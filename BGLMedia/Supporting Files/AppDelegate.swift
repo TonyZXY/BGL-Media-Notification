@@ -9,6 +9,8 @@
 
 import UIKit
 import UserNotifications
+import SwiftyJSON
+import Alamofire
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -20,6 +22,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UITabBar.appearance().tintColor = .white
         UITabBar.appearance().barTintColor = ThemeColor().themeColor()
         
+        UNUserNotificationCenter.current().delegate = self
+        UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in
+            print("granted:\(granted)") // user reaction handling
+            UIApplication.shared.registerForRemoteNotifications()
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         
         if launchedBefore{
@@ -28,10 +34,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
             }
-            UNUserNotificationCenter.current().delegate = self
-            UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in
-            print("granted:\(granted)") // user reaction handling
-            UIApplication.shared.registerForRemoteNotifications()
         }
         
         
@@ -63,9 +65,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         
         let deviceTokenString = deviceToken.reduce("",{$0 + String(format: "%02X",$1)})
-        
         print("token:\(deviceTokenString)")
+        let deviceTokenJson: [String: Any] = [
+            "userId": "5b31e9865dacbf11ec31b7b2",
+            "deviceId": deviceTokenString
+        ]
+        
     }
+        
+    
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
         //handle failure
