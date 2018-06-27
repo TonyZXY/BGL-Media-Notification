@@ -1,0 +1,6 @@
+framework module Pods_BGLMedia {
+  umbrella header "Pods-BGLMedia-umbrella.h"
+
+  export *
+  module * { export * }
+}
