@@ -133,6 +133,10 @@ alertDelete_history = "Delete";
 settingTitle = "More Options";
 aboutUs_section = "Blockchain Global";
 setting_section = "Setting";
+account_section = "Account";
+register_cell = "Create an account";
+login_cell = "Log In";
+logout_cell = "Log Out";
 aboutUs_cell = "About Us";
 community_cell = "BGL Community";
 defaultCurrency_cell = "Default Currency";
@@ -141,6 +145,9 @@ display_cell = "Display Option";
 other_cell = "Other Option";
 language_cell = "Language";
 alert_cell = "Alert";
+
+
+
 
 //About Us Page
 title_about = "About Blockchain Global";
@@ -179,5 +186,7 @@ addAlert_alert = "Add alert";
 //Alert Edit Page
 exampleLabel_alert = "Market Price";
 alertDone_alert = "Done";
+
+
 
 
