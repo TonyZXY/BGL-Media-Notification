@@ -24,8 +24,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in
-            print("granted:\(granted)") // user reaction handling
-            UIApplication.shared.registerForRemoteNotifications()
+            print("granted:\(granted)") }// user reaction handling
+        UIApplication.shared.registerForRemoteNotifications()
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         
         if launchedBefore{
@@ -33,7 +33,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else{
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
-            }
         }
         
         
@@ -67,9 +66,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let deviceTokenString = deviceToken.reduce("",{$0 + String(format: "%02X",$1)})
         print("token:\(deviceTokenString)")
         let deviceTokenJson: [String: Any] = [
-            "userId": "5b31e9865dacbf11ec31b7b2",
-            "deviceId": deviceTokenString
+            "deviceID": deviceTokenString,
+            "notification": true
         ]
+        Alamofire.request("http://10.10.6.139:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+                switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        print(json)
+                    case .failure(let error):
+                        print(error)
+            }
+        }
         
     }
         
