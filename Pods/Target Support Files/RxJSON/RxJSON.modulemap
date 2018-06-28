@@ -1,6 +1,0 @@
-framework module RxJSON {
-  umbrella header "RxJSON-umbrella.h"
-
-  export *
-  module * { export * }
-}
