@@ -16,7 +16,7 @@ class OnBoardingPageViewController: UIViewController {
         // Do any additional setup after loading the view.
         
         
-         NotificationCenter.default.addObserver(self, selector: #selector(logOutUser), name: NSNotification.Name(rawValue: "logOut"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(logOutUser), name: NSNotification.Name(rawValue: "logOut"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(logInUser), name: NSNotification.Name(rawValue: "logIn"), object: nil)
 
     }
@@ -126,6 +126,7 @@ class OnBoardingPageViewController: UIViewController {
     
     @objc func signOutButtonClicked(sender: UIButton){
         UserDefaults.standard.set(false, forKey: "isLoggedIn")
+        
 //        print("User is now signed out")
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logOut"), object: nil)

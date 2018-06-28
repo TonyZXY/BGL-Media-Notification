@@ -168,6 +168,7 @@ class LoginPageViewController: UIViewController {
             let (message, success) = checkUsernameAndPassword(username: un, password: pw)
             if success{
                 loginRequestToServer(username: un, password: pw){(res,pass) in
+    
                     if pass {
                         UserDefaults.standard.set(true, forKey: "isLoggedIn")
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
@@ -203,13 +204,12 @@ class LoginPageViewController: UIViewController {
         } else{
             return ("Wrong email format", false)
         }
-        return ("should not be displaying this", false)
     }
     
     func loginRequestToServer(username: String,password: String,completion:@escaping (JSON, Bool)->Void){
         
         
-        let parameters = ["username": username, "password":password]
+        let parameters = ["username": username.lowercased(), "password":password]
         let url = URL(string: "http://10.10.6.218:3030/userLogin/login")
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "POST"
@@ -220,7 +220,12 @@ class LoginPageViewController: UIViewController {
         
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
-                let res = JSON(data)
+                var res = JSON(data)
+                if res == nil {
+                    res["code"] = "Server not available"
+                    completion(res,false)
+                }
+                
                 if res["success"].bool!{
                     completion(res,true)
                 }else {

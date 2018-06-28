@@ -190,7 +190,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
             notificationLabel.text = "Please provide all information necessary"
             notificationLabel.isHidden = false
         } else if passwordTextField.text == reEnterPasswordTextField.text {
-            let parameter = ["firstName": firstNameTextField.text!, "email": emailTextField.text!, "password": passwordTextField.text!, "title": titleTextField.text!, "lastName": lastNameTextField.text!]
+            let parameter = ["firstName": firstNameTextField.text!, "email": emailTextField.text!.lowercased(), "password": passwordTextField.text!, "title": titleTextField.text!, "lastName": lastNameTextField.text!]
 
             let (message, success) = LoginPageViewController().checkUsernameAndPassword(username: emailTextField.text!, password: passwordTextField.text!)
             if success {
@@ -206,9 +206,9 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
                     }
                 }
                 
+//                notificationLabel.text = "Write some code send to server."
+//                notificationLabel.isHidden = false
                 
-                notificationLabel.text = "Write some code send to server."
-                notificationLabel.isHidden = false
             } else {
                 self.notificationLabel.text = message
                 self.notificationLabel.isHidden = false
@@ -231,7 +231,11 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
-                let res = JSON(data)
+                var res = JSON(data)
+                if res == nil {
+                    res["code"] = "Server not available"
+                    completion(res,false)
+                }
                 if res["success"].bool!{
                     completion(res,true)
                 }else {
