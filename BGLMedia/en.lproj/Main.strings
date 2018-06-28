@@ -1,0 +1,60 @@
+
+/* Class = "UINavigationItem"; title = "其他选项"; ObjectID = "324-qy-Jua"; */
+"324-qy-Jua.title" = "其他选项";
+
+/* Class = "UITabBarItem"; title = "行情"; ObjectID = "5Be-hW-a4s"; */
+"5Be-hW-a4s.title" = "行情";
+
+/* Class = "UITabBarItem"; title = "新闻"; ObjectID = "8jz-a5-K0Q"; */
+"8jz-a5-K0Q.title" = "新闻";
+
+/* Class = "UILabel"; text = "原创文章更新提醒"; ObjectID = "EHk-Vt-3gP"; */
+"EHk-Vt-3gP.text" = "原创文章更新提醒";
+
+/* Class = "UILabel"; text = "重大行情变化通知"; ObjectID = "LPz-fL-12g"; */
+"LPz-fL-12g.text" = "重大行情变化通知";
+
+/* Class = "UILabel"; text = "Blockchain Global is a leading multi-national enterprise in blockchain technology commercialisation and investment. It plays a vital role in international blockchain audit and network infrastructure services. Blockchain Global operates ACX.io, the biggest blockchain asset exchange platform in Australia. Meanwhile, it provides technical support to eight other exchange platforms overseas, including the operation of NEM Foundation Exchange, the world’s sixth biggest encrypto currency exchange platform with a market capitalisation of 2.5 trillion US dollars. AAAAA Blockchain Global是Blockshine位于澳洲的母公司。作为一家全球领先的跨国企业，公司致力于区块链技术商业化和投资。已经投资并孵化了超过60家区块链技术初创公司和项目，累计投资额超过2亿美金。控股多家纳斯达克及ASX上市公司，专注于传统上市公司与区块链技术之结合，其中旗下控股公司DigitalX（ASX：DCC）为全球首家区块链上市企业。在全球已布局澳大利亚，美国，马来西亚，中国，瑞士。"; ObjectID = "LeO-S6-BJG"; */
+"LeO-S6-BJG.text" = "Blockchain Global is a leading multi-national enterprise in blockchain technology commercialisation and investment. It plays a vital role in international blockchain audit and network infrastructure services. Blockchain Global operates ACX.io, the biggest blockchain asset exchange platform in Australia. Meanwhile, it provides technical support to eight other exchange platforms overseas, including the operation of NEM Foundation Exchange, the world’s sixth biggest encrypto currency exchange platform with a market capitalisation of 2.5 trillion US dollars. AAAAA Blockchain Global是Blockshine位于澳洲的母公司。作为一家全球领先的跨国企业，公司致力于区块链技术商业化和投资。已经投资并孵化了超过60家区块链技术初创公司和项目，累计投资额超过2亿美金。控股多家纳斯达克及ASX上市公司，专注于传统上市公司与区块链技术之结合，其中旗下控股公司DigitalX（ASX：DCC）为全球首家区块链上市企业。在全球已布局澳大利亚，美国，马来西亚，中国，瑞士。";
+
+/* Class = "UILabel"; text = "谢谢你的支持"; ObjectID = "NeV-lH-WQa"; */
+"NeV-lH-WQa.text" = "谢谢你的支持";
+
+/* Class = "UILabel"; text = "不显示持有量为零的数字代币"; ObjectID = "NoV-Hg-jVq"; */
+"NoV-Hg-jVq.text" = "不显示持有量为零的数字代币";
+
+/* Class = "UITabBarItem"; title = "更多"; ObjectID = "QkS-WU-f5a"; */
+"QkS-WU-f5a.title" = "更多";
+
+/* Class = "UITabBarItem"; title = "钱包"; ObjectID = "REJ-BG-MsD"; */
+"REJ-BG-MsD.title" = "kkk";
+
+/* Class = "UILabel"; text = "切换至浅色主题"; ObjectID = "TDt-wO-sYZ"; */
+"TDt-wO-sYZ.text" = "切换至浅色主题";
+
+/* Class = "UILabel"; text = "大字体显示"; ObjectID = "TvS-Tu-sfI"; */
+"TvS-Tu-sfI.text" = "大字体显示";
+
+/* Class = "UILabel"; text = "快讯提醒"; ObjectID = "UT9-nS-5Oo"; */
+"UT9-nS-5Oo.text" = "快讯提醒";
+
+/* Class = "UILabel"; text = "Blockchain Global 简介"; ObjectID = "ZPe-mQ-fTm"; */
+"ZPe-mQ-fTm.text" = "Blockchain Global 简介";
+
+/* Class = "UILabel"; text = "Label"; ObjectID = "doB-Q4-FzU"; */
+"doB-Q4-FzU.text" = "Label";
+
+/* Class = "UILabel"; text = "每日数字代币交易信息更新"; ObjectID = "m1n-es-Ofk"; */
+"m1n-es-Ofk.text" = "每日数字代币交易信息更新";
+
+/* Class = "UILabel"; text = "新闻推送提醒"; ObjectID = "naO-NS-Lh2"; */
+"naO-NS-Lh2.text" = "新闻推送提醒";
+
+/* Class = "UILabel"; text = "快讯"; ObjectID = "x0K-v2-OZB"; */
+"x0K-v2-OZB.text" = "快讯";
+
+/* Class = "UITabBarItem"; title = "快讯"; ObjectID = "zIz-NJ-VV8"; */
+"zIz-NJ-VV8.title" = "快讯";
+
+/* Class = "UINavigationItem"; title = "更多设置选项"; ObjectID = "zlx-eb-bek"; */
+"zlx-eb-bek.title" = "更多设置选项";

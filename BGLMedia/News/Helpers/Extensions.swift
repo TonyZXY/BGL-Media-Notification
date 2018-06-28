@@ -76,7 +76,7 @@ public extension UIViewController {
         childViewControllers.view.frame = view.bounds
         childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
         childViewControllers.didMove(toParentViewController: self)
-        
+
         //Constraints
         childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
         childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true

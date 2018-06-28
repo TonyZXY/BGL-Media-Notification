@@ -15,7 +15,7 @@ class DefaultCurrencyViewController: UIViewController, UITableViewDataSource, UI
     
     @IBOutlet weak var currencySearchBar: UISearchBar!
     
-    let data = ["美元 USD","澳大利亚元 AUD","人民币 RMB","欧元 EURO","日元 JPY"]
+    var data = [String]()
     let storeData = ["USD","AUD","CNY","EUR","JPY"]
     let realm = try! Realm()
     var filteredData: [String]!
@@ -26,6 +26,8 @@ class DefaultCurrencyViewController: UIViewController, UITableViewDataSource, UI
         currencyTableView.dataSource = self
         currencyTableView.delegate = self
         currencySearchBar.delegate = self
+        
+        data = [textValue(name: "usd_default"),textValue(name: "aud_default"),textValue(name: "rmb_default"),textValue(name: "eur_default"),textValue(name: "jpy_default")]
         filteredData = data
         let label10 = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 50))
         label10.textAlignment = .center
@@ -35,6 +37,11 @@ class DefaultCurrencyViewController: UIViewController, UITableViewDataSource, UI
         
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredData.count
     }
@@ -42,6 +49,9 @@ class DefaultCurrencyViewController: UIViewController, UITableViewDataSource, UI
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "currencyTableCell", for: indexPath) as UITableViewCell
         cell.textLabel?.text = filteredData[indexPath.row]
+        if storeData[indexPath.row] == priceType{
+            cell.accessoryType = UITableViewCellAccessoryType.checkmark
+        }
         cell.textLabel?.textColor = #colorLiteral(red: 0.3294117647, green: 0.7019607843, blue: 0.6901960784, alpha: 0.8015839041)
         return cell
     }
@@ -59,6 +69,7 @@ class DefaultCurrencyViewController: UIViewController, UITableViewDataSource, UI
         let str = storeData[indexPath.row]
         print(realm.configuration.fileURL ?? "")
         UserDefaults.standard.set(str, forKey: "defaultCurrency")
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         navigationController?.popToRootViewController(animated: true)
     }
 

@@ -48,15 +48,18 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[0], for: indexPath) as! TransCoinTypeCell
+            cell.coinLabel.text = textValue(name: "coinForm")
             cell.coin.text = newTransaction.coinName
             return cell
         }else if indexPath.row == 1{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[1], for: indexPath) as! TransCoinMarketCell
             cell.backgroundColor = color.themeColor()
+            cell.marketLabel.text = textValue(name: "exchangeForm")
             cell.market.text = newTransaction.exchangName
             return cell
         } else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[2], for: indexPath) as! TransTradePairsCell
+            cell.tradeLabel.text = textValue(name: "tradingPairForm")
             if newTransaction.tradingPairsName == ""{
                 cell.trade.text = ""
             } else {
@@ -68,9 +71,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         }else if indexPath.row == 3{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[3], for: indexPath) as! TransPriceCell
             if transaction == "Buy"{
-                cell.priceLabel.text = "买入价格(单价)" + " " + newTransaction.tradingPairsName
+                cell.priceLabel.text = textValue(name: "buyPriceForm") + " " + newTransaction.tradingPairsName
             } else if transaction == "Sell"{
-                cell.priceLabel.text = "卖出价格(单价)" + " " + newTransaction.tradingPairsName
+                cell.priceLabel.text = textValue(name: "sellPriceForm") + " " + newTransaction.tradingPairsName
             }
             if transactionStatus == "Update"{
                 cell.price.text = scientificMethod(number: newTransaction.singlePrice)
@@ -84,9 +87,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! TransNumberCell
             if transaction == "Buy"{
-                cell.numberLabel.text = "购买数量"
+                cell.numberLabel.text = textValue(name: "amountBoughtForm")
             } else if transaction == "Sell"{
-                cell.numberLabel.text = "出售数量"
+                cell.numberLabel.text = textValue(name: "amountSoldForm")
             }
             if transactionStatus == "Update"{
                 cell.number.text = String(newTransaction.amount)
@@ -98,9 +101,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else if indexPath.row == 5{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! TransDateCell
             if transaction == "Buy"{
-                cell.dateLabel.text = "购买日期"
+                cell.dateLabel.text = textValue(name: "buyDateForm")
             } else if transaction == "Sell"{
-                cell.dateLabel.text = "出售日期"
+                cell.dateLabel.text = textValue(name: "sellDateForm")
             }
             if transactionStatus == "Update"{
                 cell.date.text = String(newTransaction.date)
@@ -112,9 +115,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else if indexPath.row == 6{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[6], for: indexPath) as! TransTimeCell
             if transaction == "Buy"{
-                cell.timeLabel.text = "购买时间"
+                cell.timeLabel.text = textValue(name: "buyTimeForm")
             } else if transaction == "Sell"{
-                cell.timeLabel.text = "出售时间"
+                cell.timeLabel.text = textValue(name: "sellTimeForm")
             }
             if transactionStatus == "Update"{
                 cell.time.text = String(newTransaction.time)
@@ -125,6 +128,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.row == 7{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[7], for: indexPath) as! TransExpensesCell
+            cell.expensesLabel.text = textValue(name: "trasactionFeeForm")
+            cell.expensesbutton.text = textValue(name: "transactionFeeButtonForm")
             cell.changeText(first: transcationData.tradingPairsFirst,second:transcationData.tradingPairsSecond)
             cell.expenses.text = String(newTransaction.expenses)
             cell.expenses.tag = indexPath.row
@@ -132,6 +137,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             return cell
         }else if indexPath.row == 8{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[8], for: indexPath) as! TransAdditionalCell
+            cell.additionalLabel.text = textValue(name: "additionalForm")
             cell.additional.text = newTransaction.additional
             cell.additional.tag = indexPath.row
             cell.additional.delegate = self
@@ -162,7 +168,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         newTransaction.totalPrice = Double(newTransaction.amount) * newTransaction.singlePrice
         newTransaction.status = transaction
         if newTransaction.coinName != "" && newTransaction.coinName != "" && newTransaction.exchangName != "" && newTransaction.tradingPairsName != "" && String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
-            transactionButton.setTitle("加载中...", for: .normal)
+            transactionButton.setTitle(textValue(name: "loading"), for: .normal)
             GetDataResult().getCryptoCurrencyApi(from: self.newTransaction.tradingPairsName, to: ["AUD","USD","JPY","EUR","CNY"], price: self.newTransaction.singlePrice){success,jsonResult in
                 if success{
                     let allCurrencys = List<Currencys>()
@@ -290,7 +296,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         titleLabel.text = "Blockchain Global"
         titleLabel.textColor = UIColor.white
         navigationItem.titleView = titleLabel
-        
+        languageLabel()
         transactionTableView.keyboardDismissMode = .onDrag
         
         navigationController?.navigationBar.barTintColor =  color.themeColor()
@@ -383,6 +389,16 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func languageLabel(){
+        buy.setTitle(textValue(name: "buy"), for: .normal)
+        sell.setTitle(textValue(name: "sell"), for: .normal)
+        if transactionStatus == "Add" {
+            transactionButton.setTitle(textValue(name: "addTransaction"), for: .normal)
+        } else if transactionStatus == "Update" {
+            transactionButton.setTitle(textValue(name: "updateTransaction"), for: .normal)
+        }
+    }
+    
     lazy var transactionTableView:UITableView = {
         var tableViews = UITableView()
         tableViews.backgroundColor = color.themeColor()
@@ -403,11 +419,11 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     lazy var transactionButton:UIButton = {
         var button = UIButton(type: .system)
-        if transactionStatus == "Add" {
-            button.setTitle("添加交易", for: .normal)
-        } else if transactionStatus == "Update" {
-            button.setTitle("更新交易", for: .normal)
-        }
+//        if transactionStatus == "Add" {
+//            button.setTitle("添加交易", for: .normal)
+//        } else if transactionStatus == "Update" {
+//            button.setTitle("更新交易", for: .normal)
+//        }
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = color.riseColor()
         return button
@@ -415,7 +431,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     lazy var buy:UIButton = {
         var button = UIButton(type: .system)
-        button.setTitle("买入", for: .normal)
+//        button.setTitle("买入", for: .normal)
         button.tintColor = UIColor.white
         button.layer.borderColor = color.greenColor().cgColor
         button.layer.borderWidth = 3
@@ -426,7 +442,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     lazy var sell:UIButton = {
         var button = UIButton(type: .system)
-        button.setTitle("卖出", for: .normal)
+//        button.setTitle("卖出", for: .normal)
         button.tintColor = UIColor.white
         button.layer.borderColor = UIColor.lightGray.cgColor
         button.layer.borderWidth = 3

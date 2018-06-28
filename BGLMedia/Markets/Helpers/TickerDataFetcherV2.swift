@@ -25,7 +25,7 @@ class TickerDataFetcherV2 {
     }
     
     func getTickerData(completionHandler: CompletionHandler = nil) {
-        let url = "https://api.coinmarketcap.com/v2/ticker/?convert=AUD&start=\(String(describing: TickerDataFetcherV2.starts))"
+        let url = "https://api.coinmarketcap.com/v2/ticker/?convert=\(priceType)&start=\(String(describing: TickerDataFetcherV2.starts))"
         
         DispatchQueue.global(qos: .userInitiated).async {
             guard let data = try? Data(contentsOf: URL(string: url)!) else {
@@ -50,7 +50,7 @@ class TickerDataFetcherV2 {
         realm.beginWrite()
         if let collection = json["data"].dictionary {
             for item in collection.values {
-                let quotes = item["quotes"]["AUD"]
+                let quotes = item["quotes"][priceType]
                 let symbol = item["symbol"].string ?? "--"
                 let name = item["name"].string ?? "--"
                 let price = quotes["price"].double ?? 0.0

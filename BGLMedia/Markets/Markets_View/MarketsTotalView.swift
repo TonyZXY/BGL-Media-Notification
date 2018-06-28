@@ -19,7 +19,6 @@ class MarketsTotalView:UICollectionViewCell{
     //市场总资产
     let totalFunds:UILabel={
         var totalfunds = UILabel()
-        totalfunds.text = "市场总资产"
         totalfunds.sizeToFit()
         totalfunds.textColor = UIColor.white
         return totalfunds
@@ -27,7 +26,6 @@ class MarketsTotalView:UICollectionViewCell{
     
     let number:UILabel={
         var number = UILabel()
-        number.text = "AUD123"
         number.textColor = UIColor.white
         return number
     }()

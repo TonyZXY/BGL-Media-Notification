@@ -26,6 +26,11 @@ class GenuineListViewController: UIViewController, UICollectionViewDelegate,UICo
     var newsArrayList: Results<Genuine>?
     var videoArrayList: Results<Video>?
     var selectionOtherTwo: [String] = ["原创文章", "原创视频", "百科", "分析"]
+    var selectionTag:[String]{
+        get{
+            return [textValue(name: "originArticle_newsPage"),textValue(name: "video_newsPage"),textValue(name: "encyclopedia_newsPage"),textValue(name: "analyse_newsPage")]
+        }
+    }
     
     lazy var selectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -153,7 +158,7 @@ class GenuineListViewController: UIViewController, UICollectionViewDelegate,UICo
             }
         } else { // selection list
             let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "selectionCell", for: indexPath) as! SelectionViewCell
-            cell1.textLabel.text = selectionOtherTwo[indexPath.item]
+            cell1.textLabel.text = selectionTag[indexPath.item]
             return cell1
         }
     }
@@ -222,12 +227,12 @@ class GenuineListViewController: UIViewController, UICollectionViewDelegate,UICo
     // load data online whit no arguement
     func fetchData() {
         if (position != 1) {
-            APIService.shardInstance.fetchGenuineData(contentType: selectionOtherTwo[position], currentNumber: 0) { (gens: Results<Genuine>) in
+            APIService.shardInstance.fetchGenuineData(contentType: selectionOtherTwo[position], currentNumber: 0,language: defaultLanguage) { (gens: Results<Genuine>) in
                 self.newsArrayList = gens
                 self.cellListView.reloadData()
             }
         } else {
-            APIService.shardInstance.fetchVideoData(currentNumber: 0) { (video: Results<Video>) in
+            APIService.shardInstance.fetchVideoData(currentNumber: 0,language: defaultLanguage) { (video: Results<Video>) in
                 self.videoArrayList = video
                 self.cellListView.reloadData()
             }
@@ -252,12 +257,12 @@ class GenuineListViewController: UIViewController, UICollectionViewDelegate,UICo
     // load data when load more data (with arguement)
     func fetchData(skip: Int) {
         if (position != 1) {
-            APIService.shardInstance.fetchGenuineData(contentType: selectionOtherTwo[position], currentNumber: skip) { (gens: Results<Genuine>) in
+            APIService.shardInstance.fetchGenuineData(contentType: selectionOtherTwo[position], currentNumber: skip,language: defaultLanguage) { (gens: Results<Genuine>) in
                 self.newsArrayList = gens
                 self.cellListView.reloadData()
             }
         } else {
-            APIService.shardInstance.fetchVideoData(currentNumber: 0) { (video: Results<Video>) in
+            APIService.shardInstance.fetchVideoData(currentNumber: 0,language: defaultLanguage) { (video: Results<Video>) in
                 self.videoArrayList = video
                 self.cellListView.reloadData()
             }

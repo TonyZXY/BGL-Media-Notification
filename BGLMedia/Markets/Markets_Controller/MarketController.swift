@@ -11,21 +11,39 @@ import UIKit
 class MarketController: UIViewController, UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     let tickerDataFetcher = TickerDataFetcherV2()
-    let general = generalDetail()
+    let global = GlobalMarketController()
+    let watchList = WatchListController()
+    var color = ThemeColor()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        navigationController?.navigationBar.isTranslucent = false
-        navigationController?.navigationBar.barTintColor = color.themeColor()
-        NotificationCenter.default.addObserver(self, selector: #selector(globalToDetail), name: NSNotification.Name(rawValue: "selectGlobalCoin"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(watchListToDetail), name: NSNotification.Name(rawValue: "selectWatchListCoin"), object: nil)
-        setupMenuBar()
-        setupColleectionView()
-        let titleLabel = UILabel()
-        titleLabel.text = "Blockchain Global"
-        titleLabel.textColor = UIColor.white
-        navigationItem.titleView = titleLabel
+        setUpView()
         cancelTouchKeyboard()
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        tabBarController?.tabBar.isHidden = false
+    }
+    
+    @objc func changeLanguage(){
+        menuBar.collectionView.reloadData()
+        global.changeLanguage()
+        watchList.watchList.sortDate.reloadData()
+        watchList.watchList.coinList.reloadData()
+        watchList.watchList.marketSortPickerView.setPickerViewDoneButton()
+    }
+    
+    @objc func changeCurrency(){
+        global.marketCell.coinList.reloadData()
+        watchList.watchList.coinList.reloadData()
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -33,34 +51,11 @@ class MarketController: UIViewController, UICollectionViewDelegate,UICollectionV
         tickerDataFetcher.fetchTickerDataWrapper()
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateWatchInWatchList"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "removeWatchInMarketsCell"), object: nil)
     }
-    
-    deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "selectGlobalCoin"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "selectWatchListCoin"), object: nil)
-    }
-    
-    @objc func globalToDetail(notificaiton:Notification){
-        let result = notificaiton.object as! MarketsCell
-        let global = GloabalController()
-        global.coinDetail.coinName = result.general.coinAbbName
-        navigationController?.pushViewController(global, animated: true)
-    }
-    
-    @objc func watchListToDetail(notificaiton:Notification){
-        let result = notificaiton.object as! WatchList
-        let global = GloabalController()
-        global.coinDetail.coinName = result.general.coinAbbName
-        navigationController?.pushViewController(global, animated: true)
-    }
-    
-    var color = ThemeColor()
-    var menuitems = ["Markets","Watchlists"]
-    
-    private var coinListUpdateObserver: NSObjectProtocol?
     
     func scrollToMenuIndex(menuIndex: Int){
         let indexPath = NSIndexPath(item: menuIndex, section: 0)
@@ -71,13 +66,34 @@ class MarketController: UIViewController, UICollectionViewDelegate,UICollectionV
         return 2
     }
     
-    
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
-        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: menuitems[indexPath.row], for: indexPath)
-        
-        return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
+        if indexPath.row == 0{
+            addChildViewController(childViewControllers: global,cell:cell)
+            return cell
+        } else if indexPath.row == 1{
+            addChildViewController(childViewControllers: watchList,cell:cell)
+            return cell
+        } else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
+            return cell
+        }
     }
+    
+//    func addChildViewController(childViewControllers:UIViewController,cell:UICollectionViewCell){
+//        addChildViewController(childViewControllers)
+//        cell.contentView.addSubview(childViewControllers.view)
+//        childViewControllers.view.frame = view.bounds
+//        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+//        childViewControllers.didMove(toParentViewController: self)
+//
+//        //Constraints
+//        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
+//        childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+//        childViewControllers.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
+//        childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
+//        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
+//    }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
@@ -112,57 +128,29 @@ class MarketController: UIViewController, UICollectionViewDelegate,UICollectionV
         return collectionview
     }()
     
-    private func setupMenuBar(){
+    func setUpView(){
+        navigationController?.navigationBar.isTranslucent = false
+        navigationController?.navigationBar.barTintColor = color.themeColor()
+        
+        let titleLabel = UILabel()
+        titleLabel.text = "Blockchain Global"
+        titleLabel.textColor = UIColor.white
+        navigationItem.titleView = titleLabel
+        
+        //Set Up Menu Bar
         view.addSubview(menuBar)
         menuBar.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
-    }
-    
-    private func setupColleectionView(){
+        
+        //Set Up collection View
         view.addSubview(collectionviews)
-        collectionviews.register(MarketsCell.self, forCellWithReuseIdentifier: "Markets")
-        collectionviews.register(WatchList.self, forCellWithReuseIdentifier: "Watchlists")
+        collectionviews.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "containterController")
         collectionviews.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews,"v1":menuBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews,"v1":menuBar]))
         collectionviews.backgroundColor = color.themeColor()
-    }
-    
-    class market:UICollectionViewCell{
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-        }
         
-        let view:UIView = {
-            var view = UIView()
-            return view
-        }()
-        
-        func setupView(){
-            
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-    }
-    
-    class watchlist:UICollectionViewCell{
-        override init(frame: CGRect) {
-            super.init(frame: frame)
-            backgroundColor = UIColor.yellow
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init(coder:) has not been implemented")
-        }
-    }
-    
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateWatchInWatchList"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "removeWatchInMarketsCell"), object: nil)
     }
 }
 

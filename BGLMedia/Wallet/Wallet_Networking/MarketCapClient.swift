@@ -16,7 +16,7 @@ class MarketCapClient: APIClient{
     typealias CoinCapList = [CoinDetails]
     typealias GlobalCap = [String: Double?]
     
-    init(configuration: URLSessionConfiguration, currency: String? = "AUD"){
+    init(configuration: URLSessionConfiguration, currency: String? = priceType){
         self.session = URLSession(configuration: configuration)
         self.defaultCurrency = currency!
     }

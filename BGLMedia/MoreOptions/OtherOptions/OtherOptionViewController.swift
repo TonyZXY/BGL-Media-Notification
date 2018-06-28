@@ -27,6 +27,11 @@ class OtherOptionViewController: UIViewController, UITableViewDataSource, UITabl
         self.navigationItem.titleView = label13
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1
     }

@@ -62,11 +62,13 @@ class MainView:UIView{
         NSLayoutConstraint(item: netCostResult, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: netCost, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: netCostResult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5).isActive = true
         
+        portfolio.text = textValue(name: "portfolio_detail")
+        marketValue.text = textValue(name: "marketValue_detail")
+        netCost.text = textValue(name: "netCost_detail")
     }
     
     var portfolio:UILabel = {
         var label = UILabel()
-        label.text = "数量"
         label.font = label.font.withSize(18)
         label.textColor = UIColor.white
         label.textAlignment = .center
@@ -88,7 +90,6 @@ class MainView:UIView{
         label.font = label.font.withSize(18)
         label.textAlignment = .center
         label.textColor = UIColor.white
-        label.text = "市值"
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -105,7 +106,6 @@ class MainView:UIView{
     var netCost:UILabel = {
         var label = UILabel()
         label.font = label.font.withSize(18)
-        label.text = "净值"
         label.textAlignment = .center
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false

@@ -1,0 +1,181 @@
+/* 
+  Localizable.strings
+  BGL-MediaApp
+
+  Created by Bruce Feng on 12/6/18.
+  Copyright © 2018 Xuyang Zheng. All rights reserved.
+*/
+
+//TabBar
+wallet_tab = "钱包";
+market_tab = "行情";
+flash_tab = "快讯";
+news_tab = "新闻";
+more_tab = "更多";
+
+//Assets Page Hint page
+mainHint = "开始你的货币交易管理！";
+hintLabel = "请通过点击 + 按钮添加你的第一个交易";
+
+//Assets Page
+mainBalance = "总资产";
+totalNumber = "涨幅";
+totalPercent = "总数";
+
+
+//Transaction Page
+buy = "买入";
+sell = "卖出";
+addTransaction = "添加交易";
+updateTransaction = "更新交易";
+loading = "加载中...";
+
+//Transaciton Page Table View
+coinForm = "币种";
+exchangeForm = "交易市场";
+tradingPairForm = "兑换币种";
+buyPriceForm = "买入价格(单价)";
+sellPriceForm = "卖出价格(单价)";
+amountBoughtForm = "买入数量";
+amountSoldForm = "出售数量";
+buyDateForm = "购买日期";
+sellDateForm = "出售日期";
+buyTimeForm = "购买时间";
+sellTimeForm = "出售时间";
+trasactionFeeForm = "交易费用";
+transactionFeeButtonForm = "币种 ▼";
+additionalForm = "附加信息";
+
+//Market Page
+globalMarket = "市场行情";
+watchlistMarket = "收藏列表";
+marketCap_Market = "市场总资产";
+market_24hVolume = "24小时交易量";
+btcDominance_market = "BTC占比";
+sortByLetter_market = "按字母排序";
+sortByHighestPrice_market = "按最高价排序";
+filterByWeek_market = "1周";
+filterByDay_market = "1天";
+filterByHour_market = "1小时";
+globalAverage_market = "全球平均价格";
+
+//WatchList Page
+sortByLetter_watchlist = "按字母排序";
+sortByHighestPrice_watchlist = "按最高价排序";
+filterByWeek_watchlist = "1周";
+filterByDay_watchlist = "1天";
+filterByHour_watchlist = "1小时";
+
+//Flash News Page
+navigationTitle_flash = "快讯";
+timeToday_flash = "今天";
+timeYear_flash = "年";
+timeMonth_flash = "月";
+timeDay_flash = "日";
+
+//Flash News Search Results
+searchLabel_flash = "搜索结果:";
+searchResult_flash = "条";
+searchNull_flash = "暂无搜索结果";
+
+//News Page
+news_newsPage = "新闻";
+origin_newsPage = "原创";
+native_newsPage = "国内";
+international_newsPage = "国际";
+deep_newsPage = "深度";
+trend_newsPage = "趋势";
+originArticle_newsPage = "原创文章";
+video_newsPage = "原创视频";
+encyclopedia_newsPage = "百科";
+analyse_newsPage = "分析";
+
+//News Search Page
+news_searchNews = "新闻";
+origin_searchNews = "原创";
+video_searchNews = "视频";
+searchLabel_news = "搜索结果:";
+searchResult_news = "条";
+searchNull_news = "暂无搜索结果";
+
+//Detail Page
+allTimeProfit_detail_detail = "总收益";
+portfolio_detail = "数量";
+marketValue_detail = "市值";
+netCost_detail = "净值";
+general_detail = "详细";
+transaction_detail = "交易";
+alerts_detail = "提醒";
+marketCap_detail = "市场总值";
+volume_detail = "24小时成交量";
+circulatingSupply_detail = "流动供给";
+
+//Transaction History Page
+tradingMarket_history = "交易市场";
+buyPirce = "买入价格";
+buyTradingPair = "兑换币种";
+boughtAmount = "买入数量";
+buyCost = "成本";
+buyWorth = "收益";
+buyDelta = "收益率";
+
+sellPirce = "卖出价格";
+sellTradingPair = "兑换币种";
+soldAmount = "数量";
+sellProceeds = "收益";
+
+alertTitle_history = "交易历史";
+alertHint_history = "是否删除这条交易历史记录";
+alertCancel_history = "取消";
+alertDelete_history = "删除";
+
+//Setting Page
+settingTitle = "更多设置选项";
+aboutUs_section = "Blockchain Global";
+setting_section = "应用设置选项";
+aboutUs_cell = "关于我们";
+community_cell = "BGL社区";
+defaultCurrency_cell = "默认法定货币";
+notification_cell = "应用通知选项";
+display_cell = "界面显示选项";
+other_cell = "其他选项";
+language_cell = "语言设置";
+alert_cell = "推送通知";
+
+//About Us Page
+title_about = "关于Blockchain Global";
+introduction_about = "Blockchain Global 简介";
+description_about = "Blockchain Global是一家领先的跨国企业，致力于提升整个数字行业的信任度。 它由Sam Lee 以及两位合作伙伴 于2014年创立，在澳大利亚，中国，美国和马来西亚均设有办事处。\n\nBlockchain Global 一直为区块链生态系统建设提供技术开发和管理咨询业务方面的支持。 凭借行业知识产权和专有技术，加上其IP支持平台NEM Exchange和澳大利亚最大的区块链资产交易所ACX.io，公司拥有行业领先的白标资产交易解决方案。 最近，Blockchain Global与Huobi Global达成合作关系来进一步发展澳大利亚的密码资产交易业务。\n\nBlockchain Global拥有五个关键业务部门：全球性并购，孵化和投资；商业模式和应用的国际化和本地化； 开发；管理咨询和企业咨询以及行业咨询，营销和媒体。\n\n作为澳大利亚最大的区块链行业奉献者，Blockchain Global还是以下几个协会的创始成员：澳大利亚数字商业协会（ADCA），澳大利亚区块链协会（BAA）和澳大利亚FinTech。\n\nBlockchain Global将继续成为区块链和数字货币领域的基石，革命实践者和关键意见领袖。\n\n";
+
+//Community Page
+bgl_community = "BGL社区";
+weibo_community = "微博";
+wechat_community = "微信";
+twitter_community = "Twitter";
+facebook_community = "Facebook";
+youtube_community = "Youtube";
+
+//Default Currency Page
+usd_default = "美元 (USD)";
+aud_default = "澳元 (AUD)";
+rmb_default = "人民币 (CNY)";
+eur_default = "欧元 (EUR)";
+jpy_default = "日元 (JPY)";
+
+//Language Page
+chinese_language = "简体中文";
+english_language = "English";
+alertTitle_language = "语言设置";
+alertHint_language = "请确认是否改变应用语言";
+alertCancel_language = "取消";
+alertChange_language = "确认";
+
+//Alert Page
+flashNews_alert = "快讯推送通知";
+price_alert = "货币价格提醒";
+edit_alert = "设置需要提醒的货币";
+addAlert_alert = "添加提醒";
+
+//Alert Edit Page
+exampleLabel_alert = "参考市场价格";
+alertDone_alert = "完成";

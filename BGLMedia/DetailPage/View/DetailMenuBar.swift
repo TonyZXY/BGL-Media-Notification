@@ -10,7 +10,7 @@ import UIKit
 
 class DetailMenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     var color = ThemeColor()
-    var menuitems = ["详细","交易","提醒"]
+    var menuitems = [String]()
     
     var detailController:CoinDetailController?
     
@@ -25,7 +25,9 @@ class DetailMenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,U
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
+        menuitems.append(textValue(name: "general_detail"))
+        menuitems.append(textValue(name: "transaction_detail"))
+        menuitems.append(textValue(name: "alerts_detail"))
         collectionView.register(MenuCells.self, forCellWithReuseIdentifier: "cellId")
         
         addSubview(collectionView)

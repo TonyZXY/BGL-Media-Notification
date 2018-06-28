@@ -46,6 +46,7 @@ class GerneralController: UIViewController {
 
         FirstView.addSubview(spinner)
         FirstView.addSubview(totalNumber)
+        FirstView.addSubview(defaultCurrencyLable)
         FirstView.addSubview(totalRiseFall)
         FirstView.addSubview(totalRiseFallPercent)
 
@@ -85,12 +86,18 @@ class GerneralController: UIViewController {
         scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1(120)]|", views: ImageView,LastView)
         NSLayoutConstraint(item: LastView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
 
+        
+
+        //First View Default Currency
+        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 10).isActive = true
+        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
+        
         //First View TotalNumebr Label Constraint
-        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
-//
-//
+        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: defaultCurrencyLable, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: defaultCurrencyLable, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 10).isActive = true
+        
+        
         //First View TotalRiseFall Label Constraint
         NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 10).isActive = true
         NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
@@ -147,6 +154,9 @@ class GerneralController: UIViewController {
         vc.coinSymbol = coinSymbol
         vc.didMove(toParentViewController: self)
         
+        marketCap.text = textValue(name: "marketCap_detail")
+        volume.text = textValue(name: "volume_detail")
+        circulatingSupply.text = textValue(name: "circulatingSupply_detail")
     }
     
     override func didReceiveMemoryWarning() {
@@ -202,7 +212,17 @@ class GerneralController: UIViewController {
         var label = UILabel()
         label.textColor = UIColor.white
         label.text = "0"
+        label.font = label.font.withSize(25)
+        label.sizeToFit()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var defaultCurrencyLable:UILabel = {
+        var label = UILabel()
+        label.textColor = UIColor.white
         label.font = label.font.withSize(30)
+        label.textColor = ThemeColor().bglColor()
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -255,7 +275,6 @@ class GerneralController: UIViewController {
     
     var marketCap:UILabel = {
         var label = UILabel()
-        label.text = "市场总值"
         label.font = label.font.withSize(18)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -289,7 +308,6 @@ class GerneralController: UIViewController {
     
     var volume:UILabel = {
         var label = UILabel()
-        label.text = "24小时成交量"
         label.font = label.font.withSize(18)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -313,7 +331,6 @@ class GerneralController: UIViewController {
     
     var circulatingSupply:UILabel = {
         var label = UILabel()
-        label.text = "流动供给"
         label.font = label.font.withSize(18)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false

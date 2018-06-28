@@ -26,7 +26,6 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
     
     let numberLabel:UILabel = {
         let label = UILabel()
-        label.text = "购买数量"
         label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

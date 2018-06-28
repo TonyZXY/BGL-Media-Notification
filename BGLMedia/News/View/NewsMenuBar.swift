@@ -23,7 +23,11 @@ class NewsMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
 
     let cellId = "cdllId"
 
-    let barItemName = ["新闻", "原创"]
+    var barItemName:[String]{
+        get{
+            return [textValue(name: "news_newsPage"),textValue(name: "origin_newsPage")]
+        }
+    }
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -75,6 +79,10 @@ class NewsMenuBar: UIView, UICollectionViewDataSource, UICollectionViewDelegate,
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0
+    }
+    
+    func changeLangugage(){
+        collectionView.reloadData()
     }
 
 }

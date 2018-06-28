@@ -21,7 +21,6 @@ class TransTradePairsCell:UITableViewCell{
     
     let tradeLabel:UILabel = {
         let label = UILabel()
-        label.text = "兑换币种"
         label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

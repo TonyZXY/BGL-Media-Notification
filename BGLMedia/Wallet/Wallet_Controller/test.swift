@@ -48,7 +48,7 @@
 //
 //                        GetDataResult().getCryptoCurrencyApi(from: asset.coinAbbName, to: self.priceType, price: single, completion: { (success, jsonResult) in
 //                            var price:Double = 0
-//                            for currency in jsonResult{
+//                            for currency in jsonResult{ 
 //                                price = currency.value
 //                            }
 //                            coinObject.singlePrice = price

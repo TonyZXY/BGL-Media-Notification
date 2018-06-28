@@ -13,9 +13,15 @@ class WebDetailViewController: UIViewController {
 
     @IBOutlet weak var webView: WKWebView!
     
-    let titles = ["微博","微信","Twitter","Facebook","Youtube"]
+//    let titles = ["微博","微信","Twitter","Facebook","Youtube"]
     
-    var str:String?
+    var titles:[String]?{
+        get{
+            return [textValue(name: "weibo_community"),textValue(name: "wechat_community"),textValue(name: "twitter_community"),textValue(name: "facebook_community"),textValue(name: "youtube_community")]
+        }
+    }
+    
+    var str:Int?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -26,35 +32,35 @@ class WebDetailViewController: UIViewController {
         label010.textColor = UIColor.white
         
         switch str {
-        case "Weibo":
+        case 0:
             let url = URL(string: "https://m.weibo.cn/u/5410971155")
             let request = URLRequest(url: url!)
             webView.load(request)
-            label010.text = titles[0]
+            label010.text = titles?[0]
             self.navigationItem.titleView = label010
-        case "Wechat":
+        case 1:
             let url = URL(string: "https://mp.weixin.qq.com/s?__biz=MzA5Mjg3OTcyOQ==&mid=2659941256&idx=3&sn=79046f324e1be54d0344731320e240f5&chksm=8b19b596bc6e3c80ef6116586c5797d03e9cf9e13b674d516eddadc52ca9c9bf3f0aeaba20c6&scene=21#wechat_redirect")
             let request = URLRequest(url: url!)
             webView.load(request)
-            label010.text = titles[1]
+            label010.text = titles?[1]
             self.navigationItem.titleView = label010
-        case "Twitter":
+        case 2:
             let url = URL(string: "https://twitter.com/blockchaingl")
             let request = URLRequest(url: url!)
             webView.load(request)
-            label010.text = titles[2]
+            label010.text = titles?[2]
             self.navigationItem.titleView = label010
-        case "Facebook":
+        case 3:
             let url = URL(string: "https://www.facebook.com/BlockchainGL/")
             let request = URLRequest(url: url!)
             webView.load(request)
-            label010.text = titles[3]
+            label010.text = titles?[3]
             self.navigationItem.titleView = label010
-        case "Youtube":
+        case 4:
             let url = URL(string: "https://www.youtube.com/channel/UCzKG8vKUKlTn88raV2W07Wg?view_as=subscriber")
             let request = URLRequest(url: url!)
             webView.load(request)
-            label010.text = titles[4]
+            label010.text = titles?[4]
             self.navigationItem.titleView = label010
         default:
             let url = URL(string: "https://www.blockchainglobal.com")
@@ -69,6 +75,11 @@ class WebDetailViewController: UIViewController {
         
     }
 
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.

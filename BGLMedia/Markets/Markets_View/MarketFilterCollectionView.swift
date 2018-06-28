@@ -11,7 +11,12 @@ import UIKit
 class MarketFilterCollectionView:UICollectionViewCell{
 
     var color = ThemeColor()
-    var sortdate = ["1W","1D","1H"]
+    
+    var sortdate:[String]{
+        get{
+            return [textValue(name: "filterByWeek_market"),textValue(name: "filterByDay_market"),textValue(name: "filterByHour_market")]
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -19,16 +19,27 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
         setupView()
         searchBar.becomeFirstResponder()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.tabBarController?.tabBar.isHidden = true
+    }
 
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return searchNewsObject.count + searchGennieObject.count + searchVideoObject.count
+        let total = searchNewsObject.count + searchGennieObject.count + searchVideoObject.count
+        if total == 0{
+             searchCount.text = textValue(name: "searchNull_news")
+        }else {
+            searchCount.text =  textValue(name: "searchLabel_news") + String(total) + textValue(name: "searchResult_news")
+        }
+        return total
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if searchNewsObject.count > indexPath.row{
             if indexPath.row == 0{
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sectionCell", for: indexPath) as! SectionCell
-                cell.sectionLabel.text = "新闻"
+                cell.sectionLabel.text = textValue(name: "news_searchNews")
                 cell.backgroundColor = ThemeColor().bglColor()
                 return cell
             } else {
@@ -47,7 +58,7 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
         } else if (searchGennieObject.count + searchNewsObject.count) > indexPath.row {
             if indexPath.row == (searchNewsObject.count) {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sectionCell", for: indexPath) as! SectionCell
-                cell.sectionLabel.text = "原创"
+                cell.sectionLabel.text = textValue(name: "origin_searchNews")
                 cell.backgroundColor = ThemeColor().bglColor()
                 return cell
             } else{
@@ -66,7 +77,7 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
         } else if (searchGennieObject.count + searchNewsObject.count + searchVideoObject.count) > indexPath.row{
             if indexPath.row == (searchNewsObject.count + searchGennieObject.count) {
                 let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sectionCell", for: indexPath) as! SectionCell
-                cell.sectionLabel.text = "视频"
+                cell.sectionLabel.text = textValue(name: "video_searchNews")
                 cell.backgroundColor = ThemeColor().bglColor()
                 return cell
             } else{
@@ -101,7 +112,7 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
             objects.append(value)
         }
         let object = objects[indexPath.row]
-        let newController = NewsDetailWebViewController()
+        
         
         if object.type != "section"{
             if object.type == "video"{
@@ -115,6 +126,7 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
                 videoDetailViewController.video = video
                 navigationController?.pushViewController(videoDetailViewController, animated: true)
             } else {
+                let newController = NewsDetailWebViewController()
                 newController.news = (object.title, object.url) as? (title: String, url: String)
                 navigationController?.pushViewController(newController, animated: true)
             }
@@ -172,13 +184,14 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
             let dispatchGroup = DispatchGroup()
             
             dispatchGroup.enter()
-            APIService.shardInstance.fetchSearchNews(keyword: searchBar.text!) { (searchResult) in
+            APIService.shardInstance.fetchSearchNews(keyword: searchBar.text!,language: defaultLanguage) { (searchResult) in
                 self.searchNewsObject.removeAll()
                 if searchResult.count != 0{
                     let section = SearchObject()
                     section.type = "section"
                     self.searchNewsObject.append(section)
                     for value in searchResult{
+                        value.type = "news"
                         self.searchNewsObject.append(value)
                     }
                 }
@@ -187,13 +200,14 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
             }
             
             dispatchGroup.enter()
-            APIService.shardInstance.fetchSearchGenuine(keyword: searchBar.text!) { (searchResult) in
+            APIService.shardInstance.fetchSearchGenuine(keyword: searchBar.text!,language: defaultLanguage) { (searchResult) in
                 self.searchGennieObject.removeAll()
                 if searchResult.count != 0{
                     let section = SearchObject()
                     section.type = "section"
                     self.searchGennieObject.append(section)
                     for value in searchResult{
+                        value.type = "origin"
                         self.searchGennieObject.append(value)
                     }
                 }
@@ -202,13 +216,14 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
             }
             
             dispatchGroup.enter()
-            APIService.shardInstance.fetchSearchVideo(keyword: searchBar.text!) { (searchResult) in
+            APIService.shardInstance.fetchSearchVideo(keyword: searchBar.text!,language: defaultLanguage) { (searchResult) in
                 self.searchVideoObject.removeAll()
                 if searchResult.count != 0{
                     let section = SearchObject()
                     section.type = "section"
                     self.searchVideoObject.append(section)
                     for value in searchResult{
+                        value.type = "video"
                         self.searchVideoObject.append(value)
                     }
                 }
@@ -226,12 +241,27 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(searchBar)
         view.addSubview(cellListView)
+        view.addSubview(searchCount)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":cellListView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-5-[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":cellListView]))
+        
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":searchCount]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-0-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":searchCount]))
+        
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchCount,"v1":cellListView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-5-[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchCount,"v1":cellListView]))
     }
+    
+    var searchCount:paddingLabel = {
+        var label = paddingLabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.white
+        label.backgroundColor = ThemeColor().bglColor()
+        label.insetEdge = UIEdgeInsets(top: 0, left: 15, bottom: 0, right: 15)
+        //        label.layer.backgroundColor = ThemeColor().bglColor() as! CGColor
+        return label
+    }()
     
     lazy var searchBar:UISearchBar={
         var searchBar = UISearchBar()

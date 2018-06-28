@@ -74,6 +74,22 @@ open class HistoryTableViewCell: UITableViewCell {
         historyView.backgroundColor = ThemeColor().walletCellcolor()
     }
     
+    func buyLanguage(){
+        SinglePrice.text = textValue(name: "buyPirce")
+        tradingPairs.text = textValue(name: "buyTradingPair")
+        amount.text = textValue(name: "boughtAmount")
+        cost.text = textValue(name: "buyCost")
+        worth.text = textValue(name: "buyWorth")
+        delta.text = textValue(name: "buyDelta")
+    }
+    
+    func sellLanguage(){
+        sellPrice.text = textValue(name: "sellPirce")
+        sellAmount.text = textValue(name: "soldAmount")
+        sellProceeds.text = textValue(name: "Proceeds")
+        sellTradingPairs.text = textValue(name: "sellTradingPair")
+    }
+    
     func setUpLabelPoint(){
         addSubview(labelPoint)
         NSLayoutConstraint(item: labelPoint, attribute: .leading, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: timeline.leftMargin + timeline.width / 2).isActive = true

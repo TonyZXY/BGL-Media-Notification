@@ -59,9 +59,5 @@ class TransCoinTypeCell:UITableViewCell{
         NSLayoutConstraint.activate([myLabelverticalConstraint])
         //            NSLayoutConstraint.activate([myLabelhorizontalConstraint])
     }
-    
-    func checkPage(ss:String){
-        coinLabel.text = "hhhh"
-    }
 
 }

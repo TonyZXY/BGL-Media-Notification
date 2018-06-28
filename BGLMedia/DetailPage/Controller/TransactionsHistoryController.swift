@@ -17,7 +17,6 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     var results = try! Realm().objects(AllTransactions.self)
     var indexSelected:Int = 0
     var generalData = generalDetail()
-//    var priceType = "AUD"
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -40,12 +39,13 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         //Create buy transaction cell
         if object.status == "Buy"{
             let cell = tableView.dequeueReusableCell(withIdentifier: "BuyHistory", for: indexPath) as! HistoryTableViewCell
+            cell.buyLanguage()
             cell.dateLabel.textColor = UIColor.white
             cell.buyMarket.textColor = UIColor.white
             cell.labelPoint.text = "B"
             cell.labelPoint.layer.backgroundColor = ThemeColor().greenColor().cgColor
             cell.dateLabel.text = object.date + " " + object.time
-            cell.buyMarket.text = "交易市场:" + object.exchangName
+            cell.buyMarket.text = textValue(name: "tradingMarket_history") + ":" + object.exchangName
             cell.SinglePriceResult.text = scientificMethod(number:object.audSinglePrice)
             cell.tradingPairsResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.amountResult.text = scientificMethod(number:object.amount)
@@ -67,6 +67,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         } else if object.status == "Sell"{
              //Create sell transaction cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "SellHistory", for: indexPath) as! HistoryTableViewCell
+            cell.sellLanguage()
             cell.sellDateLabel.textColor = UIColor.white
             cell.sellMarket.textColor = UIColor.white
             cell.labelPoint.text = "S"
@@ -98,21 +99,34 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     }
     
     @objc func deleteTransaction(sender:UIButton){
-        let filterId = "id = " + String(sender.tag)
-        let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
-        let statusItem = realm.objects(AllTransactions.self)
-        let specificTransaction = statusItem.filter(filterId)
-        let coinTransaction = statusItem.filter(filterName)
-        if coinTransaction.count == 1{
-            let coinSelected = realm.objects(MarketTradingPairs.self).filter(filterName)
-            try! realm.write {
-                realm.delete(coinSelected)
+        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "alertTitle_history"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
+        let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .destructive) { (_) in
+            let filterId = "id = " + String(sender.tag)
+            let filterName = "coinAbbName = '" + self.generalData.coinAbbName + "' "
+            let statusItem = self.realm.objects(AllTransactions.self)
+            let specificTransaction = statusItem.filter(filterId)
+       
+            let coinTransaction = statusItem.filter(filterName)
+//                 print(coinTransaction.count)
+            if coinTransaction.count == 1{
+                let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+                try! self.realm.write {
+                    self.realm.delete(coinSelected)
+                }
             }
+            try! self.realm.write {
+                self.realm.delete(specificTransaction)
+            }
+            self.historyTableView.reloadData()
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         }
-        try! realm.write {
-            realm.delete(specificTransaction)
-        }
-        historyTableView.reloadData()
+        confirmAlertCtrl.addAction(confirmAction)
+        let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertCancel_history"), comment: ""), style: .cancel, handler:nil)
+        confirmAlertCtrl.addAction(cancelAction)
+        self.present(confirmAlertCtrl, animated: true, completion: nil)
+        
+        
+        
     }
     
     lazy var refresher: UIRefreshControl = {

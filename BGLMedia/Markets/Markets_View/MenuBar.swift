@@ -10,7 +10,12 @@ import UIKit
 
 class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     var color = ThemeColor()
-    var menuitems = ["市场行情","收藏列表"]
+    
+    var menuitems:[String]{
+        get{
+            return [textValue(name:"globalMarket"),textValue(name:"watchlistMarket")]
+        }
+    }
     
     var marketController:MarketController?
     
@@ -25,7 +30,6 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        
         collectionView.register(MenuCell.self, forCellWithReuseIdentifier: "cellId")
         
         addSubview(collectionView)

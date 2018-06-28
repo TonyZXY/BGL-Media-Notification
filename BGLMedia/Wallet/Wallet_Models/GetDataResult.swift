@@ -98,7 +98,7 @@ class GetDataResult{
     }
     
     //Get specific coins global detail data using market cap api (for example: Market Cap, Volume24h, Supply)
-    func getMarketCapCoinDetail(coinId:Int,priceType:String,completion:@escaping (GlobalMarket?,Bool)->Void){
+    func getMarketCapCoinDetail(coinId:Int,priceTypes:String,completion:@escaping (GlobalMarket?,Bool)->Void){
         let baseUrl:String = "https://api.coinmarketcap.com/v2/ticker/"
         let urlString:String = baseUrl + String(coinId) + "/?convert=" + priceType
         Alamofire.request(urlString).responseJSON { (response) in

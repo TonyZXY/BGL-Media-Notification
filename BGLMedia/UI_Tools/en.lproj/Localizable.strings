@@ -1,0 +1,183 @@
+/* 
+  Localizable.strings
+  BGL-MediaApp
+
+  Created by Bruce Feng on 12/6/18.
+  Copyright © 2018 Xuyang Zheng. All rights reserved.
+*/
+
+//TabBar
+wallet_tab = "Asset";
+market_tab = "Market";
+flash_tab = "Flash News";
+news_tab = "News";
+more_tab = "More";
+
+//Assets Page Hint page
+mainHint = "Your portfolio starts here!";
+hintLabel = "We just need one or more transactions.Add your first transaction via the + button below";
+
+//Assets Page
+mainBalance = "Main Portfolio Balance";
+totalNumber = "Number";
+totalPercent = "Percent";
+
+
+//Transaction Page
+buy = "Buy";
+sell = "Sell";
+addTransaction = "Add Transaction";
+updateTransaction = "Update Transaction";
+loading = "Loading...";
+
+//Transaciton Page Table View
+coinForm = "Coin";
+exchangeForm = "Exchange";
+tradingPairForm = "Trading Pair";
+buyPriceForm = "Buy Price(per coin)";
+sellPriceForm = "Sell Price(per coin)";
+amountBoughtForm = "Amout Bought";
+amountSoldForm = "Amount Sold";
+buyDateForm = "Date";
+sellDateForm = "Date";
+buyTimeForm = "Time";
+sellTimeForm = "Time";
+trasactionFeeForm = "Transaction Fee";
+transactionFeeButtonForm = "Currency ▼";
+additionalForm = "Notes";
+
+//Market Page
+globalMarket = "Markets";
+watchlistMarket = "Watchlist";
+marketCap_Market = "Market Cap";
+market_24hVolume = "24h Volume";
+btcDominance_market = "BTC Dominance";
+sortByLetter_market = "Alphabetical";
+sortByHighestPrice_market = "Highest Price";
+filterByWeek_market = "1W";
+filterByDay_market = "1D";
+filterByHour_market = "1H";
+globalAverage_market = "Global Average";
+
+//WatchList Page
+sortByLetter_watchlist = "Alphabetical";
+sortByHighestPrice_watchlist = "Highest Price";
+filterByWeek_watchlist = "1W";
+filterByDay_watchlist = "1D";
+filterByHour_watchlist = "1H";
+
+//Flash News Page
+navigationTitle_flash = "Flash News";
+timeToday_flash = "Today ";
+timeYear_flash = "-";
+timeMonth_flash = "-";
+timeDay_flash = "";
+
+//Flash News Search Results
+searchLabel_flash = "Search Result:";
+searchResult_flash = "records";
+searchNull_flash = "No records";
+
+//News Page
+news_newsPage = "News";
+origin_newsPage = "Origin";
+native_newsPage = "Native";
+international_newsPage = "intl.";
+deep_newsPage = "Deep";
+trend_newsPage = "Trend";
+originArticle_newsPage = "Origin";
+video_newsPage = "Video";
+encyclopedia_newsPage = "Enc";
+analyse_newsPage = "Analyse";
+
+//News Search Page
+news_searchNews = "News";
+origin_searchNews = "Origin";
+video_searchNews = "Video";
+searchLabel_news = "Search Result:";
+searchResult_news = "records";
+searchNull_news = "No records";
+
+//Detail Page
+allTimeProfit_detail_detail = "All Time Profit";
+portfolio_detail = "Portfolio";
+marketValue_detail = "Market Value";
+netCost_detail = "Net Cost";
+general_detail = "General";
+transaction_detail = "Transactions";
+alerts_detail = "Alerts";
+marketCap_detail = "Market Cap";
+volume_detail = "Volume(24h)";
+circulatingSupply_detail = "Circulating Supply";
+
+//Transaction History Page
+tradingMarket_history = "Market";
+buyPirce = "Buy Price";
+buyTradingPair = "Trading Pair";
+boughtAmount = "Amount";
+buyCost = "Cost";
+buyWorth = "Worth";
+buyDelta = "Delta";
+
+sellPirce = "Buy Price";
+sellTradingPair = "Trading Pair";
+soldAmount = "Amount";
+sellProceeds = "Proceeds";
+
+alertTitle_history = "Transaction History";
+alertHint_history = "Do you want to delete this transaction record";
+alertCancel_history = "Cancel";
+alertDelete_history = "Delete";
+
+//Setting Page
+settingTitle = "More Options";
+aboutUs_section = "Blockchain Global";
+setting_section = "Setting";
+aboutUs_cell = "About Us";
+community_cell = "BGL Community";
+defaultCurrency_cell = "Default Currency";
+notification_cell = "Notification Option";
+display_cell = "Display Option";
+other_cell = "Other Option";
+language_cell = "Language";
+alert_cell = "Alert";
+
+//About Us Page
+title_about = "About Blockchain Global";
+introduction_about = "Blockchain Global Introduction";
+description_about = "Blockchain Global is a leading multi-national enterprise in blockchain technology commercialisation and investment. It plays a vital role in international blockchain audit and network infrastructure services. Blockchain Global operates ACX.io, the biggest blockchain asset exchange platform in Australia. Last year,  Blockchain Global has invested money and technology to acquire a 40% interest in DigitalX (ASX: DCC), the world's first listed company in blockchain industry. From the beginning of this year,  Blockchain Global has invested in several listed companies which includes First Growth Funds (FGF:ASX).\n\nBacked by core competencies of understanding blockchain technology, Blockchain Global developed into 5 key business directories: M&A, investment and incubating blockchain start-ups and projects, researching and developing innovative blockchain services and solutions, industrialising blockchain technology application, management consulting and corporate advisory and lastly,  industry consulting, marketing and media.\n\nAs the largest enterprise in blockchain industry in Australia, Blockchain Global is committed to the promotion and education of blockchain technology and its commercialised value by joining hands with local governments, industries, and the society. It will continue to be the building block, revolutionary practitioner, and the key opinion leader in blockchain and digital currency territory.\n\n";
+
+//Community Page
+bgl_community = "BGL Community";
+weibo_community = "Weibo";
+wechat_community = "Wechat";
+twitter_community = "Twitter";
+facebook_community = "Facebook";
+youtube_community = "Youtube";
+
+//Default Currency Page
+usd_default = "U.S dollar (USD)";
+aud_default = "Australian dollar (AUD)";
+rmb_default = "RenMinBi Yuan (CNY)";
+eur_default = "European Dollar (EUR)";
+jpy_default = "Japanese Yen (JPY)";
+
+//Language Page
+chinese_language = "简体中文";
+english_language = "English";
+alertTitle_language = "Change Language";
+alertHint_language = "Do you want to change application language";
+alertCancel_language = "Cancel";
+alertChange_language = "Change";
+
+//Alert Page
+flashNews_alert = "Flash News Notification";
+price_alert = "Currency Alert";
+edit_alert = "Edit Currency";
+addAlert_alert = "Add alert";
+
+//Alert Edit Page
+exampleLabel_alert = "Market Price";
+alertDone_alert = "Done";
+
+

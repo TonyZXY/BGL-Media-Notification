@@ -11,21 +11,26 @@ import UIKit
 class WebMainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
     @IBOutlet weak var webTableView: UITableView!
-    let data = ["Weibo","Wechat","Twitter","Facebook","Youtube"]
+    var data = [String]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        
+        data = [textValue(name: "weibo_community"),textValue(name: "wechat_community"),textValue(name: "twitter_community"),textValue(name: "facebook_community"),textValue(name: "youtube_community")]
         webTableView.dataSource = self
         webTableView.delegate = self
         let label01 = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 50))
         label01.textAlignment = .center
         label01.textColor = UIColor.white
-        label01.text = "Blockchain Global社区"
+        label01.text = textValue(name: "bgl_community")
         self.navigationItem.titleView = label01
 
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -51,7 +56,7 @@ class WebMainViewController: UIViewController, UITableViewDataSource, UITableVie
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let indexPath = webTableView.indexPathForSelectedRow
-        let str = data[indexPath!.row]
+        let str = indexPath!.row
         let vc = segue.destination as? WebDetailViewController
         vc?.str = str
 

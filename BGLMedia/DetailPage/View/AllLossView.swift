@@ -28,6 +28,8 @@ class AllLossView:UIView{
         translatesAutoresizingMaskIntoConstraints = false
         addSubview(allTimeLoss)
         addSubview(profitLoss)
+        allTimeLoss.text = textValue(name: "allTimeProfit_detail_detail")
+        
         
         //AllTimeLoss
         NSLayoutConstraint(item: allTimeLoss, attribute: .right, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant:-5).isActive = true
@@ -40,7 +42,7 @@ class AllLossView:UIView{
     
     var allTimeLoss:UILabel = {
         var label = UILabel()
-        label.text = "总收益:"
+//        label.text = "总收益:"
         label.textColor = UIColor.white
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false

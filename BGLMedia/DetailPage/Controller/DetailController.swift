@@ -78,8 +78,9 @@ class DetailController: UIViewController{
             checkDataRiseFallColor(risefallnumber: value.totalPrice, label: mainView.marketValueRsult, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.transactionPrice, label: mainView.netCostResult, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.singlePrice, label:  generalPage.totalNumber, type: "Default")
-            generalPage.totalNumber.text = currencyName[priceType]! + generalPage.totalNumber.text!
-            generalPage.tradingPairs.text = value.tradingPairsName
+            generalPage.defaultCurrencyLable.text = priceType
+//            generalPage.totalNumber.text = currecyLogo[priceType]! + generalPage.totalNumber.text!
+            generalPage.tradingPairs.text = value.coinAbbName + "/" +  value.tradingPairsName
             generalPage.market.text = value.exchangeName
             general.coinAbbName = value.coinAbbName
             general.coinName = value.coinName
@@ -106,7 +107,7 @@ class DetailController: UIViewController{
                 if coinNameId != 0 {
                     
                     //Get coin Market Data (Market Cap, Volume, Supply)
-                    GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceType: self.priceType){(globalMarket,bool) in
+                    GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
                         if bool {
                             DispatchQueue.main.async {
                                 self.globalMarketData = globalMarket!
@@ -147,7 +148,7 @@ class DetailController: UIViewController{
                     let single = Double(results.value)
                     
                     
-                    self.transferPriceType(priceType: [self.priceType], walletData:self.marketSelectedData, single: single, eachCell: WalletsCell(), transactionPrice: self.marketSelectedData.transactionPrice)
+                    self.transferPriceType(priceType: [priceType], walletData:self.marketSelectedData, single: single, eachCell: WalletsCell(), transactionPrice: self.marketSelectedData.transactionPrice)
                     completion(true)
                 }
             case .failure(let error):
@@ -210,7 +211,7 @@ class DetailController: UIViewController{
     @objc func setPriceChange() {
         let candleData = coinDetailController.gerneralController.vc
         if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
-            checkDataRiseFallColor(risefallnumber: priceChange, label: coinDetailController.gerneralController.totalRiseFall,type: "number")
+            checkDataRiseFallColor(risefallnumber: priceChange, label: coinDetailController.gerneralController.totalRiseFall,type: "Number")
             checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
             coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
         }

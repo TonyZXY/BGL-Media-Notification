@@ -18,6 +18,7 @@ class Genuine: Object {
     @objc dynamic var publishedTime: String? = ""
     @objc dynamic var author: String? = ""
     @objc dynamic var genuineTag: String? = ""
+    @objc dynamic var languageTag:String? = ""
 
     override class func primaryKey() -> String {
         return "_id"

@@ -35,10 +35,24 @@ class NewsHomeViewController: UIViewController, UICollectionViewDataSource, UICo
         titleLabel.font = UIFont.systemFont(ofSize: 20)
         navigationItem.titleView = titleLabel
         setupView()
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
 
     override func viewWillAppear(_ animated: Bool) {
         self.tabBarController?.tabBar.isHidden = false
+        
+    }
+    
+    @objc func changeLanguage(){
+        menuBar.collectionView.reloadData()
+        newsController.fetchData()
+        newsController.selectionView.reloadData()
+        genuineController.fetchData()
+        genuineController.cellListView.reloadData()
+    }
+    
+    deinit {
+                NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
 
     lazy var selectView: UICollectionView = {

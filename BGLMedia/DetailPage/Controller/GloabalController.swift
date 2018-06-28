@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+
 class GloabalController: UIViewController {
     var menuitems = ["General","Transactions","Alerts"]
     let cryptoCompareClient = CryptoCompareClient()
@@ -32,7 +33,12 @@ class GloabalController: UIViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
     }
-
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+        self.tabBarController?.tabBar.isHidden = true
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
     }
@@ -48,16 +54,17 @@ class GloabalController: UIViewController {
     @objc func loadData(){
         let generalPage = coinDetailController.gerneralController
         generalPage.edit.isHidden = true
-        generalPage.tradingPairs.text = coinDetail.coinName + "/" + "AUD"
+        generalPage.tradingPairs.text = coinDetail.coinName + "/" + priceType
         generalPage.market.text = "Global average"
         
-        generalPage.marketCapResult.text = "A$" + scientificMethod(number: globalMarketData.market_cap ?? 0.0)
-        generalPage.volumeResult.text = "A$" + scientificMethod(number: globalMarketData.volume_24h ?? 0.0)
+        generalPage.marketCapResult.text = currecyLogo[priceType]! + scientificMethod(number: globalMarketData.market_cap ?? 0.0)
+        generalPage.volumeResult.text = currecyLogo[priceType]! + scientificMethod(number: globalMarketData.volume_24h ?? 0.0)
         generalPage.circulatingSupplyResult.text = scientificMethod(number: globalMarketData.circulating_supply ?? 0.0)
         generalPage.coinSymbol = coinDetail.coinName
         general.coinAbbName = coinDetail.coinName
         coinDetailController.transactionHistoryController.generalData = general
-        generalPage.totalNumber.text = "A$"+scientificMethod(number:globalMarketData.price ?? 0.0)
+        generalPage.defaultCurrencyLable.text = priceType
+        generalPage.totalNumber.text = currecyLogo[priceType]! + scientificMethod(number:globalMarketData.price ?? 0.0)
     }
     
     func addChildViewControllers(childViewControllers:UIViewController,views:UIView){
@@ -80,7 +87,7 @@ class GloabalController: UIViewController {
         let coinNameId = self.getCoinName(coinAbbName: coinDetail.coinName)
         print(coinNameId)
         if coinNameId != 0 {
-            GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceType: "AUD"){(globalMarket,bool) in
+            GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
                 if bool {
                     DispatchQueue.main.async {
                          self.globalMarketData = globalMarket!
@@ -119,6 +126,7 @@ class GloabalController: UIViewController {
         if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
             checkDataRiseFallColor(risefallnumber: priceChange, label: coinDetailController.gerneralController.totalRiseFall,type: "number")
             checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
+            coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
         }
     }
 

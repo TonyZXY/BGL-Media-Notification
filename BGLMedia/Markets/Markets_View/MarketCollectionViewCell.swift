@@ -24,18 +24,17 @@ class MarketCollectionViewCell:UICollectionViewCell{
             var roundedPrice = object?.price ?? 0.0
             roundedPrice = round(roundedPrice * 100) / 100
             coinLabel.text = object?.symbol
-            coinNumber.text = "AUD $" + "\(roundedPrice)"
-            coinChange.text = "\(priceChange ?? 0.0)"
-            guard let percentChange = priceChange else { return }
-            if percentChange > 0.0 {
-                coinChange.textColor = .green
-            } else if percentChange == 0.0 {
-                coinChange.textColor = .white
-            } else {
-                coinChange.textColor = .red
-            }
+            coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
+//            coinChange.text = "\(priceChange ?? 0.0)"
+//            guard let percentChange = priceChange else { return }
+//            if percentChange > 0.0 {
+//                coinChange.textColor = .green
+//            } else if percentChange == 0.0 {
+//                coinChange.textColor = .white
+//            } else {
+//                coinChange.textColor = .red
+//            }
             
-//            coinImageSetter(coinImage: coinImage, coinName: object!.symbol)
             coinImage.coinImageSetter(coinName: object!.symbol)
             
             let watchList = try! Realm().objects(CoinsInWatchListRealm.self).filter("symbol = %@", object!.symbol)
@@ -104,11 +103,11 @@ class MarketCollectionViewCell:UICollectionViewCell{
         addSubview(coinType)
         addSubview(coinNumber)
         addSubview(addWish)
-        
+
         addWish.addTarget(self, action: #selector(MarketCollectionViewCell.addOrRemoveWatch), for: .touchUpInside)
         
         //coinImage
-        self.layer.cornerRadius = self.frame.height / 4
+//        self.layer.cornerRadius = self.frame.height / 4
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v3":coinChange,"v4":coinType,"v5":coinNumber]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v3":coinChange,"v4":coinType,"v5":coinNumber]))
         NSLayoutConstraint(item: coinImage, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
@@ -153,5 +152,6 @@ class MarketCollectionViewCell:UICollectionViewCell{
         try! realm.commitWrite()
         
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchInWatchList"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "removeWatchInMarketsCell"), object: nil)
     }
 }

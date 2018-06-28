@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class NewsListViewController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout {
-    
+    var language = ["CN":["english","chinese"],"EN":["english"]]
     // tabbar position, change when tab the bar, refresh page data when changed
     var position: Int = 0 {
         didSet {
@@ -29,6 +29,10 @@ class NewsListViewController: UIViewController, UICollectionViewDataSource,UICol
     var newsArrayList: Results<News>?
     
     var selectionOptionOne: [String] = ["国内", "国际", "深度", "趋势"]
+    
+    var selectionTag:[String]{
+        return [textValue(name: "native_newsPage"),textValue(name: "international_newsPage"),textValue(name: "deep_newsPage"),textValue(name: "trend_newsPage")]
+    }
     
     lazy var selectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -130,7 +134,7 @@ class NewsListViewController: UIViewController, UICollectionViewDataSource,UICol
             }
         } else { // tabbar cell
             let cell1 = collectionView.dequeueReusableCell(withReuseIdentifier: "selectionCell", for: indexPath) as! SelectionViewCell
-            cell1.textLabel.text = selectionOptionOne[indexPath.item]
+            cell1.textLabel.text = selectionTag[indexPath.item]
             return cell1
         }
     }
@@ -182,7 +186,7 @@ class NewsListViewController: UIViewController, UICollectionViewDataSource,UICol
     
     // fetch data without arguement
     func fetchData() {
-        APIService.shardInstance.fetchNewsData(contentType: selectionOptionOne[position], currentNumber: 0) { (news: Results<News>) in
+        APIService.shardInstance.fetchNewsData(contentType: selectionOptionOne[position], currentNumber: 0,language: defaultLanguage) { (news: Results<News>) in
             self.newsArrayList = news
             self.cellListView.reloadData()
         }
@@ -198,7 +202,7 @@ class NewsListViewController: UIViewController, UICollectionViewDataSource,UICol
     
     // fetch data with arguement, used when load more data
     func fetchData(skip: Int) {
-        APIService.shardInstance.fetchNewsData(contentType: selectionOptionOne[position], currentNumber: skip) { (news: Results<News>) in
+        APIService.shardInstance.fetchNewsData(contentType: selectionOptionOne[position], currentNumber: skip,language: defaultLanguage) { (news: Results<News>) in
             self.newsArrayList = news
             self.cellListView.reloadData()
         }

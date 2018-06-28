@@ -14,7 +14,7 @@ class CryptoCompareClient: APIClient{
     typealias ExchangeListResult = [String:[String:[String]]]
     typealias Price = [String: Double]
     
-    init(configuration: URLSessionConfiguration, currency: String? = "AUD"){
+    init(configuration: URLSessionConfiguration, currency: String? = priceType){
         self.session = URLSession(configuration: configuration)
         self.defaultCurrency = currency!
     }
@@ -83,6 +83,8 @@ class CryptoCompareClient: APIClient{
         }, completion: completion)
         
     }
+    
+    
     
     func getTradePrices(from: String, to: String?=nil, exchange: String?=nil, completion: @escaping (Result<Price?, APIError>) -> Void) {
         

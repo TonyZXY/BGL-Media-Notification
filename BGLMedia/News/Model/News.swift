@@ -19,6 +19,7 @@ class News: Object {
     @objc dynamic var author: String? = ""
     @objc dynamic var localeTag: String? = ""
     @objc dynamic var contentTag: String? = ""
+    @objc dynamic var languageTag:String? = ""
 
     override class func primaryKey() -> String {
         return "_id"
