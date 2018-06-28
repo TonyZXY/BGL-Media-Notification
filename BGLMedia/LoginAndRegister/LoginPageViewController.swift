@@ -177,7 +177,7 @@ class LoginPageViewController: UIViewController {
                         self.notificationLabel.text = "Login successfull, press close below."
                         self.notificationLabel.isHidden = false
                     } else{
-                        self.notificationLabel.text = "Login failed. Error code \(res["code"])"
+                        self.notificationLabel.text = "Error code \(res["code"])"
                         self.notificationLabel.isHidden = false
                     }
                 }
@@ -222,15 +222,12 @@ class LoginPageViewController: UIViewController {
             if let data = response.data{
                 var res = JSON(data)
                 if res == nil {
-                    res["code"] = "Server not available"
-                    completion(res,false)
-                }
-                
-                if res["success"].bool!{
+                    completion(["code":"Server not available"],false)
+                } else if res["success"].bool!{
                     completion(res,true)
-                }else {
-                    completion(res,false)
-                }
+                    }else {
+                        completion(res,false)
+                    }
             }
         }
     }
