@@ -213,7 +213,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     @objc func refreshUserStatus(){
         let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
         loginButton.setTitle(status ? "Login Out" : "Login in", for: .normal)
-       self.loginButton.reloadInputViews()
+        loginLabel.text = status ? "User" : "Guest"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -254,14 +254,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
 
     @objc func addLogin(){
-        if UserDefaults.standard.bool(forKey: "isLoggedIn"){
-            
+        let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        if status{
+            UserDefaults.standard.set(false,forKey: "isLoggedIn")
+            loginButton.setTitle("Login in",for: .normal)
+        } else{
+            let loginPage = LoginPageViewController()
+            navigationController?.present(loginPage, animated: true, completion: nil)
         }
-//        self.loginStatusView.reloadInputViews()
-        self.loginButton.reloadInputViews()
-//        let loginPage = LoginPageViewController()
-//        navigationController?.present(loginPage, animated: true, completion: nil)
-        
     }
     
     @objc func switchIsInAction(sender:UISwitch){
