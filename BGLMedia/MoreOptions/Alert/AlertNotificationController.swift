@@ -201,16 +201,22 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         super.viewDidLoad()
         getNotificationStatus()
         setUpView()
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+       NotificationCenter.default.addObserver(self, selector: #selector(refreshUserStatus), name:NSNotification.Name(rawValue: "logIn"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+        NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "logIn"), object: nil)
     }
     
-    @objc func refreshData(){
-        print("appear")
+    @objc func refreshNotificationStatus(){
         getNotificationStatus()
+    }
+    
+    @objc func refreshUserStatus(){
+
+        self.loginStatusView.reloadInputViews()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -251,8 +257,12 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
 
     @objc func addLogin(){
-        let loginPage = LoginPageViewController()
-        navigationController?.present(loginPage, animated: true, completion: nil)
+        if UserDefaults.standard.bool(forKey: "isLoggedIn"){
+            
+        }
+        self.loginStatusView.reloadInputViews()
+//        let loginPage = LoginPageViewController()
+//        navigationController?.present(loginPage, animated: true, completion: nil)
         
     }
     
@@ -287,12 +297,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     var loginStatusView:UIView = {
         var view = UIView()
         view.backgroundColor = UIColor.white
-        
+        print("Reload View")
         var loginLabel = UILabel()
-        loginLabel.text = "Guest"
+        let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        loginLabel.text = status ? "User" : "Guest"
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
         var loginButton = UIButton(type:.system)
-        loginButton.setTitle("Login in", for: .normal)
+        loginButton.setTitle(status ? "Login Out" : "Login in", for: .normal)
         loginButton.addTarget(self, action: #selector(addLogin), for: .touchUpInside)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         
@@ -307,6 +318,11 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
+    
+//    var loginLabel:UILabel = {
+//        
+//    }()
+    
     
     lazy var notificationTableView:UITableView = {
        var tableView = UITableView()
