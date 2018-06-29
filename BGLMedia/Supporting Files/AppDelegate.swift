@@ -93,7 +93,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func application(_ application: UIApplication, didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
-        
+        print("register to open notification")
         let deviceTokenString = deviceToken.reduce("",{$0 + String(format: "%02X",$1)})
         print("token:\(deviceTokenString)")
         let deviceTokenJson: [String: Any] = [
@@ -115,9 +115,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
+        print("fail to open notification")
+        
         //handle failure
     }
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+        print("success to open notification")
         print("\(userInfo)")
         let aps = userInfo["aps"] as! [String: Any]
         print("\(aps)")

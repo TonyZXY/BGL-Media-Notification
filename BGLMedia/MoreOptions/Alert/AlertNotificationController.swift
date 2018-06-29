@@ -84,31 +84,72 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     @objc func deviceSetting(){
-        let settingsButton = NSLocalizedString("Settings", comment: "")
-        let cancelButton = NSLocalizedString("Cancel", comment: "")
-        let message = NSLocalizedString("Your need to give a permission from notification settings.", comment: "")
-        let goToSettingsAlert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        print("success")
         
-        goToSettingsAlert.addAction(UIAlertAction(title: settingsButton, style: .destructive, handler: { (action: UIAlertAction) in
-            DispatchQueue.main.async {
-                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                    return
-                }
-                
-                if UIApplication.shared.canOpenURL(settingsUrl) {
-                    if #available(iOS 10.0, *) {
-                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                            print("Settings opened: \(success)") // Prints true
-                        })
-                    } else {
-                        UIApplication.shared.openURL(settingsUrl as URL)
-                    }
-                }
+        let alertController = UIAlertController(title: "Alert Title is here", message: "Alert Description is here", preferredStyle: .alert)
+        
+        // Setting button action
+        let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
+            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                return
             }
-        }))
+            
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                    // Checking for setting is opened or not
+                    
+                    
+                    
+                    
+                    print("Setting is opened: \(success)")
+                })
+            }
+        }
+        
+        alertController.addAction(settingsAction)
+        // Cancel button action
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
+            // Magic is here for cancel button
+        }
+        alertController.addAction(cancelAction)
+        // This part is important to show the alert controller ( You may delete "self." from present )
+        self.present(alertController, animated: true, completion: nil)
+        
+        
+        /////////
+        
+        
+        
+        
+        
+//        let settingsButton = NSLocalizedString("Settings", comment: "")
+//        let cancelButton = NSLocalizedString("Cancel", comment: "")
+//        let message = NSLocalizedString("Your need to give a permission from notification settings.", comment: "")
+//        let goToSettingsAlert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
+//
+//        goToSettingsAlert.addAction(UIAlertAction(title: settingsButton, style: .destructive, handler: { (action: UIAlertAction) in
+//            DispatchQueue.main.async {
+//                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+//                    return
+//                }
+//
+//                if UIApplication.shared.canOpenURL(settingsUrl) {
+//                    if #available(iOS 10.0, *) {
+//                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+//                            print("Settings opened: \(success)") // Prints true
+//                        })
+//                    } else {
+//                        UIApplication.shared.openURL(settingsUrl as URL)
+//                    }
+//                }
+//            }
+//        }))
         
 //        logoutUserAlert.addAction(UIAlertAction(title: cancelButton, style: .cancel, handler: nil))
     }
+    
+    
+    
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0{
@@ -167,7 +208,33 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        // Do any additional setup after loading the view.
+        
+//        let notificationType = UIApplication.shared.currentUserNotificationSettings!.types
+//        if notificationType == [] {
+//            print("notifications are NOT enabled")
+//        } else {
+//            print("notifications are enabled")
+//        }
+//
+//        let current = UNUserNotificationCenter. .current()
+//
+//        current.getNotificationSettings(completionHandler: { (settings) in
+//            if settings.authorizationStatus == .notDetermined {
+//                print("1")
+//                // Notification permission has not been asked yet, go for it!
+//            }
+//
+//            if settings.authorizationStatus == .denied {
+//                print("disable")
+//                // Notification permission was previously denied, go to settings & privacy to re-enable
+//            }
+//
+//            if settings.authorizationStatus == .authorized {
+//                print("enable")
+//                // Notification permission was already granted
+//            }
+//        })
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -206,21 +273,21 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     var loginStatusView:UIView = {
         var view = UIView()
         view.backgroundColor = UIColor.white
+        
         var loginLabel = UILabel()
         loginLabel.text = "Guest"
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
-        var statusLabel = UILabel()
-        statusLabel.text = "Login in"
-        statusLabel.translatesAutoresizingMaskIntoConstraints = false
-        
+        var loginButton = UIButton(type:.system)
+        loginButton.setTitle("Login in", for: .normal)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(loginLabel)
-        view.addSubview(statusLabel)
+        view.addSubview(loginButton)
         
         NSLayoutConstraint(item: loginLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: statusLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":statusLabel]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton]))
         
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
