@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import UserNotifications
 
 class switchObject{
     var type:String?
@@ -17,7 +18,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     var switchStatus = switchObject()
     var cellItems:[[String]]{
         get{
-            return [["open"],[textValue(name: "flashNews_alert"),textValue(name: "price_alert"),textValue(name: "edit_alert")]]
+            let status = UserDefaults.standard.bool(forKey: "NotificationSetting")
+            let result = status == true ? [["Open"],[textValue(name: "flashNews_alert"),textValue(name: "price_alert"),textValue(name: "edit_alert")]] : [["Close"]]
+            return result
         }
     }
     
@@ -25,7 +28,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     var SwitchOption:[Bool]{
         get{
-            return [UserDefaults.standard.value(forKey: "flashSwitch") as! Bool,UserDefaults.standard.value(forKey: "priceSwitch") as! Bool]
+            return [UserDefaults.standard.bool(forKey: "flashSwitch"),UserDefaults.standard.bool(forKey: "priceSwitch")]
         }
     }
     
@@ -60,24 +63,48 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().themeColor()
-        let hintLabel = UILabel()
-        hintLabel.text = "Please go to setting open the Notification"
-        hintLabel.font = hintLabel.font.withSize(10)
-        hintLabel.textColor = UIColor.white
-        hintLabel.translatesAutoresizingMaskIntoConstraints = false
-        sectionView.addSubview(hintLabel)
+        
+        if UserDefaults.standard.bool(forKey: "NotificationSetting"){
+            let hintLabel = UILabel()
+            hintLabel.text = "You can go to set the Notification"
+            hintLabel.font = hintLabel.font.withSize(10)
+            hintLabel.textColor = UIColor.white
+            hintLabel.translatesAutoresizingMaskIntoConstraints = false
+            sectionView.addSubview(hintLabel)
+            
+            let button = UIButton(type: .system)
+            button.setTitle("setting", for: .normal)
+            button.setTitleColor(UIColor.yellow, for: .normal)
+            button.translatesAutoresizingMaskIntoConstraints = false
+            button.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+            sectionView.addSubview(button)
+            
+            NSLayoutConstraint(item: hintLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
+            NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-0-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel,"v1":button]))
+            
+            
+        } else {
+            let settingButton = UIButton(type:.system)
+            settingButton.setTitle("Go to setting the Notification", for: .normal)
+            settingButton.setTitleColor(UIColor.white, for: .normal)
+            settingButton.backgroundColor = UIColor.red
+            settingButton.translatesAutoresizingMaskIntoConstraints = false
+            settingButton.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+            sectionView.addSubview(settingButton)
+            
+//            NSLayoutConstraint(item: settingButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+//            NSLayoutConstraint(item: settingButton, attribute: .centerX, relatedBy: .equal, toItem: sectionView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":settingButton]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":settingButton]))
+            
+            
+        }
+        
 
-        let button = UIButton(type: .system)
-        button.setTitle("setting", for: .normal)
-        button.setTitleColor(UIColor.yellow, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
-        sectionView.addSubview(button)
-
-        NSLayoutConstraint(item: hintLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-0-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel,"v1":button]))
+        
+        
 
 
         return sectionView
@@ -114,46 +141,11 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         alertController.addAction(cancelAction)
         // This part is important to show the alert controller ( You may delete "self." from present )
         self.present(alertController, animated: true, completion: nil)
-        
-        
-        /////////
-        
-        
-        
-        
-        
-//        let settingsButton = NSLocalizedString("Settings", comment: "")
-//        let cancelButton = NSLocalizedString("Cancel", comment: "")
-//        let message = NSLocalizedString("Your need to give a permission from notification settings.", comment: "")
-//        let goToSettingsAlert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
-//
-//        goToSettingsAlert.addAction(UIAlertAction(title: settingsButton, style: .destructive, handler: { (action: UIAlertAction) in
-//            DispatchQueue.main.async {
-//                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-//                    return
-//                }
-//
-//                if UIApplication.shared.canOpenURL(settingsUrl) {
-//                    if #available(iOS 10.0, *) {
-//                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-//                            print("Settings opened: \(success)") // Prints true
-//                        })
-//                    } else {
-//                        UIApplication.shared.openURL(settingsUrl as URL)
-//                    }
-//                }
-//            }
-//        }))
-        
-//        logoutUserAlert.addAction(UIAlertAction(title: cancelButton, style: .cancel, handler: nil))
     }
-    
-    
-    
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
         if section == 0{
-            return 50
+            return 80
         } else{
             return 0
         }
@@ -207,41 +199,63 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        getNotificationStatus()
         setUpView()
-        
-//        let notificationType = UIApplication.shared.currentUserNotificationSettings!.types
-//        if notificationType == [] {
-//            print("notifications are NOT enabled")
-//        } else {
-//            print("notifications are enabled")
-//        }
-//
-//        let current = UNUserNotificationCenter. .current()
-//
-//        current.getNotificationSettings(completionHandler: { (settings) in
-//            if settings.authorizationStatus == .notDetermined {
-//                print("1")
-//                // Notification permission has not been asked yet, go for it!
-//            }
-//
-//            if settings.authorizationStatus == .denied {
-//                print("disable")
-//                // Notification permission was previously denied, go to settings & privacy to re-enable
-//            }
-//
-//            if settings.authorizationStatus == .authorized {
-//                print("enable")
-//                // Notification permission was already granted
-//            }
-//        })
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+    }
+    
+    @objc func refreshData(){
+        print("appear")
+        getNotificationStatus()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         tabBarController?.tabBar.isHidden = true
     }
+    
+    func getNotificationStatus(){
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings(completionHandler: { (settings) in
+            if settings.authorizationStatus == .notDetermined {
+                print("1")
+                // Notification permission has not been asked yet, go for it!
+            }
+            
+            if settings.authorizationStatus == .denied {
+                UserDefaults.standard.set(false, forKey: "NotificationSetting")
+                print("disable")
+                // Notification permission was previously denied, go to settings & privacy to re-enable
+            }
+            
+            if settings.authorizationStatus == .authorized {
+                UserDefaults.standard.set(true, forKey: "NotificationSetting")
+                print("enable")
+                // Notification permission was already granted
+            }
+            DispatchQueue.main.async {
+                self.notificationTableView.reloadData()
+            }
+            print("trys")
+        })
+        
+//        current.getNotificationSettings(){(bool) in
+//            if bool{
+//
+//            }
+//        }
+    }
 
+    @objc func addLogin(){
+        let loginPage = LoginPageViewController()
+        navigationController?.present(loginPage, animated: true, completion: nil)
+        
+    }
+    
     @objc func switchIsInAction(sender:UISwitch){
         if sender.isOn{
             if sender.tag == 0{
@@ -279,6 +293,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         loginLabel.translatesAutoresizingMaskIntoConstraints = false
         var loginButton = UIButton(type:.system)
         loginButton.setTitle("Login in", for: .normal)
+        loginButton.addTarget(self, action: #selector(addLogin), for: .touchUpInside)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         
         view.addSubview(loginLabel)
@@ -302,6 +317,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         tableView.delegate = self
         tableView.dataSource = self
         tableView.separatorStyle = .none
+        tableView.isScrollEnabled = false
         return tableView
     }()
  

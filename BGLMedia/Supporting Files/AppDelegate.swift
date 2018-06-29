@@ -120,10 +120,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         //handle failure
     }
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
+        UserDefaults.standard.set(false, forKey: "NotificationSetting")
         print("success to open notification")
         print("\(userInfo)")
         let aps = userInfo["aps"] as! [String: Any]
         print("\(aps)")
     }
     
+//    func applicationDidBecomeActive(_ application: UIApplication) {
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
+//    }
+//    
+    func applicationWillEnterForeground(_ application: UIApplication) {
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
+    }
 }
