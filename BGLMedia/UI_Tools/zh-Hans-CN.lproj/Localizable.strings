@@ -23,6 +23,7 @@ totalNumber = "涨幅";
 totalPercent = "总数";
 
 
+
 //Transaction Page
 buy = "买入";
 sell = "卖出";
@@ -133,6 +134,10 @@ alertDelete_history = "删除";
 settingTitle = "更多设置选项";
 aboutUs_section = "Blockchain Global";
 setting_section = "应用设置选项";
+account_section = "帐户";
+register_cell = "创建帐号";
+login_cell = "登录";
+logout_cell = "登出";
 aboutUs_cell = "关于我们";
 community_cell = "BGL社区";
 defaultCurrency_cell = "默认法定货币";
@@ -141,6 +146,7 @@ display_cell = "界面显示选项";
 other_cell = "其他选项";
 language_cell = "语言设置";
 alert_cell = "推送通知";
+
 
 //About Us Page
 title_about = "关于Blockchain Global";

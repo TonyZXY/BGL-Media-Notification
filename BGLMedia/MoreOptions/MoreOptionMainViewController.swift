@@ -17,13 +17,16 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
 //
     var items:[[String]]? {
         get{
-            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")]]
+//            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell")]]
+            let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
+            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[textValue(name: "register_cell"),loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
     }
     
     var sections:[String]?{
         get{
-            return [textValue(name: "aboutUs_section"),textValue(name: "setting_section")]
+//            return [textValue(name: "aboutUs_section"),textValue(name: "setting_section")]
+            return [textValue(name: "aboutUs_section"),textValue(name: "setting_section"),textValue(name: "account_section")]
         }
     }
     
@@ -48,10 +51,12 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
         label.text = "Blockchain Global"
         self.navigationItem.titleView = label
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
-    }
+        
+}
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
+        self.tableView00.reloadData()
         self.tabBarController?.tabBar.isHidden = false
     }
     
@@ -59,7 +64,6 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
         settingTitle.topItem?.title = textValue(name: "settingTitle")
         tableView00.reloadData()
     }
-    
     deinit {
                 NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
@@ -69,10 +73,11 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return items![section].count
+        return self.items![section].count
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        
         return self.sections!.count
     }
     
@@ -90,16 +95,34 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let secnum = indexPath
-        
-        // select view segues accoding to indexPath values
-        if ((secnum == [0,0]) || (secnum == [0,1])) {
-            performSegue(withIdentifier: segueIdentities[indexPath.row], sender: self)
-            //print(segueIdentities[indexPath.row])
-        } else {
-            performSegue(withIdentifier: segueIdentities[(indexPath.row+2)], sender: self)
-            //print(segueIdentities[(indexPath.row+2)])
+        if indexPath.section != 2{
+            let secnum = indexPath
+            // select view segues accoding to indexPath values
+            if ((secnum == [0,0]) || (secnum == [0,1])) {
+                performSegue(withIdentifier: segueIdentities[indexPath.row], sender: self)
+                //print(segueIdentities[indexPath.row])
+            } else {
+                performSegue(withIdentifier: segueIdentities[(indexPath.row+2)], sender: self)
+                //print(segueIdentities[(indexPath.row+2)])
+            }
+        } else {//account sectionf
+            if indexPath == [2,0]{//create a new account cell
+                let register = RegisterationPageViewController()
+                self.present(register,animated: true, completion: nil)
+            } else if UserDefaults.standard.bool(forKey: "isLoggedIn"){//user logged in
+                UserDefaults.standard.set(false,forKey: "isLoggedIn")
+                print("log out")
+                
+                //maybe send a notification to server?
+                
+            } else{
+                print("trying to log in")
+                let login = LoginPageViewController()
+                self.present(login,animated: true, completion: nil)
+            }
+            self.tableView00.reloadData()
         }
+        
     }
     
     

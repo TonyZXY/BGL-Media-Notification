@@ -647,6 +647,7 @@
 		2D52AE3920E46E1800018FC0 /* MoreOptions */ = {
 			isa = PBXGroup;
 			children = (
+				2D52AE4E20E46E1800018FC0 /* MoreOptionMainViewController.swift */,
 				2D52AE3A20E46E1800018FC0 /* AboutUs */,
 				2D52AE3C20E46E1800018FC0 /* DefaultCurrency */,
 				2D52AE3F20E46E1800018FC0 /* Alert */,
@@ -654,7 +655,6 @@
 				2D52AE4520E46E1800018FC0 /* OtherOptions */,
 				2D52AE4920E46E1800018FC0 /* BGLCommunity */,
 				2D52AE4C20E46E1800018FC0 /* ViewOptions */,
-				2D52AE4E20E46E1800018FC0 /* MoreOptionMainViewController.swift */,
 				2D52AE4F20E46E1800018FC0 /* NotificationOptions */,
 			);
 			path = MoreOptions;
