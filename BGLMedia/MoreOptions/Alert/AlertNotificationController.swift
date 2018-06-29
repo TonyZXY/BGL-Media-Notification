@@ -124,10 +124,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             if UIApplication.shared.canOpenURL(settingsUrl) {
                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
                     // Checking for setting is opened or not
-                    
-                    
-                    
-                    
                     print("Setting is opened: \(success)")
                 })
             }
@@ -215,8 +211,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     @objc func refreshUserStatus(){
-
-        self.loginStatusView.reloadInputViews()
+        let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        loginButton.setTitle(status ? "Login Out" : "Login in", for: .normal)
+        loginLabel.text = status ? "User" : "Guest"
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -257,13 +254,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
 
     @objc func addLogin(){
-        if UserDefaults.standard.bool(forKey: "isLoggedIn"){
-            
+        let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        if status{
+            UserDefaults.standard.set(false,forKey: "isLoggedIn")
+            loginButton.setTitle("Login in",for: .normal)
+        } else{
+            let loginPage = LoginPageViewController()
+            navigationController?.present(loginPage, animated: true, completion: nil)
         }
-        self.loginStatusView.reloadInputViews()
-//        let loginPage = LoginPageViewController()
-//        navigationController?.present(loginPage, animated: true, completion: nil)
-        
     }
     
     @objc func switchIsInAction(sender:UISwitch){
@@ -287,42 +285,45 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(loginStatusView)
         view.addSubview(notificationTableView)
+        loginStatusView.addSubview(loginLabel)
+        loginStatusView.addSubview(loginButton)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginStatusView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginStatusView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notificationTableView,"v1":loginStatusView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-40-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notificationTableView,"v1":loginStatusView]))
+        
+        
+        NSLayoutConstraint(item: loginLabel, attribute: .centerY, relatedBy: .equal, toItem: loginStatusView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: loginStatusView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        loginStatusView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel]))
+        loginStatusView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton]))
     }
     
     var loginStatusView:UIView = {
         var view = UIView()
         view.backgroundColor = UIColor.white
-        print("Reload View")
-        var loginLabel = UILabel()
-        let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
-        loginLabel.text = status ? "User" : "Guest"
-        loginLabel.translatesAutoresizingMaskIntoConstraints = false
-        var loginButton = UIButton(type:.system)
-        loginButton.setTitle(status ? "Login Out" : "Login in", for: .normal)
-        loginButton.addTarget(self, action: #selector(addLogin), for: .touchUpInside)
-        loginButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(loginLabel)
-        view.addSubview(loginButton)
-        
-        NSLayoutConstraint(item: loginLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton]))
-        
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-//    var loginLabel:UILabel = {
-//        
-//    }()
+    var loginLabel:UILabel = {
+        var loginLabel = UILabel()
+        let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        loginLabel.text = status ? "User" : "Guest"
+        loginLabel.translatesAutoresizingMaskIntoConstraints = false
+        return loginLabel
+    }()
     
+    var loginButton:UIButton = {
+        var loginButton = UIButton(type:.system)
+        print("button")
+        let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        loginButton.setTitle(status ? "Login Out" : "Login in", for: .normal)
+        loginButton.addTarget(self, action: #selector(addLogin), for: .touchUpInside)
+        loginButton.translatesAutoresizingMaskIntoConstraints = false
+        return loginButton
+    }()
     
     lazy var notificationTableView:UITableView = {
        var tableView = UITableView()
