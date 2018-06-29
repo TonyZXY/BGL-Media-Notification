@@ -297,7 +297,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             } else {
                 compareStatus = false
             }
-            let realmData:[Any] = [currentTransactionId,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.tradingPairsName,newTransaction.exchangName,price,compareStatus,Date()]
+            let realmData:[Any] = [currentTransactionId,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.tradingPairsName,newTransaction.exchangName,price,compareStatus,true,Date()]
             if realm.object(ofType: alertObject.self, forPrimaryKey: currentTransactionId) == nil {
                 realm.create(alertObject.self, value: realmData)
             } else {

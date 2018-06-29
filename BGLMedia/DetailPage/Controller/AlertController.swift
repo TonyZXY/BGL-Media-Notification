@@ -183,9 +183,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
       
         let object = alerts[indexPath.section].name[indexPath.row]
         var compare:String = ""
-        if object.status == true{
+        if object.compareStatus == true{
             compare = ">"
-        }else if object.status == false{
+        }else if object.compareStatus == false{
             compare = "<"
         } else {
             compare = "="
