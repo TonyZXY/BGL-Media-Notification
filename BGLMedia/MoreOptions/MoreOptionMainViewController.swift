@@ -18,13 +18,8 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
     var items:[[String]]? {
         get{
 //            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell")]]
-            if  UserDefaults.standard.bool(forKey: "isLoggedIn") {
-                return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell")],[textValue(name: "register_cell"),textValue(name: "logout_cell")]]
-            } else {
-                return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell")],[textValue(name: "register_cell"),textValue(name: "login_cell")]]
-            }
-            
-            
+            let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
+            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[textValue(name: "register_cell"),loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
     }
     
