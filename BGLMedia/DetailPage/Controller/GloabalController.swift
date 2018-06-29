@@ -65,6 +65,10 @@ class GloabalController: UIViewController {
         coinDetailController.transactionHistoryController.generalData = general
         generalPage.defaultCurrencyLable.text = priceType
         generalPage.totalNumber.text = currecyLogo[priceType]! + scientificMethod(number:globalMarketData.price ?? 0.0)
+        
+        
+        coinDetailController.alertController.coinName.coinAbbName = general.coinAbbName
+        coinDetailController.alertController.coinName.status = true
     }
     
     func addChildViewControllers(childViewControllers:UIViewController,views:UIView){

@@ -93,6 +93,8 @@ class DetailController: UIViewController{
             marketSelectedData.transactionPrice = value.transactionPrice
             marketSelectedData.coinAmount = value.coinAmount
             coinDetailController.transactionHistoryController.generalData = general
+            coinDetailController.alertController.coinName.coinAbbName = general.coinAbbName
+            coinDetailController.alertController.coinName.status = true
             generalPage.marketCapResult.text = String(globalMarketData.market_cap ?? 0.0)
             generalPage.volumeResult.text = String(globalMarketData.volume_24h ?? 0.0)
             generalPage.circulatingSupplyResult.text = String(globalMarketData.circulating_supply ?? 0.0)
