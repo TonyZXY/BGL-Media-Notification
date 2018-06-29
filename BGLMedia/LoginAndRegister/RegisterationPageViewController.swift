@@ -165,7 +165,6 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
     
         titleTextField.text = titlePickOption[row]
         
-    
     }
     
     
@@ -197,9 +196,17 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
                
                 registerRequestToServer(parameter: parameter){(res,pass) in
                     if pass {
-                        self.notificationLabel.text = "Registration Complete. Now login user. "
-                        print(res["token"])
-                        self.notificationLabel.isHidden = false
+                        UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
+                        print("dismissing")
+                        if self.presentingViewController?.presentingViewController != nil{
+                            self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+                        } else {
+                            self.presentingViewController?.dismiss(animated: true, completion: nil)
+                        }
+                        
+                        
+//                        self.dismiss(animated: true, completion: nil)
                     } else{
                         self.notificationLabel.text = "Error code \(res["code"])"
                         self.notificationLabel.isHidden = false

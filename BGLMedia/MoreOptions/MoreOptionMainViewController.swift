@@ -19,7 +19,7 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
         get{
 //            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell")]]
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[textValue(name: "register_cell"),loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
+            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
     }
     
@@ -106,20 +106,18 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
                 //print(segueIdentities[(indexPath.row+2)])
             }
         } else {//account sectionf
-            if indexPath == [2,0]{//create a new account cell
-                let register = RegisterationPageViewController()
-                self.present(register,animated: true, completion: nil)
-            } else if UserDefaults.standard.bool(forKey: "isLoggedIn"){//user logged in
+           
+            if UserDefaults.standard.bool(forKey: "isLoggedIn"){//user logged in
                 UserDefaults.standard.set(false,forKey: "isLoggedIn")
                 print("log out")
                 
-                //maybe send a notification to server?
-                
-            } else{
-                print("trying to log in")
-                let login = LoginPageViewController()
-                self.present(login,animated: true, completion: nil)
-            }
+                    //maybe send a notification to server?
+                    
+                } else{
+                    print("trying to log in")
+                    let login = LoginPageViewController()
+                    self.present(login,animated: true, completion: nil)
+                }
             self.tableView00.reloadData()
         }
         

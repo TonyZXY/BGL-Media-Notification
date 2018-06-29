@@ -72,6 +72,22 @@ class LoginPageViewController: UIViewController {
         return button
     }()
     
+    let registerLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Click here to register"
+        label.textColor = .blue
+        label.font = UIFont(name: "Helvetica-Bold", size: 15)
+        return label
+    }()
+    
+    @objc func tapRigsterLabel(sender:UITapGestureRecognizer) {
+        print("tap working")
+        
+        let register = RegisterationPageViewController()
+        
+        self.present(register,animated: true, completion: nil)
+    }
+    
     //hide keyboard when touch somewhere else
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
@@ -88,19 +104,33 @@ class LoginPageViewController: UIViewController {
         
         
     }
-
+    
+//    override func viewWillAppear(_ animated: Bool) {
+//        if UserDefaults.standard.bool(forKey: "isLoggedIn"){
+//            self.dismiss(animated: false, completion: nil)
+//        }
+//
+//    }
+    
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
         setUp()
-        
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardShow), name: NSNotification.Name.UIKeyboardWillShow, object: nil)
     }
+    
+  
 
     func setUp(){
         self.view.backgroundColor = ThemeColor().themeColor()
+        
+        let tap = UITapGestureRecognizer(target: self, action: #selector(tapRigsterLabel))
+        registerLabel.isUserInteractionEnabled = true
+        registerLabel.addGestureRecognizer(tap)
+        
         
         view.addSubview(logoImageView)
         view.addSubview(emailTextField)
@@ -108,6 +138,7 @@ class LoginPageViewController: UIViewController {
         view.addSubview(loginButton)
         view.addSubview(cancelButton)
         view.addSubview(notificationLabel)
+        view.addSubview(registerLabel)
         
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
         logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 80).isActive = true
@@ -134,19 +165,23 @@ class LoginPageViewController: UIViewController {
         loginButton.translatesAutoresizingMaskIntoConstraints = false
         loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10).isActive = true
         loginButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
-        loginButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30).isActive = true
+        loginButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
         loginButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
 
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
-        cancelButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 10).isActive = true
-        cancelButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
+        cancelButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 10).isActive = true
         cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30).isActive = true
+        cancelButton.widthAnchor.constraint(equalToConstant: 150).isActive = true
         cancelButton.heightAnchor.constraint(equalToConstant: 40).isActive = true
-
+        
+        
+        registerLabel.translatesAutoresizingMaskIntoConstraints = false
+        registerLabel.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 5).isActive = true
+        registerLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
+        registerLabel.widthAnchor.constraint(equalToConstant: 150).isActive = true
+        registerLabel.heightAnchor.constraint(equalToConstant: 40).isActive = true
+        
     }
-    
-
-
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -168,14 +203,10 @@ class LoginPageViewController: UIViewController {
             let (message, success) = checkUsernameAndPassword(username: un, password: pw)
             if success{
                 loginRequestToServer(username: un, password: pw){(res,pass) in
-    
                     if pass {
                         UserDefaults.standard.set(true, forKey: "isLoggedIn")
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
-                        self.cancelButton.setTitle("Close", for: .normal)
-                        self.notificationLabel.textColor = UIColor.lightGray
-                        self.notificationLabel.text = "Login successfull, press close below."
-                        self.notificationLabel.isHidden = false
+                        self.dismiss(animated: true, completion: nil)
                     } else{
                         self.notificationLabel.text = "Error code \(res["code"])"
                         self.notificationLabel.isHidden = false
@@ -189,8 +220,6 @@ class LoginPageViewController: UIViewController {
     }
     
     func checkUsernameAndPassword(username: String, password: String) -> (String?, Bool) {
-//        print(username)
-//        print(password)
         let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
         let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
         if emailPredicate.evaluate(with: username){
