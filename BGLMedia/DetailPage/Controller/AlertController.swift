@@ -16,18 +16,31 @@ struct alertResult{
     var name:[alertObject] = [alertObject]()
 }
 
+struct coinAlert{
+    var status:Bool = false
+    var coinAbbName:String = ""
+}
+
 class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var realm = try! Realm()
     var alerts:[alertResult] = [alertResult]()
+    var coinName = coinAlert()
+    
     var allAlert:[alertResult]{
         get{
             var allResult = [alertResult]()
             let results = realm.objects(alertObject.self)
-            let coinNameResults = realm.objects(alertCoinNames.self)
+            var coinNameResults = realm.objects(alertCoinNames.self)
+            if coinName.status{
+                coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName + "' ")
+                print("hhahahaha")
+            }
+    
             for value in coinNameResults{
                 var alertResults = alertResult()
-                let speCoin = results.filter("coinName = '" + value.coinName + "' ")
+                let speCoin = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
                 alertResults.isExpanded = true
+                alertResults.coinAbbName = value.coinAbbName
                 alertResults.coinName = value.coinName
                 for data in speCoin{
                     alertResults.name.append(data)
@@ -49,7 +62,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         setUpView()
         alerts = allAlert
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-        // Do any additional setup after loading the view.
     }
     
     deinit {
@@ -63,6 +75,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     
     @objc func addAlerts(){
+        alerts = allAlert
         alertTableView.reloadData()
     }
     
@@ -192,37 +205,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     func setUpView(){
         view.backgroundColor = ThemeColor().themeColor()
-        
-        let addButton = UIButton()
-        addButton.setTitle("➕", for: .normal)
-        addButton.titleLabel?.font = addButton.titleLabel?.font.withSize(25)
-        addButton.backgroundColor = UIColor.white
-        addButton.layer.cornerRadius = 25
-        addButton.addTarget(self, action: #selector(addAlert), for: .touchUpInside)
-        
-        addButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        
         view.addSubview(alertTableView)
-        alertTableView.addSubview(addButton)
-         view.addSubview(alertButton)
+        view.addSubview(alertButton)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-3-[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
-
-//        NSLayoutConstraint(item: addButton, attribute: .top, relatedBy: .equal, toItem: alertTableView, attribute: .top, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: addButton, attribute: .trailing, relatedBy: .equal, toItem: alertTableView, attribute: .trailing, multiplier: 1, constant: 0).isActive = true
-//
-        
-//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(50)]-100-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButton,"v1":alertTableView]))
-//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-50-[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButton,"v1":alertTableView]))
-        
-        NSLayoutConstraint(item: addButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 50).isActive = true
-        NSLayoutConstraint(item: addButton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 50).isActive = true
-        NSLayoutConstraint(item: addButton, attribute: .centerX, relatedBy: .equal, toItem: alertTableView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: addButton, attribute: .centerY, relatedBy: .equal, toItem: alertTableView, attribute: .centerY, multiplier: 1, constant: 150).isActive = true
-
     }
     
     @objc func addAlert(){
@@ -242,7 +230,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-//        tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
         return tableView
     }()
     

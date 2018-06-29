@@ -304,10 +304,10 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 realm.create(alertObject.self, value: realmData, update: true)
             }
             
-            if realm.object(ofType: alertCoinNames.self, forPrimaryKey: newTransaction.coinName) == nil {
-                realm.create(alertCoinNames.self, value: [newTransaction.coinName])
+            if realm.object(ofType: alertCoinNames.self, forPrimaryKey: newTransaction.coinAbbName) == nil {
+                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName])
             } else {
-                realm.create(alertCoinNames.self, value: [newTransaction.coinName], update: true)
+                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName], update: true)
             }
             
             try! realm.commitWrite()

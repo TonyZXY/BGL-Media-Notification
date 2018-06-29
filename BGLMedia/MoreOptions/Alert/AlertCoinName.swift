@@ -12,9 +12,10 @@ import Foundation
 import RealmSwift
 
 class alertCoinNames:Object{
+    @objc dynamic var coinAbbName:String = ""
     @objc dynamic var coinName:String = ""
     
     override class func primaryKey() -> String {
-        return "coinName"
+        return "coinAbbName"
     }
 }

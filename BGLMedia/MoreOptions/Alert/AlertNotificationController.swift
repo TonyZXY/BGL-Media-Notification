@@ -15,9 +15,9 @@ class switchObject{
 
 class AlertNotificationController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var switchStatus = switchObject()
-    var cellItems:[String]{
+    var cellItems:[[String]]{
         get{
-            return [textValue(name: "flashNews_alert"),textValue(name: "price_alert"),textValue(name: "edit_alert")]
+            return [["open"],[textValue(name: "flashNews_alert"),textValue(name: "price_alert"),textValue(name: "edit_alert")]]
         }
     }
     
@@ -30,34 +30,125 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     var switchLabel = ["flashSwitch","priceSwitch"]
+    var sectionItem = ["Notification","Option"]
     
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         return cellItems.count
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if indexPath.row < 2{
-            let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
-            cell.backgroundColor = ThemeColor().themeColor()
-            cell.textLabel?.text = cellItems[indexPath.row]
-            cell.accessibilityHint = switchStatusItem[indexPath.row]
-            cell.textLabel?.textColor = UIColor.white
-            let swithButton = UISwitch()
-            swithButton.isOn = SwitchOption[indexPath.row]
-            cell.accessoryView = swithButton
-            swithButton.tag = indexPath.row
-            swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
-            return cell
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().bglColor()
+        let hintLabel = UILabel()
+        hintLabel.text = sectionItem[section]
+        hintLabel.textColor = UIColor.black
+        hintLabel.translatesAutoresizingMaskIntoConstraints = false
+        let statusLabel = UILabel()
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        sectionView.addSubview(hintLabel)
+        sectionView.addSubview(statusLabel)
+        
+        NSLayoutConstraint(item: hintLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+         NSLayoutConstraint(item: statusLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":statusLabel]))
+        
+        return sectionView
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().themeColor()
+        let hintLabel = UILabel()
+        hintLabel.text = "Please go to setting open the Notification"
+        hintLabel.font = hintLabel.font.withSize(10)
+        hintLabel.textColor = UIColor.white
+        hintLabel.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.addSubview(hintLabel)
+
+        let button = UIButton(type: .system)
+        button.setTitle("setting", for: .normal)
+        button.setTitleColor(UIColor.yellow, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+        sectionView.addSubview(button)
+
+        NSLayoutConstraint(item: hintLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-0-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel,"v1":button]))
+
+
+        return sectionView
+    }
+    
+    @objc func deviceSetting(){
+        let settingsButton = NSLocalizedString("Settings", comment: "")
+        let cancelButton = NSLocalizedString("Cancel", comment: "")
+        let message = NSLocalizedString("Your need to give a permission from notification settings.", comment: "")
+        let goToSettingsAlert = UIAlertController(title: "", message: message, preferredStyle: UIAlertControllerStyle.alert)
+        
+        goToSettingsAlert.addAction(UIAlertAction(title: settingsButton, style: .destructive, handler: { (action: UIAlertAction) in
+            DispatchQueue.main.async {
+                guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                    return
+                }
+                
+                if UIApplication.shared.canOpenURL(settingsUrl) {
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                            print("Settings opened: \(success)") // Prints true
+                        })
+                    } else {
+                        UIApplication.shared.openURL(settingsUrl as URL)
+                    }
+                }
+            }
+        }))
+        
+//        logoutUserAlert.addAction(UIAlertAction(title: cancelButton, style: .cancel, handler: nil))
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0{
+            return 50
         } else{
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 30
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return cellItems[section].count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
-            cell.backgroundColor = ThemeColor().themeColor()
-            cell.accessoryType = .disclosureIndicator
-            cell.textLabel?.text = cellItems[indexPath.row]
-            cell.textLabel?.textColor = UIColor.white
-            cell.isHidden = true
-            if SwitchOption[1] == true{
-                cell.isHidden = false
+            cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
+            return cell
+        } else {
+            let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
+            cell.selectionStyle = .none
+            cell.backgroundColor = UIColor.white
+            cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
+            cell.accessibilityHint = switchStatusItem[indexPath.row]
+            cell.textLabel?.textColor = UIColor.black
+            if indexPath.row < 2{
+                let swithButton = UISwitch()
+                swithButton.isOn = SwitchOption[indexPath.row]
+                cell.accessoryView = swithButton
+                swithButton.tag = indexPath.row
+                swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
+            } else{
+                cell.accessoryType = .disclosureIndicator
+                if SwitchOption[1] == true{
+                    cell.isHidden = false
+                }
             }
             return cell
         }
@@ -66,41 +157,16 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
 
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-//        let cell:UITableViewCell = tableView.cellForRow(at: indexPath)!
-//        if cell.accessibilityHint == "Edit"{
-//            let alert = AlertController()
-//            navigationController?.pushViewController(alert, animated: true)
-//        }
         if indexPath.row == 2{
             let alert = AlertController()
             navigationController?.pushViewController(alert, animated: true)
         }
-//        if indexPath.row == 0{
-//            let cell:SwitchTableViewCell = tableView.cellForRow(at: indexPath) as! SwitchTableViewCell
-//            if cell.swithButton.isOn == true{
-//                UserDefaults.standard.set(true, forKey: "flashSwitch")
-//                print("sfsf")
-//            } else{
-//                UserDefaults.standard.set(false, forKey: "flashSwitch")
-//            }
-//        } else if indexPath.row == 1 {
-//            let cell:SwitchTableViewCell = tableView.cellForRow(at: indexPath) as! SwitchTableViewCell
-//            if cell.swithButton.isOn{
-//                UserDefaults.standard.set(true, forKey: "priceSwitch")
-//            } else{
-//                UserDefaults.standard.set(false, forKey: "priceSwitch")
-//            }
-//        }
-//        notificationTableView.reloadData()
-//        notificationTableView.deselectRow(at: indexPath, animated: true)
     }
 
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        
-        
         // Do any additional setup after loading the view.
     }
     
@@ -127,10 +193,38 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func setUpView(){
+        view.backgroundColor = ThemeColor().themeColor()
+        view.addSubview(loginStatusView)
         view.addSubview(notificationTableView)
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notificationTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notificationTableView]))
+        
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginStatusView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginStatusView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notificationTableView,"v1":loginStatusView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-40-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notificationTableView,"v1":loginStatusView]))
     }
+    
+    var loginStatusView:UIView = {
+        var view = UIView()
+        view.backgroundColor = UIColor.white
+        var loginLabel = UILabel()
+        loginLabel.text = "Guest"
+        loginLabel.translatesAutoresizingMaskIntoConstraints = false
+        var statusLabel = UILabel()
+        statusLabel.text = "Login in"
+        statusLabel.translatesAutoresizingMaskIntoConstraints = false
+        
+        
+        view.addSubview(loginLabel)
+        view.addSubview(statusLabel)
+        
+        NSLayoutConstraint(item: loginLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: statusLabel, attribute: .centerY, relatedBy: .equal, toItem: view, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":statusLabel]))
+        
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
     
     lazy var notificationTableView:UITableView = {
        var tableView = UITableView()
@@ -140,36 +234,11 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.separatorStyle = .none
         return tableView
     }()
-    
-
-    
-    
+ 
     class SwitchTableViewCell:UITableViewCell{
-        
-//        var object:switchObject?{
-//            didSet{
-//                if self.object?.type == "Flash"{
-//                    if self.object?.switchStatus == true{
-////                        swithButton.isOn = true
-//                        UserDefaults.standard.set(true, forKey: "flashSwitch")
-//                    } else{
-//                        swithButton.isOn = false
-//                        UserDefaults.standard.set(false, forKey: "flashSwitch")
-//                    }
-//                } else if self.object?.type == "Currency"{
-//                    if self.object?.switchStatus == true{
-////                        swithButton.isOn = true
-//                        UserDefaults.standard.set(true, forKey: "priceSwitch")
-//                    } else{
-////                        swithButton.isOn = false
-//                        UserDefaults.standard.set(false, forKey: "priceSwitch")
-//                    }
-//                }
-//            }
-//        }
-        
         override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
             super.init(style: style, reuseIdentifier: reuseIdentifier)
             setUpView()
@@ -181,32 +250,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         
         func setUpView(){
             self.backgroundColor = ThemeColor().themeColor()
-//            self.addSubview(swithButton)
-//            self.addSubview(notifiLabel)
             self.selectionStyle = .none
-//            self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notifiLabel]))
-//            NSLayoutConstraint(item: notifiLabel, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-            
-//            self.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":swithButton]))
-//            NSLayoutConstraint(item: swithButton, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
         }
-        
-//        var swithButton:UISwitch = {
-//            var switchButton = UISwitch()
-//            switchButton.isOn = false
-//            switchButton.thumbTintColor = UIColor.red
-//            switchButton.tintColor = UIColor.green
-//            switchButton.onTintColor = ThemeColor().bglColor()
-//            switchButton.translatesAutoresizingMaskIntoConstraints = false
-//            return switchButton
-//        }()
-        
-//        var notifiLabel:UILabel = {
-//            var label = UILabel()
-//            label.textColor = UIColor.white
-//            label.translatesAutoresizingMaskIntoConstraints = false
-//            return label
-//        }()
     }
-
 }
