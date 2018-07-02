@@ -74,6 +74,8 @@ class NetworkManager: NSObject {
         }
     }
     
+    
+    
     // Network is reachable
     static func isReachable(completed: @escaping (NetworkManager) -> Void) {
         if (NetworkManager.sharedInstance.reachability).connection != .none {
