@@ -111,6 +111,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         
+        UserDefaults.standard.set(deviceTokenString, forKey: "DeviceToken")
+        
     }
         
     
