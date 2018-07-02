@@ -389,33 +389,34 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }()
     
     @objc func addNewAlert(){
-        
-        print(UserDefaults.standard.string(forKey: "DeviceToken"))
-        
-//        let parameter = ["userEmail": "aaa@gmail.com", "token": ""]
-//        let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
-//        var urlRequest = URLRequest(url: url!)
-//        urlRequest.httpMethod = "POST"
-//        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-//        urlRequest.httpBody = httpBody
-//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        //        urlRequest.setValue("gmail.com",email)
-//
-//
-//
-//
-//        Alamofire.request(urlRequest).response { (response) in
-//            if let data = response.data{
-//                var res = JSON(data)
+        let email = UserDefaults.standard.string(forKey: "UserEmail")
+        let token = UserDefaults.standard.string(forKey: "UserToken")
+        let parameter = ["userEmail": email, "token": token]
+        let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "POST"
+        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+        urlRequest.httpBody = httpBody
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        //        urlRequest.setValue("gmail.com",email)
+
+
+
+        Alamofire.request(urlRequest).response { (response) in
+            if let data = response.data{
+                var res = JSON(data)
+                print(res)
+                
 //                if res == JSON.null {
+//                    print(res)
 ////                    completion(["code":"Server not available"],false)
 //                } else if res["success"].bool!{
 ////                    completion(res,true)
 //                } else {
 ////                    completion(res,false)
 //                }
-//            }
-//        }
+            }
+        }
         
         let alert = AlertManageController()
         navigationController?.pushViewController(alert, animated: true)

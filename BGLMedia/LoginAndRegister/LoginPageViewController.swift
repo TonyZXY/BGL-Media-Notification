@@ -201,6 +201,8 @@ class LoginPageViewController: UIViewController {
                 if success{
                     self.loginRequestToServer(username: un, password: pw){(res,pass) in
                         if pass {
+                            UserDefaults.standard.set("1234", forKey: "UserEmail")
+                            UserDefaults.standard.set(res["token"], forKey: "CertificateToken")
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
@@ -268,6 +270,7 @@ class LoginPageViewController: UIViewController {
                     }
             }
         }
+        
     }
 
 }

@@ -8,6 +8,8 @@
 
 import UIKit
 import RealmSwift
+import Alamofire
+import SwiftyJSON
 
 class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDataSource,TransactionFrom{
     func setSinglePrice(single: Double) {
@@ -37,6 +39,18 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     @objc func done(){
+        
+        let email = UserDefaults.standard.string(forKey: "UserEmail")
+        let token = UserDefaults.standard.string(forKey: "CertificateToken")
+
+        print(email)
+        print(token)
+        let parameter = ["email":email,"token":token,"interests":["_id":"","coinFrom":"BTC","coinTo":"AUD","market":"BTCmarkets","price":123,"status":true,"id":"123","isGreater":1]] as [String : Any]
+        
+        registerRequestToServer(parameter: parameter){(json,pass) in
+           print(json)
+        }
+        
         if newTransaction.tradingPairsName != "" {
             let filterName = "coinAbbName = '" + newTransaction.coinAbbName + "' "
             let statusItem = realm.objects(MarketTradingPairs.self).filter(filterName)
@@ -119,4 +133,33 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
     func setTradingPairsSecondType(secondCoinType: [String]) {
         
     }
+    
+    func registerRequestToServer(parameter: [String : Any], completion:@escaping (JSON, Bool)->Void){
+        
+        let url = URL(string: "http://10.10.6.139:3030/userLogin/addInterest")
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "POST"
+        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+        urlRequest.httpBody = httpBody
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        //        urlRequest.setValue("gmail.com",email)
+        
+        
+        
+        Alamofire.request(urlRequest).response { (response) in
+            if let data = response.data{
+                var res = JSON(data)
+                if res == nil {
+                    completion(["code":"Server not available"],false)
+                } else if res["success"].bool!{
+                    completion(res,true)
+                } else {
+                    completion(res,false)
+                }
+            }
+        }
+        
+        
+    }
+    
 }

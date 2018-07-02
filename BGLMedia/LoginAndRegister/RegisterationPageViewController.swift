@@ -200,6 +200,8 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
                     self.registerRequestToServer(parameter: parameter){(res,pass) in
                         if pass {
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            UserDefaults.standard.set(parameter["email"], forKey: "UserEmail")
+                            UserDefaults.standard.set(res["token"], forKey: "CertificateToken")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             if self.presentingViewController?.presentingViewController != nil{
                                 self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -247,6 +249,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
                 var res = JSON(data)
+                print(res)
                 if res == nil {
                     completion(["code":"Server not available"],false)
                 } else if res["success"].bool!{

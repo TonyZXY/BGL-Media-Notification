@@ -11,6 +11,7 @@ import UIKit
 import UserNotifications
 import SwiftyJSON
 import Alamofire
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -111,8 +112,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         
-        UserDefaults.standard.set(deviceTokenString, forKey: "DeviceToken")
-        
+        UserDefaults.standard.set(deviceTokenString, forKey: "UserToken")
     }
         
     
