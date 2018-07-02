@@ -169,8 +169,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
             } else{
                 cell.accessoryType = .disclosureIndicator
-                print(UserDefaults.standard.bool(forKey: "flashSwitch"))
-                print(String(SwitchOption[1]) + "hahahaha" )
                 if SwitchOption[1] == false{
                     cell.isHidden = true
                 }
@@ -194,7 +192,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         getNotificationStatus()
         setUpView()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
-       NotificationCenter.default.addObserver(self, selector: #selector(refreshUserStatus), name:NSNotification.Name(rawValue: "logIn"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshUserStatus), name:NSNotification.Name(rawValue: "logIn"), object: nil)
     }
     
     deinit {

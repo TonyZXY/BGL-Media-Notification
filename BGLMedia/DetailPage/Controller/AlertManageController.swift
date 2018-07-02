@@ -93,7 +93,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             coinImage.coinImageSetter(coinName: newTransaction.coinAbbName, width: 30, height: 30, fontSize: 5)
             let coinLabel = UILabel()
             coinLabel.translatesAutoresizingMaskIntoConstraints = false
-            coinLabel.text = newTransaction.coinName
+            coinLabel.text = "Coin Name:" + newTransaction.coinName
             
             
             //        let myTextField = UITextField()
@@ -152,8 +152,11 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
              sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":priceLabel]))
             return sectionView
         }
-        
-
+    }
+    
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
     }
     
     @objc func handleExpandClose(button:UIButton ){
@@ -174,7 +177,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
 //        } else{
 //            alertTableView.deleteRows(at: indexPaths, with: .fade)
 //        }
-        
         let coin = SearchCoinController()
         coin.delegate = self
         navigationController?.pushViewController(coin, animated: true)

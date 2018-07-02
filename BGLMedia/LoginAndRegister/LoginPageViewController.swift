@@ -238,8 +238,8 @@ class LoginPageViewController: UIViewController {
     func loginRequestToServer(username: String,password: String,completion:@escaping (JSON, Bool)->Void){
         
         
-        let parameters = ["username": username.lowercased(), "password":password]
-        let url = URL(string: "http://10.10.6.218:3030/userLogin/login")
+        let parameters = ["userEmail": username.lowercased(), "password":password]
+        let url = URL(string: "http://10.10.6.139:3030/userLogin/login")
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "POST"
         let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
@@ -250,6 +250,8 @@ class LoginPageViewController: UIViewController {
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
                 var res = JSON(data)
+                
+                print(res)
                 if res == nil {
                     completion(["code":"Server not available"],false)
                 } else if res["success"].bool!{

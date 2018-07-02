@@ -8,6 +8,9 @@
 
 import UIKit
 import RealmSwift
+import UserNotifications
+import Alamofire
+import SwiftyJSON
 
 struct alertResult{
     var isExpanded:Bool = true
@@ -59,20 +62,36 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpView()
+        view.backgroundColor = ThemeColor().themeColor()
         alerts = allAlert
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         tabBarController?.tabBar.isHidden = true
+        getNotificationStatus()
+        checkSetUpView()
     }
     
+    @objc func refreshNotificationStatus(){
+        getNotificationStatus()
+    }
+    
+    func checkSetUpView(){
+        let status = UserDefaults.standard.bool(forKey: "NotificationSetting")
+        if status{
+            setUpView()
+        }else{
+            setUpNoNotificationView()
+        }
+    }
     
     @objc func addAlerts(){
         alerts = allAlert
@@ -96,7 +115,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let coinLabel = UILabel()
         coinLabel.translatesAutoresizingMaskIntoConstraints = false
         coinLabel.text = alerts[section].coinName
-        
         
         //        let myTextField = UITextField()
         //        let bottomLine = CALayer()
@@ -204,13 +222,93 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
-        view.backgroundColor = ThemeColor().themeColor()
-        view.addSubview(alertTableView)
-        view.addSubview(alertButton)
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-3-[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
+        view.addSubview(alertView)
+        alertView.addSubview(alertTableView)
+        alertView.addSubview(alertButton)
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertView]))
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-3-[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
+    }
+    
+    func setUpNoNotificationView(){
+        view.addSubview(alertHintView)
+        alertHintView.addSubview(alertMainHintLabel)
+        alertHintView.addSubview(alertHintLabel)
+        alertHintView.addSubview(alertOpenButton)
+        
+        
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintView]))
+        
+        NSLayoutConstraint(item: alertHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: alertHintLabel, attribute: .centerY, relatedBy: .equal, toItem: alertHintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: alertMainHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: alertOpenButton, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertMainHintLabel]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertMainHintLabel,"v1":alertOpenButton]))
+
+        
+    }
+    
+    @objc func deviceSetting(){
+        let alertController = UIAlertController(title: "Alert Title is here", message: "Alert Description is here", preferredStyle: .alert)
+        
+        // Setting button action
+        let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
+            guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                return
+            }
+            
+            if UIApplication.shared.canOpenURL(settingsUrl) {
+                UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                    // Checking for setting is opened or not
+                    print("Setting is opened: \(success)")
+                })
+            }
+        }
+        
+        alertController.addAction(settingsAction)
+        // Cancel button action
+        let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
+            // Magic is here for cancel button
+        }
+        alertController.addAction(cancelAction)
+        // This part is important to show the alert controller ( You may delete "self." from present )
+        self.present(alertController, animated: true, completion: nil)
+    }
+    
+    func getNotificationStatus(){
+        let current = UNUserNotificationCenter.current()
+        current.getNotificationSettings(completionHandler: { (settings) in
+            if settings.authorizationStatus == .notDetermined {
+                print("1")
+                // Notification permission has not been asked yet, go for it!
+            }
+            
+            if settings.authorizationStatus == .denied {
+                UserDefaults.standard.set(false, forKey: "NotificationSetting")
+                print("disable")
+                // Notification permission was previously denied, go to settings & privacy to re-enable
+            }
+            
+            if settings.authorizationStatus == .authorized {
+                UserDefaults.standard.set(true, forKey: "NotificationSetting")
+                print("enable")
+                // Notification permission was already gransnted
+            }
+            
+            DispatchQueue.main.async {
+                self.checkSetUpView()
+            }
+            print("trys")
+        })
     }
     
     @objc func addAlert(){
@@ -222,6 +320,52 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    var alertView:UIView = {
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor().themeColor()
+        return view
+    }()
+    
+    var alertHintView:UIView = {
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor().themeColor()
+        return view
+    }()
+    
+    var alertMainHintLabel:UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        label.text = "Open your Notification"
+        label.font = label.font.withSize(20)
+        label.textColor = UIColor.white
+        return label
+    }()
+    
+    var alertHintLabel:UILabel = {
+       var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "If you want to use alert functions, you need to go to setting page to open it, click the button and towards to setting page"
+        label.textAlignment = .center
+        label.lineBreakMode = .byWordWrapping
+        label.font = label.font.withSize(13)
+        label.numberOfLines = 0
+        label.textColor = UIColor.white
+        return label
+    }()
+    
+    var alertOpenButton:UIButton = {
+        var button = UIButton(type:.system)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = UIColor.red
+        button.setTitle("Open Notification", for: .normal)
+        button.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+        button.setTitleColor(UIColor.white, for: .normal)
+        return button
+    }()
     
     lazy var alertTableView:UITableView = {
         var tableView = UITableView()
@@ -245,6 +389,29 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }()
     
     @objc func addNewAlert(){
+        
+        let parameter = ["userID": "", "token": ""]
+        let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "POST"
+        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+        urlRequest.httpBody = httpBody
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        //        urlRequest.setValue("gmail.com",email)
+        
+        Alamofire.request(urlRequest).response { (response) in
+            if let data = response.data{
+                var res = JSON(data)
+                if res == JSON.null {
+//                    completion(["code":"Server not available"],false)
+                } else if res["success"].bool!{
+//                    completion(res,true)
+                } else {
+//                    completion(res,false)
+                }
+            }
+        }
+        
         let alert = AlertManageController()
         navigationController?.pushViewController(alert, animated: true)
     }
