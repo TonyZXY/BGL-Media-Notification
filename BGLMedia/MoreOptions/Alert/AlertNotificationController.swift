@@ -101,12 +101,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             
             
         }
-        
-
-        
-        
-
-
         return sectionView
     }
     
@@ -175,8 +169,10 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
             } else{
                 cell.accessoryType = .disclosureIndicator
-                if SwitchOption[1] == true{
-                    cell.isHidden = false
+                print(UserDefaults.standard.bool(forKey: "flashSwitch"))
+                print(String(SwitchOption[1]) + "hahahaha" )
+                if SwitchOption[1] == false{
+                    cell.isHidden = true
                 }
             }
             return cell
@@ -238,19 +234,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             if settings.authorizationStatus == .authorized {
                 UserDefaults.standard.set(true, forKey: "NotificationSetting")
                 print("enable")
-                // Notification permission was already granted
+                // Notification permission was already gransnted
             }
             DispatchQueue.main.async {
                 self.notificationTableView.reloadData()
             }
             print("trys")
         })
-        
-//        current.getNotificationSettings(){(bool) in
-//            if bool{
-//
-//            }
-//        }
     }
 
     @objc func addLogin(){
@@ -278,7 +268,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 UserDefaults.standard.set(false, forKey: "priceSwitch")
             }
         }
-        notificationTableView.reloadData()
+        DispatchQueue.main.async {
+            self.notificationTableView.reloadData()
+        }
     }
     
     func setUpView(){
