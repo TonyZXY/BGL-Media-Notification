@@ -32,7 +32,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.registerForRemoteNotifications()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-        
+
+
         if launchedBefore{
             print("launched before")
             

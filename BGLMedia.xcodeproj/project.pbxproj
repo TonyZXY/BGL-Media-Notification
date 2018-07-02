@@ -177,6 +177,7 @@
 		2D52AF3F20E46E1A00018FC0 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE9420E46E1900018FC0 /* BaseCell.swift */; };
 		2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE9620E46E1A00018FC0 /* OnBoardingUIPageViewController.swift */; };
 		2D52AF4120E46E1A00018FC0 /* OnBoardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE9720E46E1A00018FC0 /* OnBoardingPageViewController.swift */; };
+		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
 		C58BCE0F12A2628987EF92C2 /* Pods_BGLMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B6739E6F1930DDDAC5334B8 /* Pods_BGLMedia.framework */; };
 /* End PBXBuildFile section */
 
@@ -356,6 +357,7 @@
 		2D52AE9720E46E1A00018FC0 /* OnBoardingPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardingPageViewController.swift; sourceTree = "<group>"; };
 		2D6F5EFD20E324D4006264BB /* BGLMedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BGLMedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F2192DEAE64945AD062DCA3 /* Pods-BGLMedia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BGLMedia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BGLMedia/Pods-BGLMedia.debug.xcconfig"; sourceTree = "<group>"; };
+		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		E9506C012D60A9C33ABF0A9D /* Pods-BGLMedia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BGLMedia.release.xcconfig"; path = "Pods/Target Support Files/Pods-BGLMedia/Pods-BGLMedia.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -923,6 +925,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				54AA279420E9B27A0026701A /* NetworkManager */,
 				2D52AE9520E46E1900018FC0 /* OnBoardingPage */,
 				2D52ADD520E46E1700018FC0 /* Supporting Files */,
 				2D52AE1F20E46E1800018FC0 /* LoginAndRegister */,
@@ -942,6 +945,14 @@
 				2D52AE1920E46E1700018FC0 /* zh-Hans-CN.lproj */,
 			);
 			path = BGLMedia;
+			sourceTree = "<group>";
+		};
+		54AA279420E9B27A0026701A /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				54AA279520E9B28E0026701A /* NetworkManager.swift */,
+			);
+			path = NetworkManager;
 			sourceTree = "<group>";
 		};
 		F249FBEA6AE0F53C3BA5FC1E /* Frameworks */ = {
@@ -1052,6 +1063,7 @@
 				"${SRCROOT}/Pods/Target Support Files/Pods-BGLMedia/Pods-BGLMedia-frameworks.sh",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
 				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
+				"${BUILT_PRODUCTS_DIR}/ReachabilitySwift/Reachability.framework",
 				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
 				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
 				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
@@ -1064,6 +1076,7 @@
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Reachability.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
@@ -1129,6 +1142,7 @@
 				2D52AEF820E46E1A00018FC0 /* CoinsInWatchListRealm.swift in Sources */,
 				2D52AEDF20E46E1A00018FC0 /* ChangeRiseFallColor.swift in Sources */,
 				2D52AE9D20E46E1A00018FC0 /* GerneralController.swift in Sources */,
+				54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */,
 				2D52AF2520E46E1A00018FC0 /* DateTimeConverter.swift in Sources */,
 				2D52AF2E20E46E1A00018FC0 /* News.swift in Sources */,
 				2D52AF2B20E46E1A00018FC0 /* NewsListViewController.swift in Sources */,
