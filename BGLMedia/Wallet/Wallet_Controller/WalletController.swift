@@ -288,6 +288,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     
     func setUpInitialView(){
+        existTransactionView.removeFromSuperview()
         view.addSubview(invisibleView)
         invisibleView.addSubview(buttonView)
         invisibleView.addSubview(hintMainView)
@@ -337,6 +338,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     //Set Up View Layout
     func setupView(){
         //Add Subview
+        invisibleView.removeFromSuperview()
         view.addSubview(existTransactionView)
         existTransactionView.addSubview(totalProfitView)
         existTransactionView.addSubview(buttonView)

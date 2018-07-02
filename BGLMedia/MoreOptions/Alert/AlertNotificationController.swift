@@ -101,12 +101,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             
             
         }
-        
-
-        
-        
-
-
         return sectionView
     }
     
@@ -175,8 +169,8 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
             } else{
                 cell.accessoryType = .disclosureIndicator
-                if SwitchOption[1] == true{
-                    cell.isHidden = false
+                if SwitchOption[1] == false{
+                    cell.isHidden = true
                 }
             }
             return cell
@@ -198,7 +192,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         getNotificationStatus()
         setUpView()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
-       NotificationCenter.default.addObserver(self, selector: #selector(refreshUserStatus), name:NSNotification.Name(rawValue: "logIn"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshUserStatus), name:NSNotification.Name(rawValue: "logIn"), object: nil)
     }
     
     deinit {
@@ -238,19 +232,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             if settings.authorizationStatus == .authorized {
                 UserDefaults.standard.set(true, forKey: "NotificationSetting")
                 print("enable")
-                // Notification permission was already granted
+                // Notification permission was already gransnted
             }
             DispatchQueue.main.async {
                 self.notificationTableView.reloadData()
             }
             print("trys")
         })
-        
-//        current.getNotificationSettings(){(bool) in
-//            if bool{
-//
-//            }
-//        }
     }
 
     @objc func addLogin(){
@@ -278,7 +266,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 UserDefaults.standard.set(false, forKey: "priceSwitch")
             }
         }
-        notificationTableView.reloadData()
+        DispatchQueue.main.async {
+            self.notificationTableView.reloadData()
+        }
     }
     
     func setUpView(){
