@@ -36,7 +36,14 @@ class MainTabBarController: UITabBarController {
         network.reachability.whenReachable = { _ in
             print("back online -------------------")
             self.networkLabel.removeFromSuperview()
+        
         }
+        
+        
+        //debug
+//        NetworkManager.isReachable{ _ in
+//            self.view.addSubview(self.networkLabel)
+//        }
         
         NetworkManager.isUnreachable{ _ in
             self.view.addSubview(self.networkLabel)
@@ -84,7 +91,10 @@ class MainTabBarController: UITabBarController {
         viewControllers![3].tabBarItem.title = textValue(name: "news_tab")
         viewControllers![4].tabBarItem.title = textValue(name: "more_tab")
         
-        let networkLabelFrame = CGRect(x: 0, y: tabBar.frame.minY - 100,  width: 375, height: 50)
+        let networkLabelFrame = CGRect(x: 0, y: tabBar.frame.minY-80,  width: UIScreen.main.bounds.width, height: 40)
+        
+        print(tabBar.frame.minY)
+        print(UIScreen.main.bounds)
         
         networkLabel.frame = networkLabelFrame
         
