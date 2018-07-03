@@ -31,7 +31,6 @@
 		2D52AEAD20E46E1A00018FC0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADD220E46E1700018FC0 /* Localizable.strings */; };
 		2D52AEAE20E46E1A00018FC0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADD420E46E1700018FC0 /* MainTabBarController.swift */; };
 		2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADD620E46E1700018FC0 /* news_app_for_blockchain.xcdatamodeld */; };
-		2D52AEB020E46E1A00018FC0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADD820E46E1700018FC0 /* Assets.xcassets */; };
 		2D52AEB120E46E1A00018FC0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADD920E46E1700018FC0 /* LaunchScreen.storyboard */; };
 		2D52AEB220E46E1A00018FC0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADDB20E46E1700018FC0 /* AppDelegate.swift */; };
 		2D52AEB320E46E1A00018FC0 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADDC20E46E1700018FC0 /* LaunchScreen.strings */; };
@@ -177,11 +176,18 @@
 		2D52AF3F20E46E1A00018FC0 /* BaseCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE9420E46E1900018FC0 /* BaseCell.swift */; };
 		2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE9620E46E1A00018FC0 /* OnBoardingUIPageViewController.swift */; };
 		2D52AF4120E46E1A00018FC0 /* OnBoardingPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE9720E46E1A00018FC0 /* OnBoardingPageViewController.swift */; };
-		C58BCE0F12A2628987EF92C2 /* Pods_BGLMedia.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1B6739E6F1930DDDAC5334B8 /* Pods_BGLMedia.framework */; };
+		3D1332EA20E9FA5700D3CAE6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */; };
+		3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */; };
+		3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */; };
+		3D1332ED20E9FA5700D3CAE6 /* Realm.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E620E9FA5600D3CAE6 /* Realm.framework */; };
+		3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */; };
+		3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E820E9FA5600D3CAE6 /* Reachability.framework */; };
+		3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */; };
+		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
+		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		1B6739E6F1930DDDAC5334B8 /* Pods_BGLMedia.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_BGLMedia.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
 		2D52ADB920E46E1600018FC0 /* DetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
@@ -207,7 +213,6 @@
 		2D52ADD320E46E1700018FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		2D52ADD420E46E1700018FC0 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		2D52ADD720E46E1700018FC0 /* news_app_for_blockchain.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = news_app_for_blockchain.xcdatamodel; sourceTree = "<group>"; };
-		2D52ADD820E46E1700018FC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D52ADDA20E46E1700018FC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2D52ADDB20E46E1700018FC0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D52ADDD20E46E1700018FC0 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -355,8 +360,15 @@
 		2D52AE9620E46E1A00018FC0 /* OnBoardingUIPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardingUIPageViewController.swift; sourceTree = "<group>"; };
 		2D52AE9720E46E1A00018FC0 /* OnBoardingPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = OnBoardingPageViewController.swift; sourceTree = "<group>"; };
 		2D6F5EFD20E324D4006264BB /* BGLMedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BGLMedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		3F2192DEAE64945AD062DCA3 /* Pods-BGLMedia.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BGLMedia.debug.xcconfig"; path = "Pods/Target Support Files/Pods-BGLMedia/Pods-BGLMedia.debug.xcconfig"; sourceTree = "<group>"; };
-		E9506C012D60A9C33ABF0A9D /* Pods-BGLMedia.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-BGLMedia.release.xcconfig"; path = "Pods/Target Support Files/Pods-BGLMedia/Pods-BGLMedia.release.xcconfig"; sourceTree = "<group>"; };
+		3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
+		3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubePlayer.framework; path = Carthage/Build/iOS/YouTubePlayer.framework; sourceTree = "<group>"; };
+		3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
+		3D1332E620E9FA5600D3CAE6 /* Realm.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Realm.framework; path = Carthage/Build/iOS/Realm.framework; sourceTree = "<group>"; };
+		3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
+		3D1332E820E9FA5600D3CAE6 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
+		3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
+		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -364,22 +376,19 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				C58BCE0F12A2628987EF92C2 /* Pods_BGLMedia.framework in Frameworks */,
+				3D1332EA20E9FA5700D3CAE6 /* SwiftyJSON.framework in Frameworks */,
+				3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */,
+				3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */,
+				3D1332ED20E9FA5700D3CAE6 /* Realm.framework in Frameworks */,
+				3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */,
+				3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */,
+				3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		1E55C44CB146B0862DF84243 /* Pods */ = {
-			isa = PBXGroup;
-			children = (
-				3F2192DEAE64945AD062DCA3 /* Pods-BGLMedia.debug.xcconfig */,
-				E9506C012D60A9C33ABF0A9D /* Pods-BGLMedia.release.xcconfig */,
-			);
-			name = Pods;
-			sourceTree = "<group>";
-		};
 		2D52ADB620E46E1600018FC0 /* DetailPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -452,8 +461,8 @@
 			isa = PBXGroup;
 			children = (
 				2D52ADD620E46E1700018FC0 /* news_app_for_blockchain.xcdatamodeld */,
-				2D52ADD820E46E1700018FC0 /* Assets.xcassets */,
 				2D52ADD920E46E1700018FC0 /* LaunchScreen.storyboard */,
+				573C96A720EB5B8700B667AB /* Assets.xcassets */,
 				2D52ADDB20E46E1700018FC0 /* AppDelegate.swift */,
 				2D52ADDC20E46E1700018FC0 /* LaunchScreen.strings */,
 			);
@@ -907,7 +916,6 @@
 			children = (
 				2D6F5EFF20E324D4006264BB /* BGLMedia */,
 				2D6F5EFE20E324D4006264BB /* Products */,
-				1E55C44CB146B0862DF84243 /* Pods */,
 				F249FBEA6AE0F53C3BA5FC1E /* Frameworks */,
 			);
 			sourceTree = "<group>";
@@ -923,6 +931,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				54AA279420E9B27A0026701A /* NetworkManager */,
 				2D52AE9520E46E1900018FC0 /* OnBoardingPage */,
 				2D52ADD520E46E1700018FC0 /* Supporting Files */,
 				2D52AE1F20E46E1800018FC0 /* LoginAndRegister */,
@@ -944,10 +953,24 @@
 			path = BGLMedia;
 			sourceTree = "<group>";
 		};
+		54AA279420E9B27A0026701A /* NetworkManager */ = {
+			isa = PBXGroup;
+			children = (
+				54AA279520E9B28E0026701A /* NetworkManager.swift */,
+			);
+			path = NetworkManager;
+			sourceTree = "<group>";
+		};
 		F249FBEA6AE0F53C3BA5FC1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				1B6739E6F1930DDDAC5334B8 /* Pods_BGLMedia.framework */,
+				3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */,
+				3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */,
+				3D1332E820E9FA5600D3CAE6 /* Reachability.framework */,
+				3D1332E620E9FA5600D3CAE6 /* Realm.framework */,
+				3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */,
+				3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */,
+				3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -959,11 +982,10 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 2D6F5F1220E324D5006264BB /* Build configuration list for PBXNativeTarget "BGLMedia" */;
 			buildPhases = (
-				182FE3CA0C0DF50714E043CC /* [CP] Check Pods Manifest.lock */,
 				2D6F5EF920E324D4006264BB /* Sources */,
 				2D6F5EFA20E324D4006264BB /* Frameworks */,
 				2D6F5EFB20E324D4006264BB /* Resources */,
-				17F847AB57CCC8499E839830 /* [CP] Embed Pods Frameworks */,
+				3D1332F120E9FA9300D3CAE6 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -1034,8 +1056,8 @@
 				2D52AEB320E46E1A00018FC0 /* LaunchScreen.strings in Resources */,
 				2D52AEA820E46E1A00018FC0 /* SellTableViewCell.xib in Resources */,
 				2D52AEC320E46E1A00018FC0 /* README.md in Resources */,
-				2D52AEB020E46E1A00018FC0 /* Assets.xcassets in Resources */,
 				2D52AF1920E46E1A00018FC0 /* TimelineTableViewCell.xib in Resources */,
+				573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */,
 				2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1043,57 +1065,25 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		17F847AB57CCC8499E839830 /* [CP] Embed Pods Frameworks */ = {
+		3D1332F120E9FA9300D3CAE6 /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
-				"${SRCROOT}/Pods/Target Support Files/Pods-BGLMedia/Pods-BGLMedia-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
-				"${BUILT_PRODUCTS_DIR}/Kingfisher/Kingfisher.framework",
-				"${BUILT_PRODUCTS_DIR}/Realm/Realm.framework",
-				"${BUILT_PRODUCTS_DIR}/RealmSwift/RealmSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/RxCocoa/RxCocoa.framework",
-				"${BUILT_PRODUCTS_DIR}/RxJSON/RxJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/RxSwift/RxSwift.framework",
-				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
-				"${BUILT_PRODUCTS_DIR}/YouTubePlayer/YouTubePlayer.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Alamofire.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Kingfisher.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Reachability.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/Realm.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/YouTubePlayer.framework",
 			);
-			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Kingfisher.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Realm.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RealmSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxCocoa.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RxSwift.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/YouTubePlayer.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-BGLMedia/Pods-BGLMedia-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		182FE3CA0C0DF50714E043CC /* [CP] Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
-				"${PODS_ROOT}/Manifest.lock",
-			);
-			name = "[CP] Check Pods Manifest.lock";
-			outputPaths = (
-				"$(DERIVED_FILE_DIR)/Pods-BGLMedia-checkManifestLockResult.txt",
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
-			showEnvVarsInLog = 0;
+			shellScript = "/usr/local/bin/carthage copy-frameworks";
 		};
 /* End PBXShellScriptBuildPhase section */
 
@@ -1129,6 +1119,7 @@
 				2D52AEF820E46E1A00018FC0 /* CoinsInWatchListRealm.swift in Sources */,
 				2D52AEDF20E46E1A00018FC0 /* ChangeRiseFallColor.swift in Sources */,
 				2D52AE9D20E46E1A00018FC0 /* GerneralController.swift in Sources */,
+				54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */,
 				2D52AF2520E46E1A00018FC0 /* DateTimeConverter.swift in Sources */,
 				2D52AF2E20E46E1A00018FC0 /* News.swift in Sources */,
 				2D52AF2B20E46E1A00018FC0 /* NewsListViewController.swift in Sources */,
@@ -1444,20 +1435,27 @@
 		};
 		2D6F5F1320E324D5006264BB /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 3F2192DEAE64945AD062DCA3 /* Pods-BGLMedia.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 64QSYLCXQ8;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 4SMWL7L89M;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = BlockChainGlobal.BGLMedia;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "16c126c5-c70f-4842-a6cf-4786f1c72455";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1466,20 +1464,27 @@
 		};
 		2D6F5F1420E324D5006264BB /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = E9506C012D60A9C33ABF0A9D /* Pods-BGLMedia.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_STYLE = Automatic;
-				DEVELOPMENT_TEAM = 64QSYLCXQ8;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				CODE_SIGN_STYLE = Manual;
+				DEVELOPMENT_TEAM = 4SMWL7L89M;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = BlockChainGlobal.BGLMedia;
+				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "589589d0-a598-4562-8e06-149b377370d0";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

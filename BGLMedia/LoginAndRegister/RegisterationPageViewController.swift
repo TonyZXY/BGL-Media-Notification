@@ -180,50 +180,61 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
     @objc func register(sender: UIButton){
         
         self.view.endEditing(true)
+        
+        
         UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         }, completion: nil)
         
-        
-        if (firstNameTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)! || (emailTextField.text?.isEmpty)! ||  (reEnterPasswordTextField.text?.isEmpty)! || (lastNameTextField.text?.isEmpty)! {
-            notificationLabel.text = "Please provide all information necessary"
-            notificationLabel.isHidden = false
-        } else if passwordTextField.text == reEnterPasswordTextField.text {
-            let parameter = ["firstName": firstNameTextField.text!, "email": emailTextField.text!.lowercased(), "password": passwordTextField.text!, "title": titleTextField.text!, "lastName": lastNameTextField.text!]
-
-            let (message, success) = LoginPageViewController().checkUsernameAndPassword(username: emailTextField.text!, password: passwordTextField.text!)
-            if success {
-               
-                registerRequestToServer(parameter: parameter){(res,pass) in
-                    if pass {
-                        UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
-                        print("dismissing")
-                        if self.presentingViewController?.presentingViewController != nil{
-                            self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
-                        } else {
-                            self.presentingViewController?.dismiss(animated: true, completion: nil)
+        NetworkManager.isReachable { networkManagerInstance in
+            print("Network is available")
+            if (self.firstNameTextField.text?.isEmpty)! || (self.passwordTextField.text?.isEmpty)! || (self.emailTextField.text?.isEmpty)! ||  (self.reEnterPasswordTextField.text?.isEmpty)! || (self.lastNameTextField.text?.isEmpty)! {
+                self.notificationLabel.text = "Please provide all information necessary"
+                self.notificationLabel.isHidden = false
+            } else if self.passwordTextField.text == self.reEnterPasswordTextField.text {
+                let parameter = ["firstName": self.firstNameTextField.text!, "email": self.emailTextField.text!.lowercased(), "password": self.passwordTextField.text!, "title": self.titleTextField.text!, "lastName": self.lastNameTextField.text!]
+                
+                let (message, success) = LoginPageViewController().checkUsernameAndPassword(username: self.emailTextField.text!, password: self.passwordTextField.text!)
+                if success {
+                    
+                    self.registerRequestToServer(parameter: parameter){(res,pass) in
+                        if pass {
+                            UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            UserDefaults.standard.set(parameter["email"], forKey: "UserEmail")
+                            let token = (res["token"] as AnyObject? as? String) ?? ""
+                            UserDefaults.standard.set(token, forKey: "CertificateToken")
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
+                            if self.presentingViewController?.presentingViewController != nil{
+                                self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+                            } else {
+                                self.presentingViewController?.dismiss(animated: true, completion: nil)
+                            }
+                            
+                            
+                        } else{
+                            self.notificationLabel.text = "Error code \(res["code"])"
+                            self.notificationLabel.isHidden = false
                         }
-                        
-                        
-//                        self.dismiss(animated: true, completion: nil)
-                    } else{
-                        self.notificationLabel.text = "Error code \(res["code"])"
-                        self.notificationLabel.isHidden = false
                     }
+                    
+                    
+                } else {
+                    self.notificationLabel.text = message
+                    self.notificationLabel.isHidden = false
                 }
-                
-//                notificationLabel.text = "Write some code send to server."
-//                notificationLabel.isHidden = false
-                
             } else {
-                self.notificationLabel.text = message
+                self.notificationLabel.text = "Password does not match"
                 self.notificationLabel.isHidden = false
             }
-        } else {
-            notificationLabel.text = "Password does not match"
-            notificationLabel.isHidden = false
         }
+        
+        NetworkManager.isUnreachable { networkManagerInstance in
+            print("Network is Unavailable")
+            self.displayAlert(title: "Error", message: "Network Unavailable", buttonText: "OK")
+        }
+        
+        
+        
     }
     
     func registerRequestToServer(parameter: [String : String], completion:@escaping (JSON, Bool)->Void){
@@ -239,6 +250,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
                 var res = JSON(data)
+                print(res)
                 if res == nil {
                     completion(["code":"Server not available"],false)
                 } else if res["success"].bool!{

@@ -11,6 +11,7 @@ import UIKit
 import UserNotifications
 import SwiftyJSON
 import Alamofire
+import RealmSwift
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
@@ -32,12 +33,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.registerForRemoteNotifications()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-        
+
+
         if launchedBefore{
             print("launched before")
             
-            //set flag to false for debugging purpose
-//            UserDefaults.standard.set(false, forKey: "launchedBefore")
+//            set flag to false for debugging purpose
+            UserDefaults.standard.set(false, forKey: "launchedBefore")
             
             
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
@@ -64,8 +66,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(false, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
             UserDefaults.standard.set("EN", forKey: "defaultLanguage")
-                        
-            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            
+            
+//            UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
         return true
     }
@@ -110,6 +113,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             }
         }
         
+        UserDefaults.standard.set(deviceTokenString, forKey: "UserToken")
     }
         
     

@@ -105,12 +105,6 @@ class LoginPageViewController: UIViewController {
         
     }
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        if UserDefaults.standard.bool(forKey: "isLoggedIn"){
-//            self.dismiss(animated: false, completion: nil)
-//        }
-//
-//    }
     
     
     
@@ -189,34 +183,51 @@ class LoginPageViewController: UIViewController {
     }
     
     @objc func closePage(sender: UIButton){
+
         self.dismiss(animated: true, completion: nil)
     }
     
     
     @objc func login(sender: UIButton){
-        if (emailTextField.text?.isEmpty)! || (passwordTextField.text?.isEmpty)!{
-            notificationLabel.text = "Please provide username and password."
-            notificationLabel.isHidden = false
-        }else{
-            let un = emailTextField.text!
-            let pw = passwordTextField.text!
-            let (message, success) = checkUsernameAndPassword(username: un, password: pw)
-            if success{
-                loginRequestToServer(username: un, password: pw){(res,pass) in
-                    if pass {
-                        UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
-                        self.dismiss(animated: true, completion: nil)
-                    } else{
-                        self.notificationLabel.text = "Error code \(res["code"])"
-                        self.notificationLabel.isHidden = false
-                    }
-                }
-            } else{
-                self.notificationLabel.text = message
+        NetworkManager.isReachable { networkManagerInstance in
+            print("Network is available")
+            if (self.emailTextField.text?.isEmpty)! || (self.passwordTextField.text?.isEmpty)!{
+                self.notificationLabel.text = "Please provide username and password."
                 self.notificationLabel.isHidden = false
+            }else{
+                let un = self.emailTextField.text!
+                let pw = self.passwordTextField.text!
+                let (message, success) = self.checkUsernameAndPassword(username: un, password: pw)
+                if success{
+                    self.loginRequestToServer(username: un, password: pw){(res,pass) in
+                        if pass {
+                            let token = res["token"].string!
+                            UserDefaults.standard.set(token, forKey: "CertificateToken")
+                            UserDefaults.standard.set(un, forKey: "UserEmail")
+                            UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            UserDefaults.standard.set(false, forKey: "SendDeviceToken")
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
+                            self.dismiss(animated: true, completion: nil)
+                        } else{
+                            self.notificationLabel.text = "Error code \(res["code"])"
+                            self.notificationLabel.isHidden = false
+                        }
+                    }
+                } else{
+                    self.notificationLabel.text = message
+                    self.notificationLabel.isHidden = false
+                }
             }
+
         }
+        
+        NetworkManager.isUnreachable { networkManagerInstance in
+            print("Network is Unavailable")
+            self.displayAlert(title:"Error", message:"Network Unavailable", buttonText:"OK")
+            
+        }
+        
+        
     }
     
     func checkUsernameAndPassword(username: String, password: String) -> (String?, Bool) {
@@ -247,6 +258,9 @@ class LoginPageViewController: UIViewController {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         //        urlRequest.setValue("gmail.com",email)
         
+        
+        
+        
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
                 var res = JSON(data)
@@ -265,6 +279,17 @@ class LoginPageViewController: UIViewController {
 
 }
 
+extension UIViewController {
+    func displayAlert(title:String, message:String, buttonText:String){
+        // create the alert
+        let alert = UIAlertController(title: title, message: message, preferredStyle: UIAlertControllerStyle.alert)
+        // add an action (button)
+        alert.addAction(UIAlertAction(title: buttonText, style: UIAlertActionStyle.default, handler: nil))
+        // show the alert
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+}
 
 
 class LeftPaddedTextField: UITextField {
