@@ -183,8 +183,8 @@
 		3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */; };
 		3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E820E9FA5600D3CAE6 /* Reachability.framework */; };
 		3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */; };
-		544BE13720EB4E7800B68261 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 544BE13620EB4E7800B68261 /* Assets.xcassets */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
+		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -367,8 +367,8 @@
 		3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		3D1332E820E9FA5600D3CAE6 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
-		544BE13620EB4E7800B68261 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; name = Assets.xcassets; path = ../../../../../../../.Trash/Assets.xcassets; sourceTree = "<group>"; };
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -462,7 +462,7 @@
 			children = (
 				2D52ADD620E46E1700018FC0 /* news_app_for_blockchain.xcdatamodeld */,
 				2D52ADD920E46E1700018FC0 /* LaunchScreen.storyboard */,
-				544BE13620EB4E7800B68261 /* Assets.xcassets */,
+				573C96A720EB5B8700B667AB /* Assets.xcassets */,
 				2D52ADDB20E46E1700018FC0 /* AppDelegate.swift */,
 				2D52ADDC20E46E1700018FC0 /* LaunchScreen.strings */,
 			);
@@ -1057,7 +1057,7 @@
 				2D52AEA820E46E1A00018FC0 /* SellTableViewCell.xib in Resources */,
 				2D52AEC320E46E1A00018FC0 /* README.md in Resources */,
 				2D52AF1920E46E1A00018FC0 /* TimelineTableViewCell.xib in Resources */,
-				544BE13720EB4E7800B68261 /* Assets.xcassets in Resources */,
+				573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */,
 				2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
