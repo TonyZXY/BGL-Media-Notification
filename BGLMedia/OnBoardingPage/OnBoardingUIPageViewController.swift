@@ -11,11 +11,11 @@ import UIKit
 class OnBoardingUIPageViewController: UIPageViewController{
     let allPages: [OnBoardingPageViewController] = {
         var pages = [OnBoardingPageViewController]()
-        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "Welcome To Blockchain Global. Sign in or Register to access the full features of this app. ", pid:1))
         pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "You can add transactions and monitor your digital wallet here.", pid:2))
         pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "Save your favourite /marketName/ into watchlist and come back later.", pid:3))
         pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "You can read all kinds of news. Share them with your business partners. ", pid:4))
         pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "Turn on the alert functions in settings. You will get notificaitons of the latest information. ",pid:5))
+         pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "Sign in and turn on alert to get the latest market price notifications ", pid:6))
         return pages
     }()
     

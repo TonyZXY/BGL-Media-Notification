@@ -40,7 +40,7 @@ class MainTabBarController: UITabBarController {
         }
         
         
-        //debug
+//        debug
 //        NetworkManager.isReachable{ _ in
 //            self.view.addSubview(self.networkLabel)
 //        }
