@@ -10,6 +10,11 @@ import Foundation
 import UIKit
 
 class AlertTableViewCell:UITableViewCell{
+    
+
+    
+    
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setUpView()
@@ -42,9 +47,14 @@ class AlertTableViewCell:UITableViewCell{
 //        switchButton.thumbTintColor = UIColor.red
 //        switchButton.tintColor = UIColor.green
 //        switchButton.onTintColor = ThemeColor().bglColor()
+        switchButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
         switchButton.translatesAutoresizingMaskIntoConstraints = false
         return switchButton
     }()
+    
+    @objc func switchIsInAction(){
+        
+    }
     
     var compareLabel:UILabel = {
        var label = UILabel()

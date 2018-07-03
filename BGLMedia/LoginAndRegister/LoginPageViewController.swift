@@ -201,27 +201,11 @@ class LoginPageViewController: UIViewController {
                 if success{
                     self.loginRequestToServer(username: un, password: pw){(res,pass) in
                         if pass {
-                            
-                            print(res["token"])
-                            
-//                            for (key,value) in res{
-//                                if key == "token"{
-//                                    UserDefaults.standard.set(value, forKey: "CertificateToken")
-//                                }
-////                                UserDefaults.standard.set(value["token"], forKey: "CertificateToken")
-//                            }
-                           
-                            
-                            
-                            
-                            let token = (res["token"] as AnyObject? as? String) ?? ""
-                            
-//                            print(token)
-                            
+                            let token = res["token"].string!
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
                             UserDefaults.standard.set(un, forKey: "UserEmail")
-
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            UserDefaults.standard.set(false, forKey: "SendDeviceToken")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                         } else{
@@ -274,6 +258,9 @@ class LoginPageViewController: UIViewController {
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         //        urlRequest.setValue("gmail.com",email)
         
+        
+        
+        
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
                 var res = JSON(data)
@@ -288,7 +275,6 @@ class LoginPageViewController: UIViewController {
                     }
             }
         }
-        
     }
 
 }

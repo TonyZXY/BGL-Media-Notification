@@ -1439,7 +1439,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1447,14 +1447,15 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7fb85184-2f10-455a-9f48-bc4c1eee3e8c";
-				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Distribution";
+				PROVISIONING_PROFILE = "16c126c5-c70f-4842-a6cf-4786f1c72455";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1467,7 +1468,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -1475,14 +1476,15 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7fb85184-2f10-455a-9f48-bc4c1eee3e8c";
-				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Distribution";
+				PROVISIONING_PROFILE = "589589d0-a598-4562-8e06-149b377370d0";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

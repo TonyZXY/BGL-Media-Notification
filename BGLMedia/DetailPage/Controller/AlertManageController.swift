@@ -8,6 +8,23 @@
 
 import UIKit
 import RealmSwift
+import Alamofire
+import SwiftyJSON
+
+struct interset{
+    var _id:String = ""
+    var coinFrom:String = "BTC"
+    var coinTo:String = "AUD"
+    var market:String = "BTCmarkets"
+    var price:String = "123"
+    var status:String = "true"
+    var id:String = "123"
+    var isGreater:String = "1"
+}
+    
+    
+//    "interest":["_id":"","coinFrom":"BTC","coinTo":"AUD","market":"BTCmarkets","price":123,"status":true,"id":"123","isGreater":1]
+
 
 struct ExpandableNames{
     var isExpanded:Bool
@@ -276,43 +293,80 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = ThemeColor().bglColor()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(addTransaction), for: .touchUpInside)
+        button.addTarget(self, action: #selector(addNewAlert), for: .touchUpInside)
         return button
     }()
     
-    @objc func addTransaction(){        
-        if newTransaction.coinName != "" && newTransaction.tradingPairsName != "" && newTransaction.exchangName != ""{
-            realm.beginWrite()
-            var currentTransactionId:Int = 0
-            let transaction = realm.objects(alertObject.self)
-            if transaction.count != 0{
-                currentTransactionId = (transaction.last?.id)! + 1
-            } else {
-                currentTransactionId = 1
+    @objc func addNewAlert(){
+        let email = UserDefaults.standard.string(forKey: "UserEmail")
+        let token = UserDefaults.standard.string(forKey: "CertificateToken")
+        
+        
+        getAlertFromServer(parameter: email!){(json, pass) in
+            print(json)
+            for result in json["interest"].array!{
+                print(result["status"].bool!)
+                print(result["coinTo"].string!)
             }
-            var compareStatus:Bool = false
+            
+            
+            
+//
+//            print(json["interest"].string)
+        }
+        
+        
+        
+        
+        
+        if newTransaction.coinName != "" && newTransaction.tradingPairsName != "" && newTransaction.exchangName != ""{
+//            realm.beginWrite()
+//            var currentTransactionId:Int = 0
+//            let transaction = realm.objects(alertObject.self)
+//            if transaction.count != 0{
+//                currentTransactionId = (transaction.last?.id)! + 1
+//            } else {
+//                currentTransactionId = 1
+//            }
+            var compareStatus:Int = 0
             print(inputPrice)
             let price = Double(inputPrice)!
-            
+
             if sectionPrice > price {
-                compareStatus = true
+                compareStatus = 1
             } else {
-                compareStatus = false
+                compareStatus = 2
             }
-            let realmData:[Any] = [currentTransactionId,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.tradingPairsName,newTransaction.exchangName,price,compareStatus,true,Date()]
-            if realm.object(ofType: alertObject.self, forPrimaryKey: currentTransactionId) == nil {
-                realm.create(alertObject.self, value: realmData)
-            } else {
-                realm.create(alertObject.self, value: realmData, update: true)
-            }
-            
-            if realm.object(ofType: alertCoinNames.self, forPrimaryKey: newTransaction.coinAbbName) == nil {
-                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName])
-            } else {
-                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName], update: true)
+
+
+            let inter:[[String:Any]] = [["coinFrom":newTransaction.coinAbbName,"coinTo":newTransaction.tradingPairsName,"market":newTransaction.exchangName,"price":price,"status":true,"id":"123","isGreater":compareStatus]]
+            let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
+            sendAlertToServer(parameter: parameter){(json,pass) in
+                print(json)
             }
             
-            try! realm.commitWrite()
+            
+            
+            
+//
+//
+//
+//
+//
+//            let realmData:[Any] = [currentTransactionId,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.tradingPairsName,newTransaction.exchangName,price,true,true,Date()]
+//            if realm.object(ofType: alertObject.self, forPrimaryKey: currentTransactionId) == nil {
+//                realm.create(alertObject.self, value: realmData)
+//            } else {
+//                realm.create(alertObject.self, value: realmData, update: true)
+//            }
+//
+//            if realm.object(ofType: alertCoinNames.self, forPrimaryKey: newTransaction.coinAbbName) == nil {
+//                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName])
+//            } else {
+//                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName], update: true)
+//            }
+            
+//            try! realm.commitWrite()
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
             navigationController?.popViewController(animated: true)
         } else {
@@ -351,36 +405,46 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             }
     }
     
-    
-    
-//
+    func sendAlertToServer(parameter: [String : Any], completion:@escaping (JSON, Bool)->Void){
+        
+        let url = URL(string: "http://10.10.6.139:3030/userLogin/addInterest")
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "POST"
+        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+        urlRequest.httpBody = httpBody
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        //        urlRequest.setValue("gmail.com",email)
+        
+        Alamofire.request(urlRequest).response { (response) in
+            if let data = response.data{
+                var res = JSON(data)
+//                if res == nil {
+//                    completion(["code":"Server not available"],false)
+//                } else if res["status"].bool!{
+//                    completion(res,true)
+//                } else {
+//                    completion(res,false)
+//                }
+            }
+        }
+    }
 
-    
-    
-//    func textFieldDidEndEditing(_ textField: UITextField) {
-//        if textField.tag == 0 {
-//            if textField.text == "" || textField.text == nil{
-//                textField.text = "0"
-//            } else{
-//                inputPrice = textField.text!
-//            }
-//            print(inputPrice)
-//        }
-//    }
+    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
+        
+        let url = URL(string: "http://10.10.6.139:3030/userLogin/interestOfUser/" + parameter)
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "GET"
+//        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+//        urlRequest.httpBody = httpBody
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        Alamofire.request(urlRequest).response { (response) in
+            if let data = response.data{
+                var res = JSON(data)
+                completion(res,true)
+            }
+        }
+    }
+
 }
-
-//class EditAlertCell:UITableViewCell{
-//    var status:Bool
-//    
-//    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-//        super.init(style: style, reuseIdentifier: reuseIdentifier)
-//        
-//    }
-//    
-//    required init?(coder aDecoder: NSCoder) {
-//        fatalError("init has not been completed")
-//    }
-//}
-
-
 
