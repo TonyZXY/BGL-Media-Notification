@@ -201,7 +201,8 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
                         if pass {
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
                             UserDefaults.standard.set(parameter["email"], forKey: "UserEmail")
-                            UserDefaults.standard.set(res["token"], forKey: "CertificateToken")
+                            let token = (res["token"] as AnyObject? as? String) ?? ""
+                            UserDefaults.standard.set(token, forKey: "CertificateToken")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             if self.presentingViewController?.presentingViewController != nil{
                                 self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)

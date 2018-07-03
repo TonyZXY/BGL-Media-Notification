@@ -390,7 +390,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     @objc func addNewAlert(){
         let email = UserDefaults.standard.string(forKey: "UserEmail")
+        
+        
         let token = UserDefaults.standard.string(forKey: "UserToken")
+        
+        
         let parameter = ["userEmail": email, "token": token]
         let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
         var urlRequest = URLRequest(url: url!)

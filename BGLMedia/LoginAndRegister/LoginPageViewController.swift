@@ -201,8 +201,26 @@ class LoginPageViewController: UIViewController {
                 if success{
                     self.loginRequestToServer(username: un, password: pw){(res,pass) in
                         if pass {
-                            UserDefaults.standard.set("1234", forKey: "UserEmail")
-                            UserDefaults.standard.set(res["token"], forKey: "CertificateToken")
+                            
+                            print(res["token"])
+                            
+//                            for (key,value) in res{
+//                                if key == "token"{
+//                                    UserDefaults.standard.set(value, forKey: "CertificateToken")
+//                                }
+////                                UserDefaults.standard.set(value["token"], forKey: "CertificateToken")
+//                            }
+                           
+                            
+                            
+                            
+                            let token = (res["token"] as AnyObject? as? String) ?? ""
+                            
+//                            print(token)
+                            
+                            UserDefaults.standard.set(token, forKey: "CertificateToken")
+                            UserDefaults.standard.set(un, forKey: "UserEmail")
+
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
