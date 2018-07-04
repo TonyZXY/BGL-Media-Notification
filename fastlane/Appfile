@@ -1,0 +1,8 @@
+app_identifier("com.blockchainglobal.bglmedia") # The bundle identifier of your app
+apple_id("iosdev@blockchainglobal.com") # Your Apple email address
+
+itc_team_id("119032931") # iTunes Connect Team ID
+team_id("4SMWL7L89M") # Developer Portal Team ID
+
+# For more information about the Appfile, see:
+#     https://docs.fastlane.tools/advanced/#appfile
