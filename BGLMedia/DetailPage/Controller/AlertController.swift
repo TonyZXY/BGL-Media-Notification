@@ -28,7 +28,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var realm = try! Realm()
     var alerts:[alertResult] = [alertResult]()
     var coinName = coinAlert()
+//    var intersetObject = interset()
     
+    var TransactionDelegate:TransactionFrom?
     var allAlert:[alertResult]{
         get{
             var allResult = [alertResult]()
@@ -69,7 +71,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -79,6 +81,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         checkSetUpView()
         writeAlertToRealm()
     }
+    
+    
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(true)
+//
+//
+//
+//    }
     
     @objc func refreshNotificationStatus(){
         getNotificationStatus()
@@ -112,7 +122,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                         } else {
                             self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
                         }
-                        
                         try! self.realm.commitWrite()
                     }
                     completion(res,true)
@@ -248,6 +257,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             compare = "="
         }
         
+        
+        
         let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.compare)
         let coinDetail = object.exchangName + " - " + object.coinAbbName + "/" + object.tradingPairs
         let dateToString = DateFormatter()
@@ -258,7 +269,19 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         cell.compareLabel.text = compareLabel
         cell.coinDetailLabel.text = coinDetail
         cell.swithButton.isOn = object.switchStatus
+        cell.alertObject = object
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let alertEdit = AlertManageController()
+        alertEdit.intersetObject.coinAbbName = alerts[indexPath.section].name[indexPath.row].coinAbbName
+        alertEdit.intersetObject.exchangName = alerts[indexPath.section].name[indexPath.row].exchangName
+        alertEdit.intersetObject.tradingPairs = alerts[indexPath.section].name[indexPath.row].tradingPairs
+        alertEdit.intersetObject.coinName = alerts[indexPath.section].name[indexPath.row].coinName
+        alertEdit.intersetObject.compare = alerts[indexPath.section].name[indexPath.row].compare
+        alertEdit.status = "Update"
+        navigationController?.pushViewController(alertEdit, animated: true)
     }
     
     func setUpView(){

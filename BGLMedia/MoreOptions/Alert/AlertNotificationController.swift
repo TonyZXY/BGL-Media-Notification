@@ -8,6 +8,8 @@
 
 import UIKit
 import UserNotifications
+import Alamofire
+import SwiftyJSON
 
 class switchObject{
     var type:String?
@@ -161,15 +163,26 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
             cell.accessibilityHint = switchStatusItem[indexPath.row]
             cell.textLabel?.textColor = UIColor.black
+            let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
             if indexPath.row < 2{
                 let swithButton = UISwitch()
                 swithButton.isOn = SwitchOption[indexPath.row]
                 cell.accessoryView = swithButton
                 swithButton.tag = indexPath.row
                 swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
+                
+                if indexPath.row == 1{
+                    if !loginStatus{
+                        cell.isHidden = true
+                    }
+                }
             } else{
-                cell.accessoryType = .disclosureIndicator
-                if SwitchOption[1] == false{
+                if loginStatus{
+                    cell.accessoryType = .disclosureIndicator
+                    if SwitchOption[1] == false{
+                        cell.isHidden = true
+                    }
+                }else {
                     cell.isHidden = true
                 }
             }
@@ -181,8 +194,8 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 2{
-            let alert = AlertController()
-            navigationController?.pushViewController(alert, animated: true)
+                let alert = AlertController()
+                navigationController?.pushViewController(alert, animated: true)
         }
     }
 
@@ -206,13 +219,15 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     @objc func refreshUserStatus(){
         let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
-        loginButton.setTitle(status ? "Login Out" : "Login in", for: .normal)
+        loginButton.setTitle(status ? "Log Out" : "Log in", for: .normal)
         loginLabel.text = status ? "User" : "Guest"
+        self.notificationTableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(true)
         tabBarController?.tabBar.isHidden = true
+        getNotificationStatusData()
     }
     
     func getNotificationStatus(){
@@ -246,6 +261,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         if status{
             UserDefaults.standard.set(false,forKey: "isLoggedIn")
             loginButton.setTitle("Login in",for: .normal)
+            self.notificationTableView.reloadData()
         } else{
             let loginPage = LoginPageViewController()
             navigationController?.present(loginPage, animated: true, completion: nil)
@@ -327,6 +343,92 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         tableView.isScrollEnabled = false
         return tableView
     }()
+    
+    
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(true)
+        postNotificationStatusData()
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        postNotificationStatusData()
+    }
+    
+    func getNotificationStatusData(){
+
+        if UserDefaults.standard.string(forKey: "UserToken") != nil{
+            let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")
+            Alamofire.request("http://10.10.6.139:3030/deviceManage/DeviceToken/" + deviceTokenString!, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+                    UserDefaults.standard.set(json["notification"].bool!,forKey: "flashSwitch")
+                   self.notificationTableView.reloadData()
+                    print(json)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+            
+            if UserDefaults.standard.bool(forKey: "isLoggedIn"){
+                let email = UserDefaults.standard.string(forKey: "UserEmail")!
+                Alamofire.request("http://10.10.6.139:3030/userLogin/interestOfUser/" + email, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                        UserDefaults.standard.set(json["status"].bool!,forKey: "priceSwitch")
+                        self.notificationTableView.reloadData()
+                        print(json)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+            }
+        }
+        
+    }
+    
+    func postNotificationStatusData(){
+        let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
+        let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
+        print(flashNotification)
+        
+        if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
+            let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+            
+            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+            let token = UserDefaults.standard.string(forKey: "CertificateToken")!
+            
+            print(deviceTokenString)
+            let deviceTokenJson: [String: Any] = [
+                "deviceID": deviceTokenString,
+                "notification": flashNotification
+            ]
+            
+            Alamofire.request("http://10.10.6.139:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+                switch response.result {
+                case .success(let value):
+                    let json = JSON(value)
+//                    print(json)
+                case .failure(let error):
+                    print(error)
+                }
+            }
+        
+        
+        Alamofire.request("http://10.10.6.139:3030/userLogin/changeNotificationStatus", method: .post, parameters: ["email":email,"token":token,"userStatus":priceAlert], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+            switch response.result {
+            case .success(let value):
+                let json = JSON(value)
+//                print(json)
+            case .failure(let error):
+                print(error)
+            }
+        }
+        }
+    }
+
  
     class SwitchTableViewCell:UITableViewCell{
         override init(style: UITableViewCellStyle, reuseIdentifier: String?) {

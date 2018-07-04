@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             print("launched before")
             
 //            set flag to false for debugging purpose
-            UserDefaults.standard.set(false, forKey: "launchedBefore")
+//            UserDefaults.standard.set(false, forKey: "launchedBefore")
             
             
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
@@ -62,13 +62,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             SetDataResult().writeJsonExchange()
             SetDataResult().writeMarketCapCoinList()
             GetDataResult().getCoinList()
-            UserDefaults.standard.set(false, forKey: "flashSwitch")
-            UserDefaults.standard.set(false, forKey: "priceSwitch")
+            UserDefaults.standard.set(true, forKey: "flashSwitch")
+            UserDefaults.standard.set(true, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
             UserDefaults.standard.set("EN", forKey: "defaultLanguage")
-            
-            
-//            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
         return true
     }

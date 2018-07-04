@@ -224,10 +224,7 @@ class LoginPageViewController: UIViewController {
         NetworkManager.isUnreachable { networkManagerInstance in
             print("Network is Unavailable")
             self.displayAlert(title:"Error", message:"Network Unavailable", buttonText:"OK")
-            
         }
-        
-        
     }
     
     func checkUsernameAndPassword(username: String, password: String) -> (String?, Bool) {
@@ -247,8 +244,6 @@ class LoginPageViewController: UIViewController {
     }
     
     func loginRequestToServer(username: String,password: String,completion:@escaping (JSON, Bool)->Void){
-        
-        
         let parameters = ["userEmail": username.lowercased(), "password":password]
         let url = URL(string: "http://10.10.6.139:3030/userLogin/login")
         var urlRequest = URLRequest(url: url!)
@@ -257,9 +252,6 @@ class LoginPageViewController: UIViewController {
         urlRequest.httpBody = httpBody
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         //        urlRequest.setValue("gmail.com",email)
-        
-        
-        
         
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
