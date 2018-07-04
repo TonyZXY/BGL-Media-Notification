@@ -77,3 +77,4 @@ fastlane/logs
 
 .idea/
 Index/
+.DS_Store
