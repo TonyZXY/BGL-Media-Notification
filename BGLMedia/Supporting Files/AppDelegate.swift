@@ -39,7 +39,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             print("launched before")
             
 //            set flag to false for debugging purpose
-            UserDefaults.standard.set(false, forKey: "launchedBefore")
+//            UserDefaults.standard.set(false, forKey: "launchedBefore")
             
             
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
@@ -68,7 +68,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set("EN", forKey: "defaultLanguage")
             
             
-//            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
         return true
     }
