@@ -75,7 +75,7 @@ class LoginPageViewController: UIViewController {
     let registerLabel: UILabel = {
         let label = UILabel()
         label.text = "Click here to register"
-        label.textColor = .blue
+        label.textColor = .white
         label.font = UIFont(name: "Helvetica-Bold", size: 15)
         return label
     }()

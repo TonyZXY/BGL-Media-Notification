@@ -93,7 +93,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
     
     let reEnterPasswordTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
-        textField.placeholder = "*Re-enter Password"
+        textField.placeholder = "*Confirm Password"
         textField.isSecureTextEntry = true
         textField.backgroundColor = .white
         textField.addTarget(self, action: #selector(isPasswordMatch), for: .editingDidEnd)
