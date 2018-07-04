@@ -13,13 +13,14 @@ import SwiftyJSON
 class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, UIPickerViewDataSource{
     
 //    var keyboardIsShown = false
-    var pickOption = ["Male", "Female"]
+    var genderPickOption = ["Male", "Female"]
     var titlePickOption = ["Mr","Mrs","Ms","Miss","Dr","Sir"]
     
     let firstNameLabel: UILabel = {
        let label = UILabel()
         label.text = "First Name  *"
         label.bounds = CGRect(x: 0, y: 0, width: 70, height: 50)
+        label.isHidden = true
         return label
     }()
     
@@ -27,6 +28,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         let label = UILabel()
         label.text = "Email  *"
         label.bounds = CGRect(x: 0, y: 0, width: 70, height: 50)
+        label.isHidden = true
         return label
     }()
     
@@ -34,6 +36,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         let label = UILabel()
         label.text = "Password  *"
         label.bounds = CGRect(x: 0, y: 0, width: 150, height: 50)
+        label.isHidden = true
         return label
     }()
     
@@ -41,6 +44,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         let label = UILabel()
         label.text = "Confirm Password  *"
         label.bounds = CGRect(x: 0, y: 0, width: 150, height: 50)
+        label.isHidden = true
         return label
     }()
     
@@ -48,6 +52,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         let label = UILabel()
         label.text = "Title"
         label.bounds = CGRect(x: 0, y: 0, width: 150, height: 50)
+        label.isHidden = true
         return label
     }()
     
@@ -55,49 +60,56 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         let label = UILabel()
         label.text = "Last Name  *"
         label.bounds = CGRect(x: 0, y: 0, width: 150, height: 50)
+        label.isHidden = true
         return label
     }()
     
     let firstNameTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
-        textField.placeholder = ""
+        textField.placeholder = "*First Name"
         textField.backgroundColor = .white
+        
         return textField
     }()
+    
+    
     
     let emailTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
-        textField.placeholder = ""
+        textField.placeholder = "*Email"
         textField.backgroundColor = .white
+        textField.addTarget(self, action: #selector(checkEmail), for: .editingDidEnd)
         return textField
     }()
-    
+  
     let passwordTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
-        textField.placeholder = ""
+        textField.placeholder = "*Enter Password"
         textField.isSecureTextEntry = true
         textField.backgroundColor = .white
+        textField.addTarget(self, action: #selector(checkPassword), for: .editingDidEnd)
         return textField
     }()
     
     let reEnterPasswordTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
-        textField.placeholder = ""
+        textField.placeholder = "*Confirm Password"
         textField.isSecureTextEntry = true
         textField.backgroundColor = .white
+        textField.addTarget(self, action: #selector(isPasswordMatch), for: .editingDidEnd)
         return textField
     }()
     
     let titleTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
-        textField.placeholder = ""
+        textField.placeholder = "Title"
         textField.backgroundColor = .white
         return textField
     }()
     
     let lastNameTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
-        textField.placeholder = ""
+        textField.placeholder = "*Last Name"
         textField.backgroundColor = .white
         return textField
     }()
@@ -123,7 +135,43 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         return button
     }()
     
-
+    
+    @objc func checkEmail(_ textField: UITextField){
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        if textField.text != "" && !emailPredicate.evaluate(with: textField.text){
+            emailLabel.text = "Email format not correct"
+            emailLabel.textColor = .red
+            emailLabel.isHidden = false
+        } else {
+            emailLabel.isHidden = true
+        }
+    }
+    
+    @objc func checkPassword(_ textField: UITextField){
+        let passwordFormat = "^((?!.*[\\s])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$&*])(?=.*\\d).{8,15})$"
+        let passwordPredicate = NSPredicate(format:"SELF MATCHES %@", passwordFormat)
+        if textField.text != "" && !passwordPredicate.evaluate(with: textField.text){
+            passwordLabel.text = "Your passwod shoud have: captial, lowercase, number and a symbol of the following:!@#$&* "
+            passwordLabel.numberOfLines = 0
+            passwordLabel.font = UIFont(name: "Helvetica-Bold", size: 10)
+            passwordLabel.textColor = .red
+            passwordLabel.isHidden = false
+        } else {
+            passwordLabel.isHidden = true
+        }
+    }
+    
+    @objc func isPasswordMatch(_ textField: UITextField){
+        if textField.text != passwordTextField.text{
+            reEnterPasswordLabel.text = "Password do not match"
+            reEnterPasswordLabel.textColor = .red
+            reEnterPasswordLabel.isHidden = false
+        } else {
+            reEnterPasswordLabel.isHidden = true
+        }
+    }
+    
     
     
     override func viewDidLoad() {
@@ -200,6 +248,9 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
                     self.registerRequestToServer(parameter: parameter){(res,pass) in
                         if pass {
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            UserDefaults.standard.set(parameter["email"], forKey: "UserEmail")
+                            let token = (res["token"] as AnyObject? as? String) ?? ""
+                            UserDefaults.standard.set(token, forKey: "CertificateToken")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             if self.presentingViewController?.presentingViewController != nil{
                                 self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -247,6 +298,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
                 var res = JSON(data)
+                print(res)
                 if res == nil {
                     completion(["code":"Server not available"],false)
                 } else if res["success"].bool!{
@@ -266,21 +318,19 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         
         newView.addSubview(view1)
         newView.addSubview(view2)
-        newView.backgroundColor = .lightGray
+        newView.backgroundColor = ThemeColor().themeColor()
         
         view1.textColor = .white
         view1.translatesAutoresizingMaskIntoConstraints = false
-        view1.topAnchor.constraint(equalTo: newView.topAnchor, constant: 2).isActive = true
-        view1.leftAnchor.constraint(equalTo: newView.leftAnchor, constant: 30).isActive = true
-        view1.rightAnchor.constraint(equalTo: newView.rightAnchor, constant: -30).isActive = true
-
+        view1.topAnchor.constraint(equalTo: view2.bottomAnchor, constant: 2).isActive = true
+        view1.leftAnchor.constraint(equalTo: newView.leftAnchor, constant: 25).isActive = true
+        view1.rightAnchor.constraint(equalTo: newView.rightAnchor, constant: -25).isActive = true
         view1.heightAnchor.constraint(equalToConstant: 20)
         
         view2.translatesAutoresizingMaskIntoConstraints = false
-        view2.topAnchor.constraint(equalTo: view1.bottomAnchor, constant: 5).isActive = true
-        view2.leftAnchor.constraint(equalTo: newView.leftAnchor, constant: 30).isActive = true
-        view2.rightAnchor.constraint(equalTo: newView.rightAnchor, constant: -30).isActive = true
-
+        view2.topAnchor.constraint(equalTo: newView.topAnchor, constant: 5).isActive = true
+        view2.leftAnchor.constraint(equalTo: newView.leftAnchor, constant: 25).isActive = true
+        view2.rightAnchor.constraint(equalTo: newView.rightAnchor, constant: -25).isActive = true
         view2.heightAnchor.constraint(equalToConstant: 30).isActive = true
         
         return newView
@@ -332,19 +382,28 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
         
         let firstNameView = combineViews(combine: firstNameLabel, with: firstNameTextField)
         view.addSubview(firstNameView)
+        let lastNameView = combineViews(combine: lastNameLabel , with: lastNameTextField)
+        view.addSubview(lastNameView)
+        
         firstNameView.translatesAutoresizingMaskIntoConstraints = false
         firstNameView.topAnchor.constraint(equalTo: titleView.bottomAnchor,constant: 5).isActive = true
         firstNameView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-        firstNameView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        firstNameView.rightAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         firstNameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
-        let lastNameView = combineViews(combine: lastNameLabel , with: lastNameTextField)
-        view.addSubview(lastNameView)
         lastNameView.translatesAutoresizingMaskIntoConstraints = false
-        lastNameView.topAnchor.constraint(equalTo: firstNameView.bottomAnchor,constant: 5).isActive = true
-        lastNameView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        lastNameView.topAnchor.constraint(equalTo: titleView.bottomAnchor,constant: 5).isActive = true
+        lastNameView.leftAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         lastNameView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         lastNameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        
+//        let lastNameView = combineViews(combine: lastNameLabel , with: lastNameTextField)
+//        view.addSubview(lastNameView)
+//        lastNameView.translatesAutoresizingMaskIntoConstraints = false
+//        lastNameView.topAnchor.constraint(equalTo: firstNameView.bottomAnchor,constant: 5).isActive = true
+//        lastNameView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//        lastNameView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+//        lastNameView.heightAnchor.constraint(equalToConstant: 60).isActive = true
         
         let emailView = combineViews(combine: emailLabel, with: emailTextField)
         view.addSubview(emailView)

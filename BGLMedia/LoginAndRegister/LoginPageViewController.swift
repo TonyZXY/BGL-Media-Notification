@@ -75,7 +75,7 @@ class LoginPageViewController: UIViewController {
     let registerLabel: UILabel = {
         let label = UILabel()
         label.text = "Click here to register"
-        label.textColor = .blue
+        label.textColor = .white
         label.font = UIFont(name: "Helvetica-Bold", size: 15)
         return label
     }()
@@ -201,7 +201,11 @@ class LoginPageViewController: UIViewController {
                 if success{
                     self.loginRequestToServer(username: un, password: pw){(res,pass) in
                         if pass {
+                            let token = res["token"].string!
+                            UserDefaults.standard.set(token, forKey: "CertificateToken")
+                            UserDefaults.standard.set(un, forKey: "UserEmail")
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                            UserDefaults.standard.set(false, forKey: "SendDeviceToken")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                         } else{
@@ -253,6 +257,9 @@ class LoginPageViewController: UIViewController {
         urlRequest.httpBody = httpBody
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         //        urlRequest.setValue("gmail.com",email)
+        
+        
+        
         
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{

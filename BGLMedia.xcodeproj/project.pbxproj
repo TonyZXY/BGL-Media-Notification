@@ -31,7 +31,6 @@
 		2D52AEAD20E46E1A00018FC0 /* Localizable.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADD220E46E1700018FC0 /* Localizable.strings */; };
 		2D52AEAE20E46E1A00018FC0 /* MainTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADD420E46E1700018FC0 /* MainTabBarController.swift */; };
 		2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADD620E46E1700018FC0 /* news_app_for_blockchain.xcdatamodeld */; };
-		2D52AEB020E46E1A00018FC0 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADD820E46E1700018FC0 /* Assets.xcassets */; };
 		2D52AEB120E46E1A00018FC0 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADD920E46E1700018FC0 /* LaunchScreen.storyboard */; };
 		2D52AEB220E46E1A00018FC0 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADDB20E46E1700018FC0 /* AppDelegate.swift */; };
 		2D52AEB320E46E1A00018FC0 /* LaunchScreen.strings in Resources */ = {isa = PBXBuildFile; fileRef = 2D52ADDC20E46E1700018FC0 /* LaunchScreen.strings */; };
@@ -185,6 +184,7 @@
 		3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E820E9FA5600D3CAE6 /* Reachability.framework */; };
 		3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
+		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -213,7 +213,6 @@
 		2D52ADD320E46E1700018FC0 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = Localizable.strings; sourceTree = "<group>"; };
 		2D52ADD420E46E1700018FC0 /* MainTabBarController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MainTabBarController.swift; sourceTree = "<group>"; };
 		2D52ADD720E46E1700018FC0 /* news_app_for_blockchain.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = news_app_for_blockchain.xcdatamodel; sourceTree = "<group>"; };
-		2D52ADD820E46E1700018FC0 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		2D52ADDA20E46E1700018FC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		2D52ADDB20E46E1700018FC0 /* AppDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2D52ADDD20E46E1700018FC0 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/LaunchScreen.strings"; sourceTree = "<group>"; };
@@ -369,6 +368,7 @@
 		3D1332E820E9FA5600D3CAE6 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
+		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -461,8 +461,8 @@
 			isa = PBXGroup;
 			children = (
 				2D52ADD620E46E1700018FC0 /* news_app_for_blockchain.xcdatamodeld */,
-				2D52ADD820E46E1700018FC0 /* Assets.xcassets */,
 				2D52ADD920E46E1700018FC0 /* LaunchScreen.storyboard */,
+				573C96A720EB5B8700B667AB /* Assets.xcassets */,
 				2D52ADDB20E46E1700018FC0 /* AppDelegate.swift */,
 				2D52ADDC20E46E1700018FC0 /* LaunchScreen.strings */,
 			);
@@ -1056,8 +1056,8 @@
 				2D52AEB320E46E1A00018FC0 /* LaunchScreen.strings in Resources */,
 				2D52AEA820E46E1A00018FC0 /* SellTableViewCell.xib in Resources */,
 				2D52AEC320E46E1A00018FC0 /* README.md in Resources */,
-				2D52AEB020E46E1A00018FC0 /* Assets.xcassets in Resources */,
 				2D52AF1920E46E1A00018FC0 /* TimelineTableViewCell.xib in Resources */,
+				573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */,
 				2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1439,7 +1439,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
@@ -1448,14 +1448,15 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7fb85184-2f10-455a-9f48-bc4c1eee3e8c";
-				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Distribution";
+				PROVISIONING_PROFILE = "16c126c5-c70f-4842-a6cf-4786f1c72455";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -1469,7 +1470,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
@@ -1478,14 +1479,15 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7fb85184-2f10-455a-9f48-bc4c1eee3e8c";
-				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Distribution";
+				PROVISIONING_PROFILE = "589589d0-a598-4562-8e06-149b377370d0";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";

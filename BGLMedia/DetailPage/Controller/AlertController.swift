@@ -36,9 +36,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             var coinNameResults = realm.objects(alertCoinNames.self)
             if coinName.status{
                 coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName + "' ")
-                print("hhahahaha")
             }
-    
+
             for value in coinNameResults{
                 var alertResults = alertResult()
                 let speCoin = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
@@ -78,10 +77,50 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         tabBarController?.tabBar.isHidden = true
         getNotificationStatus()
         checkSetUpView()
+        writeAlertToRealm()
     }
     
     @objc func refreshNotificationStatus(){
         getNotificationStatus()
+    }
+    
+    
+    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
+        
+        let url = URL(string: "http://10.10.6.139:3030/userLogin/interestOfUser/" + parameter)
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "GET"
+        //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+        //        urlRequest.httpBody = httpBody
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        Alamofire.request(urlRequest).response { (response) in
+            if let data = response.data{
+                var res = JSON(data)
+                if res != nil{
+                    for result in res["interest"].array!{
+                        self.realm.beginWrite()
+                        let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
+                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
+                            self.realm.create(alertObject.self, value: realmData)
+                        } else {
+                            self.realm.create(alertObject.self, value: realmData, update: true)
+                        }
+                        
+                        if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
+                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
+                        } else {
+                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
+                        }
+                        
+                        try! self.realm.commitWrite()
+                    }
+                    completion(res,true)
+                } else{
+                    completion(res,false)
+                }
+            }
+        }
     }
     
     func checkSetUpView(){
@@ -201,9 +240,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
       
         let object = alerts[indexPath.section].name[indexPath.row]
         var compare:String = ""
-        if object.compareStatus == true{
+        if object.compareStatus == 1{
             compare = ">"
-        }else if object.compareStatus == false{
+        }else if object.compareStatus == 2{
             compare = "<"
         } else {
             compare = "="
@@ -218,6 +257,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         cell.dateLabel.text = timess
         cell.compareLabel.text = compareLabel
         cell.coinDetailLabel.text = coinDetail
+        cell.swithButton.isOn = object.switchStatus
         return cell
     }
     
@@ -389,36 +429,41 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }()
     
     @objc func addNewAlert(){
-        
-        print(UserDefaults.standard.string(forKey: "DeviceToken"))
-        
-//        let parameter = ["userEmail": "aaa@gmail.com", "token": ""]
-//        let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
-//        var urlRequest = URLRequest(url: url!)
-//        urlRequest.httpMethod = "POST"
-//        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-//        urlRequest.httpBody = httpBody
-//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        //        urlRequest.setValue("gmail.com",email)
-//
-//
-//
-//
-//        Alamofire.request(urlRequest).response { (response) in
-//            if let data = response.data{
-//                var res = JSON(data)
-//                if res == JSON.null {
-////                    completion(["code":"Server not available"],false)
-//                } else if res["success"].bool!{
-////                    completion(res,true)
-//                } else {
-////                    completion(res,false)
-//                }
-//            }
-//        }
+        let checkSendDeviceToken = UserDefaults.standard.bool(forKey: "SendDeviceToken")
+        if !checkSendDeviceToken{
+            let email = UserDefaults.standard.string(forKey: "UserEmail")
+            let token = UserDefaults.standard.string(forKey: "UserToken")
+            let parameter = ["userEmail": email, "token": token]
+            let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
+            var urlRequest = URLRequest(url: url!)
+            urlRequest.httpMethod = "POST"
+            let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+            urlRequest.httpBody = httpBody
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            
+            Alamofire.request(urlRequest).response { (response) in
+                if let data = response.data{
+                    var res = JSON(data)
+                    UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                }
+            }
+        }
         
         let alert = AlertManageController()
         navigationController?.pushViewController(alert, animated: true)
+    }
+    
+    func writeAlertToRealm(){
+        let email = UserDefaults.standard.string(forKey: "UserEmail")
+        
+        getAlertFromServer(parameter: email!){(json, pass) in
+            if pass{
+                DispatchQueue.main.async {
+                    self.alerts = self.allAlert
+                    self.alertTableView.reloadData()
+                }
+            }
+        }
     }
     
 }

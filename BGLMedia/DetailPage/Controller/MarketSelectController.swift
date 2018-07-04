@@ -8,6 +8,8 @@
 
 import UIKit
 import RealmSwift
+import Alamofire
+import SwiftyJSON
 
 class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDataSource,TransactionFrom{
     func setSinglePrice(single: Double) {

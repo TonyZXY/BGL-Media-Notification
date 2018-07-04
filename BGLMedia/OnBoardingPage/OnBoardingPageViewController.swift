@@ -38,6 +38,7 @@ class OnBoardingPageViewController: UIViewController {
     var registerButton = UIButton()
     var loginButton = UIButton()
     var signOutButton = UIButton()
+    var exitButton = UIButton()
     
     func createLabel(text: String){
         let offset = 5
@@ -49,23 +50,49 @@ class OnBoardingPageViewController: UIViewController {
         self.view.addSubview(label)
     }
     
+    let logoImageView: UIImageView = {
+        
+        let image = UIImage(named: "bcg_logo")
+        
+        let width = (image?.size.width)! * 0.5
+        let height = (image?.size.height)! * 0.5
+        let bounds = CGSize(width: width, height: height)
+        
+        UIGraphicsBeginImageContextWithOptions(bounds, false, 0.0)
+        image?.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: bounds))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        return UIImageView(image: newImage)
+        
+    }()
+    
     func createImage(from pid: Int){
         var image: UIImage!
-        if pid != 1 {
+//        if pid != 1 {
             image = UIImage(named: "\(pid).png")
-        } else {
-            image = UIImage(named: "bcg_logo.png")
-        }
-        let imageView = UIImageView(image: image)
+//
+//        } else {
+//            image = UIImage(named: "bcg_logo.png")
+//        }
+        let width = 335
+        let height = 410
+        let bounds = CGSize(width: width, height: height)
+        UIGraphicsBeginImageContextWithOptions(bounds, false, 0.0)
+        image?.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: bounds))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        let imageView = UIImageView(image: newImage)
         let distanceToTop = 80
-        let width = UIScreen.main.bounds.width
-        let imageFrame = CGRect(origin: CGPoint(x: (width-image.size.width)/2, y: CGFloat(distanceToTop)), size: image.size)
+        let width_ = UIScreen.main.bounds.width
+        let imageFrame = CGRect(origin: CGPoint(x: (width_-newImage.size.width)/2, y: CGFloat(distanceToTop)), size: newImage.size)
         imageView.frame = imageFrame
         view.addSubview(imageView)
     }
     
     func createButton(from pid:Int){
-        if pid != 1 {//create skip button
+        if pid != 6 {//create skip button
             button.setTitle("SKIP THESE", for: .normal)
             button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 10)
             button.titleLabel?.textColor = .white
@@ -75,7 +102,6 @@ class OnBoardingPageViewController: UIViewController {
             button.frame = buttonFrame
             view.addSubview(button)
         } else{
-            
             registerButton.setTitle("Register", for: .normal)
             registerButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
             registerButton.titleLabel?.textColor = .white
@@ -99,6 +125,15 @@ class OnBoardingPageViewController: UIViewController {
             signOutButton.addTarget(self, action: #selector(signOutButtonClicked), for: .touchUpInside)
             let signOutButtonFrame = CGRect(x: UIScreen.main.bounds.width - CGFloat(150), y: UIScreen.main.bounds.height*3/5 + CGFloat(50), width: CGFloat(100), height: CGFloat(50))
             signOutButton.frame = signOutButtonFrame
+            
+            exitButton.setTitle("Got it. ", for: .normal)
+            exitButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
+            exitButton.titleLabel?.textColor = .blue
+            
+            exitButton.addTarget(self, action: #selector(skipButtonClicked), for: .touchUpInside)
+            let buttonFrame = CGRect(x: UIScreen.main.bounds.width/2 - CGFloat(50), y: UIScreen.main.bounds.height*3/5 + CGFloat(110), width: 100, height: 50)
+            exitButton.frame = buttonFrame
+            view.addSubview(exitButton)
             
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 view.addSubview(signOutButton)
