@@ -357,13 +357,15 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     func getNotificationStatusData(){
 
+//        print(UserDefaults.standard.string(forKey: "UserToken"))
         if UserDefaults.standard.string(forKey: "UserToken") != nil{
             let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")
-            Alamofire.request("http://10.10.6.139:3030/deviceManage/DeviceToken/" + deviceTokenString!, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+            Alamofire.request("http://10.10.6.18:3030/deviceManage/DeviceToken/" + deviceTokenString!, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                    UserDefaults.standard.set(json["notification"].bool!,forKey: "flashSwitch")
+                    print(json["notification"].bool!)
+//                    UserDefaults.standard.set(json["notification"].bool!,forKey: "flashSwitch")
                    self.notificationTableView.reloadData()
                     print(json)
                 case .failure(let error):
@@ -373,11 +375,11 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 let email = UserDefaults.standard.string(forKey: "UserEmail")!
-                Alamofire.request("http://10.10.6.139:3030/userLogin/interestOfUser/" + email, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+                Alamofire.request("http://10.10.6.18:3030/userLogin/interestOfUser/" + email, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
                     switch response.result {
                     case .success(let value):
                         let json = JSON(value)
-                        UserDefaults.standard.set(json["status"].bool!,forKey: "priceSwitch")
+//                        UserDefaults.standard.set(json["status"].bool!,forKey: "priceSwitch")
                         self.notificationTableView.reloadData()
                         print(json)
                     case .failure(let error):
@@ -406,7 +408,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 "notification": flashNotification
             ]
             
-            Alamofire.request("http://10.10.6.139:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+            Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
@@ -417,7 +419,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             }
         
         
-        Alamofire.request("http://10.10.6.139:3030/userLogin/changeNotificationStatus", method: .post, parameters: ["email":email,"token":token,"userStatus":priceAlert], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+        Alamofire.request("http://10.10.6.18:3030/userLogin/changeNotificationStatus", method: .post, parameters: ["email":email,"token":token,"userStatus":priceAlert], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
             switch response.result {
             case .success(let value):
                 let json = JSON(value)

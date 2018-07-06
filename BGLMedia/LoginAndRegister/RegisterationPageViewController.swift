@@ -239,7 +239,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
     
     func registerRequestToServer(parameter: [String : String], completion:@escaping (JSON, Bool)->Void){
         
-        let url = URL(string: "http://10.10.6.139:3030/userLogin/register")
+        let url = URL(string: "http://10.10.6.18:3030/userLogin/register")
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "POST"
         let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])

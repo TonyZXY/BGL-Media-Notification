@@ -64,7 +64,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ThemeColor().themeColor()
-        alerts = allAlert
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
     }
@@ -97,7 +96,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
         
-        let url = URL(string: "http://10.10.6.139:3030/userLogin/interestOfUser/" + parameter)
+        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "GET"
         //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
@@ -108,8 +107,15 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             if let data = response.data{
                 var res = JSON(data)
                 if res != nil{
+//                    let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+//                    try! self.realm.write {
+//                        self.realm.delete(coinSelected)
+//                    }
+                    
+//                    self.realm.delete(self.realm.objects(alertObject.self))
                     for result in res["interest"].array!{
                         self.realm.beginWrite()
+//                        self.realm.delete(self.realm.objects(alertObject.self))
                         let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
                         if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
                             self.realm.create(alertObject.self, value: realmData)
@@ -142,7 +148,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     @objc func addAlerts(){
-        alerts = allAlert
+//        alerts = allAlert
         alertTableView.reloadData()
     }
     
@@ -163,13 +169,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let coinLabel = UILabel()
         coinLabel.translatesAutoresizingMaskIntoConstraints = false
         coinLabel.text = alerts[section].coinName
-        
-        //        let myTextField = UITextField()
-        //        let bottomLine = CALayer()
-        //        bottomLine.frame = CGRect(x: 0.0, y: myTextField.frame.height - 1, width: myTextField.frame.width, height: 1.0)
-        //        bottomLine.backgroundColor = UIColor.white.cgColor
-        //        myTextField.borderStyle = UITextBorderStyle.none
-        //        myTextField.layer.addSublayer(bottomLine)
         
         let button = UIButton(type:.system)
         button.setTitle("Close", for: .normal)
@@ -233,10 +232,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        alerts = allAlert
         return alerts.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        alerts = allAlert
         if !alerts[section].isExpanded{
             return 0
         }
@@ -280,6 +281,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertEdit.intersetObject.tradingPairs = alerts[indexPath.section].name[indexPath.row].tradingPairs
         alertEdit.intersetObject.coinName = alerts[indexPath.section].name[indexPath.row].coinName
         alertEdit.intersetObject.compare = alerts[indexPath.section].name[indexPath.row].compare
+        alertEdit.intersetObject.id = alerts[indexPath.section].name[indexPath.row].id
         alertEdit.status = "Update"
         navigationController?.pushViewController(alertEdit, animated: true)
     }
@@ -457,7 +459,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             let email = UserDefaults.standard.string(forKey: "UserEmail")
             let token = UserDefaults.standard.string(forKey: "UserToken")
             let parameter = ["userEmail": email, "token": token]
-            let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
+            let url = URL(string: "http://10.10.6.18:3030/deviceManage/addAlertDevice")
             var urlRequest = URLRequest(url: url!)
             urlRequest.httpMethod = "POST"
             let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])

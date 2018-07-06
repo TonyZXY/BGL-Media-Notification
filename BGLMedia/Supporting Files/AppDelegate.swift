@@ -101,7 +101,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             "deviceID": deviceTokenString,
             "notification": true
         ]
-        Alamofire.request("http://10.10.6.139:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+        Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
                 switch response.result {
                     case .success(let value):
                         let json = JSON(value)

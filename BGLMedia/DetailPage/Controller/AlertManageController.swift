@@ -34,7 +34,7 @@ struct ExpandableNames{
 class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDataSource,TransactionFrom,UITextFieldDelegate{
     var newTransaction = AllTransactions()
     let cryptoCompareClient = CryptoCompareClient()
-//    let realm = try! Realm()
+    let realm = try! Realm()
     var sectionPrice:Double = 0
     var inputPrice:String = ""
     var intersetObject = alertObjects()
@@ -277,19 +277,29 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     @objc func deleteAlert(){
-//        let url = URL(string: "http://10.10.6.139:3030/userLogin/deleteInterest")
-//        var urlRequest = URLRequest(url: url!)
-//        urlRequest.httpMethod = "GET"
-//        //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-//        //        urlRequest.httpBody = httpBody
-//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//        Alamofire.request(urlRequest).response { (response) in
-//            if let data = response.data{
-//                var res = JSON(data)
-//                completion(res,true)
-//            }
-//        }
+        let url = URL(string: "http://10.10.6.18:3030/userLogin/deleteInterest")
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "POST"
+        
+        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+        let token = UserDefaults.standard.string(forKey: "CertificateToken")!
+        
+        let parameter = ["email":email,"token":token,"interests":[["_id":intersetObject.id]]] as [String : Any]
+        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+        urlRequest.httpBody = httpBody
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+
+        Alamofire.request(urlRequest).response { (response) in
+            if let data = response.data{
+                var res = JSON(data)
+                let filterName = "id = '" + self.intersetObject.id + "' "
+                try! self.realm.write {
+                    self.realm.delete(self.realm.objects(alertObject.self).filter(filterName))
+                }
+            }
+            self.navigationController?.popViewController(animated: true)
+        }
+        
     }
     
     lazy var alertTableView:UITableView = {
@@ -331,11 +341,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 print(result["status"].bool!)
                 print(result["coinTo"].string!)
             }
-            
-            
-            
-//
-//            print(json["interest"].string)
         }
         
         
@@ -428,7 +433,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func sendAlertToServer(parameter: [String : Any], completion:@escaping (JSON, Bool)->Void){
         
-        let url = URL(string: "http://10.10.6.139:3030/userLogin/addInterest")
+        let url = URL(string: "http://10.10.6.18:3030/userLogin/addInterest")
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "POST"
         let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
@@ -452,7 +457,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
 
     func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
         
-        let url = URL(string: "http://10.10.6.139:3030/userLogin/interestOfUser/" + parameter)
+        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "GET"
 //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
