@@ -184,6 +184,7 @@
 		3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E820E9FA5600D3CAE6 /* Reachability.framework */; };
 		3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */; };
 		5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */; };
+		5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
 		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 /* End PBXBuildFile section */
@@ -369,6 +370,7 @@
 		3D1332E820E9FA5600D3CAE6 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePopUpViewController.swift; sourceTree = "<group>"; };
+		5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareImagePreViewController.swift; sourceTree = "<group>"; };
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -759,8 +761,9 @@
 				2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */,
 				2D52AE5620E46E1900018FC0 /* NewsFlashViewController.swift~HEAD */,
 				2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */,
-				2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */,
 				5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */,
+				2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */,
+				5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1227,6 +1230,7 @@
 				2D52AEE720E46E1A00018FC0 /* RegisterationPageViewController.swift in Sources */,
 				2D52AEF620E46E1A00018FC0 /* TickerDataRealm.swift in Sources */,
 				2D52AF1E20E46E1A00018FC0 /* CandleStickChart.swift in Sources */,
+				5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */,
 				2D52AEFA20E46E1A00018FC0 /* TickerDataFetcherV2.swift in Sources */,
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
 				2D52AF1520E46E1A00018FC0 /* TimelinePoint.swift in Sources */,

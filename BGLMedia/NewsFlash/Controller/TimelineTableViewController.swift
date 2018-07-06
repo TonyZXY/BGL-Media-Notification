@@ -179,35 +179,37 @@ class TimelineTableViewController: UITableViewController {
 //        let bottomImage = UIImage(named: "sample_qr_code.png")
 //        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
         
-        let image = createImage(textImage: textImage)
+        let image = generateImage(textImage: textImage)
         
+        let sharedImageVC = ShareImagePreViewController(image:image)
         
+//        sharedImageVC.parentView = self
+        
+        self.present(sharedImageVC,animated: true, completion:nil)
         
         let activityVC = UIActivityViewController(activityItems: [image], applicationActivities:nil)
         activityVC.popoverPresentationController?.sourceView = self.view
         self.present(activityVC,animated: true, completion:nil)
     }
     
-    func createImage(textImage: UIImage)->UIImage{
+    func generateImage(textImage: UIImage)->UIImage{
         let topImage = UIImage(named:"shareImageHead")
         let bottomImage = UIImage(named:"shareImageQRCode")
         let width = UIScreen.main.bounds.width
         let height1 = (topImage?.size.height)!*width/(topImage?.size.width)!
         let height2 = (bottomImage?.size.height)!*width/(bottomImage?.size.width)!
         //now we have topImage, textImage and bottomImage - we have to combine them together
-        let distance = (UIScreen.main.bounds.height - height1 - textImage.size.height - height2)/2
+//        let distance = (UIScreen.main.bounds.height - height1 - textImage.size.height - height2)/2
         
         let size = UIScreen.main.bounds.size
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        let headerSpace = CGFloat(50)
+        let headerSpace = CGFloat(0)
         topImage?.draw(in: CGRect(x: 0, y: headerSpace, width: width, height: height1))
         let temp = height1 + headerSpace
         textImage.draw(in: CGRect(x: 5, y: temp, width: width-10, height: textImage.size.height))
         bottomImage?.draw(in: CGRect(x: 0, y: temp + textImage.size.height,  width: width, height: height2))
         let image = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
-        print(image.size.height)
-        print(UIScreen.main.bounds.height)
         return image
     }
     
