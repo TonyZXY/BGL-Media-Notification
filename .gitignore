@@ -16,6 +16,9 @@ DerivedData/
 *.perspectivev3
 !default.perspectivev3
 xcuserdata/
+*.xcuserdatad
+*.xcbkptlist
+*.xcuserstate
 
 ## Other
 *.moved-aside
@@ -64,8 +67,14 @@ Carthage/
 
 fastlane/report.xml
 fastlane/Preview.html
-fastlane/screenshots/**/*.png
+fastlane/screenshots
 fastlane/test_output
+fastlane/logs
+*.cer
+*.certSigningRequest
+*.p12
+*.mobileprovision
 
 .idea/
 Index/
+.DS_Store
