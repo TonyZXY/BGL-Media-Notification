@@ -186,6 +186,7 @@
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
 		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 		573C96AB20EF068A00B667AB /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AA20EF068A00B667AB /* Extension.swift */; };
+		573C96AE20F2D7B700B667AB /* NewsV2Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AD20F2D7B700B667AB /* NewsV2Controller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -371,6 +372,7 @@
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		573C96AA20EF068A00B667AB /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		573C96AD20F2D7B700B667AB /* NewsV2Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsV2Controller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -976,6 +978,7 @@
 		573C96AC20F2D5CC00B667AB /* NewsV2 */ = {
 			isa = PBXGroup;
 			children = (
+				573C96AD20F2D7B700B667AB /* NewsV2Controller.swift */,
 			);
 			path = NewsV2;
 			sourceTree = "<group>";
@@ -1166,6 +1169,7 @@
 				2D52AEFC20E46E1A00018FC0 /* DefaultCurrencyViewController.swift in Sources */,
 				2D52AEC220E46E1A00018FC0 /* MarketCapClient.swift in Sources */,
 				2D52AE9E20E46E1A00018FC0 /* AlertManageController.swift in Sources */,
+				573C96AE20F2D7B700B667AB /* NewsV2Controller.swift in Sources */,
 				2D52AE9B20E46E1A00018FC0 /* CoinDetailController.swift in Sources */,
 				2D52AEA220E46E1A00018FC0 /* AllLossView.swift in Sources */,
 				2D52AEC620E46E1A00018FC0 /* Endpoint.swift in Sources */,
