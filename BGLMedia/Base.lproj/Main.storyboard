@@ -13,7 +13,7 @@
         <!--Market Controller-->
         <scene sceneID="nXS-Ae-Pgy">
             <objects>
-                <viewController id="d4b-Vg-VbT" customClass="MarketController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="d4b-Vg-VbT" customClass="MarketController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DS6-bt-1Nm">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -26,10 +26,10 @@
             </objects>
             <point key="canvasLocation" x="188" y="-90"/>
         </scene>
-        <!--News Home View Controller-->
+        <!--NewsV2 Controller-->
         <scene sceneID="iDc-km-PSG">
             <objects>
-                <viewController id="izm-yd-kfl" customClass="NewsHomeViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="izm-yd-kfl" customClass="NewsV2Controller" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Br7-Qz-w9l">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -45,7 +45,7 @@
         <!--Wallet Controller-->
         <scene sceneID="g3K-Nq-zyc">
             <objects>
-                <viewController id="A4p-NS-O0W" customClass="WalletController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="A4p-NS-O0W" customClass="WalletController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dTU-nN-lcr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -61,7 +61,7 @@
         <!--Main Tab Bar Controller-->
         <scene sceneID="3Mh-df-t8l">
             <objects>
-                <tabBarController storyboardIdentifier="HomePage" id="es6-dM-P9s" customClass="MainTabBarController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tabBarController storyboardIdentifier="HomePage" id="es6-dM-P9s" customClass="MainTabBarController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="n1N-YU-9Bc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -122,7 +122,7 @@
         <!--News Flash View Controller-->
         <scene sceneID="mFb-ab-Uso">
             <objects>
-                <viewController id="KOa-Tr-5Hc" customClass="NewsFlashViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="KOa-Tr-5Hc" customClass="NewsFlashViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3XO-na-vOv">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -155,7 +155,7 @@
         <!--Timeline Table View Controller-->
         <scene sceneID="ZZH-d2-Jqm">
             <objects>
-                <tableViewController id="AMK-Dr-eDh" customClass="TimelineTableViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <tableViewController id="AMK-Dr-eDh" customClass="TimelineTableViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="B3F-MS-ozY">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="638"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -193,7 +193,7 @@
         <!--About Us View Controller-->
         <scene sceneID="sQG-yX-RmZ">
             <objects>
-                <viewController id="g1r-7I-sY5" customClass="AboutUsViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController"/>
+                <viewController id="g1r-7I-sY5" customClass="AboutUsViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController"/>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="93Y-zt-AWp" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-754" y="1954"/>
@@ -201,7 +201,7 @@
         <!--Default Currency View Controller-->
         <scene sceneID="SQa-IN-azJ">
             <objects>
-                <viewController id="cKZ-vp-xcx" customClass="DefaultCurrencyViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="cKZ-vp-xcx" customClass="DefaultCurrencyViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sJI-Rn-xZd">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -251,7 +251,7 @@
         <!--View Options View Controller-->
         <scene sceneID="bAA-dT-XDY">
             <objects>
-                <viewController id="VY1-iF-tz5" customClass="ViewOptionsViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="VY1-iF-tz5" customClass="ViewOptionsViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Umx-KZ-mUh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -281,7 +281,7 @@
         <!--Notification View Controller-->
         <scene sceneID="Rxb-zg-YHs">
             <objects>
-                <viewController id="MFK-H8-Jps" customClass="NotificationViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="MFK-H8-Jps" customClass="NotificationViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="RPZ-l1-Udh">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -608,7 +608,7 @@
         <!--Other Option View Controller-->
         <scene sceneID="rDZ-Fb-nYE">
             <objects>
-                <viewController id="9gs-ku-6Bq" customClass="OtherOptionViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="9gs-ku-6Bq" customClass="OtherOptionViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="fwZ-ms-RNc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -663,7 +663,7 @@
         <!--Other Detail View Controller-->
         <scene sceneID="VuK-Bb-MIZ">
             <objects>
-                <viewController id="FUn-dB-Sl0" customClass="OtherDetailViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="FUn-dB-Sl0" customClass="OtherDetailViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="xKn-dK-Ete">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -706,7 +706,7 @@
         <!--Web Main View Controller-->
         <scene sceneID="50o-4C-Y99">
             <objects>
-                <viewController id="ZcG-lb-PCg" customClass="WebMainViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="ZcG-lb-PCg" customClass="WebMainViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="sRJ-bV-dlO">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -752,7 +752,7 @@
         <!--Web Detail View Controller-->
         <scene sceneID="Ui0-kd-6zm">
             <objects>
-                <viewController id="6Tf-yj-zFA" customClass="WebDetailViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="6Tf-yj-zFA" customClass="WebDetailViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="qDS-Lx-npJ">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -786,7 +786,7 @@
         <!--More Option Main View Controller-->
         <scene sceneID="ZpI-iE-Onq">
             <objects>
-                <viewController id="nY7-hC-uc2" customClass="MoreOptionMainViewController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="nY7-hC-uc2" customClass="MoreOptionMainViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3Hd-XQ-Zk9">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -877,7 +877,7 @@
         <!--Alert Notification Controller-->
         <scene sceneID="IUz-N6-mRA">
             <objects>
-                <viewController id="aBc-mO-nhV" customClass="AlertNotificationController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="aBc-mO-nhV" customClass="AlertNotificationController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Jkb-lC-aR0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -892,7 +892,7 @@
         <!--Default Language Controller-->
         <scene sceneID="0xO-W7-Et8">
             <objects>
-                <viewController id="BmY-4x-KTT" customClass="DefaultLanguageController" customModule="BGL_MediaApp" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="BmY-4x-KTT" customClass="DefaultLanguageController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Yws-ht-eHW">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
