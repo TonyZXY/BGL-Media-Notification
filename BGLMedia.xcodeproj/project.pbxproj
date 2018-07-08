@@ -183,6 +183,8 @@
 		3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */; };
 		3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E820E9FA5600D3CAE6 /* Reachability.framework */; };
 		3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */; };
+		5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */; };
+		5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
 		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 		573C96AB20EF068A00B667AB /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AA20EF068A00B667AB /* Extension.swift */; };
@@ -369,6 +371,8 @@
 		3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Alamofire.framework; path = Carthage/Build/iOS/Alamofire.framework; sourceTree = "<group>"; };
 		3D1332E820E9FA5600D3CAE6 /* Reachability.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Reachability.framework; path = Carthage/Build/iOS/Reachability.framework; sourceTree = "<group>"; };
 		3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
+		5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharePopUpViewController.swift; sourceTree = "<group>"; };
+		5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareImagePreViewController.swift; sourceTree = "<group>"; };
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		573C96AA20EF068A00B667AB /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
@@ -756,12 +760,14 @@
 		2D52AE5220E46E1900018FC0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */,
-				2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */,
-				2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */,
-				2D52AE5620E46E1900018FC0 /* NewsFlashViewController.swift~HEAD */,
 				2D52AE5720E46E1900018FC0 /* FlashSearchController.swift */,
 				2D52AE5820E46E1900018FC0 /* NewsFlashViewController.swift */,
+				2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */,
+				2D52AE5620E46E1900018FC0 /* NewsFlashViewController.swift~HEAD */,
+				2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */,
+				5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */,
+				2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */,
+				5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1213,6 +1219,7 @@
 				2D52AF1120E46E1A00018FC0 /* NewsInFlashNewsRealm.swift in Sources */,
 				2D52AEC120E46E1A00018FC0 /* CryptoCompareEndpoint.swift in Sources */,
 				2D52AE9A20E46E1A00018FC0 /* AlertController.swift in Sources */,
+				5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */,
 				2D52AEFD20E46E1A00018FC0 /* defCurrency.swift in Sources */,
 				2D52AF3820E46E1A00018FC0 /* NewsMenuBar.swift in Sources */,
 				2D52AEB720E46E1A00018FC0 /* TransCoinMarketCell.swift in Sources */,
@@ -1247,6 +1254,7 @@
 				2D52AEE720E46E1A00018FC0 /* RegisterationPageViewController.swift in Sources */,
 				2D52AEF620E46E1A00018FC0 /* TickerDataRealm.swift in Sources */,
 				2D52AF1E20E46E1A00018FC0 /* CandleStickChart.swift in Sources */,
+				5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */,
 				2D52AEFA20E46E1A00018FC0 /* TickerDataFetcherV2.swift in Sources */,
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
 				2D52AF1520E46E1A00018FC0 /* TimelinePoint.swift in Sources */,
@@ -1465,6 +1473,7 @@
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1483,6 +1492,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Debug;
 		};
@@ -1494,6 +1504,7 @@
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
+				CURRENT_PROJECT_VERSION = 9;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
@@ -1511,6 +1522,7 @@
 				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
 			};
 			name = Release;
 		};

@@ -69,22 +69,19 @@ class OnBoardingPageViewController: UIViewController {
     
     func createImage(from pid: Int){
         var image: UIImage!
-//        if pid != 1 {
-            image = UIImage(named: "\(pid).png")
-//
-//        } else {
-//            image = UIImage(named: "bcg_logo.png")
-//        }
-        let width = 335
-        let height = 410
-        let bounds = CGSize(width: width, height: height)
+        image = UIImage(named: "\(pid).png")
+        let imageWidth = image.size.width
+        let imageHeight = image.size.height
+        let drawWidth = UIScreen.main.bounds.size.width
+        let drawHeight = drawWidth * imageHeight / imageWidth
+        let bounds = CGSize(width: drawWidth, height: drawHeight)
         UIGraphicsBeginImageContextWithOptions(bounds, false, 0.0)
         image?.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: bounds))
         let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
         UIGraphicsEndImageContext()
         
         let imageView = UIImageView(image: newImage)
-        let distanceToTop = 80
+        let distanceToTop = 50
         let width_ = UIScreen.main.bounds.width
         let imageFrame = CGRect(origin: CGPoint(x: (width_-newImage.size.width)/2, y: CGFloat(distanceToTop)), size: newImage.size)
         imageView.frame = imageFrame

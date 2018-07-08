@@ -161,7 +161,10 @@ class TimelineTableViewController: UITableViewController {
         
         return cell
     }
-    
+//    print(UIImage(named:"shareImageHead.png")?.size)
+//    print(UIImage(named:"shareImageQRCode.png")?.size)
+//    print(UIScreen.main.bounds)
+//    print(textImage.size)
     
     @objc func shareButtonClicked(sender: UIButton){
     
@@ -172,15 +175,64 @@ class TimelineTableViewController: UITableViewController {
         let size = cell.descriptionLabel.font.pointSize
         let textImage = self.textToImage(drawText: cellText!, inImage: cell.descriptionLabel.createImage!, atPoint: CGPoint(x:0, y:0), withSize:size)
     
-        let topImage = combineLogoWithText(combine: UIImage(named: "bcg_logo.png")!, with: textImage)
-        let bottomImage = UIImage(named: "sample_qr_code.png")
-        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
+//        let topImage = combineLogoWithText(combine: UIImage(named: "bcg_logo.png")!, with: textImage)
+//        let bottomImage = UIImage(named: "sample_qr_code.png")
+//        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
+        
+        let image = generateImage(textImage: textImage)
+        
+        let sharedImageVC = ShareImagePreViewController(image:image)
+        
+//        sharedImageVC.parentView = self
+        
+        self.present(sharedImageVC,animated: true, completion:nil)
         
         let activityVC = UIActivityViewController(activityItems: [image], applicationActivities:nil)
         activityVC.popoverPresentationController?.sourceView = self.view
         self.present(activityVC,animated: true, completion:nil)
     }
     
+    func generateImage(textImage: UIImage)->UIImage{
+        let topImage = UIImage(named:"shareImageHead")
+        let bottomImage = UIImage(named:"shareImageQRCode")
+        let width = UIScreen.main.bounds.width
+        let height1 = (topImage?.size.height)!*width/(topImage?.size.width)!
+        let height2 = (bottomImage?.size.height)!*width/(bottomImage?.size.width)!
+        //now we have topImage, textImage and bottomImage - we have to combine them together
+//        let distance = (UIScreen.main.bounds.height - height1 - textImage.size.height - height2)/2
+        
+        let size = UIScreen.main.bounds.size
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        let headerSpace = CGFloat(0)
+        topImage?.draw(in: CGRect(x: 0, y: headerSpace, width: width, height: height1))
+        let temp = height1 + headerSpace
+        textImage.draw(in: CGRect(x: 5, y: temp, width: width-10, height: textImage.size.height))
+        bottomImage?.draw(in: CGRect(x: 0, y: temp + textImage.size.height,  width: width, height: height2))
+        let image = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        return image
+    }
+    
+    
+    func combineImageWithQRCode(combine topImage:UIImage, with bottomImage:UIImage)-> UIImage{
+        let width = topImage.size.width
+        let height = topImage.size.height * 2
+        let size = CGSize(width: width, height: height)
+        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
+        
+        topImage.draw(in: CGRect(x:0, y:0, width:width, height: height/2 ))
+        bottomImage.draw(in: CGRect(x:(width-height/2)/2, y:height/2, width: height/2,  height:height/2 ))
+        
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        // Change UIImageView requirements here
+        let mergeImageView = UIImageView(frame: CGRect(x:0, y: 200, width: 30, height: 20))
+        
+        //Combine images into a single image view.
+        mergeImageView.image = newImage
+        return mergeImageView.image!
+    }
     
     func textToImage(drawText text: String, inImage image: UIImage, atPoint point: CGPoint, withSize size: CGFloat) -> UIImage {
         let textColor = UIColor.black
@@ -203,25 +255,6 @@ class TimelineTableViewController: UITableViewController {
         UIGraphicsEndImageContext()
         
         return newImage!
-    }
-    func combineImageWithQRCode(combine topImage:UIImage, with bottomImage:UIImage)-> UIImage{
-        let width = topImage.size.width
-        let height = topImage.size.height * 2
-        let size = CGSize(width: width, height: height)
-        UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
-        
-        topImage.draw(in: CGRect(x:0, y:0, width:width, height: height/2 ))
-        bottomImage.draw(in: CGRect(x:(width-height/2)/2, y:height/2, width: height/2,  height:height/2 ))
-        
-        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        // Change UIImageView requirements here
-        let mergeImageView = UIImageView(frame: CGRect(x:0, y: 200, width: 30, height: 20))
-        
-        //Combine images into a single image view.
-        mergeImageView.image = newImage
-        return mergeImageView.image!
     }
     
     func combineLogoWithText(combine topImage:UIImage, with bottomImage:UIImage)-> UIImage{

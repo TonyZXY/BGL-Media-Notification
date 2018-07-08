@@ -66,6 +66,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(true, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
             UserDefaults.standard.set("EN", forKey: "defaultLanguage")
+            
+            
             UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
         return true
