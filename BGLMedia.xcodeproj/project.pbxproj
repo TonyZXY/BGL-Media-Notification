@@ -187,6 +187,8 @@
 		5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
 		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
+		573C96AB20EF068A00B667AB /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AA20EF068A00B667AB /* Extension.swift */; };
+		573C96AE20F2D7B700B667AB /* NewsV2Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AD20F2D7B700B667AB /* NewsV2Controller.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -373,6 +375,8 @@
 		5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareImagePreViewController.swift; sourceTree = "<group>"; };
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		573C96AA20EF068A00B667AB /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
+		573C96AD20F2D7B700B667AB /* NewsV2Controller.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsV2Controller.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -937,6 +941,8 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				573C96AC20F2D5CC00B667AB /* NewsV2 */,
+				573C96A920EF054A00B667AB /* Extension */,
 				54AA279420E9B27A0026701A /* NetworkManager */,
 				2D52AE9520E46E1900018FC0 /* OnBoardingPage */,
 				2D52ADD520E46E1700018FC0 /* Supporting Files */,
@@ -965,6 +971,22 @@
 				54AA279520E9B28E0026701A /* NetworkManager.swift */,
 			);
 			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		573C96A920EF054A00B667AB /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				573C96AA20EF068A00B667AB /* Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		573C96AC20F2D5CC00B667AB /* NewsV2 */ = {
+			isa = PBXGroup;
+			children = (
+				573C96AD20F2D7B700B667AB /* NewsV2Controller.swift */,
+			);
+			path = NewsV2;
 			sourceTree = "<group>";
 		};
 		F249FBEA6AE0F53C3BA5FC1E /* Frameworks */ = {
@@ -1135,6 +1157,7 @@
 				2D52AF2320E46E1A00018FC0 /* ContainerView.swift in Sources */,
 				2D52AEA520E46E1A00018FC0 /* HistoryTableViewCell.swift in Sources */,
 				2D52AEB420E46E1A00018FC0 /* TransNumberCell.swift in Sources */,
+				573C96AB20EF068A00B667AB /* Extension.swift in Sources */,
 				2D52AEE820E46E1A00018FC0 /* LoginPageViewController.swift in Sources */,
 				2D52AF3020E46E1A00018FC0 /* GenuineSliderViewCell.swift in Sources */,
 				2D52AEE220E46E1A00018FC0 /* ThemeColor.swift in Sources */,
@@ -1152,6 +1175,7 @@
 				2D52AEFC20E46E1A00018FC0 /* DefaultCurrencyViewController.swift in Sources */,
 				2D52AEC220E46E1A00018FC0 /* MarketCapClient.swift in Sources */,
 				2D52AE9E20E46E1A00018FC0 /* AlertManageController.swift in Sources */,
+				573C96AE20F2D7B700B667AB /* NewsV2Controller.swift in Sources */,
 				2D52AE9B20E46E1A00018FC0 /* CoinDetailController.swift in Sources */,
 				2D52AEA220E46E1A00018FC0 /* AllLossView.swift in Sources */,
 				2D52AEC620E46E1A00018FC0 /* Endpoint.swift in Sources */,
@@ -1456,7 +1480,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1487,7 +1511,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 11.3;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.4;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

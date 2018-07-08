@@ -249,7 +249,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
                         if pass {
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
                             UserDefaults.standard.set(parameter["email"], forKey: "UserEmail")
-                            let token = (res["token"] as AnyObject? as? String) ?? ""
+                            let token = res["token"].string!
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             if self.presentingViewController?.presentingViewController != nil{
@@ -287,7 +287,7 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
     
     func registerRequestToServer(parameter: [String : String], completion:@escaping (JSON, Bool)->Void){
         
-        let url = URL(string: "http://10.10.6.139:3030/userLogin/register")
+        let url = URL(string: "http://10.10.6.18:3030/userLogin/register")
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "POST"
         let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])

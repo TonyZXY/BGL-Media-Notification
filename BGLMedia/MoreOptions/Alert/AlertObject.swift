@@ -24,3 +24,16 @@ class alertObject:Object{
         return "id"
     }
 }
+
+class alertObjects:Object{
+    @objc dynamic var id:String = ""
+    @objc dynamic var coinName = ""
+    @objc dynamic var coinAbbName = ""
+    @objc dynamic var tradingPairs = ""
+    @objc dynamic var exchangName = ""
+    @objc dynamic var compare:Double = 0
+    @objc dynamic var compareStatus:Int = 0
+    @objc dynamic var switchStatus:Bool = true
+    @objc dynamic var dateTime = Date()
+    
+}
