@@ -331,17 +331,17 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }()
     
     @objc func addNewAlert(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")
-        let token = UserDefaults.standard.string(forKey: "CertificateToken")
+        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+        let token = UserDefaults.standard.string(forKey: "CertificateToken")!
         
         
-        getAlertFromServer(parameter: email!){(json, pass) in
-            print(json)
-            for result in json["interest"].array!{
-                print(result["status"].bool!)
-                print(result["coinTo"].string!)
-            }
-        }
+//        getAlertFromServer(parameter: email){(json, pass) in
+//            print(json)
+//            for result in json["interest"].array!{
+//                print(result["status"].bool!)
+//                print(result["coinTo"].string!)
+//            }
+//        }
         
         
         
@@ -365,11 +365,11 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 compareStatus = 2
             }
 
-
+       
             let inter:[[String:Any]] = [["coinFrom":intersetObject.coinAbbName,"coinTo":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":price,"status":true,"id":"123","isGreater":compareStatus]]
             let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
             sendAlertToServer(parameter: parameter){(json,pass) in
-                print(json)
+//                print(json)
             }
             
             

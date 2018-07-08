@@ -94,49 +94,50 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     
-    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
-        
-        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
-        var urlRequest = URLRequest(url: url!)
-        urlRequest.httpMethod = "GET"
-        //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-        //        urlRequest.httpBody = httpBody
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        Alamofire.request(urlRequest).response { (response) in
-            if let data = response.data{
-                var res = JSON(data)
-                if res != nil{
-//                    let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
-//                    try! self.realm.write {
-//                        self.realm.delete(coinSelected)
-//                    }
-                    
-//                    self.realm.delete(self.realm.objects(alertObject.self))
-                    for result in res["interest"].array!{
-                        self.realm.beginWrite()
-//                        self.realm.delete(self.realm.objects(alertObject.self))
-                        let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
-                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
-                            self.realm.create(alertObject.self, value: realmData)
-                        } else {
-                            self.realm.create(alertObject.self, value: realmData, update: true)
-                        }
-                        
-                        if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
-                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
-                        } else {
-                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
-                        }
-                        try! self.realm.commitWrite()
-                    }
-                    completion(res,true)
-                } else{
-                    completion(res,false)
-                }
-            }
-        }
-    }
+//    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
+//
+//        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
+//        var urlRequest = URLRequest(url: url!)
+//        urlRequest.httpMethod = "GET"
+//        //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+//        //        urlRequest.httpBody = httpBody
+//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        Alamofire.request(urlRequest).response { (response) in
+//            if let data = response.data{
+//                var res = JSON(data)
+//                if res != nil{
+//
+//                    print(res)
+//
+////                    let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+////                    try! self.realm.write {
+////                        self.realm.delete(coinSelected)
+////                    }
+////                    self.realm.delete(self.realm.objects(alertObject.self))
+////                    for result in res["interest"].array!{
+////                        self.realm.beginWrite()
+////                        let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
+////                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
+////                            self.realm.create(alertObject.self, value: realmData)
+////                        } else {
+////                            self.realm.create(alertObject.self, value: realmData, update: true)
+////                        }
+////
+////                        if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
+////                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
+////                        } else {
+////                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
+////                        }
+////                        try! self.realm.commitWrite()
+////                    }
+//                    completion(res,true)
+//                } else{
+//                    completion(res,false)
+//                }
+//            }
+//        }
+//    }
     
     func checkSetUpView(){
         let status = UserDefaults.standard.bool(forKey: "NotificationSetting")
@@ -334,7 +335,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             if UIApplication.shared.canOpenURL(settingsUrl) {
                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
                     // Checking for setting is opened or not
-                    print("Setting is opened: \(success)")
+//                    print("Setting is opened: \(success)")
                 })
             }
         }
@@ -353,26 +354,22 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let current = UNUserNotificationCenter.current()
         current.getNotificationSettings(completionHandler: { (settings) in
             if settings.authorizationStatus == .notDetermined {
-                print("1")
                 // Notification permission has not been asked yet, go for it!
             }
             
             if settings.authorizationStatus == .denied {
                 UserDefaults.standard.set(false, forKey: "NotificationSetting")
-                print("disable")
                 // Notification permission was previously denied, go to settings & privacy to re-enable
             }
             
             if settings.authorizationStatus == .authorized {
                 UserDefaults.standard.set(true, forKey: "NotificationSetting")
-                print("enable")
                 // Notification permission was already gransnted
             }
             
             DispatchQueue.main.async {
                 self.checkSetUpView()
             }
-            print("trys")
         })
     }
     
@@ -479,16 +476,45 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeAlertToRealm(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")
+        let email = UserDefaults.standard.string(forKey: "UserEmail")!
         
-        getAlertFromServer(parameter: email!){(json, pass) in
+        
+        passServerData(urlParameters:["userLogin","interestOfUser",email],httpMethod:"GET",parameters:[String:Any]()){(json, pass) in
             if pass{
+                print(json)
+                for result in json["interest"].array!{
+                    self.realm.beginWrite()
+                    let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
+                    if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
+                        self.realm.create(alertObject.self, value: realmData)
+                    } else {
+                        self.realm.create(alertObject.self, value: realmData, update: true)
+                    }
+
+                    if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
+                        self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
+                    } else {
+                        self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
+                    }
+                    try! self.realm.commitWrite()
+                }
+
                 DispatchQueue.main.async {
                     self.alerts = self.allAlert
                     self.alertTableView.reloadData()
                 }
             }
         }
+        
+//
+//        getAlertFromServer(parameter: email!){(json, pass) in
+//            if pass{
+//                DispatchQueue.main.async {
+//                    self.alerts = self.allAlert
+//                    self.alertTableView.reloadData()
+//                }
+//            }
+//        }
     }
     
 }

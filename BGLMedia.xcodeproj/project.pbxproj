@@ -185,6 +185,7 @@
 		3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
 		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
+		573C96AB20EF068A00B667AB /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AA20EF068A00B667AB /* Extension.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -369,6 +370,7 @@
 		3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Kingfisher.framework; path = Carthage/Build/iOS/Kingfisher.framework; sourceTree = "<group>"; };
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		573C96A720EB5B8700B667AB /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		573C96AA20EF068A00B667AB /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -931,6 +933,8 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				573C96AC20F2D5CC00B667AB /* NewsV2 */,
+				573C96A920EF054A00B667AB /* Extension */,
 				54AA279420E9B27A0026701A /* NetworkManager */,
 				2D52AE9520E46E1900018FC0 /* OnBoardingPage */,
 				2D52ADD520E46E1700018FC0 /* Supporting Files */,
@@ -959,6 +963,21 @@
 				54AA279520E9B28E0026701A /* NetworkManager.swift */,
 			);
 			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		573C96A920EF054A00B667AB /* Extension */ = {
+			isa = PBXGroup;
+			children = (
+				573C96AA20EF068A00B667AB /* Extension.swift */,
+			);
+			path = Extension;
+			sourceTree = "<group>";
+		};
+		573C96AC20F2D5CC00B667AB /* NewsV2 */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = NewsV2;
 			sourceTree = "<group>";
 		};
 		F249FBEA6AE0F53C3BA5FC1E /* Frameworks */ = {
@@ -1129,6 +1148,7 @@
 				2D52AF2320E46E1A00018FC0 /* ContainerView.swift in Sources */,
 				2D52AEA520E46E1A00018FC0 /* HistoryTableViewCell.swift in Sources */,
 				2D52AEB420E46E1A00018FC0 /* TransNumberCell.swift in Sources */,
+				573C96AB20EF068A00B667AB /* Extension.swift in Sources */,
 				2D52AEE820E46E1A00018FC0 /* LoginPageViewController.swift in Sources */,
 				2D52AF3020E46E1A00018FC0 /* GenuineSliderViewCell.swift in Sources */,
 				2D52AEE220E46E1A00018FC0 /* ThemeColor.swift in Sources */,

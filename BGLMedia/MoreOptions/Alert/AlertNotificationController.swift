@@ -333,7 +333,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     lazy var notificationTableView:UITableView = {
        var tableView = UITableView()
-        tableView.register(SwitchTableViewCell.self, forCellReuseIdentifier: "notification")
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "editCurrency")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = ThemeColor().themeColor()
@@ -351,20 +350,17 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         postNotificationStatusData()
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        postNotificationStatusData()
-    }
+//    override func viewWillDisappear(_ animated: Bool) {
+//        postNotificationStatusData()
+//    }
     
     func getNotificationStatusData(){
-
-//        print(UserDefaults.standard.string(forKey: "UserToken"))
         if UserDefaults.standard.string(forKey: "UserToken") != nil{
             let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")
             Alamofire.request("http://10.10.6.18:3030/deviceManage/DeviceToken/" + deviceTokenString!, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-                    print(json["notification"].bool!)
 //                    UserDefaults.standard.set(json["notification"].bool!,forKey: "flashSwitch")
                    self.notificationTableView.reloadData()
                     print(json)
@@ -388,7 +384,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 }
             }
         }
-        
     }
     
     func postNotificationStatusData(){
@@ -398,21 +393,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         
         if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
             let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
-            
             let email = UserDefaults.standard.string(forKey: "UserEmail")!
             let token = UserDefaults.standard.string(forKey: "CertificateToken")!
             
-            print(deviceTokenString)
-            let deviceTokenJson: [String: Any] = [
-                "deviceID": deviceTokenString,
-                "notification": flashNotification
-            ]
-            
-            Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+            Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: ["deviceID": deviceTokenString,"notification": flashNotification], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
-//                    print(json)
                 case .failure(let error):
                     print(error)
                 }
@@ -423,28 +410,10 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             switch response.result {
             case .success(let value):
                 let json = JSON(value)
-//                print(json)
             case .failure(let error):
                 print(error)
             }
         }
-        }
-    }
-
- 
-    class SwitchTableViewCell:UITableViewCell{
-        override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
-            super.init(style: style, reuseIdentifier: reuseIdentifier)
-            setUpView()
-        }
-        
-        required init?(coder aDecoder: NSCoder) {
-            fatalError("init has not been completed")
-        }
-        
-        func setUpView(){
-            self.backgroundColor = ThemeColor().themeColor()
-            self.selectionStyle = .none
         }
     }
 }
