@@ -203,7 +203,7 @@ class LoginPageViewController: UIViewController {
                         if pass {
                             let token = res["token"].string!
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
-                            UserDefaults.standard.set(un, forKey: "UserEmail")
+                            UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
                             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
@@ -244,7 +244,7 @@ class LoginPageViewController: UIViewController {
     }
     
     func loginRequestToServer(username: String,password: String,completion:@escaping (JSON, Bool)->Void){
-        let parameters = ["userEmail": username.lowercased(), "password":password]
+        let parameters = ["email": username.lowercased(), "password":password]
         let url = URL(string: "http://10.10.6.18:3030/userLogin/login")
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "POST"

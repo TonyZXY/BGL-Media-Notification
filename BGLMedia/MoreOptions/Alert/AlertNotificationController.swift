@@ -34,6 +34,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         }
     }
     
+    
+    var buildInterestStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "buildInterest")
+        }
+    }
+    
     var switchLabel = ["flashSwitch","priceSwitch"]
     var sectionItem = ["Notification","Option"]
     
@@ -357,13 +364,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     func getNotificationStatusData(){
         if UserDefaults.standard.string(forKey: "UserToken") != nil{
             let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")
-            Alamofire.request("http://10.10.6.18:3030/deviceManage/DeviceToken/" + deviceTokenString!, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+            Alamofire.request("http://10.10.6.18:3030/test/DeviceToken/" + deviceTokenString!, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
                 switch response.result {
                 case .success(let value):
                     let json = JSON(value)
 //                    UserDefaults.standard.set(json["notification"].bool!,forKey: "flashSwitch")
                    self.notificationTableView.reloadData()
-                    print(json)
+//                    print(json)
                 case .failure(let error):
                     print(error)
                 }
@@ -377,7 +384,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                         let json = JSON(value)
 //                        UserDefaults.standard.set(json["status"].bool!,forKey: "priceSwitch")
                         self.notificationTableView.reloadData()
-                        print(json)
+//                        print(json)
                     case .failure(let error):
                         print(error)
                     }
@@ -387,33 +394,35 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func postNotificationStatusData(){
-        let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
-        let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
-        print(flashNotification)
-        
-        if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
-            let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
-            let email = UserDefaults.standard.string(forKey: "UserEmail")!
-            let token = UserDefaults.standard.string(forKey: "CertificateToken")!
+        if buildInterestStatus{
+            let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
+            let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
+            print(flashNotification)
             
-            Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: ["deviceID": deviceTokenString,"notification": flashNotification], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-                switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-                case .failure(let error):
-                    print(error)
+            if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
+                let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                let email = UserDefaults.standard.string(forKey: "UserEmail")!
+                let token = UserDefaults.standard.string(forKey: "CertificateToken")!
+                
+                Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: ["deviceID": deviceTokenString,"notification": flashNotification], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                    case .failure(let error):
+                        print(error)
+                    }
+                }
+                
+                
+                Alamofire.request("http://10.10.6.18:3030/userLogin/changeNotificationStatus", method: .post, parameters: ["email":email,"token":token,"userStatus":priceAlert], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+                    switch response.result {
+                    case .success(let value):
+                        let json = JSON(value)
+                    case .failure(let error):
+                        print(error)
+                    }
                 }
             }
-        
-        
-        Alamofire.request("http://10.10.6.18:3030/userLogin/changeNotificationStatus", method: .post, parameters: ["email":email,"token":token,"userStatus":priceAlert], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-            switch response.result {
-            case .success(let value):
-                let json = JSON(value)
-            case .failure(let error):
-                print(error)
-            }
-        }
         }
     }
 }

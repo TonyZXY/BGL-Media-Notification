@@ -28,7 +28,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var realm = try! Realm()
     var alerts:[alertResult] = [alertResult]()
     var coinName = coinAlert()
-//    var intersetObject = interset()
     
     var TransactionDelegate:TransactionFrom?
     var allAlert:[alertResult]{
@@ -55,6 +54,23 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         }
     }
     
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
+    var NotificationStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "NotificationSetting")
+        }
+    }
+    
+    var buildInterestStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "buildInterest")
+        }
+    }
     
     
     var twoDimension = [ExpandableNames(isExpanded: true, name: ["ds"]),ExpandableNames(isExpanded: true, name: ["sdf","sfsdfsf"])]
@@ -63,6 +79,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        alerts = allAlert
         view.backgroundColor = ThemeColor().themeColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
@@ -77,72 +94,27 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         super.viewWillAppear(true)
         tabBarController?.tabBar.isHidden = true
         getNotificationStatus()
+        if NotificationStatus{
+            if loginStatus{
+                print("ininini")
+                writeAlertToRealm()
+            }
+        }
         checkSetUpView()
-        writeAlertToRealm()
     }
-    
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        super.viewDidDisappear(true)
-//
-//
-//
-//    }
     
     @objc func refreshNotificationStatus(){
         getNotificationStatus()
     }
     
-    
-//    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
-//
-//        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
-//        var urlRequest = URLRequest(url: url!)
-//        urlRequest.httpMethod = "GET"
-//        //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-//        //        urlRequest.httpBody = httpBody
-//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//        Alamofire.request(urlRequest).response { (response) in
-//            if let data = response.data{
-//                var res = JSON(data)
-//                if res != nil{
-//
-//                    print(res)
-//
-////                    let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
-////                    try! self.realm.write {
-////                        self.realm.delete(coinSelected)
-////                    }
-////                    self.realm.delete(self.realm.objects(alertObject.self))
-////                    for result in res["interest"].array!{
-////                        self.realm.beginWrite()
-////                        let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
-////                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
-////                            self.realm.create(alertObject.self, value: realmData)
-////                        } else {
-////                            self.realm.create(alertObject.self, value: realmData, update: true)
-////                        }
-////
-////                        if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
-////                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
-////                        } else {
-////                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
-////                        }
-////                        try! self.realm.commitWrite()
-////                    }
-//                    completion(res,true)
-//                } else{
-//                    completion(res,false)
-//                }
-//            }
-//        }
-//    }
-    
     func checkSetUpView(){
         let status = UserDefaults.standard.bool(forKey: "NotificationSetting")
         if status{
-            setUpView()
+            if loginStatus{
+                setUpView()
+            } else{
+                setUpLoginView()
+            }
         }else{
             setUpNoNotificationView()
         }
@@ -150,7 +122,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     @objc func addAlerts(){
 //        alerts = allAlert
-        alertTableView.reloadData()
+//        alertTableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -158,8 +130,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        
-        
         let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
         coinImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
         coinImage.clipsToBounds = true
@@ -226,19 +196,20 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         }
     }
     
-    
+    @objc func Login(){
+        let loginPage = LoginPageViewController()
+        navigationController?.pushViewController(loginPage, animated: true)
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 60
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        alerts = allAlert
         return alerts.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        alerts = allAlert
         if !alerts[section].isExpanded{
             return 0
         }
@@ -319,7 +290,21 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
         alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
         alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertMainHintLabel,"v1":alertOpenButton]))
-
+    }
+    
+    func setUpLoginView(){
+        view.addSubview(loginView)
+        loginView.addSubview(loginLabel)
+        loginView.addSubview(loginButton)
+        
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginView]))
+        NSLayoutConstraint(item: loginButton, attribute: .centerX, relatedBy: .equal, toItem: loginView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: loginView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: loginLabel, attribute: .centerX, relatedBy: .equal, toItem: loginButton, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(100)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
         
     }
     
@@ -382,6 +367,32 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
+    
+    
+    var loginView:UIView = {
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor().themeColor()
+        return view
+    }()
+    
+    var loginLabel:UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Login to access this function"
+        label.textAlignment = .center
+        return label
+    }()
+    
+    var loginButton:UIButton = {
+       var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("Login", for: .normal)
+        button.addTarget(self, action: #selector(Login), for: .touchUpInside)
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.backgroundColor = ThemeColor().bglColor()
+        return button
+    }()
     
     var alertView:UIView = {
         var view = UIView()
@@ -451,70 +462,65 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }()
     
     @objc func addNewAlert(){
-        let checkSendDeviceToken = UserDefaults.standard.bool(forKey: "SendDeviceToken")
-        if !checkSendDeviceToken{
-            let email = UserDefaults.standard.string(forKey: "UserEmail")
-            let token = UserDefaults.standard.string(forKey: "UserToken")
-            let parameter = ["userEmail": email, "token": token]
-            let url = URL(string: "http://10.10.6.18:3030/deviceManage/addAlertDevice")
-            var urlRequest = URLRequest(url: url!)
-            urlRequest.httpMethod = "POST"
-            let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-            urlRequest.httpBody = httpBody
-            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-            
-            Alamofire.request(urlRequest).response { (response) in
-                if let data = response.data{
-                    var res = JSON(data)
-                    UserDefaults.standard.set(true, forKey: "SendDeviceToken")
-                }
-            }
-        }
+//        let checkSendDeviceToken = UserDefaults.standard.bool(forKey: "SendDeviceToken")
+//        if !checkSendDeviceToken{
+//            let email = UserDefaults.standard.string(forKey: "UserEmail")
+//            let token = UserDefaults.standard.string(forKey: "UserToken")
+//            let parameter = ["email": email, "token": token]
+//            let url = URL(string: "http://10.10.6.18:3030/deviceManage/addAlertDevice")
+//            var urlRequest = URLRequest(url: url!)
+//            urlRequest.httpMethod = "POST"
+//            let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+//            urlRequest.httpBody = httpBody
+//            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//            
+//            Alamofire.request(urlRequest).response { (response) in
+//                if let data = response.data{
+//                    var res = JSON(data)
+//                    UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+//                }
+//            }
+//        }
         
         let alert = AlertManageController()
         navigationController?.pushViewController(alert, animated: true)
     }
     
     func writeAlertToRealm(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")!
-        
-        
-        passServerData(urlParameters:["userLogin","interestOfUser",email],httpMethod:"GET",parameters:[String:Any]()){(json, pass) in
-            if pass{
-                print(json)
-                for result in json["interest"].array!{
-                    self.realm.beginWrite()
-                    let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
-                    if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
-                        self.realm.create(alertObject.self, value: realmData)
-                    } else {
-                        self.realm.create(alertObject.self, value: realmData, update: true)
+        if buildInterestStatus {
+            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+            passServerData(urlParameters:["userLogin","interestOfUser",email],httpMethod:"GET",parameters:[String:Any]()){(json, pass) in
+                if pass{
+                    self.writeRealm(json:json){(pass) in
+                        if pass{
+                            DispatchQueue.main.async {
+                                self.alerts = self.allAlert
+                                self.alertTableView.reloadData()
+                            }
+                        }
                     }
-
-                    if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
-                        self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
-                    } else {
-                        self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
-                    }
-                    try! self.realm.commitWrite()
-                }
-
-                DispatchQueue.main.async {
-                    self.alerts = self.allAlert
-                    self.alertTableView.reloadData()
                 }
             }
         }
-        
-//
-//        getAlertFromServer(parameter: email!){(json, pass) in
-//            if pass{
-//                DispatchQueue.main.async {
-//                    self.alerts = self.allAlert
-//                    self.alertTableView.reloadData()
-//                }
-//            }
-//        }
+    }
+    
+    func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
+        for result in json["interest"].array!{
+            self.realm.beginWrite()
+            let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
+            if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
+                self.realm.create(alertObject.self, value: realmData)
+            } else {
+                self.realm.create(alertObject.self, value: realmData, update: true)
+            }
+            
+            if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
+                self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
+            } else {
+                self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
+            }
+            try! self.realm.commitWrite()
+        }
     }
     
 }
