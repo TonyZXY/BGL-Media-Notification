@@ -19,13 +19,12 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
         get{
 //            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell")]]
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
+            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
     }
     
     var sections:[String]?{
         get{
-//            return [textValue(name: "aboutUs_section"),textValue(name: "setting_section")]
             return [textValue(name: "aboutUs_section"),textValue(name: "setting_section"),textValue(name: "account_section")]
         }
     }
@@ -34,7 +33,7 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
 //        ["关于Blockchain Global","Blockchain Global社区"], //About us list items
 //        ["默认法定货币","应用通知选项","界面显示选项","其他选项","语言设置"] // other app settings
 //    ]
-    let segueIdentities  = ["aboutUs","bglCommu","defaultCurrency","notifiOption","viewOption","otherOption","defaultLanguage","alertNotification"]
+    let segueIdentities  = ["aboutUs","bglCommu","defaultCurrency","defaultLanguage","alertNotification"]
 
     @IBOutlet weak var tableView00: UITableView!
     override func viewDidLoad() {
