@@ -9,7 +9,7 @@
 import UIKit
 
 class OnBoardingPageViewController: UIViewController {
-    var label = UILabel()
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -22,126 +22,74 @@ class OnBoardingPageViewController: UIViewController {
     }
     
     @objc func logInUser() {
-        registerButton.removeFromSuperview()
-        loginButton.removeFromSuperview()
-        view.addSubview(signOutButton)
+        setupAdminButtons()
     }
     
     @objc func logOutUser() {
 //        print("received logout request")
-        signOutButton.removeFromSuperview()
-        view.addSubview(registerButton)
-        view.addSubview(loginButton)
+        setupAdminButtons()
+        
+//        signOutButton.removeFromSuperview()
+//        view.addSubview(registerButton)
+//        view.addSubview(loginButton)
     }
     
-    var button = UIButton()
-    var registerButton = UIButton()
-    var loginButton = UIButton()
-    var signOutButton = UIButton()
-    var exitButton = UIButton()
     
-    func createLabel(text: String){
+    let descriptionLabel: UILabel = {
+        let label = UILabel()
         let offset = 5
-        label.frame = CGRect(x: CGFloat(offset), y: UIScreen.main.bounds.height*3/5, width: UIScreen.main.bounds.width-CGFloat(offset*2), height: UIScreen.main.bounds.height/2)
-        label.text = text
         label.textColor = .white
         label.clipsToBounds = true
         label.numberOfLines = 0
-        self.view.addSubview(label)
-    }
-    
-    let logoImageView: UIImageView = {
         
-        let image = UIImage(named: "bcg_logo")
-        
-        let width = (image?.size.width)! * 0.5
-        let height = (image?.size.height)! * 0.5
-        let bounds = CGSize(width: width, height: height)
-        
-        UIGraphicsBeginImageContextWithOptions(bounds, false, 0.0)
-        image?.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: bounds))
-        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        return UIImageView(image: newImage)
-        
+        return label
+    }()
+
+    let instructionImageView:UIImageView = {
+        let imageView = UIImageView()
+        return imageView
     }()
     
-    func createImage(from pid: Int){
-        var image: UIImage!
-        image = UIImage(named: "\(pid).png")
-        let imageWidth = image.size.width
-        let imageHeight = image.size.height
-        let drawWidth = UIScreen.main.bounds.size.width
-        let drawHeight = drawWidth * imageHeight / imageWidth
-        let bounds = CGSize(width: drawWidth, height: drawHeight)
-        UIGraphicsBeginImageContextWithOptions(bounds, false, 0.0)
-        image?.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: bounds))
-        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
-        UIGraphicsEndImageContext()
-        
-        let imageView = UIImageView(image: newImage)
-        let distanceToTop = 50
-        let width_ = UIScreen.main.bounds.width
-        let imageFrame = CGRect(origin: CGPoint(x: (width_-newImage.size.width)/2, y: CGFloat(distanceToTop)), size: newImage.size)
-        imageView.frame = imageFrame
-        view.addSubview(imageView)
-    }
+
+    let skipButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("SKIP THESE", for: .normal)
+        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 10)
+        button.titleLabel?.textColor = .white
+        button.backgroundColor = .lightGray
+        button.addTarget(self, action: #selector(skipButtonClicked), for: .touchUpInside)
+        return button
+    }()
     
-    func createButton(from pid:Int){
-        if pid != 6 {//create skip button
-            button.setTitle("SKIP THESE", for: .normal)
-            button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 10)
-            button.titleLabel?.textColor = .white
-            button.backgroundColor = .lightGray
-            button.addTarget(self, action: #selector(skipButtonClicked), for: .touchUpInside)
-            let buttonFrame = CGRect(x: (UIScreen.main.bounds.width-CGFloat(100))/2, y: UIScreen.main.bounds.height*3/5 + CGFloat(50), width: CGFloat(100), height: CGFloat(50))
-            button.frame = buttonFrame
-            view.addSubview(button)
-        } else{
-            registerButton.setTitle("Register", for: .normal)
-            registerButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
-            registerButton.titleLabel?.textColor = .white
-            registerButton.backgroundColor = .lightGray
-            registerButton.addTarget(self, action: #selector(registerButtonClicked), for: .touchUpInside)
-            let registerButtonFrame = CGRect(x: CGFloat(50), y: UIScreen.main.bounds.height*3/5 + CGFloat(50), width: CGFloat(100), height: CGFloat(50))
-            registerButton.frame = registerButtonFrame
-            
-            loginButton.setTitle("Login", for: .normal)
-            loginButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
-            loginButton.titleLabel?.textColor = .white
-            loginButton.backgroundColor = .lightGray
-            loginButton.addTarget(self, action: #selector(loginButtonClicked), for: .touchUpInside)
-            let loginButtonFrame = CGRect(x: UIScreen.main.bounds.width - CGFloat(150), y: UIScreen.main.bounds.height*3/5 + CGFloat(50), width: CGFloat(100), height: CGFloat(50))
-            loginButton.frame = loginButtonFrame
-            
-            signOutButton.setTitle("Sign Out", for: .normal)
-            signOutButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
-            signOutButton.titleLabel?.textColor = .white
-            signOutButton.backgroundColor = .lightGray
-            signOutButton.addTarget(self, action: #selector(signOutButtonClicked), for: .touchUpInside)
-            let signOutButtonFrame = CGRect(x: UIScreen.main.bounds.width - CGFloat(150), y: UIScreen.main.bounds.height*3/5 + CGFloat(50), width: CGFloat(100), height: CGFloat(50))
-            signOutButton.frame = signOutButtonFrame
-            
-            exitButton.setTitle("Got it. ", for: .normal)
-            exitButton.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
-            exitButton.titleLabel?.textColor = .blue
-            
-            exitButton.addTarget(self, action: #selector(skipButtonClicked), for: .touchUpInside)
-            let buttonFrame = CGRect(x: UIScreen.main.bounds.width/2 - CGFloat(50), y: UIScreen.main.bounds.height*3/5 + CGFloat(110), width: 100, height: 50)
-            exitButton.frame = buttonFrame
-            view.addSubview(exitButton)
-            
-            if UserDefaults.standard.bool(forKey: "isLoggedIn"){
-                view.addSubview(signOutButton)
-            }else{
-                view.addSubview(registerButton)
-                view.addSubview(loginButton)
-            }
-            
-        }
-        
-    }
+    let registerButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("Register", for: .normal)
+        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
+        button.titleLabel?.textColor = .white
+        button.backgroundColor = .lightGray
+        button.addTarget(self, action: #selector(registerButtonClicked), for: .touchUpInside)
+        return button
+    }()
+    
+    let loginButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("Log In", for: .normal)
+        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
+        button.titleLabel?.textColor = .white
+        button.backgroundColor = .lightGray
+        button.addTarget(self, action: #selector(loginButtonClicked), for: .touchUpInside)
+        return button
+    }()
+    
+    let signOutButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("Sign Out", for: .normal)
+        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
+        button.titleLabel?.textColor = .white
+        button.backgroundColor = .lightGray
+        button.addTarget(self, action: #selector(signOutButtonClicked), for: .touchUpInside)
+        return button
+    }()
     
     
     @objc func registerButtonClicked(sender: UIButton){
@@ -184,11 +132,97 @@ class OnBoardingPageViewController: UIViewController {
     init(backgroundColor: UIColor, text: String, pid: Int){
         super.init(nibName: nil, bundle: nil)
         self.view.backgroundColor = backgroundColor
-        createLabel(text: text)
-        createImage(from: pid)
-        createButton(from: pid)
+        descriptionLabel.text = text
+        setupDescriptionLabel()
+        setupSkipButton()
+        setupImage(from:pid)
+        if pid == 6 {
+            setupAdminButtons()
+        }
+    }
+    
+    
+    
+    
+    func setupImage(from pid:Int){
+        let image = UIImage(named: "\(pid).png")
+        let imageWidth = image?.size.width
+        let imageHeight = image?.size.height
+        let drawWidth = UIScreen.main.bounds.size.width
+        let drawHeight = drawWidth * imageHeight! / imageWidth!
+        let bounds = CGSize(width: drawWidth, height: drawHeight)
+        UIGraphicsBeginImageContextWithOptions(bounds, false, 0.0)
+        image?.draw(in: CGRect(origin: CGPoint(x: 0, y: 0), size: bounds))
+        let newImage:UIImage = UIGraphicsGetImageFromCurrentImageContext()!
+        UIGraphicsEndImageContext()
+        
+        view.addSubview(instructionImageView)
+        instructionImageView.image = newImage
+        instructionImageView.translatesAutoresizingMaskIntoConstraints = false
+        instructionImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        instructionImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+        instructionImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+        instructionImageView.heightAnchor.constraint(equalToConstant: (view.frame.width-20)*1.2).isActive = true
+        
+
+    }
+    
+    func setupAdminButtons(){
+        
+        if UserDefaults.standard.bool(forKey: "isLoggedIn"){
+            if registerButton.isDescendant(of: view){
+                registerButton.removeFromSuperview()
+                loginButton.removeFromSuperview()
+            }
+            view.addSubview(signOutButton)
+            signOutButton.translatesAutoresizingMaskIntoConstraints = false
+            signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+            signOutButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            signOutButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+            signOutButton.bottomAnchor.constraint(equalTo: skipButton.topAnchor, constant: -20).isActive = true
+        } else {
+            if signOutButton.isDescendant(of: view){
+                signOutButton.removeFromSuperview()
+            }
+            view.addSubview(registerButton)
+            view.addSubview(loginButton)
+            
+            
+            registerButton.translatesAutoresizingMaskIntoConstraints = false
+            registerButton.topAnchor.constraint(equalTo: instructionImageView.bottomAnchor, constant: 10).isActive = true
+            registerButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
+            registerButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+            registerButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            
+            loginButton.translatesAutoresizingMaskIntoConstraints = false
+            loginButton.topAnchor.constraint(equalTo: instructionImageView.bottomAnchor, constant: 10).isActive = true
+            loginButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30).isActive = true
+            loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+            loginButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+            
+        }
+        
+    }
+    
+    func setupSkipButton(){
+        view.addSubview(skipButton)
+        skipButton.translatesAutoresizingMaskIntoConstraints = false
+        skipButton.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -10).isActive = true
+        skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        skipButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        skipButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
     }
 
+    func setupDescriptionLabel() {
+        view.addSubview(descriptionLabel)
+        descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
+        descriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 5).isActive = true
+        descriptionLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5).isActive = true
+        descriptionLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
