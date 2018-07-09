@@ -178,7 +178,7 @@ class OnBoardingPageViewController: UIViewController {
             signOutButton.translatesAutoresizingMaskIntoConstraints = false
             signOutButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
             signOutButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            signOutButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            signOutButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
             signOutButton.bottomAnchor.constraint(equalTo: skipButton.topAnchor, constant: -20).isActive = true
         } else {
             if signOutButton.isDescendant(of: view){
@@ -191,14 +191,14 @@ class OnBoardingPageViewController: UIViewController {
             registerButton.translatesAutoresizingMaskIntoConstraints = false
             registerButton.topAnchor.constraint(equalTo: instructionImageView.bottomAnchor, constant: 10).isActive = true
             registerButton.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 30).isActive = true
-            registerButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            registerButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
             registerButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
             
             loginButton.translatesAutoresizingMaskIntoConstraints = false
             loginButton.topAnchor.constraint(equalTo: instructionImageView.bottomAnchor, constant: 10).isActive = true
             loginButton.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -30).isActive = true
             loginButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-            loginButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+            loginButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
             
         }
         
@@ -210,7 +210,7 @@ class OnBoardingPageViewController: UIViewController {
         skipButton.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -10).isActive = true
         skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         skipButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        skipButton.widthAnchor.constraint(equalToConstant: 100).isActive = true
+        skipButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
     }
 
     func setupDescriptionLabel() {

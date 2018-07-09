@@ -18,12 +18,15 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="bcg_logo" translatesAutoresizingMaskIntoConstraints="NO" id="2bd-dk-xmC">
-                                <rect key="frame" x="60" y="218" width="254" height="230"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bcg_logo" translatesAutoresizingMaskIntoConstraints="NO" id="2bd-dk-xmC">
+                                <rect key="frame" x="62" y="208" width="250" height="250"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <constraints>
+                            <constraint firstItem="2bd-dk-xmC" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="LyQ-ZH-NHa"/>
+                            <constraint firstItem="2bd-dk-xmC" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="qEP-iv-6av"/>
+                        </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                 </viewController>
