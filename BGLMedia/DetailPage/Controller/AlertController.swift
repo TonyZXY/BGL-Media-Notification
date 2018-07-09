@@ -28,7 +28,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var realm = try! Realm()
     var alerts:[alertResult] = [alertResult]()
     var coinName = coinAlert()
+//    var intersetObject = interset()
     
+    var TransactionDelegate:TransactionFrom?
     var allAlert:[alertResult]{
         get{
             var allResult = [alertResult]()
@@ -62,14 +64,13 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ThemeColor().themeColor()
-        alerts = allAlert
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -80,48 +81,63 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         writeAlertToRealm()
     }
     
+    
+//    override func viewDidDisappear(_ animated: Bool) {
+//        super.viewDidDisappear(true)
+//
+//
+//
+//    }
+    
     @objc func refreshNotificationStatus(){
         getNotificationStatus()
     }
     
     
-    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
-        
-        let url = URL(string: "http://10.10.6.139:3030/userLogin/interestOfUser/" + parameter)
-        var urlRequest = URLRequest(url: url!)
-        urlRequest.httpMethod = "GET"
-        //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-        //        urlRequest.httpBody = httpBody
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        Alamofire.request(urlRequest).response { (response) in
-            if let data = response.data{
-                var res = JSON(data)
-                if res != nil{
-                    for result in res["interest"].array!{
-                        self.realm.beginWrite()
-                        let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
-                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
-                            self.realm.create(alertObject.self, value: realmData)
-                        } else {
-                            self.realm.create(alertObject.self, value: realmData, update: true)
-                        }
-                        
-                        if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
-                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
-                        } else {
-                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
-                        }
-                        
-                        try! self.realm.commitWrite()
-                    }
-                    completion(res,true)
-                } else{
-                    completion(res,false)
-                }
-            }
-        }
-    }
+//    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
+//
+//        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
+//        var urlRequest = URLRequest(url: url!)
+//        urlRequest.httpMethod = "GET"
+//        //        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+//        //        urlRequest.httpBody = httpBody
+//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        Alamofire.request(urlRequest).response { (response) in
+//            if let data = response.data{
+//                var res = JSON(data)
+//                if res != nil{
+//
+//                    print(res)
+//
+////                    let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+////                    try! self.realm.write {
+////                        self.realm.delete(coinSelected)
+////                    }
+////                    self.realm.delete(self.realm.objects(alertObject.self))
+////                    for result in res["interest"].array!{
+////                        self.realm.beginWrite()
+////                        let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
+////                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
+////                            self.realm.create(alertObject.self, value: realmData)
+////                        } else {
+////                            self.realm.create(alertObject.self, value: realmData, update: true)
+////                        }
+////
+////                        if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
+////                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
+////                        } else {
+////                            self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
+////                        }
+////                        try! self.realm.commitWrite()
+////                    }
+//                    completion(res,true)
+//                } else{
+//                    completion(res,false)
+//                }
+//            }
+//        }
+//    }
     
     func checkSetUpView(){
         let status = UserDefaults.standard.bool(forKey: "NotificationSetting")
@@ -133,7 +149,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     @objc func addAlerts(){
-        alerts = allAlert
+//        alerts = allAlert
         alertTableView.reloadData()
     }
     
@@ -154,13 +170,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let coinLabel = UILabel()
         coinLabel.translatesAutoresizingMaskIntoConstraints = false
         coinLabel.text = alerts[section].coinName
-        
-        //        let myTextField = UITextField()
-        //        let bottomLine = CALayer()
-        //        bottomLine.frame = CGRect(x: 0.0, y: myTextField.frame.height - 1, width: myTextField.frame.width, height: 1.0)
-        //        bottomLine.backgroundColor = UIColor.white.cgColor
-        //        myTextField.borderStyle = UITextBorderStyle.none
-        //        myTextField.layer.addSublayer(bottomLine)
         
         let button = UIButton(type:.system)
         button.setTitle("Close", for: .normal)
@@ -224,10 +233,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
+        alerts = allAlert
         return alerts.count
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        alerts = allAlert
         if !alerts[section].isExpanded{
             return 0
         }
@@ -248,6 +259,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             compare = "="
         }
         
+        
+        
         let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.compare)
         let coinDetail = object.exchangName + " - " + object.coinAbbName + "/" + object.tradingPairs
         let dateToString = DateFormatter()
@@ -258,7 +271,20 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         cell.compareLabel.text = compareLabel
         cell.coinDetailLabel.text = coinDetail
         cell.swithButton.isOn = object.switchStatus
+        cell.alertObject = object
         return cell
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let alertEdit = AlertManageController()
+        alertEdit.intersetObject.coinAbbName = alerts[indexPath.section].name[indexPath.row].coinAbbName
+        alertEdit.intersetObject.exchangName = alerts[indexPath.section].name[indexPath.row].exchangName
+        alertEdit.intersetObject.tradingPairs = alerts[indexPath.section].name[indexPath.row].tradingPairs
+        alertEdit.intersetObject.coinName = alerts[indexPath.section].name[indexPath.row].coinName
+        alertEdit.intersetObject.compare = alerts[indexPath.section].name[indexPath.row].compare
+        alertEdit.intersetObject.id = alerts[indexPath.section].name[indexPath.row].id
+        alertEdit.status = "Update"
+        navigationController?.pushViewController(alertEdit, animated: true)
     }
     
     func setUpView(){
@@ -309,7 +335,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             if UIApplication.shared.canOpenURL(settingsUrl) {
                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
                     // Checking for setting is opened or not
-                    print("Setting is opened: \(success)")
+//                    print("Setting is opened: \(success)")
                 })
             }
         }
@@ -328,26 +354,22 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let current = UNUserNotificationCenter.current()
         current.getNotificationSettings(completionHandler: { (settings) in
             if settings.authorizationStatus == .notDetermined {
-                print("1")
                 // Notification permission has not been asked yet, go for it!
             }
             
             if settings.authorizationStatus == .denied {
                 UserDefaults.standard.set(false, forKey: "NotificationSetting")
-                print("disable")
                 // Notification permission was previously denied, go to settings & privacy to re-enable
             }
             
             if settings.authorizationStatus == .authorized {
                 UserDefaults.standard.set(true, forKey: "NotificationSetting")
-                print("enable")
                 // Notification permission was already gransnted
             }
             
             DispatchQueue.main.async {
                 self.checkSetUpView()
             }
-            print("trys")
         })
     }
     
@@ -434,7 +456,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             let email = UserDefaults.standard.string(forKey: "UserEmail")
             let token = UserDefaults.standard.string(forKey: "UserToken")
             let parameter = ["userEmail": email, "token": token]
-            let url = URL(string: "http://10.10.6.139:3030/deviceManage/addAlertDevice")
+            let url = URL(string: "http://10.10.6.18:3030/deviceManage/addAlertDevice")
             var urlRequest = URLRequest(url: url!)
             urlRequest.httpMethod = "POST"
             let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
@@ -454,16 +476,45 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeAlertToRealm(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")
+        let email = UserDefaults.standard.string(forKey: "UserEmail")!
         
-        getAlertFromServer(parameter: email!){(json, pass) in
+        
+        passServerData(urlParameters:["userLogin","interestOfUser",email],httpMethod:"GET",parameters:[String:Any]()){(json, pass) in
             if pass{
+                print(json)
+                for result in json["interest"].array!{
+                    self.realm.beginWrite()
+                    let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
+                    if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
+                        self.realm.create(alertObject.self, value: realmData)
+                    } else {
+                        self.realm.create(alertObject.self, value: realmData, update: true)
+                    }
+
+                    if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
+                        self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
+                    } else {
+                        self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
+                    }
+                    try! self.realm.commitWrite()
+                }
+
                 DispatchQueue.main.async {
                     self.alerts = self.allAlert
                     self.alertTableView.reloadData()
                 }
             }
         }
+        
+//
+//        getAlertFromServer(parameter: email!){(json, pass) in
+//            if pass{
+//                DispatchQueue.main.async {
+//                    self.alerts = self.allAlert
+//                    self.alertTableView.reloadData()
+//                }
+//            }
+//        }
     }
     
 }

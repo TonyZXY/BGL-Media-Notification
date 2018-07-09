@@ -12,6 +12,11 @@ import UIKit
 class AlertTableViewCell:UITableViewCell{
     
 
+    var alertObject:alertObject?
+//        didSet{
+//
+//        }
+
     
     
     
