@@ -44,6 +44,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpBasicView()
+        var ss = [String]()
+        print(ss)
+        
         checkTransaction()
         setWalletData()
         reloadData()

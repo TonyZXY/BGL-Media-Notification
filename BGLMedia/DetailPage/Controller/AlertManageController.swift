@@ -277,29 +277,28 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     @objc func deleteAlert(){
-        let url = URL(string: "http://10.10.6.18:3030/userLogin/deleteInterest")
-        var urlRequest = URLRequest(url: url!)
-        urlRequest.httpMethod = "POST"
-        
         let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-        
-        let parameter = ["email":email,"token":token,"interests":[["_id":intersetObject.id]]] as [String : Any]
-        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-        urlRequest.httpBody = httpBody
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-        Alamofire.request(urlRequest).response { (response) in
-            if let data = response.data{
-                var res = JSON(data)
-                let filterName = "id = '" + self.intersetObject.id + "' "
+        passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
+            if pass{
+                let filterId = "id = '" + self.intersetObject.id + "' "
+                let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "
+                
+                let coinsAlert = self.realm.objects(alertObject.self).filter(filterName)
+                
                 try! self.realm.write {
-                    self.realm.delete(self.realm.objects(alertObject.self).filter(filterName))
+                    self.realm.delete(self.realm.objects(alertObject.self).filter(filterId))
                 }
+                if coinsAlert.count == 0{
+                    try! self.realm.write {
+                        self.realm.delete(self.realm.objects(alertCoinNames.self).filter(filterName))
+                    }
+                }
+                self.navigationController?.popViewController(animated: true)
+            } else{
+                self.navigationController?.popViewController(animated: true)
             }
-            self.navigationController?.popViewController(animated: true)
-        }
-        
+        }  
     }
     
     lazy var alertTableView:UITableView = {
@@ -369,7 +368,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             let inter:[[String:Any]] = [["coinFrom":intersetObject.coinAbbName,"coinTo":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":price,"status":true,"id":"123","isGreater":compareStatus]]
             let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
             sendAlertToServer(parameter: parameter){(json,pass) in
-//                print(json)
+                print(json)
             }
             
             
@@ -444,24 +443,16 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
                 var res = JSON(data)
-//                if res == nil {
-//                    completion(["code":"Server not available"],false)
-//                } else if res["status"].bool!{
-//                    completion(res,true)
-//                } else {
-//                    completion(res,false)
-//                }
+                UserDefaults.standard.set(true,forKey: "buildInterest")
+                completion(res,true)
             }
         }
     }
 
     func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
-        
         let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "GET"
-//        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-//        urlRequest.httpBody = httpBody
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         Alamofire.request(urlRequest).response { (response) in
