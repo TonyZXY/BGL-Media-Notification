@@ -44,17 +44,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpBasicView()
-        var ss = [String]()
-        print(ss)
-        
         checkTransaction()
         setWalletData()
         reloadData()
 //        SetDataResult().writeJsonExchange()
 //        SetDataResult().writeMarketCapCoinList()
 //        GetDataResult().getCoinList()
-        print(allResult)
-        print(all)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)

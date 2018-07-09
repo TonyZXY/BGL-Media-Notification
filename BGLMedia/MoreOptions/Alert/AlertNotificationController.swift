@@ -114,7 +114,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     @objc func deviceSetting(){
-        print("success")
         
         let alertController = UIAlertController(title: "Alert Title is here", message: "Alert Description is here", preferredStyle: .alert)
         
@@ -241,25 +240,21 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         let current = UNUserNotificationCenter.current()
         current.getNotificationSettings(completionHandler: { (settings) in
             if settings.authorizationStatus == .notDetermined {
-                print("1")
                 // Notification permission has not been asked yet, go for it!
             }
             
             if settings.authorizationStatus == .denied {
                 UserDefaults.standard.set(false, forKey: "NotificationSetting")
-                print("disable")
                 // Notification permission was previously denied, go to settings & privacy to re-enable
             }
             
             if settings.authorizationStatus == .authorized {
                 UserDefaults.standard.set(true, forKey: "NotificationSetting")
-                print("enable")
                 // Notification permission was already gransnted
             }
             DispatchQueue.main.async {
                 self.notificationTableView.reloadData()
             }
-            print("trys")
         })
     }
 
@@ -330,7 +325,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     var loginButton:UIButton = {
         var loginButton = UIButton(type:.system)
-        print("button")
         let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
         loginButton.setTitle(status ? "Login Out" : "Login in", for: .normal)
         loginButton.addTarget(self, action: #selector(addLogin), for: .touchUpInside)
@@ -370,7 +364,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                     let json = JSON(value)
 //                    UserDefaults.standard.set(json["notification"].bool!,forKey: "flashSwitch")
                    self.notificationTableView.reloadData()
-//                    print(json)
                 case .failure(let error):
                     print(error)
                 }
@@ -384,7 +377,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                         let json = JSON(value)
 //                        UserDefaults.standard.set(json["status"].bool!,forKey: "priceSwitch")
                         self.notificationTableView.reloadData()
-//                        print(json)
                     case .failure(let error):
                         print(error)
                     }
@@ -397,7 +389,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         if buildInterestStatus{
             let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
             let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
-            print(flashNotification)
             
             if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
                 let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!

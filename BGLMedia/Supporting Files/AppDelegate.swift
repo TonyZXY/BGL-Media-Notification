@@ -29,14 +29,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in
-            print("granted:\(granted)") }// user reaction handling
+             }// user reaction handling
+        
+//        print("granted:\(granted)")
         UIApplication.shared.registerForRemoteNotifications()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
 
 
         if launchedBefore{
-            print("launched before")
             
 //            set flag to false for debugging purpose
 //            UserDefaults.standard.set(false, forKey: "launchedBefore")
@@ -48,12 +49,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 window?.rootViewController = mainViewController
                 window?.makeKeyAndVisible()
             }else{
+                //User is not logged in
                 print("User is not logged in")
             }
             
         } else{
-            print("first time launch")
-            print(UserDefaults.standard.bool(forKey: "isLoggedIn"))
+            //First time launch
             window = UIWindow(frame:UIScreen.main.bounds)
             let mainViewController = OnBoardingUIPageViewController()
             window?.rootViewController = mainViewController
@@ -82,7 +83,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if let notification = response.notification.request.content.userInfo as? [String: AnyObject] {
             let message = parseRemoteNotification(notification: notification)
-            print(message as Any)
+//            print(message as Any)
         }
         completionHandler()
     }
