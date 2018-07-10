@@ -136,6 +136,7 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         tableViews.separatorColor = ThemeColor().themeColor()
         tableViews.delegate = self
         tableViews.dataSource = self
+        tableViews.rowHeight = 60
         tableViews.register(CoinTypeTableViewCell.self, forCellReuseIdentifier: "coins")
         tableViews.translatesAutoresizingMaskIntoConstraints = false
         return tableViews

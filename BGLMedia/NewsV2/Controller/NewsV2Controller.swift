@@ -97,6 +97,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.register(NewsDetailTableViewCell.self, forCellReuseIdentifier: "NewsCell")
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.separatorStyle = .none
+        tableView.rowHeight = 120
         tableView.delegate = self
         tableView.dataSource = self
         return tableView

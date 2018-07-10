@@ -89,7 +89,7 @@ class ShareImagePreViewController: UIViewController {
         view.backgroundColor = .white
         
         sharedImageView.translatesAutoresizingMaskIntoConstraints = false
-        sharedImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        sharedImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 30).isActive = true
         sharedImageView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         sharedImageView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         sharedImageView.heightAnchor.constraint(equalToConstant: sharedImageView.bounds.size.height).isActive = true
@@ -98,7 +98,7 @@ class ShareImagePreViewController: UIViewController {
         
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: 5).isActive = true
+        cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: 5).isActive = true
         cancelButton.leftAnchor.constraint(equalTo: view.leftAnchor,constant:10).isActive = true
         cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor,constant:-10).isActive = true
         
