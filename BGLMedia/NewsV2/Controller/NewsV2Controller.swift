@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 
 class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelegate{
-    let realm = try Realm()
+    let realm = try! Realm()
     
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
