@@ -411,6 +411,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         tableViews.register(TransTimeCell.self, forCellReuseIdentifier: "TimeCell")
         tableViews.register(TransExpensesCell.self, forCellReuseIdentifier: "ExpensesCell")
         tableViews.register(TransAdditionalCell.self, forCellReuseIdentifier: "AdditionalCell")
+        tableViews.rowHeight = 95
         tableViews.delegate = self
         tableViews.dataSource = self
         //        tableViews.separatorStyle = .none

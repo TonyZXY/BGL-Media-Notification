@@ -571,6 +571,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         collectionView.backgroundColor = color.themeColor()
         collectionView.register(WalletsCell.self, forCellReuseIdentifier: "WalletCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.rowHeight = 100
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView

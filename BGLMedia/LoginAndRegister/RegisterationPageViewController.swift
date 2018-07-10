@@ -368,7 +368,10 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
 //        titleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 80).isActive = false
 //        titleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 20).isActive = true
         
-        titleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 80).isActive = true
+        
+        
+        
+        titleView.topAnchor.constraint(equalTo: view.topAnchor,constant: 80).isActive = true
         titleView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         titleView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         titleView.heightAnchor.constraint(equalToConstant: 60).isActive = true

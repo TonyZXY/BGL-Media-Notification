@@ -11,6 +11,10 @@ import RealmSwift
 
 class CoinsInWatchListRealm: Object {
     @objc dynamic var symbol = ""
+    @objc dynamic var market = ""
+    @objc dynamic var tradingPairsName = ""
+    
+    
     override class func primaryKey() -> String {
         return "symbol"
     }

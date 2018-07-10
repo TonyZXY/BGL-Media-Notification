@@ -49,7 +49,11 @@ class NewsDetailWebViewController: UIViewController, WKNavigationDelegate {
     func setupViews() {
         view.addSubview(webView)
         view.backgroundColor = UIColor.white
-        webView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        
+        
+        
+        
+        webView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         webView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         webView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         webView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
