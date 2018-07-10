@@ -7,8 +7,12 @@
 //
 
 import UIKit
+import RealmSwift
 
 class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelegate{
+    let realm = try! Realm()
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 30
     }
@@ -46,19 +50,32 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
 
     func getData(){
-//        passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&Skip=0&limit=10"], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
-//            if pass{
-//                for value in res{
-//                    let news = NewsObject()
-//                    news._id = value["_id"].string!
-//                    
-//                }
-//                
-//                
-//                
-//                print(res)
-//            }
-//        }
+        passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&Skip=0&limit=10"], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
+            if pass{
+                self.realm.beginWrite()
+                if let collection = res.array{
+                    for result in collection{
+                        let id = result["_id"].string!
+                        let title = result["title"].string!
+                        let newsDescription = result["newsDescription"].string!
+                        let imageURL = result["imageURL"].string!
+                        let url = result["url"].string!
+                        let publishedTime = result["publishedTime"].string!.timeFormatter()
+                        let author = result["author"].string!
+                        let localeTag = result["localeTag"].string!
+                        let contentTag = result["contentTag"].string!
+                        
+                        if self.realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
+                            self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag, defaultLanguage])
+                        } else {
+                            self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag], update: true)
+                        }
+                    }
+                    try! self.realm.commitWrite()
+                    print(res)
+                }
+            }
+        }
     }
     
     func setUpView(){
