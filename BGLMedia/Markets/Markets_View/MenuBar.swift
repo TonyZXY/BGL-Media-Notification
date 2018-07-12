@@ -18,6 +18,7 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     }
     
     var marketController:MarketController?
+    var marketsController:MarketsController?
     
     lazy var collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -58,6 +59,7 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         marketController?.scrollToMenuIndex(menuIndex: indexPath.row)
+        marketsController?.scrollToMenuIndex(menuIndex: indexPath.row)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {

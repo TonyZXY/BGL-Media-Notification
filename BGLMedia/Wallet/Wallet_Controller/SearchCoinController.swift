@@ -16,9 +16,9 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
     var color = ThemeColor()
     let realm = try! Realm()
     
-    var allCoinObject = [CryptoCompareCoinsRealm]()
+    var allCoinObject = [CoinList]()
     weak var delegate:TransactionFrom?
-    var filterObject = [CryptoCompareCoinsRealm]()
+    var filterObject = [CoinList]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -27,7 +27,7 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         searchBar.returnKeyType = UIReturnKeyType.done
         
         
-        let result = try! Realm().objects(CryptoCompareCoinsRealm.self)
+        let result = try! Realm().objects(CoinList.self)
 //        let data = GetDataResult().getExchangeList()
 //        let exactMarket = data[(delegate?.getExchangeName())!]
         for coin in result {
@@ -71,13 +71,13 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "coins", for: indexPath) as! CoinTypeTableViewCell
         if isSearching{
-            cell.coinName.text = filterObject[indexPath.row].CoinName
-            cell.coinNameAbb.text = filterObject[indexPath.row].Name
-            cell.coinImage.coinImageSetter(coinName: filterObject[indexPath.row].Name, width: 30, height: 30, fontSize: 5)
+            cell.coinName.text = filterObject[indexPath.row].coinName
+            cell.coinNameAbb.text = filterObject[indexPath.row].coinSymbol
+            cell.coinImage.coinImageSetter(coinName: filterObject[indexPath.row].coinSymbol, width: 30, height: 30, fontSize: 5)
         } else {
-            cell.coinName.text = allCoinObject[indexPath.row].CoinName
-            cell.coinNameAbb.text = allCoinObject[indexPath.row].Name
-            cell.coinImage.coinImageSetter(coinName: allCoinObject[indexPath.row].Name, width: 30, height: 30, fontSize: 5)
+            cell.coinName.text = allCoinObject[indexPath.row].coinName
+            cell.coinNameAbb.text = allCoinObject[indexPath.row].coinSymbol
+            cell.coinImage.coinImageSetter(coinName: allCoinObject[indexPath.row].coinSymbol, width: 30, height: 30, fontSize: 5)
         }
         return cell
     }
@@ -105,13 +105,13 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         } else{
             isSearching = true
             filterObject.removeAll()
-            var simplyNameReault = allCoinObject.filter({(mod) -> Bool in return mod.Name.lowercased().contains(searchBar.text!.lowercased())})
-            let fullNameResult = allCoinObject.filter({(mod) -> Bool in return mod.CoinName.lowercased().contains(searchBar.text!.lowercased())})
+            var simplyNameReault = allCoinObject.filter({(mod) -> Bool in return mod.coinSymbol.lowercased().contains(searchBar.text!.lowercased())})
+            let fullNameResult = allCoinObject.filter({(mod) -> Bool in return mod.coinName.lowercased().contains(searchBar.text!.lowercased())})
             simplyNameReault += fullNameResult
             var list = [String]()
             for value in simplyNameReault{
-                if !list.contains(value.CoinName){
-                    list.append(value.CoinName)
+                if !list.contains(value.coinSymbol){
+                    list.append(value.coinSymbol)
                     filterObject.append(value)
                 }
             }
