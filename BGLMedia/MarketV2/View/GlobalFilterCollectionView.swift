@@ -1,26 +1,24 @@
 //
-//  MarketSortPickView.swift
-//  news app for blockchain
+//  GlobalFilterCollectionView.swift
+//  BGLMedia
 //
-//  Created by Bruce Feng on 1/5/18.
-//  Copyright © 2018 Sheng Li. All rights reserved.
+//  Created by Bruce Feng on 12/7/18.
+//  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
+
+import Foundation
 
 import UIKit
 
-class MarketFilterCollectionView:UICollectionViewCell{
+class GlobalFilterCollectionView:UICollectionViewCell{
 
-    var color = ThemeColor()
-    
-    var sortdate:[String]{
-        get{
-            return [textValue(name: "filterByWeek_market"),textValue(name: "filterByDay_market"),textValue(name: "filterByHour_market")]
-        }
-    }
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
+//        label.textColor = UIColor.black
+//        self.backgroundColor = UIColor.white
+//        let selectindexpath = NSIndexPath(item: 0, section: 0)
+//        collectionView.selectItem(at: selectindexpath as IndexPath, animated: false, scrollPosition:.left)
     }
     
     let label:UILabel = {
@@ -53,5 +51,5 @@ class MarketFilterCollectionView:UICollectionViewCell{
         fatalError("init(coder:) has not been implemented")
     }
     
-
+    
 }

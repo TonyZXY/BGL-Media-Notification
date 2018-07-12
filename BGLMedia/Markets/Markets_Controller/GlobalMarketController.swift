@@ -10,9 +10,8 @@ import UIKit
 import RealmSwift
 
 class GlobalMarketController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout, UIPickerViewDelegate, UIPickerViewDataSource, UITableViewDelegate, UITableViewDataSource, UISearchBarDelegate{
+    
     let marketCell = MarketView()
-
-    var color = ThemeColor()
     
     var sortItems:[String]{
         get{
@@ -30,6 +29,7 @@ class GlobalMarketController: UIViewController, UICollectionViewDelegate, UIColl
     //排序窗口 sort window
     let sortPickerView = UIPickerView()
     let realm = try! Realm()
+    
     var globalData: GlobalDataRealm? {
         get {
             return try! Realm().object(ofType: GlobalDataRealm.self, forPrimaryKey: "0")
@@ -150,7 +150,6 @@ class GlobalMarketController: UIViewController, UICollectionViewDelegate, UIColl
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         if collectionView == marketCell.totalCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "CellId", for: indexPath) as! MarketsTotalView
-            
             if indexPath.row == 0 {
                 cell.totalFunds.text = textValue(name: "marketCap_Market")
                 if let total_market_cap = globalData?.total_market_cap {
@@ -173,7 +172,6 @@ class GlobalMarketController: UIViewController, UICollectionViewDelegate, UIColl
                     cell.number.text = "--"
                 }
             }
-            cell.totalFunds.textColor = UIColor.white
             return cell
         } else if collectionView == marketCell.filterDate{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "SortDate", for: indexPath) as! MarketFilterCollectionView
@@ -198,7 +196,7 @@ class GlobalMarketController: UIViewController, UICollectionViewDelegate, UIColl
     //市场总数据view,日期筛选view--cell的宽高
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == marketCell.totalCollectionView{
-            return CGSize(width:(marketCell.totalCollectionView.frame.width-5) / 3, height: marketCell.totalCollectionView.frame.height)
+            return CGSize(width:(marketCell.totalCollectionView.frame.width-10) / 3, height: marketCell.totalCollectionView.frame.height)
         } else if collectionView == marketCell.filterDate{
             return CGSize(width:marketCell.filterDate.frame.width / 3, height: marketCell.filterDate.frame.height)
         } else if collectionView == marketCell.coinList{
@@ -245,7 +243,7 @@ class GlobalMarketController: UIViewController, UICollectionViewDelegate, UIColl
         let cell = tableView.dequeueReusableCell(withIdentifier: "coinsMarkets", for: indexPath) as! MarketsCoinTableViewCell
         cell.layer.borderWidth = 1
         cell.layer.borderColor = UIColor.white.cgColor
-        cell.backgroundColor = color.walletCellcolor()
+        cell.backgroundColor = ThemeColor().walletCellcolor()
         return cell
     }
     

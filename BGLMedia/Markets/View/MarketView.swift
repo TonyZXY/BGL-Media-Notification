@@ -18,7 +18,8 @@ class MarketView: UIView {
     var filterDateitems = [String]()
     var coinItems = ["bitcoin","haha"]
     let general = generalDetail()
-
+    var gloablMarketsController:GlobalMarketsController?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         translatesAutoresizingMaskIntoConstraints = false
@@ -89,7 +90,7 @@ class MarketView: UIView {
         totalCollectionView.translatesAutoresizingMaskIntoConstraints = false
         totalCollectionView.register(MarketsTotalView.self, forCellWithReuseIdentifier: "CellId")
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalCollectionView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0(80)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalCollectionView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0(60)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalCollectionView]))
 
         //排序按钮
         sortCoin.translatesAutoresizingMaskIntoConstraints = false

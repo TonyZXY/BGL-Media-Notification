@@ -489,7 +489,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func writeAlertToRealm(){
         if buildInterestStatus {
             let email = UserDefaults.standard.string(forKey: "UserEmail")!
-            passServerData(urlParameters:["userLogin","interestOfUser",email],httpMethod:"GET",parameters:[String:Any]()){(json, pass) in
+            URLServices.fetchInstance.passServerData(urlParameters:["userLogin","interestOfUser",email],httpMethod:"GET",parameters:[String:Any]()){(json, pass) in
                 if pass{
                     self.writeRealm(json:json){(pass) in
                         if pass{

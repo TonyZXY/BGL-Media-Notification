@@ -279,7 +279,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     @objc func deleteAlert(){
         let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-        passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
+        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
             if pass{
                 let filterId = "id = '" + self.intersetObject.id + "' "
                 let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "

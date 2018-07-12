@@ -14,7 +14,7 @@ import Alamofire
 import RealmSwift
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate { 
     
     var window: UIWindow?
     
@@ -24,9 +24,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         application.statusBarStyle = .lightContent
         UITabBar.appearance().tintColor = .white
-        UITabBar.appearance().barTintColor = ThemeColor().themeColor()
-        UINavigationBar.appearance().tintColor = UIColor.white
-        
+        UITabBar.appearance().barTintColor = ThemeColor().navigationBarColor()
+        UINavigationBar.appearance().tintColor = ThemeColor().navigationBarColor()
+        UINavigationBar.appearance().barTintColor = ThemeColor().navigationBarColor()
+        UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
+        UINavigationBar.appearance().tintColor = .white
+    
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in
              }// user reaction handling
@@ -35,14 +38,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.registerForRemoteNotifications()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-
+ URLServices.fetchInstance.getCoinList()
 
         if launchedBefore{
-            
 //            set flag to false for debugging purpose
 //            UserDefaults.standard.set(false, forKey: "launchedBefore")
-            
-            
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 window = UIWindow(frame:UIScreen.main.bounds)
                 let mainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
@@ -52,7 +52,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 //User is not logged in
                 print("User is not logged in")
             }
-            
         } else{
             //First time launch
             window = UIWindow(frame:UIScreen.main.bounds)
@@ -62,14 +61,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
             SetDataResult().writeJsonExchange()
             SetDataResult().writeMarketCapCoinList()
-            GetDataResult().getCoinList()
+            URLServices.fetchInstance.getCoinList()
             UserDefaults.standard.set(true, forKey: "flashSwitch")
             UserDefaults.standard.set(true, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
             UserDefaults.standard.set("EN", forKey: "defaultLanguage")
             UserDefaults.standard.set(false, forKey: "buildInterest")
-            
-            
             UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
         return true
@@ -77,12 +74,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
         completionHandler([.alert, .sound])
+        print("iiiii")
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
         
         if let notification = response.notification.request.content.userInfo as? [String: AnyObject] {
             let message = parseRemoteNotification(notification: notification)
+            print("hahaha")
 //            print(message as Any)
         }
         completionHandler()
@@ -105,15 +104,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             "deviceID": deviceTokenString,
             "notification": true
         ]
-        Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-                switch response.result {
-                    case .success(let value):
-                        let json = JSON(value)
-                        print(json)
-                    case .failure(let error):
-                        print(error)
+        
+        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: deviceTokenJson) { (json, success) in
+            if success{
+                print("Success to send device token")
+            } else{
+                print("Fail to send device token")
             }
         }
+
+//        Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+//                switch response.result {
+//                    case .success(let value):
+//                        let json = JSON(value)
+//                        print(json)
+//                    case .failure(let error):
+//                        print(error)
+//            }
+//        }
         
         UserDefaults.standard.set(deviceTokenString, forKey: "UserToken")
     }
@@ -131,12 +139,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("\(userInfo)")
         let aps = userInfo["aps"] as! [String: Any]
         print("\(aps)")
+        let state: UIApplicationState = UIApplication.shared.applicationState
+        if state == .active{
+            
+        }
     }
     
 //    func applicationDidBecomeActive(_ application: UIApplication) {
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
+//
+////        NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
 //    }
-//    
+//
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
     }

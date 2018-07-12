@@ -1,24 +1,25 @@
 //
-//  MarketsCell.swift
-//  news app for blockchain
+//  MarketsView.swift
+//  BGLMedia
 //
-//  Created by Bruce Feng on 30/4/18.
-//  Copyright © 2018 Sheng Li. All rights reserved.
+//  Created by Bruce Feng on 11/7/18.
+//  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
+import Foundation
 import UIKit
 import RealmSwift
 
-class MarketsCell: UICollectionViewCell {
+class MarketsView: UIView {
     
-    var color = ThemeColor()
     var sortItems = [String]()
-    var filterDateitems = ["1W","1D","1H"]
+    var filterDateitems = [String]()
     let general = generalDetail()
-    //排序窗口 sort window
+    var gloablMarketsController:GlobalMarketsController?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        translatesAutoresizingMaskIntoConstraints = false
         setupView()
     }
     
@@ -26,7 +27,7 @@ class MarketsCell: UICollectionViewCell {
     lazy var totalCollectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectview = UICollectionView(frame: .zero, collectionViewLayout:layout)
-        collectview.backgroundColor = color.themeColor()
+        collectview.backgroundColor = ThemeColor().themeColor()
         return collectview
     }()
     
@@ -43,17 +44,18 @@ class MarketsCell: UICollectionViewCell {
     lazy var filterDate:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collect = UICollectionView(frame: .zero, collectionViewLayout:layout)
-        collect.backgroundColor = color.themeColor()
+        collect.backgroundColor = ThemeColor().themeColor()
         return collect
     }()
     
     lazy var searchBar:UISearchBar={
         var searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
+        //        searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
-        searchBar.barTintColor = color.themeColor()
-        searchBar.tintColor = color.themeColor()
-        searchBar.backgroundColor = color.themeColor()
+        searchBar.barTintColor = ThemeColor().themeColor()
+        searchBar.tintColor = ThemeColor().themeColor()
+        searchBar.backgroundColor = ThemeColor().themeColor()
         searchBar.returnKeyType = .done
         return searchBar
     }()
@@ -61,7 +63,7 @@ class MarketsCell: UICollectionViewCell {
     lazy var coinList:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout:layout)
-        collectionView.backgroundColor = color.themeColor()
+        collectionView.backgroundColor = ThemeColor().themeColor()
         collectionView.register(MarketCollectionViewCell.self, forCellWithReuseIdentifier: "MarketCollectionViewCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         return collectionView
@@ -74,13 +76,18 @@ class MarketsCell: UICollectionViewCell {
         addSubview(searchBar)
         addSubview(coinList)
         
+        //        sortItems.append(textValue(name: "sortByLetter_market"))
+        //        sortItems.append(textValue(name: "sortByHighestPrice_market"))
+        //        filterDateitems.append(textValue(name: "filterByWeek_market"))
+        //        filterDateitems.append(textValue(name: "filterByDay_market"))
+        //        filterDateitems.append(textValue(name: "filterByHour_market"))
         
         
         //总额View
         totalCollectionView.translatesAutoresizingMaskIntoConstraints = false
         totalCollectionView.register(MarketsTotalView.self, forCellWithReuseIdentifier: "CellId")
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalCollectionView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalCollectionView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0(60)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalCollectionView]))
         
         //排序按钮
         sortCoin.translatesAutoresizingMaskIntoConstraints = false
@@ -101,8 +108,7 @@ class MarketsCell: UICollectionViewCell {
         //币种列表
         coinList.translatesAutoresizingMaskIntoConstraints = false
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-5-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
-        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
     }
     
     required init?(coder aDecoder: NSCoder) {

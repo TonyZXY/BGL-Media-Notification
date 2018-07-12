@@ -11,35 +11,42 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 
-extension UIViewController{
-    
-    
-    func passServerData(urlParameters:[String],httpMethod:String,parameters:[String:Any],completion:@escaping (JSON, Bool)->Void){
-        var BaseURl = "http://10.10.6.18:3030"
-        for path in urlParameters{
-            BaseURl = BaseURl + "/" + path
-        }
-        let url = URL(string: BaseURl)
-        var urlRequest = URLRequest(url: url!)
-        urlRequest.httpMethod = httpMethod
-        
-        if httpMethod == "POST"{
-            let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-            urlRequest.httpBody = httpBody
-        }
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        Alamofire.request(urlRequest).responseJSON { (response) in
-            switch response.result {
-            case .success(let value):
-                let res = JSON(value)
-                print("get success")
-                print(res)
-                completion(res,true)
-            case .failure(let error):
-                print(error)
-                 print("get faliure")
-                completion(JSON(),false)
-            }
-        }
+extension UIViewController {
+    func cancelTouchKeyboard() {
+        self.view.addGestureRecognizer(UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:))))
+        let tap = UITapGestureRecognizer(target: self.view, action: #selector(UIView.endEditing(_:)))
+        tap.cancelsTouchesInView = false
+        self.view.addGestureRecognizer(tap)
     }
+}
+
+extension UIViewController{
+//    func passServerData(urlParameters:[String],httpMethod:String,parameters:[String:Any],completion:@escaping (JSON, Bool)->Void){
+//        var BaseURl = "http://10.10.6.18:3030"
+//        for path in urlParameters{
+//            BaseURl = BaseURl + "/" + path
+//        }
+//        let url = URL(string: BaseURl)
+//        var urlRequest = URLRequest(url: url!)
+//        urlRequest.httpMethod = httpMethod
+//        
+//        if httpMethod == "POST"{
+//            let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
+//            urlRequest.httpBody = httpBody
+//        }
+//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        Alamofire.request(urlRequest).responseJSON { (response) in
+//            switch response.result {
+//            case .success(let value):
+//                let res = JSON(value)
+//                print("get success")
+//                print(res)
+//                completion(res,true)
+//            case .failure(let error):
+//                print(error)
+//                 print("get faliure")
+//                completion(JSON(),false)
+//            }
+//        }
+//    }
 }

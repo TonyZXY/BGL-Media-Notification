@@ -75,7 +75,7 @@ class NewsHomeViewController: UIViewController, UICollectionViewDataSource, UICo
         view.addSubview(menuBar)
         view.addSubview(selectView)
         view.addConstraintsWithFormat(format: "V:[v0(40)]-0-[v1]|", views: menuBar, selectView)
-
+        
         menuBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         menuBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         selectView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
