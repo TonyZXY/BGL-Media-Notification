@@ -12,6 +12,26 @@ import UIKit
 
 class NewsDetailTableViewCell:UITableViewCell{
     var coinNameItem = ["Bitcoin","CyberMiles"]
+    
+    var news: NewsObject? {
+        didSet {
+            newsTitle.text = news?.title
+            if news?.imageURL != nil {
+                let url = URL(string: (news?.imageURL)!)
+                newsImage.kf.setImage(with: url, completionHandler: {
+                    (image, error, cacheType, imageUrl) in
+                    if error == nil {
+                        
+                    }
+                })
+                
+                newsImage.setImage(urlString: (news?.imageURL)!)
+            }
+            newsDescription.text = news?.newsDescription
+            newsAuthor.text = news?.author
+        }
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupView()
@@ -27,7 +47,8 @@ class NewsDetailTableViewCell:UITableViewCell{
     
     let newsImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "navigation_arrow.png"))
-        imageView.clipsToBounds = true
+        imageView.frame = CGRect(x: 0, y: 0, width: 80, height: 130)
+//        imageView.clipsToBounds = true
         imageView.contentMode = UIViewContentMode.scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -69,19 +90,27 @@ class NewsDetailTableViewCell:UITableViewCell{
         cellView.addSubview(newsTitle)
         cellView.addSubview(newsDescription)
         cellView.addSubview(newsAuthor)
+        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v0]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         NSLayoutConstraint(item: newsImage, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(130)]-5-[v1]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
+        
+        
         NSLayoutConstraint(item: newsTitle, attribute: .top, relatedBy: .equal, toItem: newsImage, attribute: .top, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: newsTitle, attribute: .bottom, relatedBy: .equal, toItem: newsImage, attribute: .centerY, multiplier: 1/2, constant: 0).isActive = true
-        NSLayoutConstraint(item: newsDescription, attribute: .top, relatedBy: .equal, toItem: newsTitle, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: newsDescription, attribute: .top, relatedBy: .equal, toItem: newsImage, attribute: .centerY, multiplier: 1/2, constant: 0).isActive = true
+        
         NSLayoutConstraint(item: newsDescription, attribute: .bottom, relatedBy: .equal, toItem: newsImage, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        
         NSLayoutConstraint(item: newsDescription, attribute: .right, relatedBy: .equal, toItem: newsTitle, attribute: .right, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: newsDescription, attribute: .left, relatedBy: .equal, toItem: newsTitle, attribute: .left, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: newsAuthor, attribute: .bottom, relatedBy: .equal, toItem: cellView, attribute: .bottom, multiplier: 1, constant: -10).isActive = true
+        NSLayoutConstraint(item: newsAuthor, attribute: .bottom, relatedBy: .equal, toItem: cellView, attribute: .bottom, multiplier: 1, constant:-10).isActive = true
         NSLayoutConstraint(item: newsAuthor, attribute: .right, relatedBy: .equal, toItem: newsDescription, attribute: .right, multiplier: 1, constant: 0).isActive = true
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0(80)]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(130)]-5-[v1]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
+        
+        
     }
     
     required init?(coder aDecoder: NSCoder) {

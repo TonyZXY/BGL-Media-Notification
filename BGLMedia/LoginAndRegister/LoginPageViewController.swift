@@ -135,7 +135,8 @@ class LoginPageViewController: UIViewController {
         view.addSubview(registerLabel)
         
         logoImageView.translatesAutoresizingMaskIntoConstraints = false
-        logoImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant: 80).isActive = true
+//        NSLayoutConstraint(item: logoImageView, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 80)
+        logoImageView.topAnchor.constraint(equalTo: view.topAnchor,constant: 80).isActive = true
         logoImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         notificationLabel.translatesAutoresizingMaskIntoConstraints = false

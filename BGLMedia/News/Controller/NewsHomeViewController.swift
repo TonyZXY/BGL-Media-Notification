@@ -76,11 +76,11 @@ class NewsHomeViewController: UIViewController, UICollectionViewDataSource, UICo
         view.addSubview(selectView)
         view.addConstraintsWithFormat(format: "V:[v0(40)]-0-[v1]|", views: menuBar, selectView)
 
-        menuBar.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        menuBar.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        selectView.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
-        selectView.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
-        menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        menuBar.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        menuBar.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        selectView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        selectView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        menuBar.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
 
         selectView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "containerCell")
         selectView.dataSource = self

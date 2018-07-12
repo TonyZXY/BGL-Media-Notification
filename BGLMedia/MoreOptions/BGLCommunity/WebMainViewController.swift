@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import SafariServices
 
 class WebMainViewController: UIViewController, UITableViewDataSource, UITableViewDelegate{
     
@@ -54,28 +55,25 @@ class WebMainViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        let indexPath = webTableView.indexPathForSelectedRow
-        let str = indexPath!.row
-        let vc = segue.destination as? WebDetailViewController
-        vc?.str = str
-
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let urlString = "https://www.google.com"
+        
+        if let url = URL(string: urlString) {
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+//            vc.delegate = self as! SFSafariViewControllerDelegate
+            navigationController?.pushViewController(vc, animated: true)
+//            present(vc, animated: true)
+        }
     }
     
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
+//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+//        let indexPath = webTableView.indexPathForSelectedRow
+//        let str = indexPath!.row
+//        let vc = segue.destination as? WebDetailViewController
+//        vc?.str = str
+//
+//    }
 
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

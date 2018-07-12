@@ -40,11 +40,16 @@ class CoinTypeTableViewCell:UITableViewCell{
         addSubview(coinName)
         addSubview(coinNameAbb)
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0(30)]-5-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":coinNameAbb]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[v0(30)]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":coinNameAbb]))
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-5-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":coinNameAbb]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v1]-5-[v2]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":coinNameAbb]))
+        NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coinName, attribute: .bottom, relatedBy: .equal, toItem: coinImage, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+         NSLayoutConstraint(item: coinNameAbb, attribute: .top, relatedBy: .equal, toItem: coinImage, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+         NSLayoutConstraint(item: coinName, attribute: .left, relatedBy: .equal, toItem: coinNameAbb, attribute: .left, multiplier: 1, constant: 0).isActive = true
+
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0(30)]-5-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":coinNameAbb]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":coinNameAbb]))
+
+
     }
     
     required init?(coder aDecoder: NSCoder) {

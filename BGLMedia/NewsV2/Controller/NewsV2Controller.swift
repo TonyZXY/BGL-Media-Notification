@@ -8,26 +8,36 @@
 
 import UIKit
 import RealmSwift
+import SwiftyJSON
 
 class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelegate{
     let realm = try! Realm()
-    
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 30
+    var skip:Int = 0
+    var limit:Int = 10
+    var numberOfItemsToDisplay:Int=10
+    var numberOfItemsToDisplays:Int{
+        get{
+            return realm.objects(NewsObject.self).count
+        }
     }
     
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsDetailTableViewCell
-        cell.newsTitle.text = "hajajfs"
-        cell.newsDescription.text = "sdfdssfsdfdsfdsfdsfdsfsdfdsfdsfsfsfdfdsfdsfdfdfdsfsfsdfsdfsdfdsfdfsdfsffdfsdfsdf"
-        cell.newsAuthor.text = "Mike"
-        return cell
+    var newsObjects:Results<NewsObject>{
+        get{
+            return realm.objects(NewsObject.self)
+        }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-         cell.alpha = 0
-        UIView.animate(withDuration: 1.0) {
+            let lastItem = numberOfItemsToDisplay - 1
+        
+            if indexPath.row == lastItem {
+                print("refresh")
+//                 getData(skip: skip, limit: limit)
+            }
+ 
+        
+        cell.alpha = 0
+        UIView.animate(withDuration: 0.5) {
             cell.alpha = 1.0
             cell.layer.transform = CATransform3DIdentity
         }
@@ -41,50 +51,76 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
 //        }
     }
     
+    var newsObject:Results<NewsObject>{
+        get{
+            return realm.objects(NewsObject.self).sorted(byKeyPath: "_id", ascending: true)
+        }
+    }
+    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        getData()
-        // Do any additional setup after loading the view.
+        numberOfItemsToDisplay = realm.objects(NewsObject.self).count
+        getData(skip:0,limit: 10)
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+//        return 15
+        return newsObject.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsDetailTableViewCell
+        let object = newsObject[indexPath.row]
+        cell.news = object
+        return cell
     }
 
-    func getData(){
-        passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&Skip=0&limit=10"], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
+    func getData(skip:Int,limit:Int){
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&Skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
             if pass{
-                self.realm.beginWrite()
-                if let collection = res.array{
-                    for result in collection{
-                        let id = result["_id"].string!
-                        let title = result["title"].string!
-                        let newsDescription = result["newsDescription"].string!
-                        let imageURL = result["imageURL"].string!
-                        let url = result["url"].string!
-                        let publishedTime = result["publishedTime"].string!.timeFormatter()
-                        let author = result["author"].string!
-                        let localeTag = result["localeTag"].string!
-                        let contentTag = result["contentTag"].string!
-                        
-                        if self.realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
-                            self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag, defaultLanguage])
-                        } else {
-                            self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag], update: true)
+                self.storeDataToRealm(res:res){success in
+                    if success{
+//                        self.skip += 10
+//                        self.numberOfItemsToDisplay += 10
+                        DispatchQueue.main.async {
+                            self.newsTableView.reloadData()
                         }
                     }
-                    try! self.realm.commitWrite()
-                    print(res)
                 }
             }
         }
     }
     
+    func storeDataToRealm(res:JSON,completion:@escaping (Bool)->Void){
+        self.realm.beginWrite()
+        if let collection = res.array{
+            for result in collection{
+                let id = result["_id"].string!
+                let title = result["title"].string!
+                let newsDescription = result["newsDescription"].string!
+                let imageURL = result["imageURL"].string!
+                let url = result["url"].string!
+                let publishedTime = result["publishedTime"].string!.timeFormatter()
+                let author = result["author"].string!
+                let localeTag = result["localeTag"].string!
+                let contentTag = result["contentTag"].string!
+                let lanugageTag = result["languageTag"].string!
+                
+                if self.realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
+                    self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag, lanugageTag])
+                } else {
+                    self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag,lanugageTag], update: true)
+                }
+            }
+            try! self.realm.commitWrite()
+            completion(true)
+        }
+    }
+    
     func setUpView(){
-        navigationController?.navigationBar.barTintColor = ThemeColor().themeColor()
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.isTranslucent = false
         navigationItem.titleView = titleLabel
-        
-        
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(newsTableView)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
@@ -97,6 +133,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.register(NewsDetailTableViewCell.self, forCellReuseIdentifier: "NewsCell")
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.separatorStyle = .none
+        tableView.rowHeight = 120
         tableView.delegate = self
         tableView.dataSource = self
         return tableView

@@ -225,18 +225,25 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Click Add Transaction Button Method
     @objc func changetotransaction(){
-        passServerData(urlParameters: ["coin","getAllWithCurrency?currency=AUD"], httpMethod: "GET", parameters: [String:Any]()){
-            response,pass in
-                if pass{
-                    print(response)
-                }
-            
-        }
+//        URLServices.fetchInstance.passServerData(urlParameters: ["coin","getAllWithCurrency?currency=AUD"], httpMethod: "GET", parameters: [String:Any]()){
+//            response,pass in
+//                if pass{
+//                    print(response)
+//                }
+//        }
+
+//        let transaction = TransactionsController()
+//        self.navigationController?.pushViewController(transaction, animated: true)
         
-        
-        
-        let transaction = TransactionsController()
-        self.navigationController?.pushViewController(transaction, animated: true)
+//        URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (json, success) in
+//            if success{
+//                print(json)
+//            }
+//        }
+
+
+        let news = MarketsController()
+        navigationController?.pushViewController(news, animated: true)
     }
     
     //Refresh Method
@@ -282,16 +289,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func setUpBasicView(){
         view.backgroundColor = color.themeColor()
-        
         //NavigationBar
-        navigationController?.navigationBar.barTintColor =  color.themeColor()
-        self.navigationController?.navigationBar.tintColor = UIColor.white
-        navigationController?.navigationBar.isTranslucent = false
         let titilebarlogo = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
         titilebarlogo.image = image.logoImage()
         titilebarlogo.contentMode = .scaleAspectFit
         navigationItem.titleView = titilebarlogo
-        
     }
     
     
@@ -571,6 +573,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         collectionView.backgroundColor = color.themeColor()
         collectionView.register(WalletsCell.self, forCellReuseIdentifier: "WalletCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
+        collectionView.rowHeight = 100
         collectionView.delegate = self
         collectionView.dataSource = self
         return collectionView

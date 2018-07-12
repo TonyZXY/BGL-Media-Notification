@@ -159,12 +159,10 @@ class OnBoardingPageViewController: UIViewController {
         view.addSubview(instructionImageView)
         instructionImageView.image = newImage
         instructionImageView.translatesAutoresizingMaskIntoConstraints = false
-        instructionImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+        instructionImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         instructionImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         instructionImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         instructionImageView.heightAnchor.constraint(equalToConstant: (view.frame.width-20)*1.2).isActive = true
-        
-
     }
     
     func setupAdminButtons(){
@@ -216,7 +214,9 @@ class OnBoardingPageViewController: UIViewController {
     func setupDescriptionLabel() {
         view.addSubview(descriptionLabel)
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
-        descriptionLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 5).isActive = true
+//        NSLayoutConstraint(item: descriptionLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 5)
+
+        descriptionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 5).isActive = true
         descriptionLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5).isActive = true
         descriptionLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5).isActive = true
         descriptionLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
