@@ -279,7 +279,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         refreshControl.tintColor = UIColor.white
         return refreshControl
     }()
-    
+    //
     func setUpBasicView(){
         view.backgroundColor = color.themeColor()
         
