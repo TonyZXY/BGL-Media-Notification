@@ -96,7 +96,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         if collectionView == coinList{
             let cell = coinList.cellForItem(at: indexPath) as! WatchListCell
             let global = GloabalController()
-            global.coinDetail.coinName = cell.coinLabel.text!　 
+            global.coinDetail.coinName = cell.coinLabel.text!
             navigationController?.pushViewController(global, animated: true)
         }
     }
