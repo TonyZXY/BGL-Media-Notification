@@ -13,34 +13,55 @@ import SwiftyJSON
 class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelegate{
     let realm = try! Realm()
     var skip:Int = 0
-    var limit:Int = 10
-    var numberOfItemsToDisplay:Int=10
-    var numberOfItemsToDisplays:Int{
-        get{
-            return realm.objects(NewsObject.self).count
-        }
-    }
+    var limit:Int = 5
+    var numberOfItemsToDisplay:Int=5
+    var displayNumber:Int = 0
+    var loadMoreData:Bool = false
     
-    var newsObjects:Results<NewsObject>{
+    var newsObject:Results<NewsObject>{
         get{
-            return realm.objects(NewsObject.self)
+            return realm.objects(NewsObject.self).sorted(byKeyPath: "publishedTime", ascending: false)
         }
     }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-            let lastItem = numberOfItemsToDisplay - 1
+        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+        spinner.startAnimating()
+        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(60))
+        self.newsTableView.tableFooterView = spinner
+        self.newsTableView.tableFooterView?.isHidden = false
         
-            if indexPath.row == lastItem {
-                print("refresh")
-//                 getData(skip: skip, limit: limit)
+        let lastItem = displayNumber - 1
+        if tableView == newsTableView {
+        if indexPath.row == lastItem && displayNumber <= newsObject.count{
+            print(displayNumber)
+                if displayNumber != 0{
+                    
+                    getData(skip: displayNumber, limit: 5){ success in
+                        if success{
+                            DispatchQueue.main.async {
+                                self.displayNumber += 5
+                                self.newsTableView.reloadData()
+                                //                            self.refresher.endRefreshing()
+                            }
+                        }
+                    }
+                }
+            
             }
- 
-        
-        cell.alpha = 0
-        UIView.animate(withDuration: 0.5) {
-            cell.alpha = 1.0
-            cell.layer.transform = CATransform3DIdentity
+            
+            if displayNumber >= newsObject.count {
+                spinner.stopAnimating()
+            }
         }
+        
+//        newsTableView.visibleCells
+        
+//        cell.alpha = 0
+//        UIView.animate(withDuration: 0.5) {
+//            cell.alpha = 1.0
+//            cell.layer.transform = CATransform3DIdentity
+//        }
         
 //        cell.alpha = 0
 //        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
@@ -51,44 +72,65 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
 //        }
     }
     
-    var newsObject:Results<NewsObject>{
-        get{
-            return realm.objects(NewsObject.self).sorted(byKeyPath: "_id", ascending: true)
-        }
+    func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        spinner.stopAnimating()
     }
-    
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        numberOfItemsToDisplay = realm.objects(NewsObject.self).count
-        getData(skip:0,limit: 10)
+        getData(skip:0,limit: 5){ success in
+            if success{
+                self.displayNumber += 5
+                self.newsTableView.reloadData()
+            }
+        }
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(true)
+//        print(realm.objects(NewsObject.self).count)
+    }
+    
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-//        return 15
-        return newsObject.count
+        if newsObject.count != 0{
+            if newsObject.count > displayNumber {
+                return displayNumber
+            } else {
+                return newsObject.count
+            }
+        } else{
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsDetailTableViewCell
-        let object = newsObject[indexPath.row]
-        cell.news = object
-        return cell
+        if indexPath.row <= displayNumber{
+            let object = newsObject[indexPath.row]
+            cell.news = object
+            return cell
+        } else{
+            return cell
+        }
     }
 
-    func getData(skip:Int,limit:Int){
-        URLServices.fetchInstance.passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&Skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
+    func getData(skip:Int,limit:Int,completion: @escaping (Bool)->Void){
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
             if pass{
                 self.storeDataToRealm(res:res){success in
                     if success{
-//                        self.skip += 10
-//                        self.numberOfItemsToDisplay += 10
-                        DispatchQueue.main.async {
-                            self.newsTableView.reloadData()
-                        }
+                       completion(true)
                     }
                 }
+            } else{
+                completion(false)
+//                DispatchQueue.main.async {
+//                self.displayNumber = 5
+//                self.newsTableView.reloadData()
+//                self.refresher.endRefreshing()
+//                }
             }
         }
     }
@@ -97,21 +139,27 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         self.realm.beginWrite()
         if let collection = res.array{
             for result in collection{
-                let id = result["_id"].string!
-                let title = result["title"].string!
-                let newsDescription = result["newsDescription"].string!
-                let imageURL = result["imageURL"].string!
-                let url = result["url"].string!
-                let publishedTime = result["publishedTime"].string!.timeFormatter()
+                let id = result["_id"].string ?? "0"
+                let title = result["title"].string ?? ""
+                let newsDescription = result["newsDescription"].string ?? ""
+                let imageURL = result["imageURL"].string ?? ""
+                let url = result["url"].string ?? ""
+                let publishedTime = Extension.method.convertStringToDate(date: result["publishedTime"].string ?? "")
                 let author = result["author"].string!
                 let localeTag = result["localeTag"].string!
-                let contentTag = result["contentTag"].string!
                 let lanugageTag = result["languageTag"].string!
+                let contentTagResult = result["contentTag"].array!
+                let contentTag = List<String>()
+                for result in contentTagResult{
+                    contentTag.append(result.string!)
+                }
                 
-                if self.realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
-                    self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag, lanugageTag])
-                } else {
-                    self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, contentTag,lanugageTag], update: true)
+                if id != "0" {
+                    if self.realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
+                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, lanugageTag,contentTag])
+                    } else {
+                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,lanugageTag,contentTag], update: true)
+                    }
                 }
             }
             try! self.realm.commitWrite()
@@ -119,12 +167,30 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         }
     }
     
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        getData(skip: 0, limit: 5){ sccuess in
+            if sccuess{
+                self.displayNumber = 5
+                self.newsTableView.reloadData()
+                self.refresher.endRefreshing()
+            } else{
+                self.refresher.endRefreshing()
+            }
+        }
+    }
+    
     func setUpView(){
         navigationItem.titleView = titleLabel
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(newsTableView)
+        newsTableView.addSubview(refresher)
+//        view.addSubview(spinner)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-15-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
+//
+//        NSLayoutConstraint(item: spinner, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//
+//        NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
     }
 
     lazy var newsTableView:UITableView = {
@@ -148,5 +214,16 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         return titleLabel
     }()
     
+    var spinner:UIActivityIndicatorView{
+        let spinner = UIActivityIndicatorView()
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
+    }
     
+    lazy var refresher: UIRefreshControl = {
+            let refreshControl = UIRefreshControl()
+            refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+            refreshControl.tintColor = UIColor.white
+            return refreshControl
+    }()
 }

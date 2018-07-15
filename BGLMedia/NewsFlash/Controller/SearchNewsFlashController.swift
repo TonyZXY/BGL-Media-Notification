@@ -44,7 +44,6 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
            } else {
             return 0
         }
-        
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

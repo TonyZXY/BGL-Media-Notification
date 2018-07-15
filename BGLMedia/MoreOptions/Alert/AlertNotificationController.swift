@@ -41,11 +41,21 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         }
     }
     
+    var loginStatus:Bool{
+        get{
+            return  UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
     var switchLabel = ["flashSwitch","priceSwitch"]
     var sectionItem = ["Notification","Option"]
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return cellItems.count
+        if loginStatus{
+            return cellItems.count
+        } else{
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -176,11 +186,8 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 cell.accessoryView = swithButton
                 swithButton.tag = indexPath.row
                 swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
-                
-                if indexPath.row == 1{
-                    if !loginStatus{
-                        cell.isHidden = true
-                    }
+                if !loginStatus{
+                    cell.isHidden = true
                 }
             } else{
                 if loginStatus{
@@ -357,28 +364,15 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     func getNotificationStatusData(){
         if UserDefaults.standard.string(forKey: "UserToken") != nil{
-            let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")
-            Alamofire.request("http://10.10.6.18:3030/test/DeviceToken/" + deviceTokenString!, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-                switch response.result {
-                case .success(let value):
-                    let json = JSON(value)
-//                    UserDefaults.standard.set(json["notification"].bool!,forKey: "flashSwitch")
-                   self.notificationTableView.reloadData()
-                case .failure(let error):
-                    print(error)
-                }
-            }
-            
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 let email = UserDefaults.standard.string(forKey: "UserEmail")!
-                Alamofire.request("http://10.10.6.18:3030/userLogin/interestOfUser/" + email, method: .get, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-                    switch response.result {
-                    case .success(let value):
-                        let json = JSON(value)
-//                        UserDefaults.standard.set(json["status"].bool!,forKey: "priceSwitch")
+                let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
+                let parameter = ["email":email,"token":certificateToken]
+                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                    if success{
+//                        UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
+//                        UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
                         self.notificationTableView.reloadData()
-                    case .failure(let error):
-                        print(error)
                     }
                 }
             }
@@ -387,32 +381,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     func postNotificationStatusData(){
         if buildInterestStatus{
-            let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
-            let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
-            
             if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
-                let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
+                let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
+                let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
                 let email = UserDefaults.standard.string(forKey: "UserEmail")!
-                let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-                
-                Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: ["deviceID": deviceTokenString,"notification": flashNotification], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-                    switch response.result {
-                    case .success(let value):
-                        let json = JSON(value)
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
-                
-                
-                Alamofire.request("http://10.10.6.18:3030/userLogin/changeNotificationStatus", method: .post, parameters: ["email":email,"token":token,"userStatus":priceAlert], encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-                    switch response.result {
-                    case .success(let value):
-                        let json = JSON(value)
-                    case .failure(let error):
-                        print(error)
-                    }
-                }
+                let parameter:[String:Any] = ["email":email,"token":certificateToken,"flash":flashNotification,"interest":priceAlert]
+                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in}
             }
         }
     }

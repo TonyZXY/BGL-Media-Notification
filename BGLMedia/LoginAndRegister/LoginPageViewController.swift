@@ -198,11 +198,12 @@ class LoginPageViewController: UIViewController {
             }else{
                 let un = self.emailTextField.text!
                 let pw = self.passwordTextField.text!
-                let (message, success) = self.checkUsernameAndPassword(username: un, password: pw)
+                let (message, success) = Extension.method.checkUsernameAndPassword(username: un, password: pw)
                 if success{
-                    self.loginRequestToServer(username: un, password: pw){(res,pass) in
-                        if pass {
-                            let token = res["token"].string!
+                    let parameter = ["email":self.emailTextField.text!.lowercased(),"password":self.passwordTextField.text!]
+                    URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","login"], httpMethod: "POST", parameters: parameter, completion: { (response, success) in
+                        if success {
+                            let token = response["token"].string!
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
                             UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
@@ -210,16 +211,15 @@ class LoginPageViewController: UIViewController {
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                         } else{
-                            self.notificationLabel.text = "Error code \(res["code"])"
+                            self.notificationLabel.text = "Error code \(response["code"])"
                             self.notificationLabel.isHidden = false
                         }
-                    }
+                    })
                 } else{
                     self.notificationLabel.text = message
                     self.notificationLabel.isHidden = false
                 }
             }
-
         }
         
         NetworkManager.isUnreachable { networkManagerInstance in
@@ -228,45 +228,45 @@ class LoginPageViewController: UIViewController {
         }
     }
     
-    func checkUsernameAndPassword(username: String, password: String) -> (String?, Bool) {
-        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
-        if emailPredicate.evaluate(with: username){
-            let passwordFormat = "^((?!.*[\\s])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$&*])(?=.*\\d).{8,15})$"
-            let passwordPredicate = NSPredicate(format:"SELF MATCHES %@", passwordFormat)
-            if passwordPredicate.evaluate(with: password){
-                return (nil,true)
-            }else{
-                return ("Wrong password format", false)
-            }
-        } else{
-            return ("Wrong email format", false)
-        }
-    }
+//    func checkUsernameAndPassword(username: String, password: String) -> (String?, Bool) {
+//        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+//        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+//        if emailPredicate.evaluate(with: username){
+//            let passwordFormat = "^((?!.*[\\s])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$&*])(?=.*\\d).{8,15})$"
+//            let passwordPredicate = NSPredicate(format:"SELF MATCHES %@", passwordFormat)
+//            if passwordPredicate.evaluate(with: password){
+//                return (nil,true)
+//            }else{
+//                return ("Wrong password format", false)
+//            }
+//        } else{
+//            return ("Wrong email format", false)
+//        }
+//    }
     
-    func loginRequestToServer(username: String,password: String,completion:@escaping (JSON, Bool)->Void){
-        let parameters = ["email": username.lowercased(), "password":password]
-        let url = URL(string: "http://10.10.6.18:3030/userLogin/login")
-        var urlRequest = URLRequest(url: url!)
-        urlRequest.httpMethod = "POST"
-        let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-        urlRequest.httpBody = httpBody
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        //        urlRequest.setValue("gmail.com",email)
-        
-        Alamofire.request(urlRequest).response { (response) in
-            if let data = response.data{
-                var res = JSON(data)
-                if res == nil {
-                    completion(["code":"Server not available"],false)
-                } else if res["success"].bool!{
-                    completion(res,true)
-                    }else {
-                        completion(res,false)
-                    }
-            }
-        }
-    }
+//    func loginRequestToServer(username: String,password: String,completion:@escaping (JSON, Bool)->Void){
+//        let parameters = ["email": username.lowercased(), "password":password]
+//        let url = URL(string: "http://10.10.6.18:3030/userLogin/login")
+//        var urlRequest = URLRequest(url: url!)
+//        urlRequest.httpMethod = "POST"
+//        let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
+//        urlRequest.httpBody = httpBody
+//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        //        urlRequest.setValue("gmail.com",email)
+//
+//        Alamofire.request(urlRequest).response { (response) in
+//            if let data = response.data{
+//                var res = JSON(data)
+//                if res == nil {
+//                    completion(["code":"Server not available"],false)
+//                } else if res["success"].bool!{
+//                    completion(res,true)
+//                    }else {
+//                        completion(res,false)
+//                    }
+//            }
+//        }
+//    }
 
 }
 

@@ -31,6 +31,10 @@ class URLServices:NSObject{
             urlRequest.httpBody = httpBody
         }
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let manager = Alamofire.SessionManager.default
+        manager.session.configuration.timeoutIntervalForRequest = 30
+        
         Alamofire.request(urlRequest).responseJSON { (response) in
             switch response.result {
             case .success(let value):
@@ -39,6 +43,9 @@ class URLServices:NSObject{
 //                print(res)
                 completion(res,true)
             case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    completion(JSON(),false)
+                }
                 print(error)
                 print("get faliure")
                 completion(JSON(),false)
@@ -50,6 +57,7 @@ class URLServices:NSObject{
     func getCoinList(){
         URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (json, success) in
             if success{
+                
                 self.realm.beginWrite()
                 for result in json.array!{
                     let id = result["_id"].string!

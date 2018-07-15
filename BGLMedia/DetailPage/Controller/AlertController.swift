@@ -489,9 +489,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func writeAlertToRealm(){
         if buildInterestStatus {
             let email = UserDefaults.standard.string(forKey: "UserEmail")!
-            passServerData(urlParameters:["userLogin","interestOfUser",email],httpMethod:"GET",parameters:[String:Any]()){(json, pass) in
+            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
+            let body:[String:Any] = ["email":email,"token":certificateToken]
+            
+            URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest",email],httpMethod:"POST",parameters:body){(response, pass) in
                 if pass{
-                    self.writeRealm(json:json){(pass) in
+                    self.writeRealm(json:response){(pass) in
                         if pass{
                             DispatchQueue.main.async {
                                 self.alerts = self.allAlert
@@ -505,9 +508,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
-        for result in json["interest"].array!{
+        for result in json["data"].array!{
             self.realm.beginWrite()
-            let realmData:[Any] = [result["_id"].string!,result["coinFrom"].string!,result["coinFrom"].string!,result["coinTo"].string!,result["market"].string!,result["price"].double!,result["isGreater"].int!,result["status"].int!,Date()]
+            let realmData:[Any] = [result["_id"].string!,result["from"].string!,result["from"].string!,result["to"].string!,result["market"].string!,result["price"].double!,result["isgreater"].int!,result["status"].bool!,Date()]
             if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
                 self.realm.create(alertObject.self, value: realmData)
             } else {
@@ -515,9 +518,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             }
             
             if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
-                self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!])
+                self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!])
             } else {
-                self.realm.create(alertCoinNames.self, value: [result["coinFrom"].string!,result["coinFrom"].string!], update: true)
+                self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
             }
             try! self.realm.commitWrite()
         }
