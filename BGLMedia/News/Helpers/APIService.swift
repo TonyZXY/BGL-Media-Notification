@@ -19,7 +19,7 @@ class APIService: NSObject {
     let realm = try! Realm()
     
     //Connection Strings
-    let urlString = "http://10.10.6.111:3000/api/"
+    let urlString = "http://10.10.6.18:3020/api/"
     let localNews = "getNewsLocaleOnly"
     let contentNews = "getNewsContentOnly"
     let contentGenuine = "getgenuine"

@@ -25,11 +25,20 @@ class GloabalController: UIViewController {
     var marketSelectedData = MarketTradingPairs()
     var globalMarketData = GlobalMarket()
     
+    
+    var GlobalData:Results<GlobalAverageObject>{
+        get{
+            let filterName = "coinAbbName = '" + coinDetail.coinName + "' "
+            let objects = realm.objects(GlobalAverageObject.self).filter(filterName)
+            return objects
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         loadData()
-        getCoinGloablDetail()
+//        getCoinGloablDetail()
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
     }
@@ -53,18 +62,17 @@ class GloabalController: UIViewController {
     
     @objc func loadData(){
         let generalPage = coinDetailController.gerneralController
-        generalPage.edit.isHidden = true
+//        generalPage.edit.isHidden = true
         generalPage.tradingPairs.text = coinDetail.coinName + "/" + priceType
         generalPage.market.text = "Global average"
-        
-        generalPage.marketCapResult.text = currecyLogo[priceType]! + scientificMethod(number: globalMarketData.market_cap ?? 0.0)
-        generalPage.volumeResult.text = currecyLogo[priceType]! + scientificMethod(number: globalMarketData.volume_24h ?? 0.0)
-        generalPage.circulatingSupplyResult.text = scientificMethod(number: globalMarketData.circulating_supply ?? 0.0)
+        generalPage.marketCapResult.text = currecyLogo[priceType]! + scientificMethod(number: GlobalData[0].marketCap )
+        generalPage.volumeResult.text = currecyLogo[priceType]! + scientificMethod(number: GlobalData[0].volume24 )
+        generalPage.circulatingSupplyResult.text = scientificMethod(number: GlobalData[0].circulatingSupply )
         generalPage.coinSymbol = coinDetail.coinName
         general.coinAbbName = coinDetail.coinName
         coinDetailController.transactionHistoryController.generalData = general
         generalPage.defaultCurrencyLable.text = priceType
-        generalPage.totalNumber.text = currecyLogo[priceType]! + scientificMethod(number:globalMarketData.price ?? 0.0)
+        generalPage.totalNumber.text = currecyLogo[priceType]! + scientificMethod(number:GlobalData[0].price ?? 0.0)
         
         
         coinDetailController.alertController.coinName.coinAbbName = general.coinAbbName
@@ -87,43 +95,43 @@ class GloabalController: UIViewController {
     }
     
     //Get coins global data and Global Average Price
-    func getCoinGloablDetail(){
-        let coinNameId = self.getCoinName(coinAbbName: coinDetail.coinName)
-        print(coinNameId)
-        if coinNameId != 0 {
-            GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
-                if bool {
-                    DispatchQueue.main.async {
-                         self.globalMarketData = globalMarket!
-                         self.loadData()
-                         self.coinDetailController.gerneralController.spinner.stopAnimating()
-                    }
-                } else {
-                    self.coinDetailController.gerneralController.spinner.stopAnimating()
-                }
-            }
-        }
-    }
+//    func getCoinGloablDetail(){
+//        let coinNameId = self.getCoinName(coinAbbName: coinDetail.coinName)
+//        print(coinNameId)
+//        if coinNameId != 0 {
+//            GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
+//                if bool {
+//                    DispatchQueue.main.async {
+//                         self.globalMarketData = globalMarket!
+//                         self.loadData()
+//                         self.coinDetailController.gerneralController.spinner.stopAnimating()
+//                    }
+//                } else {
+//                    self.coinDetailController.gerneralController.spinner.stopAnimating()
+//                }
+//            }
+//        }
+//    }
     
     //Get coin Id
-    func getCoinName(coinAbbName:String)->Int{
-        let data = GetDataResult().getMarketCapCoinList()
-        var coinId:Int = 0
-        
-        for value in data {
-            if value.symbol == coinAbbName{
-                coinId = value.id!
-            }
-        }
-        if coinId == 0{
-            self.coinDetailController.gerneralController.spinner.stopAnimating()
-            let generalPage = coinDetailController.gerneralController
-            generalPage.marketCapResult.text = "--"
-            generalPage.volumeResult.text = "--"
-            generalPage.circulatingSupplyResult.text = "--"
-        }
-        return coinId
-    }
+//    func getCoinName(coinAbbName:String)->Int{
+//        let data = GetDataResult().getMarketCapCoinList()
+//        var coinId:Int = 0
+//
+//        for value in data {
+//            if value.symbol == coinAbbName{
+//                coinId = value.id!
+//            }
+//        }
+//        if coinId == 0{
+//            self.coinDetailController.gerneralController.spinner.stopAnimating()
+//            let generalPage = coinDetailController.gerneralController
+//            generalPage.marketCapResult.text = "--"
+//            generalPage.volumeResult.text = "--"
+//            generalPage.circulatingSupplyResult.text = "--"
+//        }
+//        return coinId
+//    }
     
     @objc func setPriceChange() {
         let candleData = coinDetailController.gerneralController.vc

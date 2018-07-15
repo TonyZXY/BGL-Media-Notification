@@ -225,25 +225,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Click Add Transaction Button Method
     @objc func changetotransaction(){
-//        URLServices.fetchInstance.passServerData(urlParameters: ["coin","getAllWithCurrency?currency=AUD"], httpMethod: "GET", parameters: [String:Any]()){
-//            response,pass in
-//                if pass{
-//                    print(response)
-//                }
-//        }
-
-//        let transaction = TransactionsController()
-//        self.navigationController?.pushViewController(transaction, animated: true)
-        
-//        URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (json, success) in
-//            if success{
-//                print(json)
-//            }
-//        }
-
-
-        let news = MarketsController()
-        navigationController?.pushViewController(news, animated: true)
+        let transaction = TransactionsController()
+        self.navigationController?.pushViewController(transaction, animated: true)
     }
     
     //Refresh Method

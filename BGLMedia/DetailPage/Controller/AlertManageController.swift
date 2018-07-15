@@ -279,7 +279,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     @objc func deleteAlert(){
         let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-        passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
+        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
             if pass{
                 let filterId = "id = '" + self.intersetObject.id + "' "
                 let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "
@@ -332,14 +332,15 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     @objc func addNewAlert(){
         let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-        
+        print(email)
+        print(token)
         
 //        getAlertFromServer(parameter: email){(json, pass) in
 //            print(json)
 //            for result in json["interest"].array!{
 //                print(result["status"].bool!)
 //                print(result["coinTo"].string!)
-//            }
+//            }　
 //        }
         
         
@@ -363,16 +364,19 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             } else {
                 compareStatus = 2
             }
-
+            
+            
        
-            let inter:[[String:Any]] = [["coinFrom":intersetObject.coinAbbName,"coinTo":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":price,"status":true,"id":"123","isGreater":compareStatus]]
+            let inter:[String:Any] = ["from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":price,"isGreater":compareStatus]
             let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
-            sendAlertToServer(parameter: parameter){(json,pass) in
-                print(json)
+            
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addInterest"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                if success{
+                    print(response)
+                } else{
+                    print(response)
+                }
             }
-            
-            
-            
             
 //
 //
@@ -449,19 +453,24 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
 
-    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
-        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
-        var urlRequest = URLRequest(url: url!)
-        urlRequest.httpMethod = "GET"
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        
-        Alamofire.request(urlRequest).response { (response) in
-            if let data = response.data{
-                var res = JSON(data)
-                completion(res,true)
-            }
-        }
-    }
+//    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
+//
+//
+//
+//
+//
+//        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
+//        var urlRequest = URLRequest(url: url!)
+//        urlRequest.httpMethod = "GET"
+//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//
+//        Alamofire.request(urlRequest).response { (response) in
+//            if let data = response.data{
+//                var res = JSON(data)
+//                completion(res,true)
+//            }
+//        }
+//    }
 
 }
 

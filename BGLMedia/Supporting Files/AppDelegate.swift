@@ -29,6 +29,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().barTintColor = ThemeColor().navigationBarColor()
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().isTranslucent = false
         
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in
@@ -38,13 +39,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.registerForRemoteNotifications()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-
+       
 
         if launchedBefore{
-            
+             URLServices.fetchInstance.getCoinList()
 //            set flag to false for debugging purpose
 //            UserDefaults.standard.set(false, forKey: "launchedBefore")
-            
             
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 window = UIWindow(frame:UIScreen.main.bounds)
@@ -65,7 +65,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
             SetDataResult().writeJsonExchange()
             SetDataResult().writeMarketCapCoinList()
-            GetDataResult().getCoinList()
+            URLServices.fetchInstance.getCoinList()
             UserDefaults.standard.set(true, forKey: "flashSwitch")
             UserDefaults.standard.set(true, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")

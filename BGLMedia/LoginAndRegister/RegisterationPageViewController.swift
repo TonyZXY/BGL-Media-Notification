@@ -16,6 +16,9 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
     var genderPickOption = ["Male", "Female"]
     var titlePickOption = ["Mr","Mrs","Ms","Miss","Dr","Sir"]
     
+    
+    
+    
     let firstNameLabel: UILabel = {
        let label = UILabel()
         label.text = "First Name  *"
@@ -234,38 +237,42 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
             self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
         }, completion: nil)
         
+        
         NetworkManager.isReachable { networkManagerInstance in
             print("Network is available")
             if (self.firstNameTextField.text?.isEmpty)! || (self.passwordTextField.text?.isEmpty)! || (self.emailTextField.text?.isEmpty)! ||  (self.reEnterPasswordTextField.text?.isEmpty)! || (self.lastNameTextField.text?.isEmpty)! {
                 self.notificationLabel.text = "Please provide all information necessary"
                 self.notificationLabel.isHidden = false
             } else if self.passwordTextField.text == self.reEnterPasswordTextField.text {
-                let parameter = ["firstName": self.firstNameTextField.text!, "email": self.emailTextField.text!.lowercased(), "password": self.passwordTextField.text!, "title": self.titleTextField.text!, "lastName": self.lastNameTextField.text!]
                 
-                let (message, success) = LoginPageViewController().checkUsernameAndPassword(username: self.emailTextField.text!, password: self.passwordTextField.text!)
+                let parameter = ["email": self.emailTextField.text!.lowercased(), "firstName": self.firstNameTextField.text!, "lastName":self.lastNameTextField.text!,"title": self.titleTextField.text!, "password": self.passwordTextField.text!]
+                
+                let (message, success) = Extension.method.checkUsernameAndPassword(username: self.emailTextField.text!, password: self.passwordTextField.text!)
                 if success {
-                    
-                    self.registerRequestToServer(parameter: parameter){(res,pass) in
-                        if pass {
+                    URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","register"], httpMethod: "POST", parameters: parameter, completion: { (response, success) in
+                        if success{
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                            UserDefaults.standard.set(parameter["email"], forKey: "UserEmail")
-                            let token = res["token"].string!
+                            UserDefaults.standard.set(self.emailTextField.text!.lowercased(), forKey: "UserEmail")
+                            let token = response["token"].string!
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
+                            let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                            
+                            
+                            let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
+                            URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in})
+                            
+                            
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             if self.presentingViewController?.presentingViewController != nil{
                                 self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
                             } else {
                                 self.presentingViewController?.dismiss(animated: true, completion: nil)
                             }
-                            
-                            
                         } else{
-                            self.notificationLabel.text = "Error code \(res["code"])"
+                            self.notificationLabel.text = "Error code \(response["code"]): \(response["message"])"
                             self.notificationLabel.isHidden = false
                         }
-                    }
-                    
-                    
+                    })
                 } else {
                     self.notificationLabel.text = message
                     self.notificationLabel.isHidden = false
@@ -280,38 +287,33 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
             print("Network is Unavailable")
             self.displayAlert(title: "Error", message: "Network Unavailable", buttonText: "OK")
         }
-        
-        
-        
     }
     
-    func registerRequestToServer(parameter: [String : String], completion:@escaping (JSON, Bool)->Void){
-        
-        let url = URL(string: "http://10.10.6.18:3030/userLogin/register")
-        var urlRequest = URLRequest(url: url!)
-        urlRequest.httpMethod = "POST"
-        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-        urlRequest.httpBody = httpBody
-        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-        //        urlRequest.setValue("gmail.com",email)
-        
-        Alamofire.request(urlRequest).response { (response) in
-            if let data = response.data{
-                var res = JSON(data)
-                print(res)
-                if res == nil {
-                    completion(["code":"Server not available"],false)
-                } else if res["success"].bool!{
-                    completion(res,true)
-                    } else {
-                        completion(res,false)
-                    }
-            }
-        }
-        
-        
-    }
-        
+//    func registerRequestToServer(parameter: [String : String], completion:@escaping (JSON, Bool)->Void){
+//
+//        let url = URL(string: "http://10.10.6.18:3030/userLogin/register")
+//        var urlRequest = URLRequest(url: url!)
+//        urlRequest.httpMethod = "POST"
+//        let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+//        urlRequest.httpBody = httpBody
+//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+//        //        urlRequest.setValue("gmail.com",email)
+//
+//        Alamofire.request(urlRequest).response { (response) in
+//            if let data = response.data{
+//                var res = JSON(data)
+//                print(res)
+//                if res == nil {
+//                    completion(["code":"Server not available"],false)
+//                } else if res["success"].bool!{
+//                    completion(res,true)
+//                    } else {
+//                        completion(res,false)
+//                    }
+//            }
+//        }
+//    }
+    
     
     func combineViews(combine view1: UILabel, with view2: LeftPaddedTextField) -> UIView {
         let newView = UIView()
