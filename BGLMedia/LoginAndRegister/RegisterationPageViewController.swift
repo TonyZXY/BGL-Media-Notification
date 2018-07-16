@@ -16,7 +16,11 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
     var genderPickOption = ["Male", "Female"]
     var titlePickOption = ["Mr","Mrs","Ms","Miss","Dr","Sir"]
     
-    
+    var sendDeviceTokenStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "SendDeviceToken")
+        }
+    }
     
     
     let firstNameLabel: UILabel = {
@@ -255,11 +259,19 @@ class RegisterationPageViewController: UIViewController, UIPickerViewDelegate, U
                             UserDefaults.standard.set(self.emailTextField.text!.lowercased(), forKey: "UserEmail")
                             let token = response["token"].string!
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
-                            let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
                             
+                            print(token)
+                            print(self.emailTextField.text!.lowercased())
                             
-                            let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
-                            URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in})
+                            if !self.sendDeviceTokenStatus{
+                                let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                                let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
+                                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
+                                    if success{
+                                        UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                                    }
+                                })
+                            }
                             
                             
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)

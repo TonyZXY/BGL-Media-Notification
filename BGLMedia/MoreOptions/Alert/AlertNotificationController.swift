@@ -217,6 +217,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         super.viewDidLoad()
         getNotificationStatus()
         setUpView()
+        print(UserDefaults.standard.string(forKey: "UserToken")!)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshUserStatus), name:NSNotification.Name(rawValue: "logIn"), object: nil)
     }
@@ -238,8 +239,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        tabBarController?.tabBar.isHidden = true
         getNotificationStatusData()
     }
     
@@ -367,11 +366,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 let email = UserDefaults.standard.string(forKey: "UserEmail")!
                 let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
+                print(email)
+                print(certificateToken)
                 let parameter = ["email":email,"token":certificateToken]
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
                     if success{
-//                        UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
-//                        UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
+                        print(response)
+                        UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
+                        UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
                         self.notificationTableView.reloadData()
                     }
                 }
@@ -380,15 +382,17 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func postNotificationStatusData(){
-        if buildInterestStatus{
+//        if buildInterestStatus{
             if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
                 let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
                 let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
                 let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
                 let email = UserDefaults.standard.string(forKey: "UserEmail")!
                 let parameter:[String:Any] = ["email":email,"token":certificateToken,"flash":flashNotification,"interest":priceAlert]
-                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in}
+                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                    print(response)
+                }
             }
-        }
+//        }
     }
 }

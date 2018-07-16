@@ -9,9 +9,6 @@
 import UIKit
 
 class AboutUsViewController: UIViewController {
-
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -21,16 +18,6 @@ class AboutUsViewController: UIViewController {
         label00.textColor = UIColor.white
         label00.text = textValue(name: "title_about")
         self.navigationItem.titleView = label00
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     func setUpView(){

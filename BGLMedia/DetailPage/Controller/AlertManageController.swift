@@ -12,7 +12,7 @@ import Alamofire
 import SwiftyJSON
 
 struct interset{
-    var _id:String = ""
+    var _id:Int = 0
     var coinFrom:String = "BTC"
     var coinTo:String = "AUD"
     var market:String = "BTCmarkets"
@@ -39,7 +39,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     var inputPrice:String = ""
     var intersetObject = alertObjects()
     
-    var status:String = ""
+    var status:String = "AddAlert"
     
     func getExchangeName() -> String {
         return intersetObject.exchangName
@@ -75,10 +75,24 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     func setSinglePrice(single: Double) {
         newTransaction.singlePrice = single
     }
+    
 
+    
+    var email:String{
+        get{
+            return UserDefaults.standard.string(forKey: "UserEmail")!
+        }
+    }
+    
+    var token:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken")!
+        }
+    }
     
     var twoDimension = [ExpandableNames(isExpanded: true, name: ["a","sf"]),ExpandableNames(isExpanded: true, name: ["sdf"])]
 
+    
     var showIndexPaths = false
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -269,7 +283,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
         view.addSubview(alertTableView)
         view.addSubview(alertButton)
-        
+        alertButton.addTarget(self, action: #selector(addNewAlert), for: .touchUpInside)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]-3-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView,"v1":alertButton]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
@@ -277,11 +291,21 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     @objc func deleteAlert(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")!
-        let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
-            if pass{
-                let filterId = "id = '" + self.intersetObject.id + "' "
+//        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+//        let token = UserDefaults.standard.string(forKey: "CertificateToken")!
+        
+        print(intersetObject.id)
+        
+        
+        
+        let body:[String:Any] = ["email":email,"token":token,"interest":[["_id":intersetObject.id]]]
+        
+        
+        
+        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: body) { (response, success) in
+            if success{
+                print(response)
+                let filterId = "id = " + String(self.intersetObject.id)
                 let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "
                 
                 let coinsAlert = self.realm.objects(alertObject.self).filter(filterName)
@@ -298,7 +322,29 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             } else{
                 self.navigationController?.popViewController(animated: true)
             }
-        }  
+        }
+        
+        
+//        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
+//            if pass{
+//                let filterId = "id = '" + self.intersetObject.id + "' "
+//                let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "
+//
+//                let coinsAlert = self.realm.objects(alertObject.self).filter(filterName)
+//
+//                try! self.realm.write {
+//                    self.realm.delete(self.realm.objects(alertObject.self).filter(filterId))
+//                }
+//                if coinsAlert.count == 0{
+//                    try! self.realm.write {
+//                        self.realm.delete(self.realm.objects(alertCoinNames.self).filter(filterName))
+//                    }
+//                }
+//                self.navigationController?.popViewController(animated: true)
+//            } else{
+//                self.navigationController?.popViewController(animated: true)
+//            }
+//        }
     }
     
     lazy var alertTableView:UITableView = {
@@ -325,58 +371,63 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = ThemeColor().bglColor()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(addNewAlert), for: .touchUpInside)
         return button
     }()
     
     @objc func addNewAlert(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")!
-        let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-        print(email)
-        print(token)
-        
-//        getAlertFromServer(parameter: email){(json, pass) in
-//            print(json)
-//            for result in json["interest"].array!{
-//                print(result["status"].bool!)
-//                print(result["coinTo"].string!)
-//            }　
-//        }
-        
-        
-        
-        
-        
         if intersetObject.coinName != "" && intersetObject.tradingPairs != "" && intersetObject.tradingPairs != ""{
-//            realm.beginWrite()
-//            var currentTransactionId:Int = 0
-//            let transaction = realm.objects(alertObject.self)
-//            if transaction.count != 0{
-//                currentTransactionId = (transaction.last?.id)! + 1
-//            } else {
-//                currentTransactionId = 1
-//            }
-            var compareStatus:Int = 0
-            let price = Double(inputPrice)!
-
-            if sectionPrice > price {
-                compareStatus = 1
-            } else {
-                compareStatus = 2
-            }
-            
-            
-       
-            let inter:[String:Any] = ["from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":price,"isGreater":compareStatus]
-            let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
-            
-            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addInterest"], httpMethod: "POST", parameters: parameter) { (response, success) in
-                if success{
+            if status == "Update"{
+                
+                print(intersetObject.id)
+                
+                let interest:[String:Any] = ["_id":intersetObject.id,"from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":intersetObject.compare,"isGreater":intersetObject.compareStatus]
+                let body:[String:Any] = ["email":email,"token":token,"interest":interest]
+                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterest"], httpMethod: "POST", parameters: body) { (response, success) in
                     print(response)
-                } else{
-                    print(response)
+                    if success{
+                        let realmData:[Any] = [self.intersetObject.id,self.intersetObject.coinName,self.intersetObject.coinAbbName,self.intersetObject.tradingPairs,self.intersetObject.exchangName,self.intersetObject.compare,self.intersetObject.compareStatus,self.intersetObject.switchStatus,Date()]
+                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: self.intersetObject.id) == nil {
+                            self.realm.create(alertObject.self, value: realmData)
+                        } else {
+                            self.realm.create(alertObject.self, value: realmData, update: true)
+                        }
+                    }
+                }
+            } else{
+                var compareStatus:Int = 0
+                let Inputprice = Double(inputPrice)!
+                
+                if sectionPrice < Inputprice {
+                    compareStatus = 1
+                } else {
+                    compareStatus = 2
+                }
+                let inter:[String:Any] = ["from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":Inputprice,"isGreater":compareStatus]
+                let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
+                
+                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addInterest"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                    if success{
+                        print(response)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+                        self.navigationController?.popViewController(animated: true)
+                    } else{
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+                        self.navigationController?.popViewController(animated: true)
+                    }
                 }
             }
+            
+            
+            //            realm.beginWrite()
+            //            var currentTransactionId:Int = 0
+            //            let transaction = realm.objects(alertObject.self)
+            //            if transaction.count != 0{
+            //                currentTransactionId = (transaction.last?.id)! + 1
+            //            } else {
+            //                currentTransactionId = 1
+            //            }
+            
+            
             
 //
 //
@@ -397,8 +448,8 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
 //            }
             
 //            try! realm.commitWrite()
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-            navigationController?.popViewController(animated: true)
+//            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+//            navigationController?.popViewController(animated: true)
         } else {
             navigationController?.popViewController(animated: true)
         }

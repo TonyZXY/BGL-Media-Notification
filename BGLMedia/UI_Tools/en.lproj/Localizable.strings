@@ -52,12 +52,19 @@ watchlistMarket = "Watchlist";
 marketCap_Market = "Market Cap";
 market_24hVolume = "24h Volume";
 btcDominance_market = "BTC Dominance";
+sortByHighestCap_market = "Highest Cap";
+sortByLowestCap_market = "Lowest Cap";
+sortByBiggestGainers_market = "Biggest Gainers";
+sortByBiggestLosers_market = "Biggest Losers";
 sortByLetter_market = "Alphabetical";
-sortByHighestPrice_market = "Highest Price";
 filterByWeek_market = "1W";
 filterByDay_market = "1D";
 filterByHour_market = "1H";
 globalAverage_market = "Global Average";
+
+
+
+
 
 //WatchList Page
 sortByLetter_watchlist = "Alphabetical";

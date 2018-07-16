@@ -17,7 +17,6 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
 //
     var items:[[String]]? {
         get{
-//            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "notification_cell"),textValue(name: "display_cell"),textValue(name: "other_cell"),textValue(name: "language_cell")]]
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
             return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
@@ -63,8 +62,9 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
         settingTitle.topItem?.title = textValue(name: "settingTitle")
         tableView00.reloadData()
     }
+    
     deinit {
-                NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {

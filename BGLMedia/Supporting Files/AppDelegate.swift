@@ -69,10 +69,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(true, forKey: "flashSwitch")
             UserDefaults.standard.set(true, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
-            UserDefaults.standard.set("EN", forKey: "defaultLanguage")
+            UserDefaults.standard.set("CN", forKey: "defaultLanguage")
             UserDefaults.standard.set(false, forKey: "buildInterest")
-            
-            
+            UserDefaults.standard.set(false, forKey: "SendDeviceToken")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
         return true
@@ -104,20 +103,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("register to open notification")
         let deviceTokenString = deviceToken.reduce("",{$0 + String(format: "%02X",$1)})
         print("token:\(deviceTokenString)")
-        let deviceTokenJson: [String: Any] = [
-            "deviceID": deviceTokenString,
-            "notification": true
-        ]
-        Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-                switch response.result {
-                    case .success(let value):
-                        let json = JSON(value)
-                        print(json)
-                    case .failure(let error):
-                        print(error)
-            }
-        }
         
+//        let deviceTokenJson: [String: Any] = [
+//            "deviceID": deviceTokenString,
+//            "notification": true
+//        ]
+//        Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
+//                switch response.result {
+//                    case .success(let value):
+//                        let json = JSON(value)
+//                        print(json)
+//                    case .failure(let error):
+//                        print(error)
+//            }
+//        }
+//
         UserDefaults.standard.set(deviceTokenString, forKey: "UserToken")
     }
         
