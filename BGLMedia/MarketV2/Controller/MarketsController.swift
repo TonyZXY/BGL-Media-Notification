@@ -10,13 +10,48 @@ import UIKit
 
 class MarketsController: UIViewController, UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
-    let global = GlobalMarketsController()
-    let watchList = WatchListsController()
+    var navigationBarItem:String{
+        get{
+            return textValue(name: "globalMarket")
+        }
+    }
+    
+    var global = GlobalMarketsController()
+    var watchList = WatchListsController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         cancelTouchKeyboard()
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+    }
+    
+    @objc func changeLanguage(){
+        titleLabel.text = navigationBarItem
+        navigationItem.titleView = titleLabel
+        menuBar.collectionView.reloadData()
+        
+//        global = GlobalMarketsController()
+//        watchList = WatchListsController()
+//        collectionviews.reloadData()
+//        global.mainTotalCollectionView.reloadData()
+//        global.sortdoneclick()
+//        global.coinList.reloadData()
+//        global.filterDate.reloadData()
+//
+//        watchList.coinList.reloadData()
+//
+//        watchList.watchList.sortDate.reloadData()
+//        watchList.watchList.coinList.reloadData()
+//        watchList.watchList.marketSortPickerView.setPickerViewDoneButton()
+        
+    }
+    
+    @objc func changeCurrency(){
+//        global.marketCell.coinList.reloadData()
+//        watchList.watchList.coinList.reloadData()
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -95,10 +130,16 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         return collectionview
     }()
     
-    func setUpView(){
+    let titleLabel: UILabel = {
         let titleLabel = UILabel()
-        titleLabel.text = "Blockchain Global"
         titleLabel.textColor = UIColor.white
+        titleLabel.font = UIFont.systemFont(ofSize: 17)
+        titleLabel.textAlignment = .center
+        return titleLabel
+    }()
+    
+    func setUpView(){
+        titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         
         //Set Up Menu Bar

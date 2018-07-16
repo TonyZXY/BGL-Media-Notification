@@ -12,6 +12,13 @@ import SwiftyJSON
 
 class LoginPageViewController: UIViewController {
 
+    
+    var sendDeviceTokenStatus:Bool{
+        get{
+             return UserDefaults.standard.bool(forKey: "SendDeviceToken")
+        }
+    }
+    
     let logoImageView: UIImageView = {
         
         let image = UIImage(named: "bcg_logo")
@@ -207,7 +214,19 @@ class LoginPageViewController: UIViewController {
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
                             UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                            UserDefaults.standard.set(false, forKey: "SendDeviceToken")
+                            
+                            print(token)
+                            print(self.emailTextField.text!.lowercased())
+                            
+                            if !self.sendDeviceTokenStatus{
+                                let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                                let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
+                                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
+                                    if success{
+                                        UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                                    }
+                                })
+                            }
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                         } else{

@@ -24,6 +24,12 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         }
     }
     
+    var navigationBarItem:String{
+        get{
+            return textValue(name: "news_newsPage")
+        }
+    }
+    
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
         spinner.startAnimating()
@@ -85,13 +91,17 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 self.newsTableView.reloadData()
             }
         }
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-//        print(realm.objects(NewsObject.self).count)
+    @objc func changeLanguage(){
+        titleLabel.text = navigationBarItem
+        navigationItem.titleView = titleLabel
     }
     
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+    }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if newsObject.count != 0{
@@ -145,10 +155,10 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 let imageURL = result["imageURL"].string ?? ""
                 let url = result["url"].string ?? ""
                 let publishedTime = Extension.method.convertStringToDate(date: result["publishedTime"].string ?? "")
-                let author = result["author"].string!
-                let localeTag = result["localeTag"].string!
-                let lanugageTag = result["languageTag"].string!
-                let contentTagResult = result["contentTag"].array!
+                let author = result["author"].string ?? ""
+                let localeTag = result["localeTag"].string ?? ""
+                let lanugageTag = result["languageTag"].string ?? ""
+                let contentTagResult = result["contentTag"].array ?? [""]
                 let contentTag = List<String>()
                 for result in contentTagResult{
                     contentTag.append(result.string!)
@@ -180,6 +190,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
     
     func setUpView(){
+        titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(newsTableView)

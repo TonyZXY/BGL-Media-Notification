@@ -81,6 +81,10 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         }
     }
     
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
     lazy var searchBar:UISearchBar={
         var searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false

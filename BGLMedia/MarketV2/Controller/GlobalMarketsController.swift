@@ -10,9 +10,25 @@ import UIKit
 import RealmSwift
 
 class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout,UIPickerViewDelegate, UIPickerViewDataSource,UISearchBarDelegate{
-    let pickerRow = ["Hightest Cap","Lowest Cap","Biggest Gainers","Biggest Losers","Alphabetical"]
-    let filterItems = ["1W","1D","1H"]
-    let mainItems = ["Market Cap","24h Volume","BTC Dominance"]
+    
+    var pickerRow:[String]{
+        get{
+            return [textValue(name: "sortByHighestCap_market"),textValue(name: "sortByLowestCap_market"),textValue(name: "sortByBiggestGainers_market"),textValue(name: "sortByBiggestLosers_market"),textValue(name: "sortByLetter_market")]
+        }
+    }
+    
+    var filterItems:[String]{
+        get{
+            return [textValue(name: "filterByWeek_market"),textValue(name: "filterByDay_market"),textValue(name: "filterByHour_market")]
+        }
+    }
+
+    var mainItems:[String]{
+        get{
+            return [textValue(name: "marketCap_Market"),textValue(name: "market_24hVolume"),textValue(name: "btcDominance_market")]
+        }
+    }
+    
     let sortPickerView = UIPickerView()
     let realm = try! Realm()
     var filterOption:Int = 0
@@ -363,6 +379,10 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             filterObject = coinAlphabeticalObjects.filter("coinAbbName CONTAINS %@", searchBar.text!.uppercased())
             coinList.reloadData()
         }
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
     }
     
 //    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {

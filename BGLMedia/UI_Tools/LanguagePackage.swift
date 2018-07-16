@@ -25,21 +25,21 @@ var defaultLanguage:String {
 extension UIViewController{
     
     
-//    var bundal:Bundle{
-//        get{
-//            if defaultLanguage == "EN"{
-//                let path = Bundle.main.path(forResource: "en", ofType: "lproj")
-//                let bundals = Bundle.init(path: path!)
-//                return bundals!
-//            } else if defaultLanguage == "CN"{
-//                let path = Bundle.main.path(forResource: "zh-Hans-CN", ofType: "lproj")
-//                let bundals = Bundle.init(path: path!)
-//                return bundals!
-//            } else{
-//                return self.bundal
-//            }
-//        }
-//    }
+    //    var bundal:Bundle{
+    //        get{
+    //            if defaultLanguage == "EN"{
+    //                let path = Bundle.main.path(forResource: "en", ofType: "lproj")
+    //                let bundals = Bundle.init(path: path!)
+    //                return bundals!
+    //            } else if defaultLanguage == "CN"{
+    //                let path = Bundle.main.path(forResource: "zh-Hans-CN", ofType: "lproj")
+    //                let bundals = Bundle.init(path: path!)
+    //                return bundals!
+    //            } else{
+    //                return self.bundal
+    //            }
+    //        }
+    //    }
     
     func textValue(name:String)->String{
         var bundals = Bundle()
@@ -73,7 +73,7 @@ extension UIView{
         if defaultLanguage == "EN"{
             let path = Bundle.main.path(forResource: "en", ofType: "lproj")
             bundals = Bundle.init(path: path!)!
-
+            
         } else if defaultLanguage == "CN"{
             let path = Bundle.main.path(forResource: "zh-Hans-CN", ofType: "lproj")
             bundals = Bundle.init(path: path!)!

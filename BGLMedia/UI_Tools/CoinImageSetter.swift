@@ -52,10 +52,10 @@ extension UIImageView {
         NSLayoutConstraint.activate(constraints)
         
         let realm = try! Realm()
-        let result = realm.objects(CryptoCompareCoinsRealm.self).filter("Name = %@", coinName)
+        let result = realm.objects(CoinList.self).filter("coinSymbol = %@", coinName)
         if result.count == 1 {
             let coin = result[0]
-            let url = URL(string: "https://www.cryptocompare.com" + coin.ImageUrl)
+            let url = URL(string: "https://www.cryptocompare.com" + coin.logoUrl)
             self.kf.setImage(with: url, completionHandler: {
                 (image, error, cacheType, imageUrl) in
                 if error == nil {

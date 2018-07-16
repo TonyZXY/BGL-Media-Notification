@@ -19,6 +19,7 @@ struct alertResult{
     var name:[alertObject] = [alertObject]()
 }
 
+
 struct coinAlert{
     var status:Bool = false
     var coinAbbName:String = ""
@@ -53,6 +54,25 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             return allResult
         }
     }
+    
+    var allAlerts:Results<alertObject>{
+        get{
+            return realm.objects(alertObject.self)
+        }
+    }
+    
+    var email:String{
+        get{
+            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
+    
     
     var loginStatus:Bool{
         get{
@@ -91,16 +111,34 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        tabBarController?.tabBar.isHidden = true
+//        super.viewWillAppear(true)
+//        tabBarController?.tabBar.isHidden = true
         getNotificationStatus()
         if NotificationStatus{
             if loginStatus{
-                print("ininini")
                 writeAlertToRealm()
             }
         }
         checkSetUpView()
+    }
+    
+    
+    override func viewDidAppear(_ animated: Bool) {
+//        let alertStatus:[[String:Any]]?
+//
+//        for result in allAlerts{
+//            let alert:[String:Any] = ["_id":result.id,"status":result.switchStatus]
+//            alertStatus?.append(alert)
+//        }
+//        
+//        let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
+//        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterestStatus"], httpMethod: "POST", parameters: body) { (response, success) in
+//            if success{
+//                
+//            }
+//        }
+        
+        
     }
     
     @objc func refreshNotificationStatus(){
@@ -121,8 +159,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     @objc func addAlerts(){
-//        alerts = allAlert
-//        alertTableView.reloadData()
+        alerts = allAlert
+        alertTableView.reloadData()
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -232,7 +270,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         
         
-        let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.compare)
+        let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.price)
         let coinDetail = object.exchangName + " - " + object.coinAbbName + "/" + object.tradingPairs
         let dateToString = DateFormatter()
         dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
@@ -252,8 +290,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertEdit.intersetObject.exchangName = alerts[indexPath.section].name[indexPath.row].exchangName
         alertEdit.intersetObject.tradingPairs = alerts[indexPath.section].name[indexPath.row].tradingPairs
         alertEdit.intersetObject.coinName = alerts[indexPath.section].name[indexPath.row].coinName
-        alertEdit.intersetObject.compare = alerts[indexPath.section].name[indexPath.row].compare
-        alertEdit.intersetObject.id = alerts[indexPath.section].name[indexPath.row].id
+        alertEdit.intersetObject.compare = alerts[indexPath.section].name[indexPath.row].price
+        alertEdit.intersetObject.id =   alerts[indexPath.section].name[indexPath.row].id
         alertEdit.status = "Update"
         navigationController?.pushViewController(alertEdit, animated: true)
     }
@@ -357,6 +395,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             }
         })
     }
+    
+//    func getAlertStatus(){
+//
+//    }
+    
     
     @objc func addAlert(){
         let addAlert = AlertManageController()
@@ -487,13 +530,15 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeAlertToRealm(){
-        if buildInterestStatus {
             let email = UserDefaults.standard.string(forKey: "UserEmail")!
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
             let body:[String:Any] = ["email":email,"token":certificateToken]
-            
-            URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest",email],httpMethod:"POST",parameters:body){(response, pass) in
+        
+        
+        
+            URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
                 if pass{
+                    print(response)
                     self.writeRealm(json:response){(pass) in
                         if pass{
                             DispatchQueue.main.async {
@@ -504,25 +549,39 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                     }
                 }
             }
-        }
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
-        for result in json["data"].array!{
-            self.realm.beginWrite()
-            let realmData:[Any] = [result["_id"].string!,result["from"].string!,result["from"].string!,result["to"].string!,result["market"].string!,result["price"].double!,result["isgreater"].int!,result["status"].bool!,Date()]
-            if self.realm.object(ofType: alertObject.self, forPrimaryKey: result["_id"].string!) == nil {
-                self.realm.create(alertObject.self, value: realmData)
-            } else {
-                self.realm.create(alertObject.self, value: realmData, update: true)
+        if json["success"].bool!{
+            for result in json["data"].array!{
+                self.realm.beginWrite()
+                let id = result["_id"].int ?? 0
+                let coinName = result["from"].string ?? "null"
+                let coinAbbName = result["from"].string ?? "null"
+                let tradingPairs = result["to"].string ?? "null"
+                let exchangName = result["market"].string ?? "null"
+                let comparePice = result["price"].double ?? 0
+                let compareStatus = result["isgreater"].int ?? 0
+                let switchStatus = result["status"].bool ?? true
+                
+                
+                let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date()]
+                if self.realm.object(ofType: alertObject.self, forPrimaryKey: id) == nil {
+                    self.realm.create(alertObject.self, value: realmData)
+                } else {
+                    self.realm.create(alertObject.self, value: realmData, update: true)
+                }
+                
+                if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: coinAbbName) == nil {
+                    self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!])
+                } else {
+                    self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
+                }
+                try! self.realm.commitWrite()
             }
-            
-            if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: result["coinFrom"].string!) == nil {
-                self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!])
-            } else {
-                self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
-            }
-            try! self.realm.commitWrite()
+            completion(true)
+        } else{
+            completion(false)
         }
     }
     
