@@ -8,15 +8,57 @@
 
 import Foundation
 import UIKit
+import RealmSwift
 
 class AlertTableViewCell:UITableViewCell{
     
 
-    var alertObject:alertObject?
+    var object:alertObject?{
+        didSet{
+            var compare:String = ""
+            if object?.compareStatus == 1{
+                compare = ">"
+            }else if object?.compareStatus == 2{
+                compare = "<"
+            } else {
+                compare = "="
+            }
+            let compareLabels = "1 " + (object?.coinAbbName)! + " " + compare + " " + String((object?.price)!)
+            let coinDetail = (object?.exchangName)! + " - " + (object?.coinAbbName)! + "/" + (object?.tradingPairs)!
+            let dateToString = DateFormatter()
+            dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
+            dateToString.locale = Locale(identifier: "en_AU")
+            let times = dateToString.string(from: (object?.dateTime)!)
+            dateLabel.text = times
+            compareLabel.text = compareLabels
+            coinDetailLabel.text = coinDetail
+            swithButton.isOn = (object?.switchStatus)!
+        }
+    }
 //        didSet{
 //
 //        }
-
+//
+//    var object: alertObject? {
+//        didSet {
+//            var roundedPrice = object?.price ?? 0.0
+//            roundedPrice = round(roundedPrice * 100) / 100
+//
+//
+//
+//            coinLabel.text = object?.coinAbbName
+//            coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
+//            //            coinChange.text = object?.percent7d
+//            coinImage.coinImageSetter(coinName: (object?.coinAbbName)!)
+//
+//            let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
+//            if watchList.count == 1 {
+//                addWish.setTitle("★", for: .normal)
+//            } else {
+//                addWish.setTitle("☆", for: .normal)
+//            }
+//        }
+//    }
     
     
     
@@ -35,6 +77,8 @@ class AlertTableViewCell:UITableViewCell{
         addSubview(dateLabel)
         addSubview(coinDetailLabel)
         
+        swithButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
+        
         NSLayoutConstraint(item: swithButton, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -10).isActive = true
         NSLayoutConstraint(item: swithButton, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: compareLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
@@ -46,19 +90,46 @@ class AlertTableViewCell:UITableViewCell{
         
     }
     
+    
     var swithButton:UISwitch = {
         var switchButton = UISwitch()
-        switchButton.isOn = false
+//        switchButton.isOn = false
 //        switchButton.thumbTintColor = UIColor.red
 //        switchButton.tintColor = UIColor.green
 //        switchButton.onTintColor = ThemeColor().bglColor()
-        switchButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
+//        switchButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
         switchButton.translatesAutoresizingMaskIntoConstraints = false
         return switchButton
     }()
     
-    @objc func switchIsInAction(){
+    @objc func switchIsInAction(sender:UISwitch){
+        let realm = try! Realm()
         
+        let alertStatus = try! Realm().objects(alertObject.self).filter("id = %@", object?.id ?? 0)
+        
+        if let object = alertStatus.first{
+                try! realm.write {
+                    if swithButton.isOn{
+                         object.switchStatus = true
+                    } else{
+                        object.switchStatus = false
+                    }
+                }
+        }
+        
+            print(alertStatus)
+        
+//        realm.beginWrite()
+//        if alertStatus.count == 1{
+//            if alertStatus[0].switchStatus{
+//
+//            }
+//        }
+//
+//        try! realm.commitWrite()
+        
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
     
     var compareLabel:UILabel = {
@@ -84,6 +155,4 @@ class AlertTableViewCell:UITableViewCell{
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
-    
 }

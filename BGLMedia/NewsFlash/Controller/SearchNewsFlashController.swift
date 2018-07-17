@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import SwiftyJSON
 
 class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableViewDelegate,UITableViewDataSource{
     let realm = try! Realm()
@@ -159,19 +160,55 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
             newsFlashResult.removeAll()
             flashTableView.reloadData()
         } else{
-            APIService.shardInstance.fetchSearchFlash(keyword: searchBar.text!,language: defaultLanguage) { (searchResult) in
-                self.newsFlashResult.removeAll()
-//                print(searchResult.count)
-                if searchResult.count != 0{
-                    for value in searchResult{
-                        self.newsFlashResult.append(value)
+            storeData() { (response, success) in
+                if success{
+                    self.newsFlashResult.removeAll()
+                    if response.count != 0{
+                        for value in response{
+                            self.newsFlashResult.append(value)
+                        }
+                        self.flashTableView.reloadData()
                     }
-                    self.flashTableView.reloadData()
                 }
             }
+            
+//            APIService.shardInstance.fetchSearchFlash(keyword: searchBar.text!,language: defaultLanguage) { (searchResult) in
+//                self.newsFlashResult.removeAll()
+////                print(searchResult.count)
+//                if searchResult.count != 0{
+//                    for value in searchResult{
+//                        self.newsFlashResult.append(value)
+//                    }
+//                    self.flashTableView.reloadData()
+//                }
+//            }
         }
     }
 
+    func storeData(completion:@escaping ([NewsFlash],Bool)->Void){
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","searchFlash?patten=" + searchBar.text! + "&languageTag=EN"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+            if success{
+                let json = response
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                var searchArrayObject = [NewsFlash]()
+                if let collection = json.array {
+                    for item in collection {
+                        let searchObject = NewsFlash()
+                        searchObject.id = item["_id"].string!
+                        searchObject.contents = item["shortMassage"].string!
+                        searchObject.dateTime = dateFormatter.date(from: item["publishedTime"].string!)!
+                        searchArrayObject.append(searchObject)
+                    }
+                }
+                completion(searchArrayObject,true)
+            } else{
+                completion([NewsFlash](),false)
+            }
+            
+        }
+        
+    }
     
     func setupView(){
         view.backgroundColor = ThemeColor().themeColor()

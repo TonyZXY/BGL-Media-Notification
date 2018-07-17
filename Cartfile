@@ -5,4 +5,6 @@ github "realm/realm-cocoa"
 github "ashleymills/Reachability.swift"
 github "onevcat/Kingfisher" ~> 4.0
 github "gilesvangruisen/Swift-YouTube-Player"
+github "PiXeL16/RevealingSplashView"
+github "imwcl/WCLShineButton"
 

@@ -136,11 +136,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("\(aps)")
     }
     
-//    func applicationDidBecomeActive(_ application: UIApplication) {
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
-//    }
-//    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+       UIApplication.shared.applicationIconBadgeNumber = 0
+        let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+        
+        if email != "null" && certificateToken != "null" &&  deviceToken != "null"{
+                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
+                    if success{
+                        print(response)
+                    }
+                }
+        }
+    }
+//
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
     }
+    
 }

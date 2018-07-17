@@ -95,7 +95,7 @@ class GlobalCoinListCell:UICollectionViewCell{
         addSubview(coinNumber)
         addSubview(addWish)
         
-        addWish.addTarget(self, action: #selector(MarketCollectionViewCell.addOrRemoveWatch), for: .touchUpInside)
+        addWish.addTarget(self, action: #selector(addOrRemoveWatch), for: .touchUpInside)
         
         //coinImage
         //        self.layer.cornerRadius = self.frame.height / 4

@@ -14,6 +14,7 @@ class NewsFlash: Object {
     @objc dynamic var dateTime = Date()
     @objc dynamic var contents = ""
     @objc dynamic var languageTag = ""
+    @objc dynamic var toSent:Bool = false
     
     
     override class func primaryKey() -> String {

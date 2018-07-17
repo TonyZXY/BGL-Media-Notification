@@ -230,6 +230,7 @@ class LoginPageViewController: UIViewController {
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                         } else{
+                            print(response)
                             self.notificationLabel.text = "Error code \(response["code"])"
                             self.notificationLabel.isHidden = false
                         }
@@ -246,47 +247,6 @@ class LoginPageViewController: UIViewController {
             self.displayAlert(title:"Error", message:"Network Unavailable", buttonText:"OK")
         }
     }
-    
-//    func checkUsernameAndPassword(username: String, password: String) -> (String?, Bool) {
-//        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-//        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
-//        if emailPredicate.evaluate(with: username){
-//            let passwordFormat = "^((?!.*[\\s])(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$&*])(?=.*\\d).{8,15})$"
-//            let passwordPredicate = NSPredicate(format:"SELF MATCHES %@", passwordFormat)
-//            if passwordPredicate.evaluate(with: password){
-//                return (nil,true)
-//            }else{
-//                return ("Wrong password format", false)
-//            }
-//        } else{
-//            return ("Wrong email format", false)
-//        }
-//    }
-    
-//    func loginRequestToServer(username: String,password: String,completion:@escaping (JSON, Bool)->Void){
-//        let parameters = ["email": username.lowercased(), "password":password]
-//        let url = URL(string: "http://10.10.6.18:3030/userLogin/login")
-//        var urlRequest = URLRequest(url: url!)
-//        urlRequest.httpMethod = "POST"
-//        let httpBody = try? JSONSerialization.data(withJSONObject: parameters, options: [])
-//        urlRequest.httpBody = httpBody
-//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//        //        urlRequest.setValue("gmail.com",email)
-//
-//        Alamofire.request(urlRequest).response { (response) in
-//            if let data = response.data{
-//                var res = JSON(data)
-//                if res == nil {
-//                    completion(["code":"Server not available"],false)
-//                } else if res["success"].bool!{
-//                    completion(res,true)
-//                    }else {
-//                        completion(res,false)
-//                    }
-//            }
-//        }
-//    }
-
 }
 
 extension UIViewController {

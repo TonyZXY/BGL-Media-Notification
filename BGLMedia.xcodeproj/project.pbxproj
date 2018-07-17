@@ -79,7 +79,6 @@
 		2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */; };
 		2D52AF0C20E46E1A00018FC0 /* SearchNewsFlashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */; };
 		2D52AF0D20E46E1A00018FC0 /* NewsFlashViewController.swift~HEAD in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE5620E46E1900018FC0 /* NewsFlashViewController.swift~HEAD */; };
-		2D52AF0E20E46E1A00018FC0 /* FlashSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5720E46E1900018FC0 /* FlashSearchController.swift */; };
 		2D52AF0F20E46E1A00018FC0 /* NewsFlashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5820E46E1900018FC0 /* NewsFlashViewController.swift */; };
 		2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5A20E46E1900018FC0 /* NewsFlash.swift */; };
 		2D52AF1120E46E1A00018FC0 /* NewsInFlashNewsRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5B20E46E1900018FC0 /* NewsInFlashNewsRealm.swift */; };
@@ -205,6 +204,7 @@
 		57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */; };
 		57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FA20FB00320052EE02 /* CurrencyController.swift */; };
 		57FC41FD20FB08560052EE02 /* LanguageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FC20FB08560052EE02 /* LanguageController.swift */; };
+		57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC420420FDC7260052EE02 /* FlashSearchController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -282,7 +282,6 @@
 		2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "NewsFlashViewController.swift~FlashNews"; sourceTree = "<group>"; };
 		2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SearchNewsFlashController.swift; sourceTree = "<group>"; };
 		2D52AE5620E46E1900018FC0 /* NewsFlashViewController.swift~HEAD */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "NewsFlashViewController.swift~HEAD"; sourceTree = "<group>"; };
-		2D52AE5720E46E1900018FC0 /* FlashSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashSearchController.swift; sourceTree = "<group>"; };
 		2D52AE5820E46E1900018FC0 /* NewsFlashViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFlashViewController.swift; sourceTree = "<group>"; };
 		2D52AE5A20E46E1900018FC0 /* NewsFlash.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsFlash.swift; sourceTree = "<group>"; };
 		2D52AE5B20E46E1900018FC0 /* NewsInFlashNewsRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsInFlashNewsRealm.swift; sourceTree = "<group>"; };
@@ -411,6 +410,7 @@
 		57FC41FC20FB08560052EE02 /* LanguageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LanguageController.swift; sourceTree = "<group>"; };
 		57FC420120FBA02A0052EE02 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/Main.strings; sourceTree = "<group>"; };
 		57FC420320FBA0310052EE02 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "../zh-Hans-CN.lproj/Main.strings"; sourceTree = "<group>"; };
+		57FC420420FDC7260052EE02 /* FlashSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashSearchController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -688,7 +688,7 @@
 		2D52AE5220E46E1900018FC0 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				2D52AE5720E46E1900018FC0 /* FlashSearchController.swift */,
+				57FC420420FDC7260052EE02 /* FlashSearchController.swift */,
 				2D52AE5820E46E1900018FC0 /* NewsFlashViewController.swift */,
 				2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */,
 				2D52AE5620E46E1900018FC0 /* NewsFlashViewController.swift~HEAD */,
@@ -1395,7 +1395,6 @@
 				2D52AEB220E46E1A00018FC0 /* AppDelegate.swift in Sources */,
 				2D52AE9F20E46E1A00018FC0 /* MarketSelectController.swift in Sources */,
 				2D52AF0F20E46E1A00018FC0 /* NewsFlashViewController.swift in Sources */,
-				2D52AF0E20E46E1A00018FC0 /* FlashSearchController.swift in Sources */,
 				2D52AF0820E46E1A00018FC0 /* MoreOptionMainViewController.swift in Sources */,
 				2D52AF2A20E46E1A00018FC0 /* VideoDetailViewController.swift in Sources */,
 				2D52AF2F20E46E1A00018FC0 /* Video.swift in Sources */,
@@ -1403,6 +1402,7 @@
 				57355C6320F718CC002E70E4 /* TransactionFrom.swift in Sources */,
 				2D52AEFB20E46E1A00018FC0 /* AboutUsViewController.swift in Sources */,
 				2D52AF0A20E46E1A00018FC0 /* TimelineTableViewController.swift in Sources */,
+				57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */,
 				2D52AEED20E46E1A00018FC0 /* MarketsCoinTableViewCell.swift in Sources */,
 				2D52AEE720E46E1A00018FC0 /* RegisterationPageViewController.swift in Sources */,
 				2D52AEF620E46E1A00018FC0 /* TickerDataRealm.swift in Sources */,

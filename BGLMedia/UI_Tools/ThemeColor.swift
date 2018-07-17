@@ -39,6 +39,12 @@ class ThemeColor:UIColor{
         return color
     }
     
+    func textGreycolor() -> UIColor {
+        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
+        let color = UIColor.init(red:153/255.0, green:153/255.0, blue:153/255.0, alpha:1)
+        return color
+    }
+    
     func themeWidgetColor() -> UIColor{
         _ = #colorLiteral(red: 0.2117647059, green: 0.8666666667, blue: 0.6705882353, alpha: 1)
         let color = UIColor.init(red:54/255.0, green:221/255.0, blue:171/255.0, alpha:1)
