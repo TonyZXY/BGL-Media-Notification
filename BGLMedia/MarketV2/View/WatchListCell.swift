@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import Kingfisher
+import WCLShineButton
 
 class WatchListCell:UICollectionViewCell{
     var color = ThemeColor()
@@ -27,15 +28,28 @@ class WatchListCell:UICollectionViewCell{
             coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
             //            coinChange.text = object?.percent7d
             coinImage.coinImageSetter(coinName: (object?.coinAbbName)!)
+            coinType.text = textValue(name: "globalAverage_market")
             
             let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
             if watchList.count == 1 {
-                addWish.setTitle("★", for: .normal)
+              addWish.setClicked(true, animated: false)
+//                addWish.setTitle("★", for: .normal)
             } else {
-                addWish.setTitle("☆", for: .normal)
+                addWish.setClicked(false, animated: false)
+//                addWish.setTitle("☆", for: .normal)
             }
         }
     }
+    
+    let rankLabel:UILabel = {
+        let label = UILabel()
+        label.text = "1234"
+        label.font = label.font.withSize(10)
+        label.textColor = ThemeColor().textGreycolor()
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
     
     let coinImage: UIImageView = {
         let imageView = UIImageView()
@@ -48,46 +62,60 @@ class WatchListCell:UICollectionViewCell{
     
     let coinLabel: UILabel = {
         let label = UILabel()
-        label.text = "Bitcoin"
-        label.textColor = UIColor.white
+        label.textAlignment = .left
+        label.textColor = ThemeColor().whiteColor()
+        label.font = label.font.withSize(18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let coinChange:UILabel = {
         let label = UILabel()
-        label.text = "-4.98%"
+        label.textAlignment = .right
         label.textColor = UIColor.white
+        label.font = label.font.withSize(12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     let coinType: UILabel = {
         let label = UILabel()
-        label.text = "全球市场平均价"
-        label.textColor = UIColor.gray
+        label.font = label.font.withSize(12)
+        label.textAlignment = .left
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     let coinNumber: UILabel = {
         let label = UILabel()
-        label.text = "$11345"
-        label.textColor = UIColor.gray
+        label.textAlignment = .right
+        label.textColor = ThemeColor().whiteColor()
+        label.font = label.font.withSize(15)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let addWish:UIButton = {
-        let button = UIButton()
-        button.setTitle("☆", for: .normal)
-        button.setTitleColor(UIColor.yellow, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
+    let addWish:WCLShineButton = {
+        var param1 = WCLShineParams()
+        param1.bigShineColor = UIColor(rgb:(54,221,171))
+        param1.smallShineColor = UIColor(rgb: (102,102,102))
+        let bt1 = WCLShineButton(frame: .init(x:0, y:0, width: 20, height: 20), params: param1)
+        bt1.fillColor = UIColor(rgb:(54,221,171))
+        bt1.color = UIColor(rgb:(153,153,153))
+        bt1.translatesAutoresizingMaskIntoConstraints = false
+        bt1.image = .star
+        
+        //        let button = UIButton()
+        //        button.setTitle("☆", for: .normal)
+        //        button.setTitleColor(UIColor.yellow, for: .normal)
+        //        button.translatesAutoresizingMaskIntoConstraints = false
+        return bt1
     }()
     
     func setupView(){
         backgroundColor = color.walletCellcolor()
         
+        addSubview(rankLabel)
         addSubview(coinImage)
         addSubview(coinLabel)
         addSubview(coinChange)
@@ -95,33 +123,42 @@ class WatchListCell:UICollectionViewCell{
         addSubview(coinNumber)
         addSubview(addWish)
         
-        addWish.addTarget(self, action: #selector(MarketCollectionViewCell.addOrRemoveWatch), for: .touchUpInside)
+        addWish.addTarget(self, action: #selector(addOrRemoveWatch), for: .touchUpInside)
         
         //coinImage
         //        self.layer.cornerRadius = self.frame.height / 4
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v3":coinChange,"v4":coinType,"v5":coinNumber]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v3":coinChange,"v4":coinType,"v5":coinNumber]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0(50)]-2-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1(20)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(20)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
+        NSLayoutConstraint(item: addWish, attribute: .centerX, relatedBy: NSLayoutRelation.equal, toItem: rankLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
         NSLayoutConstraint(item: coinImage, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: rankLabel, attribute: .top, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: .top, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: addWish, attribute: .bottom, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
-        //coinLabel
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-5-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v2":coinChange,"v3":coinType,"v4":coinNumber]))
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2]-5-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
         NSLayoutConstraint(item: coinLabel, attribute: .bottom, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        
-        //coinType
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-5-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v2":coinChange,"v3":coinType,"v4":coinNumber]))
+        NSLayoutConstraint(item: coinLabel, attribute: .top, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: .top, multiplier: 1, constant: 0).isActive = true
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2]-5-[v4]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
         NSLayoutConstraint(item: coinType, attribute: .top, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coinType, attribute: .bottom, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: NSLayoutAttribute.bottom, multiplier: 1, constant: 0).isActive = true
         
-        //coinChange
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2]-5-[v5]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v2":coinChange,"v3":coinType,"v4":coinNumber,"v5":addWish]))
-        NSLayoutConstraint(item: coinChange, attribute:.centerY , relatedBy: NSLayoutRelation.equal, toItem: coinLabel, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
         
-        //coinNunmber
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v4]-5-[v5]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v2":coinChange,"v3":coinType,"v4":coinNumber,"v5":addWish]))
-        NSLayoutConstraint(item: coinNumber, attribute:.centerY , relatedBy: NSLayoutRelation.equal, toItem: coinType, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v3]-5-[v5]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
+        NSLayoutConstraint(item: coinNumber, attribute: .bottom, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coinNumber, attribute: .top, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: .top, multiplier: 1, constant: 0).isActive = true
         
-        //addWish Button
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinLabel,"v2":coinChange,"v3":coinType,"v4":coinNumber,"v5":addWish]))
-        NSLayoutConstraint(item: addWish, attribute:.centerY , relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v4]-5-[v6]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":coinType,"v5":coinNumber,"v6":coinChange]))
+        NSLayoutConstraint(item: coinChange, attribute: .top, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coinChange, attribute: .bottom, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coinLabel, attribute: .left, relatedBy: NSLayoutRelation.equal, toItem: coinType, attribute: .left, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coinNumber, attribute: .right, relatedBy: NSLayoutRelation.equal, toItem: coinChange, attribute: .right, multiplier: 1, constant: 0).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -134,11 +171,13 @@ class WatchListCell:UICollectionViewCell{
         let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
         realm.beginWrite()
         if watchList.count == 1 {
-            addWish.setTitle("☆", for: .normal)
+//            addWish.setTitle("☆", for: .normal)
+            addWish.setClicked(false, animated: true)
             realm.delete(watchList[0])
         } else {
-            addWish.setTitle("★", for: .normal)
-            realm.create(WatchListRealm.self, value: [object!.coinAbbName])
+            addWish.setClicked(true, animated: true)
+//            addWish.setTitle("★", for: .normal)
+//            realm.create(WatchListRealm.self, value: [object!.coinAbbName,object?.coinName,object?.market,object?.tradingPairsName,object?.price,object?.profitChange])
         }
         try! realm.commitWrite()
         

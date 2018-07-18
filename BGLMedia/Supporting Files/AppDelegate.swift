@@ -25,11 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         application.statusBarStyle = .lightContent
         UITabBar.appearance().tintColor = .white
         UITabBar.appearance().barTintColor = ThemeColor().themeColor()
+//        UITabBar.appearance().isTranslucent = false
+        
         UINavigationBar.appearance().tintColor = ThemeColor().navigationBarColor()
         UINavigationBar.appearance().barTintColor = ThemeColor().navigationBarColor()
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().isTranslucent = false
+       
         
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in
@@ -136,11 +139,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("\(aps)")
     }
     
-//    func applicationDidBecomeActive(_ application: UIApplication) {
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
-//    }
-//    
+    func applicationDidBecomeActive(_ application: UIApplication) {
+       UIApplication.shared.applicationIconBadgeNumber = 0
+        let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+        
+        if email != "null" && certificateToken != "null" &&  deviceToken != "null"{
+                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
+                    if success{
+                        print(response)
+                    }
+                }
+        }
+    }
+//
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
     }
+    
 }

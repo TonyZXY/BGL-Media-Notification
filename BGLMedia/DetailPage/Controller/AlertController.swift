@@ -123,22 +123,27 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     
-    override func viewDidAppear(_ animated: Bool) {
-//        let alertStatus:[[String:Any]]?
-//
-//        for result in allAlerts{
-//            let alert:[String:Any] = ["_id":result.id,"status":result.switchStatus]
-//            alertStatus?.append(alert)
-//        }
-//        
-//        let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
-//        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterestStatus"], httpMethod: "POST", parameters: body) { (response, success) in
-//            if success{
-//                
-//            }
-//        }
+    override func viewDidDisappear(_ animated: Bool){
+        var alertStatus = [[String:Any]]()
+        print(realm.objects(alertObject.self))
+        var alla = allAlerts
+        for result in alla{
+            let alert:[String:Any] = ["id":result.id,"status":result.switchStatus]
+            alertStatus.append(alert)
+        }
         
-        
+        print(alertStatus)
+
+        if alertStatus.count != 0{
+            let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterestStatus"], httpMethod: "POST", parameters: body) { (response, success) in
+                if success{
+                    print(response)
+                } else{
+                    print(response)
+                }
+            }
+        }
     }
     
     @objc func refreshNotificationStatus(){
@@ -259,28 +264,26 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         //        let name = twoDimension[indexPath.section].name[indexPath.row]
       
         let object = alerts[indexPath.section].name[indexPath.row]
-        var compare:String = ""
-        if object.compareStatus == 1{
-            compare = ">"
-        }else if object.compareStatus == 2{
-            compare = "<"
-        } else {
-            compare = "="
-        }
-        
-        
-        
-        let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.price)
-        let coinDetail = object.exchangName + " - " + object.coinAbbName + "/" + object.tradingPairs
-        let dateToString = DateFormatter()
-        dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
-        dateToString.locale = Locale(identifier: "en_AU")
-        let timess = dateToString.string(from: object.dateTime)
-        cell.dateLabel.text = timess
-        cell.compareLabel.text = compareLabel
-        cell.coinDetailLabel.text = coinDetail
-        cell.swithButton.isOn = object.switchStatus
-        cell.alertObject = object
+//        var compare:String = ""
+//        if object.compareStatus == 1{
+//            compare = ">"
+//        }else if object.compareStatus == 2{
+//            compare = "<"
+//        } else {
+//            compare = "="
+//        }
+//
+//        let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.price)
+//        let coinDetail = object.exchangName + " - " + object.coinAbbName + "/" + object.tradingPairs
+//        let dateToString = DateFormatter()
+//        dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
+//        dateToString.locale = Locale(identifier: "en_AU")
+//        let timess = dateToString.string(from: object.dateTime)
+//        cell.dateLabel.text = timess
+//        cell.compareLabel.text = compareLabel
+//        cell.coinDetailLabel.text = coinDetail
+//        cell.swithButton.isOn = object.switchStatus
+        cell.object = object
         return cell
     }
     
@@ -542,9 +545,13 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                     self.writeRealm(json:response){(pass) in
                         if pass{
                             DispatchQueue.main.async {
+                                print(self.realm.objects(alertObject.self))
                                 self.alerts = self.allAlert
                                 self.alertTableView.reloadData()
                             }
+                        } else{
+                            self.alerts = self.allAlert
+                            self.alertTableView.reloadData()
                         }
                     }
                 }
@@ -581,6 +588,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             }
             completion(true)
         } else{
+            try! realm.write {
+                realm.delete(realm.objects(alertObject.self))
+            }
             completion(false)
         }
     }

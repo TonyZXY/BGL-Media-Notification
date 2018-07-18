@@ -25,6 +25,10 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         NotificationCenter.default.addObserver(self, selector: #selector(updateWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(refreshWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        print(realm.objects(WatchListRealm.self))
+    }
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
@@ -62,6 +66,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WatchListCell", for: indexPath) as! WatchListCell
             let object = watchListObjects[indexPath.row]
             cell.object = object
+            checkDataRiseFallColor(risefallnumber: object.profitChange, label: cell.coinChange, type: "PercentDown")
             return cell
         }else{
             return UICollectionViewCell()

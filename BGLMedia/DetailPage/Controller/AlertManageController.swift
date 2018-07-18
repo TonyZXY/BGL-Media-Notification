@@ -170,7 +170,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             fixLabel.translatesAutoresizingMaskIntoConstraints = false
             
             let priceLabel = UILabel()
-            priceLabel.text = self.scientificMethod(number: sectionPrice) + " " + intersetObject.tradingPairs
+            priceLabel.text = Extension.method.scientificMethod(number: sectionPrice) + " " + intersetObject.tradingPairs
             priceLabel.translatesAutoresizingMaskIntoConstraints = false
             sectionView.addSubview(fixLabel)
             sectionView.addSubview(priceLabel)
@@ -291,17 +291,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     @objc func deleteAlert(){
-//        let email = UserDefaults.standard.string(forKey: "UserEmail")!
-//        let token = UserDefaults.standard.string(forKey: "CertificateToken")!
-        
-        print(intersetObject.id)
-        
-        
-        
         let body:[String:Any] = ["email":email,"token":token,"interest":[["_id":intersetObject.id]]]
-        
-        
-        
         URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: body) { (response, success) in
             if success{
                 print(response)
@@ -323,28 +313,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 self.navigationController?.popViewController(animated: true)
             }
         }
-        
-        
-//        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: ["email":email,"token":token,"interests":[["_id":intersetObject.id]]]) { (json, pass) in
-//            if pass{
-//                let filterId = "id = '" + self.intersetObject.id + "' "
-//                let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "
-//
-//                let coinsAlert = self.realm.objects(alertObject.self).filter(filterName)
-//
-//                try! self.realm.write {
-//                    self.realm.delete(self.realm.objects(alertObject.self).filter(filterId))
-//                }
-//                if coinsAlert.count == 0{
-//                    try! self.realm.write {
-//                        self.realm.delete(self.realm.objects(alertCoinNames.self).filter(filterName))
-//                    }
-//                }
-//                self.navigationController?.popViewController(animated: true)
-//            } else{
-//                self.navigationController?.popViewController(animated: true)
-//            }
-//        }
     }
     
     lazy var alertTableView:UITableView = {
@@ -376,33 +344,37 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     @objc func addNewAlert(){
         if intersetObject.coinName != "" && intersetObject.tradingPairs != "" && intersetObject.tradingPairs != ""{
+            var compareStatus:Int = 0
+            let Inputprice = Double(inputPrice)!
+            if sectionPrice < Inputprice {
+                compareStatus = 1
+            } else {
+                compareStatus = 2
+            }
+            intersetObject.compare = Inputprice
+            intersetObject.compareStatus = compareStatus
+            print(Inputprice)
             if status == "Update"{
-                
-                print(intersetObject.id)
-                
                 let interest:[String:Any] = ["_id":intersetObject.id,"from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":intersetObject.compare,"isGreater":intersetObject.compareStatus]
                 let body:[String:Any] = ["email":email,"token":token,"interest":interest]
+                print(body)
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterest"], httpMethod: "POST", parameters: body) { (response, success) in
                     print(response)
                     if success{
+                        self.realm.beginWrite()
                         let realmData:[Any] = [self.intersetObject.id,self.intersetObject.coinName,self.intersetObject.coinAbbName,self.intersetObject.tradingPairs,self.intersetObject.exchangName,self.intersetObject.compare,self.intersetObject.compareStatus,self.intersetObject.switchStatus,Date()]
                         if self.realm.object(ofType: alertObject.self, forPrimaryKey: self.intersetObject.id) == nil {
                             self.realm.create(alertObject.self, value: realmData)
                         } else {
                             self.realm.create(alertObject.self, value: realmData, update: true)
                         }
+                        try! self.realm.commitWrite()
                     }
+                    self.navigationController?.popViewController(animated: true)
                 }
             } else{
-                var compareStatus:Int = 0
-                let Inputprice = Double(inputPrice)!
-                
-                if sectionPrice < Inputprice {
-                    compareStatus = 1
-                } else {
-                    compareStatus = 2
-                }
-                let inter:[String:Any] = ["from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":Inputprice,"isGreater":compareStatus]
+               
+                let inter:[String:Any] = ["from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":intersetObject.compare ,"isGreater":intersetObject.compareStatus]
                 let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
                 
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addInterest"], httpMethod: "POST", parameters: parameter) { (response, success) in

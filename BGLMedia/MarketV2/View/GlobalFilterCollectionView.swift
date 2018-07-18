@@ -29,14 +29,14 @@ class GlobalFilterCollectionView:UICollectionViewCell{
     
     override var isHighlighted: Bool {
         didSet {
-            label.textColor = isHighlighted ? UIColor.white : UIColor.gray
+            label.textColor = isHighlighted ? ThemeColor().themeWidgetColor() : UIColor.gray
         }
     }
     
     override var isSelected: Bool {
         didSet {
-            label.textColor = isSelected ? UIColor.black : UIColor.gray
-            self.backgroundColor = isSelected ? UIColor.white : ThemeColor().themeColor()
+            label.textColor = isSelected ? ThemeColor().whiteColor() : ThemeColor().textGreycolor()
+            self.backgroundColor = isSelected ? ThemeColor().themeWidgetColor() : ThemeColor().themeColor()
         }
     }
     

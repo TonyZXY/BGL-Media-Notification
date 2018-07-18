@@ -65,14 +65,14 @@ class GloabalController: UIViewController {
 //        generalPage.edit.isHidden = true
         generalPage.tradingPairs.text = coinDetail.coinName + "/" + priceType
         generalPage.market.text = "Global average"
-        generalPage.marketCapResult.text = currecyLogo[priceType]! + scientificMethod(number: GlobalData[0].marketCap )
-        generalPage.volumeResult.text = currecyLogo[priceType]! + scientificMethod(number: GlobalData[0].volume24 )
-        generalPage.circulatingSupplyResult.text = scientificMethod(number: GlobalData[0].circulatingSupply )
+        generalPage.marketCapResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].marketCap )
+        generalPage.volumeResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].volume24 )
+        generalPage.circulatingSupplyResult.text = Extension.method.scientificMethod(number: GlobalData[0].circulatingSupply )
         generalPage.coinSymbol = coinDetail.coinName
         general.coinAbbName = coinDetail.coinName
         coinDetailController.transactionHistoryController.generalData = general
         generalPage.defaultCurrencyLable.text = priceType
-        generalPage.totalNumber.text = currecyLogo[priceType]! + scientificMethod(number:GlobalData[0].price ?? 0.0)
+        generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:GlobalData[0].price ?? 0.0)
         
         
         coinDetailController.alertController.coinName.coinAbbName = general.coinAbbName

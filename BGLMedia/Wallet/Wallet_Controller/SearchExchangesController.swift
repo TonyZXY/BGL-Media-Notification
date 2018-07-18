@@ -92,7 +92,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         searchBar.returnKeyType = UIReturnKeyType.done
         searchBar.barTintColor = color.walletCellcolor()
         searchBar.tintColor = color.themeColor()
-        searchBar.backgroundColor = color.fallColor()
+        searchBar.backgroundColor = color.redColor()
         return searchBar
     }()
     

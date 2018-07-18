@@ -76,19 +76,15 @@ class TimelineTableViewController: UITableViewController {
 //    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         sectionArray = [Int](repeating: 0, count: dates.count)
         let resultSet = defaultLanguage == "CN" ? self.results : results.filter("languageTag='" + defaultLanguage + "'")
-        
         for result in resultSet{
             let date = result.dateTime.description.components(separatedBy: " ")[0]
             //get index of date in dates
             let sectionArrayIndex = dates.index(of: date)!
             sectionArray[sectionArrayIndex] += 1
         }
-
         return sectionArray[section]
-
     }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -289,18 +285,34 @@ class TimelineTableViewController: UITableViewController {
 
     
     func getNews(){
-//        self.cleanOldNewsFlash()
-        APIService.shardInstance.fetchFlashNews(language:defaultLanguage) { (searchResult) in
-            self.JSONtoData(json: searchResult)
-            DispatchQueue.main.async {
-//                let filterName = "languageTag = '" + self.defaultLanguage + "' "
-                self.results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)//.filter("languageTag='" + self.defaultLanguage + "'")
-                self.resultsUpdated = true
-//                print(self.results)
-                self.tableView.reloadData()
-//                print(self.results.count)
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","flash?languageTag=EN"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+            if success{
+                self.JSONtoData(json: response)
+                DispatchQueue.main.async {
+                //                let filterName = "languageTag = '" + self.defaultLanguage + "' "
+                                self.results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)//.filter("languageTag='" + self.defaultLanguage + "'")
+                                self.resultsUpdated = true
+                //                print(self.results)
+                                self.tableView.reloadData()
+                //                print(self.results.count)
+                            }
+            } else{
+                print(response)
             }
         }
+        
+        
+//        APIService.shardInstance.fetchFlashNews(language:defaultLanguage) { (searchResult) in
+//            self.JSONtoData(json: searchResult)
+//            DispatchQueue.main.async {
+////                let filterName = "languageTag = '" + self.defaultLanguage + "' "
+//                self.results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)//.filter("languageTag='" + self.defaultLanguage + "'")
+//                self.resultsUpdated = true
+////                print(self.results)
+//                self.tableView.reloadData()
+////                print(self.results.count)
+//            }
+//        }
     }
     
     private func JSONtoData(json: JSON) {
@@ -311,12 +323,12 @@ class TimelineTableViewController: UITableViewController {
             for item in collection {
                 let date = dateFormatter.date(from: item["publishedTime"].string!)
                 let id = "\(item["_id"].string!)"
+                let toSent = item["toSent"].bool ?? false
                 if realm.object(ofType: NewsFlash.self, forPrimaryKey: id) == nil {
-                    realm.create(NewsFlash.self, value: [id, date!, item["shortMassage"].string!,defaultLanguage])
+                    realm.create(NewsFlash.self, value: [id, date!, item["shortMassage"].string!,"EN",toSent])
                 } else {
-                    
 //                    print("updating")
-                    realm.create(NewsFlash.self, value: [id, date!, item["shortMassage"].string!], update: true)
+                    realm.create(NewsFlash.self, value: [id, date!, item["shortMassage"].string!,"EN",toSent], update: true)
                 }
             }
         }

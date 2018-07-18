@@ -133,11 +133,11 @@ class MarketsCoinTableViewCell:UITableViewCell{
             
             guard let percentChange = priceChange else { return }
             if percentChange > 0.0 {
-                coinChange.textColor = color.riseColor()
+                coinChange.textColor = color.greenColor()
             } else if percentChange == 0.0 {
                 coinChange.textColor = .white
             } else {
-                coinChange.textColor = color.fallColor()
+                coinChange.textColor = color.redColor()
             }
         }
     }
