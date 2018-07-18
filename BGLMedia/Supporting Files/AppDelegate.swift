@@ -25,11 +25,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         application.statusBarStyle = .lightContent
         UITabBar.appearance().tintColor = .white
         UITabBar.appearance().barTintColor = ThemeColor().themeColor()
+//        UITabBar.appearance().isTranslucent = false
+        
         UINavigationBar.appearance().tintColor = ThemeColor().navigationBarColor()
         UINavigationBar.appearance().barTintColor = ThemeColor().navigationBarColor()
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().isTranslucent = false
+       
         
         UNUserNotificationCenter.current().delegate = self
         UNUserNotificationCenter.current().requestAuthorization(options: [.alert, .badge, .sound]){ (granted, error) in

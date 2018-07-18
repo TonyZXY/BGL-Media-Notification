@@ -76,7 +76,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 cell.priceLabel.text = textValue(name: "sellPriceForm") + " " + newTransaction.tradingPairsName
             }
             if transactionStatus == "Update"{
-                cell.price.text = scientificMethod(number: newTransaction.singlePrice)
+                cell.price.text = Extension.method.scientificMethod(number: newTransaction.singlePrice)
             }
             cell.price.tag = indexPath.row
             cell.priceType.tag = 10
@@ -256,7 +256,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                         }
                         let index = IndexPath(row: 3, section: 0)
                         let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                        cell.price.text = self.scientificMethod(number: readData)
+                        cell.price.text = Extension.method.scientificMethod(number: readData)
                         self.newTransaction.singlePrice = Double(String(readData))!
                     //                                        self.textFieldDidEndEditing(cell.price)
                     case .failure(let error):
@@ -426,7 +426,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
 //            button.setTitle("更新交易", for: .normal)
 //        }
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = color.riseColor()
+        button.backgroundColor = color.greenColor()
         return button
     }()
     

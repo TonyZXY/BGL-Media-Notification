@@ -9,6 +9,12 @@
 import UIKit
 
 class ThemeColor:UIColor{
+    func whiteColor() -> UIColor {
+        _ = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
+        let color = UIColor.white
+        return color
+    }
+    
     func navigationBarColor() -> UIColor {
         _ = #colorLiteral(red: 0.1254901961, green: 0.1333333333, blue: 0.1450980392, alpha: 1)
         let color = UIColor.init(red:32/255.0, green:34/255.0, blue:37/255.0, alpha:1)
@@ -21,45 +27,9 @@ class ThemeColor:UIColor{
         return color
     }
     
-    func riseColor() -> UIColor {
-        _ = #colorLiteral(red: 0.1450980392, green: 0.6078431373, blue: 0.1411764706, alpha: 1)
-        let color = UIColor.init(red:115/255.0, green:216/255.0, blue:109/255.0, alpha:1)
-        return color
-    }
-  
-    func fallColor() -> UIColor {
-        _ = #colorLiteral(red: 0.8980392157, green: 0.1098039216, blue: 0.137254902, alpha: 1)
-        let color = UIColor.init(red:229.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:1)
-        return color
-    }
-    
-    func walletCellcolor() -> UIColor {
-        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
-        let color = UIColor.init(red:54/255.0, green:57/255.0, blue:62/255.0, alpha:1)
-        return color
-    }
-    
-    func textGreycolor() -> UIColor {
-        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
-        let color = UIColor.init(red:153/255.0, green:153/255.0, blue:153/255.0, alpha:1)
-        return color
-    }
-    
-    func themeWidgetColor() -> UIColor{
-        _ = #colorLiteral(red: 0.2117647059, green: 0.8666666667, blue: 0.6705882353, alpha: 1)
-        let color = UIColor.init(red:54/255.0, green:221/255.0, blue:171/255.0, alpha:1)
-        return color
-    }
-    
     func greenColor() -> UIColor {
         _ = #colorLiteral(red: 0.1450980392, green: 0.6078431373, blue: 0.1411764706, alpha: 1)
         let color = UIColor.init(red:115/255.0, green:216/255.0, blue:109/255.0, alpha:1)
-        return color
-    }
-    
-    func greenTransColor() -> UIColor {
-        _ = #colorLiteral(red: 0.1450980392, green: 0.6078431373, blue: 0.1411764706, alpha: 0.5)
-        let color = UIColor.init(red:37/255.0, green:155/255.0, blue:36/255.0, alpha:0.8)
         return color
     }
     
@@ -69,11 +39,57 @@ class ThemeColor:UIColor{
         return color
     }
     
-    func redTransColor() -> UIColor {
-        _ = #colorLiteral(red: 0.8980392157, green: 0.1098039216, blue: 0.137254902, alpha: 0.5)
-        let color = UIColor.init(red:229.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:0.8)
+    func themeWidgetColor() -> UIColor{
+        _ = #colorLiteral(red: 0.2117647059, green: 0.8666666667, blue: 0.6705882353, alpha: 1)
+        let color = UIColor.init(red:54/255.0, green:221/255.0, blue:171/255.0, alpha:1)
         return color
     }
+    
+    func textGreycolor() -> UIColor {
+        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
+        let color = UIColor.init(red:153/255.0, green:153/255.0, blue:153/255.0, alpha:1)
+        return color
+    }
+    
+    func walletCellcolor() -> UIColor {
+        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
+        let color = UIColor.init(red:54/255.0, green:57/255.0, blue:62/255.0, alpha:1)
+        return color
+    }
+    
+    
+    
+    
+    
+ //////////////////
+//    func riseColor() -> UIColor {
+//        _ = #colorLiteral(red: 0.1450980392, green: 0.6078431373, blue: 0.1411764706, alpha: 1)
+//        let color = UIColor.init(red:115/255.0, green:216/255.0, blue:109/255.0, alpha:1)
+//        return color
+//    }
+//
+//    func fallColor() -> UIColor {
+//        _ = #colorLiteral(red: 0.8980392157, green: 0.1098039216, blue: 0.137254902, alpha: 1)
+//        let color = UIColor.init(red:229.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:1)
+//        return color
+//    }
+    
+    
+    
+    
+
+//    func greenTransColor() -> UIColor {
+//        _ = #colorLiteral(red: 0.1450980392, green: 0.6078431373, blue: 0.1411764706, alpha: 0.5)
+//        let color = UIColor.init(red:37/255.0, green:155/255.0, blue:36/255.0, alpha:0.8)
+//        return color
+//    }
+    
+
+//    func redTransColor() -> UIColor {
+//        _ = #colorLiteral(red: 0.8980392157, green: 0.1098039216, blue: 0.137254902, alpha: 0.5)
+//        let color = UIColor.init(red:229.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:0.8)
+//        return color
+//    }
     
     func bglColor() -> UIColor {
         _ = #colorLiteral(red: 0.2078431373, green: 0.8549019608, blue: 0.7254901961, alpha: 0.5)

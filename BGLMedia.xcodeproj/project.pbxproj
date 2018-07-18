@@ -200,12 +200,33 @@
 		57355C8720F71931002E70E4 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C8620F71931002E70E4 /* ThemeColor.swift */; };
 		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 		573C96AB20EF068A00B667AB /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AA20EF068A00B667AB /* Extension.swift */; };
+		5752745620FEBB0200562060 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; };
+		5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		5752745820FEBB0200562060 /* WCLShineButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420620FEB81B0052EE02 /* WCLShineButton.framework */; };
+		5752745920FEBB0200562060 /* WCLShineButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420620FEB81B0052EE02 /* WCLShineButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
 		57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */; };
 		57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FA20FB00320052EE02 /* CurrencyController.swift */; };
 		57FC41FD20FB08560052EE02 /* LanguageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FC20FB08560052EE02 /* LanguageController.swift */; };
 		57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC420420FDC7260052EE02 /* FlashSearchController.swift */; };
+		57FC420720FEB81B0052EE02 /* WCLShineButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420620FEB81B0052EE02 /* WCLShineButton.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		57FC420920FEB8230052EE02 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		5752745A20FEBB0200562060 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */,
+				5752745920FEBB0200562060 /* WCLShineButton.framework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
@@ -411,6 +432,8 @@
 		57FC420120FBA02A0052EE02 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/Main.strings; sourceTree = "<group>"; };
 		57FC420320FBA0310052EE02 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "../zh-Hans-CN.lproj/Main.strings"; sourceTree = "<group>"; };
 		57FC420420FDC7260052EE02 /* FlashSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashSearchController.swift; sourceTree = "<group>"; };
+		57FC420620FEB81B0052EE02 /* WCLShineButton.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WCLShineButton.framework; path = Carthage/Build/iOS/WCLShineButton.framework; sourceTree = "<group>"; };
+		57FC420820FEB8230052EE02 /* RevealingSplashView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RevealingSplashView.framework; path = Carthage/Build/iOS/RevealingSplashView.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -418,13 +441,17 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				57FC420920FEB8230052EE02 /* RevealingSplashView.framework in Frameworks */,
 				3D1332EA20E9FA5700D3CAE6 /* SwiftyJSON.framework in Frameworks */,
 				3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */,
 				3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */,
+				5752745620FEBB0200562060 /* RevealingSplashView.framework in Frameworks */,
 				3D1332ED20E9FA5700D3CAE6 /* Realm.framework in Frameworks */,
 				3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */,
 				3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */,
+				5752745820FEBB0200562060 /* WCLShineButton.framework in Frameworks */,
 				3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */,
+				57FC420720FEB81B0052EE02 /* WCLShineButton.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -549,7 +576,6 @@
 			children = (
 				2D52AE2420E46E1800018FC0 /* MarketsTotalView.swift */,
 				2D52AE2520E46E1800018FC0 /* MarketFilterCollectionView.swift */,
-				2D52AE2620E46E1800018FC0 /* MenuBar.swift */,
 				2D52AE2720E46E1800018FC0 /* MarketsCell.swift */,
 				2D52AE2820E46E1800018FC0 /* MarketsCoinTableViewCell.swift */,
 				2D52AE2920E46E1800018FC0 /* MarketView.swift */,
@@ -1057,6 +1083,7 @@
 		57355C7520F718F8002E70E4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2D52AE2620E46E1800018FC0 /* MenuBar.swift */,
 				57355C7620F718F8002E70E4 /* MarketsView.swift */,
 				57355C7720F718F8002E70E4 /* TotalMarketCell.swift */,
 				57355C7820F718F8002E70E4 /* GlobalFilterCollectionView.swift */,
@@ -1131,6 +1158,8 @@
 		F249FBEA6AE0F53C3BA5FC1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				57FC420820FEB8230052EE02 /* RevealingSplashView.framework */,
+				57FC420620FEB81B0052EE02 /* WCLShineButton.framework */,
 				3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */,
 				3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */,
 				3D1332E820E9FA5600D3CAE6 /* Reachability.framework */,
@@ -1153,6 +1182,7 @@
 				2D6F5EFA20E324D4006264BB /* Frameworks */,
 				2D6F5EFB20E324D4006264BB /* Resources */,
 				3D1332F120E9FA9300D3CAE6 /* ShellScript */,
+				5752745A20FEBB0200562060 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);

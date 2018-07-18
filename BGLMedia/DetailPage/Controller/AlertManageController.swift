@@ -170,7 +170,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             fixLabel.translatesAutoresizingMaskIntoConstraints = false
             
             let priceLabel = UILabel()
-            priceLabel.text = self.scientificMethod(number: sectionPrice) + " " + intersetObject.tradingPairs
+            priceLabel.text = Extension.method.scientificMethod(number: sectionPrice) + " " + intersetObject.tradingPairs
             priceLabel.translatesAutoresizingMaskIntoConstraints = false
             sectionView.addSubview(fixLabel)
             sectionView.addSubview(priceLabel)

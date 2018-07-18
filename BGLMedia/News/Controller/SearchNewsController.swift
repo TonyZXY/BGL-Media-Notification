@@ -270,7 +270,7 @@ class SearchNewsController: UIViewController,UICollectionViewDelegate,UICollecti
         searchBar.returnKeyType = UIReturnKeyType.done
         searchBar.barTintColor = ThemeColor().walletCellcolor()
         searchBar.tintColor = ThemeColor().themeColor()
-        searchBar.backgroundColor = ThemeColor().fallColor()
+        searchBar.backgroundColor = ThemeColor().redColor()
         return searchBar
     }()
     

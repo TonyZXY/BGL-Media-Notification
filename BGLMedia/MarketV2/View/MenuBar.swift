@@ -47,14 +47,14 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     var horizontalBarLeftAnchorConstraint:NSLayoutConstraint?
     func setHorizontalBar(){
         let horizontalBarView = UIView()
-        horizontalBarView.backgroundColor = UIColor.white
+        horizontalBarView.backgroundColor = ThemeColor().themeWidgetColor()
         addSubview(horizontalBarView)
         horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
         horizontalBarLeftAnchorConstraint = horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor)
         horizontalBarLeftAnchorConstraint?.isActive = true
         horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor,multiplier:1/2).isActive = true
-        horizontalBarView.heightAnchor.constraint(equalToConstant: 5).isActive = true
+        horizontalBarView.heightAnchor.constraint(equalToConstant: 3).isActive = true
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -89,19 +89,19 @@ class MenuCell: UICollectionViewCell{
     var color = ThemeColor()
     let menuLabel:UILabel = {
         let menuLabel = UILabel()
-        menuLabel.textColor = UIColor.gray
+        menuLabel.textColor = ThemeColor().textGreycolor()
         return menuLabel
     }()
     
     override var isHighlighted: Bool {
         didSet {
-            menuLabel.textColor = isHighlighted ? UIColor.white : UIColor.gray
+            menuLabel.textColor = isHighlighted ? ThemeColor().themeWidgetColor() : ThemeColor().textGreycolor()
         }
     }
     
     override var isSelected: Bool {
         didSet {
-            menuLabel.textColor = isSelected ? UIColor.white : UIColor.gray
+            menuLabel.textColor = isSelected ? ThemeColor().themeWidgetColor() : ThemeColor().textGreycolor()
         }
     }
     

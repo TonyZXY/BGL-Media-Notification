@@ -61,13 +61,13 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     var coinGainersObjects:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self)
+            return realm.objects(GlobalAverageObject.self).sorted(byKeyPath: filterItem[filterOption], ascending: false)
         }
     }
     
     var coinLosersObjects:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self)
+            return realm.objects(GlobalAverageObject.self).sorted(byKeyPath: filterItem[filterOption], ascending: true)
         }
     }
     
@@ -160,7 +160,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortCoin]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v0(50)]-[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortCoin]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v0(80)]-[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortCoin]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v1(\(view.frame.width/2-20))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortCoin]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView]))
@@ -170,7 +170,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         
         NSLayoutConstraint(item: filterDate, attribute: .centerY, relatedBy: .equal, toItem: sortCoin, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":searchBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":searchBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v1]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":searchBar]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
@@ -201,8 +201,8 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     let sortCoin:UITextField={
         var sort = UITextField()
         sort.tintColor = .clear
-        sort.layer.borderColor = UIColor.white.cgColor
-        sort.textColor = UIColor.white
+//        sort.layer.borderColor = UIColor.white.cgColor
+        sort.textColor = ThemeColor().textGreycolor()
         sort.translatesAutoresizingMaskIntoConstraints = false
         return sort
     }()
@@ -259,6 +259,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     @objc func sortdoneclick(){
         let row = sortPickerView.selectedRow(inComponent: 0)
         sortCoin.text = "▼ "+pickerRow[row]
+        
         view.endEditing(true)
         self.coinList.reloadData()
     }
@@ -311,7 +312,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
                 object = filterObject[indexPath.row]
             }
             cell.object = object
-            cell.coinChange.text = String([object.percent7d,object.percent24h,object.percent1h][filterOption])
+            checkDataRiseFallColor(risefallnumber: [object.percent7d,object.percent24h,object.percent1h][filterOption], label: cell.coinChange, type: "PercentDown")
             return cell
         }else{
             return UICollectionViewCell()
@@ -320,7 +321,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         if collectionView == mainTotalCollectionView{
-            return CGSize(width:(mainTotalCollectionView.frame.width-10) / 3, height: mainTotalCollectionView.frame.height)
+            return CGSize(width:(mainTotalCollectionView.frame.width) / 3, height: mainTotalCollectionView.frame.height)
         } else if collectionView == filterDate{
            return CGSize(width: 50, height: 20)
         } else if collectionView == coinList{
@@ -384,6 +385,9 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()
     }
+    
+    
+    
     
 //    func collectionView(_ collectionView: UICollectionView, didHighlightItemAt indexPath: IndexPath) {
 //        if indexPath.row == 0{

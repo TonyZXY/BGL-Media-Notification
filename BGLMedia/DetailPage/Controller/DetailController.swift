@@ -56,7 +56,7 @@ class DetailController: UIViewController{
         super.viewWillAppear(animated)
         refreshPage()
         refreshData()
-        self.tabBarController?.tabBar.isHidden = true
+//        self.tabBarController?.tabBar.isHidden = true
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
     }
@@ -74,7 +74,7 @@ class DetailController: UIViewController{
         generalPage.coinSymbol = coinDetails.selectCoinAbbName
         for value in selectItem{
             checkDataRiseFallColor(risefallnumber: value.totalRiseFall, label: allLossView.profitLoss,type:"Number")
-            mainView.portfolioResult.text = scientificMethod(number:value.coinAmount) + " " + value.coinAbbName            
+            mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.coinAmount) + " " + value.coinAbbName            
             checkDataRiseFallColor(risefallnumber: value.totalPrice, label: mainView.marketValueRsult, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.transactionPrice, label: mainView.netCostResult, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.singlePrice, label:  generalPage.totalNumber, type: "Default")

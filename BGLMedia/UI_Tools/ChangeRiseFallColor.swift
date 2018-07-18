@@ -35,35 +35,4 @@ var currencyName:[String:String] {
     }
 }
 
-extension UIViewController{
-    func checkDataRiseFallColor(risefallnumber: Double,label:UILabel,type:String) {
-//        let currecyLogo = ["AUD":"A$","JPY":"JP¥","USD":"$","CNY":"RMB¥","EUR":"€"]
-        
-        if type == "Default"{
-            label.textColor = UIColor.white
-            label.text = currecyLogo[priceType]! + scientificMethod(number: risefallnumber)
-        } else {
-            if String(risefallnumber).prefix(1) == "-" {
-                // lost with red
-                label.textColor = ThemeColor().fallColor()
-                if type == "Percent"{
-                    label.text = scientificMethod(number: risefallnumber) + "%"
-                } else{
-                    label.text = "▼ " + currecyLogo[priceType]! + scientificMethod(number: risefallnumber)
-                }
-            } else if String(risefallnumber) == "0.0"{
-                // Not any change with white
-                label.text = "--"
-                label.textColor = UIColor.white
-            } else {
-                //Profit with green
-                label.textColor = ThemeColor().riseColor()
-                if type == "Percent"{
-                    label.text =  scientificMethod(number: risefallnumber) + "%"
-                } else{
-                    label.text = "▲ " + currecyLogo[priceType]! + scientificMethod(number: risefallnumber)
-                }
-            }
-        }
-    }
-}
+

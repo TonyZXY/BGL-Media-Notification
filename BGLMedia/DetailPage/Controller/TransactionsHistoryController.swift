@@ -46,10 +46,10 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.labelPoint.layer.backgroundColor = ThemeColor().greenColor().cgColor
             cell.dateLabel.text = object.date + " " + object.time
             cell.buyMarket.text = textValue(name: "tradingMarket_history") + ":" + object.exchangName
-            cell.SinglePriceResult.text = scientificMethod(number:object.audSinglePrice)
+            cell.SinglePriceResult.text = Extension.method.scientificMethod(number:object.audSinglePrice)
             cell.tradingPairsResult.text = object.coinAbbName + "/" + object.tradingPairsName
-            cell.amountResult.text = scientificMethod(number:object.amount)
-            cell.costResult.text = scientificMethod(number:object.audTotalPrice)
+            cell.amountResult.text = Extension.method.scientificMethod(number:object.amount)
+            cell.costResult.text = Extension.method.scientificMethod(number:object.audTotalPrice)
             cell.buyDeleteButton.tag = object.id
             cell.buyDeleteButton.addTarget(self, action: #selector(deleteTransaction), for: .touchUpInside)
             let filterName = "coinAbbName = '" + object.coinAbbName + "' "
@@ -58,9 +58,9 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             for value in currentWorth{
                 currentWorthData = value.singlePrice * object.amount
             }
-            cell.worthResult.text = scientificMethod(number:currentWorthData)
+            cell.worthResult.text = Extension.method.scientificMethod(number:currentWorthData)
             let delta = ((currentWorthData - object.totalPrice) / object.totalPrice) * 100
-            cell.deltaResult.text = scientificMethod(number:delta) + "%"
+            cell.deltaResult.text = Extension.method.scientificMethod(number:delta) + "%"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
             return cell
@@ -73,10 +73,10 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.labelPoint.text = "S"
             cell.labelPoint.layer.backgroundColor = ThemeColor().redColor().cgColor
             cell.sellDateLabel.text = object.date + " " + object.time
-            cell.sellPriceResult.text = scientificMethod(number:object.singlePrice)
+            cell.sellPriceResult.text = Extension.method.scientificMethod(number:object.singlePrice)
             cell.sellTradingPairResult.text = object.coinAbbName + "/" + object.tradingPairsName
-            cell.sellAmountResult.text = scientificMethod(number:object.amount)
-            cell.sellProceedsResult.text = scientificMethod(number:object.totalPrice)
+            cell.sellAmountResult.text = Extension.method.scientificMethod(number:object.amount)
+            cell.sellProceedsResult.text = Extension.method.scientificMethod(number:object.totalPrice)
             cell.sellDeleteButton.tag = object.id
             cell.sellDeleteButton.addTarget(self, action: #selector(deleteTransaction), for: .touchUpInside)
             return cell

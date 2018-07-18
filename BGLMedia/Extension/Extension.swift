@@ -50,4 +50,66 @@ class Extension:NSObject{
         }
     }
     
+    
+    func scientificMethod(number:Double)->String{
+        var value:String = ""
+        var getNumber:String =  String(number)
+        
+        if number == 0.0{
+            value = "--"
+        } else{
+            if getNumber.prefix(1) != "-" {
+                getNumber = "+" + getNumber
+            }
+            
+            if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 2)] == "."{
+                if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 1)] == "0"{
+//                   value = String(format:"%.6f",number)
+                    value = String(format:"%.3f",number)
+                } else{
+                    value = String(format:"%.2f",number)
+                }
+            } else{
+                value = String(format:"%.2f",number)
+            }
+        }
+        return value
+    }
+}
+
+extension UIViewController{
+    func checkDataRiseFallColor(risefallnumber: Double,label:UILabel,type:String) {
+        //        let currecyLogo = ["AUD":"A$","JPY":"JP¥","USD":"$","CNY":"RMB¥","EUR":"€"]
+        
+        if type == "Default"{
+            label.textColor = UIColor.white
+            label.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: risefallnumber)
+        } else {
+            if String(risefallnumber).prefix(1) == "-" {
+                // lost with red
+                label.textColor = ThemeColor().redColor()
+                if type == "Percent"{
+                    label.text = Extension.method.scientificMethod(number: risefallnumber) + "%"
+                } else if type == "PercentDown"{
+                    label.text =  "▼ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+                } else{
+                    label.text = "▼ " + currecyLogo[priceType]! + Extension.method.scientificMethod(number: risefallnumber)
+                }
+            } else if String(risefallnumber) == "0.0"{
+                // Not any change with white
+                label.text = "--"
+                label.textColor = UIColor.white
+            } else {
+                //Profit with green
+                label.textColor = ThemeColor().greenColor()
+                if type == "Percent"{
+                    label.text =  Extension.method.scientificMethod(number: risefallnumber) + "%"
+                } else if type == "PercentDown"{
+                    label.text =  "▲ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+                } else{
+                    label.text = "▲ " + currecyLogo[priceType]! + Extension.method.scientificMethod(number: risefallnumber)
+                }
+            }
+        }
+    }
 }

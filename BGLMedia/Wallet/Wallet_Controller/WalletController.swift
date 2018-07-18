@@ -64,12 +64,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     //Every Time the Page appear will active this method
-    override func viewWillAppear(_ animated: Bool) {
-//        checkTransaction()
-//        setWalletData()
-//        reloadData()
-        tabBarController?.tabBar.isHidden = false
-    }
+//    override func viewWillAppear(_ animated: Bool) {
+////        checkTransaction()
+////        setWalletData()
+////        reloadData()
+//        tabBarController?.tabBar.isHidden = false
+//    }
     
     // Refresh Table View Data
     
@@ -219,13 +219,14 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     
     func caculateTotal(){
-        totalNumber.text = currencyName[priceType]! + self.scientificMethod(number: totalAssets)
+        totalNumber.text = currencyName[priceType]! + Extension.method.scientificMethod(number: totalAssets)
         self.checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange, type: "Number")
     }
     
     //Click Add Transaction Button Method
     @objc func changetotransaction(){
         let transaction = TransactionsController()
+        transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
     }
     
@@ -271,11 +272,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }()
     
     func setUpBasicView(){
-        view.backgroundColor = color.themeColor()
+        view.backgroundColor = ThemeColor().navigationBarColor()
         //NavigationBar
-        let titilebarlogo = UIImageView(frame: CGRect(x: 0, y: 0, width: 25, height: 25))
+        let titilebarlogo = UIImageView()
         titilebarlogo.image = image.logoImage()
         titilebarlogo.contentMode = .scaleAspectFit
+        titilebarlogo.clipsToBounds = true
         navigationItem.titleView = titilebarlogo
     }
     
@@ -355,7 +357,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
         //        Total Profit View Constraints(总资产)
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v0(150)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0(150)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
         
         NSLayoutConstraint(item: totalLabel, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
@@ -485,7 +487,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     lazy var buttonView:UIView = {
         var view = UIView()
-        view.backgroundColor = color.themeColor()
+        view.backgroundColor = ThemeColor().navigationBarColor()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -542,9 +544,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         var button = UIButton()
         button.setTitle("➕", for: .normal)
         button.titleLabel?.font = button.titleLabel?.font.withSize(25)
-        button.tintColor = UIColor.black
+        button.tintColor = ThemeColor().themeColor()
         button.layer.cornerRadius = 25
-        button.backgroundColor = UIColor.white
+        button.backgroundColor = ThemeColor().themeWidgetColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(changetotransaction), for: .touchUpInside)
         return button
@@ -553,7 +555,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     lazy var walletList:UITableView = {
         var collectionView = UITableView()
         collectionView.separatorStyle = .none
-        collectionView.backgroundColor = color.themeColor()
+        collectionView.backgroundColor = ThemeColor().themeColor()
         collectionView.register(WalletsCell.self, forCellReuseIdentifier: "WalletCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.rowHeight = 100
