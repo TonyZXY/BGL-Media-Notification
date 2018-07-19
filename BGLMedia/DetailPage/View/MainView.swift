@@ -70,7 +70,7 @@ class MainView:UIView{
     var portfolio:UILabel = {
         var label = UILabel()
         label.font = label.font.withSize(18)
-        label.textColor = UIColor.white
+        label.textColor = ThemeColor().textGreycolor()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -89,7 +89,7 @@ class MainView:UIView{
         var label = UILabel()
         label.font = label.font.withSize(18)
         label.textAlignment = .center
-        label.textColor = UIColor.white
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -107,7 +107,7 @@ class MainView:UIView{
         var label = UILabel()
         label.font = label.font.withSize(18)
         label.textAlignment = .center
-        label.textColor = UIColor.white
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

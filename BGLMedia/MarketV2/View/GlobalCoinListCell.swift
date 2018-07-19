@@ -29,17 +29,20 @@ class GlobalCoinListCell:UICollectionViewCell{
             coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
             coinType.text = textValue(name: "globalAverage_market")
 //            coinChange.text = object?.percent7d
+            rankLabel.text = String((object?.rank)!)
             coinImage.coinImageSetter(coinName: (object?.coinAbbName)!)
             
             let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
             if watchList.count == 1 {
+                addWish.setTitleColor(ThemeColor().blueColor(), for: .normal)
 //                addWish.setTitle("★", for: .normal)
-                addWish.setClicked(true, animated: false)
+//                addWish.setClicked(true, animated: false)
 //                addWish.color = ThemeColor().themeWidgetColor()
             } else {
+                addWish.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
 //                addWish.color = ThemeColor().textGreycolor()
 //                addWish.setTitle("☆", for: .normal)
-                addWish.setClicked(false, animated: false)
+//                addWish.setClicked(false, animated: false)
             }
         }
     }
@@ -104,21 +107,22 @@ class GlobalCoinListCell:UICollectionViewCell{
         return label
     }()
     
-    let addWish:WCLShineButton = {
-        var param1 = WCLShineParams()
-        param1.bigShineColor = ThemeColor().themeWidgetColor()
-        param1.smallShineColor = ThemeColor().themeWidgetColor()
-        let bt1 = WCLShineButton(frame: .init(x:0, y:0, width: 20, height: 20), params: param1)
-        bt1.fillColor = ThemeColor().themeWidgetColor()
-        bt1.color = ThemeColor().textGreycolor()
-        bt1.translatesAutoresizingMaskIntoConstraints = false
-        bt1.image = .star
+    let addWish:UIButton = {
+//        var param1 = WCLShineParams()
+//        param1.bigShineColor = ThemeColor().themeWidgetColor()
+//        param1.smallShineColor = ThemeColor().themeWidgetColor()
+//        let bt1 = WCLShineButton(frame: .init(x:0, y:0, width: 20, height: 20), params: param1)
+//        bt1.fillColor = ThemeColor().themeWidgetColor()
+//        bt1.color = ThemeColor().textGreycolor()
+//        bt1.translatesAutoresizingMaskIntoConstraints = false
+//        bt1.image = .star
 
-//        let button = UIButton()
-//        button.setTitle("☆", for: .normal)
-//        button.setTitleColor(UIColor.yellow, for: .normal)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-        return bt1
+        let button = UIButton()
+        button.setTitle("★", for: .normal)
+        button.titleLabel?.font = button.titleLabel?.font.withSize(20)
+        button.setTitleColor(ThemeColor().blueColor(), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
     
     func setupView(){
@@ -207,15 +211,17 @@ class GlobalCoinListCell:UICollectionViewCell{
         realm.beginWrite()
         if watchList.count == 1 {
 //            addWish.setClicked(false)
-            addWish.setClicked(false, animated: true)
+//            addWish.setClicked(false, animated: true)
 //            addWish.color = ThemeColor().textGreycolor()
 //            addWish.setTitle("☆", for: .normal)
+            addWish.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
             realm.delete(watchList[0])
         } else {
 //            addWish.setClicked(true)
-            addWish.setClicked(true, animated: true)
+//            addWish.setClicked(true, animated: true)
 //            addWish.setTitle("★", for: .normal)
-            realm.create(WatchListRealm.self, value: [object!.coinAbbName, object!.coinName,"GlobalAverage",priceType,object!.price,object!.percent24h])
+            addWish.setTitleColor(ThemeColor().blueColor(), for: .normal)
+            realm.create(WatchListRealm.self, value: [object!.coinAbbName, object!.coinName,"Global Average",priceType,object!.price,object!.percent24h])
         }
         try! realm.commitWrite()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)

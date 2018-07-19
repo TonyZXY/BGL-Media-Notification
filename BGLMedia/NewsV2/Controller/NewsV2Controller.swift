@@ -9,6 +9,7 @@
 import UIKit
 import RealmSwift
 import SwiftyJSON
+import SafariServices
 
 class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelegate{
     let realm = try! Realm()
@@ -42,20 +43,17 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         if indexPath.row == lastItem && displayNumber <= newsObject.count{
             print(displayNumber)
                 if displayNumber != 0{
-                    
+                    self.displayNumber += 5
                     getData(skip: displayNumber, limit: 5){ success in
                         if success{
                             DispatchQueue.main.async {
-                                self.displayNumber += 5
                                 self.newsTableView.reloadData()
                                 //                            self.refresher.endRefreshing()
                             }
                         }
                     }
                 }
-            
             }
-            
             if displayNumber >= newsObject.count {
                 spinner.stopAnimating()
             }
@@ -85,9 +83,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+        self.displayNumber += 5
         getData(skip:0,limit: 5){ success in
             if success{
-                self.displayNumber += 5
                 self.newsTableView.reloadData()
             }
         }
@@ -123,6 +121,19 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             return cell
         } else{
             return cell
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let object = newsObject[indexPath.row]
+        
+        let urlString = object.url
+        if let url = URL(string: urlString!) {
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            vc.hidesBottomBarWhenPushed = true
+            vc.accessibilityNavigationStyle = .separate
+            
+            navigationController?.pushViewController(vc, animated: true)
         }
     }
 
@@ -238,3 +249,4 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             return refreshControl
     }()
 }
+

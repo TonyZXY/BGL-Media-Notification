@@ -55,7 +55,6 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         self.tableView00.reloadData()
-        self.tabBarController?.tabBar.isHidden = false
     }
     
     @objc func changeLanguage(){

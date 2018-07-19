@@ -38,7 +38,10 @@ class GerneralController: UIViewController {
     func setUpView(){
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(mainViews)
+
         mainViews.addSubview(scrollView)
+        scrollView.addSubview(graphLabel)
+        scrollView.addSubview(globalMarketLabel)
         scrollView.addSubview(FirstView)
         scrollView.addSubview(SecondView)
         scrollView.addSubview(ImageView)
@@ -46,7 +49,7 @@ class GerneralController: UIViewController {
 
         FirstView.addSubview(spinner)
         FirstView.addSubview(totalNumber)
-        FirstView.addSubview(defaultCurrencyLable)
+//        FirstView.addSubview(defaultCurrencyLable)
         FirstView.addSubview(totalRiseFall)
         FirstView.addSubview(totalRiseFallPercent)
 
@@ -63,72 +66,114 @@ class GerneralController: UIViewController {
         mainViews.addConstraintsWithFormat(format: "H:|[v0]|", views: scrollView)
         mainViews.addConstraintsWithFormat(format: "V:|[v0]|", views: scrollView)
 
-        //Frist View constraint
-        scrollView.addConstraintsWithFormat(format: "H:|[v0]|", views: FirstView)
-        scrollView.addConstraintsWithFormat(format: "V:|-10-[v0(80)]", views: FirstView)
-        NSLayoutConstraint(item: FirstView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        
-
-        //Second View constraint
-        scrollView.addConstraintsWithFormat(format: "H:|[v1]|", views: FirstView,SecondView)
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-5-[v1(50)]", views: FirstView,SecondView)
+        //Market View constraint
+        scrollView.addConstraintsWithFormat(format: "H:|-15-[v0]-15-|", views: SecondView)
+        scrollView.addConstraintsWithFormat(format: "V:|-5-[v0(50)]", views: SecondView)
         NSLayoutConstraint(item: SecondView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-
-        //Image View constraint
-        ImageView.frame.size.width = view.frame.size.width-20
-        scrollView.addConstraintsWithFormat(format: "H:[v1(\(view.frame.size.width-20))]", views: SecondView,ImageView)
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-5-[v1(200)]", views: SecondView,ImageView)
+        
+        //Market View
+        NSLayoutConstraint(item: market, attribute: .bottom, relatedBy: .equal, toItem: SecondView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: tradingPairs, attribute: .top, relatedBy: .equal, toItem: SecondView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: market, attribute: .centerX, relatedBy: .equal, toItem: SecondView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: tradingPairs, attribute: .centerX, relatedBy: .equal, toItem: SecondView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        
+        NSLayoutConstraint(item: edit, attribute: .right, relatedBy: .equal, toItem: SecondView, attribute: .right, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: edit, attribute: .centerY, relatedBy: .equal, toItem: SecondView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        
+        
+        //Price View constraint
+        scrollView.addConstraintsWithFormat(format: "H:|-15-[v0]-15-|", views: FirstView)
+        scrollView.addConstraintsWithFormat(format: "V:[v1]-5-[v0(80)]", views: FirstView,SecondView)
+        NSLayoutConstraint(item: FirstView, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: totalNumber, attribute: .bottom, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: totalNumber, attribute: .centerX, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: totalRiseFall, attribute: .top, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: totalRiseFallPercent, attribute: .top, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: totalRiseFall, attribute: .right, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: totalRiseFallPercent, attribute: .left, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+         NSLayoutConstraint(item: spinner, attribute: .right, relatedBy: .equal, toItem: FirstView, attribute: .right, multiplier: 1, constant: -10).isActive = true
+        NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        
+        //Graph
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1]", views: FirstView,graphLabel)
+        NSLayoutConstraint(item: graphLabel, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        ImageView.frame.size.width = view.frame.size.width-30
+        scrollView.addConstraintsWithFormat(format: "H:[v1(\(view.frame.size.width-30))]", views: SecondView,ImageView)
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-5-[v1(200)]", views: graphLabel,ImageView)
         NSLayoutConstraint(item: ImageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-//         NSLayoutConstraint(item: ImageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-
-        //Last View constraint
-        scrollView.addConstraintsWithFormat(format: "H:|-10-[v1]-10-|", views: ImageView,LastView)
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1(120)]|", views: ImageView,LastView)
+        
+        //Global Market
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1]", views: ImageView,globalMarketLabel)
+        NSLayoutConstraint(item: globalMarketLabel, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        
+        scrollView.addConstraintsWithFormat(format: "H:|-15-[v1]-15-|", views: globalMarketLabel,LastView)
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1(120)]|", views: globalMarketLabel,LastView)
         NSLayoutConstraint(item: LastView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-
-        
-
-        //First View Default Currency
-        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
-        
-        //First View TotalNumebr Label Constraint
-        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: defaultCurrencyLable, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: defaultCurrencyLable, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 10).isActive = true
         
         
-        //First View TotalRiseFall Label Constraint
-        NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
-
-        //First View TotalRiseFallPercent Label Constraint
-        NSLayoutConstraint(item: totalRiseFallPercent, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalRiseFall, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: totalRiseFallPercent, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: totalRiseFall, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 10).isActive = true
         
-        //First View Spinnner
-        NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: -15).isActive = true
+        
+        
+//        //Second View constraint
+//        scrollView.addConstraintsWithFormat(format: "H:|[v1]|", views: FirstView,SecondView)
+//        scrollView.addConstraintsWithFormat(format: "V:[v0]-5-[v1(50)]", views: FirstView,SecondView)
+//        NSLayoutConstraint(item: SecondView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
 //
-        //Second View market Label Constraint
-        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 5).isActive = true
-        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: -5).isActive = true
-        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
-
-        //Second View tradingPairs Label Constraint
-        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: -5).isActive = true
-        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
-        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: market, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 5).isActive = true
+//        //Image View constraint
+//        ImageView.frame.size.width = view.frame.size.width-20
+//        scrollView.addConstraintsWithFormat(format: "H:[v1(\(view.frame.size.width-20))]", views: SecondView,ImageView)
+//        scrollView.addConstraintsWithFormat(format: "V:[v0]-5-[v1(200)]", views: SecondView,ImageView)
+//        NSLayoutConstraint(item: ImageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
+////         NSLayoutConstraint(item: ImageView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
 //
-//        //Second View edit button Constraint
-        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: -5).isActive = true
-        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
-        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: tradingPairs, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 5).isActive = true
+//        //Last View constraint
+//        scrollView.addConstraintsWithFormat(format: "H:|-10-[v1]-10-|", views: ImageView,LastView)
+//        scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1(120)]|", views: ImageView,LastView)
+//        NSLayoutConstraint(item: LastView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
+
+        
+
+//        //First View Default Currency
+//        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 10).isActive = true
+//        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: defaultCurrencyLable, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
+//
+//        //First View TotalNumebr Label Constraint
+//        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: defaultCurrencyLable, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: defaultCurrencyLable, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 10).isActive = true
+//
+//
+//        //First View TotalRiseFall Label Constraint
+//        NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 10).isActive = true
+//        NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: totalRiseFall, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
+//
+//        //First View TotalRiseFallPercent Label Constraint
+//        NSLayoutConstraint(item: totalRiseFallPercent, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalRiseFall, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: totalRiseFallPercent, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: totalRiseFall, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 10).isActive = true
+//
+//        //First View Spinnner
+//        NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 10).isActive = true
+//        NSLayoutConstraint(item: spinner, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: FirstView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: -15).isActive = true
+////
+//        //Second View market Label Constraint
+//        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 5).isActive = true
+//        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: -5).isActive = true
+//        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: market, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
+//
+//        //Second View tradingPairs Label Constraint
+//        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: -5).isActive = true
+//        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
+//        NSLayoutConstraint(item: tradingPairs, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: market, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 5).isActive = true
+////
+////        //Second View edit button Constraint
+//        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: -5).isActive = true
+//        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: SecondView, attribute: NSLayoutAttribute.height, multiplier: 1/2, constant: 0).isActive = true
+//        NSLayoutConstraint(item: edit, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: tradingPairs, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 5).isActive = true
 //
         let stack2 = setUpStackView(view: [setUpStackView(view: [volume,volumeResult], spacing: 0, axis: .vertical),setUpStackView(view: [circulatingSupply,circulatingSupplyResult], spacing: 0, axis: .vertical)], spacing: 5, axis: .horizontal)
 
@@ -157,6 +202,9 @@ class GerneralController: UIViewController {
         marketCap.text = textValue(name: "marketCap_detail")
         volume.text = textValue(name: "volume_detail")
         circulatingSupply.text = textValue(name: "circulatingSupply_detail")
+        globalMarketLabel.text = textValue(name: "titleGraphs_details")
+        graphLabel.text = textValue(name: "titleGlobal_details")
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -165,14 +213,14 @@ class GerneralController: UIViewController {
     
     var mainViews:UIView = {
         var view = UIView()
-        view.backgroundColor = ThemeColor().walletCellcolor()
+        view.backgroundColor = ThemeColor().darkGreyColor()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     var scrollView:UIScrollView = {
         var scrollView = UIScrollView()
-        scrollView.backgroundColor = ThemeColor().walletCellcolor()
+        scrollView.backgroundColor = ThemeColor().darkGreyColor()
         scrollView.alwaysBounceVertical = true
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         return scrollView
@@ -180,30 +228,50 @@ class GerneralController: UIViewController {
     
     var FirstView:UIView = {
         var view = UIView()
-        view.backgroundColor = ThemeColor().walletCellcolor()
+        view.backgroundColor = ThemeColor().greyColor()
+        view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
     var SecondView:UIView = {
         var view = UIView()
-        view.backgroundColor = ThemeColor().walletCellcolor()
+        view.backgroundColor = ThemeColor().darkGreyColor()
+        view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    var graphLabel:UILabel = {
+       var label = UILabel()
+        label.textColor = ThemeColor().textGreycolor()
+        label.font = label.font.withSize(15)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var globalMarketLabel:UILabel = {
+        var label = UILabel()
+        label.textColor = ThemeColor().textGreycolor()
+        label.font = label.font.withSize(15)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
     }()
     
     var ImageView:UIView = {
         var imageView = UIView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.frame.size.height = 200
-        //        imageView.frame.size.width = 300
-        imageView.backgroundColor = .orange
+//        imageView.frame.size.width = 300
+//        imageView.backgroundColor = .orange
+        imageView.layer.cornerRadius = 8
         return imageView
     }()
     
     var LastView:UIView = {
         var view = UIView()
-        view.backgroundColor = ThemeColor().themeColor()
+        view.backgroundColor = ThemeColor().greyColor()
+        view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -246,10 +314,9 @@ class GerneralController: UIViewController {
     var market:UILabel = {
         var label = UILabel()
         label.text = "0"
-        label.layer.borderColor = UIColor.white.cgColor
-        label.layer.borderWidth = 0.8
         label.textAlignment = .center
-        label.textColor = UIColor.white
+        label.font = label.font.withSize(15)
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -257,10 +324,9 @@ class GerneralController: UIViewController {
     var tradingPairs:UILabel = {
         var label = UILabel()
         label.text = "0"
-        label.layer.borderColor = UIColor.white.cgColor
-        label.layer.borderWidth = 0.8
         label.textAlignment = .center
-        label.textColor = UIColor.white
+        label.font = label.font.withSize(13)
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -275,8 +341,8 @@ class GerneralController: UIViewController {
     
     var marketCap:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(18)
-        label.textColor = UIColor.white
+        label.font = label.font.withSize(13)
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -308,8 +374,8 @@ class GerneralController: UIViewController {
     
     var volume:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(18)
-        label.textColor = UIColor.white
+        label.font = label.font.withSize(13)
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -331,8 +397,8 @@ class GerneralController: UIViewController {
     
     var circulatingSupply:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(18)
-        label.textColor = UIColor.white
+        label.font = label.font.withSize(13)
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -349,7 +415,7 @@ class GerneralController: UIViewController {
     var low:UILabel = {
         var label = UILabel()
         label.text = "0"
-        label.textColor = UIColor.white
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

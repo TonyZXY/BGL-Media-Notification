@@ -89,7 +89,13 @@ class ShareImagePreViewController: UIViewController {
         view.backgroundColor = .white
         
         sharedImageView.translatesAutoresizingMaskIntoConstraints = false
-        sharedImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 30).isActive = true
+       
+        if #available(iOS 11.0, *) {
+            sharedImageView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30).isActive = true
+        } else {
+            sharedImageView.topAnchor.constraint(equalTo: view.topAnchor, constant: 30).isActive = true
+        }
+     
         sharedImageView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         sharedImageView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         sharedImageView.heightAnchor.constraint(equalToConstant: sharedImageView.bounds.size.height).isActive = true
@@ -98,13 +104,21 @@ class ShareImagePreViewController: UIViewController {
         
         cancelButton.translatesAutoresizingMaskIntoConstraints = false
         cancelButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        cancelButton.bottomAnchor.constraint(equalTo: view.bottomAnchor,constant: 5).isActive = true
+        if #available(iOS 11.0, *) {
+            cancelButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor,constant: 5).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         cancelButton.leftAnchor.constraint(equalTo: view.leftAnchor,constant:10).isActive = true
         cancelButton.rightAnchor.constraint(equalTo: view.rightAnchor,constant:-10).isActive = true
         
         shareButton.translatesAutoresizingMaskIntoConstraints = false
         shareButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        shareButton.bottomAnchor.constraint(equalTo: cancelButton.topAnchor,constant: -15).isActive = true
+        if #available(iOS 11.0, *) {
+            shareButton.bottomAnchor.constraint(equalTo: cancelButton.safeAreaLayoutGuide.topAnchor,constant: -15).isActive = true
+        } else {
+            // Fallback on earlier versions
+        }
         shareButton.leftAnchor.constraint(equalTo: view.leftAnchor,constant: 10).isActive = true
         shareButton.rightAnchor.constraint(equalTo: view.rightAnchor,constant: -10).isActive = true
         

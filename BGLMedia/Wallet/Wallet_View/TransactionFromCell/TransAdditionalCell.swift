@@ -29,25 +29,22 @@ class TransAdditionalCell:UITableViewCell{
     
     let additional: UITextField = {
         let textfield = UITextField()
-        textfield.textColor = UIColor.white
+        textfield.textColor = ThemeColor().whiteColor()
+        textfield.tintColor = ThemeColor().whiteColor()
         //            textfield.leftView?.frame = CGRect(x:10, y: 10, width: 200, height: 30)
         //            textfield.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
-        
         // Create a padding view for padding on left
-        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
-        textfield.leftViewMode = .always
-        
-        // Create a padding view for padding on right
-        textfield.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
-        textfield.rightViewMode = .always
-        textfield.clipsToBounds = false
-        
+//        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
+//        textfield.leftViewMode = .always
+//
+//        // Create a padding view for padding on right
+//        textfield.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
+//        textfield.rightViewMode = .always
+//        textfield.clipsToBounds = false
         //            let paddingView = UIView(frame: CGRect(x: 30, y: 0, width: 15, height: textfield.frame.height))
-        
-        textfield.layer.cornerRadius = 8;
         //            textfield.layer.masksToBounds = false;
-        textfield.layer.borderColor = UIColor.white.cgColor
-        textfield.layer.borderWidth = 1
+//        textfield.layer.borderColor = UIColor.white.cgColor
+//        textfield.layer.borderWidth = 1
         textfield.translatesAutoresizingMaskIntoConstraints = false
         textfield.keyboardType = UIKeyboardType.default
         return textfield
@@ -59,9 +56,15 @@ class TransAdditionalCell:UITableViewCell{
         addSubview(additionalLabel)
         addSubview(additional)
         
+        additional.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes: [kCTForegroundColorAttributeName as NSAttributedStringKey: UIColor.white])
+        
+        
+        NSLayoutConstraint(item: additionalLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
+        NSLayoutConstraint(item: additional, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true
+        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v1]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[v0]-10-[v1(30)]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
     }
     
     func createKeyboarddonebutton(){

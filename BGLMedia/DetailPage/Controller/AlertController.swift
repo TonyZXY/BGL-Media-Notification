@@ -126,13 +126,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidDisappear(_ animated: Bool){
         var alertStatus = [[String:Any]]()
         print(realm.objects(alertObject.self))
-        var alla = allAlerts
+        let alla = allAlerts
         for result in alla{
             let alert:[String:Any] = ["id":result.id,"status":result.switchStatus]
             alertStatus.append(alert)
         }
         
-        print(alertStatus)
 
         if alertStatus.count != 0{
             let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
@@ -155,6 +154,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         if status{
             if loginStatus{
                 setUpView()
+//                view.willRemoveSubview(setUpLoginView)
             } else{
                 setUpLoginView()
             }
@@ -241,7 +241,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     @objc func Login(){
         let loginPage = LoginPageViewController()
-        navigationController?.pushViewController(loginPage, animated: true)
+        self.present(loginPage, animated: true, completion: nil)
+//        navigationController?.pushViewController(loginPage, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -321,14 +322,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintView]))
         
-        NSLayoutConstraint(item: alertHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: alertHintLabel, attribute: .centerY, relatedBy: .equal, toItem: alertHintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: alertMainHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: alertHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: alertHintLabel, attribute: .centerY, relatedBy: .equal, toItem: alertHintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: alertMainHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
 //        NSLayoutConstraint(item: alertOpenButton, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
 //
-        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertMainHintLabel]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertMainHintLabel]))
         alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
-        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[v1]-40-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
         alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
         alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertMainHintLabel,"v1":alertOpenButton]))
     }
@@ -337,15 +338,23 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         view.addSubview(loginView)
         loginView.addSubview(loginLabel)
         loginView.addSubview(loginButton)
+        loginView.addSubview(loginMainLabel)
         
+//        alertOpenButton.setTitle("Open Notification", for: .normal)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginView]))
-        NSLayoutConstraint(item: loginButton, attribute: .centerX, relatedBy: .equal, toItem: loginView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: loginView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: loginLabel, attribute: .centerX, relatedBy: .equal, toItem: loginButton, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(100)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+//        NSLayoutConstraint(item: loginButton, attribute: .centerX, relatedBy: .equal, toItem: loginView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: loginView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: loginLabel, attribute: .centerX, relatedBy: .equal, toItem: loginButton, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(100)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+//        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+//        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+        
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginMainLabel]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginMainLabel,"v1":loginButton]))
         
     }
     
@@ -422,6 +431,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         return view
     }()
     
+    var loginMainLabel:UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.text = "Please Login First"
+        label.textAlignment = .center
+        return label
+    }()
+    
     var loginLabel:UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -434,9 +451,10 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
        var button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Login", for: .normal)
+        button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(Login), for: .touchUpInside)
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = ThemeColor().bglColor()
+        button.backgroundColor = ThemeColor().blueColor()
         return button
     }()
     
@@ -481,6 +499,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         button.translatesAutoresizingMaskIntoConstraints = false
         button.backgroundColor = UIColor.red
         button.setTitle("Open Notification", for: .normal)
+        button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
         button.setTitleColor(UIColor.white, for: .normal)
         return button
@@ -536,9 +555,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             let email = UserDefaults.standard.string(forKey: "UserEmail")!
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
             let body:[String:Any] = ["email":email,"token":certificateToken]
-        
-        
-        
+
             URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
                 if pass{
                     print(response)

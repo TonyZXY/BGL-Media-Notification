@@ -50,6 +50,7 @@ class DetailController: UIViewController{
         setUpView()
         refreshTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(refreshData), userInfo: nil, repeats: true)
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -57,12 +58,12 @@ class DetailController: UIViewController{
         refreshPage()
         refreshData()
 //        self.tabBarController?.tabBar.isHidden = true
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
+        
     }
     
     //Remove the refresh notification (From market and tradingpairs change)
-    deinit { 
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
     }
     
@@ -134,6 +135,8 @@ class DetailController: UIViewController{
         let selectItem = realm.objects(MarketTradingPairs.self).filter(filterName)
         var tradingPairs:String = ""
         var exchangeName:String = ""
+        
+        
         
         for value in selectItem{
             exchangeName = value.exchangeName

@@ -99,7 +99,8 @@ class URLServices:NSObject{
                     let marketCap = result["quotes"][0]["data"]["market_cap"].double ?? 0
                     let price = result["quotes"][0]["data"]["price"].double ?? 0
                     let max_supply = result["max_supply"].double ?? 0
-                    let realmData:[Any] = [id,coinAbbName,coinName,totalSupply,circulatingSupply,currency,percent24h,percent1h,percent7d,volume24,max_supply,marketCap,price]
+                    let rank = result["rank"].int ?? 0
+                    let realmData:[Any] = [id,coinAbbName,coinName,totalSupply,circulatingSupply,currency,percent24h,percent1h,percent7d,volume24,max_supply,marketCap,price,rank]
                     if self.realm.object(ofType: GlobalAverageObject.self, forPrimaryKey: id) == nil {
                         self.realm.create(GlobalAverageObject.self, value: realmData)
                     } else {

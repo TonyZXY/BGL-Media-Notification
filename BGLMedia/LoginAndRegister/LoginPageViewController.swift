@@ -210,13 +210,12 @@ class LoginPageViewController: UIViewController {
                     let parameter = ["email":self.emailTextField.text!.lowercased(),"password":self.passwordTextField.text!]
                     URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","login"], httpMethod: "POST", parameters: parameter, completion: { (response, success) in
                         if success {
-                            let token = response["token"].string!
+                            let token = response["token"].string ?? ""
                             UserDefaults.standard.set(token, forKey: "CertificateToken")
                             UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
                             
-                            print(token)
-                            print(self.emailTextField.text!.lowercased())
+        
                             
                             if !self.sendDeviceTokenStatus{
                                 let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!

@@ -31,6 +31,7 @@ updateTransaction = "Update Transaction";
 loading = "Loading...";
 
 //Transaciton Page Table View
+navigationbar_transa = "Add Transaction";
 coinForm = "Coin";
 exchangeForm = "Exchange";
 tradingPairForm = "Trading Pair";
@@ -45,6 +46,9 @@ sellTimeForm = "Time";
 trasactionFeeForm = "Transaction Fee";
 transactionFeeButtonForm = "Currency ▼";
 additionalForm = "Notes";
+pricePlaceholder = "Enter the price here...";
+amountPlaceholder = "Enter bought amount here...";
+additional = "Notes...";
 
 //Market Page
 globalMarket = "Markets";
@@ -116,6 +120,8 @@ alerts_detail = "Alerts";
 marketCap_detail = "Market Cap";
 volume_detail = "Volume(24h)";
 circulatingSupply_detail = "Circulating Supply";
+titleGraphs_details = "Graphs";
+titleGlobal_details = "Global Market";
 
 //Transaction History Page
 tradingMarket_history = "Market";
@@ -189,6 +195,8 @@ flashNews_alert = "Flash News Notification";
 price_alert = "Currency Alert";
 edit_alert = "Edit Currency";
 addAlert_alert = "Add alert";
+pushSection_alert = "Push Notification";
+editSection_alert = "Currency Alert";
 
 //Alert Edit Page
 exampleLabel_alert = "Market Price";

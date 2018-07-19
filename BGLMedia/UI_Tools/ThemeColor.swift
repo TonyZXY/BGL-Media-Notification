@@ -15,15 +15,27 @@ class ThemeColor:UIColor{
         return color
     }
     
-    func navigationBarColor() -> UIColor {
+    func darkGreyColor() -> UIColor {
+        _ = #colorLiteral(red: 0.1843137255, green: 0.1921568627, blue: 0.2117647059, alpha: 1)
+        let color = UIColor.init(red:47/255.0, green:49/255.0, blue:54/255.0, alpha:1)
+        return color
+    }
+    
+    func darkBlackColor() -> UIColor {
         _ = #colorLiteral(red: 0.1254901961, green: 0.1333333333, blue: 0.1450980392, alpha: 1)
         let color = UIColor.init(red:32/255.0, green:34/255.0, blue:37/255.0, alpha:1)
         return color
     }
     
-    func themeColor() -> UIColor {
-        _ = #colorLiteral(red: 0.1843137255, green: 0.1921568627, blue: 0.2117647059, alpha: 1)
-        let color = UIColor.init(red:47/255.0, green:49/255.0, blue:54/255.0, alpha:1)
+    func greyColor() -> UIColor {
+        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
+        let color = UIColor.init(red:54/255.0, green:57/255.0, blue:62/255.0, alpha:1)
+        return color
+    }
+    
+    func textGreycolor() -> UIColor {
+        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
+        let color = UIColor.init(red:153/255.0, green:153/255.0, blue:153/255.0, alpha:1)
         return color
     }
     
@@ -39,15 +51,29 @@ class ThemeColor:UIColor{
         return color
     }
     
-    func themeWidgetColor() -> UIColor{
+    func redColorTran() -> UIColor {
+        _ = #colorLiteral(red: 0.8980392157, green: 0.1098039216, blue: 0.137254902, alpha: 1)
+        let color = UIColor.init(red:229.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:0.2)
+        return color
+    }
+    
+    func blueColor() -> UIColor {
         _ = #colorLiteral(red: 0.2117647059, green: 0.8666666667, blue: 0.6705882353, alpha: 1)
         let color = UIColor.init(red:54/255.0, green:221/255.0, blue:171/255.0, alpha:1)
         return color
     }
     
-    func textGreycolor() -> UIColor {
-        _ = #colorLiteral(red: 0.2117647059, green: 0.2235294118, blue: 0.2431372549, alpha: 1)
-        let color = UIColor.init(red:153/255.0, green:153/255.0, blue:153/255.0, alpha:1)
+    func blueColorTran() -> UIColor {
+        _ = #colorLiteral(red: 0.2117647059, green: 0.8666666667, blue: 0.6705882353, alpha: 1)
+        let color = UIColor.init(red:54/255.0, green:221/255.0, blue:171/255.0, alpha:0.5)
+        return color
+    }
+    
+    ///////////////
+    
+    func themeWidgetColor() -> UIColor{
+        _ = #colorLiteral(red: 0.2117647059, green: 0.8666666667, blue: 0.6705882353, alpha: 1)
+        let color = UIColor.init(red:54/255.0, green:221/255.0, blue:171/255.0, alpha:1)
         return color
     }
     
@@ -57,7 +83,17 @@ class ThemeColor:UIColor{
         return color
     }
     
+    func navigationBarColor() -> UIColor {
+        _ = #colorLiteral(red: 0.1254901961, green: 0.1333333333, blue: 0.1450980392, alpha: 1)
+        let color = UIColor.init(red:32/255.0, green:34/255.0, blue:37/255.0, alpha:1)
+        return color
+    }
     
+    func themeColor() -> UIColor {
+        _ = #colorLiteral(red: 0.1843137255, green: 0.1921568627, blue: 0.2117647059, alpha: 1)
+        let color = UIColor.init(red:47/255.0, green:49/255.0, blue:54/255.0, alpha:1)
+        return color
+    }
     
     
     

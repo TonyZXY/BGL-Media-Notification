@@ -85,9 +85,10 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     lazy var intervalBarCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let bar = UICollectionView(frame: CGRect(x: 0, y: 0, width: intervalBarWidth, height: intervalBarHeight), collectionViewLayout: layout)
-        bar.backgroundColor = ThemeColor().themeColor()
+        bar.backgroundColor = ThemeColor().darkBlackColor()
         bar.delegate = self
         bar.dataSource = self
+        bar.layer.cornerRadius = 3
         bar.register(IntervalBarCollectionViewCell.self, forCellWithReuseIdentifier: "IntervalBarCollectionViewCell")
         bar.translatesAutoresizingMaskIntoConstraints = false
         return bar
@@ -148,7 +149,8 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     // MARK: Setup UI and its layout
     
     private func setupUI() {
-        view.backgroundColor = ThemeColor().themeColor()
+        view.layer.cornerRadius = 8
+        view.backgroundColor = UIColor.black
         view.addSubview(intervalBarCollectionView)
         view.addSubview(spinner)
         containerView.addSubview(xAxisLabelView)
@@ -235,8 +237,6 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 0.0
     }
-    
-    
     
     // MARK: Fetching data
     

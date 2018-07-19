@@ -32,6 +32,7 @@ updateTransaction = "更新交易";
 loading = "加载中...";
 
 //Transaciton Page Table View
+navigationbar_transa = "添加交易";
 coinForm = "币种";
 exchangeForm = "交易市场";
 tradingPairForm = "兑换币种";
@@ -46,6 +47,9 @@ sellTimeForm = "出售时间";
 trasactionFeeForm = "交易费用";
 transactionFeeButtonForm = "币种 ▼";
 additionalForm = "附加信息";
+pricePlaceholder = "请输入价格...";
+amountPlaceholder = "请输入数量...";
+additional = "备注...";
 
 //Market Page
 globalMarket = "市场行情";
@@ -113,6 +117,8 @@ alerts_detail = "提醒";
 marketCap_detail = "市场总值";
 volume_detail = "24小时成交量";
 circulatingSupply_detail = "流动供给";
+titleGraphs_details = "图表";
+titleGlobal_details = "全球市场";
 
 //Transaction History Page
 tradingMarket_history = "交易市场";
@@ -184,6 +190,8 @@ flashNews_alert = "快讯推送通知";
 price_alert = "货币价格提醒";
 edit_alert = "设置需要提醒的货币";
 addAlert_alert = "添加提醒";
+pushSection_alert = "推送通知功能";
+editSection_alert = "币种提醒";
 
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";

@@ -141,7 +141,8 @@ class TimelineTableViewController: UITableViewController {
         let numberOfSkips = sectionArray.prefix(indexPath.section).reduce(0,+)
         let resultSet = defaultLanguage == "CN" ? self.results : results.filter("languageTag='" + defaultLanguage + "'")
         let object = resultSet[indexPath.row + numberOfSkips]
-        
+        cell.likeButton.isHidden = true
+        cell.shareButton.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
         

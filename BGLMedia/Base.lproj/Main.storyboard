@@ -15,7 +15,7 @@
             <objects>
                 <viewController id="d4b-Vg-VbT" customClass="MarketsController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="DS6-bt-1Nm">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="Rxd-VJ-sdM"/>
@@ -31,7 +31,7 @@
             <objects>
                 <viewController id="izm-yd-kfl" customClass="NewsV2Controller" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Br7-Qz-w9l">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="2sd-8h-9sb"/>
@@ -47,7 +47,7 @@
             <objects>
                 <viewController id="A4p-NS-O0W" customClass="WalletController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dTU-nN-lcr">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="641"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="j3U-oW-x6z"/>
@@ -62,7 +62,7 @@
         <scene sceneID="3Mh-df-t8l">
             <objects>
                 <tabBarController storyboardIdentifier="HomePage" id="es6-dM-P9s" customClass="MainTabBarController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
-                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="n1N-YU-9Bc">
+                    <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="n1N-YU-9Bc">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="49"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -85,7 +85,7 @@
         <scene sceneID="9xf-BY-cQa">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="vDn-uj-q1H" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="钱包" image="icons8-mywallet-25" id="REJ-BG-MsD"/>
+                    <tabBarItem key="tabBarItem" title="钱包" image="wallet_" id="REJ-BG-MsD"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" translucent="NO" id="02N-S3-wju">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -104,7 +104,7 @@
         <scene sceneID="z75-Sl-2ee">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="yJ1-Ou-v1F" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="行情" image="icons8-market-25" id="5Be-hW-a4s"/>
+                    <tabBarItem key="tabBarItem" title="行情" image="market_" id="5Be-hW-a4s"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="x11-yH-Fax">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -124,7 +124,7 @@
             <objects>
                 <viewController id="KOa-Tr-5Hc" customClass="NewsFlashViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="3XO-na-vOv">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
                             <containerView opaque="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="WiS-mC-vbz">
@@ -175,7 +175,7 @@
         <scene sceneID="xkC-wr-ebI">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="TX3-Hz-XTC" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="新闻" image="icons8-news-25" id="8jz-a5-K0Q"/>
+                    <tabBarItem key="tabBarItem" title="新闻" image="news_" id="8jz-a5-K0Q"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="9e9-CO-PLV">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -195,7 +195,7 @@
             <objects>
                 <viewController id="FEH-gx-S0f" customClass="MoreController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="uCk-dN-FOP">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="WIl-OV-c3O"/>
@@ -210,7 +210,7 @@
         <scene sceneID="AhY-aC-nu4">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="vMw-TG-Mm2" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="快讯" image="icons8-newsflash-25" id="zIz-NJ-VV8"/>
+                    <tabBarItem key="tabBarItem" title="快讯" image="flash_" id="zIz-NJ-VV8"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Xre-1O-lHQ">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -229,7 +229,7 @@
         <scene sceneID="8GU-Vr-oUq">
             <objects>
                 <navigationController automaticallyAdjustsScrollViewInsets="NO" id="MLX-un-Yun" sceneMemberID="viewController">
-                    <tabBarItem key="tabBarItem" title="选项" id="o4B-1l-rrU"/>
+                    <tabBarItem key="tabBarItem" title="选项" image="more_" id="o4B-1l-rrU"/>
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="BQi-MY-Gtv">
                         <rect key="frame" x="0.0" y="44" width="375" height="44"/>
@@ -246,9 +246,10 @@
         </scene>
     </scenes>
     <resources>
-        <image name="icons8-market-25" width="25" height="25"/>
-        <image name="icons8-mywallet-25" width="25" height="25"/>
-        <image name="icons8-news-25" width="25" height="25"/>
-        <image name="icons8-newsflash-25" width="25" height="25"/>
+        <image name="flash_" width="25" height="25"/>
+        <image name="market_" width="25" height="25"/>
+        <image name="more_" width="25" height="25"/>
+        <image name="news_" width="25" height="25"/>
+        <image name="wallet_" width="25" height="25"/>
     </resources>
 </document>

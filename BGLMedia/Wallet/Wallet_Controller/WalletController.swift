@@ -98,13 +98,18 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         cell.coinName.text = assets.coinName
         cell.coinAmount.text = String(assets.coinAmount) + assets.coinAbbName
         checkDataRiseFallColor(risefallnumber: assets.singlePrice, label: cell.coinSinglePrice, type: "Default")
-        checkDataRiseFallColor(risefallnumber: assets.totalPrice, label:  cell.coinTotalPrice, type: "Default")
+        cell.coinTotalPrice.text = Extension.method.scientificMethod(number: assets.totalPrice)
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
-        if displayType == "Percent"{
-             self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
-        } else if displayType == "Number"{
-            self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFall, label: cell.profitChange, type: "Number")
-        }
+        self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
+        cell.profitChange.text = "(" + cell.profitChange.text! + ")"
+        self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFall, label: cell.profitChangeNumber, type: "Number")
+        
+        
+//        if displayType == "Percent"{
+//             self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
+//        } else if displayType == "Number"{
+//            self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFall, label: cell.profitChange, type: "Number")
+//        }
         cell.selectCoin.selectCoinAbbName = assets.coinAbbName
         cell.selectCoin.selectCoinName = assets.coinName
         cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
@@ -255,6 +260,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     //Select specific coins and change to detail page
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailPage = DetailController()
+        detailPage.hidesBottomBarWhenPushed = true
         let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
         
         // Pass coin detail to detail page (etc, coin name)
@@ -337,8 +343,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         view.addSubview(existTransactionView)
         existTransactionView.addSubview(totalProfitView)
         existTransactionView.addSubview(buttonView)
-        existTransactionView.addSubview(filterButtonNumber)
-        existTransactionView.addSubview(filterButtonPercent)
+//        existTransactionView.addSubview(filterButtonNumber)
+//        existTransactionView.addSubview(filterButtonPercent)
         existTransactionView.addSubview(walletList)
         walletList.addSubview(self.refresher)
         
@@ -375,26 +381,24 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
         buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
         
-        //Add filter Button Constraints
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v7(100)]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v4]-10-[v7(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
+//        //Add filter Button Constraints
+//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v7(100)]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
+//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v4]-10-[v7(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
         
-        //Add filter Button Constraints
-        NSLayoutConstraint(item: filterButtonNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: filterButtonPercent, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v8(100)]-10-[v7]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v8(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
+//        //Add filter Button Constraints
+//        NSLayoutConstraint(item: filterButtonNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: filterButtonPercent, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v8(100)]-10-[v7]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
+//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v8(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
         
         
         //Wallet List Constraints
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":filterButtonNumber,"v6":walletList]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v7]-10-[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":filterButtonNumber,"v6":walletList]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":buttonView,"v6":walletList]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v7]-10-[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":buttonView,"v6":walletList]))
         
     }
     
     func languageLabel(){
         totalLabel.text = textValue(name:"mainBalance")
-        filterButtonNumber.setTitle(textValue(name:"totalNumber"), for: .normal)
-        filterButtonPercent.setTitle(textValue(name:"totalPercent"), for: .normal)
     }
     
     func hintLanguageLabel(){
@@ -487,51 +491,51 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     lazy var buttonView:UIView = {
         var view = UIView()
-        view.backgroundColor = ThemeColor().navigationBarColor()
+        view.backgroundColor = ThemeColor().themeColor()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    var filterButtonNumber:UIButton = {
-        var button = UIButton(type: .system)
-        button.setTitle("总数", for: .normal)
-        button.frame = CGRect(x: 0, y: 0, width: 200, height: 80)
-        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = ThemeColor().walletCellcolor()
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(setUpNumber), for: .touchUpInside)
-        return button
-    }()
+//    var filterButtonNumber:UIButton = {
+//        var button = UIButton(type: .system)
+//        button.setTitle("总数", for: .normal)
+//        button.frame = CGRect(x: 0, y: 0, width: 200, height: 80)
+//        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
+//        button.setTitleColor(UIColor.white, for: .normal)
+//        button.backgroundColor = ThemeColor().walletCellcolor()
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.addTarget(self, action: #selector(setUpNumber), for: .touchUpInside)
+//        return button
+//    }()
     
-    var filterButtonPercent:UIButton = {
-        var button = UIButton(type: .system)
-        button.setTitle("涨幅", for: .normal)
-        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
-        button.setTitleColor(ThemeColor().themeColor(), for: .normal)
-        button.backgroundColor = UIColor.white
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.addTarget(self, action: #selector(setUpPercent), for: .touchUpInside)
-        return button
-    }()
+//    var filterButtonPercent:UIButton = {
+//        var button = UIButton(type: .system)
+//        button.setTitle("涨幅", for: .normal)
+//        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
+//        button.setTitleColor(ThemeColor().themeColor(), for: .normal)
+//        button.backgroundColor = UIColor.white
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        button.addTarget(self, action: #selector(setUpPercent), for: .touchUpInside)
+//        return button
+//    }()
     
-    @objc func setUpNumber(){
-        displayType = "Number"
-        filterButtonNumber.setTitleColor(ThemeColor().themeColor(), for: .normal)
-        filterButtonNumber.backgroundColor = UIColor.white
-        filterButtonPercent.setTitleColor(UIColor.white, for: .normal)
-        filterButtonPercent.backgroundColor = ThemeColor().walletCellcolor()
-        walletList.reloadData()
-    }
-    
-    @objc func setUpPercent(){
-        displayType = "Percent"
-        filterButtonPercent.setTitleColor(ThemeColor().themeColor(), for: .normal)
-        filterButtonPercent.backgroundColor = UIColor.white
-        filterButtonNumber.setTitleColor(UIColor.white, for: .normal)
-        filterButtonNumber.backgroundColor = ThemeColor().walletCellcolor()
-        walletList.reloadData()
-    }
+//    @objc func setUpNumber(){
+//        displayType = "Number"
+//        filterButtonNumber.setTitleColor(ThemeColor().themeColor(), for: .normal)
+//        filterButtonNumber.backgroundColor = UIColor.white
+//        filterButtonPercent.setTitleColor(UIColor.white, for: .normal)
+//        filterButtonPercent.backgroundColor = ThemeColor().walletCellcolor()
+//        walletList.reloadData()
+//    }
+//
+//    @objc func setUpPercent(){
+//        displayType = "Percent"
+//        filterButtonPercent.setTitleColor(ThemeColor().themeColor(), for: .normal)
+//        filterButtonPercent.backgroundColor = UIColor.white
+//        filterButtonNumber.setTitleColor(UIColor.white, for: .normal)
+//        filterButtonNumber.backgroundColor = ThemeColor().walletCellcolor()
+//        walletList.reloadData()
+//    }
     
     var spinner:UIActivityIndicatorView = {
         var spinner = UIActivityIndicatorView()
