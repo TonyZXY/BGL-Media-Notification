@@ -19,6 +19,8 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
     var newTransaction = AllTransactions()
     var items = ["ExChangeName","Trading Pairs Name"]
     let realm = try! Realm()
+    var selectStatus = "Global"
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -39,17 +41,32 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
     }
     
     @objc func done(){
-        if newTransaction.tradingPairsName != "" {
-            let filterName = "coinAbbName = '" + newTransaction.coinAbbName + "' "
-            let statusItem = realm.objects(MarketTradingPairs.self).filter(filterName)
-            if let object = statusItem.first{
-                try! self.realm.write {
-                    object.exchangeName = newTransaction.exchangName
-                    object.tradingPairsName = newTransaction.tradingPairsName
+        if selectStatus == "WatchList"{
+            if newTransaction.tradingPairsName != ""{
+                let filterName = "coinAbbName = '" + newTransaction.coinAbbName + "' "
+                let statusItem = realm.objects(WatchListRealm.self).filter(filterName)
+                if let object = statusItem.first{
+                    try! self.realm.write {
+                        object.market = newTransaction.exchangName
+                        object.tradingPairsName = newTransaction.tradingPairsName
+                    }
                 }
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
+                navigationController?.popViewController(animated: true)
             }
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
-            navigationController?.popViewController(animated: true)
+        } else{
+            if newTransaction.tradingPairsName != "" {
+                let filterName = "coinAbbName = '" + newTransaction.coinAbbName + "' "
+                let statusItem = realm.objects(MarketTradingPairs.self).filter(filterName)
+                if let object = statusItem.first{
+                    try! self.realm.write {
+                        object.exchangeName = newTransaction.exchangName
+                        object.tradingPairsName = newTransaction.tradingPairsName
+                    }
+                }
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
+                navigationController?.popViewController(animated: true)
+            }
         }
     }
     
@@ -59,6 +76,8 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "marketCell", for: indexPath)
+        cell.backgroundColor = ThemeColor().greyColor()
+        cell.textLabel?.textColor = ThemeColor().whiteColor()
         if indexPath.row == 0 {
             cell.textLabel?.text = newTransaction.exchangName
         } else if indexPath.row == 1{
@@ -71,10 +90,12 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
         if indexPath.row == 0{
             let searchExchange = SearchExchangesController()
             searchExchange.delegate = self
+            searchExchange.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(searchExchange, animated: true)
         } else if indexPath.row == 1{
             let searchTradingPairs = SearchTradingPairController()
             searchTradingPairs.delegate = self
+            searchTradingPairs.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(searchTradingPairs, animated: true)
         }
     }
@@ -82,7 +103,7 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
     lazy var marketTableView:UITableView = {
         var tableView = UITableView()
         tableView.separatorStyle = .none
-        tableView.backgroundColor = ThemeColor().themeColor()
+        tableView.backgroundColor = ThemeColor().darkGreyColor()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "marketCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self

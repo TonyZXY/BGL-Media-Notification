@@ -21,16 +21,21 @@ class TransCoinTypeCell:UITableViewCell{
     let coinLabel:UILabel = {
         let label = UILabel()
         label.text = "币种"
+//        label.font = UIFont(name: "Montserrat-Italic", size: 18)
+        label.font = label.font.withSize(18)
+        label.textAlignment = .left
         label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let nihao:String = ""
-    
-    let coin: UILabel = {
-        let label = UILabel()
+    let coin:InsetLabel = {
+        let label = InsetLabel()
         label.textColor = UIColor.white
+        label.layer.cornerRadius = 8
+        label.layer.backgroundColor = ThemeColor().greyColor().cgColor
+        label.font = label.font.withSize(15)
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -48,16 +53,15 @@ class TransCoinTypeCell:UITableViewCell{
         backgroundColor = ThemeColor().themeColor()
         addSubview(coinLabel)
         addSubview(coin)
-        addSubview(coinarrow)
+        accessoryType = .disclosureIndicator
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coin,"v3":coinarrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coin,"v3":coinarrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[v0]-10-[v1]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coin,"v3":coinarrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v3(10)]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coin,"v3":coinarrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v3(10)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coin,"v3":coinarrow]))
-        let myLabelverticalConstraint = NSLayoutConstraint(item: coinarrow, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
-        NSLayoutConstraint.activate([myLabelverticalConstraint])
-        //            NSLayoutConstraint.activate([myLabelhorizontalConstraint])
+        NSLayoutConstraint(item: coinLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: coin, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-10-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coin,"v3":coinarrow]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coin,"v3":coinarrow]))
     }
 
+    
+    
 }
+

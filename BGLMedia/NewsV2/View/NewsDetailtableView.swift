@@ -40,7 +40,7 @@ class NewsDetailTableViewCell:UITableViewCell{
     let cellView:UIView={
         var view = UIView()
         view.backgroundColor = ThemeColor().walletCellcolor()
-        view.layer.cornerRadius = 15
+        view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -91,11 +91,11 @@ class NewsDetailTableViewCell:UITableViewCell{
         cellView.addSubview(newsDescription)
         cellView.addSubview(newsAuthor)
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-2-[v0]-2-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-2-[v0]-2-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         NSLayoutConstraint(item: newsImage, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(80)]-5-[v1]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(130)]-5-[v1]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
         
         NSLayoutConstraint(item: newsTitle, attribute: .top, relatedBy: .equal, toItem: newsImage, attribute: .top, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: newsTitle, attribute: .bottom, relatedBy: .equal, toItem: newsImage, attribute: .centerY, multiplier: 1/2, constant: 0).isActive = true

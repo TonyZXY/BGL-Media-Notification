@@ -8,9 +8,10 @@
 
 import UIKit
 import UserNotifications
-
+import RealmSwift
 class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
+    let realm = try! Realm()
     var loginStatus:Bool{
         get{
             return  UserDefaults.standard.bool(forKey: "isLoggedIn")
@@ -94,6 +95,25 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().darkGreyColor()
+        let sectionLabel = UILabel()
+        sectionLabel.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.addSubview(sectionLabel)
+        sectionLabel.textColor = ThemeColor().textGreycolor()
+        sectionLabel.text = self.sections?[section]
+        
+        NSLayoutConstraint(item: sectionLabel, attribute: .bottom, relatedBy: .equal, toItem: sectionView, attribute: .bottom, multiplier: 1, constant: -5).isActive = true
+        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 5).isActive = true
+        
+        return sectionView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 60
+    }
+    
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         return self.sections?[section]
     }
@@ -110,45 +130,79 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath)
         cell.textLabel?.text = items![indexPath.section][indexPath.row]
         cell.textLabel?.textColor = UIColor.white
-        cell.selectionStyle = .none
-        cell.backgroundColor = ThemeColor().walletCellcolor()
+//        cell.selectionStyle = .none
+        cell.backgroundColor = ThemeColor().greyColor()
         cell.accessoryType = .disclosureIndicator
         return cell
     }
     
     func tableView(_ tableView: UITableView, willDisplayHeaderView view:UIView, forSection: Int) {
         if let headerTitle = view as? UITableViewHeaderFooterView {
-            headerTitle.textLabel?.textColor = ThemeColor().themeWidgetColor()
+            headerTitle.textLabel?.textColor = ThemeColor().textGreycolor()
         }
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section < 2{
-            let changePage = pushItems[indexPath.section][indexPath.row]
-            changePage.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(changePage, animated: true)
+            if indexPath.section == 1 && indexPath.row == 2{
+                if notificationStatus{
+                    let changePage = pushItems[indexPath.section][indexPath.row]
+                    changePage.hidesBottomBarWhenPushed = true
+                    navigationController?.pushViewController(changePage, animated: true)
+                } else{
+                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
+                    // Setting button action
+                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
+                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+                            return
+                        }
+                        
+                        if UIApplication.shared.canOpenURL(settingsUrl) {
+                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+                                // Checking for setting is opened or not
+                                print("Setting is opened: \(success)")
+                            })
+                        }
+                    }
+                    alertController.addAction(settingsAction)
+                    // Cancel button action
+                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
+                        // Magic is here for cancel button
+                    }
+                    alertController.addAction(cancelAction)
+                    // This part is important to show the alert controller ( You may delete "self." from present )
+                    self.present(alertController, animated: true, completion: nil)
+                }
+            } else{
+                let changePage = pushItems[indexPath.section][indexPath.row]
+                changePage.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(changePage, animated: true)
+            }
+            
         } else{
             if loginStatus{
                 let body = ["email":email,"token":certificateToken,"deviceToken":deviceToken]
                 URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","logoutIOSDevice"], httpMethod: "POST", parameters: body) { (response, success) in
                     if success{
-                        print(response)
                         UserDefaults.standard.set(false,forKey: "isLoggedIn")
                         UserDefaults.standard.set(true, forKey: "flashSwitch")
                         UserDefaults.standard.set(true, forKey: "priceSwitch")
                         UserDefaults.standard.set(false, forKey: "SendDeviceToken")
                         UserDefaults.standard.set("", forKey: "UserEmail")
                         UserDefaults.standard.set("", forKey: "CertificateToken")
+                        try! self.realm.write {
+                            self.realm.delete(self.realm.objects(alertObject.self))
+                            self.realm.delete(self.realm.objects(alertCoinNames.self))
+                        }
+                        self.optionTableView.reloadData()
                     }
                 }
-                
-                optionTableView.reloadData()
             } else{
                 if notificationStatus{
                     let login = LoginPageViewController()
                     self.present(login, animated: true, completion: nil)
                 } else{
-                    let alertController = UIAlertController(title: "Alert Title is here", message: "Alert Description is here", preferredStyle: .alert)
+                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
                     // Setting button action
                     let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
                         guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
@@ -173,6 +227,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 }
             }
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
 
     func getNotificationStatus(){
@@ -213,7 +268,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tabelView.separatorStyle = .none
         tabelView.dataSource = self
         tabelView.isScrollEnabled = false
-        tabelView.rowHeight = 80
+        tabelView.rowHeight = 50
         tabelView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tabelView.translatesAutoresizingMaskIntoConstraints = false
         return tabelView

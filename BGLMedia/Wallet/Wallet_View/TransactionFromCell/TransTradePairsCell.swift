@@ -21,39 +21,35 @@ class TransTradePairsCell:UITableViewCell{
     
     let tradeLabel:UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
+        label.textColor = ThemeColor().textGreycolor()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = label.font.withSize(18)
+        return label
+    }()
+    
+    let trade: InsetLabel = {
+        let label = InsetLabel()
+        label.textColor = ThemeColor().whiteColor()
+        label.layer.cornerRadius = 8
+        label.font = label.font.withSize(15)
+        label.layer.backgroundColor = ThemeColor().greyColor().cgColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let trade: UILabel = {
-        let label = UILabel()
-        label.textColor = UIColor.white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    let tradearrow: UIImageView = {
-        let imageView = UIImageView(image: UIImage(named: "navigation_arrow.png"))
-        imageView.clipsToBounds = true
-        imageView.contentMode = UIViewContentMode.scaleAspectFit
-        imageView.translatesAutoresizingMaskIntoConstraints = false
-        return imageView
-    }()
     
     func setupviews(){
         selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(tradeLabel)
         addSubview(trade)
-        addSubview(tradearrow)
+        accessoryType = .disclosureIndicator
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":tradeLabel,"v1":trade,"v3":tradearrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":tradeLabel,"v1":trade,"v3":tradearrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-16-[v0]-10-[v1]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":tradeLabel,"v1":trade,"v3":tradearrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v3(10)]-16-|", options: .alignAllCenterY, metrics: nil, views: ["v0":tradeLabel,"v1":trade,"v3":tradearrow]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v3(10)]", options: .alignAllCenterX, metrics: nil, views: ["v0":tradeLabel,"v1":trade,"v3":tradearrow]))
-        let myLabelverticalConstraint = NSLayoutConstraint(item: tradearrow, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0)
-        NSLayoutConstraint.activate([myLabelverticalConstraint])
+        
+        NSLayoutConstraint(item: tradeLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: trade, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-10-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":tradeLabel,"v1":trade]))
+         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":tradeLabel,"v1":trade]))
     }
 }

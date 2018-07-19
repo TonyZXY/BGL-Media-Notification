@@ -23,6 +23,7 @@ class GlobalAverageObject: Object {
     @objc dynamic var max_supply:Double = 0.0
     @objc dynamic var marketCap:Double = 0.0
     @objc dynamic var price:Double = 0.0
+    @objc dynamic var rank:Int = 0
     
     
     

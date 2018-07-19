@@ -26,13 +26,14 @@ class IntervalBarCollectionViewCell: UICollectionViewCell {
     
     override var isSelected: Bool {
         didSet {
-            label.textColor = isSelected ? .black : .gray
-            self.backgroundColor = isSelected ? .white : ThemeColor().themeColor()
+            label.textColor = isSelected ? ThemeColor().whiteColor() : ThemeColor().textGreycolor()
+            self.backgroundColor = isSelected ? ThemeColor().blueColor() : ThemeColor().darkBlackColor()
         }
     }
     
     func setupView(){
         addSubview(label)
+        layer.cornerRadius = 5
         
         addConstraint(NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))

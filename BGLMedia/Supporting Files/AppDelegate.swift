@@ -18,8 +18,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     
-    
-    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
         application.statusBarStyle = .lightContent
@@ -42,12 +40,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.registerForRemoteNotifications()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-       
-
+        
         if launchedBefore{
              URLServices.fetchInstance.getCoinList()
 //            set flag to false for debugging purpose
 //            UserDefaults.standard.set(false, forKey: "launchedBefore")
+//            window?.rootViewController = LaunchScreenViewController()
+//            window?.makeKeyAndVisible()
             
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 window = UIWindow(frame:UIScreen.main.bounds)

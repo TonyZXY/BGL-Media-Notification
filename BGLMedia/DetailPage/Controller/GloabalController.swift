@@ -24,7 +24,10 @@ class GloabalController: UIViewController {
     let general = generalDetail()
     var marketSelectedData = MarketTradingPairs()
     var globalMarketData = GlobalMarket()
-    
+    var pageStatus = "Global"
+    var coinAbbName = ""
+    var exchangeName = ""
+    var tradingPairs = ""
     
     var GlobalData:Results<GlobalAverageObject>{
         get{
@@ -34,6 +37,15 @@ class GloabalController: UIViewController {
         }
     }
     
+    var WatchListData:Results<WatchListRealm>{
+        get{
+            let filterName = "coinAbbName = '" + coinDetail.coinName + "' "
+            let objects = realm.objects(WatchListRealm.self).filter(filterName)
+            return objects
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -41,18 +53,109 @@ class GloabalController: UIViewController {
 //        getCoinGloablDetail()
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(true)
-        self.tabBarController?.tabBar.isHidden = true
-    }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
+    @objc func updateMarketData(){
+        reloadData(){ success in
+            if success{
+                self.loadData()
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
+            }
+        }
+    }
+    
+    
+    @objc func reloadData(completion:@escaping (Bool)->Void){
+        let filterName = "coinAbbName = '" + coinDetail.coinName + "' "
+        let selectItem = realm.objects(WatchListRealm.self).filter(filterName)
+        let generalView = coinDetailController.gerneralController
+        
+        for value in selectItem{
+            coinAbbName = value.coinAbbName
+            exchangeName = value.market
+            tradingPairs = value.tradingPairsName
+        }
+        
+        cryptoCompareClient.getTradePrice(from: coinAbbName, to: tradingPairs, exchange: exchangeName){ result in
+            print(result)
+            switch result{
+            case .success(let resultData):
+                for results in resultData!{
+                    let single = Double(results.value)
+                    print(single)
+                    GetDataResult().getCryptoCurrencyApi(from: self.tradingPairs, to: [priceType], price: single){success,jsonResult in
+                        print(jsonResult)
+                        if success{
+                            DispatchQueue.main.async {
+                                var pricess:Double = 0
+                                for result in jsonResult{
+                                    pricess = Double(result.value) * single
+                                }
+                                
+                                let filterName = "coinAbbName = '" + self.coinAbbName + "' "
+                                let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
+                                if let object = statusItem.first{
+                                    try! self.realm.write {
+                                        object.price = pricess
+                                    }
+                                }
+                                generalView.market.text = self.exchangeName
+                                generalView.tradingPairs.text = self.coinAbbName + "/" + self.tradingPairs
+                                completion(true)
+                            }
+                        } else{
+                            self.coinDetailController.gerneralController.spinner.stopAnimating()
+                            completion(false)
+                            print("fail")
+                        }
+                    }
+                }
+            case .failure(let error):
+                print("the error \(error.localizedDescription)")
+            }
+        }
+        
+        
+    }
+    
+//    func transferPriceType(priceType:[String],walletData:MarketTradingPairs,single:Double,eachCell:WalletsCell,transactionPrice:Double){
+//        GetDataResult().getCryptoCurrencyApi(from: walletData.tradingPairsName, to: priceType, price: single){success,jsonResult in
+//            if success{
+//                DispatchQueue.main.async {
+//                    var pricess:Double = 0
+//                    for result in jsonResult{
+//                        pricess = Double(result.value) * single
+//                    }
+//                    walletData.singlePrice = pricess
+//                    walletData.totalPrice = Double(pricess) * Double(walletData.coinAmount)
+//                    walletData.totalRiseFallPercent = ((walletData.totalPrice - transactionPrice) / transactionPrice) * 100
+//                    walletData.totalRiseFall = walletData.totalPrice - transactionPrice
+//                    self.realm.beginWrite()
+//
+//                    if self.realm.object(ofType: MarketTradingPairs.self, forPrimaryKey: walletData.coinAbbName) == nil {
+//                        self.realm.create(MarketTradingPairs.self,value:[walletData.coinName,walletData.coinAbbName,walletData.exchangeName,walletData.tradingPairsName,walletData.coinAmount,walletData.totalRiseFall,walletData.singlePrice,walletData.totalPrice,walletData.totalRiseFallPercent,walletData.transactionPrice,walletData.priceType])
+//                    } else {
+//                        self.realm.create(MarketTradingPairs.self,value:[walletData.coinName,walletData.coinAbbName,walletData.exchangeName,walletData.tradingPairsName,walletData.coinAmount,walletData.totalRiseFall,walletData.singlePrice,walletData.totalPrice,walletData.totalRiseFallPercent,walletData.transactionPrice,walletData.priceType],update:true)
+//                    }
+//                    try! self.realm.commitWrite()
+//                    self.refreshPage()
+//                }
+//            } else{
+//                self.coinDetailController.gerneralController.spinner.stopAnimating()
+//                print("fail")
+//            }
+//        }
+//    }
+    
     func setUpView(){
+        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
         addChildViewControllers(childViewControllers: coinDetailController, views: view)
         let titleLabel = UILabel()
         titleLabel.text = coinDetail.coinName
@@ -60,23 +163,57 @@ class GloabalController: UIViewController {
         navigationItem.titleView = titleLabel
     }
     
+    @objc func edit(){
+        let market = MarketSelectController()
+        market.newTransaction.coinAbbName = general.coinAbbName
+        market.newTransaction.coinName = general.coinName
+        market.newTransaction.exchangName = general.exchangeName
+        market.newTransaction.tradingPairsName = general.tradingPairs
+        market.selectStatus = "WatchList"
+        navigationController?.pushViewController(market, animated: true)
+    }
+    
     @objc func loadData(){
         let generalPage = coinDetailController.gerneralController
-//        generalPage.edit.isHidden = true
-        generalPage.tradingPairs.text = coinDetail.coinName + "/" + priceType
-        generalPage.market.text = "Global average"
+        
+        if pageStatus == "WatchList"{
+            general.coinAbbName = WatchListData[0].coinAbbName
+            general.coinName = WatchListData[0].coinName
+            general.exchangeName = WatchListData[0].market
+            general.tradingPairs = WatchListData[0].tradingPairsName
+            generalPage.edit.isHidden = false
+            generalPage.tradingPairs.text = WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName
+            generalPage.market.text = WatchListData[0].market
+            generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:WatchListData[0].price)
+        } else{
+            generalPage.edit.isHidden = true
+            generalPage.tradingPairs.text = coinDetail.coinName + "/" + priceType
+            generalPage.market.text = "Global Average"
+            generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:GlobalData[0].price)
+            general.coinAbbName = GlobalData[0].coinAbbName
+            general.coinName = GlobalData[0].coinName
+            general.exchangeName = "Global Average"
+            general.tradingPairs = priceType
+        }
         generalPage.marketCapResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].marketCap )
         generalPage.volumeResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].volume24 )
         generalPage.circulatingSupplyResult.text = Extension.method.scientificMethod(number: GlobalData[0].circulatingSupply )
         generalPage.coinSymbol = coinDetail.coinName
         general.coinAbbName = coinDetail.coinName
         coinDetailController.transactionHistoryController.generalData = general
-        generalPage.defaultCurrencyLable.text = priceType
-        generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:GlobalData[0].price ?? 0.0)
+//        generalPage.defaultCurrencyLable.text = priceType
+//        generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:GlobalData[0].price ?? 0.0)
         
         
         coinDetailController.alertController.coinName.coinAbbName = general.coinAbbName
         coinDetailController.alertController.coinName.status = true
+    }
+    
+    func loadMarketData(){
+        let generalPage = coinDetailController.gerneralController
+        generalPage.tradingPairs.text = WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName
+        generalPage.market.text = WatchListData[0].market
+        
     }
     
     func addChildViewControllers(childViewControllers:UIViewController,views:UIView){

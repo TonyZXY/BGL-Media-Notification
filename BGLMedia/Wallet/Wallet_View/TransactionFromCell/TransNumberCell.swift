@@ -35,9 +35,15 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         let textfield = UITextField()
         textfield.keyboardType = UIKeyboardType.decimalPad
         //            textfield.resignFirstResponder()
-        textfield.textColor = UIColor.white
-        textfield.frame = CGRect(x:50, y: 70, width: 200, height: 30)
+        textfield.textColor = ThemeColor().whiteColor()
+        textfield.tintColor = ThemeColor().whiteColor()
+        textfield.frame = CGRect(x:0, y: 0, width: 200, height: 30)
         textfield.translatesAutoresizingMaskIntoConstraints = false
+//        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
+//        textfield.leftViewMode = .always
+//        textfield.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
+//        textfield.rightViewMode = .always
+//        textfield.clipsToBounds = false
         return textfield
     }()
     
@@ -47,8 +53,12 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         addSubview(numberLabel)
         addSubview(number)
         
-        NSLayoutConstraint(item: numberLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: number, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        number.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes: [kCTForegroundColorAttributeName as NSAttributedStringKey: UIColor.white])
+        
+
+        
+        NSLayoutConstraint(item: numberLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
+        NSLayoutConstraint(item: number, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v1]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
