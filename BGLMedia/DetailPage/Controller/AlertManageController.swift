@@ -160,28 +160,39 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
             
             return sectionView
-        } else {
+        } else{
+            return UIView()
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if section == 0{
             let sectionView = UIView()
             sectionView.clipsToBounds = true
             sectionView.backgroundColor = ThemeColor().bglColor()
-
+            
             let fixLabel = UILabel()
             fixLabel.text = textValue(name: "exampleLabel_alert")
             fixLabel.translatesAutoresizingMaskIntoConstraints = false
+            
             
             let priceLabel = UILabel()
             priceLabel.text = Extension.method.scientificMethod(number: sectionPrice) + " " + intersetObject.tradingPairs
             priceLabel.translatesAutoresizingMaskIntoConstraints = false
             sectionView.addSubview(fixLabel)
             sectionView.addSubview(priceLabel)
-
+            priceLabel.tag = 100
             NSLayoutConstraint(item: fixLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
             NSLayoutConstraint(item: priceLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
             sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":fixLabel]))
-             sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":priceLabel]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":priceLabel]))
             return sectionView
+        } else{
+            return UIView()
         }
     }
+    
+    
     
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -214,9 +225,20 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        if section == 0{
+            return 60
+        } else{
+            return 0
+        }
+    }
+    
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        if section == 0{
+            return 60
+        } else{
+            return 0
+        }
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -438,7 +460,20 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                         readData = value
                     }
                     self.sectionPrice = readData
-                    self.alertTableView.reloadData()
+                    
+            
+                    
+//                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+//                    cell.priceType.text = Extension.method.scientificMethod(number: readData)
+                    
+                    
+                    
+                    let indexPathForSection = NSIndexSet(index: 0)
+                    self.alertTableView.reloadSections(indexPathForSection as IndexSet, with: .automatic)
+                    
+                    
+                    
+//                    self.alertTableView.reloadData()
                     self.newTransaction.singlePrice = Double(String(readData))!
                 case .failure(let error):
                     print("the error \(error.localizedDescription)")

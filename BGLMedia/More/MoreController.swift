@@ -192,6 +192,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                         UserDefaults.standard.set("", forKey: "CertificateToken")
                         try! self.realm.write {
                             self.realm.delete(self.realm.objects(alertObject.self))
+                            self.realm.delete(self.realm.objects(alertCoinNames.self))
                         }
                         self.optionTableView.reloadData()
                     }

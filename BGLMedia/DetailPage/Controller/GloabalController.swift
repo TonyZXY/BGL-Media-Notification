@@ -99,7 +99,6 @@ class GloabalController: UIViewController {
                                     pricess = Double(result.value) * single
                                 }
                                 
-                                print(pricess)
                                 let filterName = "coinAbbName = '" + self.coinAbbName + "' "
                                 let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
                                 if let object = statusItem.first{

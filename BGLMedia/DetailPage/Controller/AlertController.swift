@@ -29,7 +29,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var realm = try! Realm()
     var alerts:[alertResult] = [alertResult]()
     var coinName = coinAlert()
-    
+    var coinAbbName = "null"
     var TransactionDelegate:TransactionFrom?
     var allAlert:[alertResult]{
         get{
@@ -435,6 +435,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "Please Login First"
+        label.textColor = ThemeColor().whiteColor()
+        label.font = label.font.withSize(20)
         label.textAlignment = .center
         return label
     }()
@@ -442,8 +444,10 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var loginLabel:UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = ThemeColor().whiteColor()
         label.text = "Login to access this function"
         label.textAlignment = .center
+        label.font = label.font.withSize(13)
         return label
     }()
     
