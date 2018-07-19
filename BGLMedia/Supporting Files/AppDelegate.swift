@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(true, forKey: "flashSwitch")
             UserDefaults.standard.set(true, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
-            UserDefaults.standard.set("CN", forKey: "defaultLanguage")
+            UserDefaults.standard.set("EN", forKey: "defaultLanguage")
             UserDefaults.standard.set(false, forKey: "buildInterest")
             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
