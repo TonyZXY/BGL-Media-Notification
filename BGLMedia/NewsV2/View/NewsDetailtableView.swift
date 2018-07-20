@@ -24,7 +24,6 @@ class NewsDetailTableViewCell:UITableViewCell{
                         
                     }
                 })
-                
                 newsImage.setImage(urlString: (news?.imageURL)!)
             }
             newsDescription.text = news?.newsDescription
@@ -47,8 +46,9 @@ class NewsDetailTableViewCell:UITableViewCell{
     
     let newsImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "navigation_arrow.png"))
-        imageView.frame = CGRect(x: 0, y: 0, width: 80, height: 130)
+        imageView.frame = CGRect(x: 0, y: 0, width: 120, height: 80)
         imageView.clipsToBounds = true
+        imageView.layer.cornerRadius = 8
         imageView.contentMode = UIViewContentMode.scaleAspectFill
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -95,7 +95,11 @@ class NewsDetailTableViewCell:UITableViewCell{
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-2-[v0]-2-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         NSLayoutConstraint(item: newsImage, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(130)]-5-[v1]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-8-[v0(120)]-5-[v1]-8-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsImage,"v1":newsTitle,"v2":newsDescription,"v3":newsAuthor]))
+        
+//        
+//        NSLayoutConstraint(item: newsImage, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: newsImage, attribute: .weight, relatedBy: .equal, toItem: nil, attribute: .weight, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: newsTitle, attribute: .top, relatedBy: .equal, toItem: newsImage, attribute: .top, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: newsTitle, attribute: .bottom, relatedBy: .equal, toItem: newsImage, attribute: .centerY, multiplier: 1/2, constant: 0).isActive = true
@@ -108,8 +112,6 @@ class NewsDetailTableViewCell:UITableViewCell{
         NSLayoutConstraint(item: newsDescription, attribute: .left, relatedBy: .equal, toItem: newsTitle, attribute: .left, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: newsAuthor, attribute: .bottom, relatedBy: .equal, toItem: cellView, attribute: .bottom, multiplier: 1, constant:-10).isActive = true
         NSLayoutConstraint(item: newsAuthor, attribute: .right, relatedBy: .equal, toItem: newsDescription, attribute: .right, multiplier: 1, constant: 0).isActive = true
-        
-        
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -76,7 +76,7 @@ class AlertTableViewCell:UITableViewCell{
         addSubview(compareLabel)
         addSubview(dateLabel)
         addSubview(coinDetailLabel)
-        
+        backgroundColor = ThemeColor().greyColor()
         swithButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
         
         NSLayoutConstraint(item: swithButton, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -10).isActive = true
@@ -134,15 +134,15 @@ class AlertTableViewCell:UITableViewCell{
     
     var compareLabel:UILabel = {
        var label = UILabel()
-        label.text = "haha"
         label.font = label.font.withSize(20)
+        label.textColor = ThemeColor().whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     var dateLabel:UILabel = {
         var label = UILabel()
-        label.text = "haha"
+        label.textColor = ThemeColor().textGreycolor()
         label.font = label.font.withSize(12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -150,7 +150,7 @@ class AlertTableViewCell:UITableViewCell{
     
     var coinDetailLabel:UILabel = {
         var label = UILabel()
-        label.text = "haha"
+        label.textColor = ThemeColor().textGreycolor()
         label.font = label.font.withSize(12)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

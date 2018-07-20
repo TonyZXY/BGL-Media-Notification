@@ -127,6 +127,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             coinImage.coinImageSetter(coinName: intersetObject.coinAbbName, width: 30, height: 30, fontSize: 5)
             let coinLabel = UILabel()
             coinLabel.translatesAutoresizingMaskIntoConstraints = false
+            coinLabel.textColor = ThemeColor().whiteColor()
             coinLabel.text = "Coin Name:" + intersetObject.coinName
             
         
@@ -145,7 +146,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             sectionView.addSubview(button)
             sectionView.addSubview(coinImage)
             sectionView.addSubview(coinLabel)
-            sectionView.backgroundColor = ThemeColor().bglColor()
+            sectionView.backgroundColor = ThemeColor().darkGreyColor()
             button.translatesAutoresizingMaskIntoConstraints = false
             //        views.translatesAutoresizingMaskIntoConstraints = false
             
@@ -169,16 +170,15 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         if section == 0{
             let sectionView = UIView()
             sectionView.clipsToBounds = true
-            sectionView.backgroundColor = ThemeColor().bglColor()
-            
+            sectionView.backgroundColor = ThemeColor().darkGreyColor()
             let fixLabel = UILabel()
             fixLabel.text = textValue(name: "exampleLabel_alert")
+            fixLabel.textColor = ThemeColor().whiteColor()
             fixLabel.translatesAutoresizingMaskIntoConstraints = false
-            
-            
             let priceLabel = UILabel()
             priceLabel.text = Extension.method.scientificMethod(number: sectionPrice) + " " + intersetObject.tradingPairs
             priceLabel.translatesAutoresizingMaskIntoConstraints = false
+            priceLabel.textColor = ThemeColor().whiteColor()
             sectionView.addSubview(fixLabel)
             sectionView.addSubview(priceLabel)
             priceLabel.tag = 100
@@ -257,7 +257,8 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: "editAlertCell", for: indexPath)
             cell.accessoryType = .disclosureIndicator
-            
+            cell.textLabel?.textColor = ThemeColor().whiteColor()
+            cell.backgroundColor = ThemeColor().greyColor()
             let exchangeSection = "Exchange: " + intersetObject.exchangName
             let tradingPairs = intersetObject.tradingPairs == "" ? "TradingPairs: " : "TradingPairs: " + intersetObject.coinAbbName + "/" + intersetObject.tradingPairs
             cell.textLabel?.text = indexPath.row == 0 ?  exchangeSection : tradingPairs
@@ -266,12 +267,12 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "priceTextFieldCell", for: indexPath) as! priceNotificationCell
-            
+            cell.backgroundColor = ThemeColor().greyColor()
             cell.priceTextField.tag = indexPath.row
             cell.priceTextField.delegate = self
             cell.priceTextField.text = String(intersetObject.compare)
             cell.priceTypeLabel.text = intersetObject.tradingPairs
-            cell.priceTypeLabel.backgroundColor = UIColor.yellow
+            cell.priceTypeLabel.backgroundColor = ThemeColor().blueColor()
             return cell
         }
 //        let name = twoDimension[indexPath.section].name[indexPath.row]
@@ -504,7 +505,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
         Alamofire.request(urlRequest).response { (response) in
             if let data = response.data{
-                var res = JSON(data)
+                let res = JSON(data)
                 UserDefaults.standard.set(true,forKey: "buildInterest")
                 completion(res,true)
             }

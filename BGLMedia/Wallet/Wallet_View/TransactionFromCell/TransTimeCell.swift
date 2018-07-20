@@ -44,6 +44,7 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
         textfield.keyboardType = UIKeyboardType.default
         textfield.backgroundColor = ThemeColor().greyColor()
         textfield.frame = CGRect(x:50, y: 70, width: 200, height: 30)
+        textfield.tintColor = .clear
         let rightview = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: textfield.frame.height))
         let label = UILabel()
         label.text = "▼"
@@ -72,7 +73,7 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
         NSLayoutConstraint(item: timeLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: time, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-10-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":timeLabel,"v1":time]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-10-[v1(150)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":timeLabel,"v1":time]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":timeLabel,"v1":time]))
     }
     

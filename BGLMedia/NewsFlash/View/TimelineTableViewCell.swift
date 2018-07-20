@@ -53,6 +53,7 @@ open class TimelineTableViewCell: UITableViewCell {
     
     override open func awakeFromNib() {
         super.awakeFromNib()
+        setUpView()
         // Initialization code
     }
         
@@ -106,6 +107,12 @@ open class TimelineTableViewCell: UITableViewCell {
             
         }
         try! realm.commitWrite()
+    }
+    
+    func setUpView(){
+        shareButton.clipsToBounds = true
+//        shareButton.frame = CGRect(x: 0, y: 0, width: 5, height: 5)
+        shareButton.contentMode = .scaleAspectFit
     }
 
 }

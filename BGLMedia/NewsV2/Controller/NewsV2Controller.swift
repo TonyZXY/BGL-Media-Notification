@@ -132,8 +132,8 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
             vc.hidesBottomBarWhenPushed = true
             vc.accessibilityNavigationStyle = .separate
-            
-            navigationController?.pushViewController(vc, animated: true)
+            self.present(vc, animated: true, completion: nil)
+//            navigationController?.pushViewController(vc, animated: true)
         }
     }
 

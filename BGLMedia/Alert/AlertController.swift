@@ -100,7 +100,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         alerts = allAlert
-        view.backgroundColor = ThemeColor().themeColor()
+        view.backgroundColor = ThemeColor().darkGreyColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
     }
@@ -182,6 +182,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         let coinLabel = UILabel()
         coinLabel.translatesAutoresizingMaskIntoConstraints = false
+        coinLabel.textColor = ThemeColor().whiteColor()
         coinLabel.text = alerts[section].coinName
         
         let button = UIButton(type:.system)
@@ -198,7 +199,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         sectionView.addSubview(button)
         sectionView.addSubview(coinImage)
         sectionView.addSubview(coinLabel)
-        sectionView.backgroundColor = ThemeColor().bglColor()
+        sectionView.backgroundColor = ThemeColor().darkGreyColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         //        views.translatesAutoresizingMaskIntoConstraints = false
         
@@ -516,6 +517,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
+        tableView.rowHeight = 50
         tableView.separatorStyle = .none
         return tableView
     }()

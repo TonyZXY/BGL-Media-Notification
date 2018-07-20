@@ -49,6 +49,7 @@ class MarketSelectController: UIViewController,UITableViewDelegate,UITableViewDa
                     try! self.realm.write {
                         object.market = newTransaction.exchangName
                         object.tradingPairsName = newTransaction.tradingPairsName
+                        object.isGlobalAverage = false
                     }
                 }
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)

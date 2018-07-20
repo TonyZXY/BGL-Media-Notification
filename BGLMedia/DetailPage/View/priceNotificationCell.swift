@@ -21,6 +21,7 @@ class priceNotificationCell:UITableViewCell,UITextFieldDelegate{
     }
     
     func setUpView(){
+        backgroundColor = ThemeColor().greyColor()
         selectionStyle = .none
         
         addSubview(priceTypeLabel)
@@ -50,7 +51,6 @@ class priceNotificationCell:UITableViewCell,UITextFieldDelegate{
         var label = UILabel()
 //        label.layer.borderWidth = 3
         label.font = label.font.withSize(14)
-//        label.layer.borderColor = UIColor.yellow.cgColor
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -59,12 +59,13 @@ class priceNotificationCell:UITableViewCell,UITextFieldDelegate{
     var priceTextField:UITextField = {
         var textField = UITextField()
         textField.keyboardType = UIKeyboardType.decimalPad
-        let bottomLine = CALayer()
-        bottomLine.frame = CGRect(x: 0.0, y: textField.frame.height - 1, width: textField.frame.width, height: 3.0)
-        bottomLine.backgroundColor = UIColor.red.cgColor
-        textField.borderStyle = UITextBorderStyle.bezel
+//        let bottomLine = CALayer()
+//        bottomLine.frame = CGRect(x: 0.0, y: textField.frame.height - 1, width: textField.frame.width, height: 3.0)
+//        bottomLine.backgroundColor = UIColor.red.cgColor
+//        textField.borderStyle = UITextBorderStyle.bezel
 //        textField.layer.addSublayer(bottomLine)
         textField.translatesAutoresizingMaskIntoConstraints = false
+        textField.textColor = ThemeColor().whiteColor()
 //
 //        let toolbar = UIToolbar()
 //        toolbar.sizeToFit()
