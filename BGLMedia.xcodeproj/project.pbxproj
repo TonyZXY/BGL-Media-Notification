@@ -491,11 +491,9 @@
 			children = (
 				2D52ADB820E46E1600018FC0 /* GloabalController.swift */,
 				2D52ADB920E46E1600018FC0 /* DetailController.swift */,
-				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
 				2D52ADBB20E46E1600018FC0 /* CoinDetailController.swift */,
 				2D52ADBC20E46E1600018FC0 /* TransactionsHistoryController.swift */,
 				2D52ADBD20E46E1600018FC0 /* GerneralController.swift */,
-				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
 				2D52ADBF20E46E1600018FC0 /* MarketSelectController.swift */,
 			);
 			path = Controller;
@@ -914,6 +912,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				571F682E210170CF00342198 /* Alert */,
 				578FE8D720FF1F2B0027F17E /* LaunchScreen */,
 				57FC41F020FAD2930052EE02 /* More */,
 				57355C6C20F718F8002E70E4 /* MarketV2 */,
@@ -946,6 +945,39 @@
 				54AA279520E9B28E0026701A /* NetworkManager.swift */,
 			);
 			path = NetworkManager;
+			sourceTree = "<group>";
+		};
+		571F682E210170CF00342198 /* Alert */ = {
+			isa = PBXGroup;
+			children = (
+				571F68312101710B00342198 /* View */,
+				571F68302101710500342198 /* Model */,
+				571F682F210170F500342198 /* Controlller */,
+				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
+				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
+			);
+			path = Alert;
+			sourceTree = "<group>";
+		};
+		571F682F210170F500342198 /* Controlller */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Controlller;
+			sourceTree = "<group>";
+		};
+		571F68302101710500342198 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		571F68312101710B00342198 /* View */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = View;
 			sourceTree = "<group>";
 		};
 		57355C0620F7188B002E70E4 /* Model */ = {

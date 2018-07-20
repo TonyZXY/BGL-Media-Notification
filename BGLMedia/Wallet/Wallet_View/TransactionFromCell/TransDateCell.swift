@@ -37,6 +37,9 @@ class TransDateCell:UITableViewCell,UITextFieldDelegate {
         textfield.textColor = UIColor.white
         textfield.font = textfield.font?.withSize(15)
         textfield.backgroundColor = ThemeColor().greyColor()
+        textfield.tintColor = .clear
+        textfield.autocorrectionType = .yes
+        
         let rightview = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: textfield.frame.height))
         let label = UILabel()
         label.text = "▼"
@@ -61,11 +64,9 @@ class TransDateCell:UITableViewCell,UITextFieldDelegate {
         backgroundColor = ThemeColor().themeColor()
         addSubview(dateLabel)
         addSubview(date)
-        
         NSLayoutConstraint(item: dateLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: date, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-10-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":dateLabel,"v1":date]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-10-[v1(150)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":dateLabel,"v1":date]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":dateLabel,"v1":date]))
     }
     

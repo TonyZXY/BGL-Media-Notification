@@ -69,7 +69,7 @@ class TransPriceCell:UITableViewCell{
         
 
         
-        price.attributedPlaceholder = NSAttributedString(string:textValue(name: "pricePlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:16) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()])
+        price.attributedPlaceholder = NSAttributedString(string:textValue(name: "pricePlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
         
         NSLayoutConstraint(item: priceLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
         NSLayoutConstraint(item: price, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true

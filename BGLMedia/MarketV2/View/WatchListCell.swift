@@ -140,14 +140,11 @@ class WatchListCell:UICollectionViewCell{
         
         
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0(50)]-2-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0(30)]-2-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1(20)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(20)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
         NSLayoutConstraint(item: addWish, attribute: .centerX, relatedBy: NSLayoutRelation.equal, toItem: rankLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        
-        
-        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))

@@ -140,6 +140,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             if success{
                 DispatchQueue.main.async {
                     self.coinList.reloadData()
+                    self.refresher.endRefreshing()
                 }
             } else{
                 print("Fail to get Global Average CoinList")
@@ -157,6 +158,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         sortView.addSubview(filterDate)
         view.addSubview(searchBar)
         view.addSubview(coinList)
+        coinList.addSubview(refresher)
         
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView]))
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView]))
@@ -260,6 +262,19 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         collectionView.dataSource = self
         return collectionView
     }()
+    
+    lazy var refresher: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+        refreshControl.tintColor = UIColor.white
+        return refreshControl
+    }()
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        getCoinData()
+    }
+    
+    
     
     func setSortbutton() {
         let toolbar = UIToolbar()

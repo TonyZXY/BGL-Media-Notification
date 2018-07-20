@@ -18,10 +18,17 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         }
     }
     
+    var realmObject:Results<GlobalAverageObject>{
+        get{
+            return realm.objects(GlobalAverageObject.self)
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        
+        getCoinData()
         NotificationCenter.default.addObserver(self, selector: #selector(updateWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(refreshWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
@@ -52,6 +59,56 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         collectionView.dataSource = self
         return collectionView
     }()
+    
+    lazy var refresher: UIRefreshControl = {
+        let refreshControl = UIRefreshControl()
+        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+        refreshControl.tintColor = UIColor.white
+        return refreshControl
+    }()
+    
+    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+        getCoinData()
+    }
+    
+    func getCoinData(){
+        URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
+            if success{
+                let dispatchGroup = DispatchGroup()
+                for result in self.watchListObjects{
+                    if result.isGlobalAverage{
+                        let coinObject = self.realmObject.filter("coinAbbName = %@", result.coinAbbName)
+                        let watchListCoinObject = self.watchListObjects.filter("coinAbbName = %@", result.coinAbbName)
+                        try! self.realm.write {
+                            watchListCoinObject[0].price = coinObject[0].price
+                            watchListCoinObject[0].profitChange = coinObject[0].percent24h
+                        }
+                    } else{
+                        dispatchGroup.enter()
+                        APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.market) { (response,success) in
+                            if success{
+                                let watchListCoinObject = self.watchListObjects.filter("coinAbbName = %@", result.coinAbbName)
+                                try! self.realm.write {
+                                    watchListCoinObject[0].price = response["RAW"]["PRICE"].double ?? 0
+                                    watchListCoinObject[0].profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
+                                }
+                                dispatchGroup.leave()
+                            }
+                        }
+                    }
+                }
+                
+                dispatchGroup.notify(queue:.main){
+                    self.coinList.reloadData()
+                    self.refresher.endRefreshing()
+                }
+            } else{
+                print("Fail to get Global Average CoinList")
+            }
+        }
+    }
+    
+    
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
        if collectionView == coinList{
@@ -108,8 +165,10 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         }
     }
     
+    
     func setUpView(){
         view.addSubview(coinList)
+        coinList.addSubview(refresher)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
     }

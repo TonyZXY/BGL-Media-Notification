@@ -64,7 +64,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             let mainViewController = OnBoardingUIPageViewController()
             window?.rootViewController = mainViewController
             window?.makeKeyAndVisible()
-            
             SetDataResult().writeJsonExchange()
             SetDataResult().writeMarketCapCoinList()
             URLServices.fetchInstance.getCoinList()
@@ -75,6 +74,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(false, forKey: "buildInterest")
             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
+//            UserDefaults.standard.string("null",forKey: "UserEmail")
+            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+            let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
         }
         return true
     }
@@ -87,7 +89,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         if let notification = response.notification.request.content.userInfo as? [String: AnyObject] {
             let message = parseRemoteNotification(notification: notification)
-//            print(message as Any)
+            print(message as Any)
         }
         completionHandler()
     }
@@ -143,6 +145,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
         let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
         let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+//        UserDefaults.standard.rem
+        
         
         if email != "null" && certificateToken != "null" &&  deviceToken != "null"{
                 URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in

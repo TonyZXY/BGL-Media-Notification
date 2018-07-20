@@ -53,8 +53,8 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         addSubview(numberLabel)
         addSubview(number)
         
-        number.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes: [kCTForegroundColorAttributeName as NSAttributedStringKey: UIColor.white])
         
+        number.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
 
         
         NSLayoutConstraint(item: numberLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true

@@ -56,8 +56,8 @@ class TransAdditionalCell:UITableViewCell{
         addSubview(additionalLabel)
         addSubview(additional)
         
-        additional.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes: [kCTForegroundColorAttributeName as NSAttributedStringKey: UIColor.white])
         
+        additional.attributedPlaceholder = NSAttributedString(string:textValue(name: "additionalPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
         
         NSLayoutConstraint(item: additionalLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
         NSLayoutConstraint(item: additional, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true

@@ -18,7 +18,7 @@ class URLServices:NSObject{
     static let fetchInstance = URLServices()
     let realm = try! Realm()
     func passServerData(urlParameters:[String],httpMethod:String,parameters:[String:Any],completion:@escaping (JSON, Bool)->Void){
-        var BaseURl = "http://10.10.6.18:3020"
+        var BaseURl = "https://bglnewsbkend.tk"
         for path in urlParameters{
             BaseURl = BaseURl + "/" + path
         }

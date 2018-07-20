@@ -215,8 +215,6 @@ class LoginPageViewController: UIViewController {
                             UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
                             UserDefaults.standard.set(true, forKey: "isLoggedIn")
                             
-        
-                            
                             if !self.sendDeviceTokenStatus{
                                 let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
                                 let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
@@ -226,6 +224,8 @@ class LoginPageViewController: UIViewController {
                                     }
                                 })
                             }
+                            
+                            
                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
                             self.dismiss(animated: true, completion: nil)
                         } else{

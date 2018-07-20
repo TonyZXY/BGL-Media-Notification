@@ -48,7 +48,7 @@ transactionFeeButtonForm = "Currency ▼";
 additionalForm = "Notes";
 pricePlaceholder = "Enter the price here...";
 amountPlaceholder = "Enter bought amount here...";
-additional = "Notes...";
+additionalPlaceholder = "Notes...";
 
 //Market Page
 globalMarket = "Markets";
