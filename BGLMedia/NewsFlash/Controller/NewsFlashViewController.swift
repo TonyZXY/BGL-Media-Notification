@@ -58,7 +58,8 @@ class NewsFlashViewController: UIViewController {
     }
 
     @objc func searchResult(){
-        let search = SearchNewsFlashController()
+        let search = ShareNewsFlashControllerV2()
+    
         search.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(search, animated: true)
     }

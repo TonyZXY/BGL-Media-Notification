@@ -17,7 +17,7 @@ class generalDetail{
     var tradingPairs:String = ""
 }
 
-class DetailController: UIViewController{ 
+class DetailController: UIViewController{
     var menuitems = ["General","Transactions","Alerts"]
     let cryptoCompareClient = CryptoCompareClient()
     var coinDetail = CoinDetailData()

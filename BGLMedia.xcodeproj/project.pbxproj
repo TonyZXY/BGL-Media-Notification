@@ -246,6 +246,7 @@
 		57BAD9B82104E4BA00973B45 /* CurrencyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD9762104E4B900973B45 /* CurrencyCell.swift */; };
 		57BAD9B92104E4BA00973B45 /* CountryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD9772104E4B900973B45 /* CountryCell.swift */; };
 		57BAD9C32104E4BA00973B45 /* PickerViewViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD9882104E4BA00973B45 /* PickerViewViewController.swift */; };
+		57BAD9D1210503A100973B45 /* ShareNewsFlashControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD9D0210503A100973B45 /* ShareNewsFlashControllerV2.swift */; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
 		57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */; };
 		57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FA20FB00320052EE02 /* CurrencyController.swift */; };
@@ -509,6 +510,7 @@
 		57BAD9762104E4B900973B45 /* CurrencyCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CurrencyCell.swift; sourceTree = "<group>"; };
 		57BAD9772104E4B900973B45 /* CountryCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CountryCell.swift; sourceTree = "<group>"; };
 		57BAD9882104E4BA00973B45 /* PickerViewViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PickerViewViewController.swift; sourceTree = "<group>"; };
+		57BAD9D0210503A100973B45 /* ShareNewsFlashControllerV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShareNewsFlashControllerV2.swift; sourceTree = "<group>"; };
 		57FC41F120FAD2D20052EE02 /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
 		57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BGLCommunityController.swift; sourceTree = "<group>"; };
 		57FC41FA20FB00320052EE02 /* CurrencyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyController.swift; sourceTree = "<group>"; };
@@ -807,6 +809,7 @@
 				5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */,
 				2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */,
 				5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */,
+				57BAD9D0210503A100973B45 /* ShareNewsFlashControllerV2.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1777,6 +1780,7 @@
 				2D52AF0520E46E1A00018FC0 /* WebDetailViewController.swift in Sources */,
 				2D52AF3C20E46E1A00018FC0 /* NewsSliderCell.swift in Sources */,
 				2D52AF3620E46E1A00018FC0 /* GenuineCell.swift in Sources */,
+				57BAD9D1210503A100973B45 /* ShareNewsFlashControllerV2.swift in Sources */,
 				2D52AF0220E46E1A00018FC0 /* defDisplayOpt.swift in Sources */,
 				2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */,
 				2D52AF0320E46E1A00018FC0 /* OtherDetailViewController.swift in Sources */,
