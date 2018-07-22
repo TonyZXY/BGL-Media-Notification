@@ -13,7 +13,7 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     var observer1:NSObject?
     let gerneralController = GerneralController()
     let transactionHistoryController = TransactionsHistoryController()
-    let alertController = AlertController()
+    let alertControllers = AlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -85,7 +85,7 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
             addChildViewController(childViewControllers: transactionHistoryController,cell:cell)
             return cell
         } else if indexPath.row == 2{
-            addChildViewController(childViewControllers: alertController,cell:cell)
+            addChildViewController(childViewControllers: alertControllers,cell:cell)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
