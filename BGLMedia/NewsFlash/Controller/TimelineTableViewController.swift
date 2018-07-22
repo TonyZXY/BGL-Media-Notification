@@ -154,7 +154,7 @@ class TimelineTableViewController: UITableViewController {
         cell.titleLabel.text = dateFormatter.string(from: object.dateTime)
         cell.descriptionLabel.text = object.contents
         cell.object = object
-        cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
+        cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         
         return cell
     }
@@ -188,6 +188,9 @@ class TimelineTableViewController: UITableViewController {
         activityVC.popoverPresentationController?.sourceView = self.view
         self.present(activityVC,animated: true, completion:nil)
     }
+    
+
+    
     
     func generateImage(textImage: UIImage)->UIImage{
         let topImage = UIImage(named:"shareImageHead")

@@ -209,25 +209,30 @@ class LoginPageViewController: UIViewController {
                 if success{
                     let parameter = ["email":self.emailTextField.text!.lowercased(),"password":self.passwordTextField.text!]
                     URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","login"], httpMethod: "POST", parameters: parameter, completion: { (response, success) in
+                        print(response)
                         if success {
-                            let token = response["token"].string ?? ""
-                            UserDefaults.standard.set(token, forKey: "CertificateToken")
-                            UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
-                            UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                            
-                            if !self.sendDeviceTokenStatus{
-                                let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
-                                let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
-                                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
-                                    if success{
-                                        UserDefaults.standard.set(true, forKey: "SendDeviceToken")
-                                    }
-                                })
+                            if response["success"].bool!{
+                                print("sjflsjflkdsfklsdfldsflsf")
+                                let token = response["token"].string ?? ""
+                                UserDefaults.standard.set(token, forKey: "CertificateToken")
+                                UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
+                                UserDefaults.standard.set(true, forKey: "isLoggedIn")
+                                
+                                if !self.sendDeviceTokenStatus{
+                                    let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                                    let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
+                                    URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
+                                        if success{
+                                            UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                                        }
+                                    })
+                                }
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
+                                self.dismiss(animated: true, completion: nil)
+                            } else{
+                                self.notificationLabel.text = "Error code \(response["code"])"
+                                self.notificationLabel.isHidden = false
                             }
-                            
-                            
-                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
-                            self.dismiss(animated: true, completion: nil)
                         } else{
                             print(response)
                             self.notificationLabel.text = "Error code \(response["code"])"

@@ -17,7 +17,7 @@ class generalDetail{
     var tradingPairs:String = ""
 }
 
-class DetailController: UIViewController{
+class DetailController: UIViewController{ 
     var menuitems = ["General","Transactions","Alerts"]
     let cryptoCompareClient = CryptoCompareClient()
     var coinDetail = CoinDetailData()
@@ -83,6 +83,9 @@ class DetailController: UIViewController{
 //            generalPage.totalNumber.text = currecyLogo[priceType]! + generalPage.totalNumber.text!
             generalPage.tradingPairs.text = value.coinAbbName + "/" +  value.tradingPairsName
             generalPage.market.text = value.exchangeName
+            generalPage.edit.isHidden = true
+            generalPage.exchangeButton.setTitle(value.exchangeName, for: .normal)
+            generalPage.tradingPairButton.setTitle(value.coinAbbName + "/" +  value.tradingPairsName, for: .normal)
             general.coinAbbName = value.coinAbbName
             general.coinName = value.coinName
             general.exchangeName = value.exchangeName
@@ -94,9 +97,9 @@ class DetailController: UIViewController{
             marketSelectedData.transactionPrice = value.transactionPrice
             marketSelectedData.coinAmount = value.coinAmount
             coinDetailController.transactionHistoryController.generalData = general
-            coinDetailController.alertController.coinName.coinAbbName = general.coinAbbName
-            coinDetailController.alertController.coinName.status = true
-            coinDetailController.alertController.coinAbbName = general.coinAbbName
+            coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
+            coinDetailController.alertControllers.coinName.status = true
+            coinDetailController.alertControllers.coinAbbName = general.coinAbbName
             generalPage.marketCapResult.text = String(globalMarketData.market_cap ?? 0.0)
             generalPage.volumeResult.text = String(globalMarketData.volume_24h ?? 0.0)
             generalPage.circulatingSupplyResult.text = String(globalMarketData.circulating_supply ?? 0.0)
@@ -252,6 +255,8 @@ class DetailController: UIViewController{
     //Set up layout constraints
     func setUpView(){
         coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
+        coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)
+        coinDetailController.gerneralController.tradingPairButton.addTarget(self, action: #selector(editTradingPairs), for: .touchUpInside)
         view.backgroundColor = ThemeColor().themeColor()
         let titleLabel = UILabel()
         titleLabel.text = coinDetails.selectCoinName
@@ -275,6 +280,83 @@ class DetailController: UIViewController{
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         addChildViewControllers(childViewControllers: coinDetailController, views: coinDetailView)
 
+    }
+    
+    @objc func editMarket(){
+        var picker: TCPickerViewInput = TCPickerView()
+        picker.title = "Market"
+        let exchangList = getExchangeList()
+        let values = exchangList.map{ TCPickerView.Value(title: $0) }
+        picker.values = values
+        picker.delegate = self as? TCPickerViewOutput
+        picker.selection = .single
+        picker.completion = { (selectedIndex) in
+            for i in selectedIndex {
+                let tradingPairList = self.getTradingPairsList(market: values[i].title)
+                if tradingPairList.count != 0{
+                    let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
+                    let statusItem = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+                    if let object = statusItem.first{
+                        try! self.realm.write {
+                            object.exchangeName = values[i].title
+                            object.tradingPairsName = tradingPairList[0]
+                        }
+                    }
+                }
+            }
+            self.refreshData()
+        }
+        picker.show()
+    }
+    
+    @objc func editTradingPairs(){
+        var picker: TCPickerViewInput = TCPickerView()
+        picker.title = "Market"
+         let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
+        let getCoinExchange = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+        let exchangList = getTradingPairsList(market: getCoinExchange[0].exchangeName)
+        let values = exchangList.map{ TCPickerView.Value(title: $0) }
+        picker.values = values
+        picker.delegate = self as? TCPickerViewOutput
+        picker.selection = .single
+        picker.completion = { (selectedIndex) in
+            for i in selectedIndex {
+                //                self.titleTextField.text = values[i].title
+                self.coinDetailController.gerneralController.tradingPairButton.setTitle(self.coinDetails.selectCoinAbbName + "/" + values[i].title
+                    , for: .normal)
+//                let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
+                if let object = getCoinExchange.first{
+                    try! self.realm.write {
+                        object.tradingPairsName = values[i].title
+                    }
+                }
+            }
+            self.refreshData()
+        }
+        picker.show()
+    }
+    
+    func getExchangeList()->[String]{
+        var allExchanges = [String]()
+        let data = GetDataResult().getExchangeList()
+        for (key,value) in data{
+            let exactMarket = value.filter{name in return name.key == self.coinDetails.selectCoinAbbName}
+            if exactMarket.count != 0{
+                allExchanges.append(key)
+            }
+        }
+        return allExchanges
+    }
+    
+    func getTradingPairsList(market:String)->[String]{
+        var allTradingPairs = [String]()
+        let data = GetDataResult().getTradingCoinList(market: market,coin:self.coinDetails.selectCoinAbbName)
+        if data != []{
+            for pairs in data{
+                allTradingPairs.append(pairs)
+            }
+        }
+        return allTradingPairs
     }
     
     override func didReceiveMemoryWarning() {
