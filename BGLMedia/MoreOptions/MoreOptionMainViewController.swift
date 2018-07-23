@@ -113,7 +113,7 @@ class MoreOptionMainViewController: UIViewController, UITableViewDataSource, UIT
                     
                 } else{
                     print("trying to log in")
-                    let login = LoginPageViewController()
+                    let login = LoginController()
                     self.present(login,animated: true, completion: nil)
                 }
             self.tableView00.reloadData()

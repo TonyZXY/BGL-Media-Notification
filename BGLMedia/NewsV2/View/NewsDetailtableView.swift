@@ -46,7 +46,7 @@ class NewsDetailTableViewCell:UITableViewCell{
     
     let newsImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "navigation_arrow.png"))
-        imageView.frame = CGRect(x: 0, y: 0, width: 120, height: 80)
+//        imageView.frame = CGRect(x: 5, y: 2, width: 120, height: 80)
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         imageView.contentMode = UIViewContentMode.scaleAspectFill
@@ -91,6 +91,7 @@ class NewsDetailTableViewCell:UITableViewCell{
         cellView.addSubview(newsDescription)
         cellView.addSubview(newsAuthor)
         
+        newsImage.frame = CGRect(x: -2, y: -5, width: 120, height: 80)
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-2-[v0]-2-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         NSLayoutConstraint(item: newsImage, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
@@ -118,3 +119,5 @@ class NewsDetailTableViewCell:UITableViewCell{
         fatalError("init has not been completed")
     }
 }
+
+

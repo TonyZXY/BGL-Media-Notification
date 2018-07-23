@@ -75,6 +75,12 @@ class ThemeColor:UIColor{
         return color
     }
     
+    func progressColor() -> UIColor {
+        _ = #colorLiteral(red: 0.7490196078, green: 0.7490196078, blue: 0.7490196078, alpha: 1)
+        let color = UIColor.init(red:191/255.0, green:191/255.0, blue:191/255.0, alpha:0.5)
+        return color
+    }
+    
     ///////////////
     
     func themeWidgetColor() -> UIColor{
@@ -100,6 +106,8 @@ class ThemeColor:UIColor{
         let color = UIColor.init(red:47/255.0, green:49/255.0, blue:54/255.0, alpha:1)
         return color
     }
+    
+    
     
     
     
@@ -140,31 +148,31 @@ class ThemeColor:UIColor{
     }
 }
 
-extension UIColor {
-    public convenience init?(hexString: String) {
-        let r, g, b, a: CGFloat
-        
-        if hexString.hasPrefix("#") {
-            let start = hexString.index(hexString.startIndex, offsetBy: 1)
-            let hexColor = String(hexString[start...])
-            
-            if hexColor.count == 8 {
-                let scanner = Scanner(string: hexColor)
-                var hexNumber: UInt64 = 0
-                
-                if scanner.scanHexInt64(&hexNumber) {
-                    r = CGFloat((hexNumber & 0xff000000) >> 24) / 255
-                    g = CGFloat((hexNumber & 0x00ff0000) >> 16) / 255
-                    b = CGFloat((hexNumber & 0x0000ff00) >> 8) / 255
-                    a = CGFloat(hexNumber & 0x000000ff) / 255
-                    
-                    self.init(red: r, green: g, blue: b, alpha: a)
-                    return
-                }
-            }
-        }
-        return nil
-    }
-    
-    // Using Method:   let gold = UIColor(hexString: "#ffe700ff")
-}
+//extension UIColor {
+//    public convenience init?(hexString: String) {
+//        let r, g, b, a: CGFloat
+//        
+//        if hexString.hasPrefix("#") {
+//            let start = hexString.index(hexString.startIndex, offsetBy: 1)
+//            let hexColor = String(hexString[start...])
+//            
+//            if hexColor.count == 8 {
+//                let scanner = Scanner(string: hexColor)
+//                var hexNumber: UInt64 = 0
+//                
+//                if scanner.scanHexInt64(&hexNumber) {
+//                    r = CGFloat((hexNumber & 0xff000000) >> 24) / 255
+//                    g = CGFloat((hexNumber & 0x00ff0000) >> 16) / 255
+//                    b = CGFloat((hexNumber & 0x0000ff00) >> 8) / 255
+//                    a = CGFloat(hexNumber & 0x000000ff) / 255
+//                    
+//                    self.init(red: r, green: g, blue: b, alpha: a)
+//                    return
+//                }
+//            }
+//        }
+//        return nil
+//    }
+//    
+//    // Using Method:   let gold = UIColor(hexString: "#ffe700ff")
+//}

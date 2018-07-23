@@ -140,3 +140,29 @@ class InsetLabel: UILabel {
         }
     }
 }
+
+extension UIViewController {
+    func imageWithView(view: UIView) -> UIImage? {
+        UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
+        view.drawHierarchy(in: view.bounds, afterScreenUpdates: true)
+        let img = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return img
+    }
+}
+
+extension UIImage {
+    func reSizeImage(reSize:CGSize) -> UIImage? {
+        //UIGraphicsBeginImageContext(reSize);
+        UIGraphicsBeginImageContextWithOptions(reSize,false,UIScreen.main.scale)
+        self.draw(in: CGRect(x: 0, y: 0, width: reSize.width, height: reSize.height))
+        let reSizeImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        return reSizeImage
+    }
+    
+    func scaleImage(scaleSize:CGFloat) -> UIImage? {
+        let reSize = CGSize(width: self.size.width * scaleSize, height: self.size.height * scaleSize)
+        return reSizeImage(reSize: reSize)
+    }
+}

@@ -60,6 +60,7 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
         cell.titleLabel.text = dateFormatter.string(from: object.dateTime)
         cell.descriptionLabel.text = object.contents
         cell.object = object
+//            cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
         } else {
