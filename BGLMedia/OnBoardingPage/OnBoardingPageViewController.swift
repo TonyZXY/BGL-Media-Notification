@@ -93,12 +93,12 @@ class OnBoardingPageViewController: UIViewController {
     
     
     @objc func registerButtonClicked(sender: UIButton){
-        let register = RegisterationPageViewController()
+        let register = RegisterController()
         self.present(register,animated: true, completion: nil)
     }
     
     @objc func loginButtonClicked(sender: UIButton){
-        let login = LoginPageViewController()
+        let login = LoginController()
         self.present(login,animated: true, completion: nil)
     }
     

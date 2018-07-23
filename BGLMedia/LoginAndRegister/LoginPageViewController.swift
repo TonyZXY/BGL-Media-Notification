@@ -12,7 +12,6 @@ import SwiftyJSON
 
 class LoginPageViewController: UIViewController {
 
-    
     var sendDeviceTokenStatus:Bool{
         get{
              return UserDefaults.standard.bool(forKey: "SendDeviceToken")
@@ -90,7 +89,7 @@ class LoginPageViewController: UIViewController {
     @objc func tapRigsterLabel(sender:UITapGestureRecognizer) {
         print("tap working")
         
-        let register = RegisterationPageViewController()
+        let register = RegisterController()
         
         self.present(register,animated: true, completion: nil)
     }
@@ -265,14 +264,14 @@ extension UIViewController {
     
 }
 
-
-class LeftPaddedTextField: UITextField {
-    override func textRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x + 10, y: bounds.origin.y, width: bounds.width + 10, height: bounds.height)
-    }
-    
-    override func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return CGRect(x: bounds.origin.x + 10, y: bounds.origin.y, width: bounds.width + 10, height: bounds.height)
-    }
-}
+//
+//class LeftPaddedTextField: UITextField {
+//    override func textRect(forBounds bounds: CGRect) -> CGRect {
+//        return CGRect(x: bounds.origin.x + 10, y: bounds.origin.y, width: bounds.width + 10, height: bounds.height)
+//    }
+//
+//    override func editingRect(forBounds bounds: CGRect) -> CGRect {
+//        return CGRect(x: bounds.origin.x + 10, y: bounds.origin.y, width: bounds.width + 10, height: bounds.height)
+//    }
+//}
 

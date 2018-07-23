@@ -121,7 +121,7 @@ open class TimelineTableViewCell: UITableViewCell {
 //       var button = UIButton(frame: CGRect(x: 0, y: 0, width: 5, height: 5))
         var button = UIButton()
         button.imageView?.contentMode = .scaleAspectFit
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 30, 0, 30)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 30, 0, 10)
         button.imageEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0)
         button.titleLabel!.font =  UIFont(name: "HelveticaNeue-Thin", size: 13)
         button.translatesAutoresizingMaskIntoConstraints = false

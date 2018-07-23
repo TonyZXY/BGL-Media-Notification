@@ -83,7 +83,7 @@ open class TCPickerView: UIView, UITableViewDataSource, UITableViewDelegate, TCP
     
     public var completion: Completion?
     public var selection: Mode = .multiply
-    public var theme: TCPickerViewThemeType = TCPickerViewDarkTheme() {
+    public var theme: TCPickerViewThemeType = TCPickerViewDefaultTheme() {
         didSet {
             self.updateUI()
         }

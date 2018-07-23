@@ -197,6 +197,11 @@ edit_alert = "Edit Currency";
 addAlert_alert = "Add alert";
 pushSection_alert = "Push Notification";
 editSection_alert = "Currency Alert";
+notallow_alert = "Unavailable to use alert function without setting allow in Setting";
+notlogin_alert = "Login is neccssary to use the alert function";
+alertStatus_alert = "Notification Setting";
+alertUnavaliable_alert = "Unavaliable";
+alertavaliable_alert = "Avaliable";
 
 //Alert Edit Page
 exampleLabel_alert = "Market Price";

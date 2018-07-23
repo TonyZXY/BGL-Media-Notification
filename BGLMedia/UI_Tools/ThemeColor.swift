@@ -75,6 +75,12 @@ class ThemeColor:UIColor{
         return color
     }
     
+    func progressColor() -> UIColor {
+        _ = #colorLiteral(red: 0.7490196078, green: 0.7490196078, blue: 0.7490196078, alpha: 1)
+        let color = UIColor.init(red:191/255.0, green:191/255.0, blue:191/255.0, alpha:0.5)
+        return color
+    }
+    
     ///////////////
     
     func themeWidgetColor() -> UIColor{
@@ -100,6 +106,8 @@ class ThemeColor:UIColor{
         let color = UIColor.init(red:47/255.0, green:49/255.0, blue:54/255.0, alpha:1)
         return color
     }
+    
+    
     
     
     

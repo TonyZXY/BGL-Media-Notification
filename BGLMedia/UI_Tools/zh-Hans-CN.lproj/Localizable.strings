@@ -192,6 +192,11 @@ edit_alert = "设置需要提醒的货币";
 addAlert_alert = "添加提醒";
 pushSection_alert = "推送通知功能";
 editSection_alert = "币种提醒";
+notallow_alert = "需要在setting里设置允许才能使用推送功能";
+notlogin_alert = "需要登陆后才允许使用推送功能";
+alertStatus_alert = "推送通知设置";
+alertUnavaliable_alert = "禁用";
+alertavaliable_alert = "允许";
 
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";
