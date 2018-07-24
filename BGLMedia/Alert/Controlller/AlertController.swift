@@ -192,8 +192,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
         button.tag = section
         
-        
-        
         let sectionView = UIView()
         sectionView.clipsToBounds = true
         sectionView.addSubview(button)
@@ -203,10 +201,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         button.translatesAutoresizingMaskIntoConstraints = false
         //        views.translatesAutoresizingMaskIntoConstraints = false
         
-        
-        
-        
-        
+
         sectionView.layer.borderWidth = 1
         
         NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true

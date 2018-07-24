@@ -203,7 +203,7 @@ class LoginController: UIViewController {
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                     hud.textLabel.text = "Success"
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                         self.dismiss(animated: true, completion: nil)
                     }
@@ -212,7 +212,7 @@ class LoginController: UIViewController {
                     hud.indicatorView = JGProgressHUDErrorIndicatorView()
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = loginfailure
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                         self.passwordTextField.layer.borderWidth = 1.8
                         self.passwordTextField.layer.borderColor = ThemeColor().redColor().cgColor
@@ -235,14 +235,14 @@ class LoginController: UIViewController {
                 if !(manager?.isReachable)! {
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = "No Network" // To change?
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     
                 } else {
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = "Time Out" // To change?
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     

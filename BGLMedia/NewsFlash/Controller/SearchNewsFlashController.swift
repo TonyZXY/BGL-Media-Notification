@@ -44,9 +44,6 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        if tableView == flashTableView{
-            
-        
         let cell = tableView.dequeueReusableCell(withIdentifier: "flashNews", for: indexPath) as! TimelineTableViewCell
         let object = newsFlashResult[indexPath.row]
 //        print(object.id)
@@ -60,29 +57,21 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
         cell.titleLabel.text = dateFormatter.string(from: object.dateTime)
         cell.descriptionLabel.text = object.contents
         cell.object = object
+        cell.likeButton.isHidden = true
+        cell.shareButton.isHidden = true
 //            cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
-        } else {
-            return UITableViewCell()
-        }
     }
     
     @objc func shareButtonClicked(sender: UIButton){
-        let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:self.flashTableView)
-        let indexPath = self.flashTableView.indexPathForRow(at: buttonPosition)
+        let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:flashTableView)
+        let indexPath = flashTableView.indexPathForRow(at: buttonPosition)
         let cell = flashTableView.cellForRow(at: indexPath!)! as! TimelineTableViewCell
-        let cellText = cell.descriptionLabel.text
-        let size = cell.descriptionLabel.font.pointSize
-        let textImage = self.textToImage(drawText: cellText!, inImage: cell.descriptionLabel.createImage!, atPoint: CGPoint(x:0, y:0), withSize:size)
-        
-        let topImage = combineLogoWithText(combine: UIImage(named: "bcg_logo.png")!, with: textImage)
-        let bottomImage = UIImage(named: "sample_qr_code.png")
-        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
-        
-        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities:nil)
-        activityVC.popoverPresentationController?.sourceView = self.view
-        self.present(activityVC,animated: true, completion:nil)
+        let shareView = ShareNewsFlashControllerV2()
+        shareView.dateLabel.text = cell.titleLabel.text
+        shareView.flashNewsDescription.text = cell.descriptionLabel.text
+        present(shareView, animated: true, completion: nil)
     }
     
     func textToImage(drawText text: String, inImage image: UIImage, atPoint point: CGPoint, withSize size: CGFloat) -> UIImage {

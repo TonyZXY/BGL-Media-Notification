@@ -9,7 +9,7 @@
 import UIKit
 import RealmSwift
 import Kingfisher
-import WCLShineButton
+
 
 class WatchListCell:UICollectionViewCell{
     var color = ThemeColor()

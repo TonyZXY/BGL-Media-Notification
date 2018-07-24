@@ -45,6 +45,12 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         }
     }
     
+    var sendDeviceTokenStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "SendDeviceToken")
+        }
+    }
+    
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
@@ -190,100 +196,72 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 hud.show(in: (self.parent?.view)!)
                 
                 let body = ["email":email,"token":certificateToken,"deviceToken":deviceToken]
-                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","logoutIOSDevice"], httpMethod: "POST", parameters: body) { (response, success) in
-                    if success{
-                        UserDefaults.standard.set(false,forKey: "isLoggedIn")
-                        UserDefaults.standard.set(true, forKey: "flashSwitch")
-                        UserDefaults.standard.set(true, forKey: "priceSwitch")
-                        UserDefaults.standard.set(false, forKey: "SendDeviceToken")
-                        UserDefaults.standard.set("", forKey: "UserEmail")
-                        UserDefaults.standard.set("", forKey: "CertificateToken")
-                        try! self.realm.write {
-                            self.realm.delete(self.realm.objects(alertObject.self))
-                            self.realm.delete(self.realm.objects(alertCoinNames.self))
-                        }
-                        self.optionTableView.reloadData()
-                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                        hud.textLabel.text = "Success"
-                        
-                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                            hud.dismiss()
-                            self.dismiss(animated: true, completion: nil)
-                        }
-                    } else{
-                        let manager = NetworkReachabilityManager()
-                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                        if !(manager?.isReachable)! {
-                            hud.textLabel.text = "Error"
-                            hud.detailTextLabel.text = "No Network" // To change?
+                
+                
+                if sendDeviceTokenStatus{
+                    URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","logoutIOSDevice"], httpMethod: "POST", parameters: body) { (response, success) in
+                        if success{
+                            self.deleteMemory()
+                            self.optionTableView.reloadData()
+                            hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                            hud.textLabel.text = "Success"
+                            
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                 hud.dismiss()
                             }
-                            
-                        } else {
-                            hud.textLabel.text = "Error"
-                            hud.detailTextLabel.text = "Time Out" // To change?
-                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
-                                hud.dismiss()
+                        } else{
+                            let manager = NetworkReachabilityManager()
+                            hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                            if !(manager?.isReachable)! {
+                                hud.textLabel.text = "Error"
+                                hud.detailTextLabel.text = "No Network" // To change?
+                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                                    hud.dismiss()
+                                }
+                            } else {
+                                hud.textLabel.text = "Error"
+                                hud.detailTextLabel.text = "Time Out" // To change?
+                                DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                                    hud.dismiss()
+                                }
                             }
-                            
                         }
+                    }
+                } else{
+                    deleteMemory()
+                    self.optionTableView.reloadData()
+                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                    hud.textLabel.text = "Success"
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                        hud.dismiss()
                     }
                 }
             } else{
-//                if notificationStatus{
                     let login = LoginController()
                     self.present(login, animated: true, completion: nil)
-//                } else{
-//                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
-//                    // Setting button action
-//                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
-//                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-//                            return
-//                        }
-//
-//                        if UIApplication.shared.canOpenURL(settingsUrl) {
-//                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-//                                // Checking for setting is opened or not
-//                                print("Setting is opened: \(success)")
-//                            })
-//                        }
-//                    }
-//                    alertController.addAction(settingsAction)
-//                    // Cancel button action
-//                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
-//                        // Magic is here for cancel button
-//                    }
-//                    alertController.addAction(cancelAction)
-//                    // This part is important to show the alert controller ( You may delete "self." from present )
-//                    self.present(alertController, animated: true, completion: nil)
-//                }
             }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-//    func getNotificationStatus(){
-//        let current = UNUserNotificationCenter.current()
-//        current.getNotificationSettings(completionHandler: { (settings) in
-//            if settings.authorizationStatus == .notDetermined {
-//                // Notification permission has not been asked yet, go for it!
-//            }
-//
-//            if settings.authorizationStatus == .denied {
-//                UserDefaults.standard.set(false, forKey: "NotificationSetting")
-//                // Notification permission was previously denied, go to settings & privacy to re-enable
-//            }
-//
-//            if settings.authorizationStatus == .authorized {
-//                UserDefaults.standard.set(true, forKey: "NotificationSetting")
-//                // Notification permission was already gransnted
-//            }
-////            DispatchQueue.main.async {
-////                self.notificationTableView.reloadData()
-////            }
-//        })
-//    }
+    
+    func deleteMemory(){
+        UserDefaults.standard.set(false,forKey: "isLoggedIn")
+        UserDefaults.standard.set(true, forKey: "flashSwitch")
+        UserDefaults.standard.set(true, forKey: "priceSwitch")
+        UserDefaults.standard.set(false, forKey: "SendDeviceToken")
+        UserDefaults.standard.set(false, forKey: "getDeviceToken")
+        UserDefaults.standard.set("null", forKey: "UserEmail")
+        UserDefaults.standard.set("null", forKey: "CertificateToken")
+        UserDefaults.standard.set("null", forKey: "UserToken")
+        
+        try! self.realm.write {
+            self.realm.delete(self.realm.objects(alertObject.self))
+            self.realm.delete(self.realm.objects(alertCoinNames.self))
+        }
+    }
+
     
     func setUpView(){
         titleLabel.text = navigationBarItem

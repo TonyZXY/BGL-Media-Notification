@@ -202,8 +202,6 @@
 		573C96AB20EF068A00B667AB /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AA20EF068A00B667AB /* Extension.swift */; };
 		5752745620FEBB0200562060 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; };
 		5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		5752745820FEBB0200562060 /* WCLShineButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420620FEB81B0052EE02 /* WCLShineButton.framework */; };
-		5752745920FEBB0200562060 /* WCLShineButton.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420620FEB81B0052EE02 /* WCLShineButton.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		576751FC2105556E006DB67C /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576751FB2105556E006DB67C /* RegisterController.swift */; };
 		576751FE210556E8006DB67C /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; };
 		576751FF210556E8006DB67C /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -256,7 +254,6 @@
 		57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FA20FB00320052EE02 /* CurrencyController.swift */; };
 		57FC41FD20FB08560052EE02 /* LanguageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FC20FB08560052EE02 /* LanguageController.swift */; };
 		57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC420420FDC7260052EE02 /* FlashSearchController.swift */; };
-		57FC420720FEB81B0052EE02 /* WCLShineButton.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420620FEB81B0052EE02 /* WCLShineButton.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 		57FC420920FEB8230052EE02 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (Required, ); }; };
 /* End PBXBuildFile section */
 
@@ -268,7 +265,6 @@
 			dstSubfolderSpec = 10;
 			files = (
 				5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */,
-				5752745920FEBB0200562060 /* WCLShineButton.framework in Embed Frameworks */,
 				576751FF210556E8006DB67C /* JGProgressHUD.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
@@ -526,7 +522,6 @@
 		57FC420120FBA02A0052EE02 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = ../en.lproj/Main.strings; sourceTree = "<group>"; };
 		57FC420320FBA0310052EE02 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "../zh-Hans-CN.lproj/Main.strings"; sourceTree = "<group>"; };
 		57FC420420FDC7260052EE02 /* FlashSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashSearchController.swift; sourceTree = "<group>"; };
-		57FC420620FEB81B0052EE02 /* WCLShineButton.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WCLShineButton.framework; path = Carthage/Build/iOS/WCLShineButton.framework; sourceTree = "<group>"; };
 		57FC420820FEB8230052EE02 /* RevealingSplashView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RevealingSplashView.framework; path = Carthage/Build/iOS/RevealingSplashView.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -544,9 +539,7 @@
 				3D1332ED20E9FA5700D3CAE6 /* Realm.framework in Frameworks */,
 				3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */,
 				3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */,
-				5752745820FEBB0200562060 /* WCLShineButton.framework in Frameworks */,
 				3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */,
-				57FC420720FEB81B0052EE02 /* WCLShineButton.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1036,9 +1029,6 @@
 				571F68312101710B00342198 /* View */,
 				571F68302101710500342198 /* Model */,
 				571F682F210170F500342198 /* Controlller */,
-				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
-				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
-				2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */,
 			);
 			path = Alert;
 			sourceTree = "<group>";
@@ -1046,6 +1036,9 @@
 		571F682F210170F500342198 /* Controlller */ = {
 			isa = PBXGroup;
 			children = (
+				2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */,
+				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
+				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
 			);
 			path = Controlller;
 			sourceTree = "<group>";
@@ -1456,7 +1449,6 @@
 			isa = PBXGroup;
 			children = (
 				57FC420820FEB8230052EE02 /* RevealingSplashView.framework */,
-				57FC420620FEB81B0052EE02 /* WCLShineButton.framework */,
 				3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */,
 				3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */,
 				3D1332E820E9FA5600D3CAE6 /* Reachability.framework */,

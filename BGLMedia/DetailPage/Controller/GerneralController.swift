@@ -72,6 +72,12 @@ class GerneralController: UIViewController {
         //Market View constraint
         scrollView.addConstraintsWithFormat(format: "H:|-15-[v0]-15-|", views: SecondView)
         scrollView.addConstraintsWithFormat(format: "V:|-5-[v0(50)]", views: SecondView)
+        
+        market.isHidden = true
+        tradingPairs.isHidden = true
+        edit.isHidden = true
+        
+        
         NSLayoutConstraint(item: SecondView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
         //Market View

@@ -65,44 +65,49 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         
+        
+        
+        
         if launchedBefore{
-             URLServices.fetchInstance.getCoinList()
 //            set flag to false for debugging purpose
 //            UserDefaults.standard.set(false, forKey: "launchedBefore")
 //            window?.rootViewController = LaunchScreenViewController()
 //            window?.makeKeyAndVisible()
             
-            if UserDefaults.standard.bool(forKey: "isLoggedIn"){
+            
+            
+//            if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 window = UIWindow(frame:UIScreen.main.bounds)
                 let mainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
-                window?.rootViewController = mainViewController
+                window?.rootViewController = LaunchScreenViewController()
                 window?.makeKeyAndVisible()
-            }else{
-                //User is not logged in
-                print("User is not logged in")
-            }
+//            }else{
+//                //User is not logged in
+//                print("User is not logged in")
+//            }
+//
             
+            
+        
         } else{
             //First time launch
             window = UIWindow(frame:UIScreen.main.bounds)
-            let mainViewController = OnBoardingUIPageViewController()
+            let mainViewController = LaunchScreenViewController()
             window?.rootViewController = mainViewController
             window?.makeKeyAndVisible()
-            SetDataResult().writeJsonExchange()
-            SetDataResult().writeMarketCapCoinList()
-            URLServices.fetchInstance.getCoinList()
+//            SetDataResult().writeJsonExchange()
+//            SetDataResult().writeMarketCapCoinList()
+//            URLServices.fetchInstance.getCoinList()
             UserDefaults.standard.set(true, forKey: "flashSwitch")
             UserDefaults.standard.set(true, forKey: "priceSwitch")
             UserDefaults.standard.set("AUD", forKey: "defaultCurrency")
             UserDefaults.standard.set("EN", forKey: "defaultLanguage")
             UserDefaults.standard.set(false, forKey: "buildInterest")
             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
-            UserDefaults.standard.set(true, forKey: "launchedBefore")
             UserDefaults.standard.set(false, forKey: "getDeviceToken")
-            
-//            UserDefaults.standard.string("null",forKey: "UserEmail")
-//            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
-//            let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+            UserDefaults.standard.set("null", forKey: "UserEmail")
+            UserDefaults.standard.set("null", forKey: "CertificateToken")
+            UserDefaults.standard.set("null", forKey: "UserToken")
         }
         return true
     }
@@ -171,15 +176,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
         let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
         let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
-//        UserDefaults.standard.rem
-        
-        
-        if email != "null" && certificateToken != "null" &&  deviceToken != "null"{
+
+        if loginStatus{
+            if email != "null" && certificateToken != "null" &&  deviceToken != "null"{
                 URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
                     if success{
                         print(response)
                     }
                 }
+            }
         }
     }
 //

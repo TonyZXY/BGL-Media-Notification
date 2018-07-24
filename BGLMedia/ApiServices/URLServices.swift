@@ -55,10 +55,9 @@ class URLServices:NSObject{
     }
     
     //Get coin List
-    func getCoinList(){
+    func getCoinList(completion:@escaping (Bool)-> Void){
         URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (json, success) in
             if success{
-                
                 self.realm.beginWrite()
                 for result in json.array!{
                     let id = result["_id"].string!
@@ -76,6 +75,9 @@ class URLServices:NSObject{
                     }
                 }
                 try! self.realm.commitWrite()
+                completion(true)
+            } else{
+                completion(false)
             }
         }
     }
