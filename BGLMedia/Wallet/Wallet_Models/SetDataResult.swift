@@ -13,7 +13,7 @@ import SwiftyJSON
 class SetDataResult{
     
     //Write exchange market detail to the local json file using crypto compare api
-    func writeJsonExchange(){
+    func writeJsonExchange(completion:@escaping (Bool)-> Void){
         Alamofire.request("https://min-api.cryptocompare.com/data/all/exchanges", method: .get).validate().responseJSON { response in
             switch response.result {
             case .success(let value):
@@ -26,8 +26,10 @@ class SetDataResult{
                 } catch {
                     print("Error \(error)")
                 }
+                completion(true)
             case .failure(let error):
                 print(error)
+                completion(false)
             }
         }
     }

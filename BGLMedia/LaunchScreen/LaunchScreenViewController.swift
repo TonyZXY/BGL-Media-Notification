@@ -15,15 +15,52 @@ class LaunchScreenViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        
-        
-        
         view.addSubview(revealingSplashView)
         revealingSplashView.animationType = .heartBeat
-        revealingSplashView.startAnimation(nil)
+        getData()
         // Do any additional setup after loading the view.
     }
+    
+    func getData(){
+        revealingSplashView.startAnimation()
+            let dispatchGroup = DispatchGroup()
+
+            dispatchGroup.enter()
+            SetDataResult().writeJsonExchange(){ success in
+                if success{
+                     dispatchGroup.leave()
+                } else{
+                     dispatchGroup.leave()
+                }
+            }
+
+            dispatchGroup.enter()
+            URLServices.fetchInstance.getCoinList(){ success in
+                if success{
+                    dispatchGroup.leave()
+                } else{
+                    dispatchGroup.leave()
+                }
+            }
+
+            dispatchGroup.notify(queue:.main){
+                if  UserDefaults.standard.bool(forKey: "launchedBefore"){
+                    let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
+                    // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
+                    self.revealingSplashView.heartAttack = true
+                    
+                    //                vc.modalTransitionStyle = .flipHorizontal
+                    //        vc.modalTransitionStyle = .crossDissolve // another form of animations
+                    
+                    self.present(vc, animated: true, completion: nil)
+                } else{
+                    let mainViewController = OnBoardingUIPageViewController()
+                    self.present(mainViewController, animated: true, completion: nil)
+                }
+            }
+    }
+    
+    
 }
 
 class LaunchScreen: UIView {

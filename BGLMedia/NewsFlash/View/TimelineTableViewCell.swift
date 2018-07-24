@@ -123,10 +123,11 @@ open class TimelineTableViewCell: UITableViewCell {
         button.imageView?.contentMode = .scaleAspectFit
         button.contentEdgeInsets = UIEdgeInsetsMake(0, 30, 0, 10)
         button.imageEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0)
-        button.titleLabel!.font =  UIFont(name: "HelveticaNeue-Thin", size: 13)
+        button.titleLabel!.font =  UIFont.regularFont(15)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Share", for: .normal)
         button.setImage(UIImage(named: "share_.png"), for: .normal)
+//        button.titleLabel?.font = UIFont(name: <#T##String#>, size: <#T##CGFloat#>)
 //        button.imageView?.frame = CGRect(x: 5, y: 5, width: 5, height: 5)
 //        button.transform = CGAffineTransform(scaleX: -1, y: 1)
 //        button.transform = CGAffineTransform(scaleX: 1, y: -1)

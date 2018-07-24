@@ -9,6 +9,7 @@
 import Foundation
 
 import UIKit
+import Kingfisher
 
 class NewsDetailTableViewCell:UITableViewCell{
     var coinNameItem = ["Bitcoin","CyberMiles"]
@@ -18,13 +19,18 @@ class NewsDetailTableViewCell:UITableViewCell{
             newsTitle.text = news?.title
             if news?.imageURL != nil {
                 let url = URL(string: (news?.imageURL)!)
-                newsImage.kf.setImage(with: url, completionHandler: {
-                    (image, error, cacheType, imageUrl) in
-                    if error == nil {
-                        
-                    }
-                })
-                newsImage.setImage(urlString: (news?.imageURL)!)
+//                newsImage.kf.setImage(with: url, completionHandler: {
+//                    (image, error, cacheType, imageUrl) in
+//                    if error == nil {
+//
+//                    }
+//                })
+                newsImage.kf.setImage(with: url, placeholder: IndicatorView(frame: CGRect(x: 0, y: 0, width: 120, height: 80)) as Placeholder)
+                
+//                newsImage.setImage(urlString: (news?.imageURL)!)
+//                let reSizeMain = CGSize(width: 120, height: 80)
+//                self.newsImage.image = self.newsImage.image?.reSizeImage(reSize: reSizeMain)
+                
             }
             newsDescription.text = news?.newsDescription
             newsAuthor.text = news?.author
@@ -46,7 +52,7 @@ class NewsDetailTableViewCell:UITableViewCell{
     
     let newsImage: UIImageView = {
         let imageView = UIImageView(image: UIImage(named: "navigation_arrow.png"))
-//        imageView.frame = CGRect(x: 5, y: 2, width: 120, height: 80)
+        imageView.frame = CGRect(x: 5, y: 2, width: 120, height: 80)
         imageView.clipsToBounds = true
         imageView.layer.cornerRadius = 8
         imageView.contentMode = UIViewContentMode.scaleAspectFill
@@ -91,7 +97,10 @@ class NewsDetailTableViewCell:UITableViewCell{
         cellView.addSubview(newsDescription)
         cellView.addSubview(newsAuthor)
         
-        newsImage.frame = CGRect(x: -2, y: -5, width: 120, height: 80)
+        
+//        let reSizeMain = CGSize(width: 120, height: 80)
+//        newsImage.image = UIImage(named: "downloadapp")?.reSizeImage(reSize: reSizeMain)
+//        newsImage.frame = CGRect(x: -2, y: -5, width: 120, height: 80)
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v0]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-2-[v0]-2-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         NSLayoutConstraint(item: newsImage, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true

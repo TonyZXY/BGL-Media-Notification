@@ -316,9 +316,9 @@ class RegisterController: UIViewController {
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                     hud.textLabel.text = "Success"
                     
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
-                        if self.presentingViewController?.presentingViewController != nil{
+                        if self.presentingViewController?.presentingViewController?.presentingViewController != nil{
                             self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
                         } else {
                             self.presentingViewController?.dismiss(animated: true, completion: nil)
@@ -330,7 +330,7 @@ class RegisterController: UIViewController {
                     hud.indicatorView = JGProgressHUDErrorIndicatorView()
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = registerFailure
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                         
                         if code == 23505{
@@ -350,14 +350,14 @@ class RegisterController: UIViewController {
                 if !(manager?.isReachable)! {
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = "No Network" // To change?
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     
                 } else {
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = "Time Out" // To change?
-                    DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     

@@ -115,6 +115,7 @@ class OnBoardingPageViewController: UIViewController {
     }
     
     @objc func skipButtonClicked(sender: UIButton){
+        UserDefaults.standard.set(true, forKey: "launchedBefore")
         let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
         // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
         

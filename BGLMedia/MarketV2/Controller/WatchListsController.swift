@@ -57,6 +57,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
+        collectionView.alwaysBounceVertical  = true
         return collectionView
     }()
     

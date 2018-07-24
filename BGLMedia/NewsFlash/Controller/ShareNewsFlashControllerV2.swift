@@ -55,6 +55,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         view.addSubview(scrollView)
         scrollView.addSubview(shareImage)
         shareImage.addSubview(mainLogoImage)
+        shareImage.addSubview(clockImage)
         shareImage.addSubview(dateLabel)
         shareImage.addSubview(flashNewsDescription)
         shareImage.addSubview(downloadAppImage)
@@ -83,26 +84,37 @@ class ShareNewsFlashControllerV2: UIViewController {
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]-0-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView,"v1":selectBarView]))
         
         scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0(\(view.frame.width))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
-        scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(\(view.frame.height))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
+        scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0(\(view.frame.height))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "v:|[v0(300)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
         
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(200)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         
-        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
-        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
+        
+//        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage,"v4":clockImage]))
+        
+        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage,"v4":clockImage]))
+        
+        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v4(20)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage,"v4":clockImage]))
+        
+        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v4(20)]-5-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage,"v4":clockImage]))
+//        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v2]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v3]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
-        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v3(150)]-50-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
+        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v3(150)]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
-        NSLayoutConstraint(item: shareButton, attribute: .centerY, relatedBy: .equal, toItem: selectBarView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: shareButton, attribute: .centerY, relatedBy: .equal, toItem: selectBarView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+         NSLayoutConstraint(item: shareButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: shareButton, attribute: .bottom, relatedBy: .equal, toItem: selectBarView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: shareButton, attribute: .right, relatedBy: .equal, toItem: selectBarView, attribute: .right, multiplier: 1, constant: -10).isActive = true
-        NSLayoutConstraint(item: cancelButton, attribute: .centerY, relatedBy: .equal, toItem: selectBarView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: cancelButton, attribute: .centerY, relatedBy: .equal, toItem: selectBarView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: cancelButton, attribute: .left, relatedBy: .equal, toItem: selectBarView, attribute: .left, multiplier: 1, constant: 10).isActive = true
+        NSLayoutConstraint(item: cancelButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: cancelButton, attribute: .bottom, relatedBy: .equal, toItem: selectBarView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
     }
     
     var shareImage:UIView = {
@@ -132,6 +144,13 @@ class ShareNewsFlashControllerV2: UIViewController {
         return label
     }()
     
+    var clockImage:UIImageView = {
+        var imageView = UIImageView()
+        imageView.translatesAutoresizingMaskIntoConstraints = false
+        imageView.image = UIImage(named: "alarm")
+        return imageView
+    }()
+    
     var flashNewsDescription:UILabel = {
        var label = UILabel()
         label.font = label.font.withSize(17)
@@ -156,6 +175,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         var button = UIButton()
         button.setTitle("Share", for: .normal)
         button.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 30, 0, 0)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -164,6 +184,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         var button = UIButton()
         button.setTitle("Cancel", for: .normal)
         button.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 30)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()
@@ -179,7 +200,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         var scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = true
-        scrollView.scrollsToTop = false
+        scrollView.alwaysBounceVertical = true
         return scrollView
     }()
 //    var testImages:UIImage = {

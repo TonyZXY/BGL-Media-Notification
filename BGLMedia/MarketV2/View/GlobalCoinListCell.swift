@@ -10,7 +10,7 @@ import UIKit
 import RealmSwift
 import Kingfisher
 //import RevealingSplashView
-import WCLShineButton
+
 
 class GlobalCoinListCell:UICollectionViewCell{
     var color = ThemeColor()

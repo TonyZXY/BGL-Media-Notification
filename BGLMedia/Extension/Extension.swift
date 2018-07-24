@@ -166,3 +166,35 @@ extension UIImage {
         return reSizeImage(reSize: reSize)
     }
 }
+
+extension UIFont
+{
+    class func regularFont(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Montserrat-Regular", size: size)!
+    }
+    class func boldFont(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Montserrat-Bold", size: size)!
+    }
+    class func semiBoldFont(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Montserrat-SemiBold", size: size)!
+    }
+    class func lightFont(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Montserrat-Light", size: size)!
+    }
+    class func ItalicFont(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Montserrat-Italic", size: size)!
+    }
+    class func MediumFont(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Montserrat-Medium", size: size)!
+    }
+    class func ThinFont(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Montserrat-Thin", size: size)!
+    }
+}
