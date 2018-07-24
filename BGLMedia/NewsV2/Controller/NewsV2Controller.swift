@@ -40,8 +40,8 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         
         let lastItem = displayNumber - 1
         if tableView == newsTableView {
-        if indexPath.row == lastItem && displayNumber <= newsObject.count{
-            print(displayNumber)
+            if indexPath.row == lastItem && displayNumber <= newsObject.count{
+                print(displayNumber)
                 if displayNumber != 0{
                     self.displayNumber += 5
                     getData(skip: displayNumber, limit: 5){ success in
@@ -59,36 +59,38 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             }
         }
         
-//        newsTableView.visibleCells
+        //        newsTableView.visibleCells
         
-//        cell.alpha = 0
-//        UIView.animate(withDuration: 0.5) {
-//            cell.alpha = 1.0
-//            cell.layer.transform = CATransform3DIdentity
-//        }
+        //        cell.alpha = 0
+        //        UIView.animate(withDuration: 0.5) {
+        //            cell.alpha = 1.0
+        //            cell.layer.transform = CATransform3DIdentity
+        //        }
         
-//        cell.alpha = 0
-//        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
-//        cell.layer.transform = transform
-//        UIView.animate(withDuration: 1.0) {
-//            cell.alpha = 1.0
-//            cell.layer.transform = CATransform3DIdentity
-//        }
+        //        cell.alpha = 0
+        //        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
+        //        cell.layer.transform = transform
+        //        UIView.animate(withDuration: 1.0) {
+        //            cell.alpha = 1.0
+        //            cell.layer.transform = CATransform3DIdentity
+        //        }
     }
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         spinner.stopAnimating()
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         self.displayNumber += 5
-        getData(skip:0,limit: 5){ success in
-            if success{
-                self.newsTableView.reloadData()
-            }
-        }
+        
+        //        handleRefresh(newsTableView)
+        //        getData(skip:0,limit: 5){ success in
+        //            if success{
+        //                self.newsTableView.reloadData()
+        //            }
+        //        }
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
@@ -133,25 +135,25 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             vc.hidesBottomBarWhenPushed = true
             vc.accessibilityNavigationStyle = .separate
             self.present(vc, animated: true, completion: nil)
-//            navigationController?.pushViewController(vc, animated: true)
+            //            navigationController?.pushViewController(vc, animated: true)
         }
     }
-
+    
     func getData(skip:Int,limit:Int,completion: @escaping (Bool)->Void){
         URLServices.fetchInstance.passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
             if pass{
                 self.storeDataToRealm(res:res){success in
                     if success{
-                       completion(true)
+                        completion(true)
                     }
                 }
             } else{
                 completion(false)
-//                DispatchQueue.main.async {
-//                self.displayNumber = 5
-//                self.newsTableView.reloadData()
-//                self.refresher.endRefreshing()
-//                }
+                //                DispatchQueue.main.async {
+                //                self.displayNumber = 5
+                //                self.newsTableView.reloadData()
+                //                self.refresher.endRefreshing()
+                //                }
             }
         }
     }
@@ -188,14 +190,16 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         }
     }
     
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
+    @objc func handleRefresh(_ tableView: UITableView) {
         getData(skip: 0, limit: 5){ sccuess in
             if sccuess{
                 self.displayNumber = 5
                 self.newsTableView.reloadData()
-                self.refresher.endRefreshing()
+                tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+                print("999888777666666666666")
+                //                self.refresher.endRefreshing()
             } else{
-                self.refresher.endRefreshing()
+                //                self.refresher.endRefreshing()
             }
         }
     }
@@ -205,22 +209,35 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         navigationItem.titleView = titleLabel
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(newsTableView)
-        newsTableView.addSubview(refresher)
-//        view.addSubview(spinner)
+        //        newsTableView.addSubview(refresher)
+        //        view.addSubview(spinner)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-15-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
-//
-//        NSLayoutConstraint(item: spinner, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-//
-//        NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        //
+        //        NSLayoutConstraint(item: spinner, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        //
+        //        NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
     }
-
+    
     lazy var newsTableView:UITableView = {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(NewsDetailTableViewCell.self, forCellReuseIdentifier: "NewsCell")
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.separatorStyle = .none
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        //        header.setText("Pull To Refresh", mode: .pullToRefresh)
+        //        header.setText("Release To Refresh", mode: .releaseToRefresh)
+        //        header.setText("Refreshing", mode: .refreshing)
+        //        header.setText("Success", mode: .refreshSuccess)
+        //        header.setText("Failed", mode: .refreshFailure)
+        header.textLabel.font = UIFont(name: "Montserrat-Regular", size: 12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        tableView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(tableView)
+        })
         tableView.rowHeight = 120
         tableView.delegate = self
         tableView.dataSource = self
@@ -236,17 +253,20 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         return titleLabel
     }()
     
+    
+    
+    
     var spinner:UIActivityIndicatorView{
         let spinner = UIActivityIndicatorView()
         spinner.translatesAutoresizingMaskIntoConstraints = false
         return spinner
     }
     
-    lazy var refresher: UIRefreshControl = {
-            let refreshControl = UIRefreshControl()
-            refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
-            refreshControl.tintColor = UIColor.white
-            return refreshControl
-    }()
+    //    lazy var refresher: UIRefreshControl = {
+    //            let refreshControl = UIRefreshControl()
+    ////            refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+    ////            refreshControl.tintColor = UIColor.white
+    //            return refreshControl
+    //    }()
 }
 
