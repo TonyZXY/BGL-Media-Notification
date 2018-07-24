@@ -207,6 +207,25 @@ alertavaliable_alert = "Avaliable";
 exampleLabel_alert = "Market Price";
 alertDone_alert = "Done";
 
+//Pull to refresh
+pullDownToRefresh = "Pull to refresh";
+
+releaseToRefresh = "Release to refresh";
+
+refreshSuccess = "Update successful";
+
+refreshFailure = "Update failed";
+
+refreshing = "Refreshing...";
+
+pullUpToRefresh = "Scroll to load";
+
+noMoreData = "No more data";
+
+tapToRefresh = "Tap to refresh";
+
+scrollAndTapToRefresh = "Scroll or tap to load";
+
 
 
 
