@@ -241,7 +241,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     @objc func Login(){
-        let loginPage = LoginPageViewController()
+        let loginPage = LoginController()
         self.present(loginPage, animated: true, completion: nil)
 //        navigationController?.pushViewController(loginPage, animated: true)
     }

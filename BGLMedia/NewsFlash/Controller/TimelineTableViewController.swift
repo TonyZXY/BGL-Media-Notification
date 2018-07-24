@@ -154,7 +154,7 @@ class TimelineTableViewController: UITableViewController {
         cell.titleLabel.text = dateFormatter.string(from: object.dateTime)
         cell.descriptionLabel.text = object.contents
         cell.object = object
-        cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
+        cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         
         return cell
     }
@@ -168,26 +168,37 @@ class TimelineTableViewController: UITableViewController {
         let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: buttonPosition)
         let cell = tableView.cellForRow(at: indexPath!)! as! TimelineTableViewCell
-        let cellText = cell.descriptionLabel.text
-        let size = cell.descriptionLabel.font.pointSize
-        let textImage = self.textToImage(drawText: cellText!, inImage: cell.descriptionLabel.createImage!, atPoint: CGPoint(x:0, y:0), withSize:size)
-    
-//        let topImage = combineLogoWithText(combine: UIImage(named: "bcg_logo.png")!, with: textImage)
-//        let bottomImage = UIImage(named: "sample_qr_code.png")
-//        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
+//        let cellText = cell.descriptionLabel.text
+//        let size = cell.descriptionLabel.font.pointSize
+//        let textImage = self.textToImage(drawText: cellText!, inImage: cell.descriptionLabel.createImage!, atPoint: CGPoint(x:0, y:0), withSize:size)
+//
+////        let topImage = combineLogoWithText(combine: UIImage(named: "bcg_logo.png")!, with: textImage)
+////        let bottomImage = UIImage(named: "sample_qr_code.png")
+////        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
+//
+//        let image = generateImage(textImage: textImage)
+//
+//        let sharedImageVC = ShareImagePreViewController(image:image)
+//
+////        sharedImageVC.parentView = self
+//
+//        self.present(sharedImageVC,animated: true, completion:nil)
+//
+//        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities:nil)
+//        activityVC.popoverPresentationController?.sourceView = self.view
+//        self.present(activityVC,animated: true, completion:nil)
         
-        let image = generateImage(textImage: textImage)
         
-        let sharedImageVC = ShareImagePreViewController(image:image)
+        let shareView = ShareNewsFlashControllerV2()
+        shareView.dateLabel.text = cell.titleLabel.text
+        shareView.flashNewsDescription.text = cell.descriptionLabel.text
+        present(shareView, animated: true, completion: nil)
         
-//        sharedImageVC.parentView = self
         
-        self.present(sharedImageVC,animated: true, completion:nil)
-        
-        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities:nil)
-        activityVC.popoverPresentationController?.sourceView = self.view
-        self.present(activityVC,animated: true, completion:nil)
     }
+    
+
+    
     
     func generateImage(textImage: UIImage)->UIImage{
         let topImage = UIImage(named:"shareImageHead")
@@ -403,3 +414,6 @@ extension UIImage {
         return isSameSize(newSize) ? self : scaleImage(newSize)!
     }
 }
+
+
+

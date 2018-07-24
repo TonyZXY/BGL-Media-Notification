@@ -18,6 +18,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var window: UIWindow?
     
+    var getDeviceToken:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "getDeviceToken")
+        }
+    }
+    
+    var email:String{
+        get{
+            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
+    
+    
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
         application.statusBarStyle = .lightContent
@@ -74,9 +98,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(false, forKey: "buildInterest")
             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
             UserDefaults.standard.set(true, forKey: "launchedBefore")
+            UserDefaults.standard.set(false, forKey: "getDeviceToken")
+            
 //            UserDefaults.standard.string("null",forKey: "UserEmail")
-            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
-            let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+//            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+//            let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
         }
         return true
     }
@@ -108,21 +134,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         let deviceTokenString = deviceToken.reduce("",{$0 + String(format: "%02X",$1)})
         print("token:\(deviceTokenString)")
         
-//        let deviceTokenJson: [String: Any] = [
-//            "deviceID": deviceTokenString,
-//            "notification": true
-//        ]
-//        Alamofire.request("http://10.10.6.18:3030/deviceManage/addIOSDevice", method: .post, parameters: deviceTokenJson, encoding: JSONEncoding.default, headers: ["Content-Type": "application/json"]).validate().responseJSON{response in
-//                switch response.result {
-//                    case .success(let value):
-//                        let json = JSON(value)
-//                        print(json)
-//                    case .failure(let error):
-//                        print(error)
-//            }
-//        }
-//
+        
         UserDefaults.standard.set(deviceTokenString, forKey: "UserToken")
+        UserDefaults.standard.set(true, forKey: "getDeviceToken")
+        
+        if self.loginStatus{
+//            if !self.sendDeviceTokenStatus{
+                let sendDeviceTokenParameter = ["email":self.email,"token":self.certificateToken,"deviceToken":deviceTokenString]
+                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
+                    if success{
+                        UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                    }
+                })
+//            }
+        }
     }
         
     
@@ -140,6 +165,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         print("\(aps)")
     }
     
+
     func applicationDidBecomeActive(_ application: UIApplication) {
        UIApplication.shared.applicationIconBadgeNumber = 0
         let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"

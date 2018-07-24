@@ -9,6 +9,9 @@
 import UIKit
 import UserNotifications
 import RealmSwift
+import Alamofire
+import JGProgressHUD
+
 class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
     let realm = try! Realm()
@@ -58,7 +61,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[AboutUsViewController(), BGLCommunityController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginPageViewController()]]
+            return [[AboutUsViewController(), BGLCommunityController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController()]]
         }
     }
     
@@ -76,12 +79,12 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        getNotificationStatus()
+//        getNotificationStatus()
         optionTableView.reloadData()
     }
     
     @objc func refreshNotificationStatus(){
-        getNotificationStatus()
+//        getNotificationStatus()
     }
     
     @objc func changeLanguage(){
@@ -144,43 +147,48 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section < 2{
-            if indexPath.section == 1 && indexPath.row == 2{
-                if notificationStatus{
+//            if indexPath.section == 1 && indexPath.row == 2{
+//                if notificationStatus{
                     let changePage = pushItems[indexPath.section][indexPath.row]
                     changePage.hidesBottomBarWhenPushed = true
                     navigationController?.pushViewController(changePage, animated: true)
-                } else{
-                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
-                    // Setting button action
-                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
-                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                            return
-                        }
-                        
-                        if UIApplication.shared.canOpenURL(settingsUrl) {
-                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                // Checking for setting is opened or not
-                                print("Setting is opened: \(success)")
-                            })
-                        }
-                    }
-                    alertController.addAction(settingsAction)
-                    // Cancel button action
-                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
-                        // Magic is here for cancel button
-                    }
-                    alertController.addAction(cancelAction)
-                    // This part is important to show the alert controller ( You may delete "self." from present )
-                    self.present(alertController, animated: true, completion: nil)
-                }
-            } else{
-                let changePage = pushItems[indexPath.section][indexPath.row]
-                changePage.hidesBottomBarWhenPushed = true
-                navigationController?.pushViewController(changePage, animated: true)
-            }
+//                } else{
+//                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
+//                    // Setting button action
+//                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
+//                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+//                            return
+//                        }
+//
+//                        if UIApplication.shared.canOpenURL(settingsUrl) {
+//                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+//                                // Checking for setting is opened or not
+//                                print("Setting is opened: \(success)")
+//                            })
+//                        }
+//                    }
+//                    alertController.addAction(settingsAction)
+//                    // Cancel button action
+//                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
+//                        // Magic is here for cancel button
+//                    }
+//                    alertController.addAction(cancelAction)
+//                    // This part is important to show the alert controller ( You may delete "self." from present )
+//                    self.present(alertController, animated: true, completion: nil)
+//                }
+//            } else{
+//                let changePage = pushItems[indexPath.section][indexPath.row]
+//                changePage.hidesBottomBarWhenPushed = true
+//                navigationController?.pushViewController(changePage, animated: true)
+//            }
             
         } else{
             if loginStatus{
+                let hud = JGProgressHUD(style: .light)
+                hud.textLabel.text = "Log Out"
+                hud.backgroundColor = ThemeColor().progressColor()
+                hud.show(in: (self.parent?.view)!)
+                
                 let body = ["email":email,"token":certificateToken,"deviceToken":deviceToken]
                 URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","logoutIOSDevice"], httpMethod: "POST", parameters: body) { (response, success) in
                     if success{
@@ -195,62 +203,87 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             self.realm.delete(self.realm.objects(alertCoinNames.self))
                         }
                         self.optionTableView.reloadData()
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = "Success"
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                            hud.dismiss()
+                            self.dismiss(animated: true, completion: nil)
+                        }
+                    } else{
+                        let manager = NetworkReachabilityManager()
+                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        if !(manager?.isReachable)! {
+                            hud.textLabel.text = "Error"
+                            hud.detailTextLabel.text = "No Network" // To change?
+                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                                hud.dismiss()
+                            }
+                            
+                        } else {
+                            hud.textLabel.text = "Error"
+                            hud.detailTextLabel.text = "Time Out" // To change?
+                            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+                                hud.dismiss()
+                            }
+                            
+                        }
                     }
                 }
             } else{
-                if notificationStatus{
-                    let login = LoginPageViewController()
+//                if notificationStatus{
+                    let login = LoginController()
                     self.present(login, animated: true, completion: nil)
-                } else{
-                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
-                    // Setting button action
-                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
-                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-                            return
-                        }
-                        
-                        if UIApplication.shared.canOpenURL(settingsUrl) {
-                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                                // Checking for setting is opened or not
-                                print("Setting is opened: \(success)")
-                            })
-                        }
-                    }
-                    alertController.addAction(settingsAction)
-                    // Cancel button action
-                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
-                        // Magic is here for cancel button
-                    }
-                    alertController.addAction(cancelAction)
-                    // This part is important to show the alert controller ( You may delete "self." from present )
-                    self.present(alertController, animated: true, completion: nil)
-                }
+//                } else{
+//                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
+//                    // Setting button action
+//                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
+//                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+//                            return
+//                        }
+//
+//                        if UIApplication.shared.canOpenURL(settingsUrl) {
+//                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+//                                // Checking for setting is opened or not
+//                                print("Setting is opened: \(success)")
+//                            })
+//                        }
+//                    }
+//                    alertController.addAction(settingsAction)
+//                    // Cancel button action
+//                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
+//                        // Magic is here for cancel button
+//                    }
+//                    alertController.addAction(cancelAction)
+//                    // This part is important to show the alert controller ( You may delete "self." from present )
+//                    self.present(alertController, animated: true, completion: nil)
+//                }
             }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
 
-    func getNotificationStatus(){
-        let current = UNUserNotificationCenter.current()
-        current.getNotificationSettings(completionHandler: { (settings) in
-            if settings.authorizationStatus == .notDetermined {
-                // Notification permission has not been asked yet, go for it!
-            }
-            
-            if settings.authorizationStatus == .denied {
-                UserDefaults.standard.set(false, forKey: "NotificationSetting")
-                // Notification permission was previously denied, go to settings & privacy to re-enable
-            }
-            
-            if settings.authorizationStatus == .authorized {
-                UserDefaults.standard.set(true, forKey: "NotificationSetting")
-                // Notification permission was already gransnted
-            }
-//            DispatchQueue.main.async {
-//                self.notificationTableView.reloadData()
+//    func getNotificationStatus(){
+//        let current = UNUserNotificationCenter.current()
+//        current.getNotificationSettings(completionHandler: { (settings) in
+//            if settings.authorizationStatus == .notDetermined {
+//                // Notification permission has not been asked yet, go for it!
 //            }
-        })
-    }
+//
+//            if settings.authorizationStatus == .denied {
+//                UserDefaults.standard.set(false, forKey: "NotificationSetting")
+//                // Notification permission was previously denied, go to settings & privacy to re-enable
+//            }
+//
+//            if settings.authorizationStatus == .authorized {
+//                UserDefaults.standard.set(true, forKey: "NotificationSetting")
+//                // Notification permission was already gransnted
+//            }
+////            DispatchQueue.main.async {
+////                self.notificationTableView.reloadData()
+////            }
+//        })
+//    }
     
     func setUpView(){
         titleLabel.text = navigationBarItem
@@ -281,5 +314,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         titleLabel.textAlignment = .center
         return titleLabel
     }()
+    
+    
     
 }

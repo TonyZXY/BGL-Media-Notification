@@ -17,6 +17,7 @@ import RealmSwift
 class URLServices:NSObject{
     static let fetchInstance = URLServices()
     let realm = try! Realm()
+//    "https://bglnewsbkend.tk"
     func passServerData(urlParameters:[String],httpMethod:String,parameters:[String:Any],completion:@escaping (JSON, Bool)->Void){
         var BaseURl = "https://bglnewsbkend.tk"
         for path in urlParameters{
@@ -33,7 +34,7 @@ class URLServices:NSObject{
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let manager = Alamofire.SessionManager.default
-        manager.session.configuration.timeoutIntervalForRequest = 30
+        manager.session.configuration.timeoutIntervalForRequest = 300
         
         Alamofire.request(urlRequest).responseJSON { (response) in
             switch response.result {
