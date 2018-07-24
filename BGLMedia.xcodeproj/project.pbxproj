@@ -1570,6 +1570,7 @@
 				"$(SRCROOT)/Carthage/Build/iOS/RealmSwift.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/SwiftyJSON.framework",
 				"$(SRCROOT)/Carthage/Build/iOS/YouTubePlayer.framework",
+				"$(SRCROOT)/Carthage/Build/iOS/JGProgressHUD.framework",
 			);
 			outputPaths = (
 			);
@@ -1974,7 +1975,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
@@ -1990,8 +1991,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7fb85184-2f10-455a-9f48-bc4c1eee3e8c";
-				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Distribution";
+				PROVISIONING_PROFILE = "d25fffab-2e56-4320-9529-95bc81d12655";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
@@ -2005,7 +2006,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_ENTITLEMENTS = BGLMedia/BGLMedia.entitlements;
-				CODE_SIGN_IDENTITY = "iPhone Distribution";
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 13;
 				DEVELOPMENT_TEAM = 4SMWL7L89M;
@@ -2021,8 +2022,8 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.blockchainglobal.bglmedia;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "7fb85184-2f10-455a-9f48-bc4c1eee3e8c";
-				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Distribution";
+				PROVISIONING_PROFILE = "d25fffab-2e56-4320-9529-95bc81d12655";
+				PROVISIONING_PROFILE_SPECIFIER = "BGL Media Development";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
