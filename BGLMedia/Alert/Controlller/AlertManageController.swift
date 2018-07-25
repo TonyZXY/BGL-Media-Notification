@@ -38,6 +38,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     var sectionPrice:Double = 0
     var inputPrice:String = ""
     var intersetObject = alertObjects()
+    var coinName = coinAlert()
     
     var status:String = "AddAlert"
     
@@ -121,25 +122,33 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
             coinImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
             coinImage.clipsToBounds = true
-            
             coinImage.contentMode = UIViewContentMode.scaleAspectFit
             coinImage.translatesAutoresizingMaskIntoConstraints = false
-            coinImage.coinImageSetter(coinName: intersetObject.coinAbbName, width: 30, height: 30, fontSize: 5)
             let coinLabel = UILabel()
             coinLabel.translatesAutoresizingMaskIntoConstraints = false
             coinLabel.textColor = ThemeColor().whiteColor()
-            coinLabel.text = "Coin Name:" + intersetObject.coinName
             
-        
             let button = UIButton(type:.system)
             button.setTitle("Edit", for: .normal)
             button.setTitleColor(UIColor.white, for: .normal)
             button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
             button.tag = section
             
+            if coinName.status{
+                intersetObject.coinAbbName = coinName.coinAbbName
+                intersetObject.coinName = coinName.coinName
+                button.isHidden = true
+            }
             if status == "Update"{
                 button.isHidden = true
             }
+            
+            coinImage.coinImageSetter(coinName: intersetObject.coinAbbName, width: 30, height: 30, fontSize: 5)
+            coinLabel.text = "Coin Name: " + intersetObject.coinName
+            
+        
+            
+           
             
             let sectionView = UIView()
             sectionView.clipsToBounds = true
@@ -346,7 +355,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-//        tableView.separatorStyle = .none
+        tableView.separatorStyle = .none
         return tableView
     }()
     

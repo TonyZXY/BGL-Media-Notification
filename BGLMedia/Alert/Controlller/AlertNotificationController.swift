@@ -240,6 +240,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         } else if indexPath.section == 2{
             cell.accessoryType = .disclosureIndicator
             if !loginStatus{
+                cell.textLabel?.textColor = ThemeColor().textGreycolor()
                 cell.isUserInteractionEnabled = false
             }
             return cell

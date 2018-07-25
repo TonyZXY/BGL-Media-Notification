@@ -80,13 +80,37 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+        newsTableView.switchRefreshFooter(to: .removed)
+        
+        DispatchQueue.main.async(execute: {
+            //            self.newsTableView.contentOffset = CGPoint(x: 0, y: -50.5)
+            self.newsTableView.beginHeaderRefreshing()
+        })
+        
         self.displayNumber += 20
         getData(skip:0,limit: 20){ success in
             if success{
                 self.newsTableView.reloadData()
+                let footer = DefaultRefreshFooter.footer()
+                footer.textLabel.textColor = ThemeColor().whiteColor()
+                footer.tintColor = ThemeColor().whiteColor()
+                footer.textLabel.backgroundColor = ThemeColor().themeColor()
+                self.newsTableView.configRefreshFooter(with: footer, container: self, action: {
+                    self.handleFooter()
+                })
+                
+            } else {
+                self.newsTableView.reloadData()
+                let footer = DefaultRefreshFooter.footer()
+                footer.textLabel.textColor = ThemeColor().whiteColor()
+                footer.tintColor = ThemeColor().whiteColor()
+                footer.textLabel.backgroundColor = ThemeColor().themeColor()
+                self.newsTableView.configRefreshFooter(with: footer, container: self, action: {
+                    self.handleFooter()
+                })
             }
         }
-
+        
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
@@ -114,8 +138,10 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsDetailTableViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsTableViewCell
         if indexPath.row <= displayNumber{
+            let width = self.view.frame.width
+            cell.width = width
             let object = newsObject[indexPath.row]
             cell.news = object
             return cell
@@ -135,6 +161,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             self.present(vc, animated: true, completion: nil)
             //            navigationController?.pushViewController(vc, animated: true)
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     func getData(skip:Int,limit:Int,completion: @escaping (Bool)->Void){
@@ -159,6 +186,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     func storeDataToRealm(res:JSON,completion:@escaping (Bool)->Void){
         self.realm.beginWrite()
         if let collection = res.array{
+            print(res)
             for result in collection{
                 let id = result["_id"].string ?? "0"
                 let title = result["title"].string ?? ""
@@ -169,6 +197,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 let author = result["author"].string ?? ""
                 let localeTag = result["localeTag"].string ?? ""
                 let lanugageTag = result["languageTag"].string ?? ""
+                let source = result["source"].string ?? ""
                 let contentTagResult = result["contentTag"].array ?? [""]
                 let contentTag = List<String>()
                 for result in contentTagResult{
@@ -177,9 +206,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 
                 if id != "0" {
                     if self.realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
-                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, lanugageTag,contentTag])
+                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, lanugageTag,source,contentTag])
                     } else {
-                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,lanugageTag,contentTag], update: true)
+                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,lanugageTag,source,contentTag], update: true)
                     }
                 }
             }
@@ -197,6 +226,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 print("999888777666666666666")
                 //                self.refresher.endRefreshing()
             } else{
+                tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
                 //                self.refresher.endRefreshing()
             }
         }
@@ -210,7 +240,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         //        newsTableView.addSubview(refresher)
         //        view.addSubview(spinner)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-15-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":newsTableView]))
         //
         //        NSLayoutConstraint(item: spinner, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         //
@@ -220,7 +250,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     lazy var newsTableView:UITableView = {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(NewsDetailTableViewCell.self, forCellReuseIdentifier: "NewsCell")
+        tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsCell")
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.separatorStyle = .none
         let header = DefaultRefreshHeader.header()
@@ -238,7 +268,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.configRefreshFooter(with: footer, container: self, action: {
             self.handleFooter()
         })
-        tableView.rowHeight = 120
+        tableView.rowHeight = 120 * self.view.frame.width/414
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
@@ -248,7 +278,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         let titleLabel = UILabel()
         titleLabel.text = "News"
         titleLabel.textColor = UIColor.white
-        titleLabel.font = UIFont.systemFont(ofSize: 17)
+        titleLabel.font = UIFont.semiBoldFont(17)
         titleLabel.textAlignment = .center
         return titleLabel
     }()

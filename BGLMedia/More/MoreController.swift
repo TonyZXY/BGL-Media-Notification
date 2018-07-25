@@ -288,7 +288,8 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textColor = UIColor.white
-        titleLabel.font = UIFont.systemFont(ofSize: 17)
+        
+        titleLabel.font = UIFont.semiBoldFont(17)
         titleLabel.textAlignment = .center
         return titleLabel
     }()

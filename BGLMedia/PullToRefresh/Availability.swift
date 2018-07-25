@@ -55,10 +55,10 @@ public extension UIScrollView{
         return header
     }
     @available(*, deprecated, message: "Use new API at PullToRefresh.Swift")
-    public func beginHeaderRefreshing(){
-        let header = self.viewWithTag(PullToRefreshKitConst.headerTag) as? RefreshHeaderContainer
-        header?.beginRefreshing()
-    }
+//    public func beginHeaderRefreshing(){
+//        let header = self.viewWithTag(PullToRefreshKitConst.headerTag) as? RefreshHeaderContainer
+//        header?.beginRefreshing()
+//    }
     @available(*, deprecated, message: "Use new API at PullToRefresh.Swift")
     public  func endHeaderRefreshing(_ result:RefreshResult = .none,delay:Double = 0.0){
         let header = self.viewWithTag(PullToRefreshKitConst.headerTag) as? RefreshHeaderContainer

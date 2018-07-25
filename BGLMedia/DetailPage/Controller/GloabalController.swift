@@ -342,6 +342,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         
         coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
         coinDetailController.alertControllers.coinName.status = true
+        coinDetailController.alertControllers.coinName.coinName = general.coinName
     }
     
     func loadMarketData(){

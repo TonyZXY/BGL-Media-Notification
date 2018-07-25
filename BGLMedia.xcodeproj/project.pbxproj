@@ -233,6 +233,7 @@
 		57BBAB4E2107085F00984AA4 /* ElasticRefreshHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB452107085F00984AA4 /* ElasticRefreshHeader.swift */; };
 		57BBAB4F2107085F00984AA4 /* ElasticRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB462107085F00984AA4 /* ElasticRefreshControl.swift */; };
 		57BBAB502107085F00984AA4 /* Left.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB472107085F00984AA4 /* Left.swift */; };
+		57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB5121083DF800984AA4 /* NewsTableViewCell.swift */; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
 		57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */; };
 		57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FA20FB00320052EE02 /* CurrencyController.swift */; };
@@ -483,6 +484,7 @@
 		57BBAB452107085F00984AA4 /* ElasticRefreshHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElasticRefreshHeader.swift; sourceTree = "<group>"; };
 		57BBAB462107085F00984AA4 /* ElasticRefreshControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElasticRefreshControl.swift; sourceTree = "<group>"; };
 		57BBAB472107085F00984AA4 /* Left.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Left.swift; sourceTree = "<group>"; };
+		57BBAB5121083DF800984AA4 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		57FC41F120FAD2D20052EE02 /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
 		57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BGLCommunityController.swift; sourceTree = "<group>"; };
 		57FC41FA20FB00320052EE02 /* CurrencyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyController.swift; sourceTree = "<group>"; };
@@ -1046,6 +1048,7 @@
 		57355C0A20F7188B002E70E4 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				57BBAB5121083DF800984AA4 /* NewsTableViewCell.swift */,
 				57355C0B20F7188B002E70E4 /* NewsDetailtableView.swift */,
 			);
 			path = View;
@@ -1475,6 +1478,7 @@
 				2D52AEEE20E46E1A00018FC0 /* MarketView.swift in Sources */,
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,
 				57355C8420F718F8002E70E4 /* WatchListCell.swift in Sources */,
+				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
 				2D52AF1D20E46E1A00018FC0 /* Params.swift in Sources */,
 				57355C5920F718CC002E70E4 /* SearchExchangesController.swift in Sources */,
 				57BBAB4C2107085F00984AA4 /* Right.swift in Sources */,

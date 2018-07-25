@@ -46,7 +46,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         setUpBasicView()
         checkTransaction()
         setWalletData()
-        reloadData()
+        DispatchQueue.main.async(execute: {
+            self.walletList.beginHeaderRefreshing()
+        })
 //        SetDataResult().writeJsonExchange()
 //        SetDataResult().writeMarketCapCoinList()
 //        GetDataResult().getCoinList()
@@ -168,13 +170,25 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     @objc func refreshData(){
         checkTransaction()
         setWalletData()
-        reloadData()
+//        reloadData(){success in
+//            if success{
+//                self.walletList.reloadData()
+//                self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+//            } else{
+//                self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+//            }
+//        }
+        
+        
+        DispatchQueue.main.async(execute: {
+            self.walletList.beginHeaderRefreshing()
+        })
 //        setWalletData()
 //        reloadData()
     }
     
-    func reloadData(){
-        self.refresher.beginRefreshing()
+    func reloadData(completion:@escaping (Bool)->Void){
+//        self.refresher.beginRefreshing()
 //        refresher.sendActions(for: .valueChanged)
 //        let contentOffset = CGPoint(x: 0, y: -refresher.frame.height)
 //        walletList.setContentOffset(contentOffset, animated: true)
@@ -213,6 +227,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                         })
                     }
                 case .failure(let error):
+                
                     print("the error \(error.localizedDescription)")
                 }
             }
@@ -220,8 +235,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
         dispatchGroup.notify(queue:.main){
             self.caculateTotal()
-            self.walletList.reloadData()
-            self.refresher.endRefreshing()
+            completion(true)
+//            self.refresher.endRefreshing()
         }
     }
     
@@ -239,8 +254,15 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     //Refresh Method
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        reloadData()
+    @objc func handleRefresh(_ tableView:UITableView) {
+        reloadData(){success in
+            if success{
+                self.walletList.reloadData()
+                self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+            } else{
+                 self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -273,12 +295,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     //TableView Refresh Spinnner
-    lazy var refresher: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
-        refreshControl.tintColor = UIColor.white
-        return refreshControl
-    }()
+//    lazy var refresher: UIRefreshControl = {
+//        let refreshControl = UIRefreshControl()
+//        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+//        refreshControl.tintColor = UIColor.white
+//        return refreshControl
+//    }()
     
     func setUpBasicView(){
         view.backgroundColor = ThemeColor().navigationBarColor()
@@ -349,7 +371,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
 //        existTransactionView.addSubview(filterButtonNumber)
 //        existTransactionView.addSubview(filterButtonPercent)
         existTransactionView.addSubview(walletList)
-        walletList.addSubview(self.refresher)
+//        walletList.addSubview(self.refresher)
         
         totalProfitView.addSubview(totalLabel)
         totalProfitView.addSubview(totalNumber)
@@ -357,6 +379,16 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         buttonView.addSubview(addTransactionButton)
         
         languageLabel()
+        
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        walletList.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(self.walletList)
+        })
+        
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
@@ -560,15 +592,15 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }()
     
     lazy var walletList:UITableView = {
-        var collectionView = UITableView()
-        collectionView.separatorStyle = .none
-        collectionView.backgroundColor = ThemeColor().themeColor()
-        collectionView.register(WalletsCell.self, forCellReuseIdentifier: "WalletCell")
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.rowHeight = 100
-        collectionView.delegate = self
-        collectionView.dataSource = self
-        return collectionView
+        var tableView = UITableView()
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = ThemeColor().themeColor()
+        tableView.register(WalletsCell.self, forCellReuseIdentifier: "WalletCell")
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.rowHeight = 100
+        tableView.delegate = self
+        tableView.dataSource = self
+        return tableView
     }()
     
     override func didReceiveMemoryWarning() {
