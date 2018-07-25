@@ -28,7 +28,9 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        getCoinData()
+        DispatchQueue.main.async(execute: {
+            self.coinList.beginHeaderRefreshing()
+        })
         NotificationCenter.default.addObserver(self, selector: #selector(updateWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(refreshWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
@@ -61,18 +63,19 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         return collectionView
     }()
     
-    lazy var refresher: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
-        refreshControl.tintColor = UIColor.white
-        return refreshControl
-    }()
     
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        getCoinData()
+    @objc func handleRefresh(_ collectionView: UICollectionView) {
+        getCoinData(){success in 
+            if success{
+                self.coinList.reloadData()
+                 self.coinList.switchRefreshHeader(to: .normal(.success, 0.5))
+            } else{
+                 self.coinList.switchRefreshHeader(to: .normal(.failure, 0.5))
+            }
+        }
     }
     
-    func getCoinData(){
+    func getCoinData(completion:@escaping (Bool)->Void){
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
             if success{
                 let dispatchGroup = DispatchGroup()
@@ -94,16 +97,18 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
                                     watchListCoinObject[0].profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
                                 }
                                 dispatchGroup.leave()
+                            } else{
+                                dispatchGroup.leave()
                             }
                         }
                     }
                 }
                 
                 dispatchGroup.notify(queue:.main){
-                    self.coinList.reloadData()
-                    self.refresher.endRefreshing()
+                    completion(true)
                 }
             } else{
+                completion(false)
                 print("Fail to get Global Average CoinList")
             }
         }
@@ -169,7 +174,17 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     func setUpView(){
         view.addSubview(coinList)
-        coinList.addSubview(refresher)
+        
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        coinList.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(self.coinList)
+        })
+        
+
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
     }
