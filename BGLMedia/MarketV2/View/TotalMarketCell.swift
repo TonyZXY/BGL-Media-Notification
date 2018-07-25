@@ -29,6 +29,7 @@ class TotalMarketCell:UICollectionViewCell{
         var number = UILabel()
         number.translatesAutoresizingMaskIntoConstraints = false
         number.textColor = UIColor.white
+        number.text = "--"
         number.font = number.font.withSize(20)
         return number
     }()

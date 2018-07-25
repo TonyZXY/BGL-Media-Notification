@@ -278,7 +278,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tabelView.delegate = self
         tabelView.separatorStyle = .none
         tabelView.dataSource = self
-        tabelView.isScrollEnabled = false
+        tabelView.alwaysBounceVertical = true
         tabelView.rowHeight = 50
         tabelView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tabelView.translatesAutoresizingMaskIntoConstraints = false

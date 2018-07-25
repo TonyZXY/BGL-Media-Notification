@@ -55,9 +55,6 @@ class GerneralController: UIViewController {
 
         
         
-        SecondView.addSubview(market)
-        SecondView.addSubview(tradingPairs)
-        SecondView.addSubview(edit)
         SecondView.addSubview(exchangeButton)
         SecondView.addSubview(tradingPairButton)
         
@@ -72,22 +69,13 @@ class GerneralController: UIViewController {
         //Market View constraint
         scrollView.addConstraintsWithFormat(format: "H:|-15-[v0]-15-|", views: SecondView)
         scrollView.addConstraintsWithFormat(format: "V:|-5-[v0(50)]", views: SecondView)
-        
-        market.isHidden = true
-        tradingPairs.isHidden = true
-        edit.isHidden = true
+
         
         
         NSLayoutConstraint(item: SecondView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
-        //Market View
-        NSLayoutConstraint(item: market, attribute: .bottom, relatedBy: .equal, toItem: SecondView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: tradingPairs, attribute: .top, relatedBy: .equal, toItem: SecondView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: market, attribute: .centerX, relatedBy: .equal, toItem: SecondView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: tradingPairs, attribute: .centerX, relatedBy: .equal, toItem: SecondView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        
-        NSLayoutConstraint(item: edit, attribute: .right, relatedBy: .equal, toItem: SecondView, attribute: .right, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: edit, attribute: .centerY, relatedBy: .equal, toItem: SecondView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+
+    
         
         
         
@@ -291,33 +279,9 @@ class GerneralController: UIViewController {
         return label
     }()
     
-    var market:UILabel = {
-        var label = UILabel()
-        label.text = "0"
-        label.textAlignment = .center
-        label.font = label.font.withSize(15)
-        label.textColor = ThemeColor().textGreycolor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+
     
-    var tradingPairs:UILabel = {
-        var label = UILabel()
-        label.text = "0"
-        label.textAlignment = .center
-        label.font = label.font.withSize(13)
-        label.textColor = ThemeColor().textGreycolor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var edit:UIButton = {
-        var button = UIButton(type:.system)
-        button.setTitle("Edit", for: .normal)
-        button.setTitleColor(UIColor.white, for: .normal)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        return button
-    }()
+
     
     var marketCap:UILabel = {
         var label = UILabel()

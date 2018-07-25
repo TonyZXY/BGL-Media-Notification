@@ -142,12 +142,11 @@ class TimelineTableViewController: UITableViewController {
         let resultSet = defaultLanguage == "CN" ? self.results : results.filter("languageTag='" + defaultLanguage + "'")
         let object = resultSet[indexPath.row + numberOfSkips]
         cell.likeButton.isHidden = true
-        cell.shareButton.setTitleColor(ThemeColor().whiteColor(), for: .normal)
+        cell.shareButton.isHidden = true
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
         
         let bglGreen = #colorLiteral(red: 0.5019607843, green: 0.8588235294, blue: 0.7176470588, alpha: 1)
-
         cell.timelinePoint = TimelinePoint(diameter: CGFloat(16.0), color: bglGreen, filled: false)
         cell.timelinePointInside = TimelinePoint(diameter: CGFloat(4.0), color: bglGreen, filled: true, insidePoint: true)
         cell.timeline.backColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
@@ -155,7 +154,6 @@ class TimelineTableViewController: UITableViewController {
         cell.descriptionLabel.text = object.contents
         cell.object = object
         cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
-        
         return cell
     }
 //    print(UIImage(named:"shareImageHead.png")?.size)

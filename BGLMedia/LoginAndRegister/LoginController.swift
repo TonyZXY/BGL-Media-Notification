@@ -106,6 +106,7 @@ class LoginController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = ThemeColor().themeColor()
         setUp()
+        loginButton.isEnabled = false
         // Do any additional setup after loading the view.
     }
     
@@ -322,7 +323,7 @@ class LoginController: UIViewController {
         skipButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
         skipButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
         skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        skipButton.topAnchor.constraint(equalTo:signUpButton.bottomAnchor , constant: 100).isActive = true
+        skipButton.topAnchor.constraint(equalTo:signUpButton.bottomAnchor , constant: 75).isActive = true
         
     }
     

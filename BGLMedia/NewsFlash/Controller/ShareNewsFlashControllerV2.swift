@@ -79,13 +79,35 @@ class ShareNewsFlashControllerV2: UIViewController {
         
         mainLogoImage.image = UIImage(named: "bcgflashnews2")?.reSizeImage(reSize: reSizeMain)
         downloadAppImage.image = UIImage(named: "downloadapp")?.reSizeImage(reSize: reSizeDownLoadApp)
+//
+//        if #available(iOS 11.0, *) {
+//            scrollView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+//            scrollView.safeAreaLayoutGuide.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+//            scrollView.safeAreaLayoutGuide.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+//            scrollView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: selectBarView.safeAreaLayoutGuide.topAnchor).isActive = true
+//            selectBarView.heightAnchor.constraint(equalToConstant: 80).isActive = true
+//            selectBarView.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+////            scrollView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
+////            scrollView.safeAreaLayoutGuide.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor).isActive = true
+////            scrollView.safeAreaLayoutGuide.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor).isActive = true
+//        } else {
+//            // Fallback on earlier versions
+//        }
+//
+        if #available(iOS 11.0, *) {
+            scrollView.contentInsetAdjustmentBehavior = .never
+        } else {
+            
+        }
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView,"v1":selectBarView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]-0-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView,"v1":selectBarView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0]-0-[v1(80)]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView,"v1":selectBarView]))
         
         scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0(\(view.frame.width))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
         scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0(\(view.frame.height))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
+        
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "v:|[v0(300)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
+        
         
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(200)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
@@ -105,7 +127,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v3]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v3(150)]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
+//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
 //        NSLayoutConstraint(item: shareButton, attribute: .centerY, relatedBy: .equal, toItem: selectBarView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
          NSLayoutConstraint(item: shareButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 0).isActive = true
@@ -200,7 +222,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         var scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.showsVerticalScrollIndicator = true
-        scrollView.alwaysBounceVertical = true
+//        scrollView.alwaysBounceVertical = true
         return scrollView
     }()
 //    var testImages:UIImage = {

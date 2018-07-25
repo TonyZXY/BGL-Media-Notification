@@ -175,6 +175,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func reloadData(){
         self.refresher.beginRefreshing()
+//        refresher.sendActions(for: .valueChanged)
+//        let contentOffset = CGPoint(x: 0, y: -refresher.frame.height)
+//        walletList.setContentOffset(contentOffset, animated: true)
         let dispatchGroup = DispatchGroup()
         self.totalAssets = 0
         self.totalProfit = 0

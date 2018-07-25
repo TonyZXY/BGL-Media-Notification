@@ -16,7 +16,8 @@ class MainTabBarController: UITabBarController {
     
     let networkLabel:UILabel = {
         let label = UILabel()
-        label.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+//        label.backgroundColor = UIColor.blue.withAlphaComponent(0.5)
+        label.backgroundColor = ThemeColor().redColorTran()
         label.textColor = .white
         label.text = "Network error. Please check your connection."
         label.font = UIFont(name:"Helvetica-Bold", size:15)
