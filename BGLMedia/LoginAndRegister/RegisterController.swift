@@ -451,6 +451,9 @@ class RegisterController: UIViewController {
     
     func setUp(){
         
+        let width = view.frame.width/375
+        let height = view.frame.height/736
+        print("width: \(width), height: \(height)")
         // Add First Name Label
         view.addSubview(titleView)
         titleView.translatesAutoresizingMaskIntoConstraints = false

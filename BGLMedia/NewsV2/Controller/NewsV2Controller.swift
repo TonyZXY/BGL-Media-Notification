@@ -114,6 +114,13 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
+//    override func viewDidAppear(_ animated: Bool) {
+//        DispatchQueue.main.async(execute: {
+//            //            self.newsTableView.contentOffset = CGPoint(x: 0, y: -50.5)
+//            self.newsTableView.beginHeaderRefreshing()
+//        })
+//    }
+    
     
     
     @objc func changeLanguage(){
@@ -182,6 +189,8 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             }
         }
     }
+    
+    
     
     func storeDataToRealm(res:JSON,completion:@escaping (Bool)->Void){
         self.realm.beginWrite()
