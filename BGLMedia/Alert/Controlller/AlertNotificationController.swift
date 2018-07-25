@@ -222,6 +222,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         cell.accessibilityHint = switchStatusItem[indexPath.section][indexPath.row]
         cell.textLabel?.textColor = ThemeColor().whiteColor()
         cell.separatorInset = UIEdgeInsetsMake(0, 16, 0, 0)
+        cell.isUserInteractionEnabled = true
         if indexPath.section == 1 {
             let swithButton = UISwitch()
             swithButton.isOn = SwitchOption[indexPath.row]
@@ -421,7 +422,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         tableView.separatorInset = UIEdgeInsetsMake(0, 16, 0, 0);
         tableView.dataSource = self
         tableView.separatorStyle = .none
-        tableView.isScrollEnabled = false
+        tableView.bounces = false
         return tableView
     }()
     

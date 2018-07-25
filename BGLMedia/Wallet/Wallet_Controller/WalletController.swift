@@ -580,7 +580,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }()
     
     var addTransactionButton:UIButton = {
-        var button = UIButton()
+        var button = UIButton(type: .system)
         button.setTitle("➕", for: .normal)
         button.titleLabel?.font = button.titleLabel?.font.withSize(25)
         button.tintColor = ThemeColor().themeColor()

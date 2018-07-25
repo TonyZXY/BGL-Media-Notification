@@ -186,7 +186,6 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     func storeDataToRealm(res:JSON,completion:@escaping (Bool)->Void){
         self.realm.beginWrite()
         if let collection = res.array{
-            print(res)
             for result in collection{
                 let id = result["_id"].string ?? "0"
                 let title = result["title"].string ?? ""
