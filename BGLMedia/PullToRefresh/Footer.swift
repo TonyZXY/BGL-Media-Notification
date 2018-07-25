@@ -168,21 +168,21 @@ open class DefaultRefreshFooter:UIView, RefreshableFooter{
         guard refreshMode != .scroll else{
             return
         }
-        self.backgroundColor = UIColor.lightGray.withAlphaComponent(0.5)
+        self.backgroundColor = ThemeColor().themeColor()
     }
     open override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesEnded(touches, with: event)
         guard refreshMode != .scroll else{
             return
         }
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = ThemeColor().themeColor()
     }
     open override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         super.touchesCancelled(touches, with: event)
         guard refreshMode != .scroll else{
             return
         }
-        self.backgroundColor = UIColor.white
+        self.backgroundColor = ThemeColor().themeColor()
     }
     override open var tintColor: UIColor!{
         didSet{

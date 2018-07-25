@@ -60,7 +60,7 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
         cell.likeButton.isHidden = true
         cell.shareButton.isHidden = true
 //            cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
-        cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
+        cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
     }
     

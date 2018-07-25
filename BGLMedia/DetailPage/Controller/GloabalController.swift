@@ -66,6 +66,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         loadData()
 //        getCoinGloablDetail()
         
+        
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
@@ -120,8 +121,6 @@ class GloabalController: UIViewController,ExchangeSelect{
                                         object.price = pricess
                                     }
                                 }
-                                generalView.market.text = self.exchangeName
-                                generalView.tradingPairs.text = self.coinAbbName + "/" + self.tradingPairs
                                 completion(true)
                             }
                         } else{
@@ -170,14 +169,26 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     func setUpView(){
     coinDetailController.gerneralController.exchangeButton.setTitle(newTransaction.exchangName, for: .normal)
-        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
+//        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
         coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)
         coinDetailController.gerneralController.tradingPairButton.addTarget(self, action: #selector(editTradingPairs), for: .touchUpInside)
+        let generalPage = coinDetailController.gerneralController
+
         addChildViewControllers(childViewControllers: coinDetailController, views: view)
         let titleLabel = UILabel()
         titleLabel.text = coinDetail.coinName
         titleLabel.textColor = UIColor.white
         navigationItem.titleView = titleLabel
+        
+        if pageStatus == "WatchList"{
+            
+        } else{
+//            generalPage.exchangeButton.isUserInteractionEnabled = false
+//            generalPage.tradingPairs.isUserInteractionEnabled = false
+            generalPage.exchangeButton.isEnabled = false
+            generalPage.tradingPairButton.isEnabled = false
+        }
+        
     }
     
     @objc func editMarket(){
@@ -295,23 +306,20 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     @objc func loadData(){
         let generalPage = coinDetailController.gerneralController
-        
         if pageStatus == "WatchList"{
             general.coinAbbName = WatchListData[0].coinAbbName
             general.coinName = WatchListData[0].coinName
             general.exchangeName = WatchListData[0].market
             general.tradingPairs = WatchListData[0].tradingPairsName
-            generalPage.edit.isHidden = true
-            generalPage.tradingPairs.text = WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName
-            generalPage.market.text = WatchListData[0].market
+           
+
             generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:WatchListData[0].price)
             generalPage.exchangeButton.setTitle(WatchListData[0].market, for: .normal)
             generalPage.tradingPairButton.setTitle(WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName, for: .normal)
             
         } else{
-            generalPage.edit.isHidden = true
-            generalPage.tradingPairs.text = coinDetail.coinName + "/" + priceType
-            generalPage.market.text = "Global Average"
+            
+       
             generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:GlobalData[0].price)
             general.coinAbbName = GlobalData[0].coinAbbName
             general.coinName = GlobalData[0].coinName
@@ -319,6 +327,8 @@ class GloabalController: UIViewController,ExchangeSelect{
             general.tradingPairs = priceType
             generalPage.exchangeButton.setTitle("Global Average", for: .normal)
             generalPage.tradingPairButton.setTitle(coinDetail.coinName + "/" + priceType, for: .normal)
+            generalPage.exchangeButton.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
+            generalPage.tradingPairButton.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
         }
         generalPage.marketCapResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].marketCap )
         generalPage.volumeResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].volume24 )
@@ -336,8 +346,8 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     func loadMarketData(){
         let generalPage = coinDetailController.gerneralController
-        generalPage.tradingPairs.text = WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName
-        generalPage.market.text = WatchListData[0].market
+//        generalPage.tradingPairs.text = WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName
+//        generalPage.market.text = WatchListData[0].market
         
     }
     

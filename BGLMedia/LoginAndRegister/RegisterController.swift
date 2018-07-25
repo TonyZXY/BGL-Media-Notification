@@ -193,6 +193,7 @@ class RegisterController: UIViewController {
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
         view.backgroundColor = ThemeColor().themeColor()
         setUp()
+        signUpButton.isEnabled = false
         signUpButton.backgroundColor = UIColor.init(red:168/255.0, green:234/255.0, blue:214/255.0, alpha:1)
         
     }

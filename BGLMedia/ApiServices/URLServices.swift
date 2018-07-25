@@ -34,7 +34,7 @@ class URLServices:NSObject{
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         
         let manager = Alamofire.SessionManager.default
-        manager.session.configuration.timeoutIntervalForRequest = 300
+        manager.session.configuration.timeoutIntervalForRequest = 30
         
         Alamofire.request(urlRequest).responseJSON { (response) in
             switch response.result {
@@ -88,26 +88,35 @@ class URLServices:NSObject{
             response,pass in
             if pass{
                 self.realm.beginWrite()
+                let realmObject = self.realm.objects(GlobalAverageObject.self)
                 for result in response.array!{
-                    let id = result["_id"].string ?? ""
                     let coinAbbName = result["symbol"].string ?? ""
-                    let coinName = result["name"].string ?? ""
-                    let totalSupply = result["total_supply"].double ?? 0
-                    let circulatingSupply = result["circulating_supply"].double ?? 0
-                    let currency = result["quotes"][0]["currency"].string ?? ""
-                    let percent24h = result["quotes"][0]["data"]["percent_change_24h"].double ?? 0
-                    let percent1h = result["quotes"][0]["data"]["percent_change_1h"].double ?? 0
-                    let percent7d = result["quotes"][0]["data"]["percent_change_7d"].double ?? 0
-                    let volume24 = result["quotes"][0]["data"]["volume_24h"].double ?? 0
-                    let marketCap = result["quotes"][0]["data"]["market_cap"].double ?? 0
-                    let price = result["quotes"][0]["data"]["price"].double ?? 0
-                    let max_supply = result["max_supply"].double ?? 0
-                    let rank = result["rank"].int ?? 0
-                    let realmData:[Any] = [id,coinAbbName,coinName,totalSupply,circulatingSupply,currency,percent24h,percent1h,percent7d,volume24,max_supply,marketCap,price,rank]
-                    if self.realm.object(ofType: GlobalAverageObject.self, forPrimaryKey: id) == nil {
-                        self.realm.create(GlobalAverageObject.self, value: realmData)
-                    } else {
-                        self.realm.create(GlobalAverageObject.self, value: realmData, update: true)
+                    if self.realm.objects(CoinList.self).filter("coinSymbol = %@", coinAbbName).count != 0{
+                             print(coinAbbName)
+                        let id = result["_id"].string ?? ""
+                        let coinName = result["name"].string ?? ""
+                        let totalSupply = result["total_supply"].double ?? 0
+                        let circulatingSupply = result["circulating_supply"].double ?? 0
+                        let currency = result["quotes"][0]["currency"].string ?? ""
+                        let percent24h = result["quotes"][0]["data"]["percent_change_24h"].double ?? 0
+                        let percent1h = result["quotes"][0]["data"]["percent_change_1h"].double ?? 0
+                        let percent7d = result["quotes"][0]["data"]["percent_change_7d"].double ?? 0
+                        let volume24 = result["quotes"][0]["data"]["volume_24h"].double ?? 0
+                        let marketCap = result["quotes"][0]["data"]["market_cap"].double ?? 0
+                        let price = result["quotes"][0]["data"]["price"].double ?? 0
+                        let max_supply = result["max_supply"].double ?? 0
+                        let rank = result["rank"].int ?? 0
+                        let realmData:[Any] = [id,coinAbbName,coinName,totalSupply,circulatingSupply,currency,percent24h,percent1h,percent7d,volume24,max_supply,marketCap,price,rank]
+                        if self.realm.object(ofType: GlobalAverageObject.self, forPrimaryKey: id) == nil {
+                            self.realm.create(GlobalAverageObject.self, value: realmData)
+                        } else {
+                            self.realm.create(GlobalAverageObject.self, value: realmData, update: true)
+                        }
+                    } else{
+                        if realmObject.filter("coinAbbName = %@", coinAbbName).count != 0{
+//                            self.realm.delete(realmObject.filter(coinAbbName))
+//                            print(coinAbbName)
+                        }
                     }
                 }
                 try! self.realm.commitWrite()

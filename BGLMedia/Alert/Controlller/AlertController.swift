@@ -150,17 +150,13 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func checkSetUpView(){
-        let status = UserDefaults.standard.bool(forKey: "NotificationSetting")
-        if status{
+
             if loginStatus{
                 setUpView()
 //                view.willRemoveSubview(setUpLoginView)
             } else{
                 setUpLoginView()
             }
-        }else{
-            setUpNoNotificationView()
-        }
     }
     
     @objc func addAlerts(){

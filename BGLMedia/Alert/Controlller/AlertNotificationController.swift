@@ -10,6 +10,7 @@ import UIKit
 import UserNotifications
 import Alamofire
 import SwiftyJSON
+import JGProgressHUD
 
 class switchObject{
     var type:String?
@@ -456,12 +457,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
 //    }
     
     func getNotificationStatusData(){
-        if UserDefaults.standard.string(forKey: "UserToken") != nil{
+            print("sfsdfsds")
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
+                let hud = JGProgressHUD(style: .light)
+                hud.show(in: (self.parent?.view)!)
+                
                 let email = UserDefaults.standard.string(forKey: "UserEmail")!
                 let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
-                print(email)
-                print(certificateToken)
                 let parameter = ["email":email,"token":certificateToken]
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
                     if success{
@@ -469,10 +471,27 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                         UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
                         UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
                         self.notificationTableView.reloadData()
+                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                            hud.dismiss()
+                        }
+                    } else{
+                        let manager = NetworkReachabilityManager()
+                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        if !(manager?.isReachable)! {
+                            hud.textLabel.text = "Error"
+                            hud.detailTextLabel.text = "No Network" // To change?
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                hud.dismiss()
+                            }
+                            
+                        } else{
+                            hud.textLabel.text = "Error"
+                            hud.detailTextLabel.text = "Time Out"
+                            hud.dismiss()
+                        }
                     }
                 }
             }
-        }
     }
     
     func postNotificationStatusData(){

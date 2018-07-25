@@ -304,11 +304,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == mainTotalCollectionView{
-            if globalMarket.count == 0{
-                return 0
-            } else{
                 return 3
-            }
         }else if collectionView == filterDate{
             return 3
         }else if collectionView == coinList{
@@ -325,13 +321,15 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         if collectionView == mainTotalCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainTotalCell", for: indexPath) as! TotalMarketCell
                 cell.totalFunds.text = mainItems[indexPath.row]
-            let object = globalMarket[0]
-            if indexPath.row == 0{
-                cell.number.text = object.total_market_cap + "B"
-            } else if indexPath.row == 1{
-                cell.number.text = object.total_volume_24h + "B"
-            } else if indexPath.row == 2{
-                cell.number.text = object.bitcoin_percentage_of_market_cap + "%"
+            if globalMarket.count != 0 {
+                let object = globalMarket[0]
+                if indexPath.row == 0{
+                    cell.number.text = object.total_market_cap + "B"
+                } else if indexPath.row == 1{
+                    cell.number.text = object.total_volume_24h + "B"
+                } else if indexPath.row == 2{
+                    cell.number.text = object.bitcoin_percentage_of_market_cap + "%"
+                }
             }
             return cell
         } else if collectionView == filterDate{

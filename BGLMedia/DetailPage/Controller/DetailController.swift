@@ -81,9 +81,9 @@ class DetailController: UIViewController{
             checkDataRiseFallColor(risefallnumber: value.singlePrice, label:  generalPage.totalNumber, type: "Default")
             generalPage.defaultCurrencyLable.text = priceType
 //            generalPage.totalNumber.text = currecyLogo[priceType]! + generalPage.totalNumber.text!
-            generalPage.tradingPairs.text = value.coinAbbName + "/" +  value.tradingPairsName
-            generalPage.market.text = value.exchangeName
-            generalPage.edit.isHidden = true
+//            generalPage.tradingPairs.text = value.coinAbbName + "/" +  value.tradingPairsName
+//            generalPage.market.text = value.exchangeName
+//            generalPage.edit.isHidden = true
             generalPage.exchangeButton.setTitle(value.exchangeName, for: .normal)
             generalPage.tradingPairButton.setTitle(value.coinAbbName + "/" +  value.tradingPairsName, for: .normal)
             general.coinAbbName = value.coinAbbName
@@ -254,7 +254,7 @@ class DetailController: UIViewController{
     
     //Set up layout constraints
     func setUpView(){
-        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
+//        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
         coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)
         coinDetailController.gerneralController.tradingPairButton.addTarget(self, action: #selector(editTradingPairs), for: .touchUpInside)
         view.backgroundColor = ThemeColor().themeColor()

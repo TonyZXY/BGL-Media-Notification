@@ -13,9 +13,6 @@ import SafariServices
 
 class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelegate{
     let realm = try! Realm()
-    var skip:Int = 0
-    var limit:Int = 5
-    var numberOfItemsToDisplay:Int=5
     var displayNumber:Int = 0
     var loadMoreData:Bool = false
     
@@ -31,68 +28,69 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         }
     }
     
-    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-        spinner.startAnimating()
-        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(60))
-        self.newsTableView.tableFooterView = spinner
-        self.newsTableView.tableFooterView?.isHidden = false
-        
-        let lastItem = displayNumber - 1
-        if tableView == newsTableView {
-            if indexPath.row == lastItem && displayNumber <= newsObject.count{
-                print(displayNumber)
-                if displayNumber != 0{
-                    self.displayNumber += 5
-                    getData(skip: displayNumber, limit: 5){ success in
-                        if success{
-                            DispatchQueue.main.async {
-                                self.newsTableView.reloadData()
-                                //                            self.refresher.endRefreshing()
-                            }
-                        }
-                    }
-                }
-            }
-            if displayNumber >= newsObject.count {
-                spinner.stopAnimating()
-            }
-        }
-        
-        //        newsTableView.visibleCells
-        
-        //        cell.alpha = 0
-        //        UIView.animate(withDuration: 0.5) {
-        //            cell.alpha = 1.0
-        //            cell.layer.transform = CATransform3DIdentity
-        //        }
-        
-        //        cell.alpha = 0
-        //        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
-        //        cell.layer.transform = transform
-        //        UIView.animate(withDuration: 1.0) {
-        //            cell.alpha = 1.0
-        //            cell.layer.transform = CATransform3DIdentity
-        //        }
-    }
+    //    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    //        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
+    //        spinner.startAnimating()
+    //        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(60))
+    //        self.newsTableView.tableFooterView = spinner
+    //        self.newsTableView.tableFooterView?.isHidden = false
+    //
+    //        let lastItem = displayNumber - 1
+    //        if tableView == newsTableView {
+    //            if indexPath.row == lastItem && displayNumber <= newsObject.count{
+    //                print(displayNumber)
+    //                if displayNumber != 0{
+    //                    self.displayNumber += 5
+    //                    getData(skip: displayNumber, limit: 5){ success in
+    //                        if success{
+    //                            DispatchQueue.main.async {
+    //                                self.newsTableView.reloadData()
+    //                                //                            self.refresher.endRefreshing()
+    //                            }
+    //                        }
+    //                    }
+    //                }
+    //            }
+    //            if displayNumber >= newsObject.count {
+    //                spinner.stopAnimating()
+    //            }
+    //        }
+    
+    //        newsTableView.visibleCells
+    
+    //        cell.alpha = 0
+    //        UIView.animate(withDuration: 0.5) {
+    //            cell.alpha = 1.0
+    //            cell.layer.transform = CATransform3DIdentity
+    //        }
+    
+    //        cell.alpha = 0
+    //        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
+    //        cell.layer.transform = transform
+    //        UIView.animate(withDuration: 1.0) {
+    //            cell.alpha = 1.0
+    //            cell.layer.transform = CATransform3DIdentity
+    //        }
+    
     
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-        spinner.stopAnimating()
+        self.newsTableView.switchRefreshFooter(to: .normal)
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        self.displayNumber += 5
-        
-        //        handleRefresh(newsTableView)
-        //        getData(skip:0,limit: 5){ success in
-        //            if success{
-        //                self.newsTableView.reloadData()
-        //            }
-        //        }
+        self.displayNumber += 20
+        getData(skip:0,limit: 20){ success in
+            if success{
+                self.newsTableView.reloadData()
+            }
+        }
+
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
+    
+    
     
     @objc func changeLanguage(){
         titleLabel.text = navigationBarItem
@@ -191,9 +189,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
     
     @objc func handleRefresh(_ tableView: UITableView) {
-        getData(skip: 0, limit: 5){ sccuess in
+        getData(skip: 0, limit: 20){ sccuess in
             if sccuess{
-                self.displayNumber = 5
+                self.displayNumber = 20
                 self.newsTableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
                 print("999888777666666666666")
@@ -227,16 +225,18 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.separatorStyle = .none
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
-        //        header.setText("Pull To Refresh", mode: .pullToRefresh)
-        //        header.setText("Release To Refresh", mode: .releaseToRefresh)
-        //        header.setText("Refreshing", mode: .refreshing)
-        //        header.setText("Success", mode: .refreshSuccess)
-        //        header.setText("Failed", mode: .refreshFailure)
-        header.textLabel.font = UIFont(name: "Montserrat-Regular", size: 12)
+        header.textLabel.font = UIFont.regularFont(12)
         header.tintColor = ThemeColor().whiteColor()
         header.imageRenderingWithTintColor = true
         tableView.configRefreshHeader(with:header, container: self, action: {
             self.handleRefresh(tableView)
+        })
+        let footer = DefaultRefreshFooter.footer()
+        footer.textLabel.textColor = ThemeColor().whiteColor()
+        footer.tintColor = ThemeColor().whiteColor()
+        footer.textLabel.backgroundColor = ThemeColor().themeColor()
+        tableView.configRefreshFooter(with: footer, container: self, action: {
+            self.handleFooter()
         })
         tableView.rowHeight = 120
         tableView.delegate = self
@@ -253,14 +253,30 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         return titleLabel
     }()
     
-    
-    
-    
-    var spinner:UIActivityIndicatorView{
-        let spinner = UIActivityIndicatorView()
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        return spinner
+    func handleFooter(){
+        if displayNumber <= newsObject.count{
+            print(displayNumber)
+            if displayNumber != 0{
+                self.displayNumber += 20
+                getData(skip: displayNumber, limit: 20){ success in
+                    if success{
+                        DispatchQueue.main.async {
+                            self.newsTableView.reloadData()
+                            self.newsTableView.switchRefreshFooter(to: .normal)
+                            //                            self.refresher.endRefreshing()
+                        }
+                    }
+                }
+            }
+        }
+        if displayNumber >= newsObject.count {
+            self.newsTableView.switchRefreshFooter(to: .normal)
+        }
     }
+    
+    
+    
+    
     
     //    lazy var refresher: UIRefreshControl = {
     //            let refreshControl = UIRefreshControl()
