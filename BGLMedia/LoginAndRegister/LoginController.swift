@@ -268,62 +268,66 @@ class LoginController: UIViewController {
     
     func setUp(){
         
+        let width = view.frame.width/375
+        let height = view.frame.height/736
+        print("width: \(width), height: \(height)")
+        
         view.addSubview(logoImage)
         logoImage.translatesAutoresizingMaskIntoConstraints = false
-        logoImage.heightAnchor.constraint(equalToConstant: 150).isActive = true
-        logoImage.widthAnchor.constraint(equalToConstant:150).isActive = true
+        logoImage.heightAnchor.constraint(equalToConstant: 150 * height).isActive = true
+        logoImage.widthAnchor.constraint(equalToConstant:150 * height).isActive = true
         logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 100).isActive = true
+        logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 80 * height).isActive = true
         
         
         view.addSubview(emailLabel)
         emailLabel.translatesAutoresizingMaskIntoConstraints = false
-        emailLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        emailLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        emailLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        emailLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         emailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emailLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 30).isActive = true
+        emailLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 30 * height).isActive = true
         
         view.addSubview(emailTextField)
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5).isActive = true
-        emailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        emailTextField.widthAnchor.constraint(equalToConstant:300).isActive = true
+        emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5 * height).isActive = true
+        emailTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        emailTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
         emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         view.addSubview(passwordLabel)
         passwordLabel.translatesAutoresizingMaskIntoConstraints = false
-        passwordLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        passwordLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        passwordLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        passwordLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         passwordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        passwordLabel.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30).isActive = true
+        passwordLabel.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30 * height).isActive = true
         
         view.addSubview(passwordTextField)
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 5).isActive = true
-        passwordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        passwordTextField.widthAnchor.constraint(equalToConstant:300).isActive = true
+        passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 5 * height).isActive = true
+        passwordTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        passwordTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
         passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         view.addSubview(loginButton)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        loginButton.widthAnchor.constraint(equalToConstant:200).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
+        loginButton.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 40).isActive = true
+        loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 40 * height).isActive = true
         
         view.addSubview(signUpButton)
         signUpButton.translatesAutoresizingMaskIntoConstraints = false
-        signUpButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        signUpButton.widthAnchor.constraint(equalToConstant:200).isActive = true
+        signUpButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
+        signUpButton.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        signUpButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20).isActive = true
+        signUpButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20 * height).isActive = true
         
         view.addSubview(skipButton)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
-        skipButton.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        skipButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        skipButton.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        skipButton.widthAnchor.constraint(equalToConstant: 80 * width).isActive = true
         skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        skipButton.topAnchor.constraint(equalTo:signUpButton.bottomAnchor , constant: 75).isActive = true
+        skipButton.topAnchor.constraint(equalTo:signUpButton.bottomAnchor , constant: 70 * height).isActive = true
         
     }
     
