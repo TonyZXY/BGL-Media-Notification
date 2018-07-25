@@ -29,15 +29,17 @@ class RegisterController: UIViewController {
         label.textColor = ThemeColor().whiteColor()
         return label
     }()
-    let navButton: UIButton = {
-        
+    lazy var navButton: UIButton = {
+        let width = view.frame.width/375
         let button = UIButton()
         button.setImage(UIImage(named: "back_button"), for: .normal)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 40)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 20 * width, 0, 20 * width)
+        button.imageEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         button.addTarget(self, action: #selector(closePage), for: .touchUpInside)
         return button
     }()
     let firstNameLabel: UILabel = {
+        
         let label = UILabel()
         label.text = "First Name"
         label.textAlignment = .center
@@ -482,8 +484,8 @@ class RegisterController: UIViewController {
         titleView.addSubview(navButton)
         navButton.translatesAutoresizingMaskIntoConstraints = false
         navButton.heightAnchor.constraint(equalToConstant: 23 * width).isActive = true
-        navButton.widthAnchor.constraint(equalToConstant: 23 * width).isActive = true
-        navButton.leftAnchor.constraint(equalTo:view.leftAnchor,constant: 28 * width).isActive = true
+//        navButton.widthAnchor.constraint(equalToConstant: 23 * width).isActive = true
+        navButton.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
         navButton.centerYAnchor.constraint(equalTo:titleView.centerYAnchor).isActive = true
         
         
