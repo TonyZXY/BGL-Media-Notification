@@ -67,7 +67,6 @@ class URLServices:NSObject{
                     if let logoUrl = result["logoUrl"].string{
                         logoURL = logoUrl
                     }
-                  
                     if self.realm.object(ofType: CoinList.self, forPrimaryKey: id) == nil {
                         self.realm.create(CoinList.self, value: [id, coinName, coinSymbol,logoURL])
                     } else {
@@ -92,7 +91,7 @@ class URLServices:NSObject{
                 for result in response.array!{
                     let coinAbbName = result["symbol"].string ?? ""
                     if self.realm.objects(CoinList.self).filter("coinSymbol = %@", coinAbbName).count != 0{
-                             print(coinAbbName)
+//                             print(coinAbbName)
                         let id = result["_id"].string ?? ""
                         let coinName = result["name"].string ?? ""
                         let totalSupply = result["total_supply"].double ?? 0
@@ -114,8 +113,8 @@ class URLServices:NSObject{
                         }
                     } else{
                         if realmObject.filter("coinAbbName = %@", coinAbbName).count != 0{
-//                            self.realm.delete(realmObject.filter(coinAbbName))
-//                            print(coinAbbName)
+                            self.realm.delete(realmObject.filter(coinAbbName))
+                            print(coinAbbName)
                         }
                     }
                 }

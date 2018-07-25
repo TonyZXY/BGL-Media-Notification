@@ -100,6 +100,7 @@ class DetailController: UIViewController{
             coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
             coinDetailController.alertControllers.coinName.status = true
             coinDetailController.alertControllers.coinAbbName = general.coinAbbName
+            coinDetailController.alertControllers.coinName.coinName = general.coinName
             generalPage.marketCapResult.text = String(globalMarketData.market_cap ?? 0.0)
             generalPage.volumeResult.text = String(globalMarketData.volume_24h ?? 0.0)
             generalPage.circulatingSupplyResult.text = String(globalMarketData.circulating_supply ?? 0.0)

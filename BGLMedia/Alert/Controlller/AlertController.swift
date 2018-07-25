@@ -11,6 +11,7 @@ import RealmSwift
 import UserNotifications
 import Alamofire
 import SwiftyJSON
+import JGProgressHUD
 
 struct alertResult{
     var isExpanded:Bool = true
@@ -23,6 +24,7 @@ struct alertResult{
 struct coinAlert{
     var status:Bool = false
     var coinAbbName:String = ""
+    var coinName:String = ""
 }
 
 class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSource{
@@ -545,6 +547,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
 //        }
         
         let alert = AlertManageController()
+        if coinName.status{
+            alert.coinName.status = true
+            alert.coinName.coinAbbName = coinName.coinAbbName
+            alert.coinName.coinName = coinName.coinName
+        }
         navigationController?.pushViewController(alert, animated: true)
     }
     
@@ -553,20 +560,46 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
             let body:[String:Any] = ["email":email,"token":certificateToken]
 
+            let hud = JGProgressHUD(style: .light)
+            hud.show(in: (self.parent?.view)!)
+        
             URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
                 if pass{
-                    print(response)
                     self.writeRealm(json:response){(pass) in
                         if pass{
                             DispatchQueue.main.async {
                                 print(self.realm.objects(alertObject.self))
                                 self.alerts = self.allAlert
                                 self.alertTableView.reloadData()
+                                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                    hud.dismiss()
+                                }
                             }
                         } else{
                             self.alerts = self.allAlert
                             self.alertTableView.reloadData()
+                            DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                hud.dismiss()
+                            }
                         }
+                    }
+                } else{
+                    let manager = NetworkReachabilityManager()
+                    hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                    if !(manager?.isReachable)! {
+                        hud.textLabel.text = "Error"
+                        hud.detailTextLabel.text = "No Network" // To change?
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                        
+                    } else {
+                        hud.textLabel.text = "Error"
+                        hud.detailTextLabel.text = "Time Out" // To change?
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                        
                     }
                 }
             }
