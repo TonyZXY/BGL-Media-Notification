@@ -32,6 +32,7 @@ class RegisterController: UIViewController {
     let navButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "back_button"), for: .normal)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 40)
         button.addTarget(self, action: #selector(closePage), for: .touchUpInside)
         return button
     }()

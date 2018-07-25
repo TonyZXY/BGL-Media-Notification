@@ -24,7 +24,7 @@ class NewsTableViewCell: UITableViewCell {
             timeLabel.text = news?.publishedTime.timeAgoDisplay()
             // source text and source pic need to be implement
             sourceLabel.text = news?.source!
-//            logoImageView.image = ??
+            logoImageView.image = UIImage(named: (news?.source?.lowercased())! + ".png")
         }
     }
 
