@@ -273,16 +273,16 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     lazy var optionTableView:UITableView = {
-        var tabelView = UITableView()
-        tabelView.backgroundColor = ThemeColor().themeColor()
-        tabelView.delegate = self
-        tabelView.separatorStyle = .none
-        tabelView.dataSource = self
-        tabelView.alwaysBounceVertical = true
-        tabelView.rowHeight = 50
-        tabelView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
-        tabelView.translatesAutoresizingMaskIntoConstraints = false
-        return tabelView
+        var tableView = UITableView()
+        tableView.backgroundColor = ThemeColor().themeColor()
+        tableView.delegate = self
+        tableView.separatorStyle = .none
+        tableView.dataSource = self
+        tableView.rowHeight = 50
+        tableView.bounces = false
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
+        tableView.translatesAutoresizingMaskIntoConstraints = false
+        return tableView
     }()
 
     let titleLabel: UILabel = {
