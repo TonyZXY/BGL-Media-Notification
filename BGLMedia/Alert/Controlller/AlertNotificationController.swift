@@ -460,7 +460,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             print("sfsdfsds")
             if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 let hud = JGProgressHUD(style: .light)
-                hud.show(in: self.parent?.view)
+                hud.show(in: (self.parent?.view)!)
                 
                 let email = UserDefaults.standard.string(forKey: "UserEmail")!
                 let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
