@@ -136,6 +136,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     }
     
     func getCoinData(){
+        refresher.beginRefreshing()
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
             if success{
                 DispatchQueue.main.async {
@@ -144,6 +145,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
                 }
             } else{
                 print("Fail to get Global Average CoinList")
+                self.refresher.endRefreshing()
             }
         }
     }
