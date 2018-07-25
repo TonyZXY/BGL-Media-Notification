@@ -73,6 +73,7 @@ sortByHighestPrice_watchlist = "按最高价排序";
 filterByWeek_watchlist = "1周";
 filterByDay_watchlist = "1天";
 filterByHour_watchlist = "1小时";
+hintLabel_watchlist = "请在行情页面添加您的第一个货币到收藏列表，点击 ★ 按钮标记收藏 ★";
 
 //Flash News Page
 navigationTitle_flash = "快讯";
@@ -119,6 +120,10 @@ volume_detail = "24小时成交量";
 circulatingSupply_detail = "流动供给";
 titleGraphs_details = "图表";
 titleGlobal_details = "全球市场";
+chart30m_details = "30分钟";
+chart4h_details = "4小时";
+chart1d_details = "日";
+chart1w_details = "周";
 
 //Transaction History Page
 tradingMarket_history = "交易市场";

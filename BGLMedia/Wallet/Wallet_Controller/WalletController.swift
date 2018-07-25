@@ -164,7 +164,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 list.append(value.coinName)
             }
         }
-        walletList.reloadData()
+//        DispatchQueue.main.async {
+//            self.walletList.reloadData()
+//        }
     }
     
     @objc func refreshData(){

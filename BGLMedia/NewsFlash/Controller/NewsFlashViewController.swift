@@ -43,8 +43,8 @@ class NewsFlashViewController: UIViewController {
     func initView(){
         view.backgroundColor = ThemeColor().themeColor()
         setUpNavigationTitle()
-        navigationController?.navigationBar.barTintColor =  ThemeColor().themeColor()
-        navigationController?.navigationBar.isTranslucent = false
+//        navigationController?.navigationBar.barTintColor =  ThemeColor().themeColor()
+//        navigationController?.navigationBar.isTranslucent = false
         let navigationDoneButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchResult))
         self.navigationItem.setRightBarButton(navigationDoneButton, animated: true)
 
@@ -53,12 +53,13 @@ class NewsFlashViewController: UIViewController {
     func setUpNavigationTitle(){
         let titleLabel = UILabel()
         titleLabel.text = textValue(name: "navigationTitle_flash")
+        titleLabel.font = UIFont.semiBoldFont(17)
         titleLabel.textColor = UIColor.white
         navigationItem.titleView = titleLabel
     }
 
     @objc func searchResult(){
-        let search = SearchNewsFlashController()
+        let search = FlashSearchController()
         search.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(search, animated: true)
     }

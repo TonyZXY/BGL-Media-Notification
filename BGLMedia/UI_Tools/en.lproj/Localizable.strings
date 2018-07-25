@@ -76,6 +76,7 @@ sortByHighestPrice_watchlist = "Highest Price";
 filterByWeek_watchlist = "1W";
 filterByDay_watchlist = "1D";
 filterByHour_watchlist = "1H";
+hintLabel_watchlist = "Please Add your first coin to watchlist by click the ★ button to ★ in Markets Page";
 
 //Flash News Page
 navigationTitle_flash = "Flash News";
@@ -122,6 +123,11 @@ volume_detail = "Volume(24h)";
 circulatingSupply_detail = "Circulating Supply";
 titleGraphs_details = "Graphs";
 titleGlobal_details = "Global Market";
+chart30m_details = "30min";
+chart4h_details = "4h";
+chart1d_details = "Day";
+chart1w_details = "Week";
+
 
 //Transaction History Page
 tradingMarket_history = "Market";

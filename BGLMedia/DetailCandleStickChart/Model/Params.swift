@@ -9,8 +9,12 @@
 import Foundation
 
 struct Params {
-    static var intervalText = "30分钟"
-    static let intervalTexts = ["30分钟", "4小时", "日", "周"]
+    static var intervalText = textValues(name: "chart30m_details")
+    static var intervalTexts:[String]{
+        get{
+            return [textValues(name: "chart30m_details"), textValues(name: "chart4h_details"), textValues(name: "chart1d_details"), textValues(name: "chart1w_details")]
+        }
+    }
     static var intervalParam = "histominute"
     static var interval = 30
     static var category = 0 {

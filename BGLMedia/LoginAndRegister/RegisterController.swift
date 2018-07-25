@@ -32,7 +32,8 @@ class RegisterController: UIViewController {
     let navButton: UIButton = {
         let button = UIButton()
         button.setImage(UIImage(named: "back_button"), for: .normal)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 40)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 20)
+        button.imageEdgeInsets = UIEdgeInsetsMake(15, 10, 15, 10)
         button.addTarget(self, action: #selector(closePage), for: .touchUpInside)
         return button
     }()
@@ -477,9 +478,9 @@ class RegisterController: UIViewController {
         
         titleView.addSubview(navButton)
         navButton.translatesAutoresizingMaskIntoConstraints = false
-        navButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
-        navButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        navButton.leftAnchor.constraint(equalTo:view.leftAnchor,constant: 15).isActive = true
+//        navButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
+//        navButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
+        navButton.leftAnchor.constraint(equalTo:view.leftAnchor,constant: 0).isActive = true
         navButton.centerYAnchor.constraint(equalTo:titleView.centerYAnchor).isActive = true
         
         

@@ -234,6 +234,7 @@
 		57BBAB4F2107085F00984AA4 /* ElasticRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB462107085F00984AA4 /* ElasticRefreshControl.swift */; };
 		57BBAB502107085F00984AA4 /* Left.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB472107085F00984AA4 /* Left.swift */; };
 		57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB5121083DF800984AA4 /* NewsTableViewCell.swift */; };
+		57BBAB542108E1F600984AA4 /* NewsFlashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB532108E1F600984AA4 /* NewsFlashController.swift */; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
 		57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */; };
 		57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FA20FB00320052EE02 /* CurrencyController.swift */; };
@@ -485,6 +486,7 @@
 		57BBAB462107085F00984AA4 /* ElasticRefreshControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElasticRefreshControl.swift; sourceTree = "<group>"; };
 		57BBAB472107085F00984AA4 /* Left.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Left.swift; sourceTree = "<group>"; };
 		57BBAB5121083DF800984AA4 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
+		57BBAB532108E1F600984AA4 /* NewsFlashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFlashController.swift; sourceTree = "<group>"; };
 		57FC41F120FAD2D20052EE02 /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
 		57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BGLCommunityController.swift; sourceTree = "<group>"; };
 		57FC41FA20FB00320052EE02 /* CurrencyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyController.swift; sourceTree = "<group>"; };
@@ -781,6 +783,7 @@
 				2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */,
 				5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */,
 				57BAD9D0210503A100973B45 /* ShareNewsFlashControllerV2.swift */,
+				57BBAB532108E1F600984AA4 /* NewsFlashController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1591,6 +1594,7 @@
 				57355C5420F718CC002E70E4 /* MarketCapEndpoint.swift in Sources */,
 				2D52AE9A20E46E1A00018FC0 /* AlertController.swift in Sources */,
 				5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */,
+				57BBAB542108E1F600984AA4 /* NewsFlashController.swift in Sources */,
 				2D52AEFD20E46E1A00018FC0 /* defCurrency.swift in Sources */,
 				57355C6020F718CC002E70E4 /* CryptoCompareCoinsRealm.swift in Sources */,
 				57355C4620F718CC002E70E4 /* TransCoinMarketCell.swift in Sources */,
