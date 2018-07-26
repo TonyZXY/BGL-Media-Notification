@@ -29,15 +29,17 @@ class RegisterController: UIViewController {
         label.textColor = ThemeColor().whiteColor()
         return label
     }()
-    let navButton: UIButton = {
+    lazy var navButton: UIButton = {
+        let width = view.frame.width/375
         let button = UIButton()
         button.setImage(UIImage(named: "back_button"), for: .normal)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 20, 0, 20)
-        button.imageEdgeInsets = UIEdgeInsetsMake(15, 10, 15, 10)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10 * width, 0, 20 * width)
+        button.imageEdgeInsets = UIEdgeInsets(top: 15, left: 15, bottom: 15, right: 15)
         button.addTarget(self, action: #selector(closePage), for: .touchUpInside)
         return button
     }()
     let firstNameLabel: UILabel = {
+        
         let label = UILabel()
         label.text = "First Name"
         label.textAlignment = .center
@@ -184,11 +186,6 @@ class RegisterController: UIViewController {
         button.layer.cornerRadius = 8.5
         return button
     }()
-    
-    
-    
-    
-    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -453,15 +450,18 @@ class RegisterController: UIViewController {
     
     func setUp(){
         
+        let width = view.frame.width/375
+        let height = view.frame.height/736
+        print("width: \(width), height: \(height)")
         // Add First Name Label
         view.addSubview(titleView)
         titleView.translatesAutoresizingMaskIntoConstraints = false
         if #available(iOS 11.0, *) {
             titleView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         } else {
-            // Fallback on earlier versions
+            titleView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
         }
-        titleView.heightAnchor.constraint(equalToConstant: 50).isActive = true
+        titleView.heightAnchor.constraint(equalToConstant: 50 * height).isActive = true
         titleView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
         titleView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
         //        navTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -470,7 +470,7 @@ class RegisterController: UIViewController {
         titleView.addSubview(navTitleLabel)
         navTitleLabel.translatesAutoresizingMaskIntoConstraints = false
         navTitleLabel.topAnchor.constraint(equalTo: titleView.topAnchor).isActive = true
-        navTitleLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        navTitleLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         navTitleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         navTitleLabel.bottomAnchor.constraint(equalTo: titleView.bottomAnchor).isActive = true
         
@@ -478,35 +478,35 @@ class RegisterController: UIViewController {
         
         titleView.addSubview(navButton)
         navButton.translatesAutoresizingMaskIntoConstraints = false
-//        navButton.heightAnchor.constraint(equalToConstant: 25).isActive = true
-//        navButton.widthAnchor.constraint(equalToConstant: 25).isActive = true
-        navButton.leftAnchor.constraint(equalTo:view.leftAnchor,constant: 0).isActive = true
+//        navButton.heightAnchor.constraint(equalToConstant: 23 * width).isActive = true
+//        navButton.widthAnchor.constraint(equalToConstant: 23 * width).isActive = true
+        navButton.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
         navButton.centerYAnchor.constraint(equalTo:titleView.centerYAnchor).isActive = true
         
         
         
         view.addSubview(firstNameLabel)
         firstNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        firstNameLabel.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 50).isActive = true
-        firstNameLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        firstNameLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        firstNameLabel.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 40 * height).isActive = true
+        firstNameLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        firstNameLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         firstNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         // Add First Name Text field
         view.addSubview(firstNameTextField)
         firstNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        firstNameTextField.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 5).isActive = true
-        firstNameTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        firstNameTextField.widthAnchor.constraint(equalToConstant:300).isActive = true
+        firstNameTextField.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 5 * height).isActive = true
+        firstNameTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        firstNameTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
         firstNameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         // Add Last Name Text Field
         view.addSubview(lastNameLabel)
         view.addSubview(lastNameTextField)
         lastNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        lastNameTextField.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 5).isActive = true
-        lastNameTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        lastNameTextField.widthAnchor.constraint(equalToConstant:220).isActive = true
+        lastNameTextField.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 5 * height).isActive = true
+        lastNameTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        lastNameTextField.widthAnchor.constraint(equalToConstant:220 * width).isActive = true
         //        lastNameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor,constant: 30).isActive = true
         lastNameTextField.rightAnchor.constraint(equalTo: firstNameTextField.rightAnchor).isActive = true
         
@@ -514,78 +514,78 @@ class RegisterController: UIViewController {
         //Add Last Name Label
         
         lastNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        lastNameLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        lastNameLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        lastNameLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        lastNameLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         lastNameLabel.centerXAnchor.constraint(equalTo: lastNameTextField.centerXAnchor).isActive = true
-        lastNameLabel.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 20).isActive = true
+        lastNameLabel.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 20 * height).isActive = true
         
         
         view.addSubview(emailLabel)
         emailLabel.translatesAutoresizingMaskIntoConstraints = false
-        emailLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        emailLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        emailLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        emailLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         emailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emailLabel.topAnchor.constraint(equalTo: lastNameTextField.bottomAnchor, constant: 20).isActive = true
+        emailLabel.topAnchor.constraint(equalTo: lastNameTextField.bottomAnchor, constant: 20 * height).isActive = true
         
         view.addSubview(emailTextField)
         emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5).isActive = true
-        emailTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        emailTextField.widthAnchor.constraint(equalToConstant:300).isActive = true
+        emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5 * height).isActive = true
+        emailTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        emailTextField.widthAnchor.constraint(equalToConstant:300  * width).isActive = true
         emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         view.addSubview(passwordLabel)
         passwordLabel.translatesAutoresizingMaskIntoConstraints = false
-        passwordLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        passwordLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        passwordLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        passwordLabel.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
         passwordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        passwordLabel.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30).isActive = true
+        passwordLabel.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30 * height).isActive = true
         
         view.addSubview(passwordTextField)
         passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 5).isActive = true
-        passwordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        passwordTextField.widthAnchor.constraint(equalToConstant:300).isActive = true
+        passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 5 * height).isActive = true
+        passwordTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        passwordTextField.widthAnchor.constraint(equalToConstant:300  * width).isActive = true
         passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         view.addSubview(conPasswordLabel)
         conPasswordLabel.translatesAutoresizingMaskIntoConstraints = false
-        conPasswordLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        conPasswordLabel.widthAnchor.constraint(equalToConstant:200).isActive = true
+        conPasswordLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        conPasswordLabel.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
         conPasswordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        conPasswordLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20).isActive = true
+        conPasswordLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20 * height).isActive = true
         
         
         view.addSubview(conPasswordTextField)
         conPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
-        conPasswordTextField.topAnchor.constraint(equalTo: conPasswordLabel.bottomAnchor, constant: 5).isActive = true
-        conPasswordTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        conPasswordTextField.widthAnchor.constraint(equalToConstant:300).isActive = true
+        conPasswordTextField.topAnchor.constraint(equalTo: conPasswordLabel.bottomAnchor, constant: 5 * height).isActive = true
+        conPasswordTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        conPasswordTextField.widthAnchor.constraint(equalToConstant:300  * width).isActive = true
         conPasswordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         
         // Add Title Text Field
         view.addSubview(titleLabel)
         view.addSubview(titleTextField)
         titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5).isActive = true
-        titleTextField.heightAnchor.constraint(equalToConstant: 40).isActive = true
-        titleTextField.widthAnchor.constraint(equalToConstant:60).isActive = true
+        titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5 * height).isActive = true
+        titleTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+        titleTextField.widthAnchor.constraint(equalToConstant:60  * width).isActive = true
         titleTextField.leftAnchor.constraint(equalTo: firstNameTextField.leftAnchor).isActive = true
         
         // Add Title Label
         
         titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.heightAnchor.constraint(equalToConstant: 20).isActive = true
-        titleLabel.widthAnchor.constraint(equalToConstant:80).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 20).isActive = true
+        titleLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        titleLabel.widthAnchor.constraint(equalToConstant:80  * width).isActive = true
+        titleLabel.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 20 * height).isActive = true
         titleLabel.centerXAnchor.constraint(equalTo: titleTextField.centerXAnchor).isActive = true
         
         view.addSubview(signUpButton)
         signUpButton.translatesAutoresizingMaskIntoConstraints = false
-        signUpButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
-        signUpButton.widthAnchor.constraint(equalToConstant:200).isActive = true
+        signUpButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
+        signUpButton.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
         signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        signUpButton.topAnchor.constraint(equalTo: conPasswordTextField.bottomAnchor, constant: 40).isActive = true
+        signUpButton.topAnchor.constraint(equalTo: conPasswordTextField.bottomAnchor, constant: 40 * height).isActive = true
         
     }
     
