@@ -126,10 +126,10 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     }()
     
     lazy var titleLabel: UILabel = {
-        let factor = view.frame.width/414
+        let factor = view.frame.width/375
         let titleLabel = UILabel()
         titleLabel.textColor = UIColor.white
-        titleLabel.font = UIFont.systemFont(ofSize: 17*factor)
+        titleLabel.font = UIFont.semiBoldFont(17*factor)
         titleLabel.textAlignment = .center
         return titleLabel
     }()

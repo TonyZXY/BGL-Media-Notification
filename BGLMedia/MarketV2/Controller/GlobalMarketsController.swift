@@ -166,7 +166,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
-        header.textLabel.font = UIFont.regularFont(12)
+        header.textLabel.font = UIFont.regularFont(12*factor)
         header.tintColor = ThemeColor().whiteColor()
         header.imageRenderingWithTintColor = true
         coinList.configRefreshHeader(with:header, container: self, action: {

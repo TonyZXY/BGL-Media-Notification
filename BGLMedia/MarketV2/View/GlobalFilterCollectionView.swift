@@ -24,7 +24,7 @@ class GlobalFilterCollectionView:UICollectionViewCell{
     lazy var label:UILabel = {
         var label = UILabel()
         label.textColor = UIColor.gray
-        label.font = label.font.withSize(13*frame.width/50)
+        label.font = UIFont.regularFont(13*frame.width/50)
         return label
     }()
     
