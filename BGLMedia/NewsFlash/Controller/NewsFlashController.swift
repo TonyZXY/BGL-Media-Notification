@@ -37,9 +37,6 @@ class NewsFlashController: UIViewController,UITableViewDelegate,UITableViewDataS
             self.flashNewsTableView.beginHeaderRefreshing()
             }
         
-        
-        
-        
         //Prevent empty rows
         flashNewsTableView.tableFooterView = UIView()
         flashNewsTableView.backgroundColor = ThemeColor().darkGreyColor()

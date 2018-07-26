@@ -25,7 +25,7 @@ class TotalMarketCell:UICollectionViewCell{
         var totalfunds = UILabel()
         totalfunds.sizeToFit()
         totalfunds.translatesAutoresizingMaskIntoConstraints = false
-        totalfunds.font = totalfunds.font.withSize(13*factor!)
+        totalfunds.font = UIFont.regularFont(13*factor!)
         totalfunds.textColor = ThemeColor().textGreycolor()
         return totalfunds
     }()
@@ -34,7 +34,7 @@ class TotalMarketCell:UICollectionViewCell{
         var number = UILabel()
         number.translatesAutoresizingMaskIntoConstraints = false
         number.textColor = UIColor.white
-        number.font = number.font.withSize(20*factor!)
+        number.font = UIFont.regularFont(20*factor!)
         return number
     }()
     

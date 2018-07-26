@@ -197,7 +197,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
-        header.textLabel.font = UIFont.regularFont(12)
+        header.textLabel.font = UIFont.regularFont(12*view.frame.width/414)
         header.tintColor = ThemeColor().whiteColor()
         header.imageRenderingWithTintColor = true
         coinList.configRefreshHeader(with:header, container: self, action: {
@@ -209,6 +209,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     func setUpHintView(){
+        let factor = view.frame.width/375
         view.addSubview(hintView)
         hintView.addSubview(hintLabel)
         hintView.addSubview(starLabel)
@@ -217,7 +218,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         
         
         let settingString = textValue(name: "hintLabel_watchlist")
-        let myAttribute = [NSAttributedStringKey.font: UIFont.MediumFont(15), NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()]
+        let myAttribute = [NSAttributedStringKey.font: UIFont.MediumFont(15*factor), NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()]
         let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
         var greyStarRange = NSRange(location: 0, length: 0)
         var blueStarRange = NSRange(location: 0, length: 0)
@@ -233,7 +234,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         hintLabel.attributedText = myString
         
         let settingStrings = "★ ⇥ ★"
-        let myAttributes = [NSAttributedStringKey.font: UIFont.boldFont(30), NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()]
+        let myAttributes = [NSAttributedStringKey.font: UIFont.boldFont(30*factor), NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()]
         let myStrings = NSMutableAttributedString(string: settingStrings, attributes: myAttributes )
         let myRange1 = NSRange(location: 0, length: 1)
         let myRange2 = NSRange(location: 4, length: 1)
@@ -245,7 +246,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         NSLayoutConstraint(item: starLabel, attribute: .centerX, relatedBy: .equal, toItem: hintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: hintLabel, attribute: .centerX, relatedBy: .equal, toItem: hintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: hintLabel, attribute: .centerY, relatedBy: .equal, toItem: hintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        hintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v0]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
+        hintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor)-[v0]-\(20*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
     }
     
     var hintView:UIView = {

@@ -250,7 +250,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Click Add Transaction Button Method
     @objc func changetotransaction(){
-        let transaction = TransactionsController()
+        
+        
+        
+        let transaction = FlashSearchController()
         transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
     }
@@ -582,12 +585,14 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }()
     
     var addTransactionButton:UIButton = {
-        var button = UIButton(type: .system)
-        button.setTitle("➕", for: .normal)
-        button.titleLabel?.font = button.titleLabel?.font.withSize(25)
-        button.tintColor = ThemeColor().themeColor()
+        var button = UIButton()
+//        button.setTitle("➕", for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.setImage(UIImage(named: "AddButton.png"), for: .normal)
+//        button.titleLabel?.font = button.titleLabel?.font.withSize(25)
+//        button.tintColor = ThemeColor().themeColor()
         button.layer.cornerRadius = 25
-        button.backgroundColor = ThemeColor().themeWidgetColor()
+//        button.backgroundColor = ThemeColor().themeWidgetColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(changetotransaction), for: .touchUpInside)
         return button

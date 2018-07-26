@@ -50,7 +50,7 @@ class WatchListCell:UICollectionViewCell{
     
     lazy var rankLabel:UILabel = {
         let label = UILabel()
-        label.font = label.font.withSize(10*factor!)
+        label.font = UIFont.regularFont(10*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -70,7 +70,7 @@ class WatchListCell:UICollectionViewCell{
         let label = UILabel()
         label.textAlignment = .left
         label.textColor = ThemeColor().whiteColor()
-        label.font = label.font.withSize(18*factor!)
+        label.font = UIFont.boldFont(18*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -78,7 +78,7 @@ class WatchListCell:UICollectionViewCell{
     lazy var tradingPairs:UILabel = {
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
-        label.font = label.font.withSize(12*factor!)
+        label.font = UIFont.regularFont(12*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -87,14 +87,14 @@ class WatchListCell:UICollectionViewCell{
         let label = UILabel()
         label.textAlignment = .right
         label.textColor = UIColor.white
-        label.font = label.font.withSize(12*factor!)
+        label.font = UIFont.regularFont(14*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     lazy var market: UILabel = {
         let label = UILabel()
-        label.font = label.font.withSize(12*factor!)
+        label.font = UIFont.semiBoldFont(12*factor!)
         label.textAlignment = .left
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -105,7 +105,7 @@ class WatchListCell:UICollectionViewCell{
         let label = UILabel()
         label.textAlignment = .right
         label.textColor = ThemeColor().whiteColor()
-        label.font = label.font.withSize(15*factor!)
+        label.font = UIFont.regularFont(15*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
