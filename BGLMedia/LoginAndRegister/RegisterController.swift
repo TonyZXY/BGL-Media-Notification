@@ -187,11 +187,6 @@ class RegisterController: UIViewController {
         return button
     }()
     
-    
-    
-    
-    
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)

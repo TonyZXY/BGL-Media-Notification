@@ -286,6 +286,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         let titleLabel = UILabel()
         titleLabel.text = "News"
         titleLabel.textColor = UIColor.white
+        titleLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
         titleLabel.font = UIFont.semiBoldFont(17)
         titleLabel.textAlignment = .center
         return titleLabel
