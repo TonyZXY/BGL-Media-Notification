@@ -393,13 +393,14 @@ open class RefreshHeaderContainer:UIView{
     }
     // MARK: - API -
     func beginRefreshing(){
-        if self.window != nil {
-            self.state = .refreshing
-        }else{
-            if state != .refreshing{
-                self.state = .willRefresh
-            }
-        }
+//        if self.window != nil {
+//            self.state = .refreshing
+//        }else{
+//            if state != .refreshing{
+//                self.state = .willRefresh
+//            }
+//        }
+        self.state = .refreshing
     }
     @objc func updateStateToIdea(){
         self.state = .idle

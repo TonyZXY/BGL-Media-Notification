@@ -11,7 +11,7 @@ import UIKit
 import RealmSwift
 
 extension UIImageView {
-    func coinImageSetter(coinName: String, width: Double = 50, height: Double = 50, fontSize: CGFloat = 20) {
+    func coinImageSetter(coinName: String, width: CGFloat = 50, height: CGFloat = 50, fontSize: CGFloat = 20) {
         self.image = nil
         
         self.subviews.forEach({ $0.removeFromSuperview() })
@@ -19,7 +19,7 @@ extension UIImageView {
         let icon: UIButton = {
             let button = UIButton()
             button.frame = CGRect(x: 0, y: 0, width: width, height: width)
-            button.layer.cornerRadius = CGFloat(width) / 2
+            button.layer.cornerRadius = width / 2
             button.backgroundColor = #colorLiteral(red: 0.2, green: 0.2039215686, blue: 0.2235294118, alpha: 1)
             button.translatesAutoresizingMaskIntoConstraints = false
             button.setTitle(coinName, for: .normal)
@@ -41,8 +41,8 @@ extension UIImageView {
         
         let centerYConstraints = NSLayoutConstraint(item: icon, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1.0, constant: 0.0)
         
-        let widthContraints =  NSLayoutConstraint(item: icon, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: CGFloat(width))
-        let heightContraints = NSLayoutConstraint(item: icon, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: CGFloat(height))
+        let widthContraints =  NSLayoutConstraint(item: icon, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: width)
+        let heightContraints = NSLayoutConstraint(item: icon, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: height)
         
         constraints.append(centerXConstraints)
         constraints.append(centerYConstraints)

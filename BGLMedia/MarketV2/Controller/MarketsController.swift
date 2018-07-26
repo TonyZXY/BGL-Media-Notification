@@ -125,16 +125,17 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         return collectionview
     }()
     
-    let titleLabel: UILabel = {
+    lazy var titleLabel: UILabel = {
+        let factor = view.frame.width/414
         let titleLabel = UILabel()
         titleLabel.textColor = UIColor.white
-        titleLabel.font = UIFont.semiBoldFont(17)
-        titleLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
+        titleLabel.font = UIFont.systemFont(ofSize: 17*factor)
         titleLabel.textAlignment = .center
         return titleLabel
     }()
     
     func setUpView(){
+        let factor = view.frame.width/414
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         
@@ -142,12 +143,12 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         view.addSubview(menuBar)
         menuBar.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
         
         if #available(iOS 11.0, *) {
             menuBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
         } else {
-            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
+            view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
         }
         
         //Set Up collection View

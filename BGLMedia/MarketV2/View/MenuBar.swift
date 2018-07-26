@@ -87,8 +87,10 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
 
 class MenuCell: UICollectionViewCell{
     var color = ThemeColor()
-    let menuLabel:UILabel = {
+    lazy var menuLabel:UILabel = {
+        let factor = frame.width/207
         let menuLabel = UILabel()
+        menuLabel.font = UIFont.regularFont(18*factor)
         menuLabel.textColor = ThemeColor().textGreycolor()
         return menuLabel
     }()
