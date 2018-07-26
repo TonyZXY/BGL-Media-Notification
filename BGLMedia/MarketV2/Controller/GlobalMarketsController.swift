@@ -105,15 +105,17 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         setUpView()
         setSortbutton()
         sortdoneclick()
+
+        filterDate.selectItem(at: GlobalMarketsController.selectedIntervalIndexPath, animated: true, scrollPosition: [])
+        
         DispatchQueue.main.async(execute: {
             self.coinList.beginHeaderRefreshing()
         })
-        
-        filterDate.selectItem(at: GlobalMarketsController.selectedIntervalIndexPath, animated: true, scrollPosition: [])
-//
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(updateGlobalMarket), name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
@@ -141,7 +143,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     func getCoinData(compeletion:@escaping (Bool)->Void){
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
             if success{
-                    compeletion(true)
+                compeletion(true)
             } else{
                 print("Fail to get Global Average CoinList")
                 compeletion(false)
@@ -152,6 +154,8 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 
     
     func setUpView(){
+        let width = view.frame.width
+        let factor = width/414
 //        view.addSubview(scrollView)
         view.addSubview(mainTotalCollectionView)
         view.addSubview(sortView)
@@ -169,21 +173,20 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             self.handleRefresh(self.coinList)
         })
         
-        
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView]))
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortCoin]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v0(80)]-0-[v1(40)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(5*factor)-[v0(\(80*factor))]-0-[v1(\(40*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortView]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortView]))
         
         NSLayoutConstraint(item: sortCoin, attribute: .centerY, relatedBy: .equal, toItem: sortView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: filterDate, attribute: .centerY, relatedBy: .equal, toItem: sortView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":filterDate]))
-        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1(150)]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":filterDate]))
-        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(20)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":filterDate]))
-        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(20)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortCoin]))
+        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":filterDate]))
+        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1(\(150*factor))]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":filterDate]))
+        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(\(20*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":filterDate]))
+        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(\(20*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainTotalCollectionView,"v1":sortCoin]))
         
 //        sortView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0(\(view.frame.width/2-20))]-", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortCoin,"v1":filterDate]))
 //
@@ -195,10 +198,10 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         
 //        NSLayoutConstraint(item: filterDate, attribute: .centerY, relatedBy: .equal, toItem: sortCoin, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-5-[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortView,"v1":searchBar]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-5-[v1]-5-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortView,"v1":searchBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(5*factor)-[v1(\(30*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortView,"v1":searchBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(5*factor)-[v1]-\(5*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortView,"v1":searchBar]))
         
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-5-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(5*factor)-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
         
     }
@@ -214,7 +217,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     lazy var mainTotalCollectionView:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectview = UICollectionView(frame: .zero, collectionViewLayout:layout)
-        collectview.backgroundColor = ThemeColor().themeColor()
+        collectview.backgroundColor = ThemeColor().walletCellcolor()
         collectview.delegate = self
         collectview.dataSource = self
         collectview.translatesAutoresizingMaskIntoConstraints = false
@@ -229,11 +232,13 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     }()
     
     //排序按钮
-    let sortCoin:UITextField={
+    lazy var sortCoin:UITextField={
+        let factor = view.frame.width/414
         var sort = UITextField()
         sort.tintColor = .clear
 //        sort.layer.borderColor = UIColor.white.cgColor
         sort.textColor = ThemeColor().textGreycolor()
+        sort.font = UIFont.regularFont(16*factor)
         sort.translatesAutoresizingMaskIntoConstraints = false
         return sort
     }()
@@ -273,12 +278,13 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         return collectionView
     }()
     
+    
     @objc func handleRefresh(_ collectionView: UICollectionView) {
         getCoinData(){success in
             if success{
                 DispatchQueue.main.async {
                     self.coinList.reloadData()
-                     self.coinList.switchRefreshHeader(to: .normal(.success, 0.5))
+                    self.coinList.switchRefreshHeader(to: .normal(.success, 0.5))
                 }
             } else{
                 self.coinList.switchRefreshHeader(to: .normal(.failure, 0.5))
@@ -316,7 +322,11 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == mainTotalCollectionView{
+            if globalMarket.count == 0{
+                return 0
+            } else{
                 return 3
+            }
         }else if collectionView == filterDate{
             return 3
         }else if collectionView == coinList{
@@ -330,18 +340,18 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let factor = view.frame.width/414
         if collectionView == mainTotalCollectionView{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainTotalCell", for: indexPath) as! TotalMarketCell
+                cell.factor = factor
                 cell.totalFunds.text = mainItems[indexPath.row]
-            if globalMarket.count != 0 {
-                let object = globalMarket[0]
-                if indexPath.row == 0{
-                    cell.number.text = object.total_market_cap + "B"
-                } else if indexPath.row == 1{
-                    cell.number.text = object.total_volume_24h + "B"
-                } else if indexPath.row == 2{
-                    cell.number.text = object.bitcoin_percentage_of_market_cap + "%"
-                }
+            let object = globalMarket[0]
+            if indexPath.row == 0{
+                cell.number.text = object.total_market_cap + "B"
+            } else if indexPath.row == 1{
+                cell.number.text = object.total_volume_24h + "B"
+            } else if indexPath.row == 2{
+                cell.number.text = object.bitcoin_percentage_of_market_cap + "%"
             }
             return cell
         } else if collectionView == filterDate{
@@ -350,6 +360,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             return cell
         } else if collectionView == coinList{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "GlobalAverage", for: indexPath) as! GlobalCoinListCell
+            cell.factor = factor
             var object = [coinHightestCapObjects,coinLowestCapObjects,coinGainersObjects,coinLosersObjects,coinAlphabeticalObjects][sortOption ?? 0][indexPath.row]
             if isSearching == true{
                 object = filterObject[indexPath.row]
@@ -363,12 +374,13 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     }
 
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let factor = view.frame.width/414
         if collectionView == mainTotalCollectionView{
             return CGSize(width:(mainTotalCollectionView.frame.width) / 3, height: mainTotalCollectionView.frame.height)
         } else if collectionView == filterDate{
-           return CGSize(width: 50, height: 20)
+           return CGSize(width: 50*factor, height: 20*factor)
         } else if collectionView == coinList{
-            return CGSize(width:view.frame.width-10, height: 70)
+            return CGSize(width:view.frame.width-10*factor, height: 70*factor)
         } else{
             return CGSize()
         }
@@ -387,15 +399,16 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == coinList{
-            return 5
+            return 5*view.frame.width/414
         }else{
             return CGFloat()
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
+        let factor = view.frame.width/414
         if collectionView == coinList{
-            return CGSize(width:view.frame.width, height: 10)
+            return CGSize(width:view.frame.width*factor, height: 10*factor)
         } else{
             return CGSize()
         }

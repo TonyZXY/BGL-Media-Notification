@@ -112,7 +112,7 @@ class TimelineTableViewController: UITableViewController {
        let label = UILabel(frame: CGRect(x: 20, y: 0, width: width-2*20, height: tableView.sectionHeaderHeight))
         
         label.font = UIFont.boldFont(15)
-        label.textColor = #colorLiteral(red: 0.5019607843, green: 0.8588235294, blue: 0.7176470588, alpha: 1)
+        label.textColor = ThemeColor().blueColor()
         label.textAlignment = .center
         label.text = convertDateForDisplay(convert: dates[section])
         label.layer.cornerRadius = tableView.sectionHeaderHeight/2
@@ -148,7 +148,7 @@ class TimelineTableViewController: UITableViewController {
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
         
-        let bglGreen = #colorLiteral(red: 0.5019607843, green: 0.8588235294, blue: 0.7176470588, alpha: 1)
+        let bglGreen = ThemeColor().blueColor()
         cell.timelinePoint = TimelinePoint(diameter: CGFloat(16.0), color: bglGreen, filled: false)
         cell.timelinePointInside = TimelinePoint(diameter: CGFloat(4.0), color: bglGreen, filled: true, insidePoint: true)
         cell.timeline.backColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)

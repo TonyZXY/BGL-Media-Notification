@@ -412,7 +412,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }()
     
     lazy var notificationTableView:UITableView = {
-       var tableView = UITableView()
+       var tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "editCurrency")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = ThemeColor().themeColor()

@@ -21,10 +21,10 @@ class GlobalFilterCollectionView:UICollectionViewCell{
 //        collectionView.selectItem(at: selectindexpath as IndexPath, animated: false, scrollPosition:.left)
     }
     
-    let label:UILabel = {
+    lazy var label:UILabel = {
         var label = UILabel()
         label.textColor = UIColor.gray
-        label.font = label.font.withSize(13)
+        label.font = label.font.withSize(13*frame.width/50)
         return label
     }()
     
@@ -44,7 +44,7 @@ class GlobalFilterCollectionView:UICollectionViewCell{
     func setupView(){
         addSubview(label)
         
-        self.layer.cornerRadius = 8
+        self.layer.cornerRadius = 8 * frame.width/50
         label.translatesAutoresizingMaskIntoConstraints = false
         addConstraint(NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0))

@@ -599,7 +599,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.register(WalletsCell.self, forCellReuseIdentifier: "WalletCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 100
+        tableView.rowHeight = 80
         tableView.delegate = self
         tableView.dataSource = self
         return tableView

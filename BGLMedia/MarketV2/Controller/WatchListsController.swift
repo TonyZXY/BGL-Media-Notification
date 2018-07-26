@@ -28,6 +28,8 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     override func viewDidLoad() {
         super.viewDidLoad()
 //        setUpView()
+
+        
         DispatchQueue.main.async(execute: {
             self.coinList.beginHeaderRefreshing()
         })
@@ -37,10 +39,10 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     override func viewWillAppear(_ animated: Bool) {
         if watchListObjects.count == 0{
-//            coinList.removeFromSuperview()
+            //            coinList.removeFromSuperview()
             setUpHintView()
         } else{
-//            hintView.removeFromSuperview()
+            //            hintView.removeFromSuperview()
             setUpView()
         }
         
@@ -77,14 +79,15 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         return collectionView
     }()
     
+
     
     @objc func handleRefresh(_ collectionView: UICollectionView) {
-        getCoinData(){success in 
+        getCoinData(){success in
             if success{
                 self.coinList.reloadData()
-                 self.coinList.switchRefreshHeader(to: .normal(.success, 0.5))
+                self.coinList.switchRefreshHeader(to: .normal(.success, 0.5))
             } else{
-                 self.coinList.switchRefreshHeader(to: .normal(.failure, 0.5))
+                self.coinList.switchRefreshHeader(to: .normal(.failure, 0.5))
             }
         }
     }
@@ -139,8 +142,10 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let factor = view.frame.width/414
         if collectionView == coinList{
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "WatchListCell", for: indexPath) as! WatchListCell
+            cell.factor = factor
             let object = watchListObjects[indexPath.row]
             cell.object = object
             checkDataRiseFallColor(risefallnumber: object.profitChange, label: cell.coinChange, type: "PercentDown")
@@ -151,8 +156,9 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
+        let factor = view.frame.width/414
         if collectionView == coinList{
-            return CGSize(width:view.frame.width-10, height: 70)
+            return CGSize(width:view.frame.width-10*factor, height: 70*factor)
         } else{
             return CGSize()
         }
@@ -160,7 +166,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == coinList{
-            return 10
+            return 10 * view.frame.width/414
         }else{
             return CGFloat()
         }
@@ -168,7 +174,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, referenceSizeForHeaderInSection section: Int) -> CGSize {
         if collectionView == coinList{
-            return CGSize(width:view.frame.width, height: 10)
+            return CGSize(width:view.frame.width, height: 10*view.frame.width/414)
         } else{
             return CGSize()
         }
@@ -188,6 +194,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     func setUpView(){
         view.addSubview(coinList)
+        
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
         header.textLabel.font = UIFont.regularFont(12)
@@ -197,7 +204,6 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
             self.handleRefresh(self.coinList)
         })
         
-
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
     }
@@ -240,14 +246,12 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         NSLayoutConstraint(item: hintLabel, attribute: .centerX, relatedBy: .equal, toItem: hintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: hintLabel, attribute: .centerY, relatedBy: .equal, toItem: hintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         hintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v0]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
-        
-        
     }
     
     var hintView:UIView = {
-       var view = UIView()
-       view.translatesAutoresizingMaskIntoConstraints = false
-       return view
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
     }()
     
     var starLabel:UILabel = {
@@ -255,7 +259,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
         label.textAlignment = .center
-//        label.font = label.font.withSize(30)
+        //        label.font = label.font.withSize(30)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

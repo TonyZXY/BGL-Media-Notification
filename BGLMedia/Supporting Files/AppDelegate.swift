@@ -44,6 +44,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
+        Realm.Configuration.defaultConfiguration = Realm.Configuration(
+            schemaVersion: 1,
+            migrationBlock: { migration, oldSchemaVersion in
+                if (oldSchemaVersion < 1) {
+                    // The enumerateObjects(ofType:_:) method iterates
+                    // over every Person object stored in the Realm file
+                    //                    migration.enumerateObjects(ofType: Person.className()) { oldObject, newObject in
+                    //                        // combine name fields into a single field
+                    //                        let firstName = oldObject!["firstName"] as! String
+                    //                        let lastName = oldObject!["lastName"] as! String
+                    //                        newObject!["fullName"] = "\(firstName) \(lastName)"
+                    //                    }
+                }
+        })
+        _ = try! Realm()
+        
+        
         application.statusBarStyle = .lightContent
         UITabBar.appearance().tintColor = .white
         UITabBar.appearance().barTintColor = ThemeColor().themeColor()

@@ -273,13 +273,14 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     lazy var optionTableView:UITableView = {
-        var tableView = UITableView()
+        var tableView = UITableView(frame: .zero, style: .grouped)
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.dataSource = self
         tableView.rowHeight = 50
         tableView.bounces = false
+
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
