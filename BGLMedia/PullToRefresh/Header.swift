@@ -270,8 +270,6 @@ open class RefreshHeaderContainer:UIView{
                         var oldInset = self.attachedScrollView.contentInset
                         oldInset.top = top
                         self.attachedScrollView.contentInset = oldInset
-                        print(normal2pullingOffsetY)
-                        print(offSetY)
                         if offSetY > normal2pullingOffsetY{ //手动触发
                             self.attachedScrollView.contentOffset = CGPoint(x: 0, y: -1.0 * top)
                         }else{//release，防止跳动

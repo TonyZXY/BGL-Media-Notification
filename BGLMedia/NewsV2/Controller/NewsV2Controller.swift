@@ -126,6 +126,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     @objc func changeLanguage(){
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
+            self.newsTableView.beginHeaderRefreshing()
     }
     
     deinit {

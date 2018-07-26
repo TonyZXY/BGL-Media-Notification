@@ -27,7 +27,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpView()
+//        setUpView()
         DispatchQueue.main.async(execute: {
             self.coinList.beginHeaderRefreshing()
         })
@@ -36,7 +36,14 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        print(realm.objects(WatchListRealm.self))
+        if watchListObjects.count == 0{
+//            coinList.removeFromSuperview()
+            setUpHintView()
+        } else{
+//            hintView.removeFromSuperview()
+            setUpView()
+        }
+        
     }
 
     deinit {
@@ -44,6 +51,13 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     @objc func updateWatchList(){
+        if watchListObjects.count == 0{
+            //            coinList.removeFromSuperview()
+            setUpHintView()
+        } else{
+            //            hintView.removeFromSuperview()
+            setUpView()
+        }
         self.coinList.reloadData()
     }
     
@@ -174,7 +188,6 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     func setUpView(){
         view.addSubview(coinList)
-        
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
         header.textLabel.font = UIFont.regularFont(12)
@@ -188,4 +201,71 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
     }
+    
+    func setUpHintView(){
+        view.addSubview(hintView)
+        hintView.addSubview(hintLabel)
+        hintView.addSubview(starLabel)
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintView]))
+        
+        
+        let settingString = textValue(name: "hintLabel_watchlist")
+        let myAttribute = [NSAttributedStringKey.font: UIFont.MediumFont(15), NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()]
+        let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
+        var greyStarRange = NSRange(location: 0, length: 0)
+        var blueStarRange = NSRange(location: 0, length: 0)
+        if defaultLanguage == "EN"{
+            greyStarRange = NSRange(location: 53, length: 1)
+            blueStarRange = NSRange(location: 65, length: 1)
+        } else if defaultLanguage == "CN"{
+            greyStarRange = NSRange(location: 24, length: 1)
+            blueStarRange = NSRange(location: 33, length: 1)
+        }
+        myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().textGreycolor(), range: greyStarRange)
+        myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: blueStarRange)
+        hintLabel.attributedText = myString
+        
+        let settingStrings = "★ ⇥ ★"
+        let myAttributes = [NSAttributedStringKey.font: UIFont.boldFont(30), NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()]
+        let myStrings = NSMutableAttributedString(string: settingStrings, attributes: myAttributes )
+        let myRange1 = NSRange(location: 0, length: 1)
+        let myRange2 = NSRange(location: 4, length: 1)
+        myStrings.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().textGreycolor(), range: myRange1)
+        myStrings.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange2)
+        starLabel.attributedText = myStrings
+        
+        NSLayoutConstraint(item: starLabel, attribute: .bottom, relatedBy: .equal, toItem: hintLabel, attribute: .top, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: starLabel, attribute: .centerX, relatedBy: .equal, toItem: hintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: hintLabel, attribute: .centerX, relatedBy: .equal, toItem: hintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: hintLabel, attribute: .centerY, relatedBy: .equal, toItem: hintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        hintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v0]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
+        
+        
+    }
+    
+    var hintView:UIView = {
+       var view = UIView()
+       view.translatesAutoresizingMaskIntoConstraints = false
+       return view
+    }()
+    
+    var starLabel:UILabel = {
+        var label = UILabel()
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        label.textAlignment = .center
+//        label.font = label.font.withSize(30)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    var hintLabel:UILabel = {
+        var label = UILabel()
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        label.textAlignment = .center
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 }

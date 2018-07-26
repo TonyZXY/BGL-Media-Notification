@@ -110,22 +110,29 @@ open class TimelineTableViewCell: UITableViewCell {
     }
     
     func setUpView(){
+        titleLabel.font = UIFont.semiBoldFont(20)
+        descriptionLabel.font = UIFont.regularFont(15)
+        
         addSubview(sharesbutton)
         NSLayoutConstraint(item: sharesbutton, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -5).isActive = true
         NSLayoutConstraint(item: sharesbutton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: sharesbutton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 40).isActive = true
-        NSLayoutConstraint(item: sharesbutton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 120).isActive = true
+//        NSLayoutConstraint(item: sharesbutton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 30).isActive = true
+//        NSLayoutConstraint(item: sharesbutton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 120).isActive = true
     }
 
     var sharesbutton:UIButton = {
 //       var button = UIButton(frame: CGRect(x: 0, y: 0, width: 5, height: 5))
         var button = UIButton()
+        button.backgroundColor = ThemeColor().darkBlackColor()
+        button.layer.cornerRadius = 15
         button.imageView?.contentMode = .scaleAspectFit
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 30, 0, 10)
-        button.imageEdgeInsets = UIEdgeInsetsMake(0, -30, 0, 0)
-        button.titleLabel!.font =  UIFont.regularFont(15)
+        button.contentEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10)
+        button.imageEdgeInsets = UIEdgeInsetsMake(20, 0, 20, 0)
+//        but
+        button.titleLabel!.font =  UIFont.semiBoldFont(13)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Share", for: .normal)
+    
         button.setImage(UIImage(named: "share_.png"), for: .normal)
 //        button.titleLabel?.font = UIFont(name: <#T##String#>, size: <#T##CGFloat#>)
 //        button.imageView?.frame = CGRect(x: 5, y: 5, width: 5, height: 5)

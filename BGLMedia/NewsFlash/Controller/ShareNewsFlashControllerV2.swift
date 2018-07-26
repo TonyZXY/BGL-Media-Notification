@@ -161,7 +161,7 @@ class ShareNewsFlashControllerV2: UIViewController {
        var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().blueColor()
-        label.font = label.font.withSize(18)
+        label.font = UIFont.semiBoldFont(20)
         label.text = "sdfdsff"
         return label
     }()
@@ -175,7 +175,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     
     var flashNewsDescription:UILabel = {
        var label = UILabel()
-        label.font = label.font.withSize(17)
+        label.font = UIFont.regularFont(17)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
