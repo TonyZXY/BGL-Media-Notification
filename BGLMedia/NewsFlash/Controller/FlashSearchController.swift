@@ -7,26 +7,109 @@
 //
 
 import UIKit
+import RealmSwift
+import SwiftyJSON
 
 class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate{
+    let realm = try! Realm()
+    var results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)
+    var newsFlashResult = [NewsFlash]()
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 5
+        if tableView == searchFlashNewsTableView{
+            if newsFlashResult.count == 0{
+                resultLabel.text = textValue(name: "searchNull_flash")
+            } else {
+                resultLabel.text = textValue(name: "searchLabel_flash") + " " + String(newsFlashResult.count) + " " + textValue(name: "searchResult_flash")
+            }
+            return newsFlashResult.count
+            
+        } else {
+            return 0
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = searchFlashNewsTableView.dequeueReusableCell(withIdentifier: "searchResultCell") as! FlashNewsResultCell
-        if indexPath.row == 0{
-              cell.detailLabel.text = "scddsdcscsdcdscsdcsdcdsccdscsdcsdcdscdscdscdscdscdscdscdcdcdcdcdscdcdcdscdscdscdscdscdscdscdscdscdscdscdscdcdscdscdscdcdcdscdcdscdscdcdscdcdcdscdscdsc"
-           
-        } else{
-             cell.detailLabel.text = "scddsdcscsdcdscsdcsdc"
-        }
-      
-        cell.object = "food"
+        let object = newsFlashResult[indexPath.row]
+        //        print(object.id)
+        
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
+        
+        cell.dateLabel.text = dateFormatter.string(from: object.dateTime)
+        cell.detailLabel.text = object.contents
+        cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
     }
     
+    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+        cell.alpha = 0
+        UIView.animate(withDuration: 0.5) {
+            cell.alpha = 1.0
+            cell.layer.transform = CATransform3DIdentity
+        }
+    }
+    
+    
+    @objc func shareButtonClicked(sender: UIButton){
+        let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:searchFlashNewsTableView)
+        let indexPath = searchFlashNewsTableView.indexPathForRow(at: buttonPosition)
+        let cell = searchFlashNewsTableView.cellForRow(at: indexPath!)! as! FlashNewsResultCell
+        let shareView = ShareNewsFlashControllerV2()
+        shareView.dateLabel.text = cell.dateLabel.text
+        shareView.flashNewsDescription.text = cell.detailLabel.text
+        present(shareView, animated: true, completion: nil)
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
+    }
+    
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        if searchBar.text == nil || searchBar.text == ""{
+            view.endEditing(true)
+            newsFlashResult.removeAll()
+            searchFlashNewsTableView.reloadData()
+        } else{
+            storeData() { (response, success) in
+                if success{
+                    self.newsFlashResult.removeAll()
+                    if response.count != 0{
+                        for value in response{
+                            self.newsFlashResult.append(value)
+                        }
+                        self.searchFlashNewsTableView.reloadData()
+                    }
+                }
+            }
+        }
+    }
+    
+    func storeData(completion:@escaping ([NewsFlash],Bool)->Void){
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","searchFlash?patten=" + searchBar.text! + "&languageTag=EN"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+            if success{
+                let json = response
+                let dateFormatter = DateFormatter()
+                dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+                var searchArrayObject = [NewsFlash]()
+                if let collection = json.array {
+                    for item in collection {
+                        let searchObject = NewsFlash()
+                        searchObject.id = item["_id"].string!
+                        searchObject.contents = item["shortMassage"].string!
+                        searchObject.dateTime = dateFormatter.date(from: item["publishedTime"].string!)!
+                        searchArrayObject.append(searchObject)
+                    }
+                }
+                completion(searchArrayObject,true)
+            } else{
+                completion([NewsFlash](),false)
+            }
+            
+        }
+        
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -42,13 +125,14 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
 //    }
     
     func setUpView(){
+        searchBar.becomeFirstResponder()
         view.backgroundColor = ThemeColor().darkGreyColor()
         view.addSubview(searchFlashNewsTableView)
         view.addSubview(searchBar)
         view.addSubview(resultLabel)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1(30)]-2-[v2(30)]-2-[v0]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v1]-5-[v2(30)]-5-[v0]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
         
         
         NSLayoutConstraint(item: resultLabel, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
@@ -68,10 +152,11 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         return tableView
     }()
     
-    var resultLabel:UILabel = {
-        var label = UILabel()
-        label.text = "sfsdfssff"
+    var resultLabel:InsetLabel = {
+        var label = InsetLabel()
+        label.layer.backgroundColor = ThemeColor().blueColorTran().cgColor
         label.textColor = ThemeColor().whiteColor()
+        label.layer.cornerRadius = 15
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -81,8 +166,9 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
-        searchBar.barTintColor = ThemeColor().walletCellcolor()
+        searchBar.barTintColor = ThemeColor().darkGreyColor()
         searchBar.tintColor = ThemeColor().themeColor()
+        searchBar.placeholder = "Enter the keywords..."
         searchBar.backgroundColor = ThemeColor().redColor()
         return searchBar
     }()

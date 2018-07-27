@@ -167,12 +167,6 @@ class WatchListCell:UICollectionViewCell{
 //        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2]-5-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2]-\(5*factor!)-[v4]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
         
-        
-        
-        
-       
-        
-        
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5]-\(5*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":rankLabel,"v1":addWish,"v2":coinImage,"v3":coinLabel,"v4":market,"v5":coinNumber,"v6":coinChange]))
         
         NSLayoutConstraint(item: coinNumber, attribute: .bottom, relatedBy: NSLayoutRelation.equal, toItem: coinImage, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
@@ -192,7 +186,7 @@ class WatchListCell:UICollectionViewCell{
     
     @objc func addOrRemoveWatch(sender: UIButton) {
         let realm = try! Realm()
-        
+
         let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
         realm.beginWrite()
         if watchList.count == 1 {
@@ -207,9 +201,9 @@ class WatchListCell:UICollectionViewCell{
 //            realm.create(WatchListRealm.self, value: [object!.coinAbbName,object?.coinName,object?.market,object?.tradingPairsName,object?.price,object?.profitChange])
         }
         try! realm.commitWrite()
-        
+
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
 }
 

@@ -10,13 +10,14 @@ import Foundation
 import UIKit
 
 class AllLossView:UIView{
-    override init (frame : CGRect) {
-        super.init(frame : frame)
-        setUpView()
+    var factor:CGFloat?{
+        didSet{
+            setUpView()
+        }
     }
     
-    convenience init () {
-        self.init(frame:CGRect.zero)
+    override init (frame : CGRect) {
+        super.init(frame : frame)
     }
     
     required init(coder aDecoder: NSCoder) {
@@ -40,17 +41,19 @@ class AllLossView:UIView{
         NSLayoutConstraint(item: profitLoss, attribute: .centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: .centerY, multiplier: 1, constant:0).isActive = true
     }
     
-    var allTimeLoss:UILabel = {
+    lazy var allTimeLoss:UILabel = {
         var label = UILabel()
-//        label.text = "总收益:"
+        //        label.text = "总收益:"
         label.textColor = UIColor.white
+        label.font = UIFont.regularFont(16*factor!)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var profitLoss:UILabel = {
+    lazy var profitLoss:UILabel = {
         var label = UILabel()
+        label.font = UIFont.regularFont(16*factor!)
         label.text = "0"
         label.textColor = UIColor.white
         label.textAlignment = .center

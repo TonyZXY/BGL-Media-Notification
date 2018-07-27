@@ -15,9 +15,15 @@ class GerneralController: UIViewController {
     let vc = CandleStickChartViewController()
     var coinSymbol:String = ""
     
+    var factor:CGFloat?{
+        didSet{
+//            setUpView()
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        setUpView()
+                setUpView()
     }
     
     func addChildViewControllers(childViewControllers:UIViewController,views:UIView){
@@ -34,11 +40,12 @@ class GerneralController: UIViewController {
         childViewControllers.view.widthAnchor.constraint(equalTo: views.widthAnchor).isActive = true
         childViewControllers.view.heightAnchor.constraint(equalTo: views.heightAnchor).isActive = true
     }
-
+    
     func setUpView(){
+        
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(mainViews)
-
+        
         mainViews.addSubview(scrollView)
         scrollView.addSubview(graphLabel)
         scrollView.addSubview(globalMarketLabel)
@@ -46,13 +53,13 @@ class GerneralController: UIViewController {
         scrollView.addSubview(SecondView)
         scrollView.addSubview(ImageView)
         scrollView.addSubview(LastView)
-
+        
         FirstView.addSubview(spinner)
         FirstView.addSubview(totalNumber)
-//        FirstView.addSubview(defaultCurrencyLable)
+        //        FirstView.addSubview(defaultCurrencyLable)
         FirstView.addSubview(totalRiseFall)
         FirstView.addSubview(totalRiseFallPercent)
-
+        
         
         
         SecondView.addSubview(exchangeButton)
@@ -65,33 +72,33 @@ class GerneralController: UIViewController {
         //ScrollView Constraint
         mainViews.addConstraintsWithFormat(format: "H:|[v0]|", views: scrollView)
         mainViews.addConstraintsWithFormat(format: "V:|[v0]|", views: scrollView)
-
+        
         //Market View constraint
-        scrollView.addConstraintsWithFormat(format: "H:|-15-[v0]-15-|", views: SecondView)
-        scrollView.addConstraintsWithFormat(format: "V:|-5-[v0(50)]", views: SecondView)
-
+        scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: SecondView)
+        scrollView.addConstraintsWithFormat(format: "V:|-\(5*factor!)-[v0(\(50*factor!))]", views: SecondView)
+        
         
         
         NSLayoutConstraint(item: SecondView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
-
-    
+        
+        
         
         
         
         NSLayoutConstraint(item: exchangeButton, attribute: .left, relatedBy: .equal, toItem: SecondView, attribute: .left, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: exchangeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 0, constant: 30).isActive = true
+        NSLayoutConstraint(item: exchangeButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 0, constant: 30*factor!).isActive = true
         NSLayoutConstraint(item: exchangeButton, attribute: .bottom, relatedBy: .equal, toItem: SecondView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: tradingPairButton, attribute: .right, relatedBy: .equal, toItem: SecondView, attribute: .right, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: tradingPairButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 0, constant: 30).isActive = true
+        NSLayoutConstraint(item: tradingPairButton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 0, constant: 30*factor!).isActive = true
         NSLayoutConstraint(item: tradingPairButton, attribute: .bottom, relatedBy: .equal, toItem: SecondView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         
         
         
         //Price View constraint
-        scrollView.addConstraintsWithFormat(format: "H:|-15-[v0]-15-|", views: FirstView)
-        scrollView.addConstraintsWithFormat(format: "V:[v1]-5-[v0(80)]", views: FirstView,SecondView)
+        scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: FirstView)
+        scrollView.addConstraintsWithFormat(format: "V:[v1]-\(5*factor!)-[v0(\(80*factor!))]", views: FirstView,SecondView)
         NSLayoutConstraint(item: FirstView, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalNumber, attribute: .bottom, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalNumber, attribute: .centerX, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
@@ -99,32 +106,32 @@ class GerneralController: UIViewController {
         NSLayoutConstraint(item: totalRiseFallPercent, attribute: .top, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalRiseFall, attribute: .right, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalRiseFallPercent, attribute: .left, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-         NSLayoutConstraint(item: spinner, attribute: .right, relatedBy: .equal, toItem: FirstView, attribute: .right, multiplier: 1, constant: -10).isActive = true
+        NSLayoutConstraint(item: spinner, attribute: .right, relatedBy: .equal, toItem: FirstView, attribute: .right, multiplier: 1, constant: -10*factor!).isActive = true
         NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
         //Graph
         scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1]", views: FirstView,graphLabel)
         NSLayoutConstraint(item: graphLabel, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        ImageView.frame.size.width = view.frame.size.width-30
-        scrollView.addConstraintsWithFormat(format: "H:[v1(\(view.frame.size.width-30))]", views: SecondView,ImageView)
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-5-[v1(200)]", views: graphLabel,ImageView)
+        ImageView.frame.size.width = view.frame.size.width-30*factor!
+        scrollView.addConstraintsWithFormat(format: "H:[v1(\(view.frame.size.width-30*factor!))]", views: SecondView,ImageView)
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-\(5*factor!)-[v1(\(200*factor!))]", views: graphLabel,ImageView)
         NSLayoutConstraint(item: ImageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
         //Global Market
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1]", views: ImageView,globalMarketLabel)
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1]", views: ImageView,globalMarketLabel)
         NSLayoutConstraint(item: globalMarketLabel, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         
-        scrollView.addConstraintsWithFormat(format: "H:|-15-[v1]-15-|", views: globalMarketLabel,LastView)
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-10-[v1(120)]|", views: globalMarketLabel,LastView)
+        scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v1]-\(15*factor!)-|", views: globalMarketLabel,LastView)
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1(\(120*factor!))]|", views: globalMarketLabel,LastView)
         NSLayoutConstraint(item: LastView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
-
-        let stack2 = setUpStackView(view: [setUpStackView(view: [volume,volumeResult], spacing: 0, axis: .vertical),setUpStackView(view: [circulatingSupply,circulatingSupplyResult], spacing: 0, axis: .vertical)], spacing: 5, axis: .horizontal)
-
-        let totalStack = setUpStackView(view: [setUpStackView(view: [marketCap,marketCapResult], spacing: 0, axis: .vertical),stack2], spacing: 5, axis: .vertical)
-
+        
+        let stack2 = setUpStackView(view: [setUpStackView(view: [volume,volumeResult], spacing: 0, axis: .vertical),setUpStackView(view: [circulatingSupply,circulatingSupplyResult], spacing: 0, axis: .vertical)], spacing: 5*factor!, axis: .horizontal)
+        
+        let totalStack = setUpStackView(view: [setUpStackView(view: [marketCap,marketCapResult], spacing: 0, axis: .vertical),stack2], spacing: 5*factor!, axis: .vertical)
+        
         LastView.addSubview(totalStack)
-        LastView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: totalStack)
+        LastView.addConstraintsWithFormat(format: "H:|-\(10*factor!)-[v0]-\(10*factor!)-|", views: totalStack)
         LastView.addConstraintsWithFormat(format: "V:|[v0]|", views: totalStack)
         
         
@@ -142,40 +149,38 @@ class GerneralController: UIViewController {
         NSLayoutConstraint(item: vc.view, attribute: .height, relatedBy: .equal, toItem: ImageView, attribute: .height, multiplier: 1, constant: 0).isActive = true
         vc.coinSymbol = coinSymbol
         vc.didMove(toParentViewController: self)
-        
         marketCap.text = textValue(name: "marketCap_detail")
         volume.text = textValue(name: "volume_detail")
         circulatingSupply.text = textValue(name: "circulatingSupply_detail")
         globalMarketLabel.text = textValue(name: "titleGraphs_details")
         graphLabel.text = textValue(name: "titleGlobal_details")
-        
     }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
     }
     
-    var exchangeButton:UIButton = {
+    lazy var exchangeButton:UIButton = {
         var button = UIButton()
-        button.layer.borderWidth = 1
+        button.layer.borderWidth = 1 * factor!
         button.layer.borderColor = ThemeColor().blueColor().cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(ThemeColor().blueColor(), for: .normal)
-        button.layer.cornerRadius = 5
-        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10)
+        button.layer.cornerRadius = 5*factor!
+        button.titleLabel?.font = UIFont.semiBoldFont(15*factor!)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10*factor!, 0, 10*factor!)
         return button
     }()
     
-    var tradingPairButton:UIButton = {
+    lazy var tradingPairButton:UIButton = {
         var button = UIButton()
-        button.layer.borderWidth = 1
+        button.layer.borderWidth = 1*factor!
         button.layer.borderColor = ThemeColor().blueColor().cgColor
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(ThemeColor().blueColor(), for: .normal)
-        button.layer.cornerRadius = 5
-        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10)
+        button.layer.cornerRadius = 5*factor!
+        button.titleLabel?.font = UIFont.semiBoldFont(15*factor!)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10*factor!, 0, 10*factor!)
         return button
     }()
     
@@ -194,131 +199,133 @@ class GerneralController: UIViewController {
         return scrollView
     }()
     
-    var FirstView:UIView = {
-        var view = UIView()
-        view.backgroundColor = ThemeColor().greyColor()
-        view.layer.cornerRadius = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    lazy var FirstView:UIView = {
+        var views = UIView()
+        views.backgroundColor = ThemeColor().greyColor()
+        views.layer.cornerRadius = 8 * factor!
+        views.translatesAutoresizingMaskIntoConstraints = false
+        return views
     }()
     
     var SecondView:UIView = {
         var view = UIView()
         view.backgroundColor = ThemeColor().darkGreyColor()
-//        view.layer.cornerRadius = 8
+        //        view.layer.cornerRadius = 8
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
     
-    var graphLabel:UILabel = {
-       var label = UILabel()
-        label.textColor = ThemeColor().textGreycolor()
-        label.font = label.font.withSize(15)
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var globalMarketLabel:UILabel = {
+    lazy var graphLabel:UILabel = {
         var label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
-        label.font = label.font.withSize(15)
+        label.font = UIFont.semiBoldFont(15*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var ImageView:UIView = {
+    lazy var globalMarketLabel:UILabel = {
+        var label = UILabel()
+        label.textColor = ThemeColor().textGreycolor()
+        label.font = UIFont.semiBoldFont(15*factor!)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var ImageView:UIView = {
         var imageView = UIView()
         imageView.translatesAutoresizingMaskIntoConstraints = false
         imageView.frame.size.height = 200
-//        imageView.frame.size.width = 300
-//        imageView.backgroundColor = .orange
-        imageView.layer.cornerRadius = 8
+        //        imageView.frame.size.width = 300
+        //        imageView.backgroundColor = .orange
+        imageView.layer.cornerRadius = 8*factor!
         return imageView
     }()
     
-    var LastView:UIView = {
-        var view = UIView()
-        view.backgroundColor = ThemeColor().greyColor()
-        view.layer.cornerRadius = 8
-        view.translatesAutoresizingMaskIntoConstraints = false
-        return view
+    lazy var LastView:UIView = {
+        var views = UIView()
+        views.backgroundColor = ThemeColor().greyColor()
+        views.layer.cornerRadius = 8 * factor!
+        views.translatesAutoresizingMaskIntoConstraints = false
+        return views
     }()
     
-    var totalNumber:UILabel = {
+    lazy var totalNumber:UILabel = {
         var label = UILabel()
         label.textColor = UIColor.white
         label.text = "0"
-        label.font = label.font.withSize(25)
+        label.font = UIFont.regularFont(25*factor!)
         label.sizeToFit()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var defaultCurrencyLable:UILabel = {
-        var label = UILabel()
-        label.textColor = UIColor.white
-        label.font = label.font.withSize(30)
-        label.textColor = ThemeColor().bglColor()
-        label.sizeToFit()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    //    lazy var defaultCurrencyLable:UILabel = {
+    //        var label = UILabel()
+    //        label.textColor = UIColor.white
+    //        label.font = label.font.withSize(30*factor!)
+    //        label.textColor = ThemeColor().bglColor()
+    //        label.sizeToFit()
+    //        label.translatesAutoresizingMaskIntoConstraints = false
+    //        return label
+    //    }()
     
-    var totalRiseFall:UILabel = {
+    lazy var totalRiseFall:UILabel = {
         var label = UILabel()
         label.text = "--"
+        label.font = UIFont.regularFont(17*factor!)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var totalRiseFallPercent:UILabel = {
+    lazy var totalRiseFallPercent:UILabel = {
         var label = UILabel()
+        label.font = UIFont.regularFont(17*factor!)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-
     
-
     
-    var marketCap:UILabel = {
+    
+    
+    lazy var marketCap:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(13)
+        label.font = UIFont.regularFont(13*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var marketCapResult:UILabel = {
+    lazy var marketCapResult:UILabel = {
         var label = UILabel()
         label.text = "0"
-        label.font = label.font.withSize(15)
+        label.font = UIFont.regularFont(15*factor!)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var marketRiseFall:UILabel = {
-        var label = UILabel()
-        label.text = "0"
-        label.textColor = UIColor.white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    //    var marketRiseFall:UILabel = {
+    //        var label = UILabel()
+    //        label.text = "0"
+    //        label.textColor = UIColor.white
+    //        label.translatesAutoresizingMaskIntoConstraints = false
+    //        return label
+    //    }()
+    //
+    //    var marketRiseFallResult:UILabel = {
+    //        var label = UILabel()
+    //        label.text = "0"
+    //        label.textColor = UIColor.white
+    //        label.translatesAutoresizingMaskIntoConstraints = false
+    //        return label
+    //    }()
     
-    var marketRiseFallResult:UILabel = {
+    lazy var volume:UILabel = {
         var label = UILabel()
-        label.text = "0"
-        label.textColor = UIColor.white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var volume:UILabel = {
-        var label = UILabel()
-        label.font = label.font.withSize(13)
+        label.font = UIFont.regularFont(13*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -330,63 +337,63 @@ class GerneralController: UIViewController {
         return spinner
     }()
     
-    var volumeResult:UILabel = {
+    lazy var volumeResult:UILabel = {
         var label = UILabel()
         label.text = "0"
-        label.font = label.font.withSize(15)
+        label.font = UIFont.regularFont(15*factor!)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var circulatingSupply:UILabel = {
+    lazy var circulatingSupply:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(13)
+        label.font = UIFont.regularFont(13*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var circulatingSupplyResult:UILabel = {
+    lazy var circulatingSupplyResult:UILabel = {
         var label = UILabel()
         label.text = "0"
-        label.font = label.font.withSize(15)
+        label.font = UIFont.regularFont(15*factor!)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var low:UILabel = {
-        var label = UILabel()
-        label.text = "0"
-        label.textColor = ThemeColor().textGreycolor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    //    var low:UILabel = {
+    //        var label = UILabel()
+    //        label.text = "0"
+    //        label.textColor = ThemeColor().textGreycolor()
+    //        label.translatesAutoresizingMaskIntoConstraints = false
+    //        return label
+    //    }()
+    //
+    //    var lowResult:UILabel = {
+    //        var label = UILabel()
+    //        label.text = "0"
+    //        label.textColor = UIColor.white
+    //        label.translatesAutoresizingMaskIntoConstraints = false
+    //        return label
+    //    }()
     
-    var lowResult:UILabel = {
-        var label = UILabel()
-        label.text = "0"
-        label.textColor = UIColor.white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var high:UILabel = {
-        var label = UILabel()
-        label.text = "0"
-        label.textColor = UIColor.white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var highResult:UILabel = {
-        var label = UILabel()
-        label.text = "0"
-        label.textColor = UIColor.white
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
+    //    var high:UILabel = {
+    //        var label = UILabel()
+    //        label.text = "0"
+    //        label.textColor = UIColor.white
+    //        label.translatesAutoresizingMaskIntoConstraints = false
+    //        return label
+    //    }()
+    //
+    //    var highResult:UILabel = {
+    //        var label = UILabel()
+    //        label.text = "0"
+    //        label.textColor = UIColor.white
+    //        label.translatesAutoresizingMaskIntoConstraints = false
+    //        return label
+    //    }()
     
     func setUpStackView(view:[UIView],spacing:CGFloat,axis:UILayoutConstraintAxis)-> UIStackView{
         let stackView = UIStackView(arrangedSubviews: view)

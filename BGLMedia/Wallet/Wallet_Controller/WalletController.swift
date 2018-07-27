@@ -249,11 +249,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     //Click Add Transaction Button Method
-    @objc func changetotransaction(){
-        
-        
-        
-        let transaction = FlashSearchController()
+    @objc func changetotransaction(){ 
+        let transaction = TransactionsController()
         transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
     }
