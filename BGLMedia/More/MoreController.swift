@@ -108,14 +108,14 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         let sectionLabel = UILabel()
-        sectionLabel.font = UIFont.boldFont(17)
+        sectionLabel.font = UIFont.semiBoldFont(20)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
         sectionLabel.textColor = ThemeColor().textGreycolor()
         sectionLabel.text = self.sections?[section]
         
         NSLayoutConstraint(item: sectionLabel, attribute: .bottom, relatedBy: .equal, toItem: sectionView, attribute: .bottom, multiplier: 1, constant: -5).isActive = true
-        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10).isActive = true
         
         return sectionView
     }

@@ -34,6 +34,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         global.mainTotalCollectionView.reloadData()
         global.filterDate.reloadData()
         global.sortdoneclick()
+        global.filterDate.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: [])
         
 //        global = GlobalMarketsController()
 //        watchList = WatchListsController()
