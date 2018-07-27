@@ -152,8 +152,8 @@ class GerneralController: UIViewController {
         marketCap.text = textValue(name: "marketCap_detail")
         volume.text = textValue(name: "volume_detail")
         circulatingSupply.text = textValue(name: "circulatingSupply_detail")
-        globalMarketLabel.text = textValue(name: "titleGraphs_details")
-        graphLabel.text = textValue(name: "titleGlobal_details")
+       
+        
     }
     
     override func didReceiveMemoryWarning() {
@@ -219,6 +219,7 @@ class GerneralController: UIViewController {
         var label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
         label.font = UIFont.semiBoldFont(15*factor!)
+        label.text = textValue(name: "titleGraphs_details")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -227,6 +228,7 @@ class GerneralController: UIViewController {
         var label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
         label.font = UIFont.semiBoldFont(15*factor!)
+        label.text = textValue(name: "titleGlobal_details")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
