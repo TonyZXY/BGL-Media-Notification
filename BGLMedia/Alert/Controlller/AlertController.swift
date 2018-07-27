@@ -28,6 +28,12 @@ struct coinAlert{
 }
 
 class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSource{
+    var factor:CGFloat?{
+        didSet{
+            
+        }
+    }
+    
     var realm = try! Realm()
     var alerts:[alertResult] = [alertResult]()
     var coinName = coinAlert()

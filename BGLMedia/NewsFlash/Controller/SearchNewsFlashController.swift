@@ -96,6 +96,7 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
         
         return newImage!
     }
+    
     func combineImageWithQRCode(combine topImage:UIImage, with bottomImage:UIImage)-> UIImage{
         let width = topImage.size.width
         let height = topImage.size.height * 2

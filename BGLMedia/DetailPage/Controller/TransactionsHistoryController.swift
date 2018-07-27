@@ -12,7 +12,13 @@ import Alamofire
 import RealmSwift
 
 class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITableViewDelegate{
-
+    
+    var factor:CGFloat?{
+        didSet{
+            print(factor!)
+        }
+    }
+    
     let realm = try! Realm()
     var results = try! Realm().objects(AllTransactions.self)
     var indexSelected:Int = 0
@@ -22,10 +28,10 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         super.viewDidLoad()
         let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
         results = realm.objects(AllTransactions.self).filter(filterName)
-             NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh(_:)), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh(_:)), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         setUpView()
     }
-
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
     }
@@ -65,7 +71,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
             return cell
         } else if object.status == "Sell"{
-             //Create sell transaction cell
+            //Create sell transaction cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "SellHistory", for: indexPath) as! HistoryTableViewCell
             cell.sellLanguage()
             cell.sellDateLabel.textColor = UIColor.white
@@ -84,10 +90,10 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             return UITableViewCell()
         }
     }
-
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let transactionForm = TransactionsController()
-//        let cell = self.historyTableView.cellForRow(at: indexPath) as! HistoryTableViewCell
+        //        let cell = self.historyTableView.cellForRow(at: indexPath) as! HistoryTableViewCell
         transactionForm.updateTransaction = results[indexPath.row]
         transactionForm.transactionStatus = "Update"
         navigationController?.pushViewController(transactionForm, animated: true)
@@ -105,9 +111,9 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             let filterName = "coinAbbName = '" + self.generalData.coinAbbName + "' "
             let statusItem = self.realm.objects(AllTransactions.self)
             let specificTransaction = statusItem.filter(filterId)
-       
+            
             let coinTransaction = statusItem.filter(filterName)
-//                 print(coinTransaction.count)
+            //                 print(coinTransaction.count)
             if coinTransaction.count == 1{
                 let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
                 try! self.realm.write {
@@ -142,7 +148,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         view.addSubview(averageView)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: averageView)
-        view.addConstraintsWithFormat(format: "V:|[v0(50)]", views: averageView)
+        view.addConstraintsWithFormat(format: "V:|[v0(\(50*factor!))]", views: averageView)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: historyTableView,averageView)
         view.addConstraintsWithFormat(format: "V:[v1]-0-[v0]|", views: historyTableView,averageView)
@@ -163,7 +169,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         
         //Prevent empty rows
         tableView.tableFooterView = UIView()
-//        tableView.backgroundColor = #colorLiteral(red: 0.2, green: 0.2039215686, blue: 0.2235294118, alpha: 1)
+        //        tableView.backgroundColor = #colorLiteral(red: 0.2, green: 0.2039215686, blue: 0.2235294118, alpha: 1)
         tableView.separatorStyle = .none
         tableView.addSubview(self.refresher)
         return tableView
@@ -180,5 +186,5 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         historyTableView.reloadData()
         self.refresher.endRefreshing()
     }
-
+    
 }

@@ -10,9 +10,14 @@ import Foundation
 import UIKit
 
 class MainView:UIView{
+    var factor:CGFloat?{
+        didSet{
+            setUpView()
+        }
+    }
+    
     override init (frame : CGRect) {
         super.init(frame : frame)
-        setUpView()
     }
     
     convenience init () {
@@ -37,84 +42,84 @@ class MainView:UIView{
         //portfolio
         NSLayoutConstraint(item: portfolio, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.leading, multiplier: 1, constant:0).isActive = true
         NSLayoutConstraint(item: portfolio, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant:0).isActive = true
-        NSLayoutConstraint(item: portfolio, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -5).isActive = true
+        NSLayoutConstraint(item: portfolio, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -5*factor!).isActive = true
         
         //portfolioResult
         NSLayoutConstraint(item: portfolioResult, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: portfolio, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: portfolioResult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5).isActive = true
+        NSLayoutConstraint(item: portfolioResult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5*factor!).isActive = true
         
         //marketValue
         NSLayoutConstraint(item: marketValue, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: marketValue, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: 0).isActive = true
-         NSLayoutConstraint(item: marketValue, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -5).isActive = true
-
+        NSLayoutConstraint(item: marketValue, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -5*factor!).isActive = true
+        
         //marketValueResult
         NSLayoutConstraint(item: marketValueRsult, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: marketValue, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: marketValueRsult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5).isActive = true
+        NSLayoutConstraint(item: marketValueRsult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5*factor!).isActive = true
         
         
         //netCost
         NSLayoutConstraint(item: netCost, attribute: NSLayoutAttribute.right, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.right, multiplier: 1, constant:0).isActive = true
         NSLayoutConstraint(item: netCost, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant:0).isActive = true
-        NSLayoutConstraint(item: netCost, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -5).isActive = true
+        NSLayoutConstraint(item: netCost, attribute: NSLayoutAttribute.bottom, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -5*factor!).isActive = true
         
         //netCostResult
         NSLayoutConstraint(item: netCostResult, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: netCost, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: netCostResult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5).isActive = true
+        NSLayoutConstraint(item: netCostResult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5*factor!).isActive = true
         
         portfolio.text = textValue(name: "portfolio_detail")
         marketValue.text = textValue(name: "marketValue_detail")
         netCost.text = textValue(name: "netCost_detail")
     }
     
-    var portfolio:UILabel = {
+    lazy var portfolio:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(18)
+        label.font = UIFont.regularFont(13*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var portfolioResult:UILabel = {
+    lazy var portfolioResult:UILabel = {
         var label = UILabel()
         label.text = "0"
-        label.font = label.font.withSize(13)
+        label.font = UIFont.regularFont(16*factor!)
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var marketValue:UILabel = {
+    lazy var marketValue:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(18)
+        label.font = UIFont.regularFont(13*factor!)
         label.textAlignment = .center
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var marketValueRsult:UILabel = {
+    lazy var marketValueRsult:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(13)
+        label.font = UIFont.regularFont(16*factor!)
         label.text = "0"
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var netCost:UILabel = {
+    lazy var netCost:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(18)
+        label.font = UIFont.regularFont(13*factor!)
         label.textAlignment = .center
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    var netCostResult:UILabel = {
+    lazy var netCostResult:UILabel = {
         var label = UILabel()
-        label.font = label.font.withSize(13)
+        label.font = UIFont.regularFont(16*factor!)
         label.text = "0"
         label.textColor = UIColor.white
         label.translatesAutoresizingMaskIntoConstraints = false

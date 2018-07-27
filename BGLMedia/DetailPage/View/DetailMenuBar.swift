@@ -9,6 +9,12 @@
 import UIKit
 
 class DetailMenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+    var factor:CGFloat?{
+        didSet{
+            setupView()
+        }
+    }
+    
     var color = ThemeColor()
     var menuitems = [String]()
     
@@ -25,6 +31,9 @@ class DetailMenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,U
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+    }
+    
+    func setupView(){
         menuitems.append(textValue(name: "general_detail"))
         menuitems.append(textValue(name: "transaction_detail"))
         menuitems.append(textValue(name: "alerts_detail"))
@@ -51,7 +60,7 @@ class DetailMenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,U
         horizontalBarLeftAnchorConstraint?.isActive = true
         horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor,multiplier:1/3).isActive = true
-        horizontalBarView.heightAnchor.constraint(equalToConstant: 3).isActive = true
+        horizontalBarView.heightAnchor.constraint(equalToConstant: 3*factor!).isActive = true
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
@@ -81,9 +90,12 @@ class DetailMenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,U
 }
 
 class MenuCells: UICollectionViewCell{
+    
     var color = ThemeColor()
-    let menuLabel:UILabel = {
+    lazy var menuLabel:UILabel = {
+        let factor = frame.width/125 //  iPhone X frame.width / 3
         let menuLabel = UILabel()
+        menuLabel.font = UIFont.regularFont(16*factor)
         menuLabel.textColor = ThemeColor().textGreycolor()
         return menuLabel
     }()
@@ -102,11 +114,11 @@ class MenuCells: UICollectionViewCell{
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = ThemeColor().darkBlackColor()
         setupView()
     }
     
     func setupView(){
+        backgroundColor = ThemeColor().darkBlackColor()
         addSubview(menuLabel)
         menuLabel.translatesAutoresizingMaskIntoConstraints = false
         addConstraint(NSLayoutConstraint(item: menuLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))

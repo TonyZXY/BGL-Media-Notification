@@ -32,17 +32,17 @@ class DetailController: UIViewController{
     var globalMarketData = GlobalMarket.init()
     var refreshTimer: Timer!
     
-//    var priceType:String {
-//        get{
-//            var curreny:String = ""
-//            if let defaultCurrency = UserDefaults.standard.value(forKey: "defaultCurrency") as? String{
-//                curreny = defaultCurrency
-//                return curreny
-//            } else {
-//                return curreny
-//            }
-//        }
-//    }
+    //    var priceType:String {
+    //        get{
+    //            var curreny:String = ""
+    //            if let defaultCurrency = UserDefaults.standard.value(forKey: "defaultCurrency") as? String{
+    //                curreny = defaultCurrency
+    //                return curreny
+    //            } else {
+    //                return curreny
+    //            }
+    //        }
+    //    }
     
     
     override func viewDidLoad() {
@@ -57,7 +57,7 @@ class DetailController: UIViewController{
         super.viewWillAppear(animated)
         refreshPage()
         refreshData()
-//        self.tabBarController?.tabBar.isHidden = true
+        //        self.tabBarController?.tabBar.isHidden = true
         
     }
     
@@ -75,15 +75,15 @@ class DetailController: UIViewController{
         generalPage.coinSymbol = coinDetails.selectCoinAbbName
         for value in selectItem{
             checkDataRiseFallColor(risefallnumber: value.totalRiseFall, label: allLossView.profitLoss,type:"Number")
-            mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.coinAmount) + " " + value.coinAbbName            
+            mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.coinAmount) + " " + value.coinAbbName
             checkDataRiseFallColor(risefallnumber: value.totalPrice, label: mainView.marketValueRsult, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.transactionPrice, label: mainView.netCostResult, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.singlePrice, label:  generalPage.totalNumber, type: "Default")
-            generalPage.defaultCurrencyLable.text = priceType
-//            generalPage.totalNumber.text = currecyLogo[priceType]! + generalPage.totalNumber.text!
-//            generalPage.tradingPairs.text = value.coinAbbName + "/" +  value.tradingPairsName
-//            generalPage.market.text = value.exchangeName
-//            generalPage.edit.isHidden = true
+            //            generalPage.defaultCurrencyLable.text = priceType
+            //            generalPage.totalNumber.text = currecyLogo[priceType]! + generalPage.totalNumber.text!
+            //            generalPage.tradingPairs.text = value.coinAbbName + "/" +  value.tradingPairsName
+            //            generalPage.market.text = value.exchangeName
+            //            generalPage.edit.isHidden = true
             generalPage.exchangeButton.setTitle(value.exchangeName, for: .normal)
             generalPage.tradingPairButton.setTitle(value.coinAbbName + "/" +  value.tradingPairsName, for: .normal)
             general.coinAbbName = value.coinAbbName
@@ -150,7 +150,7 @@ class DetailController: UIViewController{
         
         marketSelectedData.exchangeName = exchangeName
         marketSelectedData.tradingPairsName = tradingPairs
-
+        
         cryptoCompareClient.getTradePrice(from: marketSelectedData.coinAbbName, to: tradingPairs, exchange: exchangeName){ result in
             switch result{
             case .success(let resultData):
@@ -191,8 +191,8 @@ class DetailController: UIViewController{
                     self.refreshPage()
                 }
             } else{
-                    self.coinDetailController.gerneralController.spinner.stopAnimating()
-                print("fail")
+                self.coinDetailController.gerneralController.spinner.stopAnimating()
+                //                print("fail")
             }
         }
     }
@@ -255,32 +255,36 @@ class DetailController: UIViewController{
     
     //Set up layout constraints
     func setUpView(){
-//        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
+        let factor = view.frame.width/375
+        coinDetailController.gerneralController.factor = factor
+        allLossView.factor = factor
+        mainView.factor = factor
+        //        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
         coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)
         coinDetailController.gerneralController.tradingPairButton.addTarget(self, action: #selector(editTradingPairs), for: .touchUpInside)
         view.backgroundColor = ThemeColor().themeColor()
         let titleLabel = UILabel()
+        titleLabel.font = UIFont.boldFont(17*factor)
         titleLabel.text = coinDetails.selectCoinName
         titleLabel.textColor = UIColor.white
         navigationItem.titleView = titleLabel
-        
         view.addSubview(allLossView)
         view.addSubview(mainView)
         
         //AllLossView Constraint
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":allLossView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":allLossView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(\(30*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":allLossView]))
         
         //MainView Constraint
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":allLossView,"v1":mainView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-0-[v1(80)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":allLossView,"v1":mainView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-0-[v1(\(80*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":allLossView,"v1":mainView]))
         
         view.addSubview(coinDetailView)
         //coinDetailPage
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         addChildViewControllers(childViewControllers: coinDetailController, views: coinDetailView)
-
+        
     }
     
     @objc func editMarket(){
@@ -313,7 +317,7 @@ class DetailController: UIViewController{
     @objc func editTradingPairs(){
         var picker: TCPickerViewInput = TCPickerView()
         picker.title = "Market"
-         let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
+        let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
         let getCoinExchange = self.realm.objects(MarketTradingPairs.self).filter(filterName)
         let exchangList = getTradingPairsList(market: getCoinExchange[0].exchangeName)
         let values = exchangList.map{ TCPickerView.Value(title: $0) }
@@ -325,7 +329,7 @@ class DetailController: UIViewController{
                 //                self.titleTextField.text = values[i].title
                 self.coinDetailController.gerneralController.tradingPairButton.setTitle(self.coinDetails.selectCoinAbbName + "/" + values[i].title
                     , for: .normal)
-//                let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
+                //                let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
                 if let object = getCoinExchange.first{
                     try! self.realm.write {
                         object.tradingPairsName = values[i].title

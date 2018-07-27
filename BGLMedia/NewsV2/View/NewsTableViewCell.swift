@@ -24,7 +24,7 @@ class NewsTableViewCell: UITableViewCell {
             timeLabel.text = news?.publishedTime.timeAgoDisplay()
             // source text and source pic need to be implement
             sourceLabel.text = news?.source!
-            logoImageView.image = UIImage(named: (news?.source?.lowercased())! + ".png")
+            logoImageView.image = UIImage(named: (news?.source?.lowercased())! + ".png") ?? UIImage(named: "notfound.png")
         }
     }
 
@@ -58,6 +58,7 @@ class NewsTableViewCell: UITableViewCell {
     lazy var logoImageView:UIImageView = {
         let frame = CGRect(x: 0, y: 0, width: 40*factorNumber!, height: 40*factorNumber!)
         let imageView = UIImageView(frame: frame)
+        imageView.image = UIImage(named: "notfound.png")
         imageView.contentMode = .scaleAspectFill
         imageView.backgroundColor = UIColor.lightGray
         return imageView

@@ -42,6 +42,17 @@ class LaunchScreenViewController: UIViewController {
                     dispatchGroup.leave()
                 }
             }
+        
+            dispatchGroup.enter()
+            URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
+            if success{
+                dispatchGroup.leave()
+            } else{
+                dispatchGroup.leave()
+            }
+            }
+        
+        
 
             dispatchGroup.notify(queue:.main){
                 if  UserDefaults.standard.bool(forKey: "launchedBefore"){
@@ -59,8 +70,6 @@ class LaunchScreenViewController: UIViewController {
                 }
             }
     }
-    
-    
 }
 
 class LaunchScreen: UIView {

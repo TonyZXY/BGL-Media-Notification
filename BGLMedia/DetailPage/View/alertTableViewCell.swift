@@ -12,7 +12,7 @@ import RealmSwift
 
 class AlertTableViewCell:UITableViewCell{
     
-
+    
     var object:alertObject?{
         didSet{
             var compare:String = ""
@@ -35,30 +35,30 @@ class AlertTableViewCell:UITableViewCell{
             swithButton.isOn = (object?.switchStatus)!
         }
     }
-//        didSet{
-//
-//        }
-//
-//    var object: alertObject? {
-//        didSet {
-//            var roundedPrice = object?.price ?? 0.0
-//            roundedPrice = round(roundedPrice * 100) / 100
-//
-//
-//
-//            coinLabel.text = object?.coinAbbName
-//            coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
-//            //            coinChange.text = object?.percent7d
-//            coinImage.coinImageSetter(coinName: (object?.coinAbbName)!)
-//
-//            let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
-//            if watchList.count == 1 {
-//                addWish.setTitle("★", for: .normal)
-//            } else {
-//                addWish.setTitle("☆", for: .normal)
-//            }
-//        }
-//    }
+    //        didSet{
+    //
+    //        }
+    //
+    //    var object: alertObject? {
+    //        didSet {
+    //            var roundedPrice = object?.price ?? 0.0
+    //            roundedPrice = round(roundedPrice * 100) / 100
+    //
+    //
+    //
+    //            coinLabel.text = object?.coinAbbName
+    //            coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
+    //            //            coinChange.text = object?.percent7d
+    //            coinImage.coinImageSetter(coinName: (object?.coinAbbName)!)
+    //
+    //            let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
+    //            if watchList.count == 1 {
+    //                addWish.setTitle("★", for: .normal)
+    //            } else {
+    //                addWish.setTitle("☆", for: .normal)
+    //            }
+    //        }
+    //    }
     
     
     
@@ -93,11 +93,11 @@ class AlertTableViewCell:UITableViewCell{
     
     var swithButton:UISwitch = {
         var switchButton = UISwitch()
-//        switchButton.isOn = false
-//        switchButton.thumbTintColor = UIColor.red
-//        switchButton.tintColor = UIColor.green
-//        switchButton.onTintColor = ThemeColor().bglColor()
-//        switchButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
+        //        switchButton.isOn = false
+        //        switchButton.thumbTintColor = UIColor.red
+        //        switchButton.tintColor = UIColor.green
+        //        switchButton.onTintColor = ThemeColor().bglColor()
+        //        switchButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
         switchButton.translatesAutoresizingMaskIntoConstraints = false
         return switchButton
     }()
@@ -108,32 +108,32 @@ class AlertTableViewCell:UITableViewCell{
         let alertStatus = try! Realm().objects(alertObject.self).filter("id = %@", object?.id ?? 0)
         
         if let object = alertStatus.first{
-                try! realm.write {
-                    if swithButton.isOn{
-                         object.switchStatus = true
-                    } else{
-                        object.switchStatus = false
-                    }
+            try! realm.write {
+                if swithButton.isOn{
+                    object.switchStatus = true
+                } else{
+                    object.switchStatus = false
                 }
+            }
         }
         
-            print(alertStatus)
+        //            print(alertStatus)
         
-//        realm.beginWrite()
-//        if alertStatus.count == 1{
-//            if alertStatus[0].switchStatus{
-//
-//            }
-//        }
-//
-//        try! realm.commitWrite()
+        //        realm.beginWrite()
+        //        if alertStatus.count == 1{
+        //            if alertStatus[0].switchStatus{
+        //
+        //            }
+        //        }
+        //
+        //        try! realm.commitWrite()
         
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
+        //        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
+        //        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
     
     var compareLabel:UILabel = {
-       var label = UILabel()
+        var label = UILabel()
         label.font = label.font.withSize(20)
         label.textColor = ThemeColor().whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false

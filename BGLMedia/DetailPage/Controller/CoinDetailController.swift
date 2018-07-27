@@ -23,11 +23,16 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     
     
     func setUpView(){
+        let factor = view.frame.width/375
+        
         //Menu Bar
+        menuBar.factor = factor
+        self.transactionHistoryController.factor = factor
+        self.alertControllers.factor = factor
         view.addSubview(menuBar)
         menuBar.translatesAutoresizingMaskIntoConstraints = false
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":menuBar]))
         
         //CollectionView
         view.addSubview(collectionviews)
@@ -103,5 +108,5 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     }
     
     
-
+    
 }

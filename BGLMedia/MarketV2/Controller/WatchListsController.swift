@@ -95,11 +95,12 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     func getCoinData(completion:@escaping (Bool)->Void){
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
             if success{
+                let objectResult = self.realm.objects(WatchListRealm.self)
                 let dispatchGroup = DispatchGroup()
-                for result in self.watchListObjects{
+                for result in objectResult{
                     if result.isGlobalAverage{
                         let coinObject = self.realmObject.filter("coinAbbName = %@", result.coinAbbName)
-                        let watchListCoinObject = self.watchListObjects.filter("coinAbbName = %@", result.coinAbbName)
+                        let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
                         try! self.realm.write {
                             watchListCoinObject[0].price = coinObject[0].price
                             watchListCoinObject[0].profitChange = coinObject[0].percent24h
@@ -108,7 +109,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
                         dispatchGroup.enter()
                         APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.market) { (response,success) in
                             if success{
-                                let watchListCoinObject = self.watchListObjects.filter("coinAbbName = %@", result.coinAbbName)
+                                let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
                                 try! self.realm.write {
                                     watchListCoinObject[0].price = response["RAW"]["PRICE"].double ?? 0
                                     watchListCoinObject[0].profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
@@ -148,11 +149,34 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
             cell.factor = factor
             let object = watchListObjects[indexPath.row]
             cell.object = object
+            cell.addWish.addTarget(self, action: #selector(deleteitem), for: .touchUpInside)
             checkDataRiseFallColor(risefallnumber: object.profitChange, label: cell.coinChange, type: "PercentDown")
             return cell
         }else{
             return UICollectionViewCell()
         }
+    }
+    
+    @objc func deleteitem(sender: UIButton){
+        let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:coinList)
+        let indexPath = coinList.indexPathForItem(at: buttonPosition)
+//        let cell = coinList.cellForItem(at: indexPath!) as! WatchListCell
+        coinList.deleteItems(at: [indexPath!])
+//        let realm = try! Realm()
+        
+//        let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", cell.coinLabel.text)
+//        realm.beginWrite()
+//        if watchList.count == 1 {
+//            cell.addWish.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
+//            //            addWish.setClicked(false, animated: true)
+//            realm.delete(watchList[0])
+//        } else {
+//            cell.addWish.setTitleColor(ThemeColor().blueColor(), for: .normal)
+//        }
+//        try! realm.commitWrite()
+//
+//        coinList.deleteItems(at: [indexPath!])
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
@@ -194,7 +218,6 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     func setUpView(){
         view.addSubview(coinList)
-        
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
         header.textLabel.font = UIFont.regularFont(12*view.frame.width/414)
