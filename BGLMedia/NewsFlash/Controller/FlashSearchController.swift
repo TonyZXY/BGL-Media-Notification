@@ -8,7 +8,7 @@
 
 import UIKit
 
-class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewDelegate {
+class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewDelegate,UISearchBarDelegate{
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 5
@@ -42,9 +42,18 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
 //    }
     
     func setUpView(){
+        view.backgroundColor = ThemeColor().darkGreyColor()
         view.addSubview(searchFlashNewsTableView)
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView]))
+        view.addSubview(searchBar)
+        view.addSubview(resultLabel)
+        
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1(30)]-2-[v2(30)]-2-[v0]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
+        
+        
+        NSLayoutConstraint(item: resultLabel, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
+        
     }
     
     
@@ -58,7 +67,25 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         tableView.register(FlashNewsResultCell.self, forCellReuseIdentifier: "searchResultCell")
         return tableView
     }()
+    
+    var resultLabel:UILabel = {
+        var label = UILabel()
+        label.text = "sfsdfssff"
+        label.textColor = ThemeColor().whiteColor()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
 
+    lazy var searchBar:UISearchBar={
+        var searchBar = UISearchBar()
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        searchBar.delegate = self
+        searchBar.returnKeyType = UIReturnKeyType.done
+        searchBar.barTintColor = ThemeColor().walletCellcolor()
+        searchBar.tintColor = ThemeColor().themeColor()
+        searchBar.backgroundColor = ThemeColor().redColor()
+        return searchBar
+    }()
     
     
 }
@@ -94,7 +121,7 @@ class FlashNewsResultCell:UITableViewCell{
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[v1]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1(40)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v2]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
@@ -155,5 +182,6 @@ class FlashNewsResultCell:UITableViewCell{
         button.setImage(UIImage(named: "share_.png"), for: .normal)
         return button
     }()
+    
 }
 
