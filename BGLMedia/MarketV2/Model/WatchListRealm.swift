@@ -18,6 +18,7 @@ class WatchListRealm: Object {
     @objc dynamic var profitChange:Double = 0
     @objc dynamic var isGlobalAverage:Bool = true
     @objc dynamic var rank:Int = 0
+    @objc dynamic var date = Date()
     
     
     override class func primaryKey() -> String {

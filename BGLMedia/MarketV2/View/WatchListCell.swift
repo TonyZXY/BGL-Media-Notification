@@ -185,24 +185,19 @@ class WatchListCell:UICollectionViewCell{
     }
     
     @objc func addOrRemoveWatch(sender: UIButton) {
-        let realm = try! Realm()
-
-        let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
-        realm.beginWrite()
-        if watchList.count == 1 {
-//            addWish.setTitle("☆", for: .normal)
-            addWish.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
-//            addWish.setClicked(false, animated: true)
-            realm.delete(watchList[0])
-        } else {
-            addWish.setTitleColor(ThemeColor().blueColor(), for: .normal)
-//            addWish.setClicked(true, animated: true)
-//            addWish.setTitle("★", for: .normal)
-//            realm.create(WatchListRealm.self, value: [object!.coinAbbName,object?.coinName,object?.market,object?.tradingPairsName,object?.price,object?.profitChange])
-        }
-        try! realm.commitWrite()
-
-        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
+//        let realm = try! Realm()
+//
+//        let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
+//        realm.beginWrite()
+//        if watchList.count == 1 {
+//            addWish.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
+//            realm.delete(watchList[0])
+//        } else {
+//            addWish.setTitleColor(ThemeColor().blueColor(), for: .normal)
+//        }
+//        try! realm.commitWrite()
+//
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
 //        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
 }

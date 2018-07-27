@@ -15,7 +15,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     var color = ThemeColor()
     var image = AppImage()
     let realm = try! Realm()
-//    var allResult = try! Realm().objects(AllTransactions.self)
+    //    var allResult = try! Realm().objects(AllTransactions.self)
     var all = try! Realm().objects(MarketTradingPairs.self)
     let cryptoCompareClient = CryptoCompareClient()
     var walletResults = [MarketTradingPairs]()
@@ -49,9 +49,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         DispatchQueue.main.async(execute: {
             self.walletList.beginHeaderRefreshing()
         })
-//        SetDataResult().writeJsonExchange()
-//        SetDataResult().writeMarketCapCoinList()
-//        GetDataResult().getCoinList()
+        //        SetDataResult().writeJsonExchange()
+        //        SetDataResult().writeMarketCapCoinList()
+        //        GetDataResult().getCoinList()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
@@ -66,12 +66,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     //Every Time the Page appear will active this method
-//    override func viewWillAppear(_ animated: Bool) {
-////        checkTransaction()
-////        setWalletData()
-////        reloadData()
-//        tabBarController?.tabBar.isHidden = false
-//    }
+    //    override func viewWillAppear(_ animated: Bool) {
+    ////        checkTransaction()
+    ////        setWalletData()
+    ////        reloadData()
+    //        tabBarController?.tabBar.isHidden = false
+    //    }
     
     // Refresh Table View Data
     
@@ -95,7 +95,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Each Table View Cell Create
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let factor = view.frame.width/375
         let cell = tableView.dequeueReusableCell(withIdentifier: "WalletCell", for: indexPath) as! WalletsCell
+        cell.factor = factor
         let assets = allTransactions[indexPath.row]
         cell.coinName.text = assets.coinName
         cell.coinAmount.text = String(assets.coinAmount) + assets.coinAbbName
@@ -107,11 +109,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFall, label: cell.profitChangeNumber, type: "Number")
         
         
-//        if displayType == "Percent"{
-//             self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
-//        } else if displayType == "Number"{
-//            self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFall, label: cell.profitChange, type: "Number")
-//        }
+        //        if displayType == "Percent"{
+        //             self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
+        //        } else if displayType == "Number"{
+        //            self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFall, label: cell.profitChange, type: "Number")
+        //        }
         cell.selectCoin.selectCoinAbbName = assets.coinAbbName
         cell.selectCoin.selectCoinName = assets.coinName
         cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
@@ -164,36 +166,36 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 list.append(value.coinName)
             }
         }
-//        DispatchQueue.main.async {
-//            self.walletList.reloadData()
-//        }
+        //        DispatchQueue.main.async {
+        //            self.walletList.reloadData()
+        //        }
     }
     
     @objc func refreshData(){
         checkTransaction()
         setWalletData()
-//        reloadData(){success in
-//            if success{
-//                self.walletList.reloadData()
-//                self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-//            } else{
-//                self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
-//            }
-//        }
+        //        reloadData(){success in
+        //            if success{
+        //                self.walletList.reloadData()
+        //                self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+        //            } else{
+        //                self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+        //            }
+        //        }
         
         
         DispatchQueue.main.async(execute: {
             self.walletList.beginHeaderRefreshing()
         })
-//        setWalletData()
-//        reloadData()
+        //        setWalletData()
+        //        reloadData()
     }
     
     func reloadData(completion:@escaping (Bool)->Void){
-//        self.refresher.beginRefreshing()
-//        refresher.sendActions(for: .valueChanged)
-//        let contentOffset = CGPoint(x: 0, y: -refresher.frame.height)
-//        walletList.setContentOffset(contentOffset, animated: true)
+        //        self.refresher.beginRefreshing()
+        //        refresher.sendActions(for: .valueChanged)
+        //        let contentOffset = CGPoint(x: 0, y: -refresher.frame.height)
+        //        walletList.setContentOffset(contentOffset, animated: true)
         let dispatchGroup = DispatchGroup()
         self.totalAssets = 0
         self.totalProfit = 0
@@ -229,7 +231,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                         })
                     }
                 case .failure(let error):
-                
+                    
                     print("the error \(error.localizedDescription)")
                 }
             }
@@ -238,18 +240,18 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         dispatchGroup.notify(queue:.main){
             self.caculateTotal()
             completion(true)
-//            self.refresher.endRefreshing()
+            //            self.refresher.endRefreshing()
         }
     }
     
     
     func caculateTotal(){
-        totalNumber.text = currencyName[priceType]! + Extension.method.scientificMethod(number: totalAssets)
+        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
         self.checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange, type: "Number")
     }
     
     //Click Add Transaction Button Method
-    @objc func changetotransaction(){ 
+    @objc func changetotransaction(){
         let transaction = TransactionsController()
         transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
@@ -262,7 +264,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 self.walletList.reloadData()
                 self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
             } else{
-                 self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+                self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
             }
         }
     }
@@ -297,12 +299,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     //TableView Refresh Spinnner
-//    lazy var refresher: UIRefreshControl = {
-//        let refreshControl = UIRefreshControl()
-//        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
-//        refreshControl.tintColor = UIColor.white
-//        return refreshControl
-//    }()
+    //    lazy var refresher: UIRefreshControl = {
+    //        let refreshControl = UIRefreshControl()
+    //        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+    //        refreshControl.tintColor = UIColor.white
+    //        return refreshControl
+    //    }()
     
     func setUpBasicView(){
         view.backgroundColor = ThemeColor().navigationBarColor()
@@ -316,6 +318,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     
     func setUpInitialView(){
+        let factor = view.frame.width/375
         existTransactionView.removeFromSuperview()
         view.addSubview(invisibleView)
         invisibleView.addSubview(buttonView)
@@ -325,7 +328,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         hintView.addSubview(hintLabel)
         hintMainView.addSubview(hintMainLabel)
         
-        hintLanguageLabel()
+        
+        hintMainLabel.text = textValue(name: "mainHint")
+        hintMainLabel.font = UIFont.regularFont(23*factor)
+        hintLabel.text = textValue(name: "hintLabel")
+        hintLabel.font = UIFont.regularFont(13*factor)
         
         //View No transactions
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":invisibleView]))
@@ -334,57 +341,66 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
         //Main Hint View
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintMainView,"v1":buttonView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintMainView,"v1":buttonView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(80*factor))]-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintMainView,"v1":buttonView]))
         
         NSLayoutConstraint(item: hintMainLabel, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: hintMainView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: hintMainLabel, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: hintMainView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        hintMainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintMainLabel]))
+        hintMainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor)-[v0]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintMainLabel]))
         hintMainView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintMainLabel]))
         
         
         //Button View
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buttonView,"v1":hintView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(60)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buttonView,"v1":hintView]))
-        NSLayoutConstraint(item: buttonView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: invisibleView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -80).isActive = true
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(60*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buttonView,"v1":hintView]))
+        NSLayoutConstraint(item: buttonView, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: invisibleView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: -80*factor).isActive = true
         NSLayoutConstraint(item: buttonView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: invisibleView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
-        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
+        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
+        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
         
         //Hint Label View
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintView,"v1":buttonView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-5-[v0(80)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintView,"v1":buttonView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(5*factor)-[v0(\(80*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintView,"v1":buttonView]))
         
         NSLayoutConstraint(item: hintLabel, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: hintView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: hintLabel, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: hintView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        hintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
+        hintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor)-[v0]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
         hintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":hintLabel]))
     }
     
     //Set Up View Layout
     func setupView(){
+        let factor = view.frame.width/375
+        totalLabel.text = textValue(name:"mainBalance")
+        totalLabel.font = UIFont.regularFont(20*factor)
+        totalNumber.font = UIFont.boldFont(30*factor)
+        totalChange.font = UIFont.regularFont(20*factor)
+        addTransactionButton.layer.cornerRadius = 25*factor
         //Add Subview
         invisibleView.removeFromSuperview()
         view.addSubview(existTransactionView)
         existTransactionView.addSubview(totalProfitView)
         existTransactionView.addSubview(buttonView)
-//        existTransactionView.addSubview(filterButtonNumber)
-//        existTransactionView.addSubview(filterButtonPercent)
+        //        existTransactionView.addSubview(filterButtonNumber)
+        //        existTransactionView.addSubview(filterButtonPercent)
         existTransactionView.addSubview(walletList)
-//        walletList.addSubview(self.refresher)
+        //        walletList.addSubview(self.refresher)
         
         totalProfitView.addSubview(totalLabel)
         totalProfitView.addSubview(totalNumber)
         totalProfitView.addSubview(totalChange)
         buttonView.addSubview(addTransactionButton)
         
-        languageLabel()
+        
+        
+        
+        
         
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
-        header.textLabel.font = UIFont.regularFont(12)
+        header.textLabel.font = UIFont.regularFont(12*factor)
         header.tintColor = ThemeColor().whiteColor()
         header.imageRenderingWithTintColor = true
         walletList.configRefreshHeader(with:header, container: self, action: {
@@ -400,48 +416,40 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
         //        Total Profit View Constraints(总资产)
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0(150)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0(\(150*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
         
         NSLayoutConstraint(item: totalLabel, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalChange, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
-        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
-        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-10-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
+        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(10*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
+        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(10*factor)-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
         
         //Add Transaction Button Constraints
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v4]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView,"v4":buttonView]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-[v4(60)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView,"v4":buttonView]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-[v4(\(60*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView,"v4":buttonView]))
         NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
-        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
+        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
+        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
         
-//        //Add filter Button Constraints
-//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v7(100)]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
-//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v4]-10-[v7(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
+        //        //Add filter Button Constraints
+        //        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v7(100)]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
+        //        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v4]-10-[v7(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v4":buttonView,"v7":filterButtonNumber]))
         
-//        //Add filter Button Constraints
-//        NSLayoutConstraint(item: filterButtonNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: filterButtonPercent, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v8(100)]-10-[v7]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
-//        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v8(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
+        //        //Add filter Button Constraints
+        //        NSLayoutConstraint(item: filterButtonNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: filterButtonPercent, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+        //        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v8(100)]-10-[v7]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
+        //        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v8(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v8":filterButtonPercent,"v7":filterButtonNumber]))
         
         
         //Wallet List Constraints
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":buttonView,"v6":walletList]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v7]-10-[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":buttonView,"v6":walletList]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v7]-\(10*factor)-[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":buttonView,"v6":walletList]))
         
     }
     
-    func languageLabel(){
-        totalLabel.text = textValue(name:"mainBalance")
-    }
-    
-    func hintLanguageLabel(){
-        hintMainLabel.text = textValue(name: "mainHint")
-        hintLabel.text = textValue(name: "hintLabel")
-    }
     
     var hintMainLabel:UILabel = {
         var label = UILabel()
@@ -464,7 +472,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     var hintLabel:UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-//        label.text = "We just need one or more transactions.Add your first transaction via the + button below"
+        //        label.text = "We just need one or more transactions.Add your first transaction via the + button below"
         label.textColor = UIColor.white
         label.numberOfLines = 0
         label.font = label.font.withSize(13)
@@ -533,46 +541,46 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         return view
     }()
     
-//    var filterButtonNumber:UIButton = {
-//        var button = UIButton(type: .system)
-//        button.setTitle("总数", for: .normal)
-//        button.frame = CGRect(x: 0, y: 0, width: 200, height: 80)
-//        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
-//        button.setTitleColor(UIColor.white, for: .normal)
-//        button.backgroundColor = ThemeColor().walletCellcolor()
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.addTarget(self, action: #selector(setUpNumber), for: .touchUpInside)
-//        return button
-//    }()
+    //    var filterButtonNumber:UIButton = {
+    //        var button = UIButton(type: .system)
+    //        button.setTitle("总数", for: .normal)
+    //        button.frame = CGRect(x: 0, y: 0, width: 200, height: 80)
+    //        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
+    //        button.setTitleColor(UIColor.white, for: .normal)
+    //        button.backgroundColor = ThemeColor().walletCellcolor()
+    //        button.translatesAutoresizingMaskIntoConstraints = false
+    //        button.addTarget(self, action: #selector(setUpNumber), for: .touchUpInside)
+    //        return button
+    //    }()
     
-//    var filterButtonPercent:UIButton = {
-//        var button = UIButton(type: .system)
-//        button.setTitle("涨幅", for: .normal)
-//        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
-//        button.setTitleColor(ThemeColor().themeColor(), for: .normal)
-//        button.backgroundColor = UIColor.white
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        button.addTarget(self, action: #selector(setUpPercent), for: .touchUpInside)
-//        return button
-//    }()
+    //    var filterButtonPercent:UIButton = {
+    //        var button = UIButton(type: .system)
+    //        button.setTitle("涨幅", for: .normal)
+    //        button.titleLabel?.font = button.titleLabel?.font.withSize(15)
+    //        button.setTitleColor(ThemeColor().themeColor(), for: .normal)
+    //        button.backgroundColor = UIColor.white
+    //        button.translatesAutoresizingMaskIntoConstraints = false
+    //        button.addTarget(self, action: #selector(setUpPercent), for: .touchUpInside)
+    //        return button
+    //    }()
     
-//    @objc func setUpNumber(){
-//        displayType = "Number"
-//        filterButtonNumber.setTitleColor(ThemeColor().themeColor(), for: .normal)
-//        filterButtonNumber.backgroundColor = UIColor.white
-//        filterButtonPercent.setTitleColor(UIColor.white, for: .normal)
-//        filterButtonPercent.backgroundColor = ThemeColor().walletCellcolor()
-//        walletList.reloadData()
-//    }
-//
-//    @objc func setUpPercent(){
-//        displayType = "Percent"
-//        filterButtonPercent.setTitleColor(ThemeColor().themeColor(), for: .normal)
-//        filterButtonPercent.backgroundColor = UIColor.white
-//        filterButtonNumber.setTitleColor(UIColor.white, for: .normal)
-//        filterButtonNumber.backgroundColor = ThemeColor().walletCellcolor()
-//        walletList.reloadData()
-//    }
+    //    @objc func setUpNumber(){
+    //        displayType = "Number"
+    //        filterButtonNumber.setTitleColor(ThemeColor().themeColor(), for: .normal)
+    //        filterButtonNumber.backgroundColor = UIColor.white
+    //        filterButtonPercent.setTitleColor(UIColor.white, for: .normal)
+    //        filterButtonPercent.backgroundColor = ThemeColor().walletCellcolor()
+    //        walletList.reloadData()
+    //    }
+    //
+    //    @objc func setUpPercent(){
+    //        displayType = "Percent"
+    //        filterButtonPercent.setTitleColor(ThemeColor().themeColor(), for: .normal)
+    //        filterButtonPercent.backgroundColor = UIColor.white
+    //        filterButtonNumber.setTitleColor(UIColor.white, for: .normal)
+    //        filterButtonNumber.backgroundColor = ThemeColor().walletCellcolor()
+    //        walletList.reloadData()
+    //    }
     
     var spinner:UIActivityIndicatorView = {
         var spinner = UIActivityIndicatorView()
@@ -583,25 +591,26 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     var addTransactionButton:UIButton = {
         var button = UIButton()
-//        button.setTitle("➕", for: .normal)
+        //        button.setTitle("➕", for: .normal)
         button.imageView?.contentMode = .scaleAspectFit
         button.setImage(UIImage(named: "AddButton.png"), for: .normal)
-//        button.titleLabel?.font = button.titleLabel?.font.withSize(25)
-//        button.tintColor = ThemeColor().themeColor()
+        //        button.titleLabel?.font = button.titleLabel?.font.withSize(25)
+        //        button.tintColor = ThemeColor().themeColor()
         button.layer.cornerRadius = 25
-//        button.backgroundColor = ThemeColor().themeWidgetColor()
+        //        button.backgroundColor = ThemeColor().themeWidgetColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(changetotransaction), for: .touchUpInside)
         return button
     }()
     
     lazy var walletList:UITableView = {
+        let factor = view.frame.width/375
         var tableView = UITableView()
         tableView.separatorStyle = .none
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.register(WalletsCell.self, forCellReuseIdentifier: "WalletCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.rowHeight = 80
+        tableView.rowHeight = 70*factor
         tableView.delegate = self
         tableView.dataSource = self
         return tableView

@@ -108,13 +108,14 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         let sectionLabel = UILabel()
+        sectionLabel.font = UIFont.semiBoldFont(20)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
         sectionLabel.textColor = ThemeColor().textGreycolor()
         sectionLabel.text = self.sections?[section]
         
         NSLayoutConstraint(item: sectionLabel, attribute: .bottom, relatedBy: .equal, toItem: sectionView, attribute: .bottom, multiplier: 1, constant: -5).isActive = true
-        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10).isActive = true
         
         return sectionView
     }
@@ -139,6 +140,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath)
         cell.textLabel?.text = items![indexPath.section][indexPath.row]
         cell.textLabel?.textColor = UIColor.white
+        cell.textLabel?.font = UIFont.regularFont(16)
 //        cell.selectionStyle = .none
         cell.backgroundColor = ThemeColor().greyColor()
         cell.accessoryType = .disclosureIndicator
