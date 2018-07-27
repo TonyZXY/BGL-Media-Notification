@@ -23,7 +23,7 @@ class HistoricalDataFetcher {
     
     // intervel should be:
     // histoday, histohour, histominute
-    func fetcher(coinSymbol: String, currency: String = "AUD", completionHandler: CompletionHandler = nil) {
+    func fetcher(coinSymbol: String, currency: String = priceType, completionHandler: CompletionHandler = nil) {
         let url = URL(string: "https://min-api.cryptocompare.com/data/\(Params.intervalParam)?fsym=\(coinSymbol)&tsym=\(currency)&limit=\(limit)")
         
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in

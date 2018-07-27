@@ -32,18 +32,13 @@ class DetailController: UIViewController{
     var globalMarketData = GlobalMarket.init()
     var refreshTimer: Timer!
     
-    //    var priceType:String {
-    //        get{
-    //            var curreny:String = ""
-    //            if let defaultCurrency = UserDefaults.standard.value(forKey: "defaultCurrency") as? String{
-    //                curreny = defaultCurrency
-    //                return curreny
-    //            } else {
-    //                return curreny
-    //            }
-    //        }
-    //    }
-    
+    var GlobalData:Results<GlobalAverageObject>{
+        get{
+            let filterName = "coinAbbName = '" + coinDetails.selectCoinAbbName + "' "
+            let objects = realm.objects(GlobalAverageObject.self).filter(filterName)
+            return objects
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -101,9 +96,9 @@ class DetailController: UIViewController{
             coinDetailController.alertControllers.coinName.status = true
             coinDetailController.alertControllers.coinAbbName = general.coinAbbName
             coinDetailController.alertControllers.coinName.coinName = general.coinName
-            generalPage.marketCapResult.text = String(globalMarketData.market_cap ?? 0.0)
-            generalPage.volumeResult.text = String(globalMarketData.volume_24h ?? 0.0)
-            generalPage.circulatingSupplyResult.text = String(globalMarketData.circulating_supply ?? 0.0)
+            generalPage.marketCapResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].marketCap )
+            generalPage.volumeResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].volume24 )
+            generalPage.circulatingSupplyResult.text = Extension.method.scientificMethod(number: GlobalData[0].circulatingSupply )
         }
     }
     
@@ -111,22 +106,23 @@ class DetailController: UIViewController{
     @objc func refreshData(){
         loadCoinPrice { (success) in
             if success{
-                let coinNameId = self.getCoinName(coinAbbName: self.coinDetails.selectCoinAbbName)
-                if coinNameId != 0 {
-                    
-                    //Get coin Market Data (Market Cap, Volume, Supply)
-                    GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
-                        if bool {
-                            DispatchQueue.main.async {
-                                self.globalMarketData = globalMarket!
-                                self.refreshPage()
-                                self.coinDetailController.gerneralController.spinner.stopAnimating()
-                            }
-                        } else {
-                            self.coinDetailController.gerneralController.spinner.stopAnimating()
-                        }
-                    }
-                }
+//                let coinNameId = self.getCoinName(coinAbbName: self.coinDetails.selectCoinAbbName)
+//                if coinNameId != 0 {
+//
+//                    //Get coin Market Data (Market Cap, Volume, Supply)
+//                    GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
+//                        if bool {
+//                            DispatchQueue.main.async {
+//                                self.globalMarketData = globalMarket!
+//                                self.refreshPage()
+//                                self.coinDetailController.gerneralController.spinner.stopAnimating()
+//                            }
+//                        } else {
+//                            self.coinDetailController.gerneralController.spinner.stopAnimating()
+//                        }
+//                    }
+//                }
+                 self.coinDetailController.gerneralController.spinner.stopAnimating()
             } else{
                 self.coinDetailController.gerneralController.spinner.stopAnimating()
             }

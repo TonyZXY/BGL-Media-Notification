@@ -11,10 +11,10 @@ import RealmSwift
 
 class WatchListsController: UIViewController, UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     let realm = try! Realm()
-    
+    var index = 0
     var watchListObjects:Results<WatchListRealm>{
         get{
-            return realm.objects(WatchListRealm.self)
+            return realm.objects(WatchListRealm.self).sorted(byKeyPath: "date", ascending: false)
         }
     }
     
@@ -27,6 +27,8 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        coinList.delegate = self
+        coinList.dataSource = self
 //        setUpView()
 
         
@@ -67,14 +69,13 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
 //        self.coinList.reloadData()
 //    }
     
-    lazy var coinList:UICollectionView = {
+    var coinList:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout:layout)
         collectionView.backgroundColor = ThemeColor().themeColor()
         collectionView.register(WatchListCell.self, forCellWithReuseIdentifier: "WatchListCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.delegate = self
-        collectionView.dataSource = self
+        
         collectionView.alwaysBounceVertical  = true
         return collectionView
     }()
@@ -160,8 +161,22 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     @objc func deleteitem(sender: UIButton){
         let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:coinList)
         let indexPath = coinList.indexPathForItem(at: buttonPosition)
-//        let cell = coinList.cellForItem(at: indexPath!) as! WatchListCell
-        coinList.deleteItems(at: [indexPath!])
+        let cell = coinList.cellForItem(at: indexPath!) as! WatchListCell
+        deleteCoinRealm(coin:cell.coinLabel.text!){
+            success in
+            if success{
+                self.coinList.deleteItems(at: [indexPath!])
+                if self.watchListObjects.count == 0{
+                    self.coinList.removeFromSuperview()
+                    self.setUpHintView()
+                }
+            }
+        }
+
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
+        
+        
+        
 //        let realm = try! Realm()
         
 //        let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", cell.coinLabel.text)
@@ -177,6 +192,20 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
 //
 //        coinList.deleteItems(at: [indexPath!])
 //        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
+    }
+    
+    func deleteCoinRealm(coin:String,completion:@escaping (Bool)->Void){
+        let realm = try! Realm()
+        let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", coin)
+        realm.beginWrite()
+//        if watchList.count == 1 {
+//            addWish.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
+            realm.delete(watchList[0])
+//        } else {
+//            addWish.setTitleColor(ThemeColor().blueColor(), for: .normal)
+//        }
+        try! realm.commitWrite()
+        completion(true)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {

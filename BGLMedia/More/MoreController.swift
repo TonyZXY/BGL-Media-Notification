@@ -108,6 +108,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         let sectionLabel = UILabel()
+        sectionLabel.font = UIFont.boldFont(17)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
         sectionLabel.textColor = ThemeColor().textGreycolor()
@@ -139,6 +140,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath)
         cell.textLabel?.text = items![indexPath.section][indexPath.row]
         cell.textLabel?.textColor = UIColor.white
+        cell.textLabel?.font = UIFont.regularFont(16)
 //        cell.selectionStyle = .none
         cell.backgroundColor = ThemeColor().greyColor()
         cell.accessoryType = .disclosureIndicator

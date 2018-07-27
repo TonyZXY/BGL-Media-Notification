@@ -31,6 +31,9 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         menuBar.collectionView.reloadData()
+        global.mainTotalCollectionView.reloadData()
+        global.filterDate.reloadData()
+        global.sortdoneclick()
         
 //        global = GlobalMarketsController()
 //        watchList = WatchListsController()
@@ -49,9 +52,11 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     }
     
     @objc func changeCurrency(){
-//        global.marketCell.coinList.reloadData()
-//        watchList.watchList.coinList.reloadData()
-        
+        DispatchQueue.main.async(execute: {
+            self.global.coinList.beginHeaderRefreshing()
+            self.watchList.coinList.beginHeaderRefreshing()
+            
+        })
     }
     
     deinit {

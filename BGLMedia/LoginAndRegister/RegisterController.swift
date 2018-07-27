@@ -326,20 +326,19 @@ class RegisterController: UIViewController {
                     }
                 } else {
                     let registerFailure = response["message"].string ?? "Register Error"
-                    let code = response["err"].int ?? 0
+                    let code = response["err"]
                     hud.indicatorView = JGProgressHUDErrorIndicatorView()
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = registerFailure
+                    if code == "23505"{
+                        self.emailTextField.layer.borderWidth = 1.8
+                        self.emailTextField.layer.borderColor = ThemeColor().redColor().cgColor
+                        
+                        self.emailLabel.text = "Email Exists"
+                        self.emailLabel.textColor = ThemeColor().redColor()
+                    }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
-                        
-                        if code == 23505{
-                            self.emailTextField.layer.borderWidth = 1.8
-                            self.emailTextField.layer.borderColor = ThemeColor().redColor().cgColor
-                            
-                            self.emailLabel.text = "Email Exists"
-                            self.emailLabel.textColor = ThemeColor().redColor()
-                        }
                     }
                 }
                 
