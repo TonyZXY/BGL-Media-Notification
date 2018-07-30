@@ -8,6 +8,12 @@
 
 import UIKit
 
+class candleChartData{
+    var coinSymbol = ""
+    var coinExchangeName = "Global Average"
+    var coinTradingPairsName = "Default"
+}
+
 class CandleStickChartViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // MARK: Instance variables
     
@@ -21,6 +27,7 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
             yAxisLabelView.configure(historicalDataStruct: historicalDataStruct)
             xAxisLabelView.configure(historicalDataStruct: historicalDataStruct)
             if historicalDataStruct?.selectedData.count != 0 {
+                print("sfs")
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
             }
         }
@@ -52,7 +59,7 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
         }
     }
     
-    var coinSymbol: String? {
+    var coinSymbol: candleChartData? {
         didSet {
             setupNewChart()
         }
@@ -242,8 +249,17 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     
     private func fetchData() {
         guard let coinSymbol = self.coinSymbol else { return }
-        fetcher.fetcher(coinSymbol: coinSymbol) { [unowned self] in
-            self.historicalDataStruct = self.fetcher.historicalDataStruct
+        
+        if coinSymbol.coinExchangeName == "Global Average"{
+            print("average")
+            fetcher.fetcher(coinSymbol: coinSymbol.coinSymbol) { [unowned self] in
+                self.historicalDataStruct = self.fetcher.historicalDataStruct
+            }
+        } else{
+            print("symbol")
+            fetcher.fetcher(coinSymbol: coinSymbol.coinSymbol, currency: coinSymbol.coinTradingPairsName, exchangeName:coinSymbol.coinExchangeName){ [unowned self] in
+                self.historicalDataStruct = self.fetcher.historicalDataStruct
+            }
         }
     }
     

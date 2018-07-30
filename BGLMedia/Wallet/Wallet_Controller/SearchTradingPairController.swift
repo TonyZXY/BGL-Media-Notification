@@ -24,7 +24,7 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
     
     //Get Trading Pairs Name
     func getTradingPairsList()->Void{
-        let data = getDataResults.getTradingCoinList(market: (delegate?.getExchangeName())!,coin:(delegate?.getCoinName())!)
+        let data = APIServices.fetchInstance.getTradingCoinList(market: (delegate?.getExchangeName())!,coin:(delegate?.getCoinName())!)
         if data != []{
             for pairs in data{
                 self.allTradingPairs.append(pairs)

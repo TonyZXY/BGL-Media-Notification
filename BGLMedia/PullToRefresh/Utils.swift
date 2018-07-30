@@ -33,11 +33,11 @@ struct PullToRefreshKitConst{
 //}
 
 struct PullToRefreshKitHeaderString{
-    static let pullDownToRefresh = textValues(name: "pullDownToRefresh")
-    static let releaseToRefresh = textValues(name: "releaseToRefresh")
-    static let refreshSuccess = textValues(name: "refreshSuccess")
-    static let refreshFailure = textValues(name: "refreshFailure")
-    static let refreshing = textValues(name: "refreshing")
+     var pullDownToRefresh = textValues(name: "pullDownToRefresh")
+     var releaseToRefresh = textValues(name: "releaseToRefresh")
+     var refreshSuccess = textValues(name: "refreshSuccess")
+     var refreshFailure = textValues(name: "refreshFailure")
+     var refreshing = textValues(name: "refreshing")
 }
 
 struct PullToRefreshKitFooterString{

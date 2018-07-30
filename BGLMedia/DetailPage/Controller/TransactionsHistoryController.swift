@@ -19,6 +19,13 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         }
     }
     
+    var transactionHistory:Results<EachTransactions>{
+        get{
+            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName)
+        }
+    }
+    
+    
     let realm = try! Realm()
     var results = try! Realm().objects(AllTransactions.self)
     var indexSelected:Int = 0
@@ -26,8 +33,8 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
-        results = realm.objects(AllTransactions.self).filter(filterName)
+//        let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
+//        results = realm.objects(AllTransactions.self).filter(filterName)
         NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh(_:)), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         setUpView()
     }
@@ -37,33 +44,43 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return results.count
+        return transactionHistory.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let object = results[indexPath.row]
+        let object = transactionHistory[indexPath.row]
         //Create buy transaction cell
         if object.status == "Buy"{
             let cell = tableView.dequeueReusableCell(withIdentifier: "BuyHistory", for: indexPath) as! HistoryTableViewCell
+            cell.historyView.layer.borderWidth = 1
+            cell.historyView.layer.cornerRadius = 8
+            cell.historyView.layer.borderColor = ThemeColor().blueColor().cgColor
             cell.buyLanguage()
             cell.dateLabel.textColor = UIColor.white
             cell.buyMarket.textColor = UIColor.white
             cell.labelPoint.text = "B"
-            cell.labelPoint.layer.backgroundColor = ThemeColor().greenColor().cgColor
+            cell.labelPoint.layer.backgroundColor = ThemeColor().blueColor().cgColor
             cell.dateLabel.text = object.date + " " + object.time
-            cell.buyMarket.text = textValue(name: "tradingMarket_history") + ":" + object.exchangName
-            cell.SinglePriceResult.text = Extension.method.scientificMethod(number:object.audSinglePrice)
+            cell.timeline.backColor = ThemeColor().blueColor()
+            cell.buyMarket.text = textValue(name: "tradingMarket_history") + ":" + object.exchangeName
+//            cell.buyDeleteButton.setimage
+            for result in object.currency{
+                if result.name == priceType{
+                    cell.SinglePriceResult.text = Extension.method.scientificMethod(number:result.price)
+                    cell.costResult.text = Extension.method.scientificMethod(number:result.price * object.amount)
+                }
+            }
             cell.tradingPairsResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.amountResult.text = Extension.method.scientificMethod(number:object.amount)
-            cell.costResult.text = Extension.method.scientificMethod(number:object.audTotalPrice)
             cell.buyDeleteButton.tag = object.id
+            
             cell.buyDeleteButton.addTarget(self, action: #selector(deleteTransaction), for: .touchUpInside)
             let filterName = "coinAbbName = '" + object.coinAbbName + "' "
             let currentWorth = try! Realm().objects(MarketTradingPairs.self).filter(filterName)
             var currentWorthData:Double = 0
             for value in currentWorth{
                 currentWorthData = value.singlePrice * object.amount
-            }
+            } 
             cell.worthResult.text = Extension.method.scientificMethod(number:currentWorthData)
             let delta = ((currentWorthData - object.totalPrice) / object.totalPrice) * 100
             cell.deltaResult.text = Extension.method.scientificMethod(number:delta) + "%"
@@ -73,10 +90,14 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         } else if object.status == "Sell"{
             //Create sell transaction cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "SellHistory", for: indexPath) as! HistoryTableViewCell
+            cell.historyView.layer.cornerRadius = 8
+            cell.historyView.layer.borderWidth = 1
+            cell.historyView.layer.borderColor = ThemeColor().redColor().cgColor
             cell.sellLanguage()
             cell.sellDateLabel.textColor = UIColor.white
             cell.sellMarket.textColor = UIColor.white
             cell.labelPoint.text = "S"
+            cell.timeline.backColor = ThemeColor().redColor()
             cell.labelPoint.layer.backgroundColor = ThemeColor().redColor().cgColor
             cell.sellDateLabel.text = object.date + " " + object.time
             cell.sellPriceResult.text = Extension.method.scientificMethod(number:object.singlePrice)
@@ -94,7 +115,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let transactionForm = TransactionsController()
         //        let cell = self.historyTableView.cellForRow(at: indexPath) as! HistoryTableViewCell
-        transactionForm.updateTransaction = results[indexPath.row]
+        transactionForm.updateTransaction = transactionHistory[indexPath.row]
         transactionForm.transactionStatus = "Update"
         navigationController?.pushViewController(transactionForm, animated: true)
     }
@@ -107,21 +128,20 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     @objc func deleteTransaction(sender:UIButton){
         let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "alertTitle_history"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .destructive) { (_) in
-            let filterId = "id = " + String(sender.tag)
-            let filterName = "coinAbbName = '" + self.generalData.coinAbbName + "' "
-            let statusItem = self.realm.objects(AllTransactions.self)
-            let specificTransaction = statusItem.filter(filterId)
             
-            let coinTransaction = statusItem.filter(filterName)
-            //                 print(coinTransaction.count)
-            if coinTransaction.count == 1{
-                let coinSelected = self.realm.objects(MarketTradingPairs.self).filter(filterName)
-                try! self.realm.write {
-                    self.realm.delete(coinSelected)
+            let coinObject = self.realm.objects(Transactions.self).filter("coinAbbName = %@",self.generalData.coinAbbName)
+            if let coinTransactionCount = coinObject.first?.everyTransactions.count{
+                let coinSelected = self.realm.objects(EachTransactions.self).filter("id = %@",sender.tag)
+                if coinTransactionCount == 1{
+                    try! self.realm.write {
+                        self.realm.delete(coinSelected)
+                        self.realm.delete(coinObject)
+                    }
+                } else{
+                    try! self.realm.write {
+                        self.realm.delete(coinSelected)
+                    }
                 }
-            }
-            try! self.realm.write {
-                self.realm.delete(specificTransaction)
             }
             self.historyTableView.reloadData()
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)

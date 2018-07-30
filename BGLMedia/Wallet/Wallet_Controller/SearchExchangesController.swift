@@ -31,7 +31,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     //Get trading Pairs Name
     func getExchangeList()->Void{
-        let data = getDataResult.getExchangeList()
+        let data = APIServices.fetchInstance.getExchangeList()
         for (key,value) in data{
             if delegate?.getCoinName() != ""{
                 let exactMarket = value.filter{name in return name.key == delegate?.getCoinName()}

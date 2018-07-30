@@ -40,25 +40,31 @@ class DetailController: UIViewController{
         }
     }
     
+    var assetsData:Results<Transactions>{
+        get{
+            let filterName = "coinAbbName = '" + coinDetails.selectCoinAbbName + "' "
+            let objects = realm.objects(Transactions.self).filter(filterName)
+            return objects
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        refreshTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(refreshData), userInfo: nil, repeats: true)
+        refreshPage()
+        self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
+        
+//        refreshTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(refreshData), userInfo: nil, repeats: true)
+        
+        
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        refreshPage()
-        refreshData()
-        //        self.tabBarController?.tabBar.isHidden = true
-        
-    }
     
     //Remove the refresh notification (From market and tradingpairs change)
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
     }
     
@@ -66,19 +72,19 @@ class DetailController: UIViewController{
     @objc func refreshPage(){
         let generalPage = coinDetailController.gerneralController
         let filterName = "coinAbbName = '" + coinDetails.selectCoinAbbName + "' "
-        let selectItem = realm.objects(MarketTradingPairs.self).filter(filterName)
-        generalPage.coinSymbol = coinDetails.selectCoinAbbName
+        let selectItem = realm.objects(Transactions.self).filter(filterName)
         for value in selectItem{
-            checkDataRiseFallColor(risefallnumber: value.totalRiseFall, label: allLossView.profitLoss,type:"Number")
-            mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.coinAmount) + " " + value.coinAbbName
-            checkDataRiseFallColor(risefallnumber: value.totalPrice, label: mainView.marketValueRsult, type: "Default")
+            let candleChartDatas = candleChartData()
+            candleChartDatas.coinSymbol = value.coinAbbName
+            candleChartDatas.coinExchangeName = value.exchangeName
+            candleChartDatas.coinTradingPairsName = value.tradingPairsName
+            generalPage.candleChartDatas = candleChartDatas
+                
+            checkDataRiseFallColor(risefallnumber: value.totalRiseFallNumber, label: allLossView.profitLoss,type:"Number")
+            mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.totalAmount) + " " + value.coinAbbName
+            checkDataRiseFallColor(risefallnumber: value.currentTotalPrice, label: mainView.marketValueRsult, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.transactionPrice, label: mainView.netCostResult, type: "Default")
-            checkDataRiseFallColor(risefallnumber: value.singlePrice, label:  generalPage.totalNumber, type: "Default")
-            //            generalPage.defaultCurrencyLable.text = priceType
-            //            generalPage.totalNumber.text = currecyLogo[priceType]! + generalPage.totalNumber.text!
-            //            generalPage.tradingPairs.text = value.coinAbbName + "/" +  value.tradingPairsName
-            //            generalPage.market.text = value.exchangeName
-            //            generalPage.edit.isHidden = true
+            checkDataRiseFallColor(risefallnumber: value.currentSinglePrice, label:  generalPage.totalNumber, type: "Default")
             generalPage.exchangeButton.setTitle(value.exchangeName, for: .normal)
             generalPage.tradingPairButton.setTitle(value.coinAbbName + "/" +  value.tradingPairsName, for: .normal)
             general.coinAbbName = value.coinAbbName
@@ -90,7 +96,7 @@ class DetailController: UIViewController{
             marketSelectedData.exchangeName = value.exchangeName
             marketSelectedData.tradingPairsName = value.tradingPairsName
             marketSelectedData.transactionPrice = value.transactionPrice
-            marketSelectedData.coinAmount = value.coinAmount
+            marketSelectedData.coinAmount = value.totalAmount
             coinDetailController.transactionHistoryController.generalData = general
             coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
             coinDetailController.alertControllers.coinName.status = true
@@ -104,115 +110,53 @@ class DetailController: UIViewController{
     
     //refresh coin detail
     @objc func refreshData(){
-        loadCoinPrice { (success) in
+        loadData(){success in
             if success{
-//                let coinNameId = self.getCoinName(coinAbbName: self.coinDetails.selectCoinAbbName)
-//                if coinNameId != 0 {
-//
-//                    //Get coin Market Data (Market Cap, Volume, Supply)
-//                    GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
-//                        if bool {
-//                            DispatchQueue.main.async {
-//                                self.globalMarketData = globalMarket!
-//                                self.refreshPage()
-//                                self.coinDetailController.gerneralController.spinner.stopAnimating()
-//                            }
-//                        } else {
-//                            self.coinDetailController.gerneralController.spinner.stopAnimating()
-//                        }
-//                    }
-//                }
-                 self.coinDetailController.gerneralController.spinner.stopAnimating()
+                self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.success, 0.5))
+                self.refreshPage()
             } else{
-                self.coinDetailController.gerneralController.spinner.stopAnimating()
+                self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.failure, 0.5))
             }
         }
     }
     
-    //Re load the coin trading price
-    func loadCoinPrice(completion:@escaping (Bool)->Void){
-        coinDetailController.gerneralController.spinner.startAnimating()
-        let filterName = "coinAbbName = '" + coinDetails.selectCoinAbbName + "' "
-        let selectItem = realm.objects(MarketTradingPairs.self).filter(filterName)
-        var tradingPairs:String = ""
-        var exchangeName:String = ""
-        
-        
-        
-        for value in selectItem{
-            exchangeName = value.exchangeName
-            tradingPairs = value.tradingPairsName
-        }
-        
-        marketSelectedData.exchangeName = exchangeName
-        marketSelectedData.tradingPairsName = tradingPairs
-        
-        cryptoCompareClient.getTradePrice(from: marketSelectedData.coinAbbName, to: tradingPairs, exchange: exchangeName){ result in
-            switch result{
-            case .success(let resultData):
-                for results in resultData!{
-                    let single = Double(results.value)
-                    
-                    
-                    self.transferPriceType(priceType: [priceType], walletData:self.marketSelectedData, single: single, eachCell: WalletsCell(), transactionPrice: self.marketSelectedData.transactionPrice)
-                    completion(true)
+    
+    func loadData(completion:@escaping (Bool)->Void){
+        if let assets = assetsData.first {
+            APIServices.fetchInstance.getExchangePriceData(from: assets.coinAbbName, to: assets.tradingPairsName, market: assets.exchangeName) { (success, response) in
+                if success{
+                    let singlePrice = response["RAW"]["PRICE"].double ?? 0
+                    APIServices.fetchInstance.getCryptoCurrencyApis(from: assets.tradingPairsName, to: [priceType], completion: { (success, response) in
+                        if success{
+                            var currency:Double = 0
+                            for result in response{
+                                currency = (result.1.double) ?? 0
+                            }
+                            
+                            let candleData = self.coinDetailController.gerneralController.vc
+                            if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
+                                self.checkDataRiseFallColor(risefallnumber: priceChange * currency, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
+                                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                            }
+                            
+                            try! self.realm.write {
+                                assets.currentSinglePrice = singlePrice * currency
+                                assets.currentTotalPrice = assets.currentSinglePrice * assets.totalAmount
+                                assets.totalRiseFallNumber = ((assets.currentTotalPrice - assets.transactionPrice) / assets.transactionPrice) * 100
+                                assets.totalRiseFallPercent = assets.currentTotalPrice - assets.transactionPrice
+                            }
+                            completion(true)
+                        }else{
+                            completion(false)
+                        }
+                    })
+                } else{
+                    completion(false)
                 }
-            case .failure(let error):
-                print("the error \(error.localizedDescription)")
             }
         }
     }
-    
-    //Get currency rate and transfer trading price to specific currency
-    func transferPriceType(priceType:[String],walletData:MarketTradingPairs,single:Double,eachCell:WalletsCell,transactionPrice:Double){
-        GetDataResult().getCryptoCurrencyApi(from: walletData.tradingPairsName, to: priceType, price: single){success,jsonResult in
-            if success{
-                DispatchQueue.main.async {
-                    var pricess:Double = 0
-                    for result in jsonResult{
-                        pricess = Double(result.value) * single
-                    }
-                    walletData.singlePrice = pricess
-                    walletData.totalPrice = Double(pricess) * Double(walletData.coinAmount)
-                    walletData.totalRiseFallPercent = ((walletData.totalPrice - transactionPrice) / transactionPrice) * 100
-                    walletData.totalRiseFall = walletData.totalPrice - transactionPrice
-                    self.realm.beginWrite()
-                    
-                    if self.realm.object(ofType: MarketTradingPairs.self, forPrimaryKey: walletData.coinAbbName) == nil {
-                        self.realm.create(MarketTradingPairs.self,value:[walletData.coinName,walletData.coinAbbName,walletData.exchangeName,walletData.tradingPairsName,walletData.coinAmount,walletData.totalRiseFall,walletData.singlePrice,walletData.totalPrice,walletData.totalRiseFallPercent,walletData.transactionPrice,walletData.priceType])
-                    } else {
-                        self.realm.create(MarketTradingPairs.self,value:[walletData.coinName,walletData.coinAbbName,walletData.exchangeName,walletData.tradingPairsName,walletData.coinAmount,walletData.totalRiseFall,walletData.singlePrice,walletData.totalPrice,walletData.totalRiseFallPercent,walletData.transactionPrice,walletData.priceType],update:true)
-                    }
-                    try! self.realm.commitWrite()
-                    self.refreshPage()
-                }
-            } else{
-                self.coinDetailController.gerneralController.spinner.stopAnimating()
-                //                print("fail")
-            }
-        }
-    }
-    
-    //Get coin Id
-    func getCoinName(coinAbbName:String)->Int{
-        let data = GetDataResult().getMarketCapCoinList()
-        var coinId:Int = 0
-        
-        for value in data {
-            if value.symbol == coinAbbName{
-                coinId = value.id!
-            }
-        }
-        if coinId == 0{
-            self.coinDetailController.gerneralController.spinner.stopAnimating()
-            let generalPage = coinDetailController.gerneralController
-            generalPage.marketCapResult.text = "--"
-            generalPage.volumeResult.text = "--"
-            generalPage.circulatingSupplyResult.text = "--"
-        }
-        return coinId
-    }
-    
+
     //Get coin global price
     @objc func setPriceChange() {
         let candleData = coinDetailController.gerneralController.vc
@@ -280,7 +224,21 @@ class DetailController: UIViewController{
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         addChildViewControllers(childViewControllers: coinDetailController, views: coinDetailView)
+        let generalPage = coinDetailController.gerneralController
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        generalPage.scrollView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(generalPage.scrollView)
+        })
         
+    }
+    
+    
+    @objc func handleRefresh(_ scrollView:UIScrollView){
+        refreshData()
     }
     
     @objc func editMarket(){
@@ -296,7 +254,7 @@ class DetailController: UIViewController{
                 let tradingPairList = self.getTradingPairsList(market: values[i].title)
                 if tradingPairList.count != 0{
                     let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
-                    let statusItem = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+                    let statusItem = self.realm.objects(Transactions.self).filter(filterName)
                     if let object = statusItem.first{
                         try! self.realm.write {
                             object.exchangeName = values[i].title
@@ -305,7 +263,7 @@ class DetailController: UIViewController{
                     }
                 }
             }
-            self.refreshData()
+            self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
         }
         picker.show()
     }
@@ -314,7 +272,7 @@ class DetailController: UIViewController{
         var picker: TCPickerViewInput = TCPickerView()
         picker.title = "Market"
         let filterName = "coinAbbName = '" + self.coinDetails.selectCoinAbbName + "' "
-        let getCoinExchange = self.realm.objects(MarketTradingPairs.self).filter(filterName)
+        let getCoinExchange = self.realm.objects(Transactions.self).filter(filterName)
         let exchangList = getTradingPairsList(market: getCoinExchange[0].exchangeName)
         let values = exchangList.map{ TCPickerView.Value(title: $0) }
         picker.values = values
@@ -332,14 +290,14 @@ class DetailController: UIViewController{
                     }
                 }
             }
-            self.refreshData()
+            self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
         }
         picker.show()
     }
     
     func getExchangeList()->[String]{
         var allExchanges = [String]()
-        let data = GetDataResult().getExchangeList()
+        let data = APIServices.fetchInstance.getExchangeList()
         for (key,value) in data{
             let exactMarket = value.filter{name in return name.key == self.coinDetails.selectCoinAbbName}
             if exactMarket.count != 0{
@@ -351,24 +309,13 @@ class DetailController: UIViewController{
     
     func getTradingPairsList(market:String)->[String]{
         var allTradingPairs = [String]()
-        let data = GetDataResult().getTradingCoinList(market: market,coin:self.coinDetails.selectCoinAbbName)
+        let data = APIServices.fetchInstance.getTradingCoinList(market: market,coin:self.coinDetails.selectCoinAbbName)
         if data != []{
             for pairs in data{
                 allTradingPairs.append(pairs)
             }
         }
         return allTradingPairs
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
-    
-    var spinner:UIActivityIndicatorView{
-        let spinner = UIActivityIndicatorView()
-        spinner.translatesAutoresizingMaskIntoConstraints = false
-        return spinner
     }
     
     var coinDetailView:UIView = {

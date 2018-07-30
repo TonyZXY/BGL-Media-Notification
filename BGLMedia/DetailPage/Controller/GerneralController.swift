@@ -13,7 +13,12 @@ class GerneralController: UIViewController {
     var generalData = generalDetail()
     let realm = try! Realm()
     let vc = CandleStickChartViewController()
-    var coinSymbol:String = ""
+    
+    var candleChartDatas:candleChartData?{
+        didSet{
+           setUpView()
+        }
+    }
     
     var factor:CGFloat?{
         didSet{
@@ -147,13 +152,11 @@ class GerneralController: UIViewController {
         NSLayoutConstraint(item: vc.view, attribute: .centerY, relatedBy: .equal, toItem: ImageView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: vc.view, attribute: .width, relatedBy: .equal, toItem: ImageView, attribute: .width, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: vc.view, attribute: .height, relatedBy: .equal, toItem: ImageView, attribute: .height, multiplier: 1, constant: 0).isActive = true
-        vc.coinSymbol = coinSymbol
+        vc.coinSymbol = candleChartDatas
         vc.didMove(toParentViewController: self)
         marketCap.text = textValue(name: "marketCap_detail")
         volume.text = textValue(name: "volume_detail")
         circulatingSupply.text = textValue(name: "circulatingSupply_detail")
-       
-        
     }
     
     override func didReceiveMemoryWarning() {

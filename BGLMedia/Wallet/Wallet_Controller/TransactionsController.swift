@@ -11,17 +11,17 @@ import RealmSwift
 
 class TransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout,TransactionFrom,UITextFieldDelegate{
 
-    var newTransaction = AllTransactions()
+    var newTransaction = EachTransactions()
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
     var color = ThemeColor()
     var transaction:String = "Buy"
     let cryptoCompareClient = CryptoCompareClient()
     let realm = try! Realm()
     var transcationData = TransactionFormData()
-    var updateTransaction = AllTransactions()
+    var updateTransaction = EachTransactions()
     var transactionStatus = "Add"
     var transactionNumber:Int = 0
-    
+    var transactions = EachTransactions()
     
     //First load the page
     override func viewDidLoad() {
@@ -71,7 +71,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[1], for: indexPath) as! TransCoinMarketCell
             cell.backgroundColor = color.themeColor()
             cell.marketLabel.text = textValue(name: "exchangeForm")
-            cell.market.text = newTransaction.exchangName
+            cell.market.text = newTransaction.exchangeName
             return cell
         } else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[2], for: indexPath) as! TransTradePairsCell
@@ -185,29 +185,71 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     @objc func addTransaction(){
         newTransaction.totalPrice = Double(newTransaction.amount) * newTransaction.singlePrice
         newTransaction.status = transaction
-        if newTransaction.coinName != "" && newTransaction.coinName != "" && newTransaction.exchangName != "" && newTransaction.tradingPairsName != "" && String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
+        
+        if newTransaction.coinName != "" && newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != "" && String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
+            
             transactionButton.setTitle(textValue(name: "loading"), for: .normal)
-            GetDataResult().getCryptoCurrencyApi(from: self.newTransaction.tradingPairsName, to: ["AUD","USD","JPY","EUR","CNY"], price: self.newTransaction.singlePrice){success,jsonResult in
+            
+            APIServices.fetchInstance.getCryptoCurrencyApis(from: self.newTransaction.tradingPairsName, to: ["AUD","USD","JPY","EUR","CNY"]) { (success, response) in
                 if success{
-                    let allCurrencys = List<Currencys>()
-                    for result in jsonResult{
-                        let currencys = Currencys()
-                        currencys.name = result.key
-                        currencys.price = Double(result.value) * self.newTransaction.singlePrice
+                    let allCurrencys = List<EachCurrency>()
+                    for result in response{
+                        let currencys = EachCurrency()
+                        currencys.name = result.0
+                        currencys.price = ((result.1.double) ?? 0) * self.newTransaction.singlePrice
                         allCurrencys.append(currencys)
                     }
-                    self.newTransaction.audSinglePrice = 0
                     self.newTransaction.currency = allCurrencys
-                    self.newTransaction.audTotalPrice = self.newTransaction.audSinglePrice * Double(self.newTransaction.amount)
-                    DispatchQueue.main.sync{
-                        self.writeToRealm()
+                    let lastId = (self.realm.objects(EachTransactions.self).last?.id) ?? 0
+                    self.newTransaction.id = lastId + 1
+
+                    let tran = Transactions()
+                    tran.coinAbbName = self.newTransaction.coinAbbName
+                    tran.coinName = self.newTransaction.coinName
+                    tran.exchangeName = self.newTransaction.exchangeName
+                    tran.tradingPairsName = self.newTransaction.tradingPairsName
+                    let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
+                    try! self.realm.write {
+                        if object.count != 0{
+                            object[0].exchangeName = self.newTransaction.exchangeName
+                            object[0].tradingPairsName = self.newTransaction.tradingPairsName
+                            object[0].everyTransactions.append(self.newTransaction)
+                        } else{
+                            tran.everyTransactions.append(self.newTransaction)
+                            self.realm.add(tran)
+                        }
                     }
+
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                    self.navigationController?.popViewController(animated: true)
                 } else{
-                    print("fail")
+                    self.navigationController?.popViewController(animated: true)
                 }
             }
         }
     }
+    
+    func writeTransactionToRealm(completion:@escaping (Bool)->Void){
+        let tran = Transactions()
+        tran.coinAbbName = self.newTransaction.coinAbbName
+        tran.coinName = self.newTransaction.coinName
+        tran.exchangeName = self.newTransaction.exchangeName
+        tran.tradingPairsName = self.newTransaction.tradingPairsName
+        let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
+        try! self.realm.write {
+            if object.count != 0{
+                object[0].exchangeName = self.newTransaction.exchangeName
+                object[0].tradingPairsName = self.newTransaction.tradingPairsName
+                object[0].everyTransactions.append(self.newTransaction)
+            } else{
+                tran.everyTransactions.append(self.newTransaction)
+                self.realm.add(tran)
+            }
+        }
+        completion(true)
+    }
+    
+    
     
     //Write transaction to realm
     func writeToRealm(){
@@ -224,7 +266,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 currentTransactionId = 1
             }
         }
-        let realmData:[Any] = [currentTransactionId,newTransaction.status,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.exchangName, newTransaction.tradingPairsName,newTransaction.singlePrice,newTransaction.totalPrice,newTransaction.amount,newTransaction.date,newTransaction.time,newTransaction.expenses,newTransaction.additional,newTransaction.usdSinglePrice,newTransaction.usdTotalPrice,newTransaction.audSinglePrice,newTransaction.audTotalPrice,newTransaction.currency]
+        let realmData:[Any] = [currentTransactionId,newTransaction.status,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.exchangeName, newTransaction.tradingPairsName,newTransaction.singlePrice,newTransaction.totalPrice,newTransaction.amount,newTransaction.date,newTransaction.time,newTransaction.expenses,newTransaction.additional,0,0,0,0,newTransaction.currency]
         if realm.object(ofType: AllTransactions.self, forPrimaryKey: currentTransactionId) == nil {
             realm.create(AllTransactions.self, value: realmData)
         } else {
@@ -267,8 +309,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             transactionNumber = 0
         } else {
             var readData:Double = 0
-            if newTransaction.coinName != "" && newTransaction.exchangName != "" && newTransaction.tradingPairsName != ""{
-                cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangName){
+            if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
+                cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangeName){
                     result in
                     switch result{
                     case .success(let resultData):
@@ -299,7 +341,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             newTransaction.id = updateTransaction.id
             newTransaction.coinAbbName = updateTransaction.coinAbbName
             newTransaction.coinName = updateTransaction.coinName
-            newTransaction.exchangName = updateTransaction.exchangName
+            newTransaction.exchangeName = updateTransaction.exchangeName
             newTransaction.tradingPairsName = updateTransaction.tradingPairsName
             newTransaction.singlePrice = updateTransaction.singlePrice
             newTransaction.amount = updateTransaction.amount
@@ -349,11 +391,13 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Delegate from search Page
     func getExchangeName() -> String {
-        return newTransaction.exchangName
+        return newTransaction.exchangeName
+//        return transactions.exchangeName
     }
     
     func getCoinName() -> String {
         return newTransaction.coinAbbName
+//        return transactions.coinAbbName
     }
     
     func setTradingPairsFirstType(firstCoinType: [String]) {
@@ -365,18 +409,22 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func setCoinName(name: String) {
+        transactions.coinName = name
         newTransaction.coinName = name
     }
     
     func setCoinAbbName(abbName: String) {
+        transactions.coinAbbName = abbName
         newTransaction.coinAbbName = abbName
     }
     
     func setExchangesName(exchangeName: String) {
-        newTransaction.exchangName = exchangeName
+        transactions.exchangeName = exchangeName
+        newTransaction.exchangeName = exchangeName
     }
     
     func setTradingPairsName(tradingPairsName: String) {
+        transactions.tradingPairsName = tradingPairsName
         newTransaction.tradingPairsName = tradingPairsName
     }
     
@@ -386,26 +434,32 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             if textField.text == "" || textField.text == nil{
                 textField.text = "0"
             }
+            transactions.singlePrice = Double(textField.text!)!
             newTransaction.singlePrice = Double(textField.text!)!
         }
         if textField.tag == 4{
             if textField.text == "" || textField.text == nil{
                 textField.text = "0"
             }
+            transactions.amount = Double(textField.text!)!
             newTransaction.amount = Double(textField.text!)!
-            self.newTransaction.usdTotalPrice = newTransaction.usdSinglePrice * Double(self.newTransaction.amount)
-            self.newTransaction.audTotalPrice = newTransaction.audSinglePrice * Double(self.newTransaction.amount)
+//            self.newTransaction.usdTotalPrice = newTransaction.usdSinglePrice * Double(self.newTransaction.amount)
+//            self.newTransaction.audTotalPrice = newTransaction.audSinglePrice * Double(self.newTransaction.amount)
         }
         if textField.tag == 5{
+            transactions.date = textField.text!
             newTransaction.date = textField.text!
         }
         if textField.tag == 6{
+            transactions.time = textField.text!
             newTransaction.time = textField.text!
         }
         if textField.tag == 7{
+            transactions.expenses = textField.text!
             newTransaction.expenses = textField.text!
         }
         if textField.tag == 8{
+            transactions.additional = textField.text!
             newTransaction.additional = textField.text!
         }
     }

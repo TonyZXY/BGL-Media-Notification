@@ -40,7 +40,7 @@ class DefaultViewController: UIViewController {
         NSLayoutConstraint(item: container, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: view.frame.size.width).isActive = true
         NSLayoutConstraint(item: container, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .notAnAttribute, multiplier: 1, constant: 380).isActive = true
         
-        vc.coinSymbol = "LTC"
+//        vc.coinSymbol = "LTC"
         vc.didMove(toParentViewController: self)
     }
 }

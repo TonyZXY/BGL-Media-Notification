@@ -11,6 +11,7 @@ import RealmSwift
 
 class GlobalAverageObject: Object {
     @objc dynamic var id:String = ""
+    @objc dynamic var coinId:Int = 0
     @objc dynamic var coinAbbName:String = ""
     @objc dynamic var coinName:String = ""
     @objc dynamic var totalSupply:Double = 0.0
@@ -28,6 +29,6 @@ class GlobalAverageObject: Object {
     
     
     override class func primaryKey() -> String {
-        return "id"
+        return "coinAbbName"
     }
 }

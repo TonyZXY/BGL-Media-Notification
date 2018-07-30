@@ -186,7 +186,6 @@ class GlobalCoinListCell:UICollectionViewCell{
     
     @objc func addOrRemoveWatch(sender: UIButton) {
         let realm = try! Realm()
-        print(object!.coinAbbName)
         let watchList = try! Realm().objects(WatchListRealm.self).filter("coinAbbName = %@", object!.coinAbbName)
         realm.beginWrite()
         if watchList.count == 1 {
@@ -201,7 +200,7 @@ class GlobalCoinListCell:UICollectionViewCell{
 //            addWish.setClicked(true, animated: true)
 //            addWish.setTitle("★", for: .normal)
             addWish.setTitleColor(ThemeColor().blueColor(), for: .normal)
-            realm.create(WatchListRealm.self, value: [object!.coinAbbName, object!.coinName,"Global Average",priceType,object!.price,object!.percent24h,true,object!.rank])
+            realm.create(WatchListRealm.self, value: [object!.coinAbbName, object!.coinName,"Global Average",priceType,object!.price,object!.percent24h,true,object!.rank,Date(),object!.coinId])
         }
         try! realm.commitWrite()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)

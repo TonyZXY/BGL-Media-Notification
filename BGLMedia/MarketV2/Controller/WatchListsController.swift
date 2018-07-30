@@ -31,7 +31,6 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         coinList.dataSource = self
 //        setUpView()
 
-        
         DispatchQueue.main.async(execute: {
             self.coinList.beginHeaderRefreshing()
         })
@@ -108,7 +107,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
                         }
                     } else{
                         dispatchGroup.enter()
-                        APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.market) { (response,success) in
+                        APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.market) { (success,response) in
                             if success{
                                 let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
                                 try! self.realm.write {

@@ -116,11 +116,11 @@ open class DefaultRefreshHeader: UIView, RefreshableHeader {
         textLabel.textAlignment = .center
         self.isHidden = true
         //Default text
-        textDic[.pullToRefresh] = PullToRefreshKitHeaderString.pullDownToRefresh
-        textDic[.releaseToRefresh] = PullToRefreshKitHeaderString.releaseToRefresh
-        textDic[.refreshSuccess] = PullToRefreshKitHeaderString.refreshSuccess
-        textDic[.refreshFailure] = PullToRefreshKitHeaderString.refreshFailure
-        textDic[.refreshing] = PullToRefreshKitHeaderString.refreshing
+        textDic[.pullToRefresh] = PullToRefreshKitHeaderString().pullDownToRefresh
+        textDic[.releaseToRefresh] = PullToRefreshKitHeaderString().releaseToRefresh
+        textDic[.refreshSuccess] = PullToRefreshKitHeaderString().refreshSuccess
+        textDic[.refreshFailure] = PullToRefreshKitHeaderString().refreshFailure
+        textDic[.refreshing] = PullToRefreshKitHeaderString().refreshing
         textLabel.text = textDic[.pullToRefresh]
     }
     

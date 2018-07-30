@@ -13,14 +13,11 @@ class AboutUsViewController: UIViewController {
         super.viewDidLoad()
         setUpView()
         // Do any additional setup after loading the view.
-        let label00 = UILabel(frame: CGRect(x: 0, y: 0, width: 250, height: 50))
-        label00.textAlignment = .center
-        label00.textColor = UIColor.white
-        label00.text = textValue(name: "title_about")
-        self.navigationItem.titleView = label00
+        
     }
     
     func setUpView(){
+        let factor = view.frame.width/375
         view.addSubview(scrollView)
         scrollView.addSubview(imageView)
         scrollView.addSubview(introduceLabel)
@@ -29,29 +26,40 @@ class AboutUsViewController: UIViewController {
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: scrollView)
         view.addConstraintsWithFormat(format: "V:|[v0]|", views: scrollView)
         
-//        scrollView.addConstraintsWithFormat(format: "H:|-10-[v0(\(view.frame.width-20))]-10-|", views: imageView)
-        scrollView.addConstraintsWithFormat(format: "V:|-2-[v0(200)]", views: imageView)
+        //        scrollView.addConstraintsWithFormat(format: "H:|-10-[v0(\(view.frame.width-20))]-10-|", views: imageView)
+        scrollView.addConstraintsWithFormat(format: "V:|-2-[v0(\(200*factor))]", views: imageView)
         NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: scrollView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.width, multiplier: 1, constant: view.frame.width-20).isActive = true
-//        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.height, multiplier: 1, constant: 200).isActive = true
+        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.width, multiplier: 1, constant: view.frame.width-20*factor).isActive = true
+        //        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.height, multiplier: 1, constant: 200).isActive = true
         
         NSLayoutConstraint(item: introduceLabel, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: introduceLabel, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 0).isActive = true
-        scrollView.addConstraintsWithFormat(format: "V:[v1]-10-[v0]", views: introduceLabel,imageView)
+        scrollView.addConstraintsWithFormat(format: "V:[v1]-\(10*factor)-[v0]", views: introduceLabel,imageView)
         
-       
+        
         NSLayoutConstraint(item: introDescription, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: introDescription, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 0).isActive = true
-        scrollView.addConstraintsWithFormat(format: "V:[v1]-20-[v0]|", views: introDescription,introduceLabel)
+        scrollView.addConstraintsWithFormat(format: "V:[v1]-\(20*factor)-[v0]|", views: introDescription,introduceLabel)
+        
+        introduceLabel.font = UIFont.regularFont(14*factor)
+        introDescription.font = UIFont.regularFont(14*factor)
+        
         
         introduceLabel.text = textValue(name: "introduction_about")
         introDescription.text = textValue(name: "description_about")
+        
+        let label00 = UILabel(frame: CGRect(x: 0, y: 0, width: 250*factor, height: 50*factor))
+        label00.textAlignment = .center
+        label00.textColor = UIColor.white
+        label00.text = textValue(name: "title_about")
+        label00.font = UIFont.boldFont(14*factor)
+        self.navigationItem.titleView = label00
     }
     
     func setUpCn(){
         
     }
-
+    
     var scrollView:UIScrollView = {
         var scrollView = UIScrollView()
         scrollView.backgroundColor = ThemeColor().walletCellcolor()
@@ -86,16 +94,16 @@ class AboutUsViewController: UIViewController {
         return label
     }()
     
-//    bcg_new_white01
+    //    bcg_new_white01
     
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
-
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destinationViewController.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    
 }

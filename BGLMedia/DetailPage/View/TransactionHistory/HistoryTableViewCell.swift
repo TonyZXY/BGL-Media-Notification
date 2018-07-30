@@ -10,6 +10,14 @@ import UIKit
 
 open class HistoryTableViewCell: UITableViewCell {
 
+    var id:Int = 0
+    
+    var transactionId:Int?{
+        didSet{
+            id = transactionId ?? 0
+        }
+    }
+    
     @IBOutlet weak open var historyView: UIView!
 
     //Buy table view cell xib
@@ -66,7 +74,7 @@ open class HistoryTableViewCell: UITableViewCell {
         timelinePoint.position = CGPoint(x: timeline.leftMargin + timeline.width / 2, y: timelinePoint.lineWidth)
         timeline.start = CGPoint(x: timeline.leftMargin + timeline.width / 2 + 15, y: timelinePoint.lineWidth + 30)
         timeline.end = CGPoint(x: timeline.start.x, y: self.bounds.size.height)
-        timeline.backColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
+//        timeline.backColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         timeline.draw(view: self.contentView)
     }
     

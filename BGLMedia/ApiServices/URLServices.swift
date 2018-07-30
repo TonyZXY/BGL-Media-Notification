@@ -91,8 +91,8 @@ class URLServices:NSObject{
                 for result in response.array!{
                     let coinAbbName = result["symbol"].string ?? ""
                     if self.realm.objects(CoinList.self).filter("coinSymbol = %@", coinAbbName).count != 0{
-//                             print(coinAbbName)
                         let id = result["_id"].string ?? ""
+                        let coinId = result["id"].int ?? 0
                         let coinName = result["name"].string ?? ""
                         let totalSupply = result["total_supply"].double ?? 0
                         let circulatingSupply = result["circulating_supply"].double ?? 0
@@ -105,8 +105,8 @@ class URLServices:NSObject{
                         let price = result["quotes"][0]["data"]["price"].double ?? 0
                         let max_supply = result["max_supply"].double ?? 0
                         let rank = result["rank"].int ?? 0
-                        let realmData:[Any] = [id,coinAbbName,coinName,totalSupply,circulatingSupply,currency,percent24h,percent1h,percent7d,volume24,max_supply,marketCap,price,rank]
-                        if self.realm.object(ofType: GlobalAverageObject.self, forPrimaryKey: id) == nil {
+                        let realmData:[Any] = [id,coinId,coinAbbName,coinName,totalSupply,circulatingSupply,currency,percent24h,percent1h,percent7d,volume24,max_supply,marketCap,price,rank]
+                        if self.realm.object(ofType: GlobalAverageObject.self, forPrimaryKey: coinAbbName) == nil {
                             self.realm.create(GlobalAverageObject.self, value: realmData)
                         } else {
                             self.realm.create(GlobalAverageObject.self, value: realmData, update: true)
