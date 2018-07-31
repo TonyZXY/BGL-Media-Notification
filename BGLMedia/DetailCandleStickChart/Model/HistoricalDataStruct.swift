@@ -10,6 +10,9 @@ import Foundation
 import UIKit
 
 struct HistoricalDataStruct: Codable {
+    
+    
+    
     var Data = [candleStickUnit?]()
     
     struct candleStickUnit: Codable {

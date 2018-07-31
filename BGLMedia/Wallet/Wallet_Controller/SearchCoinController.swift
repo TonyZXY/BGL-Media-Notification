@@ -94,6 +94,7 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         allPairs.append(table.coinNameAbb.text!)
         allPairs.append("%"+table.coinNameAbb.text!)
         delegate?.setTradingPairsFirstType(firstCoinType: allPairs)
+        tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.popViewController(animated: true)
     }
     
@@ -150,5 +151,9 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":searchResult]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":searchResult]))
+        
+        let tableVC = UITableViewController.init(style: .plain)
+        tableVC.tableView = self.searchResult
+        self.addChildViewController(tableVC)
     }
 }

@@ -10,7 +10,7 @@ import UIKit
 import SafariServices
 
 class BGLCommunityController: UIViewController,UITableViewDataSource,UITableViewDelegate {
-
+    
     var titles:[String]{
         get{
             return [textValue(name: "weibo_community"),textValue(name: "wechat_community"),textValue(name: "twitter_community"),textValue(name: "facebook_community"),textValue(name: "youtube_community")]
@@ -37,21 +37,23 @@ class BGLCommunityController: UIViewController,UITableViewDataSource,UITableView
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let factor = view.frame.width/375
         let cell = tableView.dequeueReusableCell(withIdentifier: "communityCell") as! communityCell
+        cell.factor = factor
         cell.communityLabel.text = titles[indexPath.row]
         cell.communityImage.image = UIImage(named: logoItems[indexPath.row])
         return cell
     }
     
-//    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-//        cell.alpha = 0
-//        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
-//        cell.layer.transform = transform
-//        UIView.animate(withDuration: 1.0) {
-//            cell.alpha = 1.0
-//            cell.layer.transform = CATransform3DIdentity
-//        }
-//    }
+    //    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
+    //        cell.alpha = 0
+    //        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
+    //        cell.layer.transform = transform
+    //        UIView.animate(withDuration: 1.0) {
+    //            cell.alpha = 1.0
+    //            cell.layer.transform = CATransform3DIdentity
+    //        }
+    //    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let urlString = itemsUrl[indexPath.row]
@@ -76,36 +78,42 @@ class BGLCommunityController: UIViewController,UITableViewDataSource,UITableView
     }()
     
     func setUpView(){
+        let factor = view.frame.width/375
+        communityTableView.rowHeight = 100*factor
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(communityTableView)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityTableView]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(10*factor)-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityTableView]))
     }
-
+    
 }
 
 class communityCell:UITableViewCell{
+    var factor:CGFloat?{
+        didSet{
+            setupviews()
+        }
+    }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupviews()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init has not been completed")
     }
     
-    var cellView:UIView = {
-       var view = UIView()
+    lazy var cellView:UIView = {
+        var view = UIView()
         view.backgroundColor = ThemeColor().walletCellcolor()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 13
+        view.layer.cornerRadius = 13 * factor!
         return view
     }()
     
-    var communityImage: UIImageView = {
+    lazy var communityImage: UIImageView = {
         var imageView = UIImageView()
         imageView.clipsToBounds = true
-        imageView.frame = CGRect(x: 0, y: 0, width: 50, height: 50)
+        imageView.frame = CGRect(x: 0, y: 0, width: 50*factor!, height: 50*factor!)
         imageView.contentMode = UIViewContentMode.scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -120,14 +128,15 @@ class communityCell:UITableViewCell{
     }()
     
     func setupviews(){
+        communityLabel.font = UIFont.regularFont(14*factor!)
         selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(cellView)
         cellView.addSubview(communityImage)
         cellView.addSubview(communityLabel)
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v0]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor!)-[v0]-\(20*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(10*factor!)-[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         
         
         NSLayoutConstraint(item: communityImage, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
@@ -135,8 +144,8 @@ class communityCell:UITableViewCell{
         NSLayoutConstraint(item: communityLabel, attribute: .centerX, relatedBy: .equal, toItem: cellView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: communityLabel, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(50)]-10-[v1(80)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(\(50*factor!))]-\(10*factor!)-[v1(\(80*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(50*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
     }
 }
 

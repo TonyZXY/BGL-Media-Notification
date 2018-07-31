@@ -39,6 +39,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         textfield.tintColor = ThemeColor().whiteColor()
         textfield.frame = CGRect(x:0, y: 0, width: 200, height: 30)
         textfield.translatesAutoresizingMaskIntoConstraints = false
+        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
 //        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
 //        textfield.leftViewMode = .always
 //        textfield.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
@@ -52,9 +53,13 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         backgroundColor = ThemeColor().themeColor()
         addSubview(numberLabel)
         addSubview(number)
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
         
-        
-        number.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+       
 
         
         NSLayoutConstraint(item: numberLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true

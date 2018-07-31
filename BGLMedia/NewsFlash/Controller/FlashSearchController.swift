@@ -235,7 +235,6 @@ class FlashNewsResultCell:UITableViewCell{
        var label = InsetLabel()
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
-        label.text = "sdsfsfsdf"
         label.font = UIFont.semiBoldFont(18)
         label.textColor = ThemeColor().whiteColor()
         label.backgroundColor = ThemeColor().darkBlackColor()
@@ -255,7 +254,7 @@ class FlashNewsResultCell:UITableViewCell{
     }()
     
     var shareButton:UIButton = {
-        var button = UIButton(type: .system)
+        var button = UIButton()
         button.backgroundColor = ThemeColor().darkBlackColor()
         button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         button.layer.cornerRadius = 15

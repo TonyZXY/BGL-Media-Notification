@@ -1,8 +1,8 @@
 //
-//  RegisterController.swift
-//  BGLMedia
+//  ViewController.swift
+//  RegisterV2
 //
-//  Created by Bruce Feng on 23/7/18.
+//  Created by ZHANG ZEYAO on 29/7/18.
 //  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
@@ -10,12 +10,21 @@ import UIKit
 import Alamofire
 import JGProgressHUD
 
-class RegisterController: UIViewController {
+class RegisterController: UIViewController, UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate {
+    
     var getDeviceToken:Bool{
         get{
             return UserDefaults.standard.bool(forKey: "getDeviceToken")
         }
     }
+    
+    let cells = ["blank","firstName","lastName&Title","email","password","conPassword"]
+    var firstName  = ""
+    var titleOfUser  = ""
+    var lastName  = ""
+    var email  = ""
+    var password  = ""
+    var conPassword  = ""
     
     let titleView: UIView = {
         let view = UIView()
@@ -38,141 +47,23 @@ class RegisterController: UIViewController {
         button.addTarget(self, action: #selector(closePage), for: .touchUpInside)
         return button
     }()
-    let firstNameLabel: UILabel = {
-        
-        let label = UILabel()
-        label.text = "First Name"
-        label.textAlignment = .center
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
-        label.textColor = ThemeColor().whiteColor()
-        return label
-    }()
     
     
-    let lastNameLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Last Name"
-        label.textAlignment = .center
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
-        label.textColor = ThemeColor().whiteColor()
-        return label
-    }()
-    
-    
-    let emailLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Email"
-        label.textAlignment = .center
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
-        label.textColor = ThemeColor().whiteColor()
-        return label
-    }()
-    
-    
-    let passwordLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Password"
-        label.textAlignment = .center
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
-        label.textColor = ThemeColor().whiteColor()
-        return label
-    }()
-    
-    
-    let conPasswordLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Confirm Password"
-        label.textAlignment = .center
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
-        label.textColor = ThemeColor().whiteColor()
-        return label
-    }()
-    
-    let titleLabel: UILabel = {
-        let label = UILabel()
-        label.text = "Title"
-        label.textAlignment = .center
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
-        label.textColor = ThemeColor().whiteColor()
-        return label
-    }()
-    
-    let firstNameTextField: LeftPaddedTextField = {
-        let textField = LeftPaddedTextField()
-        textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*First Name", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
-        textField.clearButtonMode = UITextFieldViewMode.whileEditing
-        textField.addTarget(self, action: #selector(checkFirstName), for: .allEditingEvents)
-        textField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
-        textField.layer.cornerRadius = 8.5
-        textField.backgroundColor = .white
-        return textField
-    }()
-    
-    let lastNameTextField: LeftPaddedTextField = {
-        let textField = LeftPaddedTextField()
-        textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*Last Name", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
-        textField.clearButtonMode = UITextFieldViewMode.whileEditing
-        textField.addTarget(self, action: #selector(checkLastName), for: .allEditingEvents)
-        textField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
-        textField.layer.cornerRadius = 8.5
-        textField.backgroundColor = .white
-        return textField
-    }()
-    
-    let emailTextField: LeftPaddedTextField = {
-        let textField = LeftPaddedTextField()
-        textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*Email", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
-        textField.clearButtonMode = UITextFieldViewMode.whileEditing
-        textField.keyboardType = .emailAddress
-        textField.addTarget(self, action: #selector(checkEmail), for: .allEditingEvents)
-        textField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
-        textField.layer.cornerRadius = 8.5
-        textField.backgroundColor = .white
-        return textField
-    }()
-    
-    let passwordTextField: LeftPaddedTextField! = {
-        let textField = LeftPaddedTextField()
-        textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*8-20 Characters", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
-        textField.clearButtonMode = UITextFieldViewMode.whileEditing
-        textField.addTarget(self, action: #selector(checkPassword), for: .allEditingEvents)
-        textField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
-        textField.layer.cornerRadius = 8.5
-        textField.backgroundColor = .white
-        textField.isSecureTextEntry = true
-        return textField
-    }()
-    
-    let conPasswordTextField: LeftPaddedTextField! = {
-        let textField = LeftPaddedTextField()
-        textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*Confirm Your Password", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
-        textField.clearButtonMode = UITextFieldViewMode.whileEditing
-        textField.addTarget(self, action: #selector(checkPasswordConfirmed), for: .allEditingEvents)
-        textField.addTarget(self, action: #selector(keyboardShow), for: .editingDidBegin)
-        textField.addTarget(self, action: #selector(keyboardHide), for: .editingDidEnd)
-        textField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
-        textField.layer.cornerRadius = 8.5
-        textField.backgroundColor = .white
-        textField.isSecureTextEntry = true
-        return textField
-    }()
-    
-    let titleTextField: LeftPaddedTextField = {
-        let textField = LeftPaddedTextField()
-        let label = UITextView()
-        textField.inputView = label
-        textField.tintColor = .clear
-        textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "Title", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
-        textField.layer.cornerRadius = 8.5
-        textField.backgroundColor = .white
-        textField.addTarget(self, action: #selector(showSelection), for: .touchDown)
-        return textField
+    lazy var registerTable: UITableView = {
+        let view = UITableView()
+        view.backgroundColor = ThemeColor().themeColor()
+        view.separatorStyle = .none
+        view.register(UITableViewCell.self, forCellReuseIdentifier: "blank")
+        view.register(RegisterCellA.self, forCellReuseIdentifier: "firstName")
+        view.register(RegisterCellB.self, forCellReuseIdentifier: "lastName&Title")
+        view.register(RegisterCellA.self, forCellReuseIdentifier: "email")
+        view.register(RegisterCellA.self, forCellReuseIdentifier: "password")
+        view.register(RegisterCellA.self, forCellReuseIdentifier: "conPassword")
+        view.setEditing(false, animated: false)
+        view.delaysContentTouches = false
+        view.delegate = self
+        view.dataSource = self
+        return view
     }()
     
     let signUpButton: UIButton = {
@@ -187,124 +78,317 @@ class RegisterController: UIViewController {
         return button
     }()
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        NotificationCenter.default.addObserver(self, selector: #selector(keyboardHide), name: NSNotification.Name.UIKeyboardDidHide, object: nil)
-        view.backgroundColor = ThemeColor().themeColor()
-        setUp()
-        signUpButton.isEnabled = false
-        signUpButton.backgroundColor = UIColor.init(red:168/255.0, green:234/255.0, blue:214/255.0, alpha:1)
-        
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return cells.count
+    }
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let height = view.frame.height/736
+        if indexPath.row == 0 {
+            return 40 * height
+        } else {
+            return 90 * height
+        }
     }
     
-    @objc func checkEmail(_ textField: UITextField){
-        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
-        let trimmedEmail = textField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
-        if trimmedEmail == "" || !emailPredicate.evaluate(with: textField.text){
-            textField.layer.borderWidth = 1.8
-            textField.layer.borderColor = ThemeColor().redColor().cgColor
-            
-            emailLabel.text = "Invalid Email"
-            emailLabel.textColor = ThemeColor().redColor()
-        }else{
-            textField.layer.borderWidth = 0
-            textField.layer.borderColor = UIColor.clear.cgColor
-            emailLabel.text = "Email"
-            emailLabel.textColor = ThemeColor().whiteColor()
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let width = view.frame.width/375
+        let height = view.frame.height/736
+        if indexPath.row == 0 {
+            let cell = tableView.dequeueReusableCell(withIdentifier: cells[0],for: indexPath)
+            cell.selectionStyle = .none
+            cell.backgroundColor = ThemeColor().themeColor()
+            return cell
+        } else if indexPath.row == 1{
+            let cell = tableView.dequeueReusableCell(withIdentifier: cells[1], for: indexPath) as! RegisterCellA
+            cell.contentTextField.delegate = self
+            cell.selectionStyle = .none
+            cell.contentLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+            cell.contentLabel.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentTextField.topAnchor.constraint(equalTo: cell.contentLabel.bottomAnchor, constant: 5 * height).isActive = true
+            cell.contentTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+            cell.contentTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentTextField.addTarget(self, action: #selector(checkFirstName), for: .allEditingEvents)
+            cell.contentTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
+            cell.contentTextField.tag = 1
+            cell.backgroundColor = ThemeColor().themeColor()
+            return cell
+        } else if indexPath.row == 2{
+            let cell = tableView.dequeueReusableCell(withIdentifier: cells[2], for: indexPath) as! RegisterCellB
+            cell.selectionStyle = .none
+            cell.titleTextField.leftAnchor.constraint(equalTo: cell.leftAnchor,constant:37.5 * width).isActive = true
+            cell.lastNameTextField.rightAnchor.constraint(equalTo: cell.rightAnchor,constant:-37.5 * width).isActive = true
+            cell.lastNameTextField.topAnchor.constraint(equalTo: cell.lastNameLabel.bottomAnchor, constant: 5 * height).isActive = true
+            cell.lastNameTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+            cell.lastNameTextField.widthAnchor.constraint(equalToConstant:220 * width).isActive = true
+            cell.lastNameLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+            cell.lastNameLabel.widthAnchor.constraint(equalToConstant:220 * width).isActive = true
+            cell.titleTextField.topAnchor.constraint(equalTo: cell.titleLabel.bottomAnchor, constant: 5 * height).isActive = true
+            cell.titleTextField.tag = 6
+            cell.titleTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+            cell.titleTextField.widthAnchor.constraint(equalToConstant:60  * width).isActive = true
+            cell.titleLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+            cell.titleLabel.widthAnchor.constraint(equalToConstant:80  * width).isActive = true
+            cell.backgroundColor = ThemeColor().themeColor()
+            cell.titleTextField.addTarget(self, action: #selector(showSelection), for: .touchDown)
+            cell.lastNameTextField.addTarget(self, action: #selector(checkLastName), for: .allEditingEvents)
+            cell.lastNameTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
+            return cell
+        } else if indexPath.row == 3{
+            let cell = tableView.dequeueReusableCell(withIdentifier: cells[3], for: indexPath) as! RegisterCellA
+            cell.selectionStyle = .none
+            cell.contentLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+            cell.contentLabel.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentTextField.topAnchor.constraint(equalTo: cell.contentLabel.bottomAnchor, constant: 5 * height).isActive = true
+            cell.contentTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+            cell.contentTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentLabel.text = "Email"
+            cell.contentTextField.placeholder = "*Email"
+            cell.contentTextField.keyboardType = .emailAddress
+            cell.backgroundColor = ThemeColor().themeColor()
+            cell.contentTextField.addTarget(self, action: #selector(checkEmail), for: .allEditingEvents)
+            cell.contentTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
+            return cell
+        } else if indexPath.row == 4{
+            let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! RegisterCellA
+            cell.selectionStyle = .none
+            cell.contentLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+            cell.contentLabel.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentTextField.topAnchor.constraint(equalTo: cell.contentLabel.bottomAnchor, constant: 5 * height).isActive = true
+            cell.contentTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+            cell.contentTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentLabel.text = "Password"
+            cell.contentTextField.placeholder = "*8-20 Characters"
+            cell.contentTextField.isSecureTextEntry = true
+            cell.contentTextField.addTarget(self, action: #selector(checkPassword), for: .allEditingEvents)
+            cell.contentTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
+            cell.backgroundColor = ThemeColor().themeColor()
+            return cell
+        } else if indexPath.row == 5{
+            let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! RegisterCellA
+            cell.selectionStyle = .none
+            cell.contentLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+            cell.contentLabel.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentTextField.topAnchor.constraint(equalTo: cell.contentLabel.bottomAnchor, constant: 5 * height).isActive = true
+            cell.contentTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
+            cell.contentTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
+            cell.contentLabel.text = "Confirm Password"
+            cell.contentTextField.placeholder = "*Confirm Your Password"
+            cell.contentTextField.isSecureTextEntry = true
+            cell.contentTextField.addTarget(self, action: #selector(checkPasswordConfirmed), for: .allEditingEvents)
+            cell.contentTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
+            cell.backgroundColor = ThemeColor().themeColor()
+            return cell
+        } else{
+            return UITableViewCell()
         }
-        
+    }
+    
+    
+    
+    
+    
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        view.backgroundColor = ThemeColor().themeColor()
+        setUp()
+        signUpButton.backgroundColor = UIColor.init(red:168/255.0, green:234/255.0, blue:214/255.0, alpha:1)
+        signUpButton.isEnabled = false
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = true
+        view.addGestureRecognizer(tapGesture)
+        // Do any additional setup after loading the view, typically from a nib.
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
     
     @objc func closePage(sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
     }
     
-    @objc func checkPassword(_ textField: UITextField) {
-        if (textField.text?.count)! < 8{
-            textField.layer.borderWidth = 1.8
-            textField.layer.borderColor = ThemeColor().redColor().cgColor
-            
-            passwordLabel.text = "Password is too short"
-            passwordLabel.textColor = ThemeColor().redColor()
-        }else{
-            textField.layer.borderWidth = 0
-            textField.layer.borderColor = UIColor.clear.cgColor
-            passwordLabel.text = "Password"
-            passwordLabel.textColor = ThemeColor().whiteColor()
-        }
-    }
     
-    @objc func checkPasswordConfirmed(_ textField: UITextField){
-        if (textField.text?.count)! < 8 || textField.text != passwordTextField.text{
-            textField.layer.borderWidth = 1.8
-            textField.layer.borderColor = ThemeColor().redColor().cgColor
-            
-            conPasswordLabel.text = "Invalid Confirmation"
-            conPasswordLabel.textColor = ThemeColor().redColor()
-        }else{
-            textField.layer.borderWidth = 0
-            textField.layer.borderColor = UIColor.clear.cgColor
-            conPasswordLabel.text = "Confirm Password"
-            conPasswordLabel.textColor = ThemeColor().whiteColor()
+    
+    
+    
+    @objc func showSelection(_ textField: UITextField){
+        let superview = textField.superview
+        let cell = superview as! RegisterCellB
+        var picker: TCPickerViewInput = TCPickerView()
+        picker.title = "Title"
+        let titles = [
+            "Mr",
+            "Ms",
+            "Mrs",
+            "Dr"
+        ]
+        let values = titles.map{ TCPickerView.Value(title: $0) }
+        picker.values = values
+        picker.delegate = self as? TCPickerViewOutput
+        picker.selection = .single
+        picker.completion = { (selectedIndex) in
+            for i in selectedIndex {
+                cell.titleTextField.text = values[i].title
+            }
         }
+        picker.show()
+        
     }
     
     @objc func checkFirstName(_ textField: UITextField){
-        let trimmedFirstName = textField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
+        let superview = textField.superview
+        let cell = superview as! RegisterCellA
+        let trimmedFirstName = cell.contentTextField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
         if textField.isTouchInside && trimmedFirstName == ""{
+            print(cell.contentTextField.isTouchInside)
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
-            firstNameLabel.text = "First Name Needed"
-            firstNameLabel.textColor = ThemeColor().redColor()
+            cell.contentLabel.text = "First Name Needed"
+            cell.contentLabel.textColor = ThemeColor().redColor()
+            firstName = ""
         } else {
+            print(cell.contentTextField.isTouchInside)
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            firstNameLabel.text = "First Name"
-            firstNameLabel.textColor = ThemeColor().whiteColor()
+            cell.contentLabel.text = "First Name"
+            cell.contentLabel.textColor = ThemeColor().whiteColor()
+            firstName = textField.text!
         }
     }
     
     
     @objc func checkLastName(_ textField: UITextField){
-        let trimmedLastName = lastNameTextField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
+        let superview = textField.superview
+        let cell = superview as! RegisterCellB
+        let trimmedLastName = cell.lastNameTextField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
         if textField.isTouchInside && trimmedLastName == ""{
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
-            lastNameLabel.text = "Last Name Needed"
-            lastNameLabel.textColor = ThemeColor().redColor()
+            cell.lastNameLabel.text = "Last Name Needed"
+            cell.lastNameLabel.textColor = ThemeColor().redColor()
+            lastName = ""
         } else {
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            lastNameLabel.text = "Last Name"
-            lastNameLabel.textColor = ThemeColor().whiteColor()
+            cell.lastNameLabel.text = "Last Name"
+            cell.lastNameLabel.textColor = ThemeColor().whiteColor()
+            lastName = textField.text!
         }
     }
     
-    @objc func register(sender: UIButton) {
+    @objc func checkEmail(_ textField: UITextField){
+        let superview = textField.superview
+        let cell = superview as! RegisterCellA
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        let trimmedEmail = cell.contentTextField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
+        if trimmedEmail == "" || !emailPredicate.evaluate(with: textField.text){
+            textField.layer.borderWidth = 1.8
+            textField.layer.borderColor = ThemeColor().redColor().cgColor
+            
+            cell.contentLabel.text = "Invalid Email"
+            cell.contentLabel.textColor = ThemeColor().redColor()
+            email = ""
+        }else{
+            textField.layer.borderWidth = 0
+            textField.layer.borderColor = UIColor.clear.cgColor
+            cell.contentLabel.text = "Email"
+            cell.contentLabel.textColor = ThemeColor().whiteColor()
+            email = textField.text!
+        }
         
+    }
+    
+    @objc func checkPassword(_ textField: UITextField) {
+        let superview = textField.superview
+        let cell = superview as! RegisterCellA
+        if (textField.text?.count)! < 8{
+            textField.layer.borderWidth = 1.8
+            textField.layer.borderColor = ThemeColor().redColor().cgColor
+            
+            cell.contentLabel.text = "Password is too short"
+            cell.contentLabel.textColor = ThemeColor().redColor()
+            password = ""
+        }else{
+            textField.layer.borderWidth = 0
+            textField.layer.borderColor = UIColor.clear.cgColor
+            cell.contentLabel.text = "Password"
+            cell.contentLabel.textColor = ThemeColor().whiteColor()
+            password = textField.text!
+        }
+    }
+    
+    
+    @objc func checkPasswordConfirmed(_ textField: UITextField){
+        let superview = textField.superview
+        let cell = superview as! RegisterCellA
+        let indexPath = IndexPath.init(row: 4, section: 0)
+        let cellB = registerTable.cellForRow(at: indexPath) as! RegisterCellA
+        if (textField.text?.count)! < 8 || textField.text != cellB.contentTextField.text{
+            textField.layer.borderWidth = 1.8
+            textField.layer.borderColor = ThemeColor().redColor().cgColor
+            
+            cell.contentLabel.text = "Invalid Confirmation"
+            cell.contentLabel.textColor = ThemeColor().redColor()
+            conPassword = ""
+        }else{
+            textField.layer.borderWidth = 0
+            textField.layer.borderColor = UIColor.clear.cgColor
+            cell.contentLabel.text = "Confirm Password"
+            cell.contentLabel.textColor = ThemeColor().whiteColor()
+            conPassword = textField.text!
+        }
+    }
+    
+    
+    @objc func checkValuesAndChangeButton(sender: UITextField){
+        let trimmedFirstName = firstName.trimmingCharacters(in: NSCharacterSet.whitespaces)
+        let trimmedLastName = lastName.trimmingCharacters(in: NSCharacterSet.whitespaces)
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        if trimmedFirstName != "" &&
+            trimmedLastName != "" &&
+            emailPredicate.evaluate(with: email) &&
+            password.count >= 8 &&
+            conPassword == password {
+            signUpButton.backgroundColor = ThemeColor().themeWidgetColor()
+            signUpButton.isEnabled = true
+        }else{
+            signUpButton.backgroundColor = UIColor.init(red:168/255.0, green:234/255.0, blue:214/255.0, alpha:1)
+            signUpButton.isEnabled = false
+        }
+    }
+    
+    
+    @objc func register(sender: UIButton) {
+        let indexPath = IndexPath.init(row: 2, section: 0)
+        let cell = registerTable.cellForRow(at: indexPath) as! RegisterCellB
+        titleOfUser = cell.titleTextField.text!
+        print(firstName + "   " + lastName + "   " + titleOfUser + "    " + email + "   " + password)
         let hud = JGProgressHUD(style: .light)
         hud.textLabel.text = "Registing"
         hud.backgroundColor = UIColor(displayP3Red: 191, green: 191, blue: 191, alpha: 0.5)
         hud.show(in: self.view)
         
-        let parameter = ["email": self.emailTextField.text!.lowercased(), "firstName": self.firstNameTextField.text!, "lastName":self.lastNameTextField.text!,"title": self.titleTextField.text!, "password": self.passwordTextField.text!]
+        let parameter = ["email": self.email.lowercased(), "firstName": self.firstName, "lastName":self.lastName,"title": self.titleOfUser, "password": self.password]
         
         URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","register"], httpMethod: "POST", parameters: parameter, completion: { (response, success) in
             if success{
                 let registersuccess = response["success"].bool ?? true // Question
                 if registersuccess{
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                    UserDefaults.standard.set(self.emailTextField.text!.lowercased(), forKey: "UserEmail")
+                    UserDefaults.standard.set(self.email.lowercased(), forKey: "UserEmail")
                     let token = response["token"].string!
                     UserDefaults.standard.set(token, forKey: "CertificateToken")
                     
                     print(token)
-                    print(self.emailTextField.text!.lowercased())
+                    print(self.email.lowercased())
                     
                     if !self.getDeviceToken{
                         let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
-                        let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
+                        let sendDeviceTokenParameter = ["email":self.email.lowercased(),"token":token,"deviceToken":deviceTokenString]
                         URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
                             if success{
                                 UserDefaults.standard.set(true, forKey: "SendDeviceToken")
@@ -331,11 +415,13 @@ class RegisterController: UIViewController {
                     hud.textLabel.text = "Error"
                     hud.detailTextLabel.text = registerFailure
                     if code == "23505"{
-                        self.emailTextField.layer.borderWidth = 1.8
-                        self.emailTextField.layer.borderColor = ThemeColor().redColor().cgColor
+                        let indexPathC = IndexPath.init(row: 3, section: 0)
+                        let cellC = self.registerTable.cellForRow(at: indexPathC) as! RegisterCellA
+                        cellC.contentTextField.layer.borderWidth = 1.8
+                        cellC.contentTextField.layer.borderColor = ThemeColor().redColor().cgColor
                         
-                        self.emailLabel.text = "Email Exists"
-                        self.emailLabel.textColor = ThemeColor().redColor()
+                        cellC.contentLabel.text = "Email Exists"
+                        cellC.contentLabel.textColor = ThemeColor().redColor()
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
@@ -364,82 +450,7 @@ class RegisterController: UIViewController {
                 
             }
         })
-        
-        
-        
-        
-        //                } else{
-        //                    self.notificationLabel.text = "Error code \(response["code"]): \(response["message"])"
-        //                    self.notificationLabel.isHidden = false
-        //                }
-        //            })
     }
-    
-    @objc func checkValuesAndChangeButton(sender: UITextField){
-        let trimmedFirstName = firstNameTextField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
-        let trimmedLastName = lastNameTextField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
-        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
-        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
-        if trimmedFirstName != "" &&
-            trimmedLastName != "" &&
-            emailPredicate.evaluate(with: emailTextField.text) &&
-            (passwordTextField.text?.count)! >= 8 &&
-            conPasswordTextField.text == passwordTextField.text {
-            signUpButton.backgroundColor = ThemeColor().themeWidgetColor()
-            signUpButton.isEnabled = true
-        }else{
-            signUpButton.backgroundColor = UIColor.init(red:168/255.0, green:234/255.0, blue:214/255.0, alpha:1)
-            signUpButton.isEnabled = false
-        }
-    }
-    
-    @objc func keyboardShow() {
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: -40, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
-    }
-    
-    @objc func showSelection(_ textField: UITextField){
-        var picker: TCPickerViewInput = TCPickerView()
-        picker.title = "Title"
-        let titles = [
-            "Mr",
-            "Ms",
-            "Mrs",
-            "Dr"
-        ]
-        let values = titles.map{ TCPickerView.Value(title: $0) }
-        picker.values = values
-        picker.delegate = self as? TCPickerViewOutput
-        picker.selection = .single
-        picker.completion = { (selectedIndex) in
-            for i in selectedIndex {
-                self.titleTextField.text = values[i].title
-            }
-        }
-        picker.show()
-        
-    }
-    
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        
-        self.view.endEditing(true)
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
-    }
-    
-    
-    @objc func keyboardHide(){
-        UIView.animate(withDuration: 0.5, delay: 0, usingSpringWithDamping: 1, initialSpringVelocity: 1, options: .curveEaseOut, animations: {
-            self.view.frame = CGRect(x: 0, y: 0, width: self.view.frame.width, height: self.view.frame.height)
-        }, completion: nil)
-    }
-    
-    
-    
-    
     
     
     
@@ -477,132 +488,29 @@ class RegisterController: UIViewController {
         
         titleView.addSubview(navButton)
         navButton.translatesAutoresizingMaskIntoConstraints = false
-//        navButton.heightAnchor.constraint(equalToConstant: 23 * width).isActive = true
-//        navButton.widthAnchor.constraint(equalToConstant: 23 * width).isActive = true
+        //        navButton.heightAnchor.constraint(equalToConstant: 23 * width).isActive = true
+        //        navButton.widthAnchor.constraint(equalToConstant: 23 * width).isActive = true
         navButton.leftAnchor.constraint(equalTo:view.leftAnchor).isActive = true
         navButton.centerYAnchor.constraint(equalTo:titleView.centerYAnchor).isActive = true
         
-        
-        
-        view.addSubview(firstNameLabel)
-        firstNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        firstNameLabel.topAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 40 * height).isActive = true
-        firstNameLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
-        firstNameLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
-        firstNameLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        // Add First Name Text field
-        view.addSubview(firstNameTextField)
-        firstNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        firstNameTextField.topAnchor.constraint(equalTo: firstNameLabel.bottomAnchor, constant: 5 * height).isActive = true
-        firstNameTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
-        firstNameTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
-        firstNameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        // Add Last Name Text Field
-        view.addSubview(lastNameLabel)
-        view.addSubview(lastNameTextField)
-        lastNameTextField.translatesAutoresizingMaskIntoConstraints = false
-        lastNameTextField.topAnchor.constraint(equalTo: lastNameLabel.bottomAnchor, constant: 5 * height).isActive = true
-        lastNameTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
-        lastNameTextField.widthAnchor.constraint(equalToConstant:220 * width).isActive = true
-        //        lastNameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor,constant: 30).isActive = true
-        lastNameTextField.rightAnchor.constraint(equalTo: firstNameTextField.rightAnchor).isActive = true
-        
-        
-        //Add Last Name Label
-        
-        lastNameLabel.translatesAutoresizingMaskIntoConstraints = false
-        lastNameLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
-        lastNameLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
-        lastNameLabel.centerXAnchor.constraint(equalTo: lastNameTextField.centerXAnchor).isActive = true
-        lastNameLabel.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 20 * height).isActive = true
-        
-        
-        view.addSubview(emailLabel)
-        emailLabel.translatesAutoresizingMaskIntoConstraints = false
-        emailLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
-        emailLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
-        emailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emailLabel.topAnchor.constraint(equalTo: lastNameTextField.bottomAnchor, constant: 20 * height).isActive = true
-        
-        view.addSubview(emailTextField)
-        emailTextField.translatesAutoresizingMaskIntoConstraints = false
-        emailTextField.topAnchor.constraint(equalTo: emailLabel.bottomAnchor, constant: 5 * height).isActive = true
-        emailTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
-        emailTextField.widthAnchor.constraint(equalToConstant:300  * width).isActive = true
-        emailTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        view.addSubview(passwordLabel)
-        passwordLabel.translatesAutoresizingMaskIntoConstraints = false
-        passwordLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
-        passwordLabel.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
-        passwordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        passwordLabel.topAnchor.constraint(equalTo: emailTextField.bottomAnchor, constant: 30 * height).isActive = true
-        
-        view.addSubview(passwordTextField)
-        passwordTextField.translatesAutoresizingMaskIntoConstraints = false
-        passwordTextField.topAnchor.constraint(equalTo: passwordLabel.bottomAnchor, constant: 5 * height).isActive = true
-        passwordTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
-        passwordTextField.widthAnchor.constraint(equalToConstant:300  * width).isActive = true
-        passwordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        view.addSubview(conPasswordLabel)
-        conPasswordLabel.translatesAutoresizingMaskIntoConstraints = false
-        conPasswordLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
-        conPasswordLabel.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
-        conPasswordLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        conPasswordLabel.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 20 * height).isActive = true
-        
-        
-        view.addSubview(conPasswordTextField)
-        conPasswordTextField.translatesAutoresizingMaskIntoConstraints = false
-        conPasswordTextField.topAnchor.constraint(equalTo: conPasswordLabel.bottomAnchor, constant: 5 * height).isActive = true
-        conPasswordTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
-        conPasswordTextField.widthAnchor.constraint(equalToConstant:300  * width).isActive = true
-        conPasswordTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        
-        // Add Title Text Field
-        view.addSubview(titleLabel)
-        view.addSubview(titleTextField)
-        titleTextField.translatesAutoresizingMaskIntoConstraints = false
-        titleTextField.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 5 * height).isActive = true
-        titleTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
-        titleTextField.widthAnchor.constraint(equalToConstant:60  * width).isActive = true
-        titleTextField.leftAnchor.constraint(equalTo: firstNameTextField.leftAnchor).isActive = true
-        
-        // Add Title Label
-        
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        titleLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
-        titleLabel.widthAnchor.constraint(equalToConstant:80  * width).isActive = true
-        titleLabel.topAnchor.constraint(equalTo: firstNameTextField.bottomAnchor, constant: 20 * height).isActive = true
-        titleLabel.centerXAnchor.constraint(equalTo: titleTextField.centerXAnchor).isActive = true
+        view.addSubview(registerTable)
+        registerTable.translatesAutoresizingMaskIntoConstraints = false
+        registerTable.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        registerTable.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
+        registerTable.topAnchor.constraint(equalTo: titleView.bottomAnchor).isActive = true
+        registerTable.bottomAnchor.constraint(equalTo: titleView.bottomAnchor, constant: 480 * height).isActive = true
+        let tableVC = UITableViewController.init(style: .plain)
+        tableVC.tableView = self.registerTable
+        self.addChildViewController(tableVC)
         
         view.addSubview(signUpButton)
         signUpButton.translatesAutoresizingMaskIntoConstraints = false
         signUpButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
         signUpButton.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
         signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        signUpButton.topAnchor.constraint(equalTo: conPasswordTextField.bottomAnchor, constant: 40 * height).isActive = true
+        signUpButton.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 20 * height).isActive = true
         
     }
     
-    
 }
 
-class LeftPaddedTextField: UITextField {
-    let padding = UIEdgeInsets(top: 0, left: 7, bottom: 0, right: 7);
-    override open func textRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, padding)
-    }
-    
-    override open func placeholderRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, padding)
-    }
-    
-    override open func editingRect(forBounds bounds: CGRect) -> CGRect {
-        return UIEdgeInsetsInsetRect(bounds, padding)
-    }
-
-}

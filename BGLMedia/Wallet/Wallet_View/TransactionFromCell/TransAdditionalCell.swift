@@ -31,6 +31,8 @@ class TransAdditionalCell:UITableViewCell{
         let textfield = UITextField()
         textfield.textColor = ThemeColor().whiteColor()
         textfield.tintColor = ThemeColor().whiteColor()
+        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "additionalPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        
         //            textfield.leftView?.frame = CGRect(x:10, y: 10, width: 200, height: 30)
         //            textfield.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
         // Create a padding view for padding on left
@@ -51,13 +53,17 @@ class TransAdditionalCell:UITableViewCell{
     }()
     
     func setupviews(){
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
         selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(additionalLabel)
         addSubview(additional)
         
         
-        additional.attributedPlaceholder = NSAttributedString(string:textValue(name: "additionalPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
         
         NSLayoutConstraint(item: additionalLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
         NSLayoutConstraint(item: additional, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true

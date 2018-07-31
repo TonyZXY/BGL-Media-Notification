@@ -26,7 +26,7 @@ class LaunchScreenViewController: UIViewController {
             let dispatchGroup = DispatchGroup()
 
             dispatchGroup.enter()
-            SetDataResult().writeJsonExchange(){ success in
+            APIServices.fetchInstance.writeJsonExchange(){ success in
                 if success{
                      dispatchGroup.leave()
                 } else{

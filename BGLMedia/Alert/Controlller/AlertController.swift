@@ -30,7 +30,6 @@ struct coinAlert{
 class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var factor:CGFloat?{
         didSet{
-            
         }
     }
     
@@ -47,7 +46,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             if coinName.status{
                 coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName + "' ")
             }
-
+            
             for value in coinNameResults{
                 var alertResults = alertResult()
                 let speCoin = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
@@ -119,8 +118,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(true)
-//        tabBarController?.tabBar.isHidden = true
+        //        super.viewWillAppear(true)
+        //        tabBarController?.tabBar.isHidden = true
         getNotificationStatus()
         if NotificationStatus{
             if loginStatus{
@@ -140,7 +139,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             alertStatus.append(alert)
         }
         
-
+        
         if alertStatus.count != 0{
             let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterestStatus"], httpMethod: "POST", parameters: body) { (response, success) in
@@ -158,13 +157,13 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func checkSetUpView(){
-
-            if loginStatus{
-                setUpView()
-//                view.willRemoveSubview(setUpLoginView)
-            } else{
-                setUpLoginView()
-            }
+        
+        if loginStatus{
+            setUpView()
+            //                view.willRemoveSubview(setUpLoginView)
+        } else{
+            setUpLoginView()
+        }
     }
     
     @objc func addAlerts(){
@@ -178,15 +177,16 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
-        coinImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+        coinImage.frame = CGRect(x: 0, y: 0, width: 30*factor!, height: 30*factor!)
         coinImage.clipsToBounds = true
-        coinImage.coinImageSetter(coinName: alerts[section].name[0].coinAbbName, width: 30, height: 30, fontSize: 5)
+        coinImage.coinImageSetter(coinName: alerts[section].name[0].coinAbbName, width: 30*factor!, height: 30*factor!, fontSize: 5*factor!)
         coinImage.contentMode = UIViewContentMode.scaleAspectFit
         coinImage.translatesAutoresizingMaskIntoConstraints = false
         
         let coinLabel = UILabel()
         coinLabel.translatesAutoresizingMaskIntoConstraints = false
         coinLabel.textColor = ThemeColor().whiteColor()
+        coinLabel.font = UIFont.regularFont(17*factor!)
         coinLabel.text = alerts[section].coinName
         
         let button = UIButton(type:.system)
@@ -205,16 +205,16 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         button.translatesAutoresizingMaskIntoConstraints = false
         //        views.translatesAutoresizingMaskIntoConstraints = false
         
-
+        
         sectionView.layer.borderWidth = 1
         
         NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v0(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-\(10*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
         
         return sectionView
     }
@@ -231,7 +231,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         
         button.setTitle(isExpanded ? "Open":"Close", for: .normal)
-        
+        button.titleLabel?.font = UIFont.regularFont(14*factor!)
         if !isExpanded{
             alertTableView.insertRows(at: indexPaths, with: .fade)
         } else{
@@ -242,11 +242,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     @objc func Login(){
         let loginPage = LoginController()
         self.present(loginPage, animated: true, completion: nil)
-//        navigationController?.pushViewController(loginPage, animated: true)
+        //        navigationController?.pushViewController(loginPage, animated: true)
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 60 * factor!
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -263,27 +263,28 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "editAlertCell", for: indexPath) as! AlertTableViewCell
         //        let name = twoDimension[indexPath.section].name[indexPath.row]
-      
+        
         let object = alerts[indexPath.section].name[indexPath.row]
-//        var compare:String = ""
-//        if object.compareStatus == 1{
-//            compare = ">"
-//        }else if object.compareStatus == 2{
-//            compare = "<"
-//        } else {
-//            compare = "="
-//        }
-//
-//        let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.price)
-//        let coinDetail = object.exchangName + " - " + object.coinAbbName + "/" + object.tradingPairs
-//        let dateToString = DateFormatter()
-//        dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
-//        dateToString.locale = Locale(identifier: "en_AU")
-//        let timess = dateToString.string(from: object.dateTime)
-//        cell.dateLabel.text = timess
-//        cell.compareLabel.text = compareLabel
-//        cell.coinDetailLabel.text = coinDetail
-//        cell.swithButton.isOn = object.switchStatus
+        //        var compare:String = ""
+        //        if object.compareStatus == 1{
+        //            compare = ">"
+        //        }else if object.compareStatus == 2{
+        //            compare = "<"
+        //        } else {
+        //            compare = "="
+        //        }
+        //
+        //        let compareLabel = "1 " + object.coinAbbName + " " + compare + " " + String(object.price)
+        //        let coinDetail = object.exchangName + " - " + object.coinAbbName + "/" + object.tradingPairs
+        //        let dateToString = DateFormatter()
+        //        dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
+        //        dateToString.locale = Locale(identifier: "en_AU")
+        //        let timess = dateToString.string(from: object.dateTime)
+        //        cell.dateLabel.text = timess
+        //        cell.compareLabel.text = compareLabel
+        //        cell.coinDetailLabel.text = coinDetail
+        //        cell.swithButton.isOn = object.switchStatus
+        cell.factor = factor!
         cell.object = object
         return cell
     }
@@ -302,6 +303,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     func setUpView(){
         view.addSubview(alertView)
+        alertButton.titleLabel?.font = UIFont.semiBoldFont(18*factor!)
         alertView.addSubview(alertTableView)
         alertView.addSubview(alertButton)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertView]))
@@ -309,11 +311,15 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
-        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-3-[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(3*factor!)-[v0(\(80*factor!))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
     }
     
     func setUpNoNotificationView(){
         view.addSubview(alertHintView)
+        alertMainHintLabel.font = UIFont.regularFont(20*factor!)
+        alertHintLabel.font = UIFont.regularFont(13*factor!)
+        alertButton.layer.cornerRadius = 15*factor!
+        alertButton.titleLabel?.font = UIFont.semiBoldFont(18*factor!)
         alertHintView.addSubview(alertMainHintLabel)
         alertHintView.addSubview(alertHintLabel)
         alertHintView.addSubview(alertOpenButton)
@@ -322,39 +328,42 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintView]))
         
-//        NSLayoutConstraint(item: alertHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: alertHintLabel, attribute: .centerY, relatedBy: .equal, toItem: alertHintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: alertMainHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: alertOpenButton, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-//
-        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertMainHintLabel]))
-        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
-        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-40-[v1]-40-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
-        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
-        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertMainHintLabel,"v1":alertOpenButton]))
+        //        NSLayoutConstraint(item: alertHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        //        NSLayoutConstraint(item: alertHintLabel, attribute: .centerY, relatedBy: .equal, toItem: alertHintView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        //        NSLayoutConstraint(item: alertMainHintLabel, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        //        NSLayoutConstraint(item: alertOpenButton, attribute: .centerX, relatedBy: .equal, toItem: alertHintLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        //
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(30*factor!)-[v1]-\(10*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertMainHintLabel]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(10*factor!)-[v1(\(50*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(40*factor!)-[v1]-\(40*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor!)-[v0]-\(30*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertHintLabel,"v1":alertOpenButton]))
+        alertHintView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor!)-[v0]-\(30*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertMainHintLabel,"v1":alertOpenButton]))
     }
     
     func setUpLoginView(){
         view.addSubview(loginView)
+        loginLabel.font = UIFont.regularFont(13*factor!)
+        loginButton.layer.cornerRadius = 15*factor!
+        loginMainLabel.font = UIFont.regularFont(20*factor!)
         loginView.addSubview(loginLabel)
         loginView.addSubview(loginButton)
         loginView.addSubview(loginMainLabel)
         
-//        alertOpenButton.setTitle("Open Notification", for: .normal)
+        //        alertOpenButton.setTitle("Open Notification", for: .normal)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginView]))
-//        NSLayoutConstraint(item: loginButton, attribute: .centerX, relatedBy: .equal, toItem: loginView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: loginView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: loginLabel, attribute: .centerX, relatedBy: .equal, toItem: loginButton, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-//        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(100)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
-//        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
-//        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+        //        NSLayoutConstraint(item: loginButton, attribute: .centerX, relatedBy: .equal, toItem: loginView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        //        NSLayoutConstraint(item: loginButton, attribute: .centerY, relatedBy: .equal, toItem: loginView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        //        NSLayoutConstraint(item: loginLabel, attribute: .centerX, relatedBy: .equal, toItem: loginButton, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        //        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(100)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+        //        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
+        //        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginButton,"v1":loginLabel]))
         
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-30-[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginMainLabel]))
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-10-[v1(50)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v1]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-30-[v0]-30-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginMainLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(30*factor!)-[v1]-\(10*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginMainLabel]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(10*factor!)-[v1(\(50*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor!)-[v1]-\(20*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor!)-[v0]-\(30*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor!)-[v0]-\(30*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginMainLabel,"v1":loginButton]))
         
     }
     
@@ -370,7 +379,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             if UIApplication.shared.canOpenURL(settingsUrl) {
                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
                     // Checking for setting is opened or not
-//                    print("Setting is opened: \(success)")
+                    //                    print("Setting is opened: \(success)")
                 })
             }
         }
@@ -408,9 +417,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         })
     }
     
-//    func getAlertStatus(){
-//
-//    }
+    //    func getAlertStatus(){
+    //
+    //    }
     
     
     @objc func addAlert(){
@@ -452,7 +461,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }()
     
     var loginButton:UIButton = {
-       var button = UIButton()
+        var button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle("Login", for: .normal)
         button.layer.cornerRadius = 15
@@ -487,7 +496,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }()
     
     var alertHintLabel:UILabel = {
-       var label = UILabel()
+        var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.text = "If you want to use alert functions, you need to go to setting page to open it, click the button and towards to setting page"
         label.textAlignment = .center
@@ -516,7 +525,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 50
+        tableView.rowHeight = 50*factor!
         tableView.separatorStyle = .none
         return tableView
     }()
@@ -532,25 +541,25 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }()
     
     @objc func addNewAlert(){
-//        let checkSendDeviceToken = UserDefaults.standard.bool(forKey: "SendDeviceToken")
-//        if !checkSendDeviceToken{
-//            let email = UserDefaults.standard.string(forKey: "UserEmail")
-//            let token = UserDefaults.standard.string(forKey: "UserToken")
-//            let parameter = ["email": email, "token": token]
-//            let url = URL(string: "http://10.10.6.18:3030/deviceManage/addAlertDevice")
-//            var urlRequest = URLRequest(url: url!)
-//            urlRequest.httpMethod = "POST"
-//            let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
-//            urlRequest.httpBody = httpBody
-//            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//            
-//            Alamofire.request(urlRequest).response { (response) in
-//                if let data = response.data{
-//                    var res = JSON(data)
-//                    UserDefaults.standard.set(true, forKey: "SendDeviceToken")
-//                }
-//            }
-//        }
+        //        let checkSendDeviceToken = UserDefaults.standard.bool(forKey: "SendDeviceToken")
+        //        if !checkSendDeviceToken{
+        //            let email = UserDefaults.standard.string(forKey: "UserEmail")
+        //            let token = UserDefaults.standard.string(forKey: "UserToken")
+        //            let parameter = ["email": email, "token": token]
+        //            let url = URL(string: "http://10.10.6.18:3030/deviceManage/addAlertDevice")
+        //            var urlRequest = URLRequest(url: url!)
+        //            urlRequest.httpMethod = "POST"
+        //            let httpBody = try? JSONSerialization.data(withJSONObject: parameter, options: [])
+        //            urlRequest.httpBody = httpBody
+        //            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        //
+        //            Alamofire.request(urlRequest).response { (response) in
+        //                if let data = response.data{
+        //                    var res = JSON(data)
+        //                    UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+        //                }
+        //            }
+        //        }
         
         let alert = AlertManageController()
         if coinName.status{
@@ -562,53 +571,53 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeAlertToRealm(){
-            let email = UserDefaults.standard.string(forKey: "UserEmail")!
-            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
-            let body:[String:Any] = ["email":email,"token":certificateToken]
-
-            let hud = JGProgressHUD(style: .light)
-            hud.show(in: (self.parent?.view)!)
+        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
+        let body:[String:Any] = ["email":email,"token":certificateToken]
         
-            URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
-                if pass{
-                    self.writeRealm(json:response){(pass) in
-                        if pass{
-                            DispatchQueue.main.async {
-                                print(self.realm.objects(alertObject.self))
-                                self.alerts = self.allAlert
-                                self.alertTableView.reloadData()
-                                DispatchQueue.main.asyncAfter(deadline: .now()) {
-                                    hud.dismiss()
-                                }
-                            }
-                        } else{
+        let hud = JGProgressHUD(style: .light)
+        hud.show(in: (self.parent?.view)!)
+        
+        URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
+            if pass{
+                self.writeRealm(json:response){(pass) in
+                    if pass{
+                        DispatchQueue.main.async {
+                            print(self.realm.objects(alertObject.self))
                             self.alerts = self.allAlert
                             self.alertTableView.reloadData()
                             DispatchQueue.main.asyncAfter(deadline: .now()) {
                                 hud.dismiss()
                             }
                         }
-                    }
-                } else{
-                    let manager = NetworkReachabilityManager()
-                    hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                    if !(manager?.isReachable)! {
-                        hud.textLabel.text = "Error"
-                        hud.detailTextLabel.text = "No Network" // To change?
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    } else{
+                        self.alerts = self.allAlert
+                        self.alertTableView.reloadData()
+                        DispatchQueue.main.asyncAfter(deadline: .now()) {
                             hud.dismiss()
                         }
-                        
-                    } else {
-                        hud.textLabel.text = "Error"
-                        hud.detailTextLabel.text = "Time Out" // To change?
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            hud.dismiss()
-                        }
-                        
                     }
                 }
+            } else{
+                let manager = NetworkReachabilityManager()
+                hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                if !(manager?.isReachable)! {
+                    hud.textLabel.text = "Error"
+                    hud.detailTextLabel.text = "No Network" // To change?
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                    }
+                    
+                } else {
+                    hud.textLabel.text = "Error"
+                    hud.detailTextLabel.text = "Time Out" // To change?
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                    }
+                    
+                }
             }
+        }
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){

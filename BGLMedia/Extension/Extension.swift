@@ -75,6 +75,16 @@ class Extension:NSObject{
         }
         return value
     }
+    
+    func checkInputVaild(value:String)->Bool{
+        let doubleFormat = "^(0|([1-9][0-9]*))(\\.[0-9]+)?$"
+        let doublePredicate = NSPredicate(format:"SELF MATCHES %@", doubleFormat)
+        if doublePredicate.evaluate(with: value){
+            return true
+        } else{
+            return false
+        }
+    }
 }
 
 extension UIViewController{
@@ -228,3 +238,5 @@ extension UIScrollView{
         header?.beginRefreshing()
     }
 }
+
+

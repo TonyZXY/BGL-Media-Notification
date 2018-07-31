@@ -24,7 +24,7 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
     
     //Get Trading Pairs Name
     func getTradingPairsList()->Void{
-        let data = getDataResults.getTradingCoinList(market: (delegate?.getExchangeName())!,coin:(delegate?.getCoinName())!)
+        let data = APIServices.fetchInstance.getTradingCoinList(market: (delegate?.getExchangeName())!,coin:(delegate?.getCoinName())!)
         if data != []{
             for pairs in data{
                 self.allTradingPairs.append(pairs)
@@ -38,6 +38,11 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+        cell.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+        cell.layer.shadowOpacity = 1
+        cell.layer.shadowRadius = 0
+        cell.layer.masksToBounds = false
         cell.textLabel?.text = allTradingPairs[indexPath.row]
         return cell
     }
@@ -52,6 +57,7 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
         //Delegate selected tradingPairsName to the transaction page
         delegate?.setTradingPairsName(tradingPairsName: (table.textLabel?.text)!)
         delegate?.setTradingPairsSecondType(secondCoinType: allPairs)
+        tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.popViewController(animated: true)
     }
     
@@ -59,6 +65,10 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
         view.addSubview(searchResult)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchResult]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchResult]))
+        
+        let tableVC = UITableViewController.init(style: .plain)
+        tableVC.tableView = self.searchResult
+        self.addChildViewController(tableVC)
     }
     
     lazy var searchResult:UITableView = {

@@ -79,18 +79,20 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        //        let factor = view.frame.width/375
         setUpView()
+        
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        getNotificationStatus()
+        //        getNotificationStatus()
         optionTableView.reloadData()
     }
     
     @objc func refreshNotificationStatus(){
-//        getNotificationStatus()
+        //        getNotificationStatus()
     }
     
     @objc func changeLanguage(){
@@ -105,10 +107,11 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let factor = view.frame.width/375
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         let sectionLabel = UILabel()
-        sectionLabel.font = UIFont.semiBoldFont(20)
+        sectionLabel.font = UIFont.semiBoldFont(17*factor)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
         sectionLabel.textColor = ThemeColor().textGreycolor()
@@ -141,7 +144,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         cell.textLabel?.text = items![indexPath.section][indexPath.row]
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.font = UIFont.regularFont(16)
-//        cell.selectionStyle = .none
+        //        cell.selectionStyle = .none
         cell.backgroundColor = ThemeColor().greyColor()
         cell.accessoryType = .disclosureIndicator
         return cell
@@ -155,40 +158,40 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section < 2{
-//            if indexPath.section == 1 && indexPath.row == 2{
-//                if notificationStatus{
-                    let changePage = pushItems[indexPath.section][indexPath.row]
-                    changePage.hidesBottomBarWhenPushed = true
-                    navigationController?.pushViewController(changePage, animated: true)
-//                } else{
-//                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
-//                    // Setting button action
-//                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
-//                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-//                            return
-//                        }
-//
-//                        if UIApplication.shared.canOpenURL(settingsUrl) {
-//                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-//                                // Checking for setting is opened or not
-//                                print("Setting is opened: \(success)")
-//                            })
-//                        }
-//                    }
-//                    alertController.addAction(settingsAction)
-//                    // Cancel button action
-//                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
-//                        // Magic is here for cancel button
-//                    }
-//                    alertController.addAction(cancelAction)
-//                    // This part is important to show the alert controller ( You may delete "self." from present )
-//                    self.present(alertController, animated: true, completion: nil)
-//                }
-//            } else{
-//                let changePage = pushItems[indexPath.section][indexPath.row]
-//                changePage.hidesBottomBarWhenPushed = true
-//                navigationController?.pushViewController(changePage, animated: true)
-//            }
+            //            if indexPath.section == 1 && indexPath.row == 2{
+            //                if notificationStatus{
+            let changePage = pushItems[indexPath.section][indexPath.row]
+            changePage.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(changePage, animated: true)
+            //                } else{
+            //                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
+            //                    // Setting button action
+            //                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
+            //                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
+            //                            return
+            //                        }
+            //
+            //                        if UIApplication.shared.canOpenURL(settingsUrl) {
+            //                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
+            //                                // Checking for setting is opened or not
+            //                                print("Setting is opened: \(success)")
+            //                            })
+            //                        }
+            //                    }
+            //                    alertController.addAction(settingsAction)
+            //                    // Cancel button action
+            //                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
+            //                        // Magic is here for cancel button
+            //                    }
+            //                    alertController.addAction(cancelAction)
+            //                    // This part is important to show the alert controller ( You may delete "self." from present )
+            //                    self.present(alertController, animated: true, completion: nil)
+            //                }
+            //            } else{
+            //                let changePage = pushItems[indexPath.section][indexPath.row]
+            //                changePage.hidesBottomBarWhenPushed = true
+            //                navigationController?.pushViewController(changePage, animated: true)
+            //            }
             
         } else{
             if loginStatus{
@@ -240,13 +243,13 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     }
                 }
             } else{
-                    let login = LoginController()
-                    self.present(login, animated: true, completion: nil)
+                let login = LoginController()
+                self.present(login, animated: true, completion: nil)
             }
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
-
+    
     
     func deleteMemory(){
         UserDefaults.standard.set(false,forKey: "isLoggedIn")
@@ -263,7 +266,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
             self.realm.delete(self.realm.objects(alertCoinNames.self))
         }
     }
-
+    
     
     func setUpView(){
         titleLabel.text = navigationBarItem
@@ -282,12 +285,12 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.dataSource = self
         tableView.rowHeight = 50
         tableView.bounces = false
-
+        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
-
+    
     let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textColor = UIColor.white

@@ -21,8 +21,8 @@ struct interset{
     var id:String = "123"
     var isGreater:String = "1"
 }
-    
-    
+
+
 //    "interest":["_id":"","coinFrom":"BTC","coinTo":"AUD","market":"BTCmarkets","price":123,"status":true,"id":"123","isGreater":1]
 
 
@@ -77,7 +77,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         newTransaction.singlePrice = single
     }
     
-
+    
     
     var email:String{
         get{
@@ -92,18 +92,18 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     var twoDimension = [ExpandableNames(isExpanded: true, name: ["a","sf"]),ExpandableNames(isExpanded: true, name: ["sdf"])]
-
+    
     
     var showIndexPaths = false
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         
-//        let res = realm.objects(alertObject.self)
-//        print(res)
+        //        let res = realm.objects(alertObject.self)
+        //        print(res)
     }
     
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         loadPrice()
@@ -112,15 +112,17 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
-
+    
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 80
+        let factor = view.frame.width/375
+        return 80 * factor
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let factor = view.frame.width/375
         if section == 0{
             let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
-            coinImage.frame = CGRect(x: 0, y: 0, width: 30, height: 30)
+            coinImage.frame = CGRect(x: 0, y: 0, width: 30*factor, height: 30*factor)
             coinImage.clipsToBounds = true
             coinImage.contentMode = UIViewContentMode.scaleAspectFit
             coinImage.translatesAutoresizingMaskIntoConstraints = false
@@ -143,12 +145,13 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 button.isHidden = true
             }
             
-            coinImage.coinImageSetter(coinName: intersetObject.coinAbbName, width: 30, height: 30, fontSize: 5)
+            coinImage.coinImageSetter(coinName: intersetObject.coinAbbName, width: 30*factor, height: 30*factor, fontSize: 5*factor)
             coinLabel.text = "Coin Name: " + intersetObject.coinName
+            coinLabel.font = UIFont.regularFont(14*factor)
             
-        
             
-           
+            
+            
             
             let sectionView = UIView()
             sectionView.clipsToBounds = true
@@ -164,10 +167,10 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
             NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
             NSLayoutConstraint(item: coinLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
-            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
-            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage]))
-            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor)-[v0(\(30*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(30*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-\(10*factor)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
             
             return sectionView
         } else{
@@ -176,25 +179,28 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let factor = view.frame.width/375
         if section == 0{
             let sectionView = UIView()
             sectionView.clipsToBounds = true
             sectionView.backgroundColor = ThemeColor().darkGreyColor()
             let fixLabel = UILabel()
             fixLabel.text = textValue(name: "exampleLabel_alert")
+            fixLabel.font = UIFont.regularFont(14*factor)
             fixLabel.textColor = ThemeColor().whiteColor()
             fixLabel.translatesAutoresizingMaskIntoConstraints = false
             let priceLabel = UILabel()
             priceLabel.text = Extension.method.scientificMethod(number: sectionPrice) + " " + intersetObject.tradingPairs
             priceLabel.translatesAutoresizingMaskIntoConstraints = false
             priceLabel.textColor = ThemeColor().whiteColor()
+            priceLabel.font = UIFont.regularFont(14*factor)
             sectionView.addSubview(fixLabel)
             sectionView.addSubview(priceLabel)
             priceLabel.tag = 100
             NSLayoutConstraint(item: fixLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
             NSLayoutConstraint(item: priceLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":fixLabel]))
-            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":priceLabel]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":fixLabel]))
+            sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":priceLabel]))
             return sectionView
         } else{
             return UIView()
@@ -222,11 +228,11 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
         button.setTitle(isExpanded ? "Edit":"Edit", for: .normal)
         
-//        if !isExpanded{
-//            alertTableView.insertRows(at: indexPaths, with: .fade)
-//        } else{
-//            alertTableView.deleteRows(at: indexPaths, with: .fade)
-//        }
+        //        if !isExpanded{
+        //            alertTableView.insertRows(at: indexPaths, with: .fade)
+        //        } else{
+        //            alertTableView.deleteRows(at: indexPaths, with: .fade)
+        //        }
         let coin = SearchCoinController()
         coin.delegate = self
         navigationController?.pushViewController(coin, animated: true)
@@ -256,46 +262,49 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
-//        if !twoDimension[section].isExpanded{
-//            return 0
-//        }
+        //        if !twoDimension[section].isExpanded{
+        //            return 0
+        //        }
         return twoDimension[section].name.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let factor = view.frame.width/375
         if indexPath.section == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: "editAlertCell", for: indexPath)
             cell.accessoryType = .disclosureIndicator
             cell.textLabel?.textColor = ThemeColor().whiteColor()
+            cell.textLabel?.font = UIFont.regularFont(15*factor)
             cell.backgroundColor = ThemeColor().greyColor()
             let exchangeSection = "Exchange: " + intersetObject.exchangName
             let tradingPairs = intersetObject.tradingPairs == "" ? "TradingPairs: " : "TradingPairs: " + intersetObject.coinAbbName + "/" + intersetObject.tradingPairs
             cell.textLabel?.text = indexPath.row == 0 ?  exchangeSection : tradingPairs
-           
-           
+            
+            
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "priceTextFieldCell", for: indexPath) as! priceNotificationCell
+            cell.factor = factor
             cell.backgroundColor = ThemeColor().greyColor()
             cell.priceTextField.tag = indexPath.row
             cell.priceTextField.delegate = self
             cell.priceTextField.text = String(intersetObject.compare)
             cell.priceTypeLabel.text = intersetObject.tradingPairs
-            cell.priceTypeLabel.backgroundColor = ThemeColor().blueColor()
+            
             return cell
         }
-//        let name = twoDimension[indexPath.section].name[indexPath.row]
+        //        let name = twoDimension[indexPath.section].name[indexPath.row]
         
         
-//        cell.compareLabel.text = twoDimension[indexPath.section].name[indexPath.row]
+        //        cell.compareLabel.text = twoDimension[indexPath.section].name[indexPath.row]
         
-//        cell.textLabel?.text = name
+        //        cell.textLabel?.text = name
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 && indexPath.row == 0{
-//            intersetObject.exchangName = ""
-//            intersetObject.tradingPairs = ""
+            //            intersetObject.exchangName = ""
+            //            intersetObject.tradingPairs = ""
             let exchange = SearchExchangesController()
             exchange.delegate = self
             navigationController?.pushViewController(exchange, animated: true)
@@ -307,19 +316,22 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     func setUpView(){
+        let factor = view.frame.width/375
+        view.backgroundColor = ThemeColor().themeColor()
         if status == "Update"{
             alertButton.setTitle("Update", for: .normal)
             let navigationDoneButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteAlert))
             self.navigationItem.setRightBarButton(navigationDoneButton, animated: true)
         }
         
+        alertButton.titleLabel?.font = UIFont.semiBoldFont(18*factor)
         view.addSubview(alertTableView)
         view.addSubview(alertButton)
         alertButton.addTarget(self, action: #selector(addNewAlert), for: .touchUpInside)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]-3-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView,"v1":alertButton]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]-\(3*factor)-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView,"v1":alertButton]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(80*factor))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
     }
     
     @objc func deleteAlert(){
@@ -348,7 +360,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     lazy var alertTableView:UITableView = {
-       var tableView = UITableView()
+        var tableView = UITableView()
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "editAlertCell")
         tableView.register(priceNotificationCell.self, forCellReuseIdentifier: "priceTextFieldCell")
@@ -360,7 +372,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }()
     
     var PriceTextFieldCell:UITableViewCell = {
-       var tableViewCell = UITableViewCell()
+        var tableViewCell = UITableViewCell()
         tableViewCell.translatesAutoresizingMaskIntoConstraints = false
         return tableViewCell
     }()
@@ -375,9 +387,9 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }()
     
     @objc func addNewAlert(){
-        if intersetObject.coinName != "" && intersetObject.tradingPairs != "" && intersetObject.tradingPairs != ""{
+        if intersetObject.coinName != "" && intersetObject.exchangName != "" && intersetObject.tradingPairs != ""{
             var compareStatus:Int = 0
-            let Inputprice = Double(inputPrice)!
+            let Inputprice = Double(inputPrice) ?? 0
             if sectionPrice < Inputprice {
                 compareStatus = 1
             } else {
@@ -405,7 +417,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                     self.navigationController?.popViewController(animated: true)
                 }
             } else{
-               
+                
                 let inter:[String:Any] = ["from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":intersetObject.compare ,"isGreater":intersetObject.compareStatus]
                 let parameter = ["email":email,"token":token,"interest":inter] as [String : Any]
                 
@@ -433,27 +445,27 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             
             
             
-//
-//
-//
-//
-//
-//            let realmData:[Any] = [currentTransactionId,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.tradingPairsName,newTransaction.exchangName,price,true,true,Date()]
-//            if realm.object(ofType: alertObject.self, forPrimaryKey: currentTransactionId) == nil {
-//                realm.create(alertObject.self, value: realmData)
-//            } else {
-//                realm.create(alertObject.self, value: realmData, update: true)
-//            }
-//
-//            if realm.object(ofType: alertCoinNames.self, forPrimaryKey: newTransaction.coinAbbName) == nil {
-//                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName])
-//            } else {
-//                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName], update: true)
-//            }
+            //
+            //
+            //
+            //
+            //
+            //            let realmData:[Any] = [currentTransactionId,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.tradingPairsName,newTransaction.exchangName,price,true,true,Date()]
+            //            if realm.object(ofType: alertObject.self, forPrimaryKey: currentTransactionId) == nil {
+            //                realm.create(alertObject.self, value: realmData)
+            //            } else {
+            //                realm.create(alertObject.self, value: realmData, update: true)
+            //            }
+            //
+            //            if realm.object(ofType: alertCoinNames.self, forPrimaryKey: newTransaction.coinAbbName) == nil {
+            //                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName])
+            //            } else {
+            //                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName], update: true)
+            //            }
             
-//            try! realm.commitWrite()
-//            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-//            navigationController?.popViewController(animated: true)
+            //            try! realm.commitWrite()
+            //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+            //            navigationController?.popViewController(animated: true)
         } else {
             navigationController?.popViewController(animated: true)
         }
@@ -471,10 +483,10 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                     }
                     self.sectionPrice = readData
                     
-            
                     
-//                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-//                    cell.priceType.text = Extension.method.scientificMethod(number: readData)
+                    
+                    //                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                    //                    cell.priceType.text = Extension.method.scientificMethod(number: readData)
                     
                     
                     
@@ -483,7 +495,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                     
                     
                     
-//                    self.alertTableView.reloadData()
+                    //                    self.alertTableView.reloadData()
                     self.newTransaction.singlePrice = Double(String(readData))!
                 case .failure(let error):
                     print("the error \(error.localizedDescription)")
@@ -495,11 +507,13 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-            if textField.text == "" || textField.text == nil{
-                textField.text = "0"
-            } else{
-                inputPrice = textField.text!
+        if textField.text == "" || textField.text == nil{
+            textField.text = "0"
+        } else{
+            if Extension.method.checkInputVaild(value: textField.text!){
+               inputPrice = textField.text!
             }
+        }
     }
     
     func sendAlertToServer(parameter: [String : Any], completion:@escaping (JSON, Bool)->Void){
@@ -520,25 +534,25 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             }
         }
     }
-
-//    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
-//
-//
-//
-//
-//
-//        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
-//        var urlRequest = URLRequest(url: url!)
-//        urlRequest.httpMethod = "GET"
-//        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-//
-//        Alamofire.request(urlRequest).response { (response) in
-//            if let data = response.data{
-//                var res = JSON(data)
-//                completion(res,true)
-//            }
-//        }
-//    }
-
+    
+    //    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
+    //
+    //
+    //
+    //
+    //
+    //        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
+    //        var urlRequest = URLRequest(url: url!)
+    //        urlRequest.httpMethod = "GET"
+    //        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    //
+    //        Alamofire.request(urlRequest).response { (response) in
+    //            if let data = response.data{
+    //                var res = JSON(data)
+    //                completion(res,true)
+    //            }
+    //        }
+    //    }
+    
 }
 

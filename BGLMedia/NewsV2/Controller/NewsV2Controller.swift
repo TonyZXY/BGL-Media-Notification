@@ -82,10 +82,10 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         setUpView()
         newsTableView.switchRefreshFooter(to: .removed)
         
-        DispatchQueue.main.async(execute: {
-            //            self.newsTableView.contentOffset = CGPoint(x: 0, y: -50.5)
-            self.newsTableView.beginHeaderRefreshing()
-        })
+//        DispatchQueue.main.async(execute: {
+//            self.newsTableView.beginHeaderRefreshing()
+//        })
+        self.newsTableView.switchRefreshHeader(to: .refreshing)
         
         self.displayNumber += 20
         getData(skip:0,limit: 20){ success in
@@ -126,7 +126,36 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     @objc func changeLanguage(){
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
-            self.newsTableView.beginHeaderRefreshing()
+        
+        DispatchQueue.main.async(execute: {
+            self.newsTableView.switchRefreshHeader(to: .refreshing)
+        })
+        
+//        addRefreshHeader(){success in
+//            if success{
+//                let header = DefaultRefreshHeader.header()
+//                header.textLabel.textColor = ThemeColor().whiteColor()
+//                header.textLabel.font = UIFont.regularFont(12)
+//                header.tintColor = ThemeColor().whiteColor()
+//                header.imageRenderingWithTintColor = true
+//                self.newsTableView.configRefreshHeader(with:header, container: self, action: {
+//                    self.handleRefresh(self.newsTableView)
+//                })
+//                DispatchQueue.main.async(execute: {
+//                    self.newsTableView.switchRefreshHeader(to: .refreshing)
+//                })
+//            }
+//        }
+    
+
+    }
+    
+    func addRefreshHeader(completion:@escaping (Bool)->Void){
+        DispatchQueue.main.async(execute: {
+            self.newsTableView.switchRefreshHeader(to: .removed)
+            completion(true)
+        })
+        
     }
     
     deinit {
@@ -255,6 +284,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         //
         //        NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
     }
+
     
     lazy var newsTableView:UITableView = {
         var tableView = UITableView()

@@ -84,18 +84,20 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let factor = view.frame.width/375
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         let sectionLabel = UILabel()
         sectionLabel.text = sectionItem[section]
         sectionLabel.textColor = ThemeColor().textGreycolor()
+        sectionLabel.font = UIFont.regularFont(14*factor)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
         
-        NSLayoutConstraint(item: sectionLabel, attribute: .bottom, relatedBy: .equal, toItem: sectionView, attribute: .bottom, multiplier: 1, constant: -10).isActive = true
-        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10).isActive = true
-//        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sectionLabel]))
-//        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sectionLabel]))
+        NSLayoutConstraint(item: sectionLabel, attribute: .bottom, relatedBy: .equal, toItem: sectionView, attribute: .bottom, multiplier: 1, constant: -10*factor).isActive = true
+        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
+        //        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sectionLabel]))
+        //        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sectionLabel]))
         return sectionView
     }
     
@@ -113,6 +115,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        let factor = view.frame.width/375
         if section == 0{
             if !loginStatus || !NotificationStatus{
                 let sectionView = UIView()
@@ -123,7 +126,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 sectionButton.titleLabel?.contentMode = .left
                 if !loginStatus{
                     let settingString = textValue(name: "notlogin_alert")
-                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
+                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
                     let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
                     var myRange = NSRange(location: 0, length: 0)
                     if defaultLanguage == "EN"{
@@ -138,7 +141,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                     sectionButton.addTarget(self, action: #selector(GoTologin), for: .touchUpInside)
                 } else{
                     let settingString = textValue(name: "notallow_alert")
-                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
+                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
                     let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
                     var myRange = NSRange(location: 0, length: 0)
                     if defaultLanguage == "EN"{
@@ -146,15 +149,15 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 20, length: 2)
                     }
-         
+                    
                     myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
                     sectionButton.setAttributedTitle(myString, for: .normal)
-//                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13) ]
-//                    let myString = NSMutableAttributedString(string: "Go to Setting", attributes: myAttribute )
-//                    let myRange = NSRange(location: 1, length: 3) // range starting at location 17 with a lenth of 7: "Strings"
-//                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red, range: myRange)
-//
-//                    sectionButton.setAttributedTitle(myString, for: .normal)
+                    //                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13) ]
+                    //                    let myString = NSMutableAttributedString(string: "Go to Setting", attributes: myAttribute )
+                    //                    let myRange = NSRange(location: 1, length: 3) // range starting at location 17 with a lenth of 7: "Strings"
+                    //                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red, range: myRange)
+                    //
+                    //                    sectionButton.setAttributedTitle(myString, for: .normal)
                     sectionButton.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
                 }
                 sectionButton.translatesAutoresizingMaskIntoConstraints = false
@@ -162,8 +165,8 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 
                 
                 
-                NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10).isActive = true
-                NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10).isActive = true
+                NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
+                NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
                 NSLayoutConstraint(item: sectionButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
                 return sectionView
             } else{
@@ -176,9 +179,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     
     @objc func deviceSetting(){
-
+        
         let alertController = UIAlertController(title: "Notification Allow", message: "Go to setting page to set Notification", preferredStyle: .alert)
-
+        
         // Setting button action
         let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
             guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
@@ -208,7 +211,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-            return 60
+        return 60
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -216,12 +219,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let factor = view.frame.width/375
         let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
         cell.backgroundColor = ThemeColor().greyColor()
         cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
         cell.accessibilityHint = switchStatusItem[indexPath.section][indexPath.row]
         cell.textLabel?.textColor = ThemeColor().whiteColor()
-        cell.separatorInset = UIEdgeInsetsMake(0, 16, 0, 0)
+        cell.textLabel?.font = UIFont.regularFont(14*factor)
+        cell.separatorInset = UIEdgeInsetsMake(0, 16*factor, 0, 0)
         cell.isUserInteractionEnabled = true
         if indexPath.section == 1 {
             let swithButton = UISwitch()
@@ -252,52 +257,54 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         
         
         
-//        if indexPath.section == 0{
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
-//            cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
-//            return cell
-//        } else {
-//            let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
-//            cell.selectionStyle = .none
-//            cell.backgroundColor = UIColor.white
-//            cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
-//            cell.accessibilityHint = switchStatusItem[indexPath.row]
-//            cell.textLabel?.textColor = UIColor.black
-//            let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-//            if indexPath.row < 2{
-//                let swithButton = UISwitch()
-//                swithButton.isOn = SwitchOption[indexPath.row]
-//                cell.accessoryView = swithButton
-//                swithButton.tag = indexPath.row
-//                swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
-//                if !loginStatus{
-//                    cell.isHidden = true
-//                }
-//            } else{
-//                if loginStatus{
-//                    cell.accessoryType = .disclosureIndicator
-//                    if SwitchOption[1] == false{
-//                        cell.isHidden = true
-//                    }
-//                }else {
-//                    cell.isHidden = true
-//                }
-//            }
-//            return cell
-//        }
+        //        if indexPath.section == 0{
+        //            let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
+        //            cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
+        //            return cell
+        //        } else {
+        //            let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
+        //            cell.selectionStyle = .none
+        //            cell.backgroundColor = UIColor.white
+        //            cell.textLabel?.text = cellItems[indexPath.section][indexPath.row]
+        //            cell.accessibilityHint = switchStatusItem[indexPath.row]
+        //            cell.textLabel?.textColor = UIColor.black
+        //            let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
+        //            if indexPath.row < 2{
+        //                let swithButton = UISwitch()
+        //                swithButton.isOn = SwitchOption[indexPath.row]
+        //                cell.accessoryView = swithButton
+        //                swithButton.tag = indexPath.row
+        //                swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
+        //                if !loginStatus{
+        //                    cell.isHidden = true
+        //                }
+        //            } else{
+        //                if loginStatus{
+        //                    cell.accessoryType = .disclosureIndicator
+        //                    if SwitchOption[1] == false{
+        //                        cell.isHidden = true
+        //                    }
+        //                }else {
+        //                    cell.isHidden = true
+        //                }
+        //            }
+        //            return cell
+        //        }
     }
     
-
-
+    
+    
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let factor = view.frame.width/375
         if indexPath.section == 2 && indexPath.row == 0{
-                let alert = AlertController()
-                alert.hidesBottomBarWhenPushed = true
-                navigationController?.pushViewController(alert, animated: true)
-                tableView.deselectRow(at: indexPath, animated: true)
+            let alert = AlertController()
+            alert.factor = factor
+            alert.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(alert, animated: true)
+            tableView.deselectRow(at: indexPath, animated: true)
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         getNotificationStatus()
@@ -348,7 +355,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             }
         })
     }
-
+    
     @objc func addLogin(){
         let status = UserDefaults.standard.bool(forKey: "isLoggedIn")
         if status{
@@ -412,41 +419,42 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }()
     
     lazy var notificationTableView:UITableView = {
-       var tableView = UITableView(frame: .zero, style: .grouped)
+        let factor = view.frame.width/375
+        var tableView = UITableView(frame: .zero, style: .grouped)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "editCurrency")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.delegate = self
-        tableView.rowHeight = 40
-//        tableView.separatorInset = .zero
-        tableView.separatorInset = UIEdgeInsetsMake(0, 16, 0, 0);
+        tableView.rowHeight = 40 * factor
+        //        tableView.separatorInset = .zero
+        tableView.separatorInset = UIEdgeInsetsMake(0, 16*factor, 0, 0);
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.bounces = false
         return tableView
     }()
     
-//    func getNotificationStatus(){
-//            let current = UNUserNotificationCenter.current()
-//            current.getNotificationSettings(completionHandler: { (settings) in
-//                if settings.authorizationStatus == .notDetermined {
-//                    // Notification permission has not been asked yet, go for it!
-//                }
-//
-//                if settings.authorizationStatus == .denied {
-//                    UserDefaults.standard.set(false, forKey: "NotificationSetting")
-//                    // Notification permission was previously denied, go to settings & privacy to re-enable
-//                }
-//
-//                if settings.authorizationStatus == .authorized {
-//                    UserDefaults.standard.set(true, forKey: "NotificationSetting")
-//                    // Notification permission was already gransnted
-//                }
-//    //            DispatchQueue.main.async {
-//    //                self.notificationTableView.reloadData()
-//    //            }
-//            })
-//        }
+    //    func getNotificationStatus(){
+    //            let current = UNUserNotificationCenter.current()
+    //            current.getNotificationSettings(completionHandler: { (settings) in
+    //                if settings.authorizationStatus == .notDetermined {
+    //                    // Notification permission has not been asked yet, go for it!
+    //                }
+    //
+    //                if settings.authorizationStatus == .denied {
+    //                    UserDefaults.standard.set(false, forKey: "NotificationSetting")
+    //                    // Notification permission was previously denied, go to settings & privacy to re-enable
+    //                }
+    //
+    //                if settings.authorizationStatus == .authorized {
+    //                    UserDefaults.standard.set(true, forKey: "NotificationSetting")
+    //                    // Notification permission was already gransnted
+    //                }
+    //    //            DispatchQueue.main.async {
+    //    //                self.notificationTableView.reloadData()
+    //    //            }
+    //            })
+    //        }
     
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -454,60 +462,60 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         postNotificationStatusData()
     }
     
-//    override func viewWillDisappear(_ animated: Bool) {
-//        postNotificationStatusData()
-//    }
+    //    override func viewWillDisappear(_ animated: Bool) {
+    //        postNotificationStatusData()
+    //    }
     
     func getNotificationStatusData(){
-            print("sfsdfsds")
-            if UserDefaults.standard.bool(forKey: "isLoggedIn"){
-                let hud = JGProgressHUD(style: .light)
-                hud.show(in: (self.parent?.view)!)
-                
-                let email = UserDefaults.standard.string(forKey: "UserEmail")!
-                let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
-                let parameter = ["email":email,"token":certificateToken]
-                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
-                    if success{
-                        print(response)
-                        UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
-                        UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
-                        self.notificationTableView.reloadData()
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+        print("sfsdfsds")
+        if UserDefaults.standard.bool(forKey: "isLoggedIn"){
+            let hud = JGProgressHUD(style: .light)
+            hud.show(in: (self.parent?.view)!)
+            
+            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
+            let parameter = ["email":email,"token":certificateToken]
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                if success{
+                    print(response)
+                    UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
+                    UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
+                    self.notificationTableView.reloadData()
+                    DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        hud.dismiss()
+                    }
+                } else{
+                    let manager = NetworkReachabilityManager()
+                    hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                    if !(manager?.isReachable)! {
+                        hud.textLabel.text = "Error"
+                        hud.detailTextLabel.text = "No Network" // To change?
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()
                         }
+                        
                     } else{
-                        let manager = NetworkReachabilityManager()
-                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                        if !(manager?.isReachable)! {
-                            hud.textLabel.text = "Error"
-                            hud.detailTextLabel.text = "No Network" // To change?
-                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                hud.dismiss()
-                            }
-                            
-                        } else{
-                            hud.textLabel.text = "Error"
-                            hud.detailTextLabel.text = "Time Out"
-                            hud.dismiss()
-                        }
+                        hud.textLabel.text = "Error"
+                        hud.detailTextLabel.text = "Time Out"
+                        hud.dismiss()
                     }
                 }
             }
+        }
     }
     
     func postNotificationStatusData(){
-//        if buildInterestStatus{
-            if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
-                let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
-                let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
-                let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
-                let email = UserDefaults.standard.string(forKey: "UserEmail")!
-                let parameter:[String:Any] = ["email":email,"token":certificateToken,"flash":flashNotification,"interest":priceAlert]
-                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in
-                    print(response)
-                }
+        //        if buildInterestStatus{
+        if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
+            let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
+            let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
+            let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
+            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+            let parameter:[String:Any] = ["email":email,"token":certificateToken,"flash":flashNotification,"interest":priceAlert]
+            URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                print(response)
             }
-//        }
+        }
+        //        }
     }
 }

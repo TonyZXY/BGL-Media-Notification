@@ -26,8 +26,8 @@ open class ElasticRefreshHeader: UIView,RefreshableHeader {
         addSubview(control)
         addSubview(textLabel)
         addSubview(imageView)
-        textDic[.refreshSuccess] = PullToRefreshKitHeaderString.refreshSuccess
-        textDic[.refreshFailure] = PullToRefreshKitHeaderString.refreshFailure
+        textDic[.refreshSuccess] = PullToRefreshKitHeaderString().refreshSuccess
+        textDic[.refreshFailure] = PullToRefreshKitHeaderString().refreshFailure
         textLabel.text = nil
     }
     

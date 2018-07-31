@@ -93,6 +93,11 @@ class TransExpensesCell:UITableViewCell,UITextFieldDelegate, UIPickerViewDelegat
     }()
     
     func setupviews(){
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
         selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(expensesLabel)

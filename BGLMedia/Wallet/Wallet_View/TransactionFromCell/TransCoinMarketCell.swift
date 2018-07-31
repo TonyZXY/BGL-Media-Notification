@@ -13,7 +13,6 @@ class TransCoinMarketCell:UITableViewCell{
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         setupview()
-        selectionStyle = .none
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -23,7 +22,7 @@ class TransCoinMarketCell:UITableViewCell{
     let marketLabel:UILabel = {
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
-        label.font = label.font.withSize(18)
+       label.font = UIFont.semiBoldFont(18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -32,13 +31,19 @@ class TransCoinMarketCell:UITableViewCell{
         let label = InsetLabel()
         label.layer.cornerRadius = 8
         label.layer.backgroundColor = ThemeColor().greyColor().cgColor
-        label.font = label.font.withSize(15)
+        label.font = UIFont.regularFont(15)
         label.textColor = ThemeColor().whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     func setupview(){
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
+        
         backgroundColor = ThemeColor().themeColor()
         addSubview(marketLabel)
         addSubview(market)
@@ -97,6 +102,12 @@ class TradePairs:UITableViewCell{
     }()
     
     func setupviews(){
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 3)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
+        
         addSubview(tradeLabel)
         addSubview(trade)
         addSubview(tradearrow)
