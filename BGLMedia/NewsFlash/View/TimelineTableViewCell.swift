@@ -110,7 +110,7 @@ open class TimelineTableViewCell: UITableViewCell {
     }
     
     func setUpView(){
-        titleLabel.font = UIFont.semiBoldFont(20)
+        titleLabel.font = UIFont.semiBoldFont(18)
         descriptionLabel.font = UIFont.regularFont(15)
         
         addSubview(sharesbutton)

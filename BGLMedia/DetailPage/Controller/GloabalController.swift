@@ -20,12 +20,8 @@ class GloabalController: UIViewController,ExchangeSelect{
         coinDetailController.gerneralController.exchangeButton.setTitle(exchangeName, for: .normal)
         
     }
-    
-    
-    
+
     var newTransaction = AllTransactions()
-    
-    
     var selectStatus = "Global"
     var menuitems = ["General","Transactions","Alerts"]
     let cryptoCompareClient = CryptoCompareClient()
@@ -72,10 +68,10 @@ class GloabalController: UIViewController,ExchangeSelect{
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-//        loadData()
+        loadData()
         //        getCoinGloablDetail()
         
-        coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
+//        coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
@@ -394,7 +390,6 @@ class GloabalController: UIViewController,ExchangeSelect{
             generalPage.tradingPairButton.setTitle(WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName, for: .normal)
             
         } else{
-            print(coinRealm[0].price)
             generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:coinRealm[0].price)
             general.coinAbbName = GlobalData[0].coinAbbName
             general.coinName = GlobalData[0].coinName
@@ -415,12 +410,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         generalPage.circulatingSupplyResult.text = Extension.method.scientificMethod(number: GlobalData[0].circulatingSupply )
         generalPage.candleChartDatas?.coinSymbol = coinDetail.coinName
         general.coinAbbName = coinDetail.coinName
-        
         coinDetailController.transactionHistoryController.generalData = general
-        //        generalPage.defaultCurrencyLable.text = priceType
-        //        generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:GlobalData[0].price ?? 0.0)
-        
-        
         coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
         coinDetailController.alertControllers.coinName.status = true
         coinDetailController.alertControllers.coinName.coinName = general.coinName

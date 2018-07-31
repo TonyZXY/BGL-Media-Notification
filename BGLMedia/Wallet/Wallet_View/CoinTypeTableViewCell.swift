@@ -39,7 +39,11 @@ class CoinTypeTableViewCell:UITableViewCell{
         addSubview(coinImage)
         addSubview(coinName)
         addSubview(coinNameAbb)
-        
+//        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        layer.shadowOffset = CGSize(width: 0, height: 1)
+//        layer.shadowOpacity = 0.5
+//        layer.shadowRadius = 1
+//        layer.masksToBounds = false
         
         NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinName, attribute: .bottom, relatedBy: .equal, toItem: coinImage, attribute: .centerY, multiplier: 1, constant: 0).isActive = true

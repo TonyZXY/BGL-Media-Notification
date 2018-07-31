@@ -23,7 +23,7 @@ class TransTradePairsCell:UITableViewCell{
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = label.font.withSize(18)
+       label.font = UIFont.semiBoldFont(18)
         return label
     }()
     
@@ -31,7 +31,7 @@ class TransTradePairsCell:UITableViewCell{
         let label = InsetLabel()
         label.textColor = ThemeColor().whiteColor()
         label.layer.cornerRadius = 8
-        label.font = label.font.withSize(15)
+        label.font = UIFont.regularFont(15)
         label.layer.backgroundColor = ThemeColor().greyColor().cgColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -39,7 +39,13 @@ class TransTradePairsCell:UITableViewCell{
     
     
     func setupviews(){
-        selectionStyle = .none
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
+        
+        
         backgroundColor = ThemeColor().themeColor()
         addSubview(tradeLabel)
         addSubview(trade)

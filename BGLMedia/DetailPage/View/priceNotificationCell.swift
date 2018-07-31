@@ -62,7 +62,8 @@ class priceNotificationCell:UITableViewCell,UITextFieldDelegate{
     var priceTypeLabel:UILabel = {
         var label = UILabel()
         //        label.layer.borderWidth = 3
-        label.font = label.font.withSize(14)
+        label.font = UIFont.semiBoldFont(15)
+        label.textColor = ThemeColor().blueColor()
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

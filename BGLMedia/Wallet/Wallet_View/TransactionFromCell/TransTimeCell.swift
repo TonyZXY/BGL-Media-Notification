@@ -32,8 +32,8 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
     let timeLabel:UILabel = {
         let label = UILabel()
         label.text = "购买时间"
-        label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
-        label.font = label.font.withSize(18)
+        label.textColor = ThemeColor().textGreycolor()
+        label.font = UIFont.semiBoldFont(18)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -48,7 +48,7 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
         let rightview = UIView(frame: CGRect(x: 0, y: 0, width: 30, height: textfield.frame.height))
         let label = UILabel()
         label.text = "▼"
-        label.font = label.font.withSize(15)
+        label.font = UIFont.regularFont(15)
         label.textColor = ThemeColor().whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         rightview.addSubview(label)
@@ -65,6 +65,11 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
     }()
     
     func setupviews(){
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
         selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(timeLabel)

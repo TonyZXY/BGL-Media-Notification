@@ -52,7 +52,8 @@ class DetailController: UIViewController{
         super.viewDidLoad()
         setUpView()
         refreshPage()
-        self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
+        
+//        self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
         
 //        refreshTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(refreshData), userInfo: nil, repeats: true)
         

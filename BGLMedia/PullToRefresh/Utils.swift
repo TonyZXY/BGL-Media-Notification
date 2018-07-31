@@ -33,19 +33,19 @@ struct PullToRefreshKitConst{
 //}
 
 struct PullToRefreshKitHeaderString{
-     var pullDownToRefresh = textValues(name: "pullDownToRefresh")
-     var releaseToRefresh = textValues(name: "releaseToRefresh")
-     var refreshSuccess = textValues(name: "refreshSuccess")
-     var refreshFailure = textValues(name: "refreshFailure")
-     var refreshing = textValues(name: "refreshing")
+     var pullDownToRefresh = textValue(name: "pullDownToRefresh")
+     var releaseToRefresh = textValue(name: "releaseToRefresh")
+     var refreshSuccess = textValue(name: "refreshSuccess")
+     var refreshFailure = textValue(name: "refreshFailure")
+     var refreshing = textValue(name: "refreshing")
 }
 
 struct PullToRefreshKitFooterString{
-    static let pullUpToRefresh = textValues(name: "pullUpToRefresh")
-    static let refreshing = textValues(name: "refreshing")
-    static let noMoreData = textValues(name: "noMoreData")
-    static let tapToRefresh = textValues(name: "tapToRefresh")
-    static let scrollAndTapToRefresh = textValues(name: "scrollAndTapToRefresh")
+    static let pullUpToRefresh = textValue(name: "pullUpToRefresh")
+    static let refreshing = textValue(name: "refreshing")
+    static let noMoreData = textValue(name: "noMoreData")
+    static let tapToRefresh = textValue(name: "tapToRefresh")
+    static let scrollAndTapToRefresh = textValue(name: "scrollAndTapToRefresh")
 }
 
 struct PullToRefreshKitLeftString{

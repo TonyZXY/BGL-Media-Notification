@@ -290,7 +290,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             cell.priceTextField.delegate = self
             cell.priceTextField.text = String(intersetObject.compare)
             cell.priceTypeLabel.text = intersetObject.tradingPairs
-            cell.priceTypeLabel.backgroundColor = ThemeColor().blueColor()
+            
             return cell
         }
         //        let name = twoDimension[indexPath.section].name[indexPath.row]
@@ -387,9 +387,9 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }()
     
     @objc func addNewAlert(){
-        if intersetObject.coinName != "" && intersetObject.tradingPairs != "" && intersetObject.tradingPairs != ""{
+        if intersetObject.coinName != "" && intersetObject.exchangName != "" && intersetObject.tradingPairs != ""{
             var compareStatus:Int = 0
-            let Inputprice = Double(inputPrice)!
+            let Inputprice = Double(inputPrice) ?? 0
             if sectionPrice < Inputprice {
                 compareStatus = 1
             } else {
@@ -510,7 +510,9 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         if textField.text == "" || textField.text == nil{
             textField.text = "0"
         } else{
-            inputPrice = textField.text!
+            if Extension.method.checkInputVaild(value: textField.text!){
+               inputPrice = textField.text!
+            }
         }
     }
     

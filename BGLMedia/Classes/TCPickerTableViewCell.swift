@@ -61,6 +61,7 @@ class TCPickerTableViewCell: UITableViewCell, TCPickerCellType {
     }
     
     fileprivate func setupUI() {
+        titleLabel.font = UIFont.regularFont(13)
         self.addSubview(titleLabel)
         self.addSubview(self.checkmarkImageView)
         

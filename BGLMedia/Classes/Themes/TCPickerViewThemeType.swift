@@ -60,15 +60,15 @@ extension TCPickerViewThemeType {
     }
     
     public var headerBackgroundColor: UIColor {
-        return UIColor(red: 75/255, green: 178/255, blue: 218/255, alpha: 1)
+        return ThemeColor().blueColor()
     }
     
     public var doneBackgroundColor: UIColor {
-        return UIColor(red: 75/255, green: 178/255, blue: 218/255, alpha: 1)
+        return ThemeColor().blueColor()
     }
     
     public var closeBackgroundColor: UIColor {
-        return UIColor(red: 198/255, green: 198/255, blue: 198/255, alpha: 1)
+        return ThemeColor().textGreycolor()
     }
     
     public var separatorColor: UIColor {
@@ -76,11 +76,11 @@ extension TCPickerViewThemeType {
     }
     
     public var buttonsFont: UIFont {
-        return UIFont.systemFont(ofSize: 16)
+        return UIFont.regularFont(16)
     }
     
     public var titleFont: UIFont{
-        return UIFont.boldSystemFont(ofSize: 18)
+        return UIFont.semiBoldFont(18)
     }
     
     public var rowHeight: CGFloat {

@@ -22,6 +22,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     var transactionStatus = "Add"
     var transactionNumber:Int = 0
     var transactions = EachTransactions()
+//    var inputStatus = false
     
     //First load the page
     override func viewDidLoad() {
@@ -96,6 +97,11 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             }
             cell.price.tag = indexPath.row
             cell.price.delegate = self
+//            cell.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//            cell.layer.shadowOffset = CGSize(width: 0, height: 3)
+//            cell.layer.shadowOpacity = 1
+//            cell.layer.shadowRadius = 0
+//            cell.layer.masksToBounds = false
             return cell
         } else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! TransNumberCell
@@ -200,28 +206,27 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                         allCurrencys.append(currencys)
                     }
                     self.newTransaction.currency = allCurrencys
-                    let lastId = (self.realm.objects(EachTransactions.self).last?.id) ?? 0
-                    self.newTransaction.id = lastId + 1
+                   
 
-                    let tran = Transactions()
-                    tran.coinAbbName = self.newTransaction.coinAbbName
-                    tran.coinName = self.newTransaction.coinName
-                    tran.exchangeName = self.newTransaction.exchangeName
-                    tran.tradingPairsName = self.newTransaction.tradingPairsName
-                    let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
-                    try! self.realm.write {
-                        if object.count != 0{
-                            object[0].exchangeName = self.newTransaction.exchangeName
-                            object[0].tradingPairsName = self.newTransaction.tradingPairsName
-                            object[0].everyTransactions.append(self.newTransaction)
-                        } else{
-                            tran.everyTransactions.append(self.newTransaction)
-                            self.realm.add(tran)
+                    if self.transactionStatus == "Update"{
+                        self.UpdateTransactionToRealm(){succees in
+                            if success{
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                self.navigationController?.popViewController(animated: true)
+                            } else{
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                        }
+                    }else{
+                        self.AddTransactionToRealm(){success in
+                            if success{
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                self.navigationController?.popViewController(animated: true)
+                            }else{
+                                 self.navigationController?.popViewController(animated: true)
+                            }
                         }
                     }
-
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-                    self.navigationController?.popViewController(animated: true)
                 } else{
                     self.navigationController?.popViewController(animated: true)
                 }
@@ -229,7 +234,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    func writeTransactionToRealm(completion:@escaping (Bool)->Void){
+    func AddTransactionToRealm(completion:@escaping (Bool)->Void){
+        let lastId = (self.realm.objects(EachTransactions.self).last?.id) ?? 0
+        self.newTransaction.id = lastId + 1
         let tran = Transactions()
         tran.coinAbbName = self.newTransaction.coinAbbName
         tran.coinName = self.newTransaction.coinName
@@ -245,6 +252,13 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 tran.everyTransactions.append(self.newTransaction)
                 self.realm.add(tran)
             }
+        }
+        completion(true)
+    }
+    
+    func UpdateTransactionToRealm(completion:@escaping (Bool)->Void){
+        try! self.realm.write {
+            self.realm.add(newTransaction, update: true)
         }
         completion(true)
     }
@@ -320,10 +334,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                         let index = IndexPath(row: 3, section: 0)
                         let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
                         cell.priceType.text = Extension.method.scientificMethod(number: readData)
-                        
-//                        cell.price.text = Extension.method.scientificMethod(number: readData)
-//                        self.newTransaction.singlePrice = Double(String(readData))!
-                    //                                        self.textFieldDidEndEditing(cell.price)
                     case .failure(let error):
                         print("the error \(error.localizedDescription)")
                     }
@@ -434,15 +444,19 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             if textField.text == "" || textField.text == nil{
                 textField.text = "0"
             }
-            transactions.singlePrice = Double(textField.text!)!
-            newTransaction.singlePrice = Double(textField.text!)!
+            if Extension.method.checkInputVaild(value: textField.text!){
+                transactions.singlePrice = Double(textField.text!)!
+                newTransaction.singlePrice = Double(textField.text!)!
+            }
         }
         if textField.tag == 4{
             if textField.text == "" || textField.text == nil{
                 textField.text = "0"
             }
-            transactions.amount = Double(textField.text!)!
-            newTransaction.amount = Double(textField.text!)!
+            if Extension.method.checkInputVaild(value: textField.text!){
+                transactions.amount = Double(textField.text!)!
+                newTransaction.amount = Double(textField.text!)!
+            }
 //            self.newTransaction.usdTotalPrice = newTransaction.usdSinglePrice * Double(self.newTransaction.amount)
 //            self.newTransaction.audTotalPrice = newTransaction.audSinglePrice * Double(self.newTransaction.amount)
         }
@@ -490,6 +504,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         tableViews.delegate = self
         tableViews.dataSource = self
         tableViews.bounces = false
+        tableViews.separatorStyle = .none
+//        tableViews.separatorInset = UIEdgeInsets.zero
+//        tableViews.separatorColor = UIColor.black
+//        tableViews.separatorInset = UIEdgeInsets.init(top: -30, left: 0, bottom: -10, right: 0)
         tableViews.translatesAutoresizingMaskIntoConstraints = false
         //        tableViews.separatorStyle = .none
         return tableViews

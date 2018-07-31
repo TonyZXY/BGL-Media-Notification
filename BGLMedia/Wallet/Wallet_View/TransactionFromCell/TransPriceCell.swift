@@ -28,7 +28,8 @@ class TransPriceCell:UITableViewCell{
     let priceLabel:UILabel = {
         let label = UILabel()
         label.text = "买入价格"
-        label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
+        label.font = UIFont.semiBoldFont(18)
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -40,6 +41,7 @@ class TransPriceCell:UITableViewCell{
         textfield.tintColor = ThemeColor().whiteColor()
         textfield.frame = CGRect(x:0, y: 0, width: 200, height: 30)
         textfield.translatesAutoresizingMaskIntoConstraints = false
+        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "pricePlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
 //        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
 //        textfield.leftViewMode = .always
 //        textfield.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
@@ -55,11 +57,18 @@ class TransPriceCell:UITableViewCell{
         label.layer.backgroundColor = ThemeColor().greyColor().cgColor
         label.layer.cornerRadius = 8
         label.textColor = ThemeColor().whiteColor()
+        label.font = UIFont.regularFont(13)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     func setupviews(){
+        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        layer.shadowOffset = CGSize(width: 0, height: 2)
+        layer.shadowOpacity = 1
+        layer.shadowRadius = 0
+        layer.masksToBounds = false
+        
         selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(priceLabel)
@@ -69,11 +78,11 @@ class TransPriceCell:UITableViewCell{
         
 
         
-        price.attributedPlaceholder = NSAttributedString(string:textValue(name: "pricePlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+//        price.attributedPlaceholder = NSAttributedString(string:textValue(name: "pricePlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
         
         NSLayoutConstraint(item: priceLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
         NSLayoutConstraint(item: price, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true
-        NSLayoutConstraint(item: priceType, attribute: .centerY, relatedBy: .equal, toItem: priceLabel, attribute: .centerY, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: priceType, attribute: .centerY, relatedBy: .equal, toItem: priceLabel, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]-5-[v3]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":priceLabel,"v1":price,"v3":priceType]))
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v1]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":priceLabel,"v1":price,"v3":priceType]))

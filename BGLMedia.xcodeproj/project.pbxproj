@@ -191,6 +191,7 @@
 		5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57650895210D9AFE007368CC /* Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57650894210D9AFE007368CC /* Transactions.swift */; };
 		57650897210D9D27007368CC /* WalletControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57650896210D9D27007368CC /* WalletControllerV2.swift */; };
+		57650899210FE463007368CC /* RegisterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57650898210FE463007368CC /* RegisterCell.swift */; };
 		576751FC2105556E006DB67C /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576751FB2105556E006DB67C /* RegisterController.swift */; };
 		576751FE210556E8006DB67C /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; };
 		576751FF210556E8006DB67C /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -445,6 +446,7 @@
 		573C96AA20EF068A00B667AB /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		57650894210D9AFE007368CC /* Transactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transactions.swift; sourceTree = "<group>"; };
 		57650896210D9D27007368CC /* WalletControllerV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WalletControllerV2.swift; sourceTree = "<group>"; };
+		57650898210FE463007368CC /* RegisterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterCell.swift; sourceTree = "<group>"; };
 		576751FB2105556E006DB67C /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		576751FD210556E8006DB67C /* JGProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JGProgressHUD.framework; path = Carthage/Build/iOS/JGProgressHUD.framework; sourceTree = "<group>"; };
 		576752002105597C006DB67C /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -617,6 +619,7 @@
 		2D52AE1F20E46E1800018FC0 /* LoginAndRegister */ = {
 			isa = PBXGroup;
 			children = (
+				57650898210FE463007368CC /* RegisterCell.swift */,
 				2D52AE2020E46E1800018FC0 /* RegisterationPageViewController.swift */,
 				2D52AE2120E46E1800018FC0 /* LoginPageViewController.swift */,
 				576751FB2105556E006DB67C /* RegisterController.swift */,
@@ -1644,6 +1647,7 @@
 				57BAD9522104CAD500973B45 /* TCPickerView.swift in Sources */,
 				2D52AEF620E46E1A00018FC0 /* TickerDataRealm.swift in Sources */,
 				2D52AF1E20E46E1A00018FC0 /* CandleStickChart.swift in Sources */,
+				57650899210FE463007368CC /* RegisterCell.swift in Sources */,
 				5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */,
 				2D52AEFA20E46E1A00018FC0 /* TickerDataFetcherV2.swift in Sources */,
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,

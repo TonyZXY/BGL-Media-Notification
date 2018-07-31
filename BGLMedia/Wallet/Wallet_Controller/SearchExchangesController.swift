@@ -23,10 +23,6 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         getExchangeList()
         setupView()
         searchBar.becomeFirstResponder()
-        searchBar.returnKeyType = UIReturnKeyType.done
-        DispatchQueue.main.async {
-            self.searchResult.reloadData()
-        }
     }
     
     //Get trading Pairs Name
@@ -43,6 +39,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
                 self.allExchanges.append(key)
             }
         }
+        self.searchResult.reloadData()
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -54,6 +51,11 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
+//        cell.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        cell.layer.shadowOpacity = 1
+//        cell.layer.shadowRadius = 0
+//        cell.layer.masksToBounds = false
         if isSearching{
             cell.textLabel?.text = filterExchanges[indexPath.row]
         } else {
@@ -66,6 +68,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         let table:UITableViewCell = searchResult.cellForRow(at: indexPath)!
         delegate?.setExchangesName(exchangeName: (table.textLabel?.text)!)
         delegate?.setTradingPairsName(tradingPairsName: "")
+        tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.popViewController(animated: true)
     }
     
@@ -98,7 +101,9 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     lazy var searchResult:UITableView = {
         tableViews.rowHeight = 80
-        tableViews.separatorInset = UIEdgeInsets.zero
+       tableViews.separatorInset = UIEdgeInsets.zero
+//        tableViews.contentInset = UIEdgeInsets.zero
+//        tableViews.scrollIndicatorInsets = UIEdgeInsets.zero
         tableViews.backgroundColor = color.themeColor()
         tableViews.delegate = self
         tableViews.dataSource = self
@@ -114,5 +119,9 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":searchResult]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar,"v1":searchResult]))
+        
+        let tableVC = UITableViewController.init(style: .plain)
+        tableVC.tableView = self.searchResult
+        self.addChildViewController(tableVC)
     }
 }

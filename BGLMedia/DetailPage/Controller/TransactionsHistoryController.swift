@@ -73,17 +73,19 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.tradingPairsResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.amountResult.text = Extension.method.scientificMethod(number:object.amount)
             cell.buyDeleteButton.tag = object.id
-            
+//            cell.buyDeleteButton.setImage(UIImage(named: "wastebin.png", for: .normal)
             cell.buyDeleteButton.addTarget(self, action: #selector(deleteTransaction), for: .touchUpInside)
             let filterName = "coinAbbName = '" + object.coinAbbName + "' "
-            let currentWorth = try! Realm().objects(MarketTradingPairs.self).filter(filterName)
+            let currentWorth = try! Realm().objects(Transactions.self).filter(filterName)
             var currentWorthData:Double = 0
             for value in currentWorth{
-                currentWorthData = value.singlePrice * object.amount
-            } 
+                currentWorthData = value.currentSinglePrice * object.amount
+            }
             cell.worthResult.text = Extension.method.scientificMethod(number:currentWorthData)
             let delta = ((currentWorthData - object.totalPrice) / object.totalPrice) * 100
-            cell.deltaResult.text = Extension.method.scientificMethod(number:delta) + "%"
+            checkDataRiseFallColor(risefallnumber: delta, label: cell.deltaResult, type: "Percent")
+            
+//            cell.deltaResult.text = Extension.method.scientificMethod(number:delta) + "%"
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
             return cell
