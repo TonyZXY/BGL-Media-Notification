@@ -20,6 +20,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     var coinDetail = SelectCoin()
     var totalProfit:Double = 0
     var totalAssets:Double = 0
+    var changeLaugageStatus:Bool = false
     //    var walletResults = [MarketTradingPairs]()
     
     
@@ -74,6 +75,17 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if changeLaugageStatus{
+            walletList.switchRefreshHeader(to: .removed)
+            walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+                self.handleRefresh(self.walletList)
+                self.changeLaugageStatus = false
+            })
+            walletList.switchRefreshHeader(to: .refreshing)
+        }
+    }
+    
     func checkTransaction(){
         if assetss.count == 0{
             setUpInitialView()
@@ -84,6 +96,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     @objc func changeLanguage(){
         checkTransaction()
+        changeLaugageStatus = true
     }
     
     //TableView Cell Number
@@ -252,7 +265,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         view.backgroundColor = ThemeColor().navigationBarColor()
         //NavigationBar
         let titilebarlogo = UIImageView()
-        titilebarlogo.image = image.logoImage()
+        titilebarlogo.image = UIImage(named: "CryptoGeekLogo2.png")
         titilebarlogo.contentMode = .scaleAspectFit
         titilebarlogo.clipsToBounds = true
         navigationItem.titleView = titilebarlogo

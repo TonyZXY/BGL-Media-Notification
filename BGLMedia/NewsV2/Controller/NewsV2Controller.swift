@@ -15,6 +15,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     let realm = try! Realm()
     var displayNumber:Int = 0
     var loadMoreData:Bool = false
+    var changeLanguageStatus:Bool = false
     
     var newsObject:Results<NewsObject>{
         get{
@@ -85,6 +86,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
 //        DispatchQueue.main.async(execute: {
 //            self.newsTableView.beginHeaderRefreshing()
 //        })
+        
         self.newsTableView.switchRefreshHeader(to: .refreshing)
         
         self.displayNumber += 20
@@ -114,23 +116,21 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
-//    override func viewDidAppear(_ animated: Bool) {
-//        DispatchQueue.main.async(execute: {
-//            //            self.newsTableView.contentOffset = CGPoint(x: 0, y: -50.5)
-//            self.newsTableView.beginHeaderRefreshing()
-//        })
-//    }
-    
-    
+    override func viewWillAppear(_ animated: Bool) {
+        if changeLanguageStatus{
+            self.newsTableView.switchRefreshHeader(to: .removed)
+            newsTableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+                self.handleRefresh(self.newsTableView)
+                self.changeLanguageStatus = false
+            })
+            newsTableView.switchRefreshHeader(to: .refreshing)
+        }
+    }
     
     @objc func changeLanguage(){
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
-        
-        DispatchQueue.main.async(execute: {
-            self.newsTableView.switchRefreshHeader(to: .refreshing)
-        })
-        
+        changeLanguageStatus = true
 //        addRefreshHeader(){success in
 //            if success{
 //                let header = DefaultRefreshHeader.header()
@@ -141,20 +141,18 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
 //                self.newsTableView.configRefreshHeader(with:header, container: self, action: {
 //                    self.handleRefresh(self.newsTableView)
 //                })
-//                DispatchQueue.main.async(execute: {
-//                    self.newsTableView.switchRefreshHeader(to: .refreshing)
-//                })
+//                //                        DispatchQueue.main.async(execute: {
+//                self.newsTableView.beginHeaderRefreshing()
+//                //                        })
 //            }
 //        }
-    
-
     }
     
     func addRefreshHeader(completion:@escaping (Bool)->Void){
-        DispatchQueue.main.async(execute: {
-            self.newsTableView.switchRefreshHeader(to: .removed)
+
+//            self.newsTableView.switchRefreshHeader(to: .removed)
             completion(true)
-        })
+
         
     }
     

@@ -17,6 +17,7 @@ class TimelineTableViewController: UITableViewController {
     var results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)
     var dictionary = [String:Int]()
     var resultsUpdated = false
+    var changeLaugageStatus:Bool = false
     
 //    var results:Results<NewsFlash>{
 //        get{
@@ -51,9 +52,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     @objc func changeLanguage(){
-        DispatchQueue.main.async(execute: {
-            self.tableView.beginHeaderRefreshing()
-        })
+        changeLaugageStatus = true
     }
     
     deinit {
@@ -68,6 +67,17 @@ class TimelineTableViewController: UITableViewController {
             self.resultsUpdated = false
         }
         
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        if changeLaugageStatus{
+            tableView.switchRefreshHeader(to: .removed)
+            tableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+                self.handleRefresh(self.tableView)
+                self.changeLaugageStatus = false
+            })
+            tableView.switchRefreshHeader(to: .refreshing)
+        }
     }
 
     

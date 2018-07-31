@@ -151,6 +151,15 @@ class InsetLabel: UILabel {
     }
 }
 
+class InsetButton:UIButton{
+    let topInset = CGFloat(0)
+    let bottomInset = CGFloat(0)
+    let leftInset = CGFloat(20)
+    let rightInset = CGFloat(20)
+    
+//    open var contentEdgeInsets = UIEdgeInsets(top: topInset, left: leftInset, bottom: bottomInset, right: rightInset)
+}
+
 extension UIViewController {
     func imageWithView(view: UIView) -> UIImage? {
         UIGraphicsBeginImageContextWithOptions(view.bounds.size, view.isOpaque, 0.0)
@@ -238,5 +247,18 @@ extension UIScrollView{
         header?.beginRefreshing()
     }
 }
+
+
+
+    public func addRefreshHeaser()->DefaultRefreshHeader{
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        return header
+    }
+
+
 
 

@@ -22,8 +22,8 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        cancelTouchKeyboard()
-        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+//        cancelTouchKeyboard()
+////        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
     }
     
@@ -31,10 +31,6 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         menuBar.collectionView.reloadData()
-        global.mainTotalCollectionView.reloadData()
-        global.filterDate.reloadData()
-        global.sortdoneclick()
-        global.filterDate.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: [])
         
 //        global = GlobalMarketsController()
 //        watchList = WatchListsController()
