@@ -12,6 +12,7 @@ import RealmSwift
 class WatchListsController: UIViewController, UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     let realm = try! Realm()
     var index = 0
+    var changeLaugageStatus:Bool = false
     var watchListObjects:Results<WatchListRealm>{
         get{
             return realm.objects(WatchListRealm.self).sorted(byKeyPath: "date", ascending: false)
@@ -35,6 +36,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
             self.coinList.beginHeaderRefreshing()
         })
         NotificationCenter.default.addObserver(self, selector: #selector(updateWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(refreshWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
     }
     
@@ -47,10 +49,23 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
             setUpView()
         }
         
+        if changeLaugageStatus{
+            coinList.switchRefreshHeader(to: .removed)
+            coinList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+                self.handleRefresh(self.coinList)
+                self.changeLaugageStatus = false
+            })
+            coinList.switchRefreshHeader(to: .refreshing)
+        }
+    }
+    
+    @objc func changeLanguage(){
+        changeLaugageStatus = true
     }
 
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
     @objc func updateWatchList(){
@@ -68,13 +83,20 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
 //        self.coinList.reloadData()
 //    }
     
-    var coinList:UICollectionView = {
+    lazy var coinList:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout:layout)
         collectionView.backgroundColor = ThemeColor().themeColor()
         collectionView.register(WatchListCell.self, forCellWithReuseIdentifier: "WatchListCell")
         collectionView.translatesAutoresizingMaskIntoConstraints = false
-        
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        collectionView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(collectionView)
+        })
         collectionView.alwaysBounceVertical  = true
         return collectionView
     }()
@@ -245,16 +267,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     
     func setUpView(){
-        view.addSubview(coinList)
-        let header = DefaultRefreshHeader.header()
-        header.textLabel.textColor = ThemeColor().whiteColor()
-        header.textLabel.font = UIFont.regularFont(12*view.frame.width/414)
-        header.tintColor = ThemeColor().whiteColor()
-        header.imageRenderingWithTintColor = true
-        coinList.configRefreshHeader(with:header, container: self, action: {
-            self.handleRefresh(self.coinList)
-        })
-        
+        view.addSubview(coinList)        
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList]))
     }

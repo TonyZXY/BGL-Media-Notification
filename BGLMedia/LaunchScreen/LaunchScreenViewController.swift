@@ -11,7 +11,7 @@ import RevealingSplashView
 
 class LaunchScreenViewController: UIViewController {
 
-    let revealingSplashView = RevealingSplashView(iconImage: #imageLiteral(resourceName: "bcg_logo"), iconInitialSize: CGSize(width: 200, height: 200), backgroundColor:UIColor.white)
+    let revealingSplashView = RevealingSplashView(iconImage:UIImage(named: "CryptoGeekLogo3")!, iconInitialSize: CGSize(width: 200, height: 200), backgroundColor:UIColor.white)
     
     override func viewDidLoad() {
         super.viewDidLoad()

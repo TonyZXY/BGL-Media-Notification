@@ -34,6 +34,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     var filterOption:Int = 0
      var isSearching = false
     var filterItem:[String] = ["percent7d","percent24h","percent1h"]
+    var changeLaugageStatus:Bool = false
     
     var sortOption: Int? {
         get {
@@ -117,7 +118,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             self.coinList.beginHeaderRefreshing()
         })
         
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateGlobalMarket), name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
 //        let selectindexpath = NSIndexPath(item: 0, section: 0)
 //        coinList.selectItem(at: selectindexpath as IndexPath, animated: true, scrollPosition:.left)
@@ -132,8 +133,29 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 //        print(realm.objects(GlobalAverageObject.self))
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if changeLaugageStatus{
+            coinList.switchRefreshHeader(to: .removed)
+            coinList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+                self.handleRefresh(self.coinList)
+                self.changeLaugageStatus = false
+            })
+            coinList.switchRefreshHeader(to: .refreshing)
+        }
+    }
+    
+    @objc func changeLanguage(){
+        changeLaugageStatus = true
+        mainTotalCollectionView.reloadData()
+        filterDate.reloadData()
+        sortdoneclick()
+        filterDate.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: [])
+
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
     @objc func updateGlobalMarket(){
@@ -164,14 +186,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         view.addSubview(searchBar)
         view.addSubview(coinList)
         
-        let header = DefaultRefreshHeader.header()
-        header.textLabel.textColor = ThemeColor().whiteColor()
-        header.textLabel.font = UIFont.regularFont(12*factor)
-        header.tintColor = ThemeColor().whiteColor()
-        header.imageRenderingWithTintColor = true
-        coinList.configRefreshHeader(with:header, container: self, action: {
-            self.handleRefresh(self.coinList)
-        })
+        
         
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView]))
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":scrollView]))
@@ -275,6 +290,14 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.delegate = self
         collectionView.dataSource = self
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        collectionView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(collectionView)
+        })
         return collectionView
     }()
     

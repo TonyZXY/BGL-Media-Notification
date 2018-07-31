@@ -221,7 +221,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     var scrollView:UIScrollView = {
         var scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
-        scrollView.showsVerticalScrollIndicator = true
+//        scrollView.showsVerticalScrollIndicator = true
 //        scrollView.alwaysBounceVertical = true
         return scrollView
     }()

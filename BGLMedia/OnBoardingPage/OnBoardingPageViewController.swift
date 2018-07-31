@@ -41,7 +41,8 @@ class OnBoardingPageViewController: UIViewController {
         label.textColor = .white
         label.clipsToBounds = true
         label.numberOfLines = 0
-        
+        label.font = UIFont.semiBoldFont(15)
+        label.textAlignment = .center
         return label
     }()
 
@@ -54,9 +55,10 @@ class OnBoardingPageViewController: UIViewController {
     let skipButton:UIButton = {
         let button = UIButton()
         button.setTitle("SKIP THESE", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 10)
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .lightGray
+        button.titleLabel?.font = UIFont.semiBoldFont(15)
+        button.titleLabel?.textColor = ThemeColor().whiteColor()
+        button.backgroundColor = ThemeColor().blueColor()
+        button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(skipButtonClicked), for: .touchUpInside)
         return button
     }()
@@ -64,9 +66,9 @@ class OnBoardingPageViewController: UIViewController {
     let registerButton:UIButton = {
         let button = UIButton()
         button.setTitle("Register", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .lightGray
+        button.titleLabel?.font = UIFont.semiBoldFont(15)
+        button.titleLabel?.textColor = ThemeColor().whiteColor()
+        button.backgroundColor = ThemeColor().blueColor()
         button.addTarget(self, action: #selector(registerButtonClicked), for: .touchUpInside)
         return button
     }()
@@ -74,9 +76,9 @@ class OnBoardingPageViewController: UIViewController {
     let loginButton:UIButton = {
         let button = UIButton()
         button.setTitle("Log In", for: .normal)
-        button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
-        button.titleLabel?.textColor = .white
-        button.backgroundColor = .lightGray
+        button.titleLabel?.font = UIFont.semiBoldFont(15)
+        button.titleLabel?.textColor = ThemeColor().whiteColor()
+        button.backgroundColor = ThemeColor().blueColor()
         button.addTarget(self, action: #selector(loginButtonClicked), for: .touchUpInside)
         return button
     }()
@@ -86,7 +88,7 @@ class OnBoardingPageViewController: UIViewController {
         button.setTitle("Sign Out", for: .normal)
         button.titleLabel?.font = UIFont(name: "Helvetica-Bold", size: 15)
         button.titleLabel?.textColor = .white
-        button.backgroundColor = .lightGray
+        button.backgroundColor = ThemeColor().blueColor()
         button.addTarget(self, action: #selector(signOutButtonClicked), for: .touchUpInside)
         return button
     }()
@@ -160,7 +162,11 @@ class OnBoardingPageViewController: UIViewController {
         view.addSubview(instructionImageView)
         instructionImageView.image = newImage
         instructionImageView.translatesAutoresizingMaskIntoConstraints = false
-        instructionImageView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            instructionImageView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor,constant:30).isActive = true
+        } else {
+            instructionImageView.topAnchor.constraint(equalTo: view.topAnchor,constant:30).isActive = true
+        }
         instructionImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
         instructionImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
         instructionImageView.heightAnchor.constraint(equalToConstant: (view.frame.width-20)*1.2).isActive = true
@@ -209,7 +215,11 @@ class OnBoardingPageViewController: UIViewController {
         skipButton.bottomAnchor.constraint(equalTo: descriptionLabel.topAnchor, constant: -10).isActive = true
         skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         skipButton.heightAnchor.constraint(equalToConstant: 50).isActive = true
-        skipButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+//        skipButton.widthAnchor.constraint(equalToConstant: 80).isActive = true
+//        NSLayoutConstraint(item: skipButton, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 20).isActive = true
+//        NSLayoutConstraint(item: skipButton, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 20).isActive = true
+//        NSLayoutConstraint(item: skipButton, attribute: .leading, relatedBy: .equal, toItem: view, attribute: .leading, multiplier: 1, constant: 20).isActive = true
+//        NSLayoutConstraint(item: skipButton, attribute: .trailing, relatedBy: .equal, toItem: view, attribute: .trailing, multiplier: 1, constant: -20).isActive = true
     }
 
     func setupDescriptionLabel() {
@@ -217,9 +227,10 @@ class OnBoardingPageViewController: UIViewController {
         descriptionLabel.translatesAutoresizingMaskIntoConstraints = false
 //        NSLayoutConstraint(item: descriptionLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 5)
 
+        
         descriptionLabel.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 5).isActive = true
-        descriptionLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 5).isActive = true
-        descriptionLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -5).isActive = true
+        descriptionLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 20).isActive = true
+        descriptionLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -20).isActive = true
         descriptionLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     }
