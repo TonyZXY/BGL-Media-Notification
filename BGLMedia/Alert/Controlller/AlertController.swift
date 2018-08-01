@@ -580,6 +580,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
             if pass{
+                print(response)
                 self.writeRealm(json:response){(pass) in
                     if pass{
                         DispatchQueue.main.async {

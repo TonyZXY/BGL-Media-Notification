@@ -214,7 +214,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 //        NSLayoutConstraint(item: filterDate, attribute: .centerY, relatedBy: .equal, toItem: sortCoin, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(5*factor)-[v1(\(30*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortView,"v1":searchBar]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(5*factor)-[v1]-\(5*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortView,"v1":searchBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor)-[v1]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sortView,"v1":searchBar]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(5*factor)-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinList,"v1":searchBar]))
@@ -272,13 +272,18 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     lazy var searchBar:UISearchBar={
         var searchBar = UISearchBar()
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.returnKeyType = UIReturnKeyType.done
-        searchBar.barTintColor = ThemeColor().themeColor()
-        searchBar.tintColor = ThemeColor().themeColor()
-        searchBar.backgroundColor = ThemeColor().themeColor()
+        searchBar.backgroundColor = ThemeColor().darkGreyColor()
+//        searchBar.isTranslucent = false
+       
+        searchBar.searchBarStyle = .default
         searchBar.returnKeyType = .done
+        searchBar.layer.borderWidth = 1
+        searchBar.barTintColor = ThemeColor().themeColor()
+        searchBar.layer.borderColor = ThemeColor().darkGreyColor().cgColor
+        searchBar.layer.backgroundColor = ThemeColor().darkGreyColor().cgColor
         searchBar.delegate = self
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
     

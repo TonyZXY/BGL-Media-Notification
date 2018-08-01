@@ -16,15 +16,18 @@ class TimelineTableViewController: UITableViewController {
     let realm = try! Realm()
     var results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)
     var dictionary = [String:Int]()
-    var resultsUpdated = false
+    //    var resultsUpdated = false
     var changeLaugageStatus:Bool = false
+    var displayNumber:Int = 0
+    var loadMoreData:Bool = false
+    var resultNumber: Int = 0
     
-//    var results:Results<NewsFlash>{
-//        get{
-//            let filterName = "languageTag = '" + self.defaultLanguage + "' "
-//            return try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false).filter(filterName)
-//        }
-//    }
+    //    var results:Results<NewsFlash>{
+    //        get{
+    //            let filterName = "languageTag = '" + self.defaultLanguage + "' "
+    //            return try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false).filter(filterName)
+    //        }
+    //    }
     
     var sectionArray = [Int]()
     var dates = [String]()
@@ -32,14 +35,10 @@ class TimelineTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        self.resultsUpdated = false
+        //        self.resultsUpdated = false
         let timelineTableViewCellNib = UINib(nibName: "TimelineTableViewCell", bundle: Bundle(for: TimelineTableViewCell.self))
         self.tableView.register(timelineTableViewCellNib, forCellReuseIdentifier: "TimelineTableViewCell")
         setUpView()
-        //request news on start up of the app
-        DispatchQueue.main.async(execute: {
-            self.tableView.beginHeaderRefreshing()
-        })
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         
@@ -48,7 +47,33 @@ class TimelineTableViewController: UITableViewController {
         self.tableView.backgroundColor = ThemeColor().themeColor()
         self.tableView.separatorStyle = .none
         self.tableView.setContentOffset(.zero, animated: false)
-
+        self.tableView.switchRefreshFooter(to: .removed)
+        self.tableView.switchRefreshHeader(to: .refreshing)
+        
+        self.displayNumber += 5
+        getNews(skip:0,limit: 5){ success in
+            if success{
+                self.tableView.reloadData()
+                let footer = DefaultRefreshFooter.footer()
+                footer.textLabel.textColor = ThemeColor().whiteColor()
+                footer.tintColor = ThemeColor().whiteColor()
+                footer.textLabel.backgroundColor = ThemeColor().themeColor()
+                self.tableView.configRefreshFooter(with: footer, container: self, action: {
+                    self.handleFooter()
+                })
+                
+            } else {
+                self.tableView.reloadData()
+                let footer = DefaultRefreshFooter.footer()
+                footer.textLabel.textColor = ThemeColor().whiteColor()
+                footer.tintColor = ThemeColor().whiteColor()
+                footer.textLabel.backgroundColor = ThemeColor().themeColor()
+                self.tableView.configRefreshFooter(with: footer, container: self, action: {
+                    self.handleFooter()
+                })
+            }
+        }
+        
     }
     
     @objc func changeLanguage(){
@@ -59,15 +84,15 @@ class TimelineTableViewController: UITableViewController {
         NotificationCenter.default.removeObserver("changeLanguage")
     }
     
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if self.resultsUpdated {
-            self.tableView.reloadData()
-            self.resultsUpdated = false
-        }
-        
-    }
+    
+    //    override func viewDidAppear(_ animated: Bool) {
+    //        super.viewDidAppear(animated)
+    //        if self.resultsUpdated {
+    //            self.tableView.reloadData()
+    //            self.resultsUpdated = false
+    //        }
+    //
+    //    }
     
     override func viewWillAppear(_ animated: Bool) {
         if changeLaugageStatus{
@@ -79,19 +104,19 @@ class TimelineTableViewController: UITableViewController {
             tableView.switchRefreshHeader(to: .refreshing)
         }
     }
-
     
-//    override func viewWillAppear(_ animated: Bool) {
-//        super.viewWillAppear(animated)
-////        getNews()
-//        self.tableView.reloadData()
-//    }
+    
+    //    override func viewWillAppear(_ animated: Bool) {
+    //        super.viewWillAppear(animated)
+    ////        getNews()
+    //        self.tableView.reloadData()
+    //    }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         sectionArray = [Int](repeating: 0, count: dates.count)
         let resultSet = defaultLanguage == "CN" ? self.results : results.filter("languageTag='" + defaultLanguage + "'")
         for result in resultSet{
-            let date = result.dateTime.description.components(separatedBy: " ")[0]
+            let date = Extension.method.convertDateToString(date: result.dateTime).description.components(separatedBy: " ")[0]
             //get index of date in dates
             let sectionArrayIndex = dates.index(of: date)!
             sectionArray[sectionArrayIndex] += 1
@@ -99,18 +124,19 @@ class TimelineTableViewController: UITableViewController {
         return sectionArray[section]
     }
     
+    
     override func numberOfSections(in tableView: UITableView) -> Int {
         
         dates = []
         let resultSet = defaultLanguage == "CN" ? self.results : results.filter("languageTag='" + defaultLanguage + "'")
         for result in resultSet{
-            let timeArr = result.dateTime.description.components(separatedBy: " ")
+            let timeArr = Extension.method.convertDateToString(date: result.dateTime).description.components(separatedBy: " ")
             if !dates.contains(timeArr[0]){
                 dates.append(timeArr[0])
             }
         }
         return dates.count
-    
+        
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
@@ -118,8 +144,8 @@ class TimelineTableViewController: UITableViewController {
         let sectionHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: tableView.sectionHeaderHeight))
         sectionHeaderView.backgroundColor = ThemeColor().themeColor()
         tableView.scrollsToTop = true
-//        let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: tableView.sectionHeaderHeight))
-       let label = UILabel(frame: CGRect(x: 20, y: 0, width: width-2*20, height: tableView.sectionHeaderHeight))
+        //        let label = UILabel(frame: CGRect(x: 0, y: 0, width: tableView.frame.size.width, height: tableView.sectionHeaderHeight))
+        let label = UILabel(frame: CGRect(x: 20, y: 0, width: width-2*20, height: tableView.sectionHeaderHeight))
         
         label.font = UIFont.boldFont(15)
         label.textColor = ThemeColor().blueColor()
@@ -129,7 +155,7 @@ class TimelineTableViewController: UITableViewController {
         label.clipsToBounds = true
         label.layer.borderWidth = 3
         label.layer.borderColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
-
+        
         
         sectionHeaderView.addSubview(label)
         return sectionHeaderView
@@ -148,7 +174,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "TimelineTableViewCell", for: indexPath) as! TimelineTableViewCell
         let numberOfSkips = sectionArray.prefix(indexPath.section).reduce(0,+)
         let resultSet = defaultLanguage == "CN" ? self.results : results.filter("languageTag='" + defaultLanguage + "'")
@@ -168,35 +194,35 @@ class TimelineTableViewController: UITableViewController {
         cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
     }
-//    print(UIImage(named:"shareImageHead.png")?.size)
-//    print(UIImage(named:"shareImageQRCode.png")?.size)
-//    print(UIScreen.main.bounds)
-//    print(textImage.size)
+    //    print(UIImage(named:"shareImageHead.png")?.size)
+    //    print(UIImage(named:"shareImageQRCode.png")?.size)
+    //    print(UIScreen.main.bounds)
+    //    print(textImage.size)
     
     @objc func shareButtonClicked(sender: UIButton){
-    
+        
         let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:self.tableView)
         let indexPath = self.tableView.indexPathForRow(at: buttonPosition)
         let cell = tableView.cellForRow(at: indexPath!)! as! TimelineTableViewCell
-//        let cellText = cell.descriptionLabel.text
-//        let size = cell.descriptionLabel.font.pointSize
-//        let textImage = self.textToImage(drawText: cellText!, inImage: cell.descriptionLabel.createImage!, atPoint: CGPoint(x:0, y:0), withSize:size)
-//
-////        let topImage = combineLogoWithText(combine: UIImage(named: "bcg_logo.png")!, with: textImage)
-////        let bottomImage = UIImage(named: "sample_qr_code.png")
-////        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
-//
-//        let image = generateImage(textImage: textImage)
-//
-//        let sharedImageVC = ShareImagePreViewController(image:image)
-//
-////        sharedImageVC.parentView = self
-//
-//        self.present(sharedImageVC,animated: true, completion:nil)
-//
-//        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities:nil)
-//        activityVC.popoverPresentationController?.sourceView = self.view
-//        self.present(activityVC,animated: true, completion:nil)
+        //        let cellText = cell.descriptionLabel.text
+        //        let size = cell.descriptionLabel.font.pointSize
+        //        let textImage = self.textToImage(drawText: cellText!, inImage: cell.descriptionLabel.createImage!, atPoint: CGPoint(x:0, y:0), withSize:size)
+        //
+        ////        let topImage = combineLogoWithText(combine: UIImage(named: "bcg_logo.png")!, with: textImage)
+        ////        let bottomImage = UIImage(named: "sample_qr_code.png")
+        ////        let image = combineImageWithQRCode(combine: topImage, with: (bottomImage)!)
+        //
+        //        let image = generateImage(textImage: textImage)
+        //
+        //        let sharedImageVC = ShareImagePreViewController(image:image)
+        //
+        ////        sharedImageVC.parentView = self
+        //
+        //        self.present(sharedImageVC,animated: true, completion:nil)
+        //
+        //        let activityVC = UIActivityViewController(activityItems: [image], applicationActivities:nil)
+        //        activityVC.popoverPresentationController?.sourceView = self.view
+        //        self.present(activityVC,animated: true, completion:nil)
         
         
         let shareView = ShareNewsFlashControllerV2()
@@ -207,7 +233,7 @@ class TimelineTableViewController: UITableViewController {
         
     }
     
-
+    
     
     
     func generateImage(textImage: UIImage)->UIImage{
@@ -217,7 +243,7 @@ class TimelineTableViewController: UITableViewController {
         let height1 = (topImage?.size.height)!*width/(topImage?.size.width)!
         let height2 = (bottomImage?.size.height)!*width/(bottomImage?.size.width)!
         //now we have topImage, textImage and bottomImage - we have to combine them together
-//        let distance = (UIScreen.main.bounds.height - height1 - textImage.size.height - height2)/2
+        //        let distance = (UIScreen.main.bounds.height - height1 - textImage.size.height - height2)/2
         
         let size = UIScreen.main.bounds.size
         UIGraphicsBeginImageContextWithOptions(size, false, 0.0)
@@ -298,21 +324,22 @@ class TimelineTableViewController: UITableViewController {
     override func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = UIColor.clear
         cell.selectionStyle = .none
-
+        
     }
-  
     
-
-//        Alamofire.request("http://10.10.6.111:3000/api/flash?languageTag=EN&languageTag=CN", method: .get).validate().responseJSON { response in
-
     
-    func getNews(completion:@escaping (Bool)->Void){
-        URLServices.fetchInstance.passServerData(urlParameters: ["api","flash?languageTag=EN"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+    
+    //        Alamofire.request("http://10.10.6.111:3000/api/flash?languageTag=EN&languageTag=CN", method: .get).validate().responseJSON { response in
+    
+    
+    func getNews(skip:Int,limit:Int,completion:@escaping (Bool)->Void){
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","getFlashWithLan?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             if success{
+                self.resultNumber = response.count
                 self.JSONtoData(json: response)
                 DispatchQueue.main.async {
                     self.results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)//.filter("languageTag='" + self.defaultLanguage + "'")
-                    self.resultsUpdated = true
+                    //                    self.resultsUpdated = true
                     completion(true)
                 }
             } else{
@@ -321,68 +348,97 @@ class TimelineTableViewController: UITableViewController {
         }
         
         
-//        APIService.shardInstance.fetchFlashNews(language:defaultLanguage) { (searchResult) in
-//            self.JSONtoData(json: searchResult)
-//            DispatchQueue.main.async {
-////                let filterName = "languageTag = '" + self.defaultLanguage + "' "
-//                self.results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)//.filter("languageTag='" + self.defaultLanguage + "'")
-//                self.resultsUpdated = true
-////                print(self.results)
-//                self.tableView.reloadData()
-////                print(self.results.count)
-//            }
-//        }
+        //        APIService.shardInstance.fetchFlashNews(language:defaultLanguage) { (searchResult) in
+        //            self.JSONtoData(json: searchResult)
+        //            DispatchQueue.main.async {
+        ////                let filterName = "languageTag = '" + self.defaultLanguage + "' "
+        //                self.results = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)//.filter("languageTag='" + self.defaultLanguage + "'")
+        //                self.resultsUpdated = true
+        ////                print(self.results)
+        //                self.tableView.reloadData()
+        ////                print(self.results.count)
+        //            }
+        //        }
     }
     
     private func JSONtoData(json: JSON) {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        //        let dateFormatter = DateFormatter()
+        //        dateFormatter.timeZone = NSTimeZone(name: "UTC") as TimeZone!
+        //        dateFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         realm.beginWrite()
         if let collection = json.array {
             for item in collection {
-                let date = dateFormatter.date(from: item["publishedTime"].string!)
+                //                dateFormatter.timeZone = TimeZone.current
+                let date = Extension.method.convertStringToDate(date: item["publishedTime"].string ?? "")
                 let id = "\(item["_id"].string!)"
                 let toSent = item["toSent"].bool ?? false
                 if realm.object(ofType: NewsFlash.self, forPrimaryKey: id) == nil {
-                    realm.create(NewsFlash.self, value: [id, date!, item["shortMassage"].string!,"EN",toSent])
+                    realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent])
                 } else {
-//                    print("updating")
-                    realm.create(NewsFlash.self, value: [id, date!, item["shortMassage"].string!,"EN",toSent], update: true)
+                    //                    print("updating")
+                    realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent], update: true)
                 }
             }
         }
         try! realm.commitWrite()
     }
     
-//    lazy var refresher: UIRefreshControl = {
-//        let refreshControl = UIRefreshControl()
-//        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
-//        refreshControl.tintColor = UIColor.gray
-//
-//        return refreshControl
-//    }()
+    //    lazy var refresher: UIRefreshControl = {
+    //        let refreshControl = UIRefreshControl()
+    //        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+    //        refreshControl.tintColor = UIColor.gray
+    //
+    //        return refreshControl
+    //    }()
     
     func cleanOldNewsFlash() {
         //        let oneWeekBefore = Date.init(timeIntervalSinceNow: -(86400*7))
-//                let oldObjects = realm.objects(NewsFlash.self)
-//        //
-//
-//                try! realm.write {
-//                    realm.delete(oldObjects)
-//                }
+        //                let oldObjects = realm.objects(NewsFlash.self)
+        //        //
+        //
+        //                try! realm.write {
+        //                    realm.delete(oldObjects)
+        //                }
     }
     
     
     @objc func handleRefresh(_ tableView: UITableView) {
-        getNews(){ success in
+        getNews(skip: 0, limit: 5){ success in
             if success{
                 self.tableView.reloadData()
+                self.displayNumber = 5
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             } else{
                 tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
             }
         }
     }
+    
+    func handleFooter(){
+        if displayNumber <= results.count{
+            print(displayNumber)
+            self.displayNumber += 5
+            if displayNumber != 0{
+                getNews(skip: displayNumber-5, limit: 2){ success in
+                    if success{
+                        //                        DispatchQueue.main.async {
+                        self.tableView.reloadData()
+                        self.tableView.switchRefreshFooter(to: .normal)
+                        //                            self.refresher.endRefreshing()
+                        //                        }
+                    }
+                }
+            }
+        }
+        if self.displayNumber >= self.results.count {
+            self.tableView.switchRefreshFooter(to: .normal)
+            
+        }
+        if resultNumber < 5 {
+            self.tableView.switchRefreshFooter(to: .noMoreData)
+        }
+    }
+    
     
     func setUpView(){
         let header = DefaultRefreshHeader.header()
@@ -392,6 +448,14 @@ class TimelineTableViewController: UITableViewController {
         header.imageRenderingWithTintColor = true
         tableView.configRefreshHeader(with:header, container: self, action: {
             self.handleRefresh(self.tableView)
+        })
+        
+        let footer = DefaultRefreshFooter.footer()
+        footer.textLabel.textColor = ThemeColor().whiteColor()
+        footer.tintColor = ThemeColor().whiteColor()
+        footer.textLabel.backgroundColor = ThemeColor().themeColor()
+        tableView.configRefreshFooter(with: footer, container: self, action: {
+            self.handleFooter()
         })
     }
 }

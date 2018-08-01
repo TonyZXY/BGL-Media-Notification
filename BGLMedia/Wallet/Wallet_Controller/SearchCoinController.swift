@@ -70,6 +70,16 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "coins", for: indexPath) as! CoinTypeTableViewCell
+//        cell.backgroundView?.layer.masksToBounds = true
+//        cell.layer.shadowPath = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners:.allCorners, cornerRadii: CGSize(width: 0, height: 2)).cgPath
+//        cell.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        cell.layer.shadowOffset = CGSize(width: 0, height: 1)
+//        cell.layer.shouldRasterize = true
+//        cell.layer.rasterizationScale = UIScreen.main.scale
+//        cell.layer.shadowOpacity = 1
+////        cell.layer.shadowRadius = 0
+//        cell.layer.masksToBounds = false
+//        cell.clipsToBounds = false
         if isSearching{
             cell.coinName.text = filterObject[indexPath.row].coinName
             cell.coinNameAbb.text = filterObject[indexPath.row].coinSymbol
@@ -125,11 +135,39 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
-        searchBar.barTintColor = color.walletCellcolor()
-        searchBar.tintColor = color.themeColor()
-        searchBar.backgroundColor = color.redColor()
+        searchBar.tintColor = ThemeColor().darkBlackColor()
+        searchBar.barTintColor = ThemeColor().darkBlackColor()
+        searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
+        
+        var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
+        if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
+            searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        }
+        
+        
+//        searchBar.placeholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+//
+//        searchBar.
+//
+//        searchBar.nsstring
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(sortdoneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(sortCancel))
+        toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
+        searchBar.inputAccessoryView = toolbar
         return searchBar
     }()
+    
+    @objc func sortdoneclick(){
+        view.endEditing(true)
+    }
+    
+    @objc func sortCancel(){
+        view.endEditing(true)
+    }
     
     lazy var searchResult:UITableView = {
         tableViews.separatorInset = UIEdgeInsets.zero
@@ -140,6 +178,7 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         tableViews.rowHeight = 60
         tableViews.register(CoinTypeTableViewCell.self, forCellReuseIdentifier: "coins")
         tableViews.translatesAutoresizingMaskIntoConstraints = false
+        
         return tableViews
     }()
     

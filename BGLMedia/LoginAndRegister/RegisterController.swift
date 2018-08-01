@@ -376,38 +376,57 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         
         URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","register"], httpMethod: "POST", parameters: parameter, completion: { (response, success) in
             if success{
-                let registersuccess = response["success"].bool ?? true // Question
+                let registersuccess = response["success"].bool ?? false // Question
                 if registersuccess{
-                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
-                    UserDefaults.standard.set(self.email.lowercased(), forKey: "UserEmail")
-                    let token = response["token"].string!
-                    UserDefaults.standard.set(token, forKey: "CertificateToken")
-                    
-                    print(token)
-                    print(self.email.lowercased())
-                    
-                    if !self.getDeviceToken{
-                        let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
-                        let sendDeviceTokenParameter = ["email":self.email.lowercased(),"token":token,"deviceToken":deviceTokenString]
-                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
-                            if success{
-                                UserDefaults.standard.set(true, forKey: "SendDeviceToken")
-                            }
-                        })
-                    }
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
-                    
+                    print(response)
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                     hud.textLabel.text = "Success"
-                    
+                    hud.detailTextLabel.text = "Verify your email"
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
-                        if self.presentingViewController?.presentingViewController?.presentingViewController != nil{
-                            self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
-                        } else {
-                            self.presentingViewController?.dismiss(animated: true, completion: nil)
+                        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "registerVerify_alertTitle"), comment: ""), message: NSLocalizedString(textValue(name: "registerVerify_alertContent"), comment: ""), preferredStyle: .alert)
+                        let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "registerVerify_alertOK"), comment: ""), style: .cancel) { (_) in
+                            if self.presentingViewController?.presentingViewController?.presentingViewController != nil{
+                                self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+                            } else {
+                                self.dismiss(animated: true, completion: nil)
+                            }
                         }
+                        
+                        confirmAlertCtrl.addAction(cancelAction)
+                        self.present(confirmAlertCtrl, animated: true, completion: nil)
                     }
+                    
+//                    UserDefaults.standard.set(true, forKey: "isLoggedIn")
+//                    UserDefaults.standard.set(self.email.lowercased(), forKey: "UserEmail")
+//                    let token = response["token"].string!
+//                    UserDefaults.standard.set(token, forKey: "CertificateToken")
+//
+//                    print(token)
+//                    print(self.email.lowercased())
+//
+//                    if !self.getDeviceToken{
+//                        let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+//                        let sendDeviceTokenParameter = ["email":self.email.lowercased(),"token":token,"deviceToken":deviceTokenString]
+//                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
+//                            if success{
+//                                UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+//                            }
+//                        })
+//                    }
+//                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
+//
+//                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+//                    hud.textLabel.text = "Success"
+//
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                        hud.dismiss()
+//                        if self.presentingViewController?.presentingViewController?.presentingViewController != nil{
+//                            self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+//                        } else {
+//                            self.presentingViewController?.dismiss(animated: true, completion: nil)
+//                        }
+//                    }
                 } else {
                     let registerFailure = response["message"].string ?? "Register Error"
                     let code = response["err"]

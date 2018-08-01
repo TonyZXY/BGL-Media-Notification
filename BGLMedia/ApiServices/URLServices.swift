@@ -25,6 +25,7 @@ class URLServices:NSObject{
         }
         let url = URL(string: BaseURl)
         var urlRequest = URLRequest(url: url!)
+//        URLRequest(url: url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20)
         urlRequest.httpMethod = httpMethod
         
         if httpMethod == "POST"{
@@ -32,11 +33,14 @@ class URLServices:NSObject{
             urlRequest.httpBody = httpBody
         }
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+    
         
         let manager = Alamofire.SessionManager.default
-        manager.session.configuration.timeoutIntervalForRequest = 30
+        manager.session.configuration.timeoutIntervalForRequest = 20
         
-        Alamofire.request(urlRequest).responseJSON { (response) in
+//        manager.session.configuration.timeoutIntervalForRequest = 20
+        
+        manager.request(urlRequest).responseJSON { (response) in
             switch response.result {
             case .success(let value):
                 let res = JSON(value)
@@ -46,20 +50,21 @@ class URLServices:NSObject{
             case .failure(let error):
                 if error._code == NSURLErrorTimedOut {
                     completion(JSON(),false)
+                } else{
+                    print(error)
+                    print("get faliure")
+                    completion(JSON(),false)
                 }
-                print(error)
-                print("get faliure")
-                completion(JSON(),false)
             }
         }
     }
     
     //Get coin List
     func getCoinList(completion:@escaping (Bool)-> Void){
-        URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (json, success) in
+        URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (response, success) in
             if success{
                 self.realm.beginWrite()
-                for result in json.array!{
+                for result in response.array!{
                     let id = result["_id"].string!
                     let coinName = result["coinName"].string!
                     let coinSymbol = result["coinSymbol"].string!

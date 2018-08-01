@@ -42,6 +42,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             return UserDefaults.standard.bool(forKey: "isLoggedIn")
         }
     }
+    
+    var deviceToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+        }
+    }
+    
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
@@ -158,6 +165,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
         UserDefaults.standard.set(deviceTokenString, forKey: "UserToken")
+        print(deviceTokenString)
         UserDefaults.standard.set(true, forKey: "getDeviceToken")
         
         if self.loginStatus{
@@ -190,15 +198,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidBecomeActive(_ application: UIApplication) {
        UIApplication.shared.applicationIconBadgeNumber = 0
-        let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
-        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
-        let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+//        let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+//        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+//        let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
 
         if loginStatus{
-            if email != "null" && certificateToken != "null" &&  deviceToken != "null"{
-                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
-                    if success{
-                        print(response)
+            if getDeviceToken{
+                if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
+                    URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
+                        if success{
+                            print(response)
+                        }
                     }
                 }
             }
