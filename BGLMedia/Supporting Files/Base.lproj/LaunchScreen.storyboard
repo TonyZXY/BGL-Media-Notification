@@ -18,16 +18,18 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="bcg_logo" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tcy-9x-ejV">
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="CryptoGeekLogo1" adjustsImageSizeForAccessibilityContentSizeCategory="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Tcy-9x-ejV">
                                 <rect key="frame" x="87" y="233" width="200" height="200"/>
+                                <constraints>
+                                    <constraint firstAttribute="width" constant="200" id="7w8-Py-eWW"/>
+                                    <constraint firstAttribute="height" constant="200" id="IXH-nT-Cic"/>
+                                </constraints>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Tcy-9x-ejV" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" constant="87" id="46b-D2-5jC"/>
-                            <constraint firstItem="Tcy-9x-ejV" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="B27-Lp-1Kg"/>
-                            <constraint firstItem="Tcy-9x-ejV" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="213" id="G6F-QC-yl6"/>
-                            <constraint firstItem="Tcy-9x-ejV" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Jv4-Lh-WHg"/>
+                            <constraint firstItem="Tcy-9x-ejV" firstAttribute="centerX" secondItem="Ze5-6b-2t3" secondAttribute="centerX" id="Glv-v8-CBd"/>
+                            <constraint firstItem="Tcy-9x-ejV" firstAttribute="centerY" secondItem="Ze5-6b-2t3" secondAttribute="centerY" id="Qr6-T3-RlZ"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
@@ -38,6 +40,6 @@
         </scene>
     </scenes>
     <resources>
-        <image name="bcg_logo" width="250" height="250"/>
+        <image name="CryptoGeekLogo1" width="406" height="255"/>
     </resources>
 </document>

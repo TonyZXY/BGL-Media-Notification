@@ -113,8 +113,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         cell.coinName.text = assets.coinName
         cell.coinAmount.text = String(assets.totalAmount) + assets.coinAbbName
         checkDataRiseFallColor(risefallnumber: assets.currentSinglePrice, label: cell.coinSinglePrice, type: "Default")
-        cell.coinTotalPrice.text = Extension.method.scientificMethod(number: assets.currentTotalPrice)
+        checkDataRiseFallColor(risefallnumber: assets.currentTotalPrice, label: cell.coinTotalPrice, type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
+        cell.coinTotalPrice.textColor = ThemeColor().textGreycolor()
         self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
         cell.profitChange.text = "(" + cell.profitChange.text! + ")"
         self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallNumber, label: cell.profitChangeNumber, type: "Number")
@@ -265,7 +266,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         view.backgroundColor = ThemeColor().navigationBarColor()
         //NavigationBar
         let titilebarlogo = UIImageView()
-        titilebarlogo.image = UIImage(named: "CryptoGeekLogo2.png")
+        titilebarlogo.image = UIImage(named: "cryptogeek_icon_")
         titilebarlogo.contentMode = .scaleAspectFit
         titilebarlogo.clipsToBounds = true
         navigationItem.titleView = titilebarlogo

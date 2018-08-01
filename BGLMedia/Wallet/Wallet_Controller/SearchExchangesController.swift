@@ -93,9 +93,9 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
-        searchBar.barTintColor = color.walletCellcolor()
-        searchBar.tintColor = color.themeColor()
-        searchBar.backgroundColor = color.redColor()
+        searchBar.tintColor = ThemeColor().darkBlackColor()
+        searchBar.barTintColor = ThemeColor().darkBlackColor()
+        searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
         return searchBar
     }()
     
@@ -113,6 +113,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     }()
     
     func setupView(){
+        
         view.addSubview(searchBar)
         view.addSubview(searchResult)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar]))

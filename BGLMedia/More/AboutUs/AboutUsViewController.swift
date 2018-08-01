@@ -69,7 +69,7 @@ class AboutUsViewController: UIViewController {
     }()
     
     var imageView:UIImageView = {
-        var imageView = UIImageView(image: UIImage(named: "bcg_new_white01.png"))
+        var imageView = UIImageView(image: UIImage(named: "CryptoGeekLogo2"))
         imageView.clipsToBounds = true
         imageView.contentMode = UIViewContentMode.scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false

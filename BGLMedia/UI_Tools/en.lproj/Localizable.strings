@@ -232,6 +232,14 @@ tapToRefresh = "Tap to refresh";
 
 scrollAndTapToRefresh = "Scroll or tap to load";
 
+//Login
+registerVerify_alertOK = "OK";
+registerVerify_alertTitle = "Verify your email";
+registerVerify_alertContent = "Please go to your eamil to Active your account";
+
+//SearchCoin
+search_placeholder = "Enter Search Key Word...";
+
 
 
 

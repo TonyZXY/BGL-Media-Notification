@@ -225,3 +225,12 @@ noMoreData = "数据加载完毕";
 tapToRefresh = "点击加载更多";
 
 scrollAndTapToRefresh = "上拉或点击加载更多";
+
+
+//Login
+registerVerify_alertOK = "确认";
+registerVerify_alertTitle = "邮箱认证";
+registerVerify_alertContent = "请您去邮箱激活你的账号";
+
+//Searchbar
+search_placeholder = "请输入关键词...";

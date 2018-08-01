@@ -74,9 +74,10 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
     lazy var searchResult:UITableView = {
         tableViews.backgroundColor = color.themeColor()
         tableViews.rowHeight = 80
-        tableViews.separatorInset = UIEdgeInsets.zero
+//        tableViews.separatorInset = UIEdgeInsets.zero
         tableViews.delegate = self
         tableViews.dataSource = self
+        tableViews.separatorStyle = .none
         tableViews.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableViews.translatesAutoresizingMaskIntoConstraints = false
         return tableViews

@@ -18,10 +18,21 @@ class LoginController: UIViewController {
         }
     }
     
+    var sendDeviceToken:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "SendDeviceToken")
+        }
+    }
+    
     let logoImage: UIImageView = {
-        let logo = UIImageView(image: UIImage(named: "bcg_logo"))
+        let logo = UIImageView(image: UIImage(named: "CryptoGeekLogo2"))
         return logo
     }()
+    
+    var deviceToken:String{
+        return UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+    }
+    
     let emailLabel: UILabel = {
         let label = UILabel()
         label.text = "Email"
@@ -187,14 +198,18 @@ class LoginController: UIViewController {
                     UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     
-                    if !self.getDeviceToken{
+                    
+                    if self.getDeviceToken{
+                    if !self.sendDeviceToken{
                         let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                        print(deviceTokenString)
                         let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
                         URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
                             if success{
                                 UserDefaults.standard.set(true, forKey: "SendDeviceToken")
                             }
                         })
+                    }
                     }
                     
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
@@ -275,7 +290,7 @@ class LoginController: UIViewController {
         view.addSubview(logoImage)
         logoImage.translatesAutoresizingMaskIntoConstraints = false
         logoImage.heightAnchor.constraint(equalToConstant: 150 * height).isActive = true
-        logoImage.widthAnchor.constraint(equalToConstant:150 * height).isActive = true
+        logoImage.widthAnchor.constraint(equalToConstant:250 * height).isActive = true
         logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 80 * height).isActive = true
         

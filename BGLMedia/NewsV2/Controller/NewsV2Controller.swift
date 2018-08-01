@@ -16,6 +16,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     var displayNumber:Int = 0
     var loadMoreData:Bool = false
     var changeLanguageStatus:Bool = false
+    var resultNumber: Int = 0
     
     var newsObject:Results<NewsObject>{
         get{
@@ -83,9 +84,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         setUpView()
         newsTableView.switchRefreshFooter(to: .removed)
         
-//        DispatchQueue.main.async(execute: {
-//            self.newsTableView.beginHeaderRefreshing()
-//        })
+        //        DispatchQueue.main.async(execute: {
+        //            self.newsTableView.beginHeaderRefreshing()
+        //        })
         
         self.newsTableView.switchRefreshHeader(to: .refreshing)
         
@@ -131,28 +132,28 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         changeLanguageStatus = true
-//        addRefreshHeader(){success in
-//            if success{
-//                let header = DefaultRefreshHeader.header()
-//                header.textLabel.textColor = ThemeColor().whiteColor()
-//                header.textLabel.font = UIFont.regularFont(12)
-//                header.tintColor = ThemeColor().whiteColor()
-//                header.imageRenderingWithTintColor = true
-//                self.newsTableView.configRefreshHeader(with:header, container: self, action: {
-//                    self.handleRefresh(self.newsTableView)
-//                })
-//                //                        DispatchQueue.main.async(execute: {
-//                self.newsTableView.beginHeaderRefreshing()
-//                //                        })
-//            }
-//        }
+        //        addRefreshHeader(){success in
+        //            if success{
+        //                let header = DefaultRefreshHeader.header()
+        //                header.textLabel.textColor = ThemeColor().whiteColor()
+        //                header.textLabel.font = UIFont.regularFont(12)
+        //                header.tintColor = ThemeColor().whiteColor()
+        //                header.imageRenderingWithTintColor = true
+        //                self.newsTableView.configRefreshHeader(with:header, container: self, action: {
+        //                    self.handleRefresh(self.newsTableView)
+        //                })
+        //                //                        DispatchQueue.main.async(execute: {
+        //                self.newsTableView.beginHeaderRefreshing()
+        //                //                        })
+        //            }
+        //        }
     }
     
     func addRefreshHeader(completion:@escaping (Bool)->Void){
-
-//            self.newsTableView.switchRefreshHeader(to: .removed)
-            completion(true)
-
+        
+        //            self.newsTableView.switchRefreshHeader(to: .removed)
+        completion(true)
+        
         
     }
     
@@ -202,6 +203,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     func getData(skip:Int,limit:Int,completion: @escaping (Bool)->Void){
         URLServices.fetchInstance.passServerData(urlParameters: ["api","getNewsContentOnly?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
             if pass{
+                self.resultNumber = res.count
                 self.storeDataToRealm(res:res){success in
                     if success{
                         completion(true)
@@ -282,7 +284,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         //
         //        NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
     }
-
+    
     
     lazy var newsTableView:UITableView = {
         var tableView = UITableView()
@@ -326,23 +328,25 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             print(displayNumber)
             if displayNumber != 0{
                 self.displayNumber += 20
-                getData(skip: displayNumber, limit: 20){ success in
+                getData(skip: displayNumber-20, limit: 20){ success in
                     if success{
-                        DispatchQueue.main.async {
-                            self.newsTableView.reloadData()
-                            self.newsTableView.switchRefreshFooter(to: .normal)
-                            //                            self.refresher.endRefreshing()
-                        }
+                        self.newsTableView.reloadData()
+                        self.newsTableView.switchRefreshFooter(to: .normal)
+                        //                            self.refresher.endRefreshing()
                     }
                 }
             }
         }
-        if displayNumber >= newsObject.count {
+        print("Already get: \(resultNumber)")
+        if self.displayNumber >= self.newsObject.count {
             self.newsTableView.switchRefreshFooter(to: .normal)
+            
         }
+        if resultNumber < 20 {
+            self.newsTableView.switchRefreshFooter(to: .noMoreData)
+        }
+        
     }
-    
-    
     
     
     
