@@ -373,6 +373,17 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         let indexPath = IndexPath.init(row: 2, section: 0)
         let cell = registerTable.cellForRow(at: indexPath) as! RegisterCellB
         titleOfUser = cell.titleTextField.text!
+        if titleOfUser == "先生" {
+            titleOfUser = "Mr"
+        } else if titleOfUser == "女士" {
+            titleOfUser = "Ms"
+        } else if titleOfUser == "夫人" {
+            titleOfUser = "Mrs"
+        } else if titleOfUser == "博士" {
+            titleOfUser = "Dr"
+        } else {
+            titleOfUser = cell.titleTextField.text!
+        }
         print(firstName + "   " + lastName + "   " + titleOfUser + "    " + email + "   " + password)
         let hud = JGProgressHUD(style: .light)
         hud.textLabel.text = textValue(name: "registing")
