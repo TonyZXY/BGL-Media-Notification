@@ -96,8 +96,30 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         searchBar.tintColor = ThemeColor().darkBlackColor()
         searchBar.barTintColor = ThemeColor().darkBlackColor()
         searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
+        
+        var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
+        if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
+            searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()])
+        }
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(sortdoneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(sortCancel))
+        toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
+        searchBar.inputAccessoryView = toolbar
+        
         return searchBar
     }()
+    
+    @objc func sortdoneclick(){
+        view.endEditing(true)
+    }
+    
+    @objc func sortCancel(){
+        view.endEditing(true)
+    }
     
     lazy var searchResult:UITableView = {
         tableViews.rowHeight = 80

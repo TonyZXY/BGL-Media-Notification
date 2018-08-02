@@ -205,6 +205,10 @@
 		578FE8D520FEEEB20027F17E /* OFL.txt in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8CD20FEEEB10027F17E /* OFL.txt */; };
 		578FE8D620FEEEB20027F17E /* Montserrat-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8CE20FEEEB10027F17E /* Montserrat-Italic.ttf */; };
 		578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578FE8DA20FF1FF40027F17E /* LaunchScreenViewController.swift */; };
+		57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17A211276ED00042CF6 /* SCLAlertView.swift */; };
+		57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17B211276ED00042CF6 /* SCLExtensions.swift */; };
+		57AEA17F211276ED00042CF6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 57AEA17C211276ED00042CF6 /* Info.plist */; };
+		57AEA18121129B9E00042CF6 /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA18021129B9E00042CF6 /* CustomAlertController.swift */; };
 		57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD8682104540B00973B45 /* ExchangeSelect.swift */; };
 		57BAD86B21045ACF00973B45 /* exchangeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD86A21045ACF00973B45 /* exchangeController.swift */; };
 		57BAD9522104CAD500973B45 /* TCPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD94C2104CAD500973B45 /* TCPickerView.swift */; };
@@ -459,6 +463,10 @@
 		578FE8CD20FEEEB10027F17E /* OFL.txt */ = {isa = PBXFileReference; lastKnownFileType = text; path = OFL.txt; sourceTree = "<group>"; };
 		578FE8CE20FEEEB10027F17E /* Montserrat-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Italic.ttf"; sourceTree = "<group>"; };
 		578FE8DA20FF1FF40027F17E /* LaunchScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LaunchScreenViewController.swift; sourceTree = "<group>"; };
+		57AEA17A211276ED00042CF6 /* SCLAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLAlertView.swift; sourceTree = "<group>"; };
+		57AEA17B211276ED00042CF6 /* SCLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLExtensions.swift; sourceTree = "<group>"; };
+		57AEA17C211276ED00042CF6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		57AEA18021129B9E00042CF6 /* CustomAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertController.swift; sourceTree = "<group>"; };
 		57BAD8682104540B00973B45 /* ExchangeSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeSelect.swift; sourceTree = "<group>"; };
 		57BAD86A21045ACF00973B45 /* exchangeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exchangeController.swift; sourceTree = "<group>"; };
 		57BAD94C2104CAD500973B45 /* TCPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPickerView.swift; sourceTree = "<group>"; };
@@ -964,6 +972,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				57AEA179211276ED00042CF6 /* SCLAlertView */,
 				57BBAB3E2107085F00984AA4 /* PullToRefresh */,
 				57BAD94B2104CAD500973B45 /* Classes */,
 				571F682E210170CF00342198 /* Alert */,
@@ -1135,6 +1144,7 @@
 				57355C3220F718CC002E70E4 /* WalletController.swift */,
 				57355C3320F718CC002E70E4 /* SearchCoinController.swift */,
 				57650896210D9D27007368CC /* WalletControllerV2.swift */,
+				57AEA18021129B9E00042CF6 /* CustomAlertController.swift */,
 			);
 			path = Wallet_Controller;
 			sourceTree = "<group>";
@@ -1210,6 +1220,16 @@
 				578FE8DA20FF1FF40027F17E /* LaunchScreenViewController.swift */,
 			);
 			path = LaunchScreen;
+			sourceTree = "<group>";
+		};
+		57AEA179211276ED00042CF6 /* SCLAlertView */ = {
+			isa = PBXGroup;
+			children = (
+				57AEA17A211276ED00042CF6 /* SCLAlertView.swift */,
+				57AEA17B211276ED00042CF6 /* SCLExtensions.swift */,
+				57AEA17C211276ED00042CF6 /* Info.plist */,
+			);
+			path = SCLAlertView;
 			sourceTree = "<group>";
 		};
 		57BAD94B2104CAD500973B45 /* Classes */ = {
@@ -1418,6 +1438,7 @@
 				578FE8D620FEEEB20027F17E /* Montserrat-Italic.ttf in Resources */,
 				2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */,
 				2D52AF1620E46E1A00018FC0 /* TimelineTableViewCell.swift~FlashNews in Resources */,
+				57AEA17F211276ED00042CF6 /* Info.plist in Resources */,
 				2D52AEE320E46E1A00018FC0 /* Main.storyboard in Resources */,
 				57355C5220F718CC002E70E4 /* README.md in Resources */,
 				2D52AF0D20E46E1A00018FC0 /* NewsFlashViewController.swift~HEAD in Resources */,
@@ -1537,6 +1558,7 @@
 				2D52AF1C20E46E1A00018FC0 /* HistoricalDataStruct.swift in Sources */,
 				2D52AEF320E46E1A00018FC0 /* WatchListController.swift in Sources */,
 				57355C4820F718CC002E70E4 /* TransCoinTypeCell.swift in Sources */,
+				57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */,
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				2D52AF2C20E46E1A00018FC0 /* Genuine.swift in Sources */,
@@ -1561,6 +1583,7 @@
 				2D52AF4120E46E1A00018FC0 /* OnBoardingPageViewController.swift in Sources */,
 				2D52AEF920E46E1A00018FC0 /* CancelTouchKeyboard.swift in Sources */,
 				57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */,
+				57AEA18121129B9E00042CF6 /* CustomAlertController.swift in Sources */,
 				2D52AEF720E46E1A00018FC0 /* GlobalDataRealm.swift in Sources */,
 				2D52AEA320E46E1A00018FC0 /* DetailMenuBar.swift in Sources */,
 				2D52AEA920E46E1A00018FC0 /* HistoryPoint.swift in Sources */,
@@ -1650,6 +1673,7 @@
 				57650899210FE463007368CC /* RegisterCell.swift in Sources */,
 				5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */,
 				2D52AEFA20E46E1A00018FC0 /* TickerDataFetcherV2.swift in Sources */,
+				57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */,
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
 				57355C4720F718CC002E70E4 /* TransDateCell.swift in Sources */,
 				2D52AF1520E46E1A00018FC0 /* TimelinePoint.swift in Sources */,

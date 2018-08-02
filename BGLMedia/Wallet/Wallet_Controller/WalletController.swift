@@ -11,7 +11,7 @@ import RealmSwift
 
 
 
-class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSource{
+class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate{
     var image = AppImage()
     let realm = try! Realm()
     var all = try! Realm().objects(MarketTradingPairs.self)
@@ -21,7 +21,45 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     var totalProfit:Double = 0
     var totalAssets:Double = 0
     var changeLaugageStatus:Bool = false
+    var countField:String = ""
     //    var walletResults = [MarketTradingPairs]()
+    
+    var countdownTimer: Timer?
+
+    var remainingSeconds: Int = 0 {
+        willSet {
+//            sendButton.setTitle("验证码已发送(\(newValue)秒后重新获取)", for: .normal)
+            countField = "验证码已发送(\(newValue)秒后重新获取)"
+            if newValue <= 0 {
+//                sendButton.setTitle("重新获取验证码", for: .normal)
+                isCounting = false
+            }
+        }
+    }
+    
+    
+    
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        textField.text = countField
+        return true
+    }
+
+    var isCounting = false {
+        willSet {
+            if newValue {
+                countdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTime(_:)), userInfo: nil, repeats: true)
+                remainingSeconds = 5
+//                sendButton.backgroundColor = UIColor.gray
+            } else {
+                countdownTimer?.invalidate()
+                countdownTimer = nil
+
+//                sendButton.backgroundColor = UIColor.red
+            }
+
+//            sendButton.isEnabled = !newValue
+        }
+    }
     
     
     var allResult:Results<AllTransactions> {
@@ -216,6 +254,21 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let transaction = TransactionsController()
         transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
+        
+//        let vc = CustomAlertController()
+//        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//        self.addChildViewController(vc)
+//        view.addSubview(vc.view)
+    }
+    
+    
+    
+    @objc func firstButton(){
+        isCounting = true
+    }
+    
+    @objc func updateTime(_ timer: Timer) {
+        remainingSeconds -= 1
     }
     
     //Refresh Method
@@ -504,6 +557,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         return tableView
     }()
 }
+
+
+class newAlert:SCLAlertView{
+
+}
+
 
 
 

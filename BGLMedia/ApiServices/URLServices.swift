@@ -33,12 +33,11 @@ class URLServices:NSObject{
             urlRequest.httpBody = httpBody
         }
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    
+        
         
         let manager = Alamofire.SessionManager.default
         manager.session.configuration.timeoutIntervalForRequest = 20
-        
-//        manager.session.configuration.timeoutIntervalForRequest = 20
+        manager.session.configuration.timeoutIntervalForResource = 20
         
         manager.request(urlRequest).responseJSON { (response) in
             switch response.result {
