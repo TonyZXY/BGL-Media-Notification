@@ -9,7 +9,7 @@
 import UIKit
 
 class CustomAlertController: UIViewController {
-    
+    var email:String = ""
     var countdownTimer: Timer?
     
     var remainingSeconds: Int = 0 {
@@ -46,7 +46,13 @@ class CustomAlertController: UIViewController {
     
     @objc func sendButtonClick() {
         isCounting = true
-        print("sfds")
+        if isCounting{
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","resendVerifyLink",email], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+                if success{
+                    print(response)
+                }
+            }
+        }
     }
     
     @objc func updateTime(_ timer: Timer) {
