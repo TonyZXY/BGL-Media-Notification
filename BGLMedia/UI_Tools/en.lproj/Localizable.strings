@@ -272,6 +272,11 @@ successRegiste = "Success";
 verifyEmail = "Please Verify Your Email";
 registerfailed = "Register failed";
 emailExist = "Email Exists";
+
+needLoginLabel = "Please Login First";
+needLoginText = "Login to access this function";
+
+
 mr = "Mr";
 ms = "Ms";
 mrs = "Mrs";

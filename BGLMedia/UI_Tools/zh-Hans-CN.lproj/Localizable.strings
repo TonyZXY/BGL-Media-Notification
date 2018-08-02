@@ -266,7 +266,8 @@ successRegiste = "注册成功";
 verifyEmail = "请确认邮箱";
 registerfailed = "注册失败";
 emailExist = "邮箱已存在";
-
+needLoginLabel = "请先登录";
+needLoginText = "请登录以使用此功能";
 
 mr = "先生";
 ms = "女士";
