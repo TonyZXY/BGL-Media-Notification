@@ -35,7 +35,7 @@ class LoginController: UIViewController {
     
     let emailLabel: UILabel = {
         let label = UILabel()
-        label.text = "Email"
+        label.text = textValue(name: "email")
         label.textAlignment = .center
         label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
         label.textColor = ThemeColor().whiteColor()
@@ -44,7 +44,7 @@ class LoginController: UIViewController {
     
     let passwordLabel: UILabel = {
         let label = UILabel()
-        label.text = "Password"
+        label.text = textValue(name: "password")
         label.textAlignment = .center
         label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
         label.textColor = ThemeColor().whiteColor()
@@ -68,7 +68,7 @@ class LoginController: UIViewController {
     let passwordTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
         textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*Password", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Regular", size: 16)!])
+        textField.attributedPlaceholder = NSAttributedString(string: textValue(name: "needPassword"), attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Regular", size: 16)!])
         textField.clearButtonMode = UITextFieldViewMode.whileEditing
         textField.addTarget(self, action: #selector(checkPassword), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
@@ -81,8 +81,8 @@ class LoginController: UIViewController {
     
     let loginButton: UIButton = {
         let button = UIButton()
-        button.setTitle("LOGIN",for: .disabled)
-        button.setTitle("LOGIN",for: .normal)
+        button.setTitle(textValue(name: "login"),for: .disabled)
+        button.setTitle(textValue(name: "login"),for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Bold", size: 18)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(login), for: .touchUpInside)
@@ -93,8 +93,8 @@ class LoginController: UIViewController {
     
     let signUpButton: UIButton = {
         let button = UIButton()
-        button.setTitle("SIGN UP",for: .disabled)
-        button.setTitle("SIGN UP",for: .normal)
+        button.setTitle(textValue(name: "signUp"),for: .disabled)
+        button.setTitle(textValue(name: "signUp"),for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Bold", size: 18)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(register), for: .touchUpInside)
@@ -105,7 +105,7 @@ class LoginController: UIViewController {
     
     let skipButton: UIButton = {
         let button = UIButton()
-        button.setTitle("SKIP >",for: .normal)
+        button.setTitle(textValue(name: "skip"),for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Bold", size: 16)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(closePage), for: .touchUpInside)
@@ -129,12 +129,12 @@ class LoginController: UIViewController {
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
             
-            emailLabel.text = "Invalid Email"
+            emailLabel.text = textValue(name: "wrongEmail")
             emailLabel.textColor = ThemeColor().redColor()
         }else{
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            emailLabel.text = "Email"
+            emailLabel.text = textValue(name: "email")
             emailLabel.textColor = ThemeColor().whiteColor()
         }
         
@@ -145,12 +145,12 @@ class LoginController: UIViewController {
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
             
-            passwordLabel.text = "Invalid Password"
+            passwordLabel.text = textValue(name: "wrongPassword")
             passwordLabel.textColor = ThemeColor().redColor()
         }else{
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            passwordLabel.text = "Password"
+            passwordLabel.text = textValue(name: "password")
             passwordLabel.textColor = ThemeColor().whiteColor()
         }
     }
@@ -171,7 +171,7 @@ class LoginController: UIViewController {
     
     @objc func login(sender: UIButton){
         let hud = JGProgressHUD(style: .light)
-        hud.textLabel.text = "Signing In"
+        hud.textLabel.text = textValue(name: "signingIn")
         hud.backgroundColor = ThemeColor().progressColor()
         hud.show(in: self.view)
         
@@ -217,29 +217,32 @@ class LoginController: UIViewController {
                     
                     
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                    hud.textLabel.text = "Success"
+                    hud.textLabel.text = textValue(name: "successSigningIn")
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                         self.dismiss(animated: true, completion: nil)
                     }
                 } else {
-                    let loginfailure = response["message"].string ?? "Login Error"
+                    var loginfailure = response["message"].string ?? textValue(name: "errorLoginIn")
+                    if loginfailure == "Email or Password Error"{
+                        loginfailure = textValue(name: "errorHandle_login")
+                    }
                     hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                    hud.textLabel.text = "Error"
+                    hud.textLabel.text = textValue(name: "errorShow")
                     hud.detailTextLabel.text = loginfailure
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                         self.passwordTextField.layer.borderWidth = 1.8
                         self.passwordTextField.layer.borderColor = ThemeColor().redColor().cgColor
                         
-                        self.passwordLabel.text = "Password"
+                        self.passwordLabel.text = textValue(name: "wrongPassword")
                         self.passwordLabel.textColor = ThemeColor().redColor()
                         
                         self.emailTextField.layer.borderWidth = 1.8
                         self.emailTextField.layer.borderColor = ThemeColor().redColor().cgColor
                         
-                        self.emailLabel.text = "Invalid Email"
+                        self.emailLabel.text = textValue(name: "wrongEmail")
                         self.emailLabel.textColor = ThemeColor().redColor()
                         
                     }
@@ -249,15 +252,15 @@ class LoginController: UIViewController {
                 let manager = NetworkReachabilityManager()
                 hud.indicatorView = JGProgressHUDErrorIndicatorView()
                 if !(manager?.isReachable)! {
-                    hud.textLabel.text = "Error"
-                    hud.detailTextLabel.text = "No Network" // To change?
+                    hud.textLabel.text = textValue(name: "errorShow")
+                    hud.detailTextLabel.text = textValue(name: "noNetwork") // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     
                 } else {
                     hud.textLabel.text = "Error"
-                    hud.detailTextLabel.text = "Time Out" // To change?
+                    hud.detailTextLabel.text = textValue(name: "timeout") // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }

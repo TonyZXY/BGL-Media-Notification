@@ -361,7 +361,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(30*factor!)-[v1]-\(10*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginMainLabel]))
         loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(10*factor!)-[v1(\(50*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
-        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor!)-[v1]-\(20*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1(\(200 * factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
+        loginButton.centerXAnchor.constraint(equalTo: loginView.centerXAnchor).isActive = true
         loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor!)-[v0]-\(30*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginLabel,"v1":loginButton]))
         loginView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor!)-[v0]-\(30*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginMainLabel,"v1":loginButton]))
         
@@ -443,7 +444,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var loginMainLabel:UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.text = "Please Login First"
+        label.text = textValue(name: "needLoginLabel")
         label.textColor = ThemeColor().whiteColor()
         label.font = label.font.withSize(20)
         label.textAlignment = .center
@@ -454,7 +455,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
-        label.text = "Login to access this function"
+        label.text = textValue(name: "needLoginText")
         label.textAlignment = .center
         label.font = label.font.withSize(13)
         return label
@@ -463,7 +464,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var loginButton:UIButton = {
         var button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Login", for: .normal)
+        button.setTitle(textValue(name: "login"), for: .normal)
         button.layer.cornerRadius = 15
         button.addTarget(self, action: #selector(Login), for: .touchUpInside)
         button.setTitleColor(UIColor.white, for: .normal)

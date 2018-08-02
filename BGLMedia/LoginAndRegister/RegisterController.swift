@@ -32,7 +32,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
     }()
     let navTitleLabel: UILabel = {
         let label = UILabel()
-        label.text = "SIGN UP"
+        label.text = textValue(name: "signUp")
         label.textAlignment = .center
         label.font = UIFont(name: "Montserrat-Bold", size: 20)
         label.textColor = ThemeColor().whiteColor()
@@ -68,8 +68,8 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
     
     let signUpButton: UIButton = {
         let button = UIButton()
-        button.setTitle("SIGN UP",for: .disabled)
-        button.setTitle("SIGN UP",for: .normal)
+        button.setTitle(textValue(name: "signUp"),for: .disabled)
+        button.setTitle(textValue(name: "signUp"),for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Bold", size: 18)
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(register), for: .touchUpInside)
@@ -116,8 +116,15 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         } else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[2], for: indexPath) as! RegisterCellB
             cell.selectionStyle = .none
-            cell.titleTextField.leftAnchor.constraint(equalTo: cell.leftAnchor,constant:37.5 * width).isActive = true
-            cell.lastNameTextField.rightAnchor.constraint(equalTo: cell.rightAnchor,constant:-37.5 * width).isActive = true
+            
+            if defaultLanguage == "CN"{
+                cell.lastNameTextField.leftAnchor.constraint(equalTo: cell.leftAnchor,constant:37.5 * width).isActive = true
+                cell.titleTextField.rightAnchor.constraint(equalTo: cell.rightAnchor,constant:-37.5 * width).isActive = true
+            } else{
+                cell.titleTextField.leftAnchor.constraint(equalTo: cell.leftAnchor,constant:37.5 * width).isActive = true
+                cell.lastNameTextField.rightAnchor.constraint(equalTo: cell.rightAnchor,constant:-37.5 * width).isActive = true
+            }
+            
             cell.lastNameTextField.topAnchor.constraint(equalTo: cell.lastNameLabel.bottomAnchor, constant: 5 * height).isActive = true
             cell.lastNameTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
             cell.lastNameTextField.widthAnchor.constraint(equalToConstant:220 * width).isActive = true
@@ -142,8 +149,8 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             cell.contentTextField.topAnchor.constraint(equalTo: cell.contentLabel.bottomAnchor, constant: 5 * height).isActive = true
             cell.contentTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
             cell.contentTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
-            cell.contentLabel.text = "Email"
-            cell.contentTextField.placeholder = "*Email"
+            cell.contentLabel.text = textValue(name: "email")
+            cell.contentTextField.placeholder = "*email@email.com"
             cell.contentTextField.keyboardType = .emailAddress
             cell.backgroundColor = ThemeColor().themeColor()
             cell.contentTextField.addTarget(self, action: #selector(checkEmail), for: .allEditingEvents)
@@ -157,8 +164,8 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             cell.contentTextField.topAnchor.constraint(equalTo: cell.contentLabel.bottomAnchor, constant: 5 * height).isActive = true
             cell.contentTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
             cell.contentTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
-            cell.contentLabel.text = "Password"
-            cell.contentTextField.placeholder = "*8-20 Characters"
+            cell.contentLabel.text = textValue(name: "password")
+            cell.contentTextField.placeholder = "*" + textValue(name: "passwordHint")
             cell.contentTextField.isSecureTextEntry = true
             cell.contentTextField.addTarget(self, action: #selector(checkPassword), for: .allEditingEvents)
             cell.contentTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
@@ -172,8 +179,8 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             cell.contentTextField.topAnchor.constraint(equalTo: cell.contentLabel.bottomAnchor, constant: 5 * height).isActive = true
             cell.contentTextField.heightAnchor.constraint(equalToConstant: 40 * height).isActive = true
             cell.contentTextField.widthAnchor.constraint(equalToConstant:300 * width).isActive = true
-            cell.contentLabel.text = "Confirm Password"
-            cell.contentTextField.placeholder = "*Confirm Your Password"
+            cell.contentLabel.text = textValue(name: "conPassword")
+            cell.contentTextField.placeholder = "*" + textValue(name: "conPasswordPlaceHolder")
             cell.contentTextField.isSecureTextEntry = true
             cell.contentTextField.addTarget(self, action: #selector(checkPasswordConfirmed), for: .allEditingEvents)
             cell.contentTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
@@ -219,10 +226,10 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         var picker: TCPickerViewInput = TCPickerView()
         picker.title = "Title"
         let titles = [
-            "Mr",
-            "Ms",
-            "Mrs",
-            "Dr"
+            textValue(name: "mr"),
+            textValue(name: "ms"),
+            textValue(name: "mrs"),
+            textValue(name: "dr")
         ]
         let values = titles.map{ TCPickerView.Value(title: $0) }
         picker.values = values
@@ -245,14 +252,14 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             print(cell.contentTextField.isTouchInside)
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
-            cell.contentLabel.text = "First Name Needed"
+            cell.contentLabel.text = textValue(name: "firstNameNeeded")
             cell.contentLabel.textColor = ThemeColor().redColor()
             firstName = ""
         } else {
             print(cell.contentTextField.isTouchInside)
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            cell.contentLabel.text = "First Name"
+            cell.contentLabel.text = textValue(name: "firstName")
             cell.contentLabel.textColor = ThemeColor().whiteColor()
             firstName = textField.text!
         }
@@ -266,13 +273,13 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         if textField.isTouchInside && trimmedLastName == ""{
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
-            cell.lastNameLabel.text = "Last Name Needed"
+            cell.lastNameLabel.text = textValue(name: "lastNameNeeded")
             cell.lastNameLabel.textColor = ThemeColor().redColor()
             lastName = ""
         } else {
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            cell.lastNameLabel.text = "Last Name"
+            cell.lastNameLabel.text = textValue(name: "lastName")
             cell.lastNameLabel.textColor = ThemeColor().whiteColor()
             lastName = textField.text!
         }
@@ -288,13 +295,13 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
             
-            cell.contentLabel.text = "Invalid Email"
+            cell.contentLabel.text = textValue(name: "wrongEmail")
             cell.contentLabel.textColor = ThemeColor().redColor()
             email = ""
         }else{
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            cell.contentLabel.text = "Email"
+            cell.contentLabel.text = textValue(name: "email")
             cell.contentLabel.textColor = ThemeColor().whiteColor()
             email = textField.text!
         }
@@ -308,13 +315,13 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
             
-            cell.contentLabel.text = "Password is too short"
+            cell.contentLabel.text = textValue(name: "passwordTooShort")
             cell.contentLabel.textColor = ThemeColor().redColor()
             password = ""
         }else{
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            cell.contentLabel.text = "Password"
+            cell.contentLabel.text = textValue(name: "password")
             cell.contentLabel.textColor = ThemeColor().whiteColor()
             password = textField.text!
         }
@@ -330,13 +337,13 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
             
-            cell.contentLabel.text = "Invalid Confirmation"
+            cell.contentLabel.text = textValue(name: "wrongConPassword")
             cell.contentLabel.textColor = ThemeColor().redColor()
             conPassword = ""
         }else{
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
-            cell.contentLabel.text = "Confirm Password"
+            cell.contentLabel.text = textValue(name: "conPassword")
             cell.contentLabel.textColor = ThemeColor().whiteColor()
             conPassword = textField.text!
         }
@@ -366,9 +373,20 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         let indexPath = IndexPath.init(row: 2, section: 0)
         let cell = registerTable.cellForRow(at: indexPath) as! RegisterCellB
         titleOfUser = cell.titleTextField.text!
+        if titleOfUser == "先生" {
+            titleOfUser = "Mr"
+        } else if titleOfUser == "女士" {
+            titleOfUser = "Ms"
+        } else if titleOfUser == "夫人" {
+            titleOfUser = "Mrs"
+        } else if titleOfUser == "博士" {
+            titleOfUser = "Dr"
+        } else {
+            titleOfUser = cell.titleTextField.text!
+        }
         print(firstName + "   " + lastName + "   " + titleOfUser + "    " + email + "   " + password)
         let hud = JGProgressHUD(style: .light)
-        hud.textLabel.text = "Registing"
+        hud.textLabel.text = textValue(name: "registing")
         hud.backgroundColor = UIColor(displayP3Red: 191, green: 191, blue: 191, alpha: 0.5)
         hud.show(in: self.view)
         
@@ -380,8 +398,8 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
                 if registersuccess{
                     print(response)
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                    hud.textLabel.text = "Success"
-                    hud.detailTextLabel.text = "Verify your email"
+                    hud.textLabel.text = textValue(name: "successRegiste")
+                    hud.detailTextLabel.text = textValue(name: "verifyEmail")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                         let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "registerVerify_alertTitle"), comment: ""), message: NSLocalizedString(textValue(name: "registerVerify_alertContent"), comment: ""), preferredStyle: .alert)
@@ -428,19 +446,22 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
 //                        }
 //                    }
                 } else {
-                    let registerFailure = response["message"].string ?? "Register Error"
+                    let registerFailure = response["message"].string ?? textValue(name: "registerfailed")
                     let code = response["err"]
                     hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                    hud.textLabel.text = "Error"
-                    hud.detailTextLabel.text = registerFailure
+                    hud.textLabel.text = textValue(name: "errorShow")
+                    
                     if code == "23505"{
+                        hud.detailTextLabel.text = textValue(name: "emailExist")
                         let indexPathC = IndexPath.init(row: 3, section: 0)
                         let cellC = self.registerTable.cellForRow(at: indexPathC) as! RegisterCellA
                         cellC.contentTextField.layer.borderWidth = 1.8
                         cellC.contentTextField.layer.borderColor = ThemeColor().redColor().cgColor
                         
-                        cellC.contentLabel.text = "Email Exists"
+                        cellC.contentLabel.text = textValue(name: "emailExist")
                         cellC.contentLabel.textColor = ThemeColor().redColor()
+                    } else {
+                        hud.detailTextLabel.text = textValue(name: "registerfailed")
                     }
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
@@ -452,15 +473,15 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
                 let manager = NetworkReachabilityManager()
                 hud.indicatorView = JGProgressHUDErrorIndicatorView()
                 if !(manager?.isReachable)! {
-                    hud.textLabel.text = "Error"
-                    hud.detailTextLabel.text = "No Network" // To change?
+                    hud.textLabel.text = textValue(name: "errorShow")
+                    hud.detailTextLabel.text = textValue(name: "noNetwork") // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     
                 } else {
-                    hud.textLabel.text = "Error"
-                    hud.detailTextLabel.text = "Time Out" // To change?
+                    hud.textLabel.text = textValue(name: "errorShow")
+                    hud.detailTextLabel.text = textValue(name: "timeout") // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }

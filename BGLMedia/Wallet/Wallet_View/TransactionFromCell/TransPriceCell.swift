@@ -102,4 +102,5 @@ class TransPriceCell:UITableViewCell{
     @objc func pricedoneclick(){
         self.endEditing(true)
     }
+    
 }
