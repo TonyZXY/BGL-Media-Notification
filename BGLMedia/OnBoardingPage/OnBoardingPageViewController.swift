@@ -54,10 +54,11 @@ class OnBoardingPageViewController: UIViewController {
 
     let skipButton:UIButton = {
         let button = UIButton()
-        button.setTitle("SKIP THESE", for: .normal)
+        button.setTitle(textValue(name: "skip"), for: .normal)
         button.titleLabel?.font = UIFont.semiBoldFont(15)
         button.titleLabel?.textColor = ThemeColor().whiteColor()
         button.backgroundColor = ThemeColor().blueColor()
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 10, 0, 10)
         button.layer.cornerRadius = 8
         button.addTarget(self, action: #selector(skipButtonClicked), for: .touchUpInside)
         return button
@@ -134,7 +135,9 @@ class OnBoardingPageViewController: UIViewController {
         
     init(backgroundColor: UIColor, text: String, pid: Int){
         super.init(nibName: nil, bundle: nil)
-        self.view.backgroundColor = backgroundColor
+//        self.view.backgroundColor = backgroundColor
+//        view.backgroun = UIImage(named: "2")
+        
         descriptionLabel.text = text
         setupDescriptionLabel()
         setupSkipButton()
@@ -167,9 +170,17 @@ class OnBoardingPageViewController: UIViewController {
         } else {
             instructionImageView.topAnchor.constraint(equalTo: view.topAnchor,constant:30).isActive = true
         }
-        instructionImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
-        instructionImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
-        instructionImageView.heightAnchor.constraint(equalToConstant: (view.frame.width-20)*1.2).isActive = true
+//        instructionImageView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 10).isActive = true
+//        instructionImageView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -10).isActive = true
+//        instructionImageView.heightAnchor.constraint(equalToConstant: (view.frame.width-20)*1.2).isActive = true
+        
+        
+        instructionImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        instructionImageView.widthAnchor.constraint(equalToConstant:250).isActive = true
+        instructionImageView.heightAnchor.constraint(equalToConstant:380).isActive = true
+        
+        
+        
     }
     
     func setupAdminButtons(){
@@ -234,6 +245,13 @@ class OnBoardingPageViewController: UIViewController {
         descriptionLabel.heightAnchor.constraint(equalToConstant: 50).isActive = true
         
     }
+    
+//    var instructionImage:UIImageView = {
+//       var imageView = UIImageView()
+//
+//        imageView.translatesAutoresizingMaskIntoConstraints = false
+//        return imageView
+//    }()
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

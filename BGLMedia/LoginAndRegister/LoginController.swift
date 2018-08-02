@@ -224,27 +224,39 @@ class LoginController: UIViewController {
                         self.dismiss(animated: true, completion: nil)
                     }
                 } else {
-                    var loginfailure = response["message"].string ?? textValue(name: "errorLoginIn")
-                    if loginfailure == "Email or Password Error"{
-                        loginfailure = textValue(name: "errorHandle_login")
-                    }
-                    hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                    hud.textLabel.text = textValue(name: "errorShow")
-                    hud.detailTextLabel.text = loginfailure
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                    let loginCode = response["code"].int ?? 0
+                    print(loginCode)
+                    print(response)
+                    if loginCode == 888{
+                        let vc = CustomAlertController()
+                        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+                        vc.email = un
+                        self.addChildViewController(vc)
+                        self.view.addSubview(vc.view)
                         hud.dismiss()
-                        self.passwordTextField.layer.borderWidth = 1.8
-                        self.passwordTextField.layer.borderColor = ThemeColor().redColor().cgColor
-                        
-                        self.passwordLabel.text = textValue(name: "wrongPassword")
-                        self.passwordLabel.textColor = ThemeColor().redColor()
-                        
-                        self.emailTextField.layer.borderWidth = 1.8
-                        self.emailTextField.layer.borderColor = ThemeColor().redColor().cgColor
-                        
-                        self.emailLabel.text = textValue(name: "wrongEmail")
-                        self.emailLabel.textColor = ThemeColor().redColor()
-                        
+                    } else{
+                        var loginfailure = response["message"].string ?? textValue(name: "errorLoginIn")
+                        if loginfailure == "Email or Password Error"{
+                            loginfailure = textValue(name: "errorHandle_login")
+                        }
+                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        hud.textLabel.text = textValue(name: "errorShow")
+                        hud.detailTextLabel.text = loginfailure
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                            self.passwordTextField.layer.borderWidth = 1.8
+                            self.passwordTextField.layer.borderColor = ThemeColor().redColor().cgColor
+                            
+                            self.passwordLabel.text = textValue(name: "wrongPassword")
+                            self.passwordLabel.textColor = ThemeColor().redColor()
+                            
+                            self.emailTextField.layer.borderWidth = 1.8
+                            self.emailTextField.layer.borderColor = ThemeColor().redColor().cgColor
+                            
+                            self.emailLabel.text = textValue(name: "wrongEmail")
+                            self.emailLabel.textColor = ThemeColor().redColor()
+                            
+                        }
                     }
                 }
                 
@@ -267,15 +279,17 @@ class LoginController: UIViewController {
                     
                 }
             }
-            
         })
-        
-        
-        
-        
     }
     
     @objc func register(sender: UIButton){
+//        let vc = CustomAlertController()
+//        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//        vc.email = "lfsdfjkfsdksd"
+//        self.addChildViewController(vc)
+//        view.addSubview(vc.view)
+        
+        
         let registerViewController = RegisterController()
         self.present(registerViewController,animated: true, completion: nil)
     }
@@ -349,8 +363,6 @@ class LoginController: UIViewController {
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
-        
         self.view.endEditing(true)
     }
     

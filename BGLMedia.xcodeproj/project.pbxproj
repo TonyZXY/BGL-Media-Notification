@@ -208,7 +208,7 @@
 		57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17A211276ED00042CF6 /* SCLAlertView.swift */; };
 		57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17B211276ED00042CF6 /* SCLExtensions.swift */; };
 		57AEA17F211276ED00042CF6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 57AEA17C211276ED00042CF6 /* Info.plist */; };
-		57AEA18121129B9E00042CF6 /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA18021129B9E00042CF6 /* CustomAlertController.swift */; };
+		57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA1822112C0A200042CF6 /* CustomAlertController.swift */; };
 		57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD8682104540B00973B45 /* ExchangeSelect.swift */; };
 		57BAD86B21045ACF00973B45 /* exchangeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD86A21045ACF00973B45 /* exchangeController.swift */; };
 		57BAD9522104CAD500973B45 /* TCPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD94C2104CAD500973B45 /* TCPickerView.swift */; };
@@ -466,7 +466,7 @@
 		57AEA17A211276ED00042CF6 /* SCLAlertView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLAlertView.swift; sourceTree = "<group>"; };
 		57AEA17B211276ED00042CF6 /* SCLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLExtensions.swift; sourceTree = "<group>"; };
 		57AEA17C211276ED00042CF6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		57AEA18021129B9E00042CF6 /* CustomAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomAlertController.swift; sourceTree = "<group>"; };
+		57AEA1822112C0A200042CF6 /* CustomAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertController.swift; sourceTree = "<group>"; };
 		57BAD8682104540B00973B45 /* ExchangeSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeSelect.swift; sourceTree = "<group>"; };
 		57BAD86A21045ACF00973B45 /* exchangeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exchangeController.swift; sourceTree = "<group>"; };
 		57BAD94C2104CAD500973B45 /* TCPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPickerView.swift; sourceTree = "<group>"; };
@@ -627,6 +627,7 @@
 		2D52AE1F20E46E1800018FC0 /* LoginAndRegister */ = {
 			isa = PBXGroup;
 			children = (
+				57AEA1822112C0A200042CF6 /* CustomAlertController.swift */,
 				57650898210FE463007368CC /* RegisterCell.swift */,
 				2D52AE2020E46E1800018FC0 /* RegisterationPageViewController.swift */,
 				2D52AE2120E46E1800018FC0 /* LoginPageViewController.swift */,
@@ -1144,7 +1145,6 @@
 				57355C3220F718CC002E70E4 /* WalletController.swift */,
 				57355C3320F718CC002E70E4 /* SearchCoinController.swift */,
 				57650896210D9D27007368CC /* WalletControllerV2.swift */,
-				57AEA18021129B9E00042CF6 /* CustomAlertController.swift */,
 			);
 			path = Wallet_Controller;
 			sourceTree = "<group>";
@@ -1501,6 +1501,7 @@
 				2D52AF0720E46E1A00018FC0 /* ViewOptionsViewController.swift in Sources */,
 				2D52AF0020E46E1A00018FC0 /* AlertNotificationController.swift in Sources */,
 				2D52AF3320E46E1A00018FC0 /* NewsCell.swift in Sources */,
+				57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */,
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
 				57355C0C20F7188B002E70E4 /* NewsObject.swift in Sources */,
@@ -1583,7 +1584,6 @@
 				2D52AF4120E46E1A00018FC0 /* OnBoardingPageViewController.swift in Sources */,
 				2D52AEF920E46E1A00018FC0 /* CancelTouchKeyboard.swift in Sources */,
 				57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */,
-				57AEA18121129B9E00042CF6 /* CustomAlertController.swift in Sources */,
 				2D52AEF720E46E1A00018FC0 /* GlobalDataRealm.swift in Sources */,
 				2D52AEA320E46E1A00018FC0 /* DetailMenuBar.swift in Sources */,
 				2D52AEA920E46E1A00018FC0 /* HistoryPoint.swift in Sources */,

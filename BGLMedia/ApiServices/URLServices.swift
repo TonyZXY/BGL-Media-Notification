@@ -19,7 +19,8 @@ class URLServices:NSObject{
     let realm = try! Realm()
 //    "https://bglnewsbkend.tk"
     func passServerData(urlParameters:[String],httpMethod:String,parameters:[String:Any],completion:@escaping (JSON, Bool)->Void){
-        var BaseURl = "https://bglnewsbkend.tk"
+        var BaseURl = "https://cryptogeekapp.com"
+//        "https://bglnewsbkend.tk"
         for path in urlParameters{
             BaseURl = BaseURl + "/" + path
         }
