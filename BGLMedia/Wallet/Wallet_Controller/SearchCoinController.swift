@@ -141,15 +141,8 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         
         var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
         if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
-            searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+            searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()])
         }
-        
-        
-//        searchBar.placeholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
-//
-//        searchBar.
-//
-//        searchBar.nsstring
         
         let toolbar = UIToolbar()
         toolbar.sizeToFit()

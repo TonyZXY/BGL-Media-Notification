@@ -15,7 +15,7 @@ more_tab = "More";
 
 //Assets Page Hint page
 mainHint = "Your portfolio starts here!";
-hintLabel = "We just need one or more transactions.Add your first transaction via the + button below";
+hintLabel = "Add your first historical transaction via the + button, to track your crypto portfolio";
 
 //Assets Page
 mainBalance = "Main Portfolio Balance";

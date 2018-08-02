@@ -14,8 +14,8 @@ news_tab = "新闻";
 more_tab = "更多";
 
 //Assets Page Hint page
-mainHint = "开始你的货币交易管理！";
-hintLabel = "请通过点击 + 按钮添加你的第一个交易";
+mainHint = "开始你的数字货币资产管理！";
+hintLabel = "请通过点击 + 按钮添加你的第一个历史交易";
 
 //Assets Page
 mainBalance = "总资产";

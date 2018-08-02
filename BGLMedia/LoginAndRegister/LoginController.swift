@@ -278,7 +278,6 @@ class LoginController: UIViewController {
     @objc func register(sender: UIButton){
         let registerViewController = RegisterController()
         self.present(registerViewController,animated: true, completion: nil)
-        
     }
     @objc func closePage(sender: UIButton) {
         self.dismiss(animated: true, completion: nil)
