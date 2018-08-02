@@ -234,3 +234,44 @@ registerVerify_alertContent = "请您去邮箱激活你的账号";
 
 //Searchbar
 search_placeholder = "请输入关键词...";
+
+email = "邮  箱";
+password = "密  码";
+login = "登  录";
+signUp = "注  册";
+skip = "跳 过 >";
+needPassword = "*密 码";
+wrongPassword = "密码错误";
+wrongEmail = "邮箱错误";
+signingIn = "登录中";
+successSigningIn = "登录成功";
+errorLoginIn = "登录错误";
+errorShow = "错误";
+noNetwork = "无网络连接";
+timeout = "连接超时";
+errorHandle_login = "邮箱或密码错误";
+
+firstName = "名  字";
+firstNameNeeded = "请输入您的名字";
+title = "称 谓";
+lastName = "姓  氏";
+lastNameNeeded = "请输入您的姓氏";
+passwordTooShort = "密码过短";
+passwordHint = "8-20个任意字符";
+conPasswordPlaceHolder = "请确认密码";
+conPassword = "确认密码";
+wrongConPassword = "请确认您的密码";
+registing = "注册中";
+successRegiste = "注册成功";
+verifyEmail = "请确认邮箱";
+registerfailed = "注册失败";
+emailExist = "邮箱已存在";
+
+
+mr = "先生";
+ms = "女士";
+mrs = "夫人";
+dr = "博士";
+
+
+

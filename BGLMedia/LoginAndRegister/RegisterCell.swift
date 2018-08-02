@@ -20,7 +20,7 @@ class RegisterCellA: UITableViewCell {
     
     let contentLabel: UILabel = {
         let label = UILabel()
-        label.text = "First Name"
+        label.text = textValue(name: "firstName")
         label.textAlignment = .center
         label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
         label.textColor = ThemeColor().whiteColor()
@@ -30,7 +30,7 @@ class RegisterCellA: UITableViewCell {
     let contentTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
         textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*First Name", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
+        textField.attributedPlaceholder = NSAttributedString(string: "*" + textValue(name: "firstName"), attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
         textField.clearButtonMode = UITextFieldViewMode.whileEditing
         textField.layer.cornerRadius = 8.5
         textField.backgroundColor = .white
@@ -85,7 +85,7 @@ class RegisterCellB: UITableViewCell {
     
     let lastNameLabel: UILabel = {
         let label = UILabel()
-        label.text = "Last Name"
+        label.text = textValue(name: "lastName")
         label.textAlignment = .center
         label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
         label.textColor = ThemeColor().whiteColor()
@@ -94,7 +94,7 @@ class RegisterCellB: UITableViewCell {
     
     let titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Title"
+        label.text = textValue(name: "title")
         label.textAlignment = .center
         label.font = UIFont(name: "Montserrat-SemiBold", size: 18)
         label.textColor = ThemeColor().whiteColor()
@@ -104,7 +104,7 @@ class RegisterCellB: UITableViewCell {
     let lastNameTextField: LeftPaddedTextField = {
         let textField = LeftPaddedTextField()
         textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "*Last Name", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
+        textField.attributedPlaceholder = NSAttributedString(string: "*" + textValue(name: "lastName"), attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
         textField.clearButtonMode = UITextFieldViewMode.whileEditing
         textField.layer.cornerRadius = 8.5
         textField.backgroundColor = .white
@@ -117,7 +117,7 @@ class RegisterCellB: UITableViewCell {
         textField.inputView = label
         textField.tintColor = .clear
         textField.font = UIFont(name: "Montserrat-Light", size: 16)
-        textField.attributedPlaceholder = NSAttributedString(string: "Title", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
+        textField.attributedPlaceholder = NSAttributedString(string: textValue(name: "title"), attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Italic", size: 16)!])
         textField.layer.cornerRadius = 8.5
         textField.backgroundColor = .white
         return textField

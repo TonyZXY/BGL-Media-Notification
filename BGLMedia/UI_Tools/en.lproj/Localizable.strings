@@ -239,6 +239,47 @@ registerVerify_alertContent = "Please go to your eamil to Active your account";
 
 //SearchCoin
 search_placeholder = "Enter Search Key Word...";
+//Login
+email = "Email";
+password = "Password";
+login = "LOGIN";
+signUp = "SIGN UP";
+skip = "SKIP >";
+needPassword = "*Password";
+wrongPassword = "Invalid Password";
+wrongEmail = "Invalid Email";
+signingIn = "Signing in";
+successSigningIn = "Success";
+errorLoginIn = "Login Error";
+errorShow = "Error";
+noNetwork = "No Network";
+timeout = "Time Out";
+errorHandle_login = "Email or password error";
+
+//Sign Up
+firstName = "First Name";
+firstNameNeeded = "First Name Needed";
+title = "Title";
+lastName = "Last Name";
+lastNameNeeded = "Last Name Needed";
+passwordTooShort = "Password is too short";
+conPassword = "Confirm Password";
+conPasswordPlaceHolder = "Confirm Your Password";
+wrongConPassword = "Invalid Confirmation";
+passwordHint = "8-20 charactors";
+registing = "Registing";
+successRegiste = "Success";
+verifyEmail = "Please Verify Your Email";
+registerfailed = "Register failed";
+emailExist = "Email Exists";
+mr = "Mr";
+ms = "Ms";
+mrs = "Mrs";
+dr = "Dr";
+
+
+
+
 
 
 
