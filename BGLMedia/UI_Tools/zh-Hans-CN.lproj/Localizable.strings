@@ -279,6 +279,8 @@ error_usernotfound = "账户不存在";
 error_error = "错误";
 success_success = "成功";
 
+back = "< 后  退";
+
 mr = "先生";
 ms = "女士";
 mrs = "夫人";

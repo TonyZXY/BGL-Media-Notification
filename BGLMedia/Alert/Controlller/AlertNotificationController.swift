@@ -204,7 +204,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     @objc func GoTologin(){
-        let login = LoginController()
+        let login = LoginController(usedPlace: 0)
         present(login, animated: true, completion: nil)
     }
     
@@ -362,7 +362,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             loginButton.setTitle("Login in",for: .normal)
             self.notificationTableView.reloadData()
         } else{
-            let loginPage = LoginController()
+            let loginPage = LoginController(usedPlace: 0)
             navigationController?.present(loginPage, animated: true, completion: nil)
         }
     }

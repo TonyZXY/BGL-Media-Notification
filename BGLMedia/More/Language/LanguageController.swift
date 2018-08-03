@@ -38,7 +38,8 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.languageLabel.text = language[indexPath.row]
         cell.languageLogoLabel.text = logoItems[indexPath.row]
         if storeData[indexPath.row] == defaultLanguage{
-            cell.isHighlighted = true
+            cell.cellView.backgroundColor = ThemeColor().whiteColor()
+            cell.languageLabel.textColor = ThemeColor().darkBlackColor()
         }
         return cell
     }
@@ -67,7 +68,13 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
         UserDefaults.standard.synchronize()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         let selectedCell = tableView.cellForRow(at: indexPath)! as! languageCell
-        selectedCell.isHighlighted = true
+        selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
+        selectedCell.languageLabel.textColor = ThemeColor().darkBlackColor()
+//        communityTableView.deselectRow(at: indexPath, animated: true)
+
+//        selectedCell.isHighlighted = true
+        
+        
         navigationController?.popViewController(animated: true)
         
         //        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "alertTitle_language"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_language"), comment: ""), preferredStyle: .alert)
@@ -185,14 +192,14 @@ class languageCell:UITableViewCell{
         return label
     }()
     
-    override var isHighlighted: Bool {
-        didSet {
-            if isHighlighted{
-                languageLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
-                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
-            }
-        }
-    }
+//    override var isHighlighted: Bool {
+//        didSet {
+//            if isHighlighted{
+//                languageLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
+//                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
+//            }
+//        }
+//    }
     
     //    override var isSelected: Bool {
     //        didSet {

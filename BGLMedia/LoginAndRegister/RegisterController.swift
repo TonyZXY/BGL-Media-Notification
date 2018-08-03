@@ -404,11 +404,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
                         hud.dismiss()
                         let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "registerVerify_alertTitle"), comment: ""), message: NSLocalizedString(textValue(name: "registerVerify_alertContent"), comment: ""), preferredStyle: .alert)
                         let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "registerVerify_alertOK"), comment: ""), style: .cancel) { (_) in
-                            if self.presentingViewController?.presentingViewController?.presentingViewController != nil{
-                                self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
-                            } else {
-                                self.dismiss(animated: true, completion: nil)
-                            }
+                            self.dismiss(animated: true, completion: nil)
                         }
                         
                         confirmAlertCtrl.addAction(cancelAction)
@@ -551,6 +547,8 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         signUpButton.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 20 * height).isActive = true
         
     }
+    
+    
     
 }
 

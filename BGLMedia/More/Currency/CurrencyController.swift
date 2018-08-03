@@ -35,7 +35,8 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.currencyLabel.text = currencyLabel[indexPath.row]
         cell.currencyLogoLabel.text = logoItems[indexPath.row]
         if storeData[indexPath.row] == priceType{
-            cell.isHighlighted = true
+            cell.cellView.backgroundColor = ThemeColor().whiteColor()
+            cell.currencyLabel.textColor = ThemeColor().darkBlackColor()
         }
         return cell
     }
@@ -76,7 +77,9 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let str = storeData[indexPath.row]
         UserDefaults.standard.set(str, forKey: "defaultCurrency")
         let selectedCell = tableView.cellForRow(at: indexPath)! as! currencyCell
-        selectedCell.isHighlighted = true
+//        selectedCell.isHighlighted = true
+        selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
+        selectedCell.currencyLabel.textColor = ThemeColor().darkBlackColor()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         navigationController?.popViewController(animated: true)
     }
@@ -158,15 +161,15 @@ class currencyCell:UITableViewCell{
         return label
     }()
     
-    override var isHighlighted: Bool {
-        didSet {
-            if isHighlighted{
-                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
-                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
-            }
-            
-        }
-    }
+//    override var isHighlighted: Bool {
+//        didSet {
+//            if isHighlighted{
+//                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
+//                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
+//            }
+//
+//        }
+//    }
     
     //    override var isSelected: Bool {
     //        didSet {

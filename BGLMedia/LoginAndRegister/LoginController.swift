@@ -21,12 +21,14 @@ class LoginController: UIViewController {
         }
     }
     
+    var usedPlace: Int = 0
+    
     var sendDeviceToken:Bool{
         get{
             return UserDefaults.standard.bool(forKey: "SendDeviceToken")
         }
     }
-    
+
     let logoImage: UIImageView = {
         let logo = UIImageView(image: UIImage(named: "CryptoGeekLogo2"))
         return logo
@@ -114,9 +116,25 @@ class LoginController: UIViewController {
     @objc func resendVerifyEmailSendEmail() {
         resendVerifyEmailIsCounting = true
         if resendVerifyEmailIsCounting{
+            let hud = JGProgressHUD(style: .light)
+            hud.textLabel.text = textValue(name: "Send Email")
+            hud.backgroundColor = ThemeColor().progressColor()
+            hud.show(in: self.view)
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","resendVerifyLink",self.emailTextField.text!], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+                print(response)
                 if success{
+                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                    hud.textLabel.text = textValue(name: "success_success")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                    }
                     print(response)
+                } else{
+                    hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                    hud.textLabel.text = textValue(name: "error_error")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                    }
                 }
             }
         }
@@ -190,7 +208,7 @@ class LoginController: UIViewController {
     
     let resetPasswordButton:UIButton = {
         let button = UIButton()
-        button.setTitle("Foggot Password", for: .normal)
+        button.setTitle(textValue(name: "resetPassword_login"), for: .normal)
         button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = UIFont.semiBoldFont(15)
@@ -201,6 +219,8 @@ class LoginController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        print("CHeck HerE")
+        print(usedPlace)
         view.backgroundColor = ThemeColor().themeColor()
         setUp()
         loginButton.isEnabled = false
@@ -255,7 +275,19 @@ class LoginController: UIViewController {
         }
     }
     
+    init(usedPlace: Int) {
+        super.init(nibName: nil, bundle: nil)
+        self.usedPlace = usedPlace
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     @objc func login(sender: UIButton){
+        if usedPlace == 1 {
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
+        }
         let hud = JGProgressHUD(style: .light)
         hud.textLabel.text = textValue(name: "signingIn")
         hud.backgroundColor = ThemeColor().progressColor()
@@ -304,7 +336,19 @@ class LoginController: UIViewController {
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
-                        self.dismiss(animated: true, completion: nil)
+                        if self.usedPlace == 1{
+                            let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
+                            // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
+                            
+                            
+                            vc.modalTransitionStyle = .flipHorizontal
+                            //        vc.modalTransitionStyle = .crossDissolve // another form of animations
+                            
+                            
+                            self.present(vc, animated: true, completion: nil)
+                        } else {
+                            self.dismiss(animated: true, completion: nil)
+                        }
                     }
                 } else {
                     let loginCode = response["code"].int ?? 0
@@ -375,12 +419,35 @@ class LoginController: UIViewController {
 //        self.addChildViewController(vc)
 //        view.addSubview(vc.view)
         
+        if usedPlace == 1 {
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            let registerViewController = RegisterController()
+            self.present(registerViewController,animated: true, completion: nil)
+            
+        } else {
+            let registerViewController = RegisterController()
+            self.present(registerViewController,animated: true, completion: nil)
+        }
         
-        let registerViewController = RegisterController()
-        self.present(registerViewController,animated: true, completion: nil)
+        
     }
     @objc func closePage(sender: UIButton) {
-        self.dismiss(animated: true, completion: nil)
+        if usedPlace == 1{
+            UserDefaults.standard.set(true, forKey: "launchedBefore")
+            let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
+            // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
+            
+            
+            vc.modalTransitionStyle = .flipHorizontal
+            //        vc.modalTransitionStyle = .crossDissolve // another form of animations
+            
+            
+            self.present(vc, animated: true, completion: nil)
+        } else {
+            self.dismiss(animated: true, completion: nil)
+        }
+        
+
     }
     
     func setUp(){
@@ -448,10 +515,22 @@ class LoginController: UIViewController {
         
         view.addSubview(skipButton)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
-        skipButton.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
-        skipButton.widthAnchor.constraint(equalToConstant: 80 * width).isActive = true
         skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        skipButton.topAnchor.constraint(equalTo:resetPasswordButton.bottomAnchor , constant: 40 * height).isActive = true
+        skipButton.topAnchor.constraint(equalTo:signUpButton.bottomAnchor , constant: 70 * height).isActive = true
+        if usedPlace == 1{
+            skipButton.setTitle(textValue(name: "skip"),for: .normal)
+            skipButton.layer.cornerRadius = 8.5
+            skipButton.backgroundColor = ThemeColor().themeWidgetColor()
+            skipButton.heightAnchor.constraint(equalToConstant: 40 * view.frame.width/414).isActive = true
+            skipButton.widthAnchor.constraint(equalToConstant: 150 * view.frame.width/414).isActive = true
+
+        } else {
+            skipButton.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+            skipButton.widthAnchor.constraint(equalToConstant: 80 * width).isActive = true
+            skipButton.setTitle(textValue(name: "back"),for: .normal)
+            skipButton.backgroundColor = ThemeColor().themeColor()
+            
+        }
         
         
         

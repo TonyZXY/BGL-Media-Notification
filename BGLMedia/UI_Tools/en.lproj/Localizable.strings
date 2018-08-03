@@ -287,6 +287,14 @@ emailExist = "Email Exists";
 needLoginLabel = "Please Login First";
 needLoginText = "Login to access this function";
 
+back = "back";
+
+onboardingPage1 = "You can add record of your cryptocurrency to keep track of them";
+onboardingPage2 = "Save your favorite market into watchlist and come back later";
+
+onboardingPage3 = "You can read all kinds of news. Share them with your business partners";
+
+onboardingPage4 = "Turn on the alert functions in settings. You will get notifications of the latest information";
 
 mr = "Mr";
 ms = "Ms";

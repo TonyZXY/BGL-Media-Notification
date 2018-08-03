@@ -67,7 +67,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[AboutUsViewController(), BGLCommunityController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController()]]
+            return [[AboutUsViewController(), BGLCommunityController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController(usedPlace: 0)]]
         }
     }
     
@@ -243,7 +243,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     }
                 }
             } else{
-                let login = LoginController()
+                let login = LoginController(usedPlace: 0)
                 self.present(login, animated: true, completion: nil)
             }
         }
