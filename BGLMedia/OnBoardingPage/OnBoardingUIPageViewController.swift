@@ -14,10 +14,24 @@ class OnBoardingUIPageViewController: UIPageViewController{
 
     let allPages: [UIViewController] = {
         var pages = [UIViewController]()
-        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "You can add transactions and monitor your digital wallet here.", pid:2))
-        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "Save your favourite market into watchlist and come back later.", pid:3))
-        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "You can read all kinds of news. Share them with your business partners. ", pid:4))
-        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: "Turn on the alert functions in settings. You will get notificaitons of the latest information. ",pid:5))
+        var onboardingString = ["","","",""]
+        let locale = Locale.current
+        let languageCode = locale.languageCode
+        if languageCode == "zh"{
+            onboardingString[0] = "添加你的数字货币交易记录来追踪他们"
+            onboardingString[1] = "收藏你喜欢的市场的货币交易信息以便随时查看"
+            onboardingString[2] = "阅读各种数字货币的新闻。与他人分享"
+            onboardingString[3] = "在设置中开启通知选项。随时掌握一手信息"
+        } else {
+            onboardingString[0] = "Add record of your cryptocurrency to keep track of them"
+            onboardingString[1] = "Save your favorite market into watchlist and come back later"
+            onboardingString[2] = "Read all kinds of cryptocurrency news. Share them with your business partners"
+            onboardingString[3] = "Turn on the alert functions. You won't miss any latest information"
+        }
+        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: onboardingString[0] , pid:2))
+        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: onboardingString[1] , pid:3))
+        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: onboardingString[2], pid:4))
+        pages.append(OnBoardingPageViewController(backgroundColor: ThemeColor().themeColor(), text: onboardingString[3] ,pid:5))
         
         if UserDefaults.standard.bool(forKey: "isLoggedIn"){
             
