@@ -208,11 +208,16 @@ class LoginController: UIViewController {
     
     let resetPasswordButton:UIButton = {
         let button = UIButton()
-        button.setTitle(textValue(name: "resetPassword_login"), for: .normal)
+//        button.setTitle(textValue(name: "resetPassword_login"), for: .normal)
         button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = UIFont.semiBoldFont(15)
         button.translatesAutoresizingMaskIntoConstraints = false
+        
+        let myAttribute = [NSAttributedStringKey.font: UIFont.semiBoldFont(15), NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor(),NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue] as [NSAttributedStringKey : Any]
+        let myString = NSMutableAttributedString(string: textValue(name: "resetPassword_login"), attributes: myAttribute )
+        
+        button.setAttributedTitle(myString, for: .normal)
         button.addTarget(self, action: #selector(resetPassword), for: .touchUpInside)
         return button
     }()
@@ -511,12 +516,12 @@ class LoginController: UIViewController {
         resetPasswordButton.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
         resetPasswordButton.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         resetPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        resetPasswordButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 30 * height).isActive = true
+        resetPasswordButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 25 * height).isActive = true
         
         view.addSubview(skipButton)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        skipButton.topAnchor.constraint(equalTo:signUpButton.bottomAnchor , constant: 70 * height).isActive = true
+        skipButton.topAnchor.constraint(equalTo:signUpButton.bottomAnchor , constant: 95 * height).isActive = true
         if usedPlace == 1{
             skipButton.setTitle(textValue(name: "skip"),for: .normal)
             skipButton.layer.cornerRadius = 8.5
@@ -531,9 +536,6 @@ class LoginController: UIViewController {
             skipButton.backgroundColor = ThemeColor().themeColor()
             
         }
-        
-        
-        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
