@@ -90,10 +90,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         let sectionLabel = UILabel()
         sectionLabel.text = sectionItem[section]
         sectionLabel.textColor = ThemeColor().textGreycolor()
-        sectionLabel.font = UIFont.regularFont(14*factor)
+        sectionLabel.font = UIFont.regularFont(18*factor)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
-        
         NSLayoutConstraint(item: sectionLabel, attribute: .bottom, relatedBy: .equal, toItem: sectionView, attribute: .bottom, multiplier: 1, constant: -10*factor).isActive = true
         NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
         //        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sectionLabel]))
@@ -211,7 +210,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 60*view.frame.width/375
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

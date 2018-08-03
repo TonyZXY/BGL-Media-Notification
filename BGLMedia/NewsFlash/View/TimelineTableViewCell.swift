@@ -28,6 +28,7 @@ open class TimelineTableViewCell: UITableViewCell {
             } else {
                 likeButton.setTitle("♡", for: .normal)
             }
+            sharesbutton.setTitle(textValue(name: "share_flash"), for: .normal)
         }
     }
 
@@ -129,9 +130,9 @@ open class TimelineTableViewCell: UITableViewCell {
         button.contentEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10)
         button.imageEdgeInsets = UIEdgeInsetsMake(20, 0, 20, 0)
 //        but
-        button.titleLabel!.font =  UIFont.semiBoldFont(13)
+        button.titleLabel!.font =  UIFont.semiBoldFont(10)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Share", for: .normal)
+        button.setTitle(textValue(name: "share_flash"), for: .normal)
     
         button.setImage(UIImage(named: "share_.png"), for: .normal)
 //        button.titleLabel?.font = UIFont(name: <#T##String#>, size: <#T##CGFloat#>)

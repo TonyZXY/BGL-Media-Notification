@@ -54,7 +54,6 @@ class OnBoardingPageViewController: UIViewController {
         return imageView
     }()
     
-
     let skipButton:UIButton = {
         let button = UIButton()
         button.setTitle(textValue(name: "skip"), for: .normal)
