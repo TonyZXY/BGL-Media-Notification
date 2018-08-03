@@ -9,17 +9,22 @@
 import UIKit
 
 class TransAdditionalCell:UITableViewCell{
+    var factor:CGFloat?{
+        didSet{
+            setupviews()
+            createKeyboarddonebutton()
+        }
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setupviews()
-        createKeyboarddonebutton()
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init has not been completed")
     }
     
-    let additionalLabel:UILabel = {
+    lazy var additionalLabel:UILabel = {
         let label = UILabel()
         label.text = "附加信息"
         label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
@@ -27,11 +32,11 @@ class TransAdditionalCell:UITableViewCell{
         return label
     }()
     
-    let additional: UITextField = {
+    lazy var additional: UITextField = {
         let textfield = UITextField()
         textfield.textColor = ThemeColor().whiteColor()
         textfield.tintColor = ThemeColor().whiteColor()
-        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "additionalPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "additional_Placeholder"), attributes:[NSAttributedStringKey.font: UIFont(name:"Montserrat-Light",size:13*factor!) ?? "", NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
         
         //            textfield.leftView?.frame = CGRect(x:10, y: 10, width: 200, height: 30)
         //            textfield.layer.sublayerTransform = CATransform3DMakeTranslation(10, 0, 0)
@@ -53,11 +58,11 @@ class TransAdditionalCell:UITableViewCell{
     }()
     
     func setupviews(){
-        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 0
-        layer.masksToBounds = false
+//        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        layer.shadowOffset = CGSize(width: 0, height: 2)
+//        layer.shadowOpacity = 1
+//        layer.shadowRadius = 0
+//        layer.masksToBounds = false
         selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(additionalLabel)
@@ -65,12 +70,12 @@ class TransAdditionalCell:UITableViewCell{
         
         
         
-        NSLayoutConstraint(item: additionalLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
-        NSLayoutConstraint(item: additional, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: additionalLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5*factor!).isActive = true
+        NSLayoutConstraint(item: additional, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5*factor!).isActive = true
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v1]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(16*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(16*factor!)-[v1]-\(16*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":additionalLabel,"v1":additional]))
     }
     
     func createKeyboarddonebutton(){

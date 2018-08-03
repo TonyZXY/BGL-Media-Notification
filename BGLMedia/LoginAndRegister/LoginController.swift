@@ -11,6 +11,9 @@ import Alamofire
 import JGProgressHUD
 
 class LoginController: UIViewController {
+    let resendVerifyEmailAlert = CustomAlertController()
+    let resetPasswordAlert = CustomPasswordAlertController()
+    
     
     var getDeviceToken:Bool{
         get{
@@ -52,6 +55,78 @@ class LoginController: UIViewController {
         label.textColor = ThemeColor().whiteColor()
         return label
     }()
+    
+    var resetPasswordCountdownTimer: Timer?
+    
+    var resetPasswordRemainingSeconds: Int = 0 {
+        willSet {
+            resetPasswordAlert.sendEmailButton.setTitle(textValue(name: "checkSend_reset") + " (\(newValue)" + textValue(name: "min_reset") + ")", for: .normal)
+            
+            if newValue <= 0 {
+                resetPasswordAlert.sendEmailButton.setTitle(textValue(name: "sendButton_reset"), for: .normal)
+                resetPasswordIsCounting = false
+            }
+        }
+    }
+    
+    var resetPasswordIsCounting = false {
+        willSet {
+            if newValue {
+                resetPasswordCountdownTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(self.updateResetPasswordTime(_:)), userInfo: nil, repeats: true)
+                resetPasswordRemainingSeconds = 15
+                resetPasswordAlert.sendEmailButton.backgroundColor = ThemeColor().textGreycolor()
+            } else {
+                resetPasswordCountdownTimer?.invalidate()
+                resetPasswordCountdownTimer = nil
+                resetPasswordAlert.sendEmailButton.backgroundColor = ThemeColor().blueColor()
+            }
+            resetPasswordAlert.sendEmailButton.isEnabled = !newValue
+        }
+    }
+    
+    
+    var resendVerifyEmailCountdownTimer: Timer?
+    
+    var resendVerifyEmailRemainingSeconds: Int = 0 {
+        willSet {
+            resendVerifyEmailAlert.sendEmailButton.setTitle(textValue(name: "checkSend_resend") + " (\(newValue)" + textValue(name: "second_resend") + ")", for: .normal)
+            
+            if newValue <= 0 {
+                resendVerifyEmailAlert.sendEmailButton.setTitle(textValue(name: "sendButton_resend"), for: .normal)
+                resendVerifyEmailIsCounting = false
+            }
+        }
+    }
+    
+    var resendVerifyEmailIsCounting = false {
+        willSet {
+            if newValue {
+                resendVerifyEmailCountdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.resendVerifyEmailUpdateTime(_:)), userInfo: nil, repeats: true)
+                resendVerifyEmailRemainingSeconds = 60
+                resendVerifyEmailAlert.sendEmailButton.backgroundColor = ThemeColor().textGreycolor()
+            } else {
+                resendVerifyEmailCountdownTimer?.invalidate()
+                resendVerifyEmailCountdownTimer = nil
+                resendVerifyEmailAlert.sendEmailButton.backgroundColor = ThemeColor().blueColor()
+            }
+            resendVerifyEmailAlert.sendEmailButton.isEnabled = !newValue
+        }
+    }
+    
+    @objc func resendVerifyEmailSendEmail() {
+        resendVerifyEmailIsCounting = true
+        if resendVerifyEmailIsCounting{
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","resendVerifyLink",self.emailTextField.text!], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+                if success{
+                    print(response)
+                }
+            }
+        }
+    }
+    
+    @objc func resendVerifyEmailUpdateTime(_ timer: Timer) {
+        resendVerifyEmailRemainingSeconds -= 1
+    }
     
     
     let emailTextField: LeftPaddedTextField = {
@@ -112,6 +187,17 @@ class LoginController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(closePage), for: .touchUpInside)
         button.backgroundColor = ThemeColor().themeColor()
+        return button
+    }()
+    
+    let resetPasswordButton:UIButton = {
+        let button = UIButton()
+        button.setTitle("Foggot Password", for: .normal)
+        button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.semiBoldFont(15)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(resetPassword), for: .touchUpInside)
         return button
     }()
     
@@ -218,7 +304,6 @@ class LoginController: UIViewController {
                     if self.getDeviceToken{
                     if !self.sendDeviceToken{
                         let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
-                        print(deviceTokenString)
                         let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
                         URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
                             if success{
@@ -229,9 +314,7 @@ class LoginController: UIViewController {
                     }
                     
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
-                    
-                    
-                    
+
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                     hud.textLabel.text = textValue(name: "successSigningIn")
                     
@@ -256,12 +339,15 @@ class LoginController: UIViewController {
                     print(loginCode)
                     print(response)
                     if loginCode == 888{
-                        let vc = CustomAlertController()
-                        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-                        vc.email = un
-                        self.addChildViewController(vc)
-                        self.view.addSubview(vc.view)
-                        hud.dismiss()
+                        self.resendVerifyEmailAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//                        vc.email = un
+                        self.resendVerifyEmailAlert.cancelButton.addTarget(self, action: #selector(self.cancelResendVerifyEmailAlert), for: .touchUpInside)
+                        self.resendVerifyEmailAlert.sendEmailButton.addTarget(self, action: #selector(self.resendVerifyEmailSendEmail), for: .touchUpInside)
+                        self.addChildViewController(self.resendVerifyEmailAlert)
+                        self.view.addSubview(self.resendVerifyEmailAlert.view)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
                     } else{
                         var loginfailure = response["message"].string ?? textValue(name: "errorLoginIn")
                         if loginfailure == "Email or Password Error"{
@@ -392,17 +478,24 @@ class LoginController: UIViewController {
         
         view.addSubview(loginButton)
         loginButton.translatesAutoresizingMaskIntoConstraints = false
-        loginButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
+        loginButton.heightAnchor.constraint(equalToConstant: 50 * height).isActive = true
         loginButton.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         loginButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         loginButton.topAnchor.constraint(equalTo: passwordTextField.bottomAnchor, constant: 40 * height).isActive = true
         
         view.addSubview(signUpButton)
         signUpButton.translatesAutoresizingMaskIntoConstraints = false
-        signUpButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
+        signUpButton.heightAnchor.constraint(equalToConstant: 50 * height).isActive = true
         signUpButton.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         signUpButton.topAnchor.constraint(equalTo: loginButton.bottomAnchor, constant: 20 * height).isActive = true
+        
+        
+        view.addSubview(resetPasswordButton)
+        resetPasswordButton.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
+        resetPasswordButton.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
+        resetPasswordButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        resetPasswordButton.topAnchor.constraint(equalTo: signUpButton.bottomAnchor, constant: 30 * height).isActive = true
         
         view.addSubview(skipButton)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
@@ -423,10 +516,115 @@ class LoginController: UIViewController {
             
         }
         
+        
+        
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         self.view.endEditing(true)
+    }
+    
+    @objc func resetPassword(){
+        resetPasswordAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//        vc.email = un
+        resetPasswordAlert.emailTextField.addTarget(self, action: #selector(checkAlertEmailTextFieldFormat), for: .allEditingEvents)
+        resetPasswordAlert.cancelButton.addTarget(self, action: #selector(cancelResetPassportAlert), for: .touchUpInside)
+        resetPasswordAlert.sendEmailButton.addTarget(self, action: #selector(sendResetPassword), for: .touchUpInside)
+        self.addChildViewController(resetPasswordAlert)
+        self.view.addSubview(resetPasswordAlert.view)
+    }
+    
+    @objc func checkAlertEmailTextFieldFormat(){
+        let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+        let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+        if emailPredicate.evaluate(with: resetPasswordAlert.emailTextField.text){
+            if resetPasswordIsCounting != true{
+               resetPasswordAlert.sendEmailButton.backgroundColor = ThemeColor().blueColor()
+               resetPasswordAlert.sendEmailButton.isEnabled = true
+            } else{
+                resetPasswordAlert.sendEmailButton.backgroundColor = ThemeColor().textGreycolor()
+                resetPasswordAlert.sendEmailButton.isEnabled = false
+            }
+        }else{
+            resetPasswordAlert.sendEmailButton.backgroundColor =  ThemeColor().textGreycolor()
+            resetPasswordAlert.sendEmailButton.isEnabled = false
+        }
+    }
+    
+    @objc func cancelResetPassportAlert(){
+        resetPasswordAlert.removeFromParentViewController()
+        resetPasswordAlert.view.removeFromSuperview()
+    }
+    
+    @objc func cancelResendVerifyEmailAlert(){
+        resendVerifyEmailAlert.removeFromParentViewController()
+        resendVerifyEmailAlert.view.removeFromSuperview()
+    }
+    
+    @objc func updateResetPasswordTime(_ timer: Timer) {
+        resetPasswordRemainingSeconds -= 1
+    }
+    
+    @objc func sendResetPassword() {
+        resetPasswordIsCounting = true
+        if resetPasswordIsCounting{
+//            let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"
+//            let emailPredicate = NSPredicate(format:"SELF MATCHES %@", emailFormat)
+            let hud = JGProgressHUD(style: .light)
+            hud.textLabel.text = textValue(name: "Send Email")
+            hud.backgroundColor = ThemeColor().progressColor()
+            hud.show(in: self.view)
+//            if emailPredicate.evaluate(with: vcs.emailTextField.text){
+            print(resetPasswordAlert.emailTextField.text!)
+                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","resetPassword",resetPasswordAlert.emailTextField.text!], httpMethod: "Get", parameters: [String:Any]()) { (response, success) in
+                    print(response)
+                    if success{
+                        let request = response["success"].bool ?? false
+                        
+                        if request{
+                            hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                            hud.textLabel.text = textValue(name: "success_success")
+                            
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                hud.dismiss()
+                            }
+                        
+                        } else{
+                            let errorCode = response["code"].int ?? 0
+                            if errorCode == 666{
+                                hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                                hud.textLabel.text = textValue(name: "error_usernotfound")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    hud.dismiss()
+                                }
+                                self.resetPasswordIsCounting = false
+                                self.resetPasswordRemainingSeconds = 0
+                            } else if errorCode == 888{
+                                hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                                hud.textLabel.text = textValue(name: "error_verifyEmail")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    hud.dismiss()
+                                }
+                                self.resetPasswordIsCounting = false
+                                self.resetPasswordRemainingSeconds = 0
+                            } else{
+                                hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                                hud.textLabel.text = textValue(name: "error_error")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    hud.dismiss()
+                                }
+                            }
+                        }
+                    } else{
+                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_error")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }
+                }
+//            }
+        }
     }
     
 }

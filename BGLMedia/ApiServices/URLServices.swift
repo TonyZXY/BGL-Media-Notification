@@ -40,7 +40,16 @@ class URLServices:NSObject{
         manager.session.configuration.timeoutIntervalForRequest = 20
         manager.session.configuration.timeoutIntervalForResource = 20
         
-        manager.request(urlRequest).responseJSON { (response) in
+        
+//        let configuration = URLSessionConfiguration.default
+//        configuration.timeoutIntervalForRequest = 10
+//        configuration.timeoutIntervalForResource = 10
+//        let sessionManager = Alamofire.SessionManager(configuration: configuration)
+//        let sessionManager = Alamofire.Manager.sharedInstance
+        
+        
+        
+        manager.request(urlRequest).validate().responseJSON { (response) in
             switch response.result {
             case .success(let value):
                 let res = JSON(value)

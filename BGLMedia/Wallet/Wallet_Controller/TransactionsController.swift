@@ -8,9 +8,10 @@
 
 import UIKit
 import RealmSwift
+import JGProgressHUD
 
 class TransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout,TransactionFrom,UITextFieldDelegate{
-
+    
     var newTransaction = EachTransactions()
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
     var color = ThemeColor()
@@ -44,10 +45,13 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         let sectionView = UIView()
         if transaction == "Buy"{
             sectionView.backgroundColor = ThemeColor().blueColor()
+            view.backgroundColor = ThemeColor().blueColor()
         }else if transaction == "Sell" {
             sectionView.backgroundColor = ThemeColor().redColor()
+            view.backgroundColor = ThemeColor().redColor()
         } else{
             sectionView.backgroundColor = ThemeColor().blueColor()
+            view.backgroundColor = ThemeColor().blueColor()
         }
         return sectionView
     }
@@ -63,19 +67,23 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Create table view each cell
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let factor = view.frame.width/375
         if indexPath.row == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[0], for: indexPath) as! TransCoinTypeCell
+            cell.factor = factor
             cell.coinLabel.text = textValue(name: "coinForm")
             cell.coin.text = newTransaction.coinName
             return cell
         }else if indexPath.row == 1{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[1], for: indexPath) as! TransCoinMarketCell
+            cell.factor = factor
             cell.backgroundColor = color.themeColor()
             cell.marketLabel.text = textValue(name: "exchangeForm")
             cell.market.text = newTransaction.exchangeName
             return cell
         } else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[2], for: indexPath) as! TransTradePairsCell
+            cell.factor = factor
             cell.tradeLabel.text = textValue(name: "tradingPairForm")
             if newTransaction.tradingPairsName == ""{
                 cell.trade.text = ""
@@ -87,6 +95,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             return cell
         }else if indexPath.row == 3{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[3], for: indexPath) as! TransPriceCell
+            cell.factor = factor
             if transaction == "Buy"{
                 cell.priceLabel.text = textValue(name: "buyPriceForm") + " " + newTransaction.tradingPairsName
             } else if transaction == "Sell"{
@@ -105,6 +114,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! TransNumberCell
+            cell.factor = factor
             if transaction == "Buy"{
                 cell.numberLabel.text = textValue(name: "amountBoughtForm")
             } else if transaction == "Sell"{
@@ -119,6 +129,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.row == 5{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! TransDateCell
+            cell.factor = factor
             if transaction == "Buy"{
                 cell.dateLabel.text = textValue(name: "buyDateForm")
             } else if transaction == "Sell"{
@@ -133,6 +144,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             return cell
         } else if indexPath.row == 6{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[6], for: indexPath) as! TransTimeCell
+            cell.factor = factor
             if transaction == "Buy"{
                 cell.timeLabel.text = textValue(name: "buyTimeForm")
             } else if transaction == "Sell"{
@@ -158,6 +170,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
 //        }
         else if indexPath.row == 7{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[7], for: indexPath) as! TransAdditionalCell
+            cell.factor = factor
             cell.additionalLabel.text = textValue(name: "additionalForm")
             cell.additional.text = newTransaction.additional
             cell.additional.tag = indexPath.row
@@ -231,6 +244,14 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                     self.navigationController?.popViewController(animated: true)
                 }
             }
+        } else{
+            let hud = JGProgressHUD(style: .light)
+            hud.indicatorView = JGProgressHUDErrorIndicatorView()
+            hud.textLabel.text = textValue(name: "error_transaction")
+            hud.show(in: self.view)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                hud.dismiss()
+            }
         }
     }
     
@@ -296,6 +317,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         transaction = "Buy"
         buy.backgroundColor = ThemeColor().themeWidgetColor()
         sell.backgroundColor = ThemeColor().redColorTran()
+        view.backgroundColor = ThemeColor().blueColor()
         buy.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         sell.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
         transactionButton.backgroundColor = ThemeColor().themeWidgetColor()
@@ -309,6 +331,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         transaction = "Sell"
         sell.backgroundColor = ThemeColor().redColor()
         buy.backgroundColor = ThemeColor().blueColorTran()
+        view.backgroundColor = ThemeColor().redColor()
         buy.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
         sell.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         transactionButton.backgroundColor = ThemeColor().redColor()
@@ -366,7 +389,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Set up all the layout constraint
     func setupView(){
-        view.backgroundColor = color.themeColor()
+        let factor = view.frame.width/375
+        view.backgroundColor = ThemeColor().blueColor()
         let titleLabel = UILabel()
         titleLabel.text = textValue(name: "navigationbar_transa")
         titleLabel.textColor = UIColor.white
@@ -381,18 +405,30 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         addButtonView.addSubview(sell)
         
         transactionButton.addTarget(self, action: #selector(addTransaction), for: .touchUpInside)
-        
+        transactionTableView.rowHeight = 80 * factor
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButtonView,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(60)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButtonView,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(\(80*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButtonView,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
         NSLayoutConstraint(item: buy, attribute: .centerY, relatedBy: .equal, toItem: addButtonView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: sell, attribute: .centerY, relatedBy: .equal, toItem: addButtonView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        addButtonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-20-[v0]-50-[v1(==v0)]-20-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
+        addButtonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor)-[v0]-\(50*factor)-[v1(==v0)]-\(20*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
+        addButtonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
+        addButtonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v2]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-5-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButtonView,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(5*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButtonView,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v3]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-0-[v3(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":buy,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
+        
+        transactionButton.topAnchor.constraint(equalTo: transactionTableView.bottomAnchor).isActive = true
+        transactionButton.heightAnchor.constraint(equalToConstant: 60*factor).isActive = true
+        
+        if #available(iOS 11.0, *) {
+            transactionButton.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        } else {
+            transactionButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
+        
         
         let tableVC = UITableViewController.init(style: .plain)
         tableVC.tableView = self.transactionTableView
@@ -442,7 +478,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.tag == 3{
             if textField.text == "" || textField.text == nil{
-                textField.text = "0"
+                textField.text = ""
             }
             if Extension.method.checkInputVaild(value: textField.text!){
                 transactions.singlePrice = Double(textField.text!)!
@@ -451,7 +487,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         }
         if textField.tag == 4{
             if textField.text == "" || textField.text == nil{
-                textField.text = "0"
+                textField.text = ""
             }
             if Extension.method.checkInputVaild(value: textField.text!){
                 transactions.amount = Double(textField.text!)!
@@ -504,8 +540,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         tableViews.delegate = self
         tableViews.dataSource = self
         tableViews.bounces = false
-        tableViews.separatorStyle = .none
-//        tableViews.separatorInset = UIEdgeInsets.zero
+        tableViews.separatorColor = ThemeColor().darkBlackColor()
+        tableViews.separatorInset = UIEdgeInsets.zero
 //        tableViews.separatorColor = UIColor.black
 //        tableViews.separatorInset = UIEdgeInsets.init(top: -30, left: 0, bottom: -10, right: 0)
         tableViews.translatesAutoresizingMaskIntoConstraints = false
@@ -520,6 +556,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
 //        } else if transactionStatus == "Update" {
 //            button.setTitle("更新交易", for: .normal)
 //        }
+        button.titleLabel?.font = UIFont.semiBoldFont(20*view.frame.width/375)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = ThemeColor().blueColor()
@@ -536,7 +573,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     lazy var buy:UIButton = {
         var button = UIButton(type: .system)
         button.tintColor = ThemeColor().whiteColor()
-        button.layer.cornerRadius = 5
+        button.layer.cornerRadius = 5*view.frame.width/375
+        button.titleLabel?.font = UIFont.semiBoldFont(15*view.frame.width/375)
         button.backgroundColor = ThemeColor().blueColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(buyPage), for: .touchUpInside)
@@ -546,7 +584,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     lazy var sell:UIButton = {
         var button = UIButton(type: .system)
         button.tintColor = ThemeColor().textGreycolor()
-        button.layer.cornerRadius = 5
+        button.layer.cornerRadius = 5*view.frame.width/375
+        button.titleLabel?.font = UIFont.semiBoldFont(15*view.frame.width/375)
         button.backgroundColor = ThemeColor().redColorTran()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(sellPage), for: .touchUpInside)

@@ -190,7 +190,9 @@ class TimelineTableViewController: UITableViewController {
         cell.timeline.backColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         cell.titleLabel.text = dateFormatter.string(from: object.dateTime)
         cell.descriptionLabel.text = object.contents
+        
         cell.object = object
+        
         cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
     }
@@ -226,8 +228,8 @@ class TimelineTableViewController: UITableViewController {
         
         
         let shareView = ShareNewsFlashControllerV2()
-        shareView.dateLabel.text = cell.titleLabel.text
-        shareView.flashNewsDescription.text = cell.descriptionLabel.text
+        shareView.newsdate = cell.titleLabel.text!
+        shareView.newsdescriptions = cell.descriptionLabel.text!
         present(shareView, animated: true, completion: nil)
         
         
