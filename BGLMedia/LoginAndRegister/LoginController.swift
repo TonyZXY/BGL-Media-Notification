@@ -520,7 +520,7 @@ class LoginController: UIViewController {
                         
                         if request{
                             hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                            hud.textLabel.text = "Success"
+                            hud.textLabel.text = textValue(name: "success_success")
                             
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 hud.dismiss()
@@ -530,17 +530,31 @@ class LoginController: UIViewController {
                             let errorCode = response["code"].int ?? 0
                             if errorCode == 666{
                                 hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                                hud.textLabel.text = "No User Found"
+                                hud.textLabel.text = textValue(name: "error_usernotfound")
                                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                     hud.dismiss()
                                 }
                                 self.resetPasswordIsCounting = false
                                 self.resetPasswordRemainingSeconds = 0
+                            } else if errorCode == 888{
+                                hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                                hud.textLabel.text = textValue(name: "error_verifyEmail")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    hud.dismiss()
+                                }
+                                self.resetPasswordIsCounting = false
+                                self.resetPasswordRemainingSeconds = 0
+                            } else{
+                                hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                                hud.textLabel.text = textValue(name: "error_error")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    hud.dismiss()
+                                }
                             }
                         }
                     } else{
                         hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                        hud.textLabel.text = "Error"
+                        hud.textLabel.text = textValue(name: "error_error")
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()
                         }

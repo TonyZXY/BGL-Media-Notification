@@ -274,6 +274,10 @@ registerfailed = "注册失败";
 emailExist = "邮箱已存在";
 needLoginLabel = "请先登录";
 needLoginText = "请登录以使用此功能";
+error_verifyEmail = "请验证你的邮件";
+error_usernotfound = "账户不存在";
+error_error = "错误";
+success_success = "成功";
 
 mr = "先生";
 ms = "女士";

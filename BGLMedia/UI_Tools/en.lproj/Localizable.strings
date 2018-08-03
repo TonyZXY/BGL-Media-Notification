@@ -261,6 +261,11 @@ noNetwork = "No Network";
 timeout = "Time Out";
 errorHandle_login = "Email or password error";
 resetPassword_login = "Forget Password";
+error_verifyEmail = "Please Verify Email";
+error_usernotfound = "No User Found";
+error_error = "Error";
+success_success = "Success";
+
 
 //Sign Up
 firstName = "First Name";
@@ -304,7 +309,7 @@ description_resend = "You can click send button for resend verify email";
 sendButton_resend = "Send Verify Email";
 checkSend_resend = "Send Again After";
 second_resend = "s";
-done_resend = "Done";  
+done_resend = "Done";
 
 
 
