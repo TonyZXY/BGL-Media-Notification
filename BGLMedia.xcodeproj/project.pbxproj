@@ -40,8 +40,6 @@
 		2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE1320E46E1700018FC0 /* LanguagePackage.swift */; };
 		2D52AEE320E46E1A00018FC0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE1720E46E1700018FC0 /* Main.storyboard */; };
 		2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE1E20E46E1800018FC0 /* Info.plist */; };
-		2D52AEE720E46E1A00018FC0 /* RegisterationPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2020E46E1800018FC0 /* RegisterationPageViewController.swift */; };
-		2D52AEE820E46E1A00018FC0 /* LoginPageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2120E46E1800018FC0 /* LoginPageViewController.swift */; };
 		2D52AEE920E46E1A00018FC0 /* MarketsTotalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2420E46E1800018FC0 /* MarketsTotalView.swift */; };
 		2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2520E46E1800018FC0 /* MarketFilterCollectionView.swift */; };
 		2D52AEEC20E46E1A00018FC0 /* MarketsCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2720E46E1800018FC0 /* MarketsCell.swift */; };
@@ -300,8 +298,6 @@
 		2D52AE1520E46E1700018FC0 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "zh-Hans-CN.lproj/Localizable.strings"; sourceTree = "<group>"; };
 		2D52AE1820E46E1700018FC0 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Main.storyboard; sourceTree = "<group>"; };
 		2D52AE1E20E46E1800018FC0 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2D52AE2020E46E1800018FC0 /* RegisterationPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterationPageViewController.swift; sourceTree = "<group>"; };
-		2D52AE2120E46E1800018FC0 /* LoginPageViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LoginPageViewController.swift; sourceTree = "<group>"; };
 		2D52AE2420E46E1800018FC0 /* MarketsTotalView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarketsTotalView.swift; sourceTree = "<group>"; };
 		2D52AE2520E46E1800018FC0 /* MarketFilterCollectionView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarketFilterCollectionView.swift; sourceTree = "<group>"; };
 		2D52AE2720E46E1800018FC0 /* MarketsCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarketsCell.swift; sourceTree = "<group>"; };
@@ -629,8 +625,6 @@
 			children = (
 				57AEA1822112C0A200042CF6 /* CustomAlertController.swift */,
 				57650898210FE463007368CC /* RegisterCell.swift */,
-				2D52AE2020E46E1800018FC0 /* RegisterationPageViewController.swift */,
-				2D52AE2120E46E1800018FC0 /* LoginPageViewController.swift */,
 				576751FB2105556E006DB67C /* RegisterController.swift */,
 				576752002105597C006DB67C /* LoginController.swift */,
 			);
@@ -1551,7 +1545,6 @@
 				57355C6920F718CC002E70E4 /* GetDataResult.swift in Sources */,
 				57355C4B20F718CC002E70E4 /* TransAdditionalCell.swift in Sources */,
 				573C96AB20EF068A00B667AB /* Extension.swift in Sources */,
-				2D52AEE820E46E1A00018FC0 /* LoginPageViewController.swift in Sources */,
 				2D52AF3020E46E1A00018FC0 /* GenuineSliderViewCell.swift in Sources */,
 				2D52AF2D20E46E1A00018FC0 /* SearchObject.swift in Sources */,
 				2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */,
@@ -1666,7 +1659,6 @@
 				2D52AF0A20E46E1A00018FC0 /* TimelineTableViewController.swift in Sources */,
 				57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */,
 				2D52AEED20E46E1A00018FC0 /* MarketsCoinTableViewCell.swift in Sources */,
-				2D52AEE720E46E1A00018FC0 /* RegisterationPageViewController.swift in Sources */,
 				57BAD9522104CAD500973B45 /* TCPickerView.swift in Sources */,
 				2D52AEF620E46E1A00018FC0 /* TickerDataRealm.swift in Sources */,
 				2D52AF1E20E46E1A00018FC0 /* CandleStickChart.swift in Sources */,

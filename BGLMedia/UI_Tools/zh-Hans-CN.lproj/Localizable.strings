@@ -269,6 +269,8 @@ emailExist = "邮箱已存在";
 needLoginLabel = "请先登录";
 needLoginText = "请登录以使用此功能";
 
+back = "< 后  退";
+
 mr = "先生";
 ms = "女士";
 mrs = "夫人";
