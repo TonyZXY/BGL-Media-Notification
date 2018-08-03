@@ -116,9 +116,25 @@ class LoginController: UIViewController {
     @objc func resendVerifyEmailSendEmail() {
         resendVerifyEmailIsCounting = true
         if resendVerifyEmailIsCounting{
+            let hud = JGProgressHUD(style: .light)
+            hud.textLabel.text = textValue(name: "Send Email")
+            hud.backgroundColor = ThemeColor().progressColor()
+            hud.show(in: self.view)
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","resendVerifyLink",self.emailTextField.text!], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+                print(response)
                 if success{
+                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                    hud.textLabel.text = textValue(name: "success_success")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                    }
                     print(response)
+                } else{
+                    hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                    hud.textLabel.text = textValue(name: "error_error")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                    }
                 }
             }
         }
@@ -192,7 +208,7 @@ class LoginController: UIViewController {
     
     let resetPasswordButton:UIButton = {
         let button = UIButton()
-        button.setTitle("Foggot Password", for: .normal)
+        button.setTitle(textValue(name: "resetPassword_login"), for: .normal)
         button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.titleLabel?.font = UIFont.semiBoldFont(15)
