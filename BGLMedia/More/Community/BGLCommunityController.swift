@@ -32,6 +32,28 @@ class BGLCommunityController: UIViewController,UITableViewDataSource,UITableView
         // Do any additional setup after loading the view.
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let factor = view.frame.width/375
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().darkGreyColor()
+        let sectionLabel = UILabel()
+        sectionLabel.text = textValue(name: "community_setting")
+        sectionLabel.textColor = ThemeColor().textGreycolor()
+        sectionLabel.font = UIFont.regularFont(20*factor)
+        sectionLabel.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.addSubview(sectionLabel)
+        
+        NSLayoutConstraint(item: sectionLabel, attribute: .bottom, relatedBy: .equal, toItem: sectionView, attribute: .bottom, multiplier: 1, constant: -10*factor).isActive = true
+        NSLayoutConstraint(item: sectionLabel, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
+        //        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sectionLabel]))
+        //        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":sectionLabel]))
+        return sectionView
+    }
+    
+    func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        return 70*view.frame.width/375
+    }
+    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return titles.count
     }
@@ -57,11 +79,11 @@ class BGLCommunityController: UIViewController,UITableViewDataSource,UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let urlString = itemsUrl[indexPath.row]
-        
         if let url = URL(string: urlString) {
             let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
             navigationController?.pushViewController(vc, animated: true)
         }
+        tableView.deselectRow(at: indexPath, animated: true)
     }
     
     lazy var communityTableView:UITableView = {
@@ -70,7 +92,7 @@ class BGLCommunityController: UIViewController,UITableViewDataSource,UITableView
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 100
+        tableView.rowHeight = 70
         tableView.isScrollEnabled = false
         tableView.separatorStyle = .none
         tableView.register(communityCell.self, forCellReuseIdentifier: "communityCell")
@@ -79,7 +101,7 @@ class BGLCommunityController: UIViewController,UITableViewDataSource,UITableView
     
     func setUpView(){
         let factor = view.frame.width/375
-        communityTableView.rowHeight = 100*factor
+        communityTableView.rowHeight = 70*factor
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(communityTableView)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityTableView]))
@@ -106,14 +128,14 @@ class communityCell:UITableViewCell{
         var view = UIView()
         view.backgroundColor = ThemeColor().walletCellcolor()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.layer.cornerRadius = 13 * factor!
+//        view.layer.cornerRadius = 13 * factor!
         return view
     }()
     
     lazy var communityImage: UIImageView = {
         var imageView = UIImageView()
         imageView.clipsToBounds = true
-        imageView.frame = CGRect(x: 0, y: 0, width: 50*factor!, height: 50*factor!)
+        imageView.frame = CGRect(x: 0, y: 0, width: 30*factor!, height: 30*factor!)
         imageView.contentMode = UIViewContentMode.scaleAspectFit
         imageView.translatesAutoresizingMaskIntoConstraints = false
         return imageView
@@ -129,23 +151,22 @@ class communityCell:UITableViewCell{
     
     func setupviews(){
         communityLabel.font = UIFont.regularFont(14*factor!)
-        selectionStyle = .none
         backgroundColor = ThemeColor().themeColor()
         addSubview(cellView)
         cellView.addSubview(communityImage)
         cellView.addSubview(communityLabel)
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor!)-[v0]-\(20*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(10*factor!)-[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[v0]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0]-\(2*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         
         
         NSLayoutConstraint(item: communityImage, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
-        NSLayoutConstraint(item: communityLabel, attribute: .centerX, relatedBy: .equal, toItem: cellView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: communityLabel, attribute: .centerX, relatedBy: .equal, toItem: cellView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: communityLabel, attribute: .centerY, relatedBy: .equal, toItem: cellView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(\(50*factor!))]-\(10*factor!)-[v1(\(80*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(50*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(15*factor!)-[v0(\(30*factor!))]-\(10*factor!)-[v1(\(80*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":communityImage,"v1":communityLabel]))
     }
 }
 

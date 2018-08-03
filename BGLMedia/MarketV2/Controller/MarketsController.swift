@@ -23,7 +23,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         super.viewDidLoad()
         setUpView()
 //        cancelTouchKeyboard()
-////        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
     }
     

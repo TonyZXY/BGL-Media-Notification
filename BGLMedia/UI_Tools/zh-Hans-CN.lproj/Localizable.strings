@@ -49,7 +49,8 @@ transactionFeeButtonForm = "币种 ▼";
 additionalForm = "附加信息";
 pricePlaceholder = "请输入价格...";
 amountPlaceholder = "请输入数量...";
-additional = "备注...";
+additional_Placeholder = "备注...";
+error_transaction = "输入格式有误";
 
 //Market Page
 globalMarket = "市场行情";
@@ -81,6 +82,7 @@ timeToday_flash = "今天";
 timeYear_flash = "年";
 timeMonth_flash = "月";
 timeDay_flash = "日";
+share_flash = "分享";
 
 //Flash News Search Results
 searchLabel_flash = "搜索结果:";
@@ -174,6 +176,7 @@ wechat_community = "微信";
 twitter_community = "Twitter";
 facebook_community = "Facebook";
 youtube_community = "Youtube";
+community_setting = "社交平台";
 
 //Default Currency Page
 usd_default = "美元 (USD)";
@@ -181,8 +184,10 @@ aud_default = "澳元 (AUD)";
 rmb_default = "人民币 (CNY)";
 eur_default = "欧元 (EUR)";
 jpy_default = "日元 (JPY)";
+currency_setting = "默认兑换币种设置";
 
 //Language Page
+language_setting = "语言设置";
 chinese_language = "简体中文";
 english_language = "English";
 alertTitle_language = "语言设置";
@@ -231,6 +236,7 @@ scrollAndTapToRefresh = "上拉或点击加载更多";
 registerVerify_alertOK = "确认";
 registerVerify_alertTitle = "邮箱认证";
 registerVerify_alertContent = "请您去邮箱激活你的账号";
+resetPassword_login = "忘记密码";
 
 //Searchbar
 search_placeholder = "请输入关键词...";
@@ -273,6 +279,24 @@ mr = "先生";
 ms = "女士";
 mrs = "夫人";
 dr = "博士";
+
+//reset Password alert
+placeholder_reset = "请输入邮箱...";
+title_reset = "重置密码";
+description_reset = "填写邮箱发送，重置账户密码。链接将会在15分钟后失效";
+sendButton_reset = "发送邮件";
+checkSend_reset = "发送剩余时间";
+min_reset = "分钟";
+done_reset = "取消";
+
+
+//resend Password alert
+title_resend = "发送验证邮件";
+description_resend = "你可以通过点击发送按钮重新发送验证邮件";
+sendButton_resend = "发送验证邮件";
+checkSend_resend = "发送剩余时间";
+second_resend = "秒";
+done_resend = "确定";
 
 
 

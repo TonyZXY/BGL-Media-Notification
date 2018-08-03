@@ -209,6 +209,7 @@
 		57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17B211276ED00042CF6 /* SCLExtensions.swift */; };
 		57AEA17F211276ED00042CF6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 57AEA17C211276ED00042CF6 /* Info.plist */; };
 		57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA1822112C0A200042CF6 /* CustomAlertController.swift */; };
+		57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA1842112D11F00042CF6 /* CustomPasswordAlertController.swift */; };
 		57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD8682104540B00973B45 /* ExchangeSelect.swift */; };
 		57BAD86B21045ACF00973B45 /* exchangeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD86A21045ACF00973B45 /* exchangeController.swift */; };
 		57BAD9522104CAD500973B45 /* TCPickerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD94C2104CAD500973B45 /* TCPickerView.swift */; };
@@ -467,6 +468,7 @@
 		57AEA17B211276ED00042CF6 /* SCLExtensions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SCLExtensions.swift; sourceTree = "<group>"; };
 		57AEA17C211276ED00042CF6 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		57AEA1822112C0A200042CF6 /* CustomAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CustomAlertController.swift; sourceTree = "<group>"; };
+		57AEA1842112D11F00042CF6 /* CustomPasswordAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPasswordAlertController.swift; sourceTree = "<group>"; };
 		57BAD8682104540B00973B45 /* ExchangeSelect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExchangeSelect.swift; sourceTree = "<group>"; };
 		57BAD86A21045ACF00973B45 /* exchangeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = exchangeController.swift; sourceTree = "<group>"; };
 		57BAD94C2104CAD500973B45 /* TCPickerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TCPickerView.swift; sourceTree = "<group>"; };
@@ -633,6 +635,7 @@
 				2D52AE2120E46E1800018FC0 /* LoginPageViewController.swift */,
 				576751FB2105556E006DB67C /* RegisterController.swift */,
 				576752002105597C006DB67C /* LoginController.swift */,
+				57AEA1842112D11F00042CF6 /* CustomPasswordAlertController.swift */,
 			);
 			path = LoginAndRegister;
 			sourceTree = "<group>";
@@ -1562,6 +1565,7 @@
 				57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */,
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
+				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,
 				2D52AF2C20E46E1A00018FC0 /* Genuine.swift in Sources */,
 				2D52AF3220E46E1A00018FC0 /* GenuineListViewCell.swift in Sources */,
 				57355C5120F718CC002E70E4 /* MarketCapClient.swift in Sources */,

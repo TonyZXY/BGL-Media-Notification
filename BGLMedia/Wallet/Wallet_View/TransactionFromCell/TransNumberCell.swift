@@ -9,10 +9,14 @@
 import UIKit
 
 class TransNumberCell:UITableViewCell, UITextFieldDelegate{
+    var factor:CGFloat?{
+        didSet{
+            setupviews()
+            _ = createKeyboarddonebutton()
+        }
+    }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier) 
-        setupviews()
-        _ = createKeyboarddonebutton()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -26,25 +30,27 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
     
     let numberLabel:UILabel = {
         let label = UILabel()
-        label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
+        label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    let number: UITextField = {
-        let textfield = UITextField()
+    lazy var number: LeftPaddedTextField = {
+        let textfield = LeftPaddedTextField()
         textfield.keyboardType = UIKeyboardType.decimalPad
         //            textfield.resignFirstResponder()
         textfield.textColor = ThemeColor().whiteColor()
         textfield.tintColor = ThemeColor().whiteColor()
-        textfield.frame = CGRect(x:0, y: 0, width: 200, height: 30)
+        textfield.frame = CGRect(x:0, y: 0, width: 200*factor!, height: 30*factor!)
         textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor!), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
 //        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
 //        textfield.leftViewMode = .always
 //        textfield.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
 //        textfield.rightViewMode = .always
 //        textfield.clipsToBounds = false
+        textfield.backgroundColor = ThemeColor().greyColor()
+        textfield.layer.cornerRadius = 8*factor!
         return textfield
     }()
     
@@ -53,21 +59,21 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         backgroundColor = ThemeColor().themeColor()
         addSubview(numberLabel)
         addSubview(number)
-        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
-        layer.shadowOffset = CGSize(width: 0, height: 2)
-        layer.shadowOpacity = 1
-        layer.shadowRadius = 0
-        layer.masksToBounds = false
+//        layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        layer.shadowOffset = CGSize(width: 0, height: 2)
+//        layer.shadowOpacity = 1
+//        layer.shadowRadius = 0
+//        layer.masksToBounds = false
         
        
 
         
-        NSLayoutConstraint(item: numberLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
-        NSLayoutConstraint(item: number, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5).isActive = true
+        NSLayoutConstraint(item: numberLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5*factor!).isActive = true
+        NSLayoutConstraint(item: number, attribute: .top, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 5*factor!).isActive = true
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-16-[v1]-16-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(30)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(16*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(16*factor!)-[v1]-\(16*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
     }
     
     func createKeyboarddonebutton()->UIToolbar {

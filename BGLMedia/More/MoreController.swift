@@ -124,7 +124,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 60
+        return 50 * view.frame.width/375
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -150,11 +150,11 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         return cell
     }
     
-    func tableView(_ tableView: UITableView, willDisplayHeaderView view:UIView, forSection: Int) {
-        if let headerTitle = view as? UITableViewHeaderFooterView {
-            headerTitle.textLabel?.textColor = ThemeColor().textGreycolor()
-        }
-    }
+//    func tableView(_ tableView: UITableView, willDisplayHeaderView view:UIView, forSection: Int) {
+//        if let headerTitle = view as? UITableViewHeaderFooterView {
+//            headerTitle.textLabel?.textColor = ThemeColor().textGreycolor()
+//        }
+//    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section < 2{
@@ -273,6 +273,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         navigationItem.titleView = titleLabel
         view.addSubview(optionTableView)
         view.backgroundColor = ThemeColor().themeColor()
+        optionTableView.rowHeight = 50 * view.frame.width/375
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":optionTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":optionTableView]))
     }

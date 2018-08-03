@@ -19,7 +19,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     var filterItems:[String]{
         get{
-            return [textValue(name: "filterByWeek_market"),textValue(name: "filterByDay_market"),textValue(name: "filterByHour_market")]
+            return [textValue(name: "filterByHour_market"),textValue(name: "filterByDay_market"), textValue(name: "filterByWeek_market")]
         }
     }
 
@@ -32,8 +32,8 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     let sortPickerView = UIPickerView()
     let realm = try! Realm()
     var filterOption:Int = 0
-     var isSearching = false
-    var filterItem:[String] = ["percent7d","percent24h","percent1h"]
+    var isSearching = false
+    var filterItem:[String] = ["percent1h","percent24h","percent7d"]
     var changeLaugageStatus:Bool = false
     
     var sortOption: Int? {
@@ -272,10 +272,8 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     lazy var searchBar:UISearchBar={
         var searchBar = UISearchBar()
-        searchBar.returnKeyType = UIReturnKeyType.done
         searchBar.backgroundColor = ThemeColor().darkGreyColor()
 //        searchBar.isTranslucent = false
-       
         searchBar.searchBarStyle = .default
         searchBar.returnKeyType = .done
         searchBar.layer.borderWidth = 1
@@ -394,7 +392,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
                 object = filterObject[indexPath.row]
             }
             cell.object = object
-            checkDataRiseFallColor(risefallnumber: [object.percent7d,object.percent24h,object.percent1h][filterOption], label: cell.coinChange, type: "PercentDown")
+            checkDataRiseFallColor(risefallnumber: [object.percent1h,object.percent24h,object.percent7d][filterOption], label: cell.coinChange, type: "PercentDown")
             return cell
         }else{
             return UICollectionViewCell()
@@ -468,6 +466,8 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             coinList.reloadData()
         }
     }
+    
+//    func searchbar
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
         searchBar.resignFirstResponder()

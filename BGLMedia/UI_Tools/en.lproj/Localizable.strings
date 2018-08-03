@@ -47,8 +47,9 @@ trasactionFeeForm = "Transaction Fee";
 transactionFeeButtonForm = "Currency ▼";
 additionalForm = "Notes";
 pricePlaceholder = "Enter the price here...";
-amountPlaceholder = "Enter bought amount here...";
-additionalPlaceholder = "Notes...";
+amountPlaceholder = "Enter amount here...";
+additional_Placeholder = "Notes...";
+error_transaction = "Invalid Input";
 
 //Market Page
 globalMarket = "Markets";
@@ -84,6 +85,7 @@ timeToday_flash = "Today ";
 timeYear_flash = "-";
 timeMonth_flash = "-";
 timeDay_flash = "";
+share_flash = "Share";
 
 //Flash News Search Results
 searchLabel_flash = "Search Result:";
@@ -180,6 +182,7 @@ wechat_community = "Wechat";
 twitter_community = "Twitter";
 facebook_community = "Facebook";
 youtube_community = "Youtube";
+community_setting = "Community";
 
 //Default Currency Page
 usd_default = "U.S dollar (USD)";
@@ -187,8 +190,10 @@ aud_default = "Australian dollar (AUD)";
 rmb_default = "RenMinBi Yuan (CNY)";
 eur_default = "European Dollar (EUR)";
 jpy_default = "Japanese Yen (JPY)";
+currency_setting = "Currency Setting";
 
 //Language Page
+language_setting = "Language Setting";
 chinese_language = "简体中文";
 english_language = "English";
 alertTitle_language = "Change Language";
@@ -255,6 +260,7 @@ errorShow = "Error";
 noNetwork = "No Network";
 timeout = "Time Out";
 errorHandle_login = "Email or password error";
+resetPassword_login = "Forget Password";
 
 //Sign Up
 firstName = "First Name";
@@ -281,6 +287,25 @@ mr = "Mr";
 ms = "Ms";
 mrs = "Mrs";
 dr = "Dr";
+
+//reset Password alert
+placeholder_reset = "Enter your email...";
+title_reset = "Reset Password";
+description_reset = "Enter the email for reset password, link will expire after 15 min";
+sendButton_reset = "Send Email";
+checkSend_reset = "Send Again After";
+min_reset = "min";
+done_reset = "Cancel";
+
+
+//resend Password alert
+title_resend = "Resend Verify Email";
+description_resend = "You can click send button for resend verify email";
+sendButton_resend = "Send Verify Email";
+checkSend_resend = "Send Again After";
+second_resend = "s";
+done_resend = "Done";  
+
 
 
 
