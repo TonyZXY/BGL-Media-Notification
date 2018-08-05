@@ -81,7 +81,9 @@ class BGLCommunityController: UIViewController,UITableViewDataSource,UITableView
         let urlString = itemsUrl[indexPath.row]
         if let url = URL(string: urlString) {
             let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
-            navigationController?.pushViewController(vc, animated: true)
+            vc.hidesBottomBarWhenPushed = true
+            vc.accessibilityNavigationStyle = .separate
+            self.present(vc, animated: true, completion: nil)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }

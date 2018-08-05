@@ -13,7 +13,7 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
     var tableViews = UITableView()
     var color = ThemeColor()
     var allTradingPairs = [String]()
-    let getDataResults = GetDataResult()
+//    let getDataResults = GetDataResult()
     var delegate:TransactionFrom?
     var selectValues:Double = 0
     override func viewDidLoad() {

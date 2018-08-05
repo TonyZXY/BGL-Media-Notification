@@ -28,7 +28,7 @@ class DetailController: UIViewController{
     let realm = try! Realm()
     let coinDetailController = CoinDetailController()
     let general = generalDetail()
-    var marketSelectedData = MarketTradingPairs()
+//    var marketSelectedData = MarketTradingPairs()
     var globalMarketData = GlobalMarket.init()
     var refreshTimer: Timer!
     
@@ -92,12 +92,12 @@ class DetailController: UIViewController{
             general.coinName = value.coinName
             general.exchangeName = value.exchangeName
             general.tradingPairs = value.tradingPairsName
-            marketSelectedData.coinAbbName = value.coinAbbName
-            marketSelectedData.coinName = value.coinName
-            marketSelectedData.exchangeName = value.exchangeName
-            marketSelectedData.tradingPairsName = value.tradingPairsName
-            marketSelectedData.transactionPrice = value.transactionPrice
-            marketSelectedData.coinAmount = value.totalAmount
+//            marketSelectedData.coinAbbName = value.coinAbbName
+//            marketSelectedData.coinName = value.coinName
+//            marketSelectedData.exchangeName = value.exchangeName
+//            marketSelectedData.tradingPairsName = value.tradingPairsName
+//            marketSelectedData.transactionPrice = value.transactionPrice
+//            marketSelectedData.coinAmount = value.totalAmount
             coinDetailController.transactionHistoryController.generalData = general
             coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
             coinDetailController.alertControllers.coinName.status = true
@@ -169,14 +169,14 @@ class DetailController: UIViewController{
     }
     
     //Click edit button and pass data to the market reselect page
-    @objc func edit(){
-        let market = MarketSelectController()
-        market.newTransaction.coinAbbName = general.coinAbbName
-        market.newTransaction.coinName = general.coinName
-        market.newTransaction.exchangName = general.exchangeName
-        market.newTransaction.tradingPairsName = general.tradingPairs
-        navigationController?.pushViewController(market, animated: true)
-    }
+//    @objc func edit(){
+//        let market = MarketSelectController()
+//        market.newTransaction.coinAbbName = general.coinAbbName
+//        market.newTransaction.coinName = general.coinName
+//        market.newTransaction.exchangName = general.exchangeName
+//        market.newTransaction.tradingPairsName = general.tradingPairs
+//        navigationController?.pushViewController(market, animated: true)
+//    }
     
     //Add child controller (coin details)
     func addChildViewControllers(childViewControllers:UIViewController,views:UIView){

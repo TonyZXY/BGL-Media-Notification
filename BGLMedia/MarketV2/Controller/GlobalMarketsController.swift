@@ -35,6 +35,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     var isSearching = false
     var filterItem:[String] = ["percent1h","percent24h","percent7d"]
     var changeLaugageStatus:Bool = false
+    var changeCurrencyStatus:Bool = false
     
     var sortOption: Int? {
         get {
@@ -120,6 +121,10 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateGlobalMarket), name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+        
+        
+        
 //        let selectindexpath = NSIndexPath(item: 0, section: 0)
 //        coinList.selectItem(at: selectindexpath as IndexPath, animated: true, scrollPosition:.left)
         
@@ -134,14 +139,22 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLaugageStatus{
-            coinList.switchRefreshHeader(to: .removed)
-            coinList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-                self.handleRefresh(self.coinList)
-                self.changeLaugageStatus = false
-            })
+        if changeLaugageStatus || changeCurrencyStatus {
+            if changeLaugageStatus{
+                coinList.switchRefreshHeader(to: .removed)
+                coinList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+                    self.handleRefresh(self.coinList)
+                    
+                })
+            }
+            self.changeLaugageStatus = false
+            self.changeCurrencyStatus = false
             coinList.switchRefreshHeader(to: .refreshing)
         }
+    }
+    
+    @objc func changeCurrency(){
+        changeCurrencyStatus = true
     }
     
     @objc func changeLanguage(){
@@ -156,6 +169,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
     }
     
     @objc func updateGlobalMarket(){
@@ -275,15 +289,31 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         searchBar.backgroundColor = ThemeColor().darkGreyColor()
 //        searchBar.isTranslucent = false
         searchBar.searchBarStyle = .default
-        searchBar.returnKeyType = .done
+        searchBar.returnKeyType = .search
         searchBar.layer.borderWidth = 1
         searchBar.barTintColor = ThemeColor().themeColor()
         searchBar.layer.borderColor = ThemeColor().darkGreyColor().cgColor
         searchBar.layer.backgroundColor = ThemeColor().darkGreyColor().cgColor
         searchBar.delegate = self
+//        searchBar.showsCancelButton = true
+//        searchBar.enablesReturnKeyAutomatically = true
         searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        let attributes = [
+            NSAttributedStringKey.foregroundColor : ThemeColor().whiteColor(),
+            NSAttributedStringKey.font: UIFont.regularFont(13)
+        ]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
         return searchBar
     }()
+    
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        if searchBar.text == nil || searchBar.text == ""{
+            searchBar.text = ""
+        }
+    }
+    
+    
     
     lazy var coinList:UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -470,6 +500,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 //    func searchbar
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
         searchBar.resignFirstResponder()
     }
     
@@ -503,6 +534,21 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 //        }
 //    }
     
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        if searchBar.text == nil || searchBar.text == ""{
+            searchBar.setShowsCancelButton(true, animated: true)
+        }
+        return true
+    }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.clearsContextBeforeDrawing = true
+        searchBar.resignFirstResponder()
+        searchBar.setShowsCancelButton(false, animated: true)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
     
 }

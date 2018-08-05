@@ -27,7 +27,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     
     let realm = try! Realm()
-    var results = try! Realm().objects(AllTransactions.self)
+//    var results = try! Realm().objects(AllTransactions.self)
     var indexSelected:Int = 0
     var generalData = generalDetail()
     

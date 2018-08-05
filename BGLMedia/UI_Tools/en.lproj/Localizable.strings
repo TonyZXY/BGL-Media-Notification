@@ -307,7 +307,7 @@ title_reset = "Reset Password";
 description_reset = "Enter the email for reset password, link will expire after 15 min";
 sendButton_reset = "Send Email";
 checkSend_reset = "Send Again After";
-min_reset = "min";
+second_reset = "s";
 done_reset = "Cancel";
 
 

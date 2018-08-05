@@ -21,7 +21,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         
     }
 
-    var newTransaction = AllTransactions()
+    var newTransaction = Transactions()
     var selectStatus = "Global"
     var menuitems = ["General","Transactions","Alerts"]
     let cryptoCompareClient = CryptoCompareClient()
@@ -31,11 +31,11 @@ class GloabalController: UIViewController,ExchangeSelect{
     let mainView = MainView()
     let allLossView = AllLossView()
     let realm = try! Realm()
-    var coinData = try! Realm().objects(MarketTradingPairs.self)
-    var detail = MarketTradingPairs()
+//    var coinData = try! Realm().objects(MarketTradingPairs.self)
+//    var detail = MarketTradingPairs()
     let coinDetailController = CoinDetailController()
     let general = generalDetail()
-    var marketSelectedData = MarketTradingPairs()
+//    var marketSelectedData = MarketTradingPairs()
     var globalMarketData = GlobalMarket()
     var pageStatus = "Global"
     var coinAbbName = ""
@@ -74,6 +74,7 @@ class GloabalController: UIViewController,ExchangeSelect{
 //        coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
         
         
+       
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
@@ -129,8 +130,8 @@ class GloabalController: UIViewController,ExchangeSelect{
             }
         }
     }
-        
-        
+    
+    
 //        cryptoCompareClient.getTradePrice(from: coinAbbName, to: tradingPairs, exchange: exchangeName){ result in
 //            //            print(result)
 //            switch result{
@@ -167,14 +168,14 @@ class GloabalController: UIViewController,ExchangeSelect{
 //                print("the error \(error.localizedDescription)")
 //            }
 //        }
-        
+    
     
     func setUpView(){
         let factor = view.frame.width/375
         coinDetailController.gerneralController.factor = factor
         coinDetailController.transactionHistoryController.factor = factor
         coinDetailController.alertControllers.factor = factor
-        coinDetailController.gerneralController.exchangeButton.setTitle(newTransaction.exchangName, for: .normal)
+        coinDetailController.gerneralController.exchangeButton.setTitle(newTransaction.exchangeName, for: .normal)
         //        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
         coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)
         coinDetailController.gerneralController.tradingPairButton.addTarget(self, action: #selector(editTradingPairs), for: .touchUpInside)
@@ -361,15 +362,15 @@ class GloabalController: UIViewController,ExchangeSelect{
         return allTradingPairs
     }
     
-    @objc func edit(){
-        let market = MarketSelectController()
-        market.newTransaction.coinAbbName = general.coinAbbName
-        market.newTransaction.coinName = general.coinName
-        market.newTransaction.exchangName = general.exchangeName
-        market.newTransaction.tradingPairsName = general.tradingPairs
-        market.selectStatus = "WatchList"
-        navigationController?.pushViewController(market, animated: true)
-    }
+//    @objc func edit(){
+//        let market = MarketSelectController()
+//        market.newTransaction.coinAbbName = general.coinAbbName
+//        market.newTransaction.coinName = general.coinName
+//        market.newTransaction.exchangName = general.exchangeName
+//        market.newTransaction.tradingPairsName = general.tradingPairs
+//        market.selectStatus = "WatchList"
+//        navigationController?.pushViewController(market, animated: true)
+//    }
     
     @objc func loadData(){
         let generalPage = coinDetailController.gerneralController
