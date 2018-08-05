@@ -15,7 +15,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     var allExchanges = [String]()
     var filterExchanges = [String]()
     var isSearching = false
-    let getDataResult = GetDataResult()
+//    let getDataResult = GetDataResult()
     weak var delegate:TransactionFrom?
     
     override func viewDidLoad() {

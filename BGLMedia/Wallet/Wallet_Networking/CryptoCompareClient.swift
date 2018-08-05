@@ -42,25 +42,25 @@ class CryptoCompareClient: APIClient{
             return exchangeList
         }, completion: completion)
     }
-    
-    func getExchangeList(completion: @escaping (Result<ExchangeList?, APIError>) -> Void){
-        getExchangesResult(){ result in
-            switch result{
-            case .success(let exchangeData):
-                var exchangeList = ExchangeList()
-                for(key, value) in exchangeData!{
-                    var exchange = Exchange()
-                    for(from, to) in value{
-                        exchange.TradingPairs[from] = to
-                    }
-                    exchangeList.AllExchanges[key] = exchange
-                }
-                completion( .success(exchangeList))
-            case .failure(let error):
-                completion( .failure(error))
-            }
-        }
-    }
+//    
+//    func getExchangeList(completion: @escaping (Result<ExchangeList?, APIError>) -> Void){
+//        getExchangesResult(){ result in
+//            switch result{
+//            case .success(let exchangeData):
+//                var exchangeList = ExchangeList()
+//                for(key, value) in exchangeData!{
+//                    var exchange = Exchange()
+//                    for(from, to) in value{
+//                        exchange.TradingPairs[from] = to
+//                    }
+//                    exchangeList.AllExchanges[key] = exchange
+//                }
+//                completion( .success(exchangeList))
+//            case .failure(let error):
+//                completion( .failure(error))
+//            }
+//        }
+//    }
     
     func getTradePrice(from: String, to: String?=nil, exchange: String?=nil, completion: @escaping (Result<Price?, APIError>) -> Void) {
         

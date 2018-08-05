@@ -292,7 +292,7 @@ title_reset = "重置密码";
 description_reset = "填写邮箱发送，重置账户密码。链接将会在15分钟后失效";
 sendButton_reset = "发送邮件";
 checkSend_reset = "发送剩余时间";
-min_reset = "分钟";
+second_reset = "秒";
 done_reset = "取消";
 
 

@@ -24,7 +24,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         setUpView()
 //        cancelTouchKeyboard()
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
     }
     
     @objc func changeLanguage(){
@@ -49,16 +49,15 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     }
     
     @objc func changeCurrency(){
-        DispatchQueue.main.async(execute: {
-            self.global.coinList.beginHeaderRefreshing()
-            self.watchList.coinList.beginHeaderRefreshing()
-            
-        })
+//        DispatchQueue.main.async(execute: {
+//            self.global.coinList.beginHeaderRefreshing()
+//            self.watchList.coinList.beginHeaderRefreshing()
+//        })
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
     }
     
     override func viewDidAppear(_ animated: Bool) {

@@ -60,20 +60,20 @@ class LoginController: UIViewController {
     
     var resetPasswordRemainingSeconds: Int = 0 {
         willSet {
-            resetPasswordAlert.sendEmailButton.setTitle(textValue(name: "checkSend_reset") + " (\(newValue)" + textValue(name: "min_reset") + ")", for: .normal)
+            resetPasswordAlert.sendEmailButton.setTitle(textValue(name: "checkSend_reset") + " (\(newValue)" + textValue(name: "second_reset") + ")", for: .normal)
             
             if newValue <= 0 {
                 resetPasswordAlert.sendEmailButton.setTitle(textValue(name: "sendButton_reset"), for: .normal)
                 resetPasswordIsCounting = false
-            }
+            } 
         }
     }
     
     var resetPasswordIsCounting = false {
         willSet {
             if newValue {
-                resetPasswordCountdownTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(self.updateResetPasswordTime(_:)), userInfo: nil, repeats: true)
-                resetPasswordRemainingSeconds = 15
+                resetPasswordCountdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateResetPasswordTime(_:)), userInfo: nil, repeats: true)
+                resetPasswordRemainingSeconds = 60
                 resetPasswordAlert.sendEmailButton.backgroundColor = ThemeColor().textGreycolor()
             } else {
                 resetPasswordCountdownTimer?.invalidate()

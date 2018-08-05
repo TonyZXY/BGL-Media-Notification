@@ -32,7 +32,7 @@ struct ExpandableNames{
 }
 
 class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDataSource,TransactionFrom,UITextFieldDelegate{
-    var newTransaction = AllTransactions()
+    var newTransaction = Transactions()
     let cryptoCompareClient = CryptoCompareClient()
     let realm = try! Realm()
     var sectionPrice:Double = 0
@@ -74,7 +74,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
     }
     func setSinglePrice(single: Double) {
-        newTransaction.singlePrice = single
+        newTransaction.currentSinglePrice = single
     }
     
     
@@ -496,13 +496,13 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                     
                     
                     //                    self.alertTableView.reloadData()
-                    self.newTransaction.singlePrice = Double(String(readData))!
+                    self.newTransaction.currentSinglePrice = Double(String(readData))!
                 case .failure(let error):
                     print("the error \(error.localizedDescription)")
                 }
             }
         } else{
-            newTransaction.singlePrice = 0
+            newTransaction.currentSinglePrice = 0
         }
     }
     

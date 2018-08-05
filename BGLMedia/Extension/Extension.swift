@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 import SwiftyJSON
 import Alamofire
+import Kingfisher
 
 class Extension:NSObject{
     static let method = Extension()
@@ -259,6 +260,61 @@ extension UIScrollView{
         return header
     }
 
+extension UIView {
+    func addConstraintsWithFormat(format: String, views: UIView...) {
+        var viewsDictionary = [String: UIView]()
+        for (index, view) in views.enumerated() {
+            let key = "v\(index)"
+            view.translatesAutoresizingMaskIntoConstraints = false
+            viewsDictionary[key] = view
+        }
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
+    }
+}
 
+public extension UIViewController {
+    func addChildViewController(childViewControllers:UIViewController,cell:UICollectionViewCell){
+        addChildViewController(childViewControllers)
+        cell.contentView.addSubview(childViewControllers.view)
+        childViewControllers.view.frame = view.bounds
+        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        childViewControllers.didMove(toParentViewController: self)
+
+        //Constraints
+        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
+        childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        childViewControllers.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
+        childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
+        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
+    }
+}
+
+class IndicatorView: UIView {
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+
+    func setupView(){
+        backgroundColor = UIColor.darkGray
+        let indicator = UIActivityIndicatorView()
+        indicator.center = self.center
+        addSubview(indicator)
+        indicator.startAnimating()
+    }
+
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension IndicatorView: Placeholder { /* Just leave it empty */}
+
+extension UIImageView {
+    func setImage(urlString: String) {
+        self.kf.setImage(with: URL(string: urlString), placeholder: IndicatorView(frame: frame) as Placeholder)
+        //        self.kf.setImage(with: URL(string: urlString), placeholder: UIImage(named: "loading"))
+    }
+}
 
 

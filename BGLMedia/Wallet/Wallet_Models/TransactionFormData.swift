@@ -1,36 +1,36 @@
+////
+////  TransactionFormData.swift
+////  news app for blockchain
+////
+////  Created by Bruce Feng on 9/5/18.
+////  Copyright © 2018 Sheng Li. All rights reserved.
+////
 //
-//  TransactionFormData.swift
-//  news app for blockchain
+//import Foundation
 //
-//  Created by Bruce Feng on 9/5/18.
-//  Copyright © 2018 Sheng Li. All rights reserved.
+//class TransactionFormData{
+//    var coinName:String = ""
+//    var coinAbbName:String = ""
+//    var exchangesName:String = ""
+//    var tradingPairsNames:String = ""
+//    var tradingPairsFirst = [String]()
+//    var tradingPairsSecond = [String]()
+//    var tradingPrice:String = ""
+//    var transactionExpense:String = ""
+//    var transactionPrice:String = ""
 //
-
-import Foundation
-
-class TransactionFormData{
-    var coinName:String = ""
-    var coinAbbName:String = ""
-    var exchangesName:String = ""
-    var tradingPairsNames:String = ""
-    var tradingPairsFirst = [String]()
-    var tradingPairsSecond = [String]()
-    var tradingPrice:String = ""
-    var transactionExpense:String = ""
-    var transactionPrice:String = ""
-    
-    func clear(){
-        coinName = ""
-        coinAbbName = ""
-        exchangesName = ""
-        tradingPairsNames = ""
-        tradingPairsFirst = []
-        tradingPairsSecond = []
-        tradingPrice = ""
-        transactionExpense = ""
-    }
-    
-}
-
-
-
+//    func clear(){
+//        coinName = ""
+//        coinAbbName = ""
+//        exchangesName = ""
+//        tradingPairsNames = ""
+//        tradingPairsFirst = []
+//        tradingPairsSecond = []
+//        tradingPrice = ""
+//        transactionExpense = ""
+//    }
+//
+//}
+//
+//
+//

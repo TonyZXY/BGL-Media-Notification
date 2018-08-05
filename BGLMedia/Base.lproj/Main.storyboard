@@ -24,7 +24,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="g8U-LT-CdW" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-126" y="-90"/>
+            <point key="canvasLocation" x="132" y="-90"/>
         </scene>
         <!--NewsV2 Controller-->
         <scene sceneID="iDc-km-PSG">
@@ -40,7 +40,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="VNU-id-ogN" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-850" y="1978"/>
+            <point key="canvasLocation" x="-850" y="1977"/>
         </scene>
         <!--Wallet Controller-->
         <scene sceneID="g3K-Nq-zyc">
@@ -56,7 +56,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="sxY-y1-Oje" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-86" y="-1012"/>
+            <point key="canvasLocation" x="71" y="-1012"/>
         </scene>
         <!--Main Tab Bar Controller-->
         <scene sceneID="3Mh-df-t8l">

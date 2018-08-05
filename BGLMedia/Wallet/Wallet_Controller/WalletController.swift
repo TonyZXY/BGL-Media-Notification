@@ -14,13 +14,14 @@ import RealmSwift
 class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate{
     var image = AppImage()
     let realm = try! Realm()
-    var all = try! Realm().objects(MarketTradingPairs.self)
+//    var all = try! Realm().objects(MarketTradingPairs.self)
     let cryptoCompareClient = CryptoCompareClient()
-    var walletResults = [MarketTradingPairs]()
+//    var walletResults = [MarketTradingPairs]()
     var coinDetail = SelectCoin()
     var totalProfit:Double = 0
     var totalAssets:Double = 0
     var changeLaugageStatus:Bool = false
+    var changeCurrencyStatus:Bool = false
     var countField:String = ""
     //    var walletResults = [MarketTradingPairs]()
     
@@ -62,15 +63,15 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     
-    var allResult:Results<AllTransactions> {
-        return try! Realm().objects(AllTransactions.self)
-    }
+//    var allResult:Results<AllTransactions> {
+//        return try! Realm().objects(AllTransactions.self)
+//    }
     
-    var allTransactions: Results<MarketTradingPairs> {
-        get {
-            return try! Realm().objects(MarketTradingPairs.self)
-        }
-    }
+//    var allTransactions: Results<MarketTradingPairs> {
+//        get {
+//            return try! Realm().objects(MarketTradingPairs.self)
+//        }
+//    }
     
     var assetss: Results<Transactions>{
         get{
@@ -114,12 +115,15 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLaugageStatus{
-            walletList.switchRefreshHeader(to: .removed)
-            walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-                self.handleRefresh(self.walletList)
-                self.changeLaugageStatus = false
-            })
+        if changeLaugageStatus || changeCurrencyStatus{
+            if changeLaugageStatus{
+                walletList.switchRefreshHeader(to: .removed)
+                walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+                    self.handleRefresh(self.walletList)
+                })
+            }
+            self.changeLaugageStatus = false
+            self.changeCurrencyStatus = false
             walletList.switchRefreshHeader(to: .refreshing)
         }
     }
@@ -135,6 +139,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     @objc func changeLanguage(){
         checkTransaction()
         changeLaugageStatus = true
+    }
+    
+    @objc func changeCurrency(){
+        changeCurrencyStatus = true
     }
     
     //TableView Cell Number
@@ -228,7 +236,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 }
             }
         }
-        
         dispatchGroup.notify(queue:.main){
             completion(true)
         }
@@ -238,10 +245,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     @objc func refreshData(){
         checkTransaction()
-        DispatchQueue.main.async(execute: {
-                        self.walletList.beginHeaderRefreshing()
-                    })
-//        walletList.switchRefreshHeader(to: .refreshing)
+        self.walletList.beginHeaderRefreshing()
     }
     
     func caculateTotal(){
