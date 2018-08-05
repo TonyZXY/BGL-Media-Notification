@@ -65,7 +65,7 @@ class LoginController: UIViewController {
             if newValue <= 0 {
                 resetPasswordAlert.sendEmailButton.setTitle(textValue(name: "sendButton_reset"), for: .normal)
                 resetPasswordIsCounting = false
-            } 
+            }
         }
     }
     
