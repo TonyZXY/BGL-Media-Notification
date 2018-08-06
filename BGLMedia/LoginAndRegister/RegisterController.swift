@@ -152,6 +152,8 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             cell.contentLabel.text = textValue(name: "email")
             cell.contentTextField.placeholder = "*email@email.com"
             cell.contentTextField.keyboardType = .emailAddress
+            cell.contentTextField.autocorrectionType = .no
+            cell.contentTextField.autocapitalizationType = .none
             cell.backgroundColor = ThemeColor().themeColor()
             cell.contentTextField.addTarget(self, action: #selector(checkEmail), for: .allEditingEvents)
             cell.contentTextField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)

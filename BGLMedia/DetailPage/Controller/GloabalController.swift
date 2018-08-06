@@ -212,6 +212,7 @@ class GloabalController: UIViewController,ExchangeSelect{
             if success{
                 self.loadData()
                 self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.success, 0.5))
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadGlobalNewMarketData"), object: nil)
             }else{
                 self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.failure, 0.5))
             }
@@ -249,6 +250,10 @@ class GloabalController: UIViewController,ExchangeSelect{
             if let coin = coinRealm.first{
                 APIServices.fetchInstance.getMarketCapOneCoinData(coinId:coin.coinId){(success,response) in
                     if success{
+                        try! self.realm.write {
+                            self.GlobalData[0].price = response["data"]["quotes"][priceType]["price"].double ?? 0
+                            self.GlobalData[0].percent24h = response["data"]["quotes"][priceType]["percent_change_24h"].double ?? 0
+                        }
                         completion(true)
                     } else{
                         completion(false)

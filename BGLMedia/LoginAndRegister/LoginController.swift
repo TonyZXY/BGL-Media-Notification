@@ -65,7 +65,7 @@ class LoginController: UIViewController {
             if newValue <= 0 {
                 resetPasswordAlert.sendEmailButton.setTitle(textValue(name: "sendButton_reset"), for: .normal)
                 resetPasswordIsCounting = false
-            } 
+            } 
         }
     }
     
@@ -151,6 +151,8 @@ class LoginController: UIViewController {
         textField.attributedPlaceholder = NSAttributedString(string: "*email@email.com", attributes: [NSAttributedStringKey.font : UIFont(name: "Montserrat-Regular", size: 16)!])
         textField.clearButtonMode = UITextFieldViewMode.whileEditing
         textField.keyboardType = .emailAddress
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
         textField.addTarget(self, action: #selector(checkEmail), for: .editingDidEnd)
         textField.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .allEditingEvents)
         textField.layer.cornerRadius = 8.5

@@ -37,7 +37,12 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
         })
         NotificationCenter.default.addObserver(self, selector: #selector(updateWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeMarketData), name: NSNotification.Name(rawValue: "reloadGlobalNewMarketData"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(refreshWatchList), name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
+    }
+    
+    @objc func changeMarketData(){
+        coinList.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -66,6 +71,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadGlobalNewMarketData"), object: nil)
     }
     
     @objc func updateWatchList(){
@@ -240,7 +246,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumLineSpacingForSectionAt section: Int) -> CGFloat {
         if collectionView == coinList{
-            return 10 * view.frame.width/414
+            return 5 * view.frame.width/414
         }else{
             return CGFloat()
         }
