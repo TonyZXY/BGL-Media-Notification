@@ -108,7 +108,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         alerts = allAlert
-        view.backgroundColor = ThemeColor().darkGreyColor()
+        view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
     }
@@ -303,6 +303,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
+        view.backgroundColor = ThemeColor().blueColor()
         view.addSubview(alertView)
         alertButton.titleLabel?.font = UIFont.semiBoldFont(18*factor!)
         alertView.addSubview(alertTableView)
@@ -487,7 +488,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var alertView:UIView = {
         var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ThemeColor().themeColor()
+        view.backgroundColor = ThemeColor().blueColor()
         return view
     }()
     
