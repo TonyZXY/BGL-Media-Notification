@@ -274,6 +274,14 @@ class LoginController: UIViewController {
         if emailPredicate.evaluate(with: emailTextField.text) &&
             (passwordTextField.text?.count)! >= 8 {
             //            loginButton.backgroundColor = ThemeColor().themeWidgetColor()
+            emailTextField.layer.borderWidth = 0
+            emailTextField.layer.borderColor = UIColor.clear.cgColor
+            emailLabel.text = textValue(name: "email")
+            emailLabel.textColor = ThemeColor().whiteColor()
+            passwordTextField.layer.borderWidth = 0
+            passwordTextField.layer.borderColor = UIColor.clear.cgColor
+            passwordLabel.text = textValue(name: "password")
+            passwordLabel.textColor = ThemeColor().whiteColor()
             loginButton.backgroundColor = ThemeColor().themeWidgetColor()
             loginButton.isEnabled = true
         }else{

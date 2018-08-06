@@ -27,6 +27,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     //Get trading Pairs Name
     func getExchangeList()->Void{
+        allExchanges.append("Global Average")
         let data = APIServices.fetchInstance.getExchangeList()
         for (key,value) in data{
             if delegate?.getCoinName() != ""{

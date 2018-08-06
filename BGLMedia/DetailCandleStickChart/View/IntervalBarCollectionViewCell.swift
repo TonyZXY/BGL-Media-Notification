@@ -27,7 +27,7 @@ class IntervalBarCollectionViewCell: UICollectionViewCell {
     override var isSelected: Bool {
         didSet {
             label.textColor = isSelected ? ThemeColor().whiteColor() : ThemeColor().textGreycolor()
-            self.backgroundColor = isSelected ? ThemeColor().blueColor() : ThemeColor().darkBlackColor()
+            self.backgroundColor = isSelected ? ThemeColor().blueColor() : ThemeColor().greyColor()
         }
     }
     

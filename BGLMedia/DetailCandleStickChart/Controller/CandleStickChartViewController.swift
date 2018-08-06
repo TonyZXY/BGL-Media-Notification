@@ -92,7 +92,7 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     lazy var intervalBarCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let bar = UICollectionView(frame: CGRect(x: 0, y: 0, width: intervalBarWidth, height: intervalBarHeight), collectionViewLayout: layout)
-        bar.backgroundColor = ThemeColor().darkBlackColor()
+        bar.backgroundColor = ThemeColor().greyColor()
         bar.delegate = self
         bar.dataSource = self
         bar.layer.cornerRadius = 3
@@ -157,7 +157,7 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     
     private func setupUI() {
         view.layer.cornerRadius = 8
-        view.backgroundColor = UIColor.black
+        view.backgroundColor = ThemeColor().greyColor()
         view.addSubview(intervalBarCollectionView)
         view.addSubview(spinner)
         containerView.addSubview(xAxisLabelView)

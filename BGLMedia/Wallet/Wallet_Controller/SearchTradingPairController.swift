@@ -24,10 +24,14 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
     
     //Get Trading Pairs Name
     func getTradingPairsList()->Void{
-        let data = APIServices.fetchInstance.getTradingCoinList(market: (delegate?.getExchangeName())!,coin:(delegate?.getCoinName())!)
-        if data != []{
-            for pairs in data{
-                self.allTradingPairs.append(pairs)
+        if delegate?.getExchangeName() == "Global Average"{
+            allTradingPairs.append(priceType)
+        } else{
+            let data = APIServices.fetchInstance.getTradingCoinList(market: (delegate?.getExchangeName())!,coin:(delegate?.getCoinName())!)
+            if data != []{
+                for pairs in data{
+                    self.allTradingPairs.append(pairs)
+                }
             }
         }
     }
