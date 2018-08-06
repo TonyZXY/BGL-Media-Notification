@@ -138,6 +138,7 @@ class DetailController: UIViewController{
                             let candleData = self.coinDetailController.gerneralController.vc
                             if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
                                 self.checkDataRiseFallColor(risefallnumber: priceChange * currency, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
+                                self.checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
                                 self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
                             }
                             

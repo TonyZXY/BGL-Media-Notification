@@ -162,6 +162,11 @@ display_cell = "界面显示选项";
 other_cell = "其他选项";
 language_cell = "语言设置";
 alert_cell = "推送通知";
+alert_clearCache = "清除缓存";
+title_clearCache = "清除缓存";
+confirm_clearCache = "是否确认要删除快讯与新闻的缓存";
+delete_clearCache = "删除";
+cancel_clearCache = "取消";
 
 
 //About Us Page

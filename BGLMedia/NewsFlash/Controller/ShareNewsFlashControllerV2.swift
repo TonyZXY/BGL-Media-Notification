@@ -29,7 +29,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     @objc func createImage(){
 //        let ss = UIImage.imageWithView(view: shareImage)
         
-        let activityVC = UIActivityViewController(activityItems: [self.imageWithView(view: shareImage)], applicationActivities:nil)
+        let activityVC = UIActivityViewController(activityItems: [self.imageWithView(view: shareImage) as Any], applicationActivities:nil)
         activityVC.popoverPresentationController?.sourceView = self.view
         
         
@@ -43,7 +43,7 @@ class ShareNewsFlashControllerV2: UIViewController {
                 //            self.dismiss(animated: true, completion: nil)
             }
             
-            print("Completed With Activity Type: \(activityType)")
+//            print("Completed With Activity Type: \(activityType)")
             
             self.dismiss(animated: true, completion: nil)
         }

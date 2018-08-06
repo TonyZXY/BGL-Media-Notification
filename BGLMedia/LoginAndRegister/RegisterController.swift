@@ -444,7 +444,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
 //                        }
 //                    }
                 } else {
-                    let registerFailure = response["message"].string ?? textValue(name: "registerfailed")
+//                    let registerFailure = response["message"].string ?? textValue(name: "registerfailed")
                     let code = response["err"]
                     hud.indicatorView = JGProgressHUDErrorIndicatorView()
                     hud.textLabel.text = textValue(name: "errorShow")

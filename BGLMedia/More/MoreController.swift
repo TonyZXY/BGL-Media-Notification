@@ -54,7 +54,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
+            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
     }
     
@@ -160,9 +160,25 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         if indexPath.section < 2{
             //            if indexPath.section == 1 && indexPath.row == 2{
             //                if notificationStatus{
-            let changePage = pushItems[indexPath.section][indexPath.row]
-            changePage.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(changePage, animated: true)
+            
+            if indexPath.section == 1 && indexPath.row == 3{
+                let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "title_clearCache"), comment: ""), message: NSLocalizedString(textValue(name: "confirm_clearCache"), comment: ""), preferredStyle: .alert)
+                let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "delete_clearCache"), comment: ""), style: .destructive) { (_) in
+                    try! self.realm.write {
+                        self.realm.delete(self.realm.objects(NewsFlash.self))
+                        self.realm.delete(self.realm.objects(NewsObject.self))
+//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
+                    }
+                }
+                confirmAlertCtrl.addAction(confirmAction)
+                let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "cancel_clearCache"), comment: ""), style: .cancel, handler:nil)
+                confirmAlertCtrl.addAction(cancelAction)
+                self.present(confirmAlertCtrl, animated: true, completion: nil)
+            } else{
+                let changePage = pushItems[indexPath.section][indexPath.row]
+                changePage.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(changePage, animated: true)
+            }
             //                } else{
             //                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
             //                    // Setting button action
