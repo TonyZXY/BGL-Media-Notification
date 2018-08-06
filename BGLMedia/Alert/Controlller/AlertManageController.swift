@@ -162,7 +162,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             button.translatesAutoresizingMaskIntoConstraints = false
             //        views.translatesAutoresizingMaskIntoConstraints = false
             
-            sectionView.layer.borderWidth = 1
+//            sectionView.layer.borderWidth = 1
             
             NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
             NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
@@ -397,6 +397,9 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             }
             intersetObject.compare = Inputprice
             intersetObject.compareStatus = compareStatus
+            if intersetObject.exchangName == "Global Average"{
+                intersetObject.exchangName = "GLOBAL"
+            }
             print(Inputprice)
             if status == "Update"{
                 let interest:[String:Any] = ["_id":intersetObject.id,"from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":intersetObject.compare,"isGreater":intersetObject.compareStatus]
@@ -474,31 +477,51 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     func loadPrice(){
         var readData:Double = 0
         if intersetObject.coinName != "" && intersetObject.exchangName != "" && intersetObject.tradingPairs != ""{
-            cryptoCompareClient.getTradePrice(from: intersetObject.coinAbbName, to: intersetObject.tradingPairs, exchange: intersetObject.exchangName){
-                result in
-                switch result{
-                case .success(let resultData):
-                    for(_, value) in resultData!{
-                        readData = value
+            if intersetObject.exchangName == "Global Average"{
+                URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + intersetObject.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
+                    if success{
+                        print(response)
+                        if let result = response["quotes"].array{
+                            for results in result{
+                                if results["currency"].string ?? "" == priceType{
+                                    let price = results["data"]["price"].double ?? 0
+                                    self.sectionPrice = price
+                                    let indexPathForSection = NSIndexSet(index: 0)
+                                    self.alertTableView.reloadSections(indexPathForSection as IndexSet, with: .automatic)
+                                }
+                            }
+                        }
+                    } else{
+                        print("jjjjjjj")
                     }
-                    self.sectionPrice = readData
-                    
-                    
-                    
-                    //                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                    //                    cell.priceType.text = Extension.method.scientificMethod(number: readData)
-                    
-                    
-                    
-                    let indexPathForSection = NSIndexSet(index: 0)
-                    self.alertTableView.reloadSections(indexPathForSection as IndexSet, with: .automatic)
-                    
-                    
-                    
-                    //                    self.alertTableView.reloadData()
-                    self.newTransaction.currentSinglePrice = Double(String(readData))!
-                case .failure(let error):
-                    print("the error \(error.localizedDescription)")
+                }
+            } else{
+                cryptoCompareClient.getTradePrice(from: intersetObject.coinAbbName, to: intersetObject.tradingPairs, exchange: intersetObject.exchangName){
+                    result in
+                    switch result{
+                    case .success(let resultData):
+                        for(_, value) in resultData!{
+                            readData = value
+                        }
+                        self.sectionPrice = readData
+                        
+                        
+                        
+                        //                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                        //                    cell.priceType.text = Extension.method.scientificMethod(number: readData)
+                        
+                        
+                        
+                        let indexPathForSection = NSIndexSet(index: 0)
+                        self.alertTableView.reloadSections(indexPathForSection as IndexSet, with: .automatic)
+                        
+                        
+                        
+                        //                    self.alertTableView.reloadData()
+                        self.newTransaction.currentSinglePrice = Double(String(readData))!
+                    case .failure(let error):
+                        print("the error \(error.localizedDescription)")
+                    }
                 }
             }
         } else{

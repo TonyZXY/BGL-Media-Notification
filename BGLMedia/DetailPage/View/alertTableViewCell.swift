@@ -29,7 +29,11 @@ class AlertTableViewCell:UITableViewCell{
                 compare = "="
             }
             let compareLabels = "1 " + (object?.coinAbbName)! + " " + compare + " " + String((object?.price)!)
-            let coinDetail = (object?.exchangName)! + " - " + (object?.coinAbbName)! + "/" + (object?.tradingPairs)!
+            var exchangeName = (object?.exchangName)!
+            if exchangeName == "GLOBAL"{
+                exchangeName = "Global Average"
+            }
+            let coinDetail = exchangeName + " - " + (object?.coinAbbName)! + "/" + (object?.tradingPairs)!
             let dateToString = DateFormatter()
             dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
             dateToString.locale = Locale(identifier: "en_AU")

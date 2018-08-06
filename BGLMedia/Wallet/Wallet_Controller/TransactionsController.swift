@@ -266,8 +266,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
         try! self.realm.write {
             if object.count != 0{
-                object[0].exchangeName = self.newTransaction.exchangeName
-                object[0].tradingPairsName = self.newTransaction.tradingPairsName
+                if self.newTransaction.exchangeName != "Global Average"{
+                    object[0].exchangeName = self.newTransaction.exchangeName
+                    object[0].tradingPairsName = self.newTransaction.tradingPairsName
+                }
                 object[0].everyTransactions.append(self.newTransaction)
             } else{
                 tran.everyTransactions.append(self.newTransaction)
@@ -347,18 +349,57 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else {
             var readData:Double = 0
             if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
-                cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangeName){
-                    result in
-                    switch result{
-                    case .success(let resultData):
-                        for(_, value) in resultData!{
-                            readData = value
+                if newTransaction.exchangeName == "Global Average"{
+                    URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + newTransaction.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
+                        if success{
+                            if let result = response["quotes"].array{
+                                for results in result{
+                                    if results["currency"].string ?? "" == priceType{
+                                        let price = results["data"]["price"].double ?? 0
+                                        let index = IndexPath(row: 3, section: 0)
+                                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                                        cell.priceType.text = Extension.method.scientificMethod(number: price)
+                                    }
+                                }
+                            }
                         }
-                        let index = IndexPath(row: 3, section: 0)
-                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                        cell.priceType.text = Extension.method.scientificMethod(number: readData)
-                    case .failure(let error):
-                        print("the error \(error.localizedDescription)")
+                    }
+                } else{
+//                    APIServices.fetchInstance.getExchangePriceData(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, market:  newTransaction.exchangeName) { (success, response) in
+//                        if #imageLiteral(resourceName: "success"){
+//
+//                        }
+//
+//
+//                        result in
+//                        switch result{
+//                        case .success(let resultData):
+//                            for(_, value) in resultData!{
+//                                readData = value
+//                            }
+//                            let index = IndexPath(row: 3, section: 0)
+//                            let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+//                            cell.priceType.text = Extension.method.scientificMethod(number: readData)
+//                        case .failure(let error):
+//                            print("the error \(error.localizedDescription)")
+//                        }
+//                    }
+                    
+                    
+                    
+                    cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangeName){
+                        result in
+                        switch result{
+                        case .success(let resultData):
+                            for(_, value) in resultData!{
+                                readData = value
+                            }
+                            let index = IndexPath(row: 3, section: 0)
+                            let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                            cell.priceType.text = Extension.method.scientificMethod(number: readData)
+                        case .failure(let error):
+                            print("the error \(error.localizedDescription)")
+                        }
                     }
                 }
             } else{

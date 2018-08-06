@@ -132,10 +132,9 @@ class OnBoardingPageViewController: UIViewController {
         
         vc.modalTransitionStyle = .flipHorizontal
 //        vc.modalTransitionStyle = .crossDissolve // another form of animations
-
-        
-        self.present(vc, animated: true, completion: nil)
-        
+        self.present(vc, animated: true){
+//            self.removeFromParentViewController()
+        }
     }
     
 

@@ -30,6 +30,7 @@ struct coinAlert{
 class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var factor:CGFloat?{
         didSet{
+            
         }
     }
     
@@ -107,7 +108,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidLoad() {
         super.viewDidLoad()
         alerts = allAlert
-        view.backgroundColor = ThemeColor().darkGreyColor()
+        view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
     }
@@ -206,7 +207,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         //        views.translatesAutoresizingMaskIntoConstraints = false
         
         
-        sectionView.layer.borderWidth = 1
+        sectionView.layer.borderWidth = 0.5
         
         NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
@@ -302,6 +303,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
+        view.backgroundColor = ThemeColor().blueColor()
         view.addSubview(alertView)
         alertButton.titleLabel?.font = UIFont.semiBoldFont(18*factor!)
         alertView.addSubview(alertTableView)
@@ -311,7 +313,18 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
-        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(3*factor!)-[v0(\(80*factor!))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
+        
+        
+        alertButton.topAnchor.constraint(equalTo: alertTableView.bottomAnchor).isActive = true
+        alertButton.heightAnchor.constraint(equalToConstant: 60*factor!).isActive = true
+        if #available(iOS 11.0, *) {
+            alertButton.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        } else {
+            alertButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
+        
+        
+//        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(3*factor!)-[v0(\(80*factor!))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
     }
     
     func setUpNoNotificationView(){
@@ -475,7 +488,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var alertView:UIView = {
         var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ThemeColor().themeColor()
+        view.backgroundColor = ThemeColor().blueColor()
         return view
     }()
     
