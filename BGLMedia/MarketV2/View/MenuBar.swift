@@ -13,7 +13,7 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     
     var menuitems:[String]{
         get{
-            return [textValue(name:"globalMarket"),textValue(name:"watchlistMarket")]
+            return [textValue(name:"globalMarket"),textValue(name:"watchlistMarket"),textValue(name: "Alert")]
         }
     }
     
@@ -53,7 +53,7 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
         horizontalBarLeftAnchorConstraint = horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor)
         horizontalBarLeftAnchorConstraint?.isActive = true
         horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
-        horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor,multiplier:1/2).isActive = true
+        horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor,multiplier:1/3).isActive = true
         horizontalBarView.heightAnchor.constraint(equalToConstant: 3).isActive = true
     }
     
@@ -63,7 +63,7 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -74,7 +74,7 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width:frame.width / 2,height:frame.height)
+        return CGSize(width:frame.width / 3,height:frame.height)
     }
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
@@ -90,7 +90,7 @@ class MenuCell: UICollectionViewCell{
     lazy var menuLabel:UILabel = {
         let factor = frame.width/207
         let menuLabel = UILabel()
-        menuLabel.font = UIFont.regularFont(18*factor)
+        menuLabel.font = UIFont.regularFont(23*factor)
         menuLabel.textColor = ThemeColor().textGreycolor()
         return menuLabel
     }()

@@ -18,7 +18,7 @@ class CandleStick: UIView {
     private var color: CGColor? {
         get {
             if let open = candleData?.open, let close = candleData?.close {
-                return open < close ? UIColor.green.cgColor : UIColor.red.cgColor
+                return open < close ? ThemeColor().greenColor().cgColor : ThemeColor().redColor().cgColor
             }
             return nil
         }
@@ -53,7 +53,7 @@ class CandleStick: UIView {
                 var end = CGFloat((highest - close) / priceRange) * self.bounds.height
                 // if end equals start, make a very short candle to display
                 if end == candleYStart {
-                    end += color == UIColor.green.cgColor ? -1 : 1
+                    end += color == ThemeColor().greenColor().cgColor ? -1 : 1
                 }
                 return end
             }

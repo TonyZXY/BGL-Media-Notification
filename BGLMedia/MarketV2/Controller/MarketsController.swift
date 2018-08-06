@@ -18,6 +18,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     
     var global = GlobalMarketsController()
     var watchList = WatchListsController()
+    var alert = AlertController()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -76,7 +77,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return 2
+        return 3
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
@@ -86,6 +87,10 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
             return cell
         } else if indexPath.row == 1{
             addChildViewController(childViewControllers: watchList,cell:cell)
+            return cell
+        } else if indexPath.row == 2{
+            alert.factor = view.frame.width/375
+            addChildViewController(childViewControllers: alert,cell:cell)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
@@ -99,7 +104,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x/2
+        menuBar.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x/3
     }
     
     func  scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {

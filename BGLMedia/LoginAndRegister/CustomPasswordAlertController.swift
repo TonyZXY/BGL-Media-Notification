@@ -255,6 +255,7 @@ class CustomPasswordAlertController: UIViewController,UITextFieldDelegate{
         textField.layer.borderWidth = 1*view.frame.width/375
         textField.layer.cornerRadius = 8*view.frame.width/375
 //        textField.delegate = self
+        textField.keyboardType = .emailAddress
         textField.returnKeyType = .done
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
