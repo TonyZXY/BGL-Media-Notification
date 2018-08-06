@@ -23,7 +23,6 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
                 resultLabel.text = textValue(name: "searchLabel_flash") + " " + String(newsFlashResult.count) + " " + textValue(name: "searchResult_flash")
             }
             return newsFlashResult.count
-            
         } else {
             return 0
         }
@@ -36,7 +35,7 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
-        
+        cell.factor = view.frame.width/375
         cell.dateLabel.text = dateFormatter.string(from: object.dateTime)
         cell.detailLabel.text = object.contents
         cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
@@ -79,14 +78,21 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
                         for value in response{
                             self.newsFlashResult.append(value)
                         }
-                        self.searchFlashNewsTableView.reloadData()
+                    } else{
+                        self.newsFlashResult.removeAll()
                     }
+                    self.searchFlashNewsTableView.reloadData()
+                    self.spinner.stopAnimating()
+                } else{
+                    self.spinner.stopAnimating()
                 }
             }
         }
     }
     
     func storeData(completion:@escaping ([NewsFlash],Bool)->Void){
+        resultLabel.text = "" 
+        spinner.startAnimating()
         URLServices.fetchInstance.passServerData(urlParameters: ["api","searchFlash?patten=" + searchBar.text! + "&languageTag=EN"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             if success{
                 let json = response
@@ -125,19 +131,24 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
 //    }
     
     func setUpView(){
+        let factor = view.frame.width/375
         searchBar.becomeFirstResponder()
         view.backgroundColor = ThemeColor().darkGreyColor()
         view.addSubview(searchFlashNewsTableView)
         view.addSubview(searchBar)
         view.addSubview(resultLabel)
+        resultLabel.addSubview(spinner)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-5-[v1]-5-[v2(30)]-5-[v0]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1]-\(5*factor)-[v2(\(30*factor))]-\(5*factor)-[v0]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
         
         
         NSLayoutConstraint(item: resultLabel, attribute: .centerX, relatedBy: .equal, toItem: view, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
+        NSLayoutConstraint(item: spinner, attribute: .centerX, relatedBy: .equal, toItem: resultLabel, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: resultLabel, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchFlashNewsTableView,"v1":searchBar,"v2":resultLabel]))
+        resultLabel.layer.cornerRadius = 15 * factor
     }
     
     
@@ -166,11 +177,23 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
         searchBar.returnKeyType = UIReturnKeyType.done
-        searchBar.barTintColor = ThemeColor().darkGreyColor()
-        searchBar.tintColor = ThemeColor().themeColor()
-        searchBar.placeholder = "Enter the keywords..."
-        searchBar.backgroundColor = ThemeColor().redColor()
+        searchBar.tintColor = ThemeColor().darkBlackColor()
+        searchBar.barTintColor = ThemeColor().darkBlackColor()
+        searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
+        
+        var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
+        if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
+            searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()])
+        }
+        
         return searchBar
+    }()
+    
+    var spinner:UIActivityIndicatorView = {
+        var spinner = UIActivityIndicatorView()
+        spinner.tintColor = UIColor.white
+        spinner.translatesAutoresizingMaskIntoConstraints = false
+        return spinner
     }()
     
     
@@ -179,10 +202,14 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
 class FlashNewsResultCell:UITableViewCell{
     
     
+    var factor:CGFloat?{
+        didSet{
+             setUpView()
+        }
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUpView()
-    
     }
     
     var object:String?{
@@ -203,18 +230,26 @@ class FlashNewsResultCell:UITableViewCell{
         cellView.addSubview(shareButton)
         
         
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v0]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
+        cellView.layer.cornerRadius = 8 * factor!
+        dateLabel.font = UIFont.semiBoldFont(18 * factor!)
+        detailLabel.font = UIFont.regularFont(15 * factor!)
+        shareButton.layer.cornerRadius = 15 * factor!
+        shareButton.contentEdgeInsets = UIEdgeInsetsMake(5 * factor!, 10 * factor!, 5 * factor!, 10 * factor!)
+        shareButton.imageEdgeInsets = UIEdgeInsetsMake(20 * factor!, 0, 20 * factor!, 0)
+        shareButton.titleLabel!.font =  UIFont.semiBoldFont(13 * factor!)
+        
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
+        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-\(10*factor!)-[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView]))
         
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[v1]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1(40)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1(\(40*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-10-[v2]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v2]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v3]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-5-[v3]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v3]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(5*factor!)-[v3]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
+       
         
     }
     
@@ -225,7 +260,7 @@ class FlashNewsResultCell:UITableViewCell{
     var cellView:UIView = {
         var view = UIView()
         view.backgroundColor = ThemeColor().greyColor()
-        view.layer.cornerRadius = 8
+//        view.layer.cornerRadius = 8
         view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         return view

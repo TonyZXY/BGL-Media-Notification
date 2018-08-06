@@ -256,6 +256,8 @@ class CustomPasswordAlertController: UIViewController,UITextFieldDelegate{
         textField.layer.cornerRadius = 8*view.frame.width/375
 //        textField.delegate = self
         textField.returnKeyType = .done
+        textField.autocorrectionType = .no
+        textField.autocapitalizationType = .none
         textField.addTarget(self, action: #selector(allEdit), for: .allEditingEvents)
         textField.attributedPlaceholder = NSAttributedString(string:"please input text", attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*view.frame.width/375), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
         return textField

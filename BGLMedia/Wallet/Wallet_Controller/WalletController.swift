@@ -103,8 +103,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
     }
     
     deinit {
@@ -112,6 +113,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+    }
+    
+    @objc func reloadNewMarketData(){
+        walletList.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -130,6 +136,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func checkTransaction(){
         if assetss.count == 0{
+            
             setUpInitialView()
         } else {
             setupView()

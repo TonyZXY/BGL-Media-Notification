@@ -122,6 +122,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateGlobalMarket), name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeMarketData), name: NSNotification.Name(rawValue: "reloadGlobalNewMarketData"), object: nil)
         
         
         
@@ -136,6 +137,10 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             }
         }
 //        print(realm.objects(GlobalAverageObject.self))
+    }
+    
+    @objc func changeMarketData(){
+        coinList.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -170,6 +175,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadGlobalNewMarketData"), object: nil)
     }
     
     @objc func updateGlobalMarket(){
