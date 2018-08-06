@@ -165,11 +165,7 @@
 		57BBAB492107085F00984AA4 /* Footer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB402107085F00984AA4 /* Footer.swift */; };
 		57BBAB4A2107085F00984AA4 /* Availability.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB412107085F00984AA4 /* Availability.swift */; };
 		57BBAB4B2107085F00984AA4 /* Header.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB422107085F00984AA4 /* Header.swift */; };
-		57BBAB4C2107085F00984AA4 /* Right.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB432107085F00984AA4 /* Right.swift */; };
 		57BBAB4D2107085F00984AA4 /* Utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB442107085F00984AA4 /* Utils.swift */; };
-		57BBAB4E2107085F00984AA4 /* ElasticRefreshHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB452107085F00984AA4 /* ElasticRefreshHeader.swift */; };
-		57BBAB4F2107085F00984AA4 /* ElasticRefreshControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB462107085F00984AA4 /* ElasticRefreshControl.swift */; };
-		57BBAB502107085F00984AA4 /* Left.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB472107085F00984AA4 /* Left.swift */; };
 		57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB5121083DF800984AA4 /* NewsTableViewCell.swift */; };
 		57BBAB542108E1F600984AA4 /* NewsFlashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB532108E1F600984AA4 /* NewsFlashController.swift */; };
 		57BBAB64210962C300984AA4 /* WatchListsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB56210962C300984AA4 /* WatchListsController.swift */; };
@@ -366,11 +362,7 @@
 		57BBAB402107085F00984AA4 /* Footer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Footer.swift; sourceTree = "<group>"; };
 		57BBAB412107085F00984AA4 /* Availability.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Availability.swift; sourceTree = "<group>"; };
 		57BBAB422107085F00984AA4 /* Header.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Header.swift; sourceTree = "<group>"; };
-		57BBAB432107085F00984AA4 /* Right.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Right.swift; sourceTree = "<group>"; };
 		57BBAB442107085F00984AA4 /* Utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utils.swift; sourceTree = "<group>"; };
-		57BBAB452107085F00984AA4 /* ElasticRefreshHeader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElasticRefreshHeader.swift; sourceTree = "<group>"; };
-		57BBAB462107085F00984AA4 /* ElasticRefreshControl.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ElasticRefreshControl.swift; sourceTree = "<group>"; };
-		57BBAB472107085F00984AA4 /* Left.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Left.swift; sourceTree = "<group>"; };
 		57BBAB5121083DF800984AA4 /* NewsTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsTableViewCell.swift; sourceTree = "<group>"; };
 		57BBAB532108E1F600984AA4 /* NewsFlashController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsFlashController.swift; sourceTree = "<group>"; };
 		57BBAB56210962C300984AA4 /* WatchListsController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchListsController.swift; sourceTree = "<group>"; };
@@ -941,11 +933,7 @@
 				57BBAB402107085F00984AA4 /* Footer.swift */,
 				57BBAB412107085F00984AA4 /* Availability.swift */,
 				57BBAB422107085F00984AA4 /* Header.swift */,
-				57BBAB432107085F00984AA4 /* Right.swift */,
 				57BBAB442107085F00984AA4 /* Utils.swift */,
-				57BBAB452107085F00984AA4 /* ElasticRefreshHeader.swift */,
-				57BBAB462107085F00984AA4 /* ElasticRefreshControl.swift */,
-				57BBAB472107085F00984AA4 /* Left.swift */,
 			);
 			path = PullToRefresh;
 			sourceTree = "<group>";
@@ -1185,7 +1173,6 @@
 				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
 				2D52AF1D20E46E1A00018FC0 /* Params.swift in Sources */,
 				57355C5920F718CC002E70E4 /* SearchExchangesController.swift in Sources */,
-				57BBAB4C2107085F00984AA4 /* Right.swift in Sources */,
 				2D52AE9C20E46E1A00018FC0 /* TransactionsHistoryController.swift in Sources */,
 				2D52AF2120E46E1A00018FC0 /* IntervalBarCollectionViewCell.swift in Sources */,
 				57355C4320F718CC002E70E4 /* TransNumberCell.swift in Sources */,
@@ -1243,7 +1230,6 @@
 				2D52AEA320E46E1A00018FC0 /* DetailMenuBar.swift in Sources */,
 				2D52AEA920E46E1A00018FC0 /* HistoryPoint.swift in Sources */,
 				57355C1220F7189D002E70E4 /* APIServices.swift in Sources */,
-				57BBAB4E2107085F00984AA4 /* ElasticRefreshHeader.swift in Sources */,
 				2D52AEA420E46E1A00018FC0 /* alertTableViewCell.swift in Sources */,
 				2D52AEAA20E46E1A00018FC0 /* MainView.swift in Sources */,
 				57355C1320F7189D002E70E4 /* URLServices.swift in Sources */,
@@ -1316,8 +1302,6 @@
 				57355C4E20F718CC002E70E4 /* APIErrors.swift in Sources */,
 				57BBAB66210962C300984AA4 /* MarketsController.swift in Sources */,
 				2D52AF2220E46E1A00018FC0 /* XAxisLabelView.swift in Sources */,
-				57BBAB4F2107085F00984AA4 /* ElasticRefreshControl.swift in Sources */,
-				57BBAB502107085F00984AA4 /* Left.swift in Sources */,
 				57BAD9D1210503A100973B45 /* ShareNewsFlashControllerV2.swift in Sources */,
 				2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */,
 				57355C6220F718CC002E70E4 /* SaveStructToRealmObjects.swift in Sources */,

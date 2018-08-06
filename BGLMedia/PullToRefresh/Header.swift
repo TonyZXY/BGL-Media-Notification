@@ -399,7 +399,7 @@ open class RefreshHeaderContainer:UIView{
 //            if state != .refreshing{
 //                self.state = .willRefresh
 //            }
-//        }
+//    }
         self.state = .refreshing
     }
     @objc func updateStateToIdea(){
