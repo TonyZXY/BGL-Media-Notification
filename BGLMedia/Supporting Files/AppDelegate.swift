@@ -14,7 +14,7 @@ import Alamofire
 import RealmSwift
 
 @UIApplicationMain
-class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {
+class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {  
     
     var window: UIWindow?
     
@@ -102,7 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             
 //            if UserDefaults.standard.bool(forKey: "isLoggedIn"){
                 window = UIWindow(frame:UIScreen.main.bounds)
-                let mainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
+//                let mainViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
                 window?.rootViewController = LaunchScreenViewController()
                 window?.makeKeyAndVisible()
 //            }else{

@@ -21,6 +21,7 @@ class TimelineTableViewController: UITableViewController {
     var displayNumber:Int = 0
     var loadMoreData:Bool = false
     var resultNumber: Int = 0
+    var deleteCacheStatus:Bool = false
     
     //    var results:Results<NewsFlash>{
     //        get{
@@ -41,6 +42,7 @@ class TimelineTableViewController: UITableViewController {
         setUpView()
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteCache), name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
         
         //Prevent empty rows
         self.tableView.tableFooterView = UIView()
@@ -76,12 +78,17 @@ class TimelineTableViewController: UITableViewController {
         
     }
     
+    @objc func deleteCache(){
+        deleteCacheStatus = true
+    }
+    
     @objc func changeLanguage(){
         changeLaugageStatus = true
     }
     
     deinit {
         NotificationCenter.default.removeObserver("changeLanguage")
+        NotificationCenter.default.removeObserver("deleteCache")
     }
     
     
@@ -95,12 +102,13 @@ class TimelineTableViewController: UITableViewController {
     //    }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLaugageStatus{
+        if changeLaugageStatus || deleteCacheStatus{
             tableView.switchRefreshHeader(to: .removed)
             tableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
                 self.handleRefresh(self.tableView)
-                self.changeLaugageStatus = false
             })
+            self.changeLaugageStatus = false
+            self.deleteCacheStatus = false
             tableView.switchRefreshHeader(to: .refreshing)
         }
     }
@@ -211,12 +219,10 @@ class TimelineTableViewController: UITableViewController {
                     timeCN = timeEN.replacingOccurrences(of: "pm", with: "下午")
                 }
                 return  monthCN + "月" + dateToString + ", " + year + ", " + timeCN
-
             } else{
                 return date
             }
         }
-        return date
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -235,7 +241,6 @@ class TimelineTableViewController: UITableViewController {
         cell.timelinePointInside = TimelinePoint(diameter: CGFloat(4.0), color: bglGreen, filled: true, insidePoint: true)
         cell.timeline.backColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         cell.titleLabel.text = convertTimetoLocalization(convert: dateFormatter.string(from: object.dateTime) )
-        print(cell.titleLabel.text)
         cell.descriptionLabel.text = object.contents
         
         cell.object = object
