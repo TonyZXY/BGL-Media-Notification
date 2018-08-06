@@ -125,57 +125,6 @@ public extension UIScrollView{
     }
 }
 
-//Left
-extension UIScrollView{
-    @discardableResult
-    @available(*, deprecated, message: "Use new API at PullToRefresh.Swift")
-    public func setUpLeftRefresh(_ action: @escaping ()->())->DefaultRefreshLeft{
-        let left = DefaultRefreshLeft(frame: CGRect(x: 0,y: 0,width: PullToRefreshKitConst.defaultLeftWidth, height: self.frame.height))
-        return setUpLeftRefresh(left, action: action)
-    }
-    @discardableResult
-    @available(*, deprecated, message: "Use new API at PullToRefresh.Swift")
-    public func setUpLeftRefresh<T:UIView>(_ left:T,action:@escaping ()->())->T where T:RefreshableLeftRight{
-        let oldContain = self.viewWithTag(PullToRefreshKitConst.leftTag)
-        oldContain?.removeFromSuperview()
-        let frame = CGRect(x: -1.0 * PullToRefreshKitConst.defaultLeftWidth,y: 0,width: PullToRefreshKitConst.defaultLeftWidth, height: self.frame.height)
-        let containComponent = RefreshLeftContainer(frame: frame)
-        containComponent.tag = PullToRefreshKitConst.leftTag
-        containComponent.refreshAction = action
-        self.insertSubview(containComponent, at: 0)
-        
-        containComponent.delegate = left
-        left.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        left.frame = containComponent.bounds
-        containComponent.addSubview(left)
-        return left
-    }
-}
 
-//Right
-extension UIScrollView{
-    @discardableResult
-    @available(*, deprecated, message: "Use new API at PullToRefresh.Swift")
-    public  func setUpRightRefresh(_ action:@escaping ()->())->DefaultRefreshRight{
-        let right = DefaultRefreshRight(frame: CGRect(x: 0 ,y: 0 ,width: PullToRefreshKitConst.defaultLeftWidth ,height: self.frame.height ))
-        return setUpRightRefresh(right, action: action)
-    }
-    @discardableResult
-    @available(*, deprecated, message: "Use new API at PullToRefresh.Swift")
-    public func setUpRightRefresh<T:UIView>(_ right:T,action:@escaping ()->())->T where T:RefreshableLeftRight{
-        let oldContain = self.viewWithTag(PullToRefreshKitConst.rightTag)
-        oldContain?.removeFromSuperview()
-        let frame = CGRect(x: 0 ,y: 0 ,width: PullToRefreshKitConst.defaultLeftWidth ,height: self.frame.height )
-        let containComponent = RefreshRightContainer(frame: frame)
-        containComponent.tag = PullToRefreshKitConst.rightTag
-        containComponent.refreshAction = action
-        self.insertSubview(containComponent, at: 0)
-        
-        containComponent.delegate = right
-        right.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        right.frame = containComponent.bounds
-        containComponent.addSubview(right)
-        return right
-    }
-}
+
 
