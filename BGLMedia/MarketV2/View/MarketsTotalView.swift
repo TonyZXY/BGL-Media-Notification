@@ -27,6 +27,7 @@ class MarketsTotalView:UICollectionViewCell{
     let number:UILabel={
         var number = UILabel()
         number.textColor = UIColor.white
+        number.text = "--"
         return number
     }()
     

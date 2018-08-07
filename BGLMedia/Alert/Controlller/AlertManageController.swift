@@ -32,6 +32,9 @@ struct ExpandableNames{
 }
 
 class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDataSource,TransactionFrom,UITextFieldDelegate{
+    func setLoadPrice() {
+    }
+    
     var newTransaction = Transactions()
     let cryptoCompareClient = CryptoCompareClient()
     let realm = try! Realm()
@@ -98,9 +101,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        
-        //        let res = realm.objects(alertObject.self)
-        //        print(res)
     }
     
     
@@ -400,11 +400,9 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             if intersetObject.exchangName == "Global Average"{
                 intersetObject.exchangName = "GLOBAL"
             }
-            print(Inputprice)
             if status == "Update"{
                 let interest:[String:Any] = ["_id":intersetObject.id,"from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":intersetObject.compare,"isGreater":intersetObject.compareStatus]
                 let body:[String:Any] = ["email":email,"token":token,"interest":interest]
-                print(body)
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterest"], httpMethod: "POST", parameters: body) { (response, success) in
                     print(response)
                     if success{
@@ -480,7 +478,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             if intersetObject.exchangName == "Global Average"{
                 URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + intersetObject.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
                     if success{
-                        print(response)
                         if let result = response["quotes"].array{
                             for results in result{
                                 if results["currency"].string ?? "" == priceType{
@@ -492,7 +489,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                             }
                         }
                     } else{
-                        print("jjjjjjj")
+
                     }
                 }
             } else{

@@ -103,6 +103,9 @@ class TimelineTableViewController: UITableViewController {
     
     override func viewWillAppear(_ animated: Bool) {
         if changeLaugageStatus || deleteCacheStatus{
+            if deleteCacheStatus{
+                self.tableView.reloadData()
+            }
             tableView.switchRefreshHeader(to: .removed)
             tableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
                 self.handleRefresh(self.tableView)

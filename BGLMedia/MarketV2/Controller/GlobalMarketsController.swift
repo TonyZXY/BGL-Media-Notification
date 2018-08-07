@@ -106,15 +106,11 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 
     
     override func viewDidLoad() {
-        super.viewDidLoad()
-        
-        
+        super.viewDidLoad()     
         setUpView()
         setSortbutton()
         sortdoneclick()
-
         filterDate.selectItem(at: GlobalMarketsController.selectedIntervalIndexPath, animated: true, scrollPosition: [])
-        
         DispatchQueue.main.async(execute: {
             self.coinList.beginHeaderRefreshing()
         })
@@ -123,20 +119,6 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         NotificationCenter.default.addObserver(self, selector: #selector(updateGlobalMarket), name: NSNotification.Name(rawValue: "updateGlobalMarket"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeMarketData), name: NSNotification.Name(rawValue: "reloadGlobalNewMarketData"), object: nil)
-        
-        
-        
-//        let selectindexpath = NSIndexPath(item: 0, section: 0)
-//        coinList.selectItem(at: selectindexpath as IndexPath, animated: true, scrollPosition:.left)
-        
-        APIServices.fetchInstance.getGlobalMarketData(){ ss in
-            if ss{
-                DispatchQueue.main.async {
-                    self.mainTotalCollectionView.reloadData()
-                }
-            }
-        }
-//        print(realm.objects(GlobalAverageObject.self))
     }
     
     @objc func changeMarketData(){
@@ -182,14 +164,28 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         coinList.reloadData()
     }
     
-    func getCoinData(compeletion:@escaping (Bool)->Void){
+    func getCoinData(completion:@escaping (Bool)->Void){
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
+        APIServices.fetchInstance.getGlobalMarketData(){ success in
+            if success{
+                dispatchGroup.leave()
+            } else{
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.enter()
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
             if success{
-                compeletion(true)
+                dispatchGroup.leave()
             } else{
-                print("Fail to get Global Average CoinList")
-                compeletion(false)
+                dispatchGroup.leave()
             }
+        }
+        
+        dispatchGroup.notify(queue:.main){
+            completion(true)
         }
     }
     
@@ -345,6 +341,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         getCoinData(){success in
             if success{
                 DispatchQueue.main.async {
+                    self.mainTotalCollectionView.reloadData()
                     self.coinList.reloadData()
                     self.coinList.switchRefreshHeader(to: .normal(.success, 0.5))
                 }
@@ -384,11 +381,11 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         if collectionView == mainTotalCollectionView{
-            if globalMarket.count == 0{
-                return 0
-            } else{
+//            if globalMarket.count == 0{
+//                return 0
+//            } else{
                 return 3
-            }
+//            }
         }else if collectionView == filterDate{
             return 3
         }else if collectionView == coinList{
@@ -407,13 +404,15 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "MainTotalCell", for: indexPath) as! TotalMarketCell
                 cell.factor = factor
                 cell.totalFunds.text = mainItems[indexPath.row]
-            let object = globalMarket[0]
-            if indexPath.row == 0{
-                cell.number.text = object.total_market_cap + "B"
-            } else if indexPath.row == 1{
-                cell.number.text = object.total_volume_24h + "B"
-            } else if indexPath.row == 2{
-                cell.number.text = object.bitcoin_percentage_of_market_cap + "%"
+            if globalMarket.count != 0{
+                let object = globalMarket[0]
+                if indexPath.row == 0{
+                    cell.number.text = object.total_market_cap + "B"
+                } else if indexPath.row == 1{
+                    cell.number.text = object.total_volume_24h + "B"
+                } else if indexPath.row == 2{
+                    cell.number.text = object.bitcoin_percentage_of_market_cap + "%"
+                }
             }
             return cell
         } else if collectionView == filterDate{

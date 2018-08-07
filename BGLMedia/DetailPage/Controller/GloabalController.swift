@@ -346,6 +346,7 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     func getExchangeList()->[String]{
         var allExchanges = [String]()
+        allExchanges.append("Global Average")
         let data = APIServices.fetchInstance.getExchangeList()
         for (key,value) in data{
             let exactMarket = value.filter{name in return name.key == coinDetail.coinName}
@@ -358,10 +359,14 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     func getTradingPairsList(market:String)->[String]{
         var allTradingPairs = [String]()
-        let data = APIServices.fetchInstance.getTradingCoinList(market: market,coin:coinDetail.coinName)
-        if data != []{
-            for pairs in data{
-                allTradingPairs.append(pairs)
+        if market == "Global Average"{
+            allTradingPairs.append(priceType)
+        } else{
+            let data = APIServices.fetchInstance.getTradingCoinList(market: market,coin:coinDetail.coinName)
+            if data != []{
+                for pairs in data{
+                    allTradingPairs.append(pairs)
+                }
             }
         }
         return allTradingPairs

@@ -69,6 +69,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         let table:UITableViewCell = searchResult.cellForRow(at: indexPath)!
         delegate?.setExchangesName(exchangeName: (table.textLabel?.text)!)
         delegate?.setTradingPairsName(tradingPairsName: "")
+        delegate?.setLoadPrice()
         tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.popViewController(animated: true)
     }

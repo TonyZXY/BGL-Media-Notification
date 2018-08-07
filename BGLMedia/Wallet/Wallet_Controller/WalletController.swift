@@ -14,9 +14,9 @@ import RealmSwift
 class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate{
     var image = AppImage()
     let realm = try! Realm()
-//    var all = try! Realm().objects(MarketTradingPairs.self)
+    //    var all = try! Realm().objects(MarketTradingPairs.self)
     let cryptoCompareClient = CryptoCompareClient()
-//    var walletResults = [MarketTradingPairs]()
+    //    var walletResults = [MarketTradingPairs]()
     var coinDetail = SelectCoin()
     var totalProfit:Double = 0
     var totalAssets:Double = 0
@@ -25,57 +25,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     var countField:String = ""
     //    var walletResults = [MarketTradingPairs]()
     
-    var countdownTimer: Timer?
-
-    var remainingSeconds: Int = 0 {
-        willSet {
-//            sendButton.setTitle("验证码已发送(\(newValue)秒后重新获取)", for: .normal)
-            countField = "验证码已发送(\(newValue)秒后重新获取)"
-            if newValue <= 0 {
-//                sendButton.setTitle("重新获取验证码", for: .normal)
-                isCounting = false
-            }
-        }
-    }
-    
-    
-    
-    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        textField.text = countField
-        return true
-    }
-
-    var isCounting = false {
-        willSet {
-            if newValue {
-                countdownTimer = Timer.scheduledTimer(timeInterval: 1, target: self, selector: #selector(self.updateTime(_:)), userInfo: nil, repeats: true)
-                remainingSeconds = 5
-//                sendButton.backgroundColor = UIColor.gray
-            } else {
-                countdownTimer?.invalidate()
-                countdownTimer = nil
-
-//                sendButton.backgroundColor = UIColor.red
-            }
-
-//            sendButton.isEnabled = !newValue
-        }
-    }
-    
-    
-//    var allResult:Results<AllTransactions> {
-//        return try! Realm().objects(AllTransactions.self)
-//    }
-    
-//    var allTransactions: Results<MarketTradingPairs> {
-//        get {
-//            return try! Realm().objects(MarketTradingPairs.self)
-//        }
-//    }
-    
     var assetss: Results<Transactions>{
         get{
-            return realm.objects(Transactions.self)
+            return realm.objects(Transactions.self).sorted(byKeyPath: "publishDate")
         }
     }
     
@@ -88,17 +40,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         print(realm.objects(EachTransactions.self))
         print(realm.objects(Transactions.self))
         print(realm.objects(EachCurrency.self))
-//       let ss = realm.objects(AllTransactions.self).filter("coinAbbName == %@", "BET")[0].currency.filter("name == %@", "USD")
-//
-//         print(realm.objects(AllTransactions.self).filter("coinAbbName == %@", "BET")[0].currency.filter("name == %@", "USD"))
-//        print(realm.objects(Currencys.self).filter("name == %@", "USD"))
-//        try! realm.write {
-//            realm.delete(ss)
-////            realm.delete(marketResult)
-//        }
-//        DispatchQueue.main.async(execute: {
-//            self.walletList.beginHeaderRefreshing()
-//        })
+        
         walletList.switchRefreshHeader(to: .refreshing)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
@@ -136,7 +78,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func checkTransaction(){
         if assetss.count == 0{
-            
             setUpInitialView()
         } else {
             setupView()
@@ -200,54 +141,107 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             }
             
             dispatchGroup.enter()
-            APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.exchangeName) { (success, response) in
-                if success{
-                    singlePrice = response["RAW"]["PRICE"].double ?? 0
-                    APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
-                        if success{
-                            for result in response{
-                                currency = (result.1.double) ?? 0
-                            }
-                            let tran = Transactions()
-                            tran.coinAbbName = result.coinAbbName
-                            tran.transactionPrice = transactionPrice
-                            tran.currentSinglePrice = singlePrice * currency
-                            tran.currentTotalPrice = tran.currentSinglePrice * amount
-                            tran.totalAmount = amount
-                            tran.totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
-                            tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
-                            
-                            self.totalAssets += tran.currentTotalPrice
-                            self.totalProfit += tran.totalRiseFallNumber
-                            
-                            let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
-                            try! self.realm.write {
-                                if object.count != 0{
-                                    object[0].transactionPrice = transactionPrice
-                                    object[0].currentSinglePrice = singlePrice * currency
-                                    object[0].currentTotalPrice = (singlePrice * currency) * amount
-                                    object[0].totalAmount = amount
-                                    object[0].totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
-                                    object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
+            if result.exchangeName == "Global Average"{
+                URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + result.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
+                    if success{
+                        if let responseResult = response["quotes"].array{
+                            for results in responseResult{
+                                if results["currency"].string ?? "" == priceType{
+                                    singlePrice = results["data"]["price"].double ?? 0
+                                    APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
+                                        if success{
+                                            for result in response{
+                                                currency = (result.1.double) ?? 0
+                                            }
+                                            let tran = Transactions()
+                                            tran.coinAbbName = result.coinAbbName
+                                            tran.transactionPrice = transactionPrice
+                                            tran.currentSinglePrice = singlePrice * currency
+                                            tran.currentTotalPrice = tran.currentSinglePrice * amount
+                                            tran.totalAmount = amount
+                                            tran.totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                            tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
+                                            
+                                            self.totalAssets += tran.currentTotalPrice
+                                            self.totalProfit += tran.totalRiseFallNumber
+                                            
+                                            let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
+                                            try! self.realm.write {
+                                                if object.count != 0{
+                                                    object[0].transactionPrice = transactionPrice
+                                                    object[0].currentSinglePrice = singlePrice * currency
+                                                    object[0].currentTotalPrice = (singlePrice * currency) * amount
+                                                    object[0].totalAmount = amount
+                                                    object[0].totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                                    object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
+                                                }
+                                            }
+                                            dispatchGroup.leave()
+                                        } else{
+                                            dispatchGroup.leave()
+                                        }
+                                    }
                                 }
                             }
-                            dispatchGroup.leave()
                         } else{
-                            completion(false)
                             dispatchGroup.leave()
                         }
+                    } else{
+                        completion(false)
+                        dispatchGroup.leave()
                     }
-                } else{
-                    completion(false)
-                    dispatchGroup.leave()
+                }
+            } else{
+                APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.exchangeName) { (success, response) in
+                    if success{
+                        singlePrice = response["RAW"]["PRICE"].double ?? 0
+                        APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
+                            if success{
+                                for result in response{
+                                    currency = (result.1.double) ?? 0
+                                }
+                                let tran = Transactions()
+                                tran.coinAbbName = result.coinAbbName
+                                tran.transactionPrice = transactionPrice
+                                tran.currentSinglePrice = singlePrice * currency
+                                tran.currentTotalPrice = tran.currentSinglePrice * amount
+                                tran.totalAmount = amount
+                                tran.totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
+                                
+                                self.totalAssets += tran.currentTotalPrice
+                                self.totalProfit += tran.totalRiseFallNumber
+                                
+                                let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
+                                try! self.realm.write {
+                                    if object.count != 0{
+                                        object[0].transactionPrice = transactionPrice
+                                        object[0].currentSinglePrice = singlePrice * currency
+                                        object[0].currentTotalPrice = (singlePrice * currency) * amount
+                                        object[0].totalAmount = amount
+                                        object[0].totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                        object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
+                                    }
+                                }
+                                dispatchGroup.leave()
+                            } else{
+                                completion(false)
+                                dispatchGroup.leave()
+                            }
+                        }
+                    } else{
+                        completion(false)
+                        dispatchGroup.leave()
+                    }
                 }
             }
         }
         dispatchGroup.notify(queue:.main){
             completion(true)
         }
-        
     }
+    
+    
     
     
     @objc func refreshData(){
@@ -266,21 +260,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
         
-//        let vc = CustomAlertController()
-//        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-//        self.addChildViewController(vc)
-//        view.addSubview(vc.view)
+        //        let vc = CustomAlertController()
+        //        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        //        self.addChildViewController(vc)
+        //        view.addSubview(vc.view)
     }
     
-    
-    
-    @objc func firstButton(){
-        isCounting = true
-    }
-    
-    @objc func updateTime(_ timer: Timer) {
-        remainingSeconds -= 1
-    }
     
     //Refresh Method
     @objc func handleRefresh(_ tableView:UITableView) {
@@ -517,7 +502,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     var totalChange:UILabel = {
         var label = UILabel()
-        label.text = "--"
+//        label.text = "--"
         label.font = label.font.withSize(20)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -571,7 +556,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
 
 
 class newAlert:SCLAlertView{
-
+    
 }
 
 

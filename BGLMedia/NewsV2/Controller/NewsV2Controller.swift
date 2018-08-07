@@ -128,6 +128,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     override func viewWillAppear(_ animated: Bool) {
         if changeLanguageStatus || deleteCacheStatus{
+            if deleteCacheStatus{
+                self.newsTableView.reloadData()
+            }
             self.newsTableView.switchRefreshHeader(to: .removed)
             newsTableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
                 self.handleRefresh(self.newsTableView)

@@ -155,6 +155,7 @@ class APIServices:NSObject{
         let tsym = to
         let e = market
         let converUrl = baseUrl + "fsym=" + fsym + "&tsym=" + tsym + "&e=" + e
+        print(converUrl)
         let url = URL(string: converUrl)
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "GET"

@@ -9,7 +9,8 @@
 import UIKit
 
 class MarketsController: UIViewController, UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
-    
+    var alertGetStatus:Bool = false
+    var alertSendStatus:Bool = false
     var navigationBarItem:String{
         get{
             return textValue(name: "globalMarket")
@@ -61,14 +62,16 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
 //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
+    override func viewWillAppear(_ animated: Bool) {
+        if alertGetStatus{
+            self.alert.getNotification()
+        }
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateWatchInWatchList"), object: nil)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "removeWatchInMarketsCell"), object: nil)
+    override func viewDidDisappear(_ animated: Bool) {
+        if alertSendStatus{
+            self.alert.sendNotification()
+        }
     }
     
     func scrollToMenuIndex(menuIndex: Int){
@@ -97,6 +100,25 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
             return cell
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == 2{
+            self.alert.getNotification()
+            alertGetStatus = true
+            alertSendStatus = true
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == 2{
+            alertGetStatus = false
+            alertSendStatus = false
+            self.alert.sendNotification()
+            
+        }
+    }
+    
+
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)

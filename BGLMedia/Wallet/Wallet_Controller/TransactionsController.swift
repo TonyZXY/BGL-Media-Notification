@@ -11,6 +11,12 @@ import RealmSwift
 import JGProgressHUD
 
 class TransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout,TransactionFrom,UITextFieldDelegate{
+    func setLoadPrice() {
+        let index = IndexPath(row: 3, section: 0)
+        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+        cell.priceType.text = nil
+    }
+    
     
     var newTransaction = EachTransactions()
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
@@ -73,6 +79,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             cell.factor = factor
             cell.coinLabel.text = textValue(name: "coinForm")
             cell.coin.text = newTransaction.coinName
+            if transactionStatus == "Update"{
+                cell.isUserInteractionEnabled = false
+            }
             return cell
         }else if indexPath.row == 1{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[1], for: indexPath) as! TransCoinMarketCell
@@ -256,7 +265,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func AddTransactionToRealm(completion:@escaping (Bool)->Void){
-        let lastId = (self.realm.objects(EachTransactions.self).last?.id) ?? 0
+        let lastId = (self.realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
         self.newTransaction.id = lastId + 1
         let tran = Transactions()
         tran.coinAbbName = self.newTransaction.coinAbbName
@@ -266,10 +275,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
         try! self.realm.write {
             if object.count != 0{
-                if self.newTransaction.exchangeName != "Global Average"{
+//                if self.newTransaction.exchangeName != "Global Average"{
                     object[0].exchangeName = self.newTransaction.exchangeName
                     object[0].tradingPairsName = self.newTransaction.tradingPairsName
-                }
+//                }
                 object[0].everyTransactions.append(self.newTransaction)
             } else{
                 tran.everyTransactions.append(self.newTransaction)
@@ -350,14 +359,20 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             var readData:Double = 0
             if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
                 if newTransaction.exchangeName == "Global Average"{
+                    let index = IndexPath(row: 3, section: 0)
+                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+//                    cell.priceType.text = " "
+//                    cell.addSubview(spinner)
+                    cell.spinner.startAnimating()
                     URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + newTransaction.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
                         if success{
                             if let result = response["quotes"].array{
                                 for results in result{
                                     if results["currency"].string ?? "" == priceType{
                                         let price = results["data"]["price"].double ?? 0
-                                        let index = IndexPath(row: 3, section: 0)
-                                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+//                                        let index = IndexPath(row: 3, section: 0)
+//                                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+//                                        cell.spinner.stopAnimating()
                                         cell.priceType.text = Extension.method.scientificMethod(number: price)
                                     }
                                 }
@@ -396,6 +411,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                             }
                             let index = IndexPath(row: 3, section: 0)
                             let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+//                            cell.spinner.stopAnimating()
                             cell.priceType.text = Extension.method.scientificMethod(number: readData)
                         case .failure(let error):
                             print("the error \(error.localizedDescription)")

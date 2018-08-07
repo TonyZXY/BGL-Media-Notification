@@ -13,6 +13,7 @@ import Realm
 import SwiftyJSON
 import Alamofire
 import RealmSwift
+import JGProgressHUD
 
 class URLServices:NSObject{
     static let fetchInstance = URLServices()
@@ -141,6 +142,57 @@ class URLServices:NSObject{
     }
     
     
+    func storeNotificationDataToRealm(completion:@escaping (Bool)->Void){
+        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
+        let body:[String:Any] = ["email":email,"token":certificateToken]
+        
+        
+        URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
+            if pass{
+                if response["success"].bool!{
+                    for result in response["data"].array!{
+                        self.realm.beginWrite()
+                        let id = result["_id"].int ?? 0
+                        let coinName = result["from"].string ?? "null"
+                        let coinAbbName = result["from"].string ?? "null"
+                        let tradingPairs = result["to"].string ?? "null"
+                        let exchangName = result["market"].string ?? "null"
+                        let comparePice = result["price"].double ?? 0
+                        let compareStatus = result["isgreater"].int ?? 0
+                        let switchStatus = result["status"].bool ?? true
+                        
+                        
+                        let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date()]
+                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: id) == nil {
+                            self.realm.create(alertObject.self, value: realmData)
+                        } else {
+                            self.realm.create(alertObject.self, value: realmData, update: true)
+                        }
+                        
+                        if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: coinAbbName) == nil {
+                            self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!])
+                        } else {
+                            self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
+                        }
+                        try! self.realm.commitWrite()
+                    }
+                    completion(true)
+                } else{
+                    try! self.realm.write {
+                        self.realm.delete(self.realm.objects(alertObject.self))
+                    }
+                    completion(false)
+                }
+            } else{
+                try! self.realm.write {
+                    self.realm.delete(self.realm.objects(alertObject.self))
+                }
+                completion(false)
+            }
+        }
+    }
+
     
     
 }
