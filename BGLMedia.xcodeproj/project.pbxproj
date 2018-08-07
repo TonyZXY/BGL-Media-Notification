@@ -655,6 +655,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				5772046821186B420049BBE8 /* MPAchart */,
 				57AEA179211276ED00042CF6 /* SCLAlertView */,
 				57BBAB3E2107085F00984AA4 /* PullToRefresh */,
 				57BAD94B2104CAD500973B45 /* Classes */,
@@ -871,6 +872,13 @@
 				57355C0A20F7188B002E70E4 /* View */,
 			);
 			path = NewsV2;
+			sourceTree = "<group>";
+		};
+		5772046821186B420049BBE8 /* MPAchart */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MPAchart;
 			sourceTree = "<group>";
 		};
 		578FE8C620FEEE220027F17E /* Font */ = {

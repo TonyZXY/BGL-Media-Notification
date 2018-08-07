@@ -11,10 +11,11 @@ import RevealingSplashView
 
 class LaunchScreenViewController: UIViewController {
 
-    let revealingSplashView = RevealingSplashView(iconImage:UIImage(named: "CryptoGeekLogo1")!, iconInitialSize: CGSize(width: 200, height: 200), backgroundColor:UIColor.white)
+    let revealingSplashView = RevealingSplashView(iconImage:UIImage(named: "CryptoGeekLogo2")!, iconInitialSize: CGSize(width: 200, height: 200), backgroundColor:ThemeColor().logoBackgroundColor())
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.backgroundColor = ThemeColor().logoBackgroundColor()
         view.addSubview(revealingSplashView)
         revealingSplashView.animationType = .heartBeat
         getData()

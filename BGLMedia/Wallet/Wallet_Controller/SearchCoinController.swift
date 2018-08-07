@@ -96,10 +96,11 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         let table:CoinTypeTableViewCell = searchResult.cellForRow(at: indexPath) as! CoinTypeTableViewCell
         delegate?.setCoinName(name: table.coinName.text!)
         delegate?.setCoinAbbName(abbName: table.coinNameAbb.text!)
-        delegate?.setExchangesName(exchangeName: "")
-        delegate?.setTradingPairsName(tradingPairsName: "")
+        delegate?.setExchangesName(exchangeName: "Global Average")
+        delegate?.setTradingPairsName(tradingPairsName: priceType)
         delegate?.setTradingPairsFirstType(firstCoinType: [])
         delegate?.setTradingPairsSecondType(secondCoinType: [])
+        delegate?.setLoadPrice()
         var allPairs = [String]()
         allPairs.append(table.coinNameAbb.text!)
         allPairs.append("%"+table.coinNameAbb.text!)

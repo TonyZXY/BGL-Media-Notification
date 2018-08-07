@@ -167,7 +167,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     try! self.realm.write {
                         self.realm.delete(self.realm.objects(NewsFlash.self))
                         self.realm.delete(self.realm.objects(NewsObject.self))
-//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
                     }
                 }
                 confirmAlertCtrl.addAction(confirmAction)
@@ -179,36 +179,6 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 changePage.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(changePage, animated: true)
             }
-            //                } else{
-            //                    let alertController = UIAlertController(title: "You need to allow Notification", message: "Go to setting to set up the Notificaiton", preferredStyle: .alert)
-            //                    // Setting button action
-            //                    let settingsAction = UIAlertAction(title: "Go to Setting", style: .default) { (_) -> Void in
-            //                        guard let settingsUrl = URL(string: UIApplicationOpenSettingsURLString) else {
-            //                            return
-            //                        }
-            //
-            //                        if UIApplication.shared.canOpenURL(settingsUrl) {
-            //                            UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-            //                                // Checking for setting is opened or not
-            //                                print("Setting is opened: \(success)")
-            //                            })
-            //                        }
-            //                    }
-            //                    alertController.addAction(settingsAction)
-            //                    // Cancel button action
-            //                    let cancelAction = UIAlertAction(title: "Cancel", style: .default){ (_) -> Void in
-            //                        // Magic is here for cancel button
-            //                    }
-            //                    alertController.addAction(cancelAction)
-            //                    // This part is important to show the alert controller ( You may delete "self." from present )
-            //                    self.present(alertController, animated: true, completion: nil)
-            //                }
-            //            } else{
-            //                let changePage = pushItems[indexPath.section][indexPath.row]
-            //                changePage.hidesBottomBarWhenPushed = true
-            //                navigationController?.pushViewController(changePage, animated: true)
-            //            }
-            
         } else{
             if loginStatus{
                 let hud = JGProgressHUD(style: .light)
@@ -302,7 +272,6 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.dataSource = self
         tableView.rowHeight = 50
         tableView.bounces = false
-        
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
