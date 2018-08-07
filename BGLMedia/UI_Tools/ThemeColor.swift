@@ -9,6 +9,13 @@
 import UIKit
 
 class ThemeColor:UIColor{
+    
+    func logoBackgroundColor() -> UIColor {
+        _ = #colorLiteral(red: 0.1882352941, green: 0.3803921569, blue: 0.5764705882, alpha: 1)
+        let color = UIColor.init(red:48/255.0, green:97/255.0, blue:147/255.0, alpha:1)
+        return color
+    }
+    
     func whiteColor() -> UIColor {
         _ = #colorLiteral(red: 1, green: 1, blue: 1, alpha: 1)
         let color = UIColor.white

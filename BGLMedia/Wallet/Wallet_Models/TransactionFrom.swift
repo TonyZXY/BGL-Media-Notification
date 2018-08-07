@@ -17,4 +17,5 @@ protocol TransactionFrom:class{
     func setTradingPairsSecondType(secondCoinType:[String])
     func getExchangeName()->String
     func getCoinName()->String
+    func setLoadPrice()
 }

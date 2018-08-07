@@ -166,7 +166,11 @@ display_cell = "Display Option";
 other_cell = "Other Option";
 language_cell = "Language";
 alert_cell = "Alert";
-
+alert_clearCache = "Clear Cache";
+title_clearCache = "Clear Cache";
+confirm_clearCache = "Do you confirm to delete all the news and newsflash cache?";
+delete_clearCache = "Delete";
+cancel_clearCache = "Cancel";
 
 
 

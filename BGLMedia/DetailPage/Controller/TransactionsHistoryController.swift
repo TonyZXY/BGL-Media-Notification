@@ -157,12 +157,12 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         
     }
     
-    lazy var refresher: UIRefreshControl = {
-        let refreshControl = UIRefreshControl()
-        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
-        refreshControl.tintColor = UIColor.white
-        return refreshControl
-    }()
+//    lazy var refresher: UIRefreshControl = {
+//        let refreshControl = UIRefreshControl()
+//        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
+//        refreshControl.tintColor = UIColor.white
+//        return refreshControl
+//    }()
     
     func setUpView(){
         view.backgroundColor = ThemeColor().themeColor()
@@ -170,7 +170,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         view.addSubview(averageView)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: averageView)
-        view.addConstraintsWithFormat(format: "V:|[v0(\(50*factor!))]", views: averageView)
+        view.addConstraintsWithFormat(format: "V:|[v0(\(10*factor!))]", views: averageView)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: historyTableView,averageView)
         view.addConstraintsWithFormat(format: "V:[v1]-0-[v0]|", views: historyTableView,averageView)
@@ -188,12 +188,9 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         tableView.rowHeight = 200
         tableView.delegate = self
         tableView.dataSource = self
-        
-        //Prevent empty rows
+        tableView.bounces = false
         tableView.tableFooterView = UIView()
-        //        tableView.backgroundColor = #colorLiteral(red: 0.2, green: 0.2039215686, blue: 0.2235294118, alpha: 1)
         tableView.separatorStyle = .none
-        tableView.addSubview(self.refresher)
         return tableView
     }()
     
@@ -206,7 +203,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
         historyTableView.reloadData()
-        self.refresher.endRefreshing()
+//        self.refresher.endRefreshing()
     }
     
 }

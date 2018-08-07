@@ -28,8 +28,9 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         return true
     }
     
-    let numberLabel:UILabel = {
+    lazy var numberLabel:UILabel = {
         let label = UILabel()
+        label.font = UIFont.semiBoldFont(18*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

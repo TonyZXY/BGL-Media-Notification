@@ -297,6 +297,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         let factor = view.frame.width/375
         if indexPath.section == 2 && indexPath.row == 0{
             let alert = AlertController()
+            alert.status = "setting"
             alert.factor = factor
             alert.hidesBottomBarWhenPushed = true
             navigationController?.pushViewController(alert, animated: true)
@@ -466,7 +467,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     //    }
     
     func getNotificationStatusData(){
-        print("sfsdfsds")
         if UserDefaults.standard.bool(forKey: "isLoggedIn"){
             let hud = JGProgressHUD(style: .light)
             hud.show(in: (self.parent?.view)!)

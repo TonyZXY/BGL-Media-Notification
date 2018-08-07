@@ -16,6 +16,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     var displayNumber:Int = 0
     var loadMoreData:Bool = false
     var changeLanguageStatus:Bool = false
+    var deleteCacheStatus:Bool = false
     var resultNumber: Int = 0
     
     var newsObject:Results<NewsObject>{
@@ -115,15 +116,27 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         }
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(deleteCache), name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
+        
+        
+    }
+    
+    
+    @objc func deleteCache(){
+        deleteCacheStatus = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLanguageStatus{
+        if changeLanguageStatus || deleteCacheStatus{
+            if deleteCacheStatus{
+                self.newsTableView.reloadData()
+            }
             self.newsTableView.switchRefreshHeader(to: .removed)
             newsTableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
                 self.handleRefresh(self.newsTableView)
-                self.changeLanguageStatus = false
             })
+            self.changeLanguageStatus = false
+            self.deleteCacheStatus = false
             newsTableView.switchRefreshHeader(to: .refreshing)
         }
     }
@@ -159,6 +172,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

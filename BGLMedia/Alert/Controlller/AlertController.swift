@@ -38,7 +38,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var alerts:[alertResult] = [alertResult]()
     var coinName = coinAlert()
     var coinAbbName = "null"
+    var status = ""
     var TransactionDelegate:TransactionFrom?
+    
     var allAlert:[alertResult]{
         get{
             var allResult = [alertResult]()
@@ -119,21 +121,34 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        //        super.viewWillAppear(true)
-        //        tabBarController?.tabBar.isHidden = true
-        getNotificationStatus()
-        if NotificationStatus{
-            if loginStatus{
-                writeAlertToRealm()
-            }
-        }
+//        getNotificationStatus()
+//        if NotificationStatus{
+//            if loginStatus{
+//                writeAlertToRealm()
+//            }
+//        }
         checkSetUpView()
+        if status == "setting"{
+            getNotification()
+        }
+        
+        
     }
     
-    
+    func getNotification(){
+        if loginStatus{
+            writeAlertToRealm()
+        }
+    }
+
     override func viewDidDisappear(_ animated: Bool){
+        if status == "setting"{
+            sendNotification()
+        }
+    }
+    
+    func sendNotification(){
         var alertStatus = [[String:Any]]()
-        print(realm.objects(alertObject.self))
         let alla = allAlerts
         for result in alla{
             let alert:[String:Any] = ["id":result.id,"status":result.switchStatus]
@@ -145,20 +160,19 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterestStatus"], httpMethod: "POST", parameters: body) { (response, success) in
                 if success{
-                    print(response)
+                    print("send success")
                 } else{
-                    print(response)
                 }
             }
         }
     }
+    
     
     @objc func refreshNotificationStatus(){
         getNotificationStatus()
     }
     
     func checkSetUpView(){
-        
         if loginStatus{
             setUpView()
             //                view.willRemoveSubview(setUpLoginView)
@@ -540,6 +554,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 50*factor!
+        tableView.bounces = false
         tableView.separatorStyle = .none
         return tableView
     }()
@@ -591,14 +606,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         let hud = JGProgressHUD(style: .light)
         hud.show(in: (self.parent?.view)!)
-        
         URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
             if pass{
-                print(response)
+//                print(response)
                 self.writeRealm(json:response){(pass) in
                     if pass{
                         DispatchQueue.main.async {
-                            print(self.realm.objects(alertObject.self))
                             self.alerts = self.allAlert
                             self.alertTableView.reloadData()
                             DispatchQueue.main.asyncAfter(deadline: .now()) {

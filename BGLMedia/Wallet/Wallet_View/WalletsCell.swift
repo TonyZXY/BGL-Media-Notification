@@ -18,7 +18,6 @@ class SelectCoin{
 class WalletsCell:UITableViewCell{
     var factor:CGFloat?{
         didSet{
-            print(factor!)
             setupView()
         }
     }

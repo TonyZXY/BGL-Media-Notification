@@ -56,8 +56,8 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         let indexPath = searchFlashNewsTableView.indexPathForRow(at: buttonPosition)
         let cell = searchFlashNewsTableView.cellForRow(at: indexPath!)! as! FlashNewsResultCell
         let shareView = ShareNewsFlashControllerV2()
-        shareView.dateLabel.text = cell.dateLabel.text
-        shareView.flashNewsDescription.text = cell.detailLabel.text
+        shareView.newsdate = cell.dateLabel.text!
+        shareView.newsdescriptions = cell.detailLabel.text!
         present(shareView, animated: true, completion: nil)
     }
     

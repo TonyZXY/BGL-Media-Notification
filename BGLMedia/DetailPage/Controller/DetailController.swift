@@ -125,35 +125,75 @@ class DetailController: UIViewController{
     
     func loadData(completion:@escaping (Bool)->Void){
         if let assets = assetsData.first {
-            APIServices.fetchInstance.getExchangePriceData(from: assets.coinAbbName, to: assets.tradingPairsName, market: assets.exchangeName) { (success, response) in
-                if success{
-                    let singlePrice = response["RAW"]["PRICE"].double ?? 0
-                    APIServices.fetchInstance.getCryptoCurrencyApis(from: assets.tradingPairsName, to: [priceType], completion: { (success, response) in
-                        if success{
-                            var currency:Double = 0
-                            for result in response{
-                                currency = (result.1.double) ?? 0
+            if assets.exchangeName == "Global Average"{
+                URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + assets.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
+                    if success{
+                        if let responseResult = response["quotes"].array{
+                            for results in responseResult{
+                                if results["currency"].string ?? "" == priceType{
+                                    let singlePrice = results["data"]["price"].double ?? 0
+                                    APIServices.fetchInstance.getCryptoCurrencyApis(from: assets.tradingPairsName, to: [priceType], completion: { (success, response) in
+                                        if success{
+                                            var currency:Double = 0
+                                            for result in response{
+                                                currency = (result.1.double) ?? 0
+                                            }
+                                            
+                                            let candleData = self.coinDetailController.gerneralController.vc
+                                            if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
+                                                self.checkDataRiseFallColor(risefallnumber: priceChange * currency, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
+                                                self.checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
+                                                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                                            }
+                                            
+                                            try! self.realm.write {
+                                                assets.currentSinglePrice = singlePrice * currency
+                                                assets.currentTotalPrice = assets.currentSinglePrice * assets.totalAmount
+                                                assets.totalRiseFallNumber = ((assets.currentTotalPrice - assets.transactionPrice) / assets.transactionPrice) * 100
+                                                assets.totalRiseFallPercent = assets.currentTotalPrice - assets.transactionPrice
+                                            }
+                                            completion(true)
+                                        }else{
+                                            completion(false)
+                                        }
+                                    })
+                                }
                             }
-                            
-                            let candleData = self.coinDetailController.gerneralController.vc
-                            if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
-                                self.checkDataRiseFallColor(risefallnumber: priceChange * currency, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
-                                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-                            }
-                            
-                            try! self.realm.write {
-                                assets.currentSinglePrice = singlePrice * currency
-                                assets.currentTotalPrice = assets.currentSinglePrice * assets.totalAmount
-                                assets.totalRiseFallNumber = ((assets.currentTotalPrice - assets.transactionPrice) / assets.transactionPrice) * 100
-                                assets.totalRiseFallPercent = assets.currentTotalPrice - assets.transactionPrice
-                            }
-                            completion(true)
-                        }else{
-                            completion(false)
                         }
-                    })
-                } else{
-                    completion(false)
+                    }
+                }
+            } else{
+                APIServices.fetchInstance.getExchangePriceData(from: assets.coinAbbName, to: assets.tradingPairsName, market: assets.exchangeName) { (success, response) in
+                    if success{
+                        let singlePrice = response["RAW"]["PRICE"].double ?? 0
+                        APIServices.fetchInstance.getCryptoCurrencyApis(from: assets.tradingPairsName, to: [priceType], completion: { (success, response) in
+                            if success{
+                                var currency:Double = 0
+                                for result in response{
+                                    currency = (result.1.double) ?? 0
+                                }
+                                
+                                let candleData = self.coinDetailController.gerneralController.vc
+                                if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
+                                    self.checkDataRiseFallColor(risefallnumber: priceChange * currency, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
+                                    self.checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: self.coinDetailController.gerneralController.totalRiseFall,type: "Number")
+                                    self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                                }
+                                
+                                try! self.realm.write {
+                                    assets.currentSinglePrice = singlePrice * currency
+                                    assets.currentTotalPrice = assets.currentSinglePrice * assets.totalAmount
+                                    assets.totalRiseFallNumber = ((assets.currentTotalPrice - assets.transactionPrice) / assets.transactionPrice) * 100
+                                    assets.totalRiseFallPercent = assets.currentTotalPrice - assets.transactionPrice
+                                }
+                                completion(true)
+                            }else{
+                                completion(false)
+                            }
+                        })
+                    } else{
+                        completion(false)
+                    }
                 }
             }
         }
@@ -168,16 +208,6 @@ class DetailController: UIViewController{
             coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
         }
     }
-    
-    //Click edit button and pass data to the market reselect page
-//    @objc func edit(){
-//        let market = MarketSelectController()
-//        market.newTransaction.coinAbbName = general.coinAbbName
-//        market.newTransaction.coinName = general.coinName
-//        market.newTransaction.exchangName = general.exchangeName
-//        market.newTransaction.tradingPairsName = general.tradingPairs
-//        navigationController?.pushViewController(market, animated: true)
-//    }
     
     //Add child controller (coin details)
     func addChildViewControllers(childViewControllers:UIViewController,views:UIView){
@@ -299,6 +329,7 @@ class DetailController: UIViewController{
     
     func getExchangeList()->[String]{
         var allExchanges = [String]()
+        allExchanges.append("Global Average")
         let data = APIServices.fetchInstance.getExchangeList()
         for (key,value) in data{
             let exactMarket = value.filter{name in return name.key == self.coinDetails.selectCoinAbbName}
@@ -311,10 +342,14 @@ class DetailController: UIViewController{
     
     func getTradingPairsList(market:String)->[String]{
         var allTradingPairs = [String]()
-        let data = APIServices.fetchInstance.getTradingCoinList(market: market,coin:self.coinDetails.selectCoinAbbName)
-        if data != []{
-            for pairs in data{
-                allTradingPairs.append(pairs)
+        if market == "Global Average"{
+            allTradingPairs.append(priceType)
+        } else{
+            let data = APIServices.fetchInstance.getTradingCoinList(market: market,coin:self.coinDetails.selectCoinAbbName)
+            if data != []{
+                for pairs in data{
+                    allTradingPairs.append(pairs)
+                }
             }
         }
         return allTradingPairs

@@ -505,10 +505,10 @@
 		2D52AE1F20E46E1800018FC0 /* LoginAndRegister */ = {
 			isa = PBXGroup;
 			children = (
-				57AEA1822112C0A200042CF6 /* CustomAlertController.swift */,
 				57650898210FE463007368CC /* RegisterCell.swift */,
 				576751FB2105556E006DB67C /* RegisterController.swift */,
 				576752002105597C006DB67C /* LoginController.swift */,
+				57AEA1822112C0A200042CF6 /* CustomAlertController.swift */,
 				57AEA1842112D11F00042CF6 /* CustomPasswordAlertController.swift */,
 			);
 			path = LoginAndRegister;
@@ -655,6 +655,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				5772046821186B420049BBE8 /* MPAchart */,
 				57AEA179211276ED00042CF6 /* SCLAlertView */,
 				57BBAB3E2107085F00984AA4 /* PullToRefresh */,
 				57BAD94B2104CAD500973B45 /* Classes */,
@@ -871,6 +872,13 @@
 				57355C0A20F7188B002E70E4 /* View */,
 			);
 			path = NewsV2;
+			sourceTree = "<group>";
+		};
+		5772046821186B420049BBE8 /* MPAchart */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = MPAchart;
 			sourceTree = "<group>";
 		};
 		578FE8C620FEEE220027F17E /* Font */ = {

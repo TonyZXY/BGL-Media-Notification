@@ -20,6 +20,7 @@ class Transactions:Object{
     @objc dynamic var totalRiseFallPercent:Double = 0
     @objc dynamic var totalRiseFallNumber:Double = 0
     @objc dynamic var totalAmount:Double = 0
+    @objc dynamic var publishDate = Date()
     var everyTransactions = List<EachTransactions>()
     
     override class func primaryKey() -> String {
