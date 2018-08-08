@@ -310,5 +310,13 @@ checkSend_resend = "发送剩余时间";
 second_resend = "秒";
 done_resend = "确定";
 
+//SearchBar
+searchBar_cancel = "取消";
+
+//reset Password from other device
+resetDevice_title = "登出";
+resetDevice_description = "您的密码已经被重置，需要重新登陆";
+resetDevice_confirm = "确认";
+
 
 

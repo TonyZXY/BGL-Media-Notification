@@ -633,32 +633,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()
                         }
-                        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString("sss", comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
-                        let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .destructive) { (_) in
+                        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "resetDevice_title"), comment: ""), message: NSLocalizedString(textValue(name: "resetDevice_description"), comment: ""), preferredStyle: .alert)
+                        let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "resetDevice_confirm"), comment: ""), style: .destructive) { (_) in
                             self.checkSetUpView()
                         }
                         confirmAlertCtrl.addAction(confirmAction)
-//                        let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertCancel_history"), comment: ""), style: .cancel, handler:nil)
-//                        confirmAlertCtrl.addAction(cancelAction)
                         self.present(confirmAlertCtrl, animated: true, completion: nil)
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-                        
-//                        if self.presentingViewController?.presentingViewController != nil{
-//                            self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
-//                            print("11111")
-//                        } else {
-//                            self.navigationController?.popViewController(animated: true)
-//                            print("22222")
-//                        }
                     } else{
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()

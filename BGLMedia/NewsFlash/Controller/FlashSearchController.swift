@@ -64,16 +64,29 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         present(shareView, animated: true, completion: nil)
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        view.endEditing(true)
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
         searchBar.resignFirstResponder()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
+            searchBar.setShowsCancelButton(false, animated: true)
             view.endEditing(true)
             newsFlashResult.removeAll()
             searchFlashNewsTableView.reloadData()
         } else{
+            searchBar.setShowsCancelButton(true, animated: true)
             storeData() { (response, success) in
                 if success{
                     self.newsFlashResult.removeAll()
@@ -184,7 +197,14 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         searchBar.tintColor = ThemeColor().darkBlackColor()
         searchBar.barTintColor = ThemeColor().darkBlackColor()
         searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
-        
+        searchBar.layer.borderWidth = 1
+//        searchBar.showsCancelButton = true
+        let attributes = [
+            NSAttributedStringKey.foregroundColor : ThemeColor().whiteColor(),
+            NSAttributedStringKey.font: UIFont.regularFont(13)
+        ]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = textValue(name: "searchBar_cancel")
         var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
         if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
             searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()])

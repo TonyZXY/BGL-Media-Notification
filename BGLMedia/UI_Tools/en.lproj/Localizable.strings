@@ -324,6 +324,13 @@ checkSend_resend = "Send Again After";
 second_resend = "s";
 done_resend = "Done";
 
+//SearchBar
+searchBar_cancel = "Cancel";
+
+//reset Password from other device
+resetDevice_title = "LogOut";
+resetDevice_description = "You have already reset the password, you need to login again";
+resetDevice_confirm = "Confirm";
 
 
 
