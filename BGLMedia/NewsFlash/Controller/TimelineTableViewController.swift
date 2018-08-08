@@ -184,49 +184,7 @@ class TimelineTableViewController: UITableViewController {
         }
     }
     
-    func convertTimetoLocalization(convert date: String) -> String{
-        let cnTimeArray = ["1","2","3","4","5","6","7","8","9","10","11","12"]
-        let enTimeArray = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
-        let locale = Locale.current
-        let languageCode = locale.languageCode
-        if (languageCode == "zh" && defaultLanguage == "CN") || (languageCode == "en" && defaultLanguage == "EN"){
-            return date
-        } else{
-            if languageCode == "zh" && defaultLanguage == "EN"{
-                let dateArr = date.components(separatedBy: ",")
-                let year = dateArr[1]
-                let subDataArr = dateArr[0].components(separatedBy: "月")
-                let monthCN = subDataArr[0]
-                let monthEN = enTimeArray[cnTimeArray.index(of: monthCN)!]
-                let dateToString = subDataArr[1]
-                let timeCN = dateArr[2]
-                var timeEN = ""
-                if String(timeCN.suffix(2)) == "上午"{
-                    timeEN = timeCN.replacingOccurrences(of: "上午", with: "am")
-                } else{
-                    timeEN = timeCN.replacingOccurrences(of: "下午", with: "pm")
-                }
-                return  monthEN + " " + dateToString + ", " + year + ", " + timeEN
-            } else if languageCode == "en" && defaultLanguage == "CN" {
-                let dateArr = date.components(separatedBy: ",")
-                let year = dateArr[1]
-                let subDataArr = dateArr[0].components(separatedBy: " ")
-                let monthEN = subDataArr[0]
-                let monthCN = cnTimeArray[enTimeArray.index(of: monthEN)!]
-                let dateToString = subDataArr[1]
-                let timeEN = dateArr[2]
-                var timeCN = ""
-                if String(timeEN.suffix(2)) == "am"{
-                    timeCN = timeEN.replacingOccurrences(of: "am", with: "上午")
-                } else{
-                    timeCN = timeEN.replacingOccurrences(of: "pm", with: "下午")
-                }
-                return  monthCN + "月" + dateToString + ", " + year + ", " + timeCN
-            } else{
-                return date
-            }
-        }
-    }
+   
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
@@ -243,7 +201,8 @@ class TimelineTableViewController: UITableViewController {
         cell.timelinePoint = TimelinePoint(diameter: CGFloat(16.0), color: bglGreen, filled: false)
         cell.timelinePointInside = TimelinePoint(diameter: CGFloat(4.0), color: bglGreen, filled: true, insidePoint: true)
         cell.timeline.backColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
-        cell.titleLabel.text = convertTimetoLocalization(convert: dateFormatter.string(from: object.dateTime) )
+        cell.titleLabel.text = Extension.method.convertTimetoLocalization(convert: dateFormatter.string(from: object.dateTime) )
+        cell.txtTitleLabel.text = object.title
         cell.descriptionLabel.text = object.contents
         
         cell.object = object
@@ -285,6 +244,7 @@ class TimelineTableViewController: UITableViewController {
         let shareView = ShareNewsFlashControllerV2()
         shareView.newsdate = cell.titleLabel.text!
         shareView.newsdescriptions = cell.descriptionLabel.text!
+        shareView.newsTitle = cell.txtTitleLabel.text!
         present(shareView, animated: true, completion: nil)
         
         
@@ -429,11 +389,12 @@ class TimelineTableViewController: UITableViewController {
                 let date = Extension.method.convertStringToDate(date: item["publishedTime"].string ?? "")
                 let id = "\(item["_id"].string!)"
                 let toSent = item["toSent"].bool ?? false
+                let title = item["title"].string ?? ""
                 if realm.object(ofType: NewsFlash.self, forPrimaryKey: id) == nil {
-                    realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent])
+                    realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title])
                 } else {
                     //                    print("updating")
-                    realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent], update: true)
+                    realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title], update: true)
                 }
             }
         }

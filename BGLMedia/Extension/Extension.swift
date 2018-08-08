@@ -88,6 +88,68 @@ class Extension:NSObject{
             return false
         }
     }
+    
+    func convertTimetoLocalization(convert date: String) -> String{
+        let cnTimeArray = ["1","2","3","4","5","6","7","8","9","10","11","12"]
+        let enTimeArray = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]
+        let locale = Locale.current
+        let languageCode = locale.languageCode
+        if (languageCode == "zh" && defaultLanguage == "CN") || (languageCode == "en" && defaultLanguage == "EN"){
+            if languageCode == "zh" && defaultLanguage == "CN"{
+                let dateArr = date.components(separatedBy: ",")
+                let year = dateArr[1]
+                let subDataArr = dateArr[0].components(separatedBy: "月")
+                let monthCN = subDataArr[0]
+                let dateToString = subDataArr[1]
+                let timeCN = dateArr[2]
+                return  year + "年" + monthCN + "月" + dateToString + "日，" + timeCN
+            } else {
+                let dateArr = date.components(separatedBy: ",")
+                let year = dateArr[1]
+                let subDataArr = dateArr[0].components(separatedBy: " ")
+                let monthEN = subDataArr[0]
+                let dateToString = subDataArr[1]
+                let timeEN = dateArr[2]
+                return  dateToString + " " + monthEN + ", " + year + ", " + timeEN
+            }
+        } else{
+            if languageCode == "zh" && defaultLanguage == "EN"{
+                let dateArr = date.components(separatedBy: ",")
+                let year = dateArr[1]
+                let subDataArr = dateArr[0].components(separatedBy: "月")
+                let monthCN = subDataArr[0]
+                let monthEN = enTimeArray[cnTimeArray.index(of: monthCN)!]
+                let dateToString = subDataArr[1]
+                let timeCN = dateArr[2]
+                var timeEN = ""
+                if String(timeCN.suffix(2)) == "上午"{
+                    timeEN = timeCN.replacingOccurrences(of: "上午", with: "am")
+                } else{
+                    timeEN = timeCN.replacingOccurrences(of: "下午", with: "pm")
+                }
+                return  dateToString + " " + monthEN + ", " + year + ", " + timeEN
+            } else if languageCode == "en" && defaultLanguage == "CN" {
+                let dateArr = date.components(separatedBy: ",")
+                let year = dateArr[1]
+                let subDataArr = dateArr[0].components(separatedBy: " ")
+                let monthEN = subDataArr[0]
+                let monthCN = cnTimeArray[enTimeArray.index(of: monthEN)!]
+                let dateToString = subDataArr[1]
+                let timeEN = dateArr[2]
+                var timeCN = ""
+                if String(timeEN.suffix(2)) == "am"{
+                    timeCN = timeEN.replacingOccurrences(of: "am", with: "上午")
+                } else{
+                    timeCN = timeEN.replacingOccurrences(of: "pm", with: "下午")
+                }
+                return  year + "年" + monthCN + "月" + dateToString + "日，" + timeCN
+            } else{
+                return date
+            }
+        }
+    }
+    
+    
 }
 
 extension UIViewController{

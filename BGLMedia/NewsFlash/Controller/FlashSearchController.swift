@@ -36,8 +36,11 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
         cell.factor = view.frame.width/375
-        cell.dateLabel.text = dateFormatter.string(from: object.dateTime)
+        cell.dateLabel.text = Extension.method.convertTimetoLocalization(convert: dateFormatter.string(from: object.dateTime))
+        
         cell.detailLabel.text = object.contents
+        print(object.title)
+        cell.titleLabel.text = object.title
         cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
     }
@@ -104,6 +107,7 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
                         let searchObject = NewsFlash()
                         searchObject.id = item["_id"].string!
                         searchObject.contents = item["shortMassage"].string!
+                        searchObject.title = item["title"].string!
                         searchObject.dateTime = dateFormatter.date(from: item["publishedTime"].string!)!
                         searchArrayObject.append(searchObject)
                     }
@@ -228,11 +232,13 @@ class FlashNewsResultCell:UITableViewCell{
         cellView.addSubview(dateLabel)
         cellView.addSubview(detailLabel)
         cellView.addSubview(shareButton)
+        cellView.addSubview(titleLabel)
         
         
         cellView.layer.cornerRadius = 8 * factor!
         dateLabel.font = UIFont.semiBoldFont(18 * factor!)
         detailLabel.font = UIFont.regularFont(15 * factor!)
+        titleLabel.font = UIFont.boldFont(16 * factor!)
         shareButton.layer.cornerRadius = 15 * factor!
         shareButton.contentEdgeInsets = UIEdgeInsetsMake(5 * factor!, 10 * factor!, 5 * factor!, 10 * factor!)
         shareButton.imageEdgeInsets = UIEdgeInsetsMake(20 * factor!, 0, 20 * factor!, 0)
@@ -243,9 +249,9 @@ class FlashNewsResultCell:UITableViewCell{
         
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[v1]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1(\(40*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v4]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton,"v4":titleLabel]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v2]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(10*factor!)-[v4]-\(8 * factor!)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton,"v4":titleLabel]))
         
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v3]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(5*factor!)-[v3]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
@@ -274,6 +280,13 @@ class FlashNewsResultCell:UITableViewCell{
         label.textColor = ThemeColor().whiteColor()
         label.backgroundColor = ThemeColor().darkBlackColor()
         label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    var titleLabel: UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = ThemeColor().whiteColor()
+        label.numberOfLines = 2
         return label
     }()
     

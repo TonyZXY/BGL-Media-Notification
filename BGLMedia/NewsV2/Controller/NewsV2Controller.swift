@@ -124,6 +124,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     @objc func deleteCache(){
         deleteCacheStatus = true
+        print(realm.objects(NewsObject.self).count)
     }
     
     override func viewWillAppear(_ animated: Bool) {

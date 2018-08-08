@@ -15,7 +15,7 @@ class NewsFlash: Object {
     @objc dynamic var contents = ""
     @objc dynamic var languageTag = ""
     @objc dynamic var toSent:Bool = false
-    
+    @objc dynamic var title = ""
     
     override class func primaryKey() -> String {
         return "id"
