@@ -167,7 +167,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     try! self.realm.write {
                         self.realm.delete(self.realm.objects(NewsFlash.self))
                         self.realm.delete(self.realm.objects(NewsObject.self))
-//                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
                     }
                 }
                 confirmAlertCtrl.addAction(confirmAction)
