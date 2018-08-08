@@ -126,11 +126,12 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 sectionButton.titleLabel?.contentMode = .left
                 if !loginStatus{
                     let settingString = textValue(name: "notlogin_alert")
+                    
                     let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
                     let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
                     var myRange = NSRange(location: 0, length: 0)
                     if defaultLanguage == "EN"{
-                        myRange = NSRange(location: 46, length: 5)
+                        myRange = NSRange(location: 40, length: 5)
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 16, length: 2)
                     }

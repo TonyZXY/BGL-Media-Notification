@@ -214,7 +214,7 @@ addAlert_alert = "Add alert";
 pushSection_alert = "Push Notification";
 editSection_alert = "Currency Alert";
 notallow_alert = "Unavailable to use alert function without notification allow in Setting. Go to Setting";
-notlogin_alert = "Login is neccssary to use the alert function. Login";
+notlogin_alert = "Please login to use the Alert function. Login";
 alertStatus_alert = "Notification Setting";
 alertUnavaliable_alert = "Unavaliable";
 alertavaliable_alert = "Avaliable";
@@ -245,7 +245,7 @@ scrollAndTapToRefresh = "Scroll or tap to load";
 //Login
 registerVerify_alertOK = "OK";
 registerVerify_alertTitle = "Verify your email";
-registerVerify_alertContent = "Please go to your eamil to Active your account";
+registerVerify_alertContent = "Please go to your email to activate your account";
 
 //SearchCoin
 search_placeholder = "Enter Search Key Word...";

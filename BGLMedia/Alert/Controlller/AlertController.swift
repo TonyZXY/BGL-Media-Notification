@@ -558,7 +558,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         var button = UIButton(type: .system)
         button.setTitle(textValue(name: "addAlert_alert"), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = ThemeColor().bglColor()
+        button.backgroundColor = ThemeColor().blueColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(addNewAlert), for: .touchUpInside)
         return button

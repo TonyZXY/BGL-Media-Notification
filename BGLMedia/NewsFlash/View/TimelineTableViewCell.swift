@@ -121,7 +121,7 @@ open class TimelineTableViewCell: UITableViewCell {
         addSubview(sharesbutton)
         NSLayoutConstraint(item: sharesbutton, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -15).isActive = true
         NSLayoutConstraint(item: sharesbutton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
-        shareButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
+//        shareButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
 //        NSLayoutConstraint(item: sharesbutton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 30).isActive = true
 //        NSLayoutConstraint(item: sharesbutton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 120).isActive = true
     }

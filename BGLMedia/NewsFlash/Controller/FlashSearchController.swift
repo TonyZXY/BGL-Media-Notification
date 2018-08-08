@@ -61,6 +61,7 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         let shareView = ShareNewsFlashControllerV2()
         shareView.newsdate = cell.dateLabel.text!
         shareView.newsdescriptions = cell.detailLabel.text!
+        shareView.newsTitle = cell.titleLabel.text!
         present(shareView, animated: true, completion: nil)
     }
     
