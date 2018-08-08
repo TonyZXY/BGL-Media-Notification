@@ -40,7 +40,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var coinAbbName = "null"
     var status = ""
     var TransactionDelegate:TransactionFrom?
-    
+    var changeSwitchStatus = false
     var allAlert:[alertResult]{
         get{
             var allResult = [alertResult]()
@@ -445,11 +445,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         })
     }
     
-    //    func getAlertStatus(){
-    //
-    //    }
-    
-    
     @objc func addAlert(){
         let addAlert = AlertManageController()
         navigationController?.pushViewController(addAlert, animated: true)
@@ -608,20 +603,64 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         hud.show(in: (self.parent?.view)!)
         URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
             if pass{
-//                print(response)
-                self.writeRealm(json:response){(pass) in
-                    if pass{
-                        DispatchQueue.main.async {
+                let responseSuccess = response["success"].bool ?? false
+                if responseSuccess{
+                    self.writeRealm(json:response){(pass) in
+                        if pass{
+                            DispatchQueue.main.async {
+                                self.alerts = self.allAlert
+                                self.alertTableView.reloadData()
+                                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                    hud.dismiss()
+                                }
+                            }
+                        } else{
                             self.alerts = self.allAlert
                             self.alertTableView.reloadData()
                             DispatchQueue.main.asyncAfter(deadline: .now()) {
                                 hud.dismiss()
                             }
                         }
+                    }
+                } else{
+                    let code = response["code"].int ?? 0
+                    if code == 800{
+                        
+                        deleteMemory()
+                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        hud.textLabel.text = "Error"
+                        hud.detailTextLabel.text = "Password Reset" // To change?
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString("sss", comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
+                        let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .destructive) { (_) in
+                            self.checkSetUpView()
+                        }
+                        confirmAlertCtrl.addAction(confirmAction)
+//                        let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertCancel_history"), comment: ""), style: .cancel, handler:nil)
+//                        confirmAlertCtrl.addAction(cancelAction)
+                        self.present(confirmAlertCtrl, animated: true, completion: nil)
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+                        
+//                        if self.presentingViewController?.presentingViewController != nil{
+//                            self.presentingViewController?.presentingViewController?.dismiss(animated: true, completion: nil)
+//                            print("11111")
+//                        } else {
+//                            self.navigationController?.popViewController(animated: true)
+//                            print("22222")
+//                        }
                     } else{
-                        self.alerts = self.allAlert
-                        self.alertTableView.reloadData()
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()
                         }
                     }

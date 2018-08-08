@@ -473,7 +473,6 @@ class TimelineTableViewController: UITableViewController {
     
     func handleFooter(){
         if displayNumber <= results.count{
-            print(displayNumber)
             self.displayNumber += 5
             if displayNumber != 0{
                 getNews(skip: displayNumber-5, limit: 2){ success in

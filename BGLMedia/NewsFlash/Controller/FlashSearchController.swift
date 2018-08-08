@@ -214,7 +214,7 @@ class FlashNewsResultCell:UITableViewCell{
     
     var object:String?{
         didSet{
-            print("dateLabel.frame.height")
+          
 //            NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: detailLabel.frame.height + 200).isActive = true
             
 //            self.frame =  CGRect(x: 0, y: 0, width: self.frame.width, height: dateLabel.frame.height + 200)

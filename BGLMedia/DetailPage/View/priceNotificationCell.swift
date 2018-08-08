@@ -12,7 +12,6 @@ import UIKit
 class priceNotificationCell:UITableViewCell,UITextFieldDelegate{
     var factor:CGFloat?{
         didSet{
-            print(factor!)
             setUpView()
         }
     }

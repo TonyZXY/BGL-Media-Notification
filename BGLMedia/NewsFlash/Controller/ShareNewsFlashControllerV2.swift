@@ -37,7 +37,7 @@ class ShareNewsFlashControllerV2: UIViewController {
             (activityType, completed, items, error) in
             
             guard completed else {
-                print("User cancelled.")
+//                print("User cancelled.")
                 return
                 //                if user cancels activityVC preview can also be dismissed
                 //            self.dismiss(animated: true, completion: nil)
@@ -226,7 +226,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     
     lazy var cancelButton:UIButton = {
         var button = UIButton()
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle(textValue(name: "cancel_flash"), for: .normal)
         button.titleLabel?.font = UIFont.regularFont(20*view.frame.width/375)
         button.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
         button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 50)

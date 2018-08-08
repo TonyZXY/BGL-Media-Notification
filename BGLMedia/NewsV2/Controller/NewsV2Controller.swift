@@ -275,7 +275,6 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 self.displayNumber = 20
                 self.newsTableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
-                print("999888777666666666666")
                 //                self.refresher.endRefreshing()
             } else{
                 tableView.switchRefreshHeader(to: .normal(.failure, 0.5))

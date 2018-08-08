@@ -19,6 +19,7 @@ class switchObject{
 
 class AlertNotificationController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var switchStatus = switchObject()
+    var changeSwitchStatus = false
     var cellItems:[[String]]{
         get{
             var allowStatus:String = ""
@@ -385,6 +386,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         DispatchQueue.main.async {
             self.notificationTableView.reloadData()
         }
+        changeSwitchStatus = true
     }
     
     func setUpView(){
@@ -476,12 +478,35 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             let parameter = ["email":email,"token":certificateToken]
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
                 if success{
-                    print(response)
-                    UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
-                    UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
-                    self.notificationTableView.reloadData()
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
-                        hud.dismiss()
+                    let responseSuccess = response["success"].bool ?? false
+                    if responseSuccess{
+                        UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
+                        UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
+                        self.notificationTableView.reloadData()
+                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                            hud.dismiss()
+                        }
+                    } else{
+                        let code = response["code"].int ?? 0
+                        if code == 800{
+                            deleteMemory()
+                            hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                            hud.textLabel.text = "Error"
+                            hud.detailTextLabel.text = "Password Reset" // To change?
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                hud.dismiss()
+                            }
+                            let confirmAlertCtrl = UIAlertController(title: NSLocalizedString("sss", comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .destructive) { (_) in
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                            confirmAlertCtrl.addAction(confirmAction)
+                            self.present(confirmAlertCtrl, animated: true, completion: nil)
+                        } else{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                hud.dismiss()
+                            }
+                        }
                     }
                 } else{
                     let manager = NetworkReachabilityManager()
@@ -505,7 +530,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     func postNotificationStatusData(){
         //        if buildInterestStatus{
-        if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
+        if changeSwitchStatus == true && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
             let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
             let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!

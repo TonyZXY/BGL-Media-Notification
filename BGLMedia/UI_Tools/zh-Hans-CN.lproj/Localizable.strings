@@ -83,6 +83,7 @@ timeYear_flash = "年";
 timeMonth_flash = "月";
 timeDay_flash = "日";
 share_flash = "分享";
+cancel_flash = "取消";
 
 //Flash News Search Results
 searchLabel_flash = "搜索结果:";
