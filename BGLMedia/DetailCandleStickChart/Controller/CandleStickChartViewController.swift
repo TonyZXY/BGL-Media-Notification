@@ -27,7 +27,6 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
             yAxisLabelView.configure(historicalDataStruct: historicalDataStruct)
             xAxisLabelView.configure(historicalDataStruct: historicalDataStruct)
             if historicalDataStruct?.selectedData.count != 0 {
-                print("sfs")
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
             }
         }
@@ -251,12 +250,10 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
         guard let coinSymbol = self.coinSymbol else { return }
         
         if coinSymbol.coinExchangeName == "Global Average"{
-            print("average")
             fetcher.fetcher(coinSymbol: coinSymbol.coinSymbol) { [unowned self] in
                 self.historicalDataStruct = self.fetcher.historicalDataStruct
             }
         } else{
-            print("symbol")
             fetcher.fetcher(coinSymbol: coinSymbol.coinSymbol, currency: coinSymbol.coinTradingPairsName, exchangeName:coinSymbol.coinExchangeName){ [unowned self] in
                 self.historicalDataStruct = self.fetcher.historicalDataStruct
             }

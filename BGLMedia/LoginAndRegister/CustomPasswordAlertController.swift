@@ -260,7 +260,7 @@ class CustomPasswordAlertController: UIViewController,UITextFieldDelegate{
         textField.autocorrectionType = .no
         textField.autocapitalizationType = .none
         textField.addTarget(self, action: #selector(allEdit), for: .allEditingEvents)
-        textField.attributedPlaceholder = NSAttributedString(string:"please input text", attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*view.frame.width/375), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        textField.attributedPlaceholder = NSAttributedString(string:textValue(name: "placeholder_reset"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*view.frame.width/375), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
         return textField
     }()
     

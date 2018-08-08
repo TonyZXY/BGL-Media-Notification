@@ -94,8 +94,8 @@ class MainTabBarController: UITabBarController {
         
         let networkLabelFrame = CGRect(x: 0, y: tabBar.frame.minY-80,  width: UIScreen.main.bounds.width, height: 40)
         
-        print(tabBar.frame.minY)
-        print(UIScreen.main.bounds)
+//        print(tabBar.frame.minY)
+//        print(UIScreen.main.bounds)
         
         networkLabel.frame = networkLabelFrame
         

@@ -165,7 +165,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
         UserDefaults.standard.set(deviceTokenString, forKey: "UserToken")
-        print(deviceTokenString)
         UserDefaults.standard.set(true, forKey: "getDeviceToken")
         
         if self.loginStatus{

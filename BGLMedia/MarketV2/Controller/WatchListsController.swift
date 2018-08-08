@@ -266,6 +266,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
             let global = GloabalController()
             global.hidesBottomBarWhenPushed = true
             global.pageStatus = "WatchList"
+            global.coinDetailController.alertControllers.status = "setting"
             global.coinDetail.coinName = cell.coinLabel.text!
             navigationController?.pushViewController(global, animated: true)
         }

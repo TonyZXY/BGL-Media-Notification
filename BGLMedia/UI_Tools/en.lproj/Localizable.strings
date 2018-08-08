@@ -86,6 +86,7 @@ timeYear_flash = "-";
 timeMonth_flash = "-";
 timeDay_flash = "";
 share_flash = "Share";
+cancel_flash = "Cancel";
 
 //Flash News Search Results
 searchLabel_flash = "Search Result:";

@@ -11,8 +11,10 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 import Kingfisher
+import RealmSwift
 
 class Extension:NSObject{
+    var realm = try! Realm()
     static let method = Extension()
     
     //Convert String to Date
@@ -314,6 +316,22 @@ extension UIImageView {
     func setImage(urlString: String) {
         self.kf.setImage(with: URL(string: urlString), placeholder: IndicatorView(frame: frame) as Placeholder)
         //        self.kf.setImage(with: URL(string: urlString), placeholder: UIImage(named: "loading"))
+    }
+}
+
+func deleteMemory(){
+    UserDefaults.standard.set(false,forKey: "isLoggedIn")
+    UserDefaults.standard.set(true, forKey: "flashSwitch")
+    UserDefaults.standard.set(true, forKey: "priceSwitch")
+    UserDefaults.standard.set(false, forKey: "SendDeviceToken")
+    UserDefaults.standard.set(false, forKey: "getDeviceToken")
+    UserDefaults.standard.set("null", forKey: "UserEmail")
+    UserDefaults.standard.set("null", forKey: "CertificateToken")
+    UserDefaults.standard.set("null", forKey: "UserToken")
+    let realm = try! Realm()
+    try! realm.write {
+        realm.delete(realm.objects(alertObject.self))
+        realm.delete(realm.objects(alertCoinNames.self))
     }
 }
 

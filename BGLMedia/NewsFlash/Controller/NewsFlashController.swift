@@ -378,7 +378,6 @@ class NewsFlashController: UIViewController,UITableViewDelegate,UITableViewDataS
     @objc func handleRefresh(_ tableView: UITableView) {
         getNews(){ success in
             if success{
-                    print("runing")
                     self.flashNewsTableView.reloadData()
 
                 self.flashNewsTableView.switchRefreshHeader(to: .normal(.success, 0.5))
