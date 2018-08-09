@@ -206,7 +206,12 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         
         let urlString = object.url
         if let url = URL(string: urlString!) {
-            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: false)
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            if #available(iOS 11.0, *) {
+                vc.dismissButtonStyle = .close
+            } else {
+                
+            }
             vc.hidesBottomBarWhenPushed = true
             vc.accessibilityNavigationStyle = .separate
             self.present(vc, animated: true, completion: nil)

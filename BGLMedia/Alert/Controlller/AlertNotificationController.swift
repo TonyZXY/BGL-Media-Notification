@@ -131,7 +131,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                     let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
                     var myRange = NSRange(location: 0, length: 0)
                     if defaultLanguage == "EN"{
-                        myRange = NSRange(location: 40, length: 5)
+                        myRange = NSRange(location: settingString.count-5, length: 5)
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 16, length: 2)
                     }
@@ -150,6 +150,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 20, length: 2)
                     }
+                    
                     
                     myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
                     sectionButton.setAttributedTitle(myString, for: .normal)

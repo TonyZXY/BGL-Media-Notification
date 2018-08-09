@@ -9,7 +9,7 @@
 //TabBar
 wallet_tab = "Asset";
 market_tab = "Market";
-flash_tab = "Flash News";
+flash_tab = "News Flash";
 news_tab = "News";
 more_tab = "More";
 
@@ -80,7 +80,7 @@ filterByHour_watchlist = "1H";
 hintLabel_watchlist = "Please Add your first coin to watchlist by click the ★ button to ★ in Markets Page";
 
 //Flash News Page
-navigationTitle_flash = "Flash News";
+navigationTitle_flash = "News Flash";
 timeToday_flash = "Today ";
 timeYear_flash = "-";
 timeMonth_flash = "-";
@@ -160,7 +160,7 @@ register_cell = "Create Account";
 login_cell = "Log In";
 logout_cell = "Log Out";
 aboutUs_cell = "About Us";
-community_cell = "BGL Community";
+community_cell = "Our Community";
 defaultCurrency_cell = "Default Currency";
 notification_cell = "Notification Option";
 display_cell = "Display Option";
@@ -207,12 +207,12 @@ alertCancel_language = "Cancel";
 alertChange_language = "Change";
 
 //Alert Page
-flashNews_alert = "Flash News Notification";
+flashNews_alert = "News Flash Notification";
 price_alert = "Currency Alert";
-edit_alert = "Edit Currency";
+edit_alert = "Manage Alerts";
 addAlert_alert = "Add alert";
 pushSection_alert = "Push Notification";
-editSection_alert = "Currency Alert";
+editSection_alert = "Edit Alerts";
 notallow_alert = "Unavailable to use alert function without notification allow in Setting. Go to Setting";
 notlogin_alert = "Please login to use the Alert function. Login";
 alertStatus_alert = "Notification Setting";
