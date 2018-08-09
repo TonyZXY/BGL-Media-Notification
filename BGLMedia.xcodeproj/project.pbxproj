@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		2D3AF495211BBEC900F5AA51 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF494211BBEC900F5AA51 /* HelpViewController.swift */; };
+		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
 		2D52AE9A20E46E1A00018FC0 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADBA20E46E1600018FC0 /* AlertController.swift */; };
@@ -206,6 +207,7 @@
 
 /* Begin PBXFileReference section */
 		2D3AF494211BBEC900F5AA51 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
+		2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
 		2D52ADB920E46E1600018FC0 /* DetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
@@ -414,6 +416,7 @@
 			isa = PBXGroup;
 			children = (
 				2D3AF494211BBEC900F5AA51 /* HelpViewController.swift */,
+				2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */,
 			);
 			path = Help;
 			sourceTree = "<group>";
@@ -1222,6 +1225,7 @@
 				57355C4B20F718CC002E70E4 /* TransAdditionalCell.swift in Sources */,
 				573C96AB20EF068A00B667AB /* Extension.swift in Sources */,
 				2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */,
+				2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */,
 				57BAD9552104CAD500973B45 /* TCPickerViewThemeType.swift in Sources */,
 				2D52AF1C20E46E1A00018FC0 /* HistoricalDataStruct.swift in Sources */,
 				57355C4820F718CC002E70E4 /* TransCoinTypeCell.swift in Sources */,

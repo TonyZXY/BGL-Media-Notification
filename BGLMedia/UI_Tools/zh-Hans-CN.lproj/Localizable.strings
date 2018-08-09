@@ -149,8 +149,17 @@ alertDelete_history = "删除";
 
 //Setting Page
 settingTitle = "更多设置选项";
-aboutUs_section = "Blockchain Global";
+aboutUs_section = "关于";
 setting_section = "应用设置选项";
+help = "帮助及反馈";
+about_app = "关于CryptoGeek";
+feedback_section = "意见反馈";
+feedback_rateus = "给我们打分";
+feedBack_reportbug = "问题反馈";
+help_section = "帮助中心";
+help_FAQ = "常见问题";
+help_userAgreement = "用户协议";
+help_privacy = "隐私协议";
 account_section = "帐户";
 register_cell = "创建帐号";
 login_cell = "登录";
@@ -285,7 +294,8 @@ error_usernotfound = "账户不存在";
 error_error = "错误";
 success_success = "成功";
 
-back = "< 后  退";
+back = "< 返  回";
+back2 = "返回";
 
 mr = "先生";
 ms = "女士";
