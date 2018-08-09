@@ -27,9 +27,9 @@ class AboutUsViewController: UIViewController {
         view.addConstraintsWithFormat(format: "V:|[v0]|", views: scrollView)
         
         //        scrollView.addConstraintsWithFormat(format: "H:|-10-[v0(\(view.frame.width-20))]-10-|", views: imageView)
-        scrollView.addConstraintsWithFormat(format: "V:|-2-[v0(\(200*factor))]", views: imageView)
+        scrollView.addConstraintsWithFormat(format: "V:|-\(5*factor)-[v0(\(150*factor))]", views: imageView)
         NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: scrollView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.width, multiplier: 1, constant: view.frame.width-20*factor).isActive = true
+        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.width, multiplier: 1, constant: view.frame.width-30*factor).isActive = true
         //        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.height, multiplier: 1, constant: 200).isActive = true
         
         NSLayoutConstraint(item: introduceLabel, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true

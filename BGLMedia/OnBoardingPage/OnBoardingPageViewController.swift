@@ -182,8 +182,8 @@ class OnBoardingPageViewController: UIViewController {
         
         
         instructionImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        instructionImageView.widthAnchor.constraint(equalToConstant:imageWidth!/3 * factor).isActive = true
-        instructionImageView.heightAnchor.constraint(equalToConstant:imageHeight!/3 * factor).isActive = true
+        instructionImageView.widthAnchor.constraint(equalToConstant:imageWidth! * factor).isActive = true
+        instructionImageView.heightAnchor.constraint(equalToConstant:imageHeight! * factor).isActive = true
         
         
         

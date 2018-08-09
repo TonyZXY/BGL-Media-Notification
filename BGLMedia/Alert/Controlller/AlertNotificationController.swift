@@ -126,11 +126,12 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 sectionButton.titleLabel?.contentMode = .left
                 if !loginStatus{
                     let settingString = textValue(name: "notlogin_alert")
+                    
                     let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
-                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
+                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
                     var myRange = NSRange(location: 0, length: 0)
                     if defaultLanguage == "EN"{
-                        myRange = NSRange(location: 46, length: 5)
+                        myRange = NSRange(location: settingString.count-5, length: 5)
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 16, length: 2)
                     }
@@ -149,6 +150,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 20, length: 2)
                     }
+                    
                     
                     myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
                     sectionButton.setAttributedTitle(myString, for: .normal)
@@ -496,8 +498,8 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                             DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                                 hud.dismiss()
                             }
-                            let confirmAlertCtrl = UIAlertController(title: NSLocalizedString("sss", comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
-                            let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .destructive) { (_) in
+                            let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "resetDevice_title"), comment: ""), message: NSLocalizedString(textValue(name: "resetDevice_description"), comment: ""), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "resetDevice_confirm"), comment: ""), style: .destructive) { (_) in
                                 self.navigationController?.popViewController(animated: true)
                             }
                             confirmAlertCtrl.addAction(confirmAction)

@@ -24,7 +24,6 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         super.viewDidLoad()
         setupView()
         searchBar.becomeFirstResponder()
-        searchBar.returnKeyType = UIReturnKeyType.done
         
         
         let result = try! Realm().objects(CoinList.self)
@@ -38,9 +37,7 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         }
     }
     
-    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
-        searchBar.resignFirstResponder()
-    }
+    
     
     override func viewWillAppear(_ animated: Bool) {
     }
@@ -111,10 +108,12 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
+            searchBar.setShowsCancelButton(false, animated: true)
             isSearching = false
             view.endEditing(true)
             searchResult.reloadData()
         } else{
+            searchBar.setShowsCancelButton(true, animated: true)
             isSearching = true
             filterObject.removeAll()
             var simplyNameReault = allCoinObject.filter({(mod) -> Bool in return mod.coinSymbol.lowercased().contains(searchBar.text!.lowercased())})
@@ -131,6 +130,7 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         }
     }
     
+    
     lazy var searchBar:UISearchBar={
         var searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
@@ -139,6 +139,15 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         searchBar.tintColor = ThemeColor().darkBlackColor()
         searchBar.barTintColor = ThemeColor().darkBlackColor()
         searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
+        searchBar.layer.borderWidth = 1
+//        searchBar.showsCancelButton = true
+        let attributes = [
+            NSAttributedStringKey.foregroundColor : ThemeColor().whiteColor(),
+            NSAttributedStringKey.font: UIFont.regularFont(13)
+        ]
+        
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = textValue(name: "searchBar_cancel")
         
         var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
         if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
@@ -155,11 +164,28 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         return searchBar
     }()
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        view.endEditing(true)
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+    
+    func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.resignFirstResponder()
+    }
+
     @objc func sortdoneclick(){
+        searchBar.setShowsCancelButton(false, animated: true)
         view.endEditing(true)
     }
     
     @objc func sortCancel(){
+        searchBar.setShowsCancelButton(false, animated: true)
         view.endEditing(true)
     }
     

@@ -317,7 +317,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func setUpView(){
         let factor = view.frame.width/375
-        view.backgroundColor = ThemeColor().themeColor()
+        view.backgroundColor = ThemeColor().blueColor()
         if status == "Update"{
             alertButton.setTitle("Update", for: .normal)
             let navigationDoneButton = UIBarButtonItem(barButtonSystemItem: .trash, target: self, action: #selector(deleteAlert))
@@ -329,9 +329,23 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         view.addSubview(alertButton)
         alertButton.addTarget(self, action: #selector(addNewAlert), for: .touchUpInside)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]-\(3*factor)-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView,"v1":alertButton]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView,"v1":alertButton]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(80*factor))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
+//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(80*factor))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
+        
+        alertButton.topAnchor.constraint(equalTo: alertTableView.bottomAnchor).isActive = true
+        alertButton.heightAnchor.constraint(equalToConstant: 60*factor).isActive = true
+        if #available(iOS 11.0, *) {
+            alertButton.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//            let safeAreaView = UIView()
+//            safeAreaView.translatesAutoresizingMaskIntoConstraints = false
+//            safeAreaView.backgroundColor = ThemeColor().blueColor()
+//            view.addSubview(safeAreaView)
+//            safeAreaView.topAnchor.constraint(equalTo: alertButton.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//            safeAreaView.heightAnchor.constraint(equalToConstant: 30).isActive = true
+        } else {
+            alertButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        }
     }
     
     @objc func deleteAlert(){
@@ -381,7 +395,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         var button = UIButton(type: .system)
         button.setTitle(textValue(name: "alertDone_alert"), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = ThemeColor().bglColor()
+        button.backgroundColor = ThemeColor().blueColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
     }()

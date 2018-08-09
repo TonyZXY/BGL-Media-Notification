@@ -306,6 +306,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             NSAttributedStringKey.font: UIFont.regularFont(13)
         ]
         UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = textValue(name: "searchBar_cancel")
         return searchBar
     }()
     

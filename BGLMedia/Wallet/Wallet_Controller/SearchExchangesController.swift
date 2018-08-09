@@ -76,17 +76,30 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
+            searchBar.setShowsCancelButton(false, animated: true)
             isSearching = false
             view.endEditing(true)
             searchResult.reloadData()
         } else{
+            searchBar.setShowsCancelButton(true, animated: true)
             isSearching = true
             filterExchanges = allExchanges.filter{ name in return name.lowercased().contains(searchBar.text!.lowercased())}
             searchResult.reloadData()
         }
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        view.endEditing(true)
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
         searchBar.resignFirstResponder()
     }
     
@@ -94,11 +107,18 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
         var searchBar = UISearchBar()
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         searchBar.delegate = self
-        searchBar.returnKeyType = UIReturnKeyType.done
+        searchBar.returnKeyType = UIReturnKeyType.search
         searchBar.tintColor = ThemeColor().darkBlackColor()
         searchBar.barTintColor = ThemeColor().darkBlackColor()
         searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
-        
+        searchBar.layer.borderWidth = 1
+//        searchBar.showsCancelButton = true
+        let attributes = [
+            NSAttributedStringKey.foregroundColor : ThemeColor().whiteColor(),
+            NSAttributedStringKey.font: UIFont.regularFont(13)
+        ]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = textValue(name: "searchBar_cancel")
         var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
         if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
             searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()])
@@ -116,10 +136,12 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     }()
     
     @objc func sortdoneclick(){
+        searchBar.setShowsCancelButton(false, animated: true)
         view.endEditing(true)
     }
     
     @objc func sortCancel(){
+        searchBar.setShowsCancelButton(false, animated: true)
         view.endEditing(true)
     }
     

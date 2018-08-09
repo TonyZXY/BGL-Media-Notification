@@ -318,6 +318,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let titilebarlogo = UIImageView()
         titilebarlogo.image = UIImage(named: "cryptogeek_icon_")
         titilebarlogo.contentMode = .scaleAspectFit
+        titilebarlogo.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         titilebarlogo.clipsToBounds = true
         navigationItem.titleView = titilebarlogo
     }
