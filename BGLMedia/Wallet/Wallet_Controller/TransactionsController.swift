@@ -361,9 +361,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 if newTransaction.exchangeName == "Global Average"{
                     let index = IndexPath(row: 3, section: 0)
                     let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-//                    cell.priceType.text = " "
-//                    cell.addSubview(spinner)
-                    cell.spinner.startAnimating()
+                    cell.priceType.text = " "
                     URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + newTransaction.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
                         if success{
                             if let result = response["quotes"].array{
@@ -372,7 +370,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                                         let price = results["data"]["price"].double ?? 0
 //                                        let index = IndexPath(row: 3, section: 0)
 //                                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-//                                        cell.spinner.stopAnimating()
                                         cell.priceType.text = Extension.method.scientificMethod(number: price)
                                     }
                                 }
@@ -411,7 +408,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                             }
                             let index = IndexPath(row: 3, section: 0)
                             let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-//                            cell.spinner.stopAnimating()
                             cell.priceType.text = Extension.method.scientificMethod(number: readData)
                         case .failure(let error):
                             print("the error \(error.localizedDescription)")

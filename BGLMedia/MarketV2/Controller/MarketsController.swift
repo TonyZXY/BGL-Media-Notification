@@ -158,6 +158,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         let titleLabel = UILabel()
         titleLabel.textColor = UIColor.white
         titleLabel.font = UIFont.semiBoldFont(17*factor)
+        titleLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
         titleLabel.textAlignment = .center
         return titleLabel
     }()

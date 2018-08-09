@@ -182,8 +182,8 @@ class OnBoardingPageViewController: UIViewController {
         
         
         instructionImageView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        instructionImageView.widthAnchor.constraint(equalToConstant:imageWidth!/2.75 * factor).isActive = true
-        instructionImageView.heightAnchor.constraint(equalToConstant:imageHeight!/2.75 * factor).isActive = true
+        instructionImageView.widthAnchor.constraint(equalToConstant:imageWidth! * factor).isActive = true
+        instructionImageView.heightAnchor.constraint(equalToConstant:imageHeight! * factor).isActive = true
         
         
         
@@ -228,17 +228,26 @@ class OnBoardingPageViewController: UIViewController {
     
     func setupSkipButton(){
         let factor = view.frame.width/414
+        let factor2 = view.frame.height/736
+        print(factor2)
 
         view.addSubview(skipButton)
         skipButton.translatesAutoresizingMaskIntoConstraints = false
         skipButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         skipButton.heightAnchor.constraint(equalToConstant: 40 * factor).isActive = true
         skipButton.widthAnchor.constraint(equalToConstant: 150 * factor).isActive = true
-        skipButton.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 120 * factor).isActive = true
+        if #available(iOS 11.0, *) {
+            skipButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10 * factor2).isActive = true
+        } else {
+            skipButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -5 * factor2).isActive = true
+        }
+
     }
 
     func setupDescriptionLabel() {
         let factor = view.frame.width/414
+        let factor2 = view.frame.height/736
+
         view.addSubview(emptyView)
 
         view.addSubview(descriptionLabel)
@@ -246,11 +255,11 @@ class OnBoardingPageViewController: UIViewController {
 //        NSLayoutConstraint(item: descriptionLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 5)
 
         
-        descriptionLabel.topAnchor.constraint(equalTo: instructionImageView.bottomAnchor, constant: 27 * factor).isActive = true
+        descriptionLabel.topAnchor.constraint(equalTo: instructionImageView.bottomAnchor, constant: 17 * factor2).isActive = true
         descriptionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         descriptionLabel.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 28 * factor).isActive = true
         descriptionLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -28 * factor).isActive = true
-        descriptionLabel.heightAnchor.constraint(equalToConstant: 65 * factor).isActive = true
+        descriptionLabel.heightAnchor.constraint(equalToConstant: 65 * factor2).isActive = true
         
 //        emptyView.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
 //        emptyView.rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true

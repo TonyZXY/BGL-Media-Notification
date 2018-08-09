@@ -19,6 +19,7 @@ class switchObject{
 
 class AlertNotificationController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var switchStatus = switchObject()
+    var changeSwitchStatus = false
     var cellItems:[[String]]{
         get{
             var allowStatus:String = ""
@@ -125,11 +126,12 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                 sectionButton.titleLabel?.contentMode = .left
                 if !loginStatus{
                     let settingString = textValue(name: "notlogin_alert")
+                    
                     let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
-                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
+                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
                     var myRange = NSRange(location: 0, length: 0)
                     if defaultLanguage == "EN"{
-                        myRange = NSRange(location: 46, length: 5)
+                        myRange = NSRange(location: settingString.count-5, length: 5)
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 16, length: 2)
                     }
@@ -148,6 +150,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
                     } else if defaultLanguage == "CN"{
                         myRange = NSRange(location: 20, length: 2)
                     }
+                    
                     
                     myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
                     sectionButton.setAttributedTitle(myString, for: .normal)
@@ -385,6 +388,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         DispatchQueue.main.async {
             self.notificationTableView.reloadData()
         }
+        changeSwitchStatus = true
     }
     
     func setUpView(){
@@ -476,12 +480,35 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             let parameter = ["email":email,"token":certificateToken]
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
                 if success{
-                    print(response)
-                    UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
-                    UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
-                    self.notificationTableView.reloadData()
-                    DispatchQueue.main.asyncAfter(deadline: .now()) {
-                        hud.dismiss()
+                    let responseSuccess = response["success"].bool ?? false
+                    if responseSuccess{
+                        UserDefaults.standard.set(response["data"]["interest"].bool!,forKey: "priceSwitch")
+                        UserDefaults.standard.set(response["data"]["flash"].bool!,forKey: "flashSwitch")
+                        self.notificationTableView.reloadData()
+                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                            hud.dismiss()
+                        }
+                    } else{
+                        let code = response["code"].int ?? 0
+                        if code == 800{
+                            deleteMemory()
+                            hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                            hud.textLabel.text = "Error"
+                            hud.detailTextLabel.text = "Password Reset" // To change?
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                hud.dismiss()
+                            }
+                            let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "resetDevice_title"), comment: ""), message: NSLocalizedString(textValue(name: "resetDevice_description"), comment: ""), preferredStyle: .alert)
+                            let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "resetDevice_confirm"), comment: ""), style: .destructive) { (_) in
+                                self.navigationController?.popViewController(animated: true)
+                            }
+                            confirmAlertCtrl.addAction(confirmAction)
+                            self.present(confirmAlertCtrl, animated: true, completion: nil)
+                        } else{
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                hud.dismiss()
+                            }
+                        }
                     }
                 } else{
                     let manager = NetworkReachabilityManager()
@@ -505,7 +532,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     func postNotificationStatusData(){
         //        if buildInterestStatus{
-        if UserDefaults.standard.string(forKey: "UserToken") != nil && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
+        if changeSwitchStatus == true && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
             let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
             let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!

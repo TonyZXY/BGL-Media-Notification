@@ -124,6 +124,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     @objc func deleteCache(){
         deleteCacheStatus = true
+        print(realm.objects(NewsObject.self).count)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -205,7 +206,12 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         
         let urlString = object.url
         if let url = URL(string: urlString!) {
-            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: false)
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            if #available(iOS 11.0, *) {
+                vc.dismissButtonStyle = .close
+            } else {
+                
+            }
             vc.hidesBottomBarWhenPushed = true
             vc.accessibilityNavigationStyle = .separate
             self.present(vc, animated: true, completion: nil)
@@ -275,7 +281,6 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 self.displayNumber = 20
                 self.newsTableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
-                print("999888777666666666666")
                 //                self.refresher.endRefreshing()
             } else{
                 tableView.switchRefreshHeader(to: .normal(.failure, 0.5))

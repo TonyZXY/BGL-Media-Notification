@@ -226,8 +226,6 @@ class LoginController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("CHeck HerE")
-        print(usedPlace)
         view.backgroundColor = ThemeColor().themeColor()
         setUp()
         loginButton.isEnabled = false
@@ -367,8 +365,6 @@ class LoginController: UIViewController {
                     }
                 } else {
                     let loginCode = response["code"].int ?? 0
-                    print(loginCode)
-                    print(response)
                     if loginCode == 888{
                         self.resendVerifyEmailAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
 //                        vc.email = un

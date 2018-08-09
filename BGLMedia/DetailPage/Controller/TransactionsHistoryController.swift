@@ -15,7 +15,6 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     var factor:CGFloat?{
         didSet{
-            print(factor!)
         }
     }
     

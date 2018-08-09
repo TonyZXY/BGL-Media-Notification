@@ -37,9 +37,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         setUpBasicView()
         checkTransaction()
         
-        print(realm.objects(EachTransactions.self))
-        print(realm.objects(Transactions.self))
-        print(realm.objects(EachCurrency.self))
+//        print(realm.objects(EachTransactions.self))
+//        print(realm.objects(Transactions.self))
+//        print(realm.objects(EachCurrency.self))
         
         walletList.switchRefreshHeader(to: .refreshing)
         
@@ -300,6 +300,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
         coinDetail = cell.selectCoin
         detailPage.coinDetails = coinDetail
+        detailPage.coinDetailController.alertControllers.status = "setting"
         navigationController?.pushViewController(detailPage, animated: true)
     }
     
@@ -317,6 +318,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let titilebarlogo = UIImageView()
         titilebarlogo.image = UIImage(named: "cryptogeek_icon_")
         titilebarlogo.contentMode = .scaleAspectFit
+        titilebarlogo.frame = CGRect(x: 0, y: 0, width: 20, height: 20)
         titilebarlogo.clipsToBounds = true
         navigationItem.titleView = titilebarlogo
     }

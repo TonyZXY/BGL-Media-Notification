@@ -40,7 +40,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var coinAbbName = "null"
     var status = ""
     var TransactionDelegate:TransactionFrom?
-    
+    var changeSwitchStatus = false
     var allAlert:[alertResult]{
         get{
             var allResult = [alertResult]()
@@ -445,11 +445,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         })
     }
     
-    //    func getAlertStatus(){
-    //
-    //    }
-    
-    
     @objc func addAlert(){
         let addAlert = AlertManageController()
         navigationController?.pushViewController(addAlert, animated: true)
@@ -563,7 +558,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         var button = UIButton(type: .system)
         button.setTitle(textValue(name: "addAlert_alert"), for: .normal)
         button.setTitleColor(UIColor.white, for: .normal)
-        button.backgroundColor = ThemeColor().bglColor()
+        button.backgroundColor = ThemeColor().blueColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(addNewAlert), for: .touchUpInside)
         return button
@@ -608,20 +603,44 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         hud.show(in: (self.parent?.view)!)
         URLServices.fetchInstance.passServerData(urlParameters:["userLogin","getInterest"],httpMethod:"POST",parameters:body){(response, pass) in
             if pass{
-//                print(response)
-                self.writeRealm(json:response){(pass) in
-                    if pass{
-                        DispatchQueue.main.async {
+                let responseSuccess = response["success"].bool ?? false
+                if responseSuccess{
+                    self.writeRealm(json:response){(pass) in
+                        if pass{
+                            DispatchQueue.main.async {
+                                self.alerts = self.allAlert
+                                self.alertTableView.reloadData()
+                                DispatchQueue.main.asyncAfter(deadline: .now()) {
+                                    hud.dismiss()
+                                }
+                            }
+                        } else{
                             self.alerts = self.allAlert
                             self.alertTableView.reloadData()
                             DispatchQueue.main.asyncAfter(deadline: .now()) {
                                 hud.dismiss()
                             }
                         }
+                    }
+                } else{
+                    let code = response["code"].int ?? 0
+                    if code == 800{
+                        
+                        deleteMemory()
+                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        hud.textLabel.text = "Error"
+                        hud.detailTextLabel.text = "Password Reset" // To change?
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "resetDevice_title"), comment: ""), message: NSLocalizedString(textValue(name: "resetDevice_description"), comment: ""), preferredStyle: .alert)
+                        let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "resetDevice_confirm"), comment: ""), style: .destructive) { (_) in
+                            self.checkSetUpView()
+                        }
+                        confirmAlertCtrl.addAction(confirmAction)
+                        self.present(confirmAlertCtrl, animated: true, completion: nil)
                     } else{
-                        self.alerts = self.allAlert
-                        self.alertTableView.reloadData()
-                        DispatchQueue.main.asyncAfter(deadline: .now()) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()
                         }
                     }

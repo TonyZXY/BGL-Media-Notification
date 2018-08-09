@@ -192,7 +192,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 if sendDeviceTokenStatus{
                     URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","logoutIOSDevice"], httpMethod: "POST", parameters: body) { (response, success) in
                         if success{
-                            self.deleteMemory()
+                            deleteMemory()
                             self.optionTableView.reloadData()
                             hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                             hud.textLabel.text = "Success"
@@ -237,22 +237,22 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     
-    func deleteMemory(){
-        UserDefaults.standard.set(false,forKey: "isLoggedIn")
-        UserDefaults.standard.set(true, forKey: "flashSwitch")
-        UserDefaults.standard.set(true, forKey: "priceSwitch")
-        UserDefaults.standard.set(false, forKey: "SendDeviceToken")
-        UserDefaults.standard.set(false, forKey: "getDeviceToken")
-        UserDefaults.standard.set("null", forKey: "UserEmail")
-        UserDefaults.standard.set("null", forKey: "CertificateToken")
-        UserDefaults.standard.set("null", forKey: "UserToken")
-        
-        try! self.realm.write {
-            self.realm.delete(self.realm.objects(alertObject.self))
-            self.realm.delete(self.realm.objects(alertCoinNames.self))
-        }
-    }
-    
+//    func deleteMemory(){
+//        UserDefaults.standard.set(false,forKey: "isLoggedIn")
+//        UserDefaults.standard.set(true, forKey: "flashSwitch")
+//        UserDefaults.standard.set(true, forKey: "priceSwitch")
+//        UserDefaults.standard.set(false, forKey: "SendDeviceToken")
+//        UserDefaults.standard.set(false, forKey: "getDeviceToken")
+//        UserDefaults.standard.set("null", forKey: "UserEmail")
+//        UserDefaults.standard.set("null", forKey: "CertificateToken")
+//        UserDefaults.standard.set("null", forKey: "UserToken")
+//
+//        try! self.realm.write {
+//            self.realm.delete(self.realm.objects(alertObject.self))
+//            self.realm.delete(self.realm.objects(alertCoinNames.self))
+//        }
+//    }
+//
     
     func setUpView(){
         titleLabel.text = navigationBarItem
@@ -280,7 +280,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     let titleLabel: UILabel = {
         let titleLabel = UILabel()
         titleLabel.textColor = UIColor.white
-        
+        titleLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
         titleLabel.font = UIFont.semiBoldFont(17)
         titleLabel.textAlignment = .center
         return titleLabel

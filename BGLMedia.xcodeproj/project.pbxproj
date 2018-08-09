@@ -448,7 +448,6 @@
 			children = (
 				2D52ADC420E46E1600018FC0 /* AllLossView.swift */,
 				2D52ADC520E46E1600018FC0 /* DetailMenuBar.swift */,
-				2D52ADC620E46E1600018FC0 /* alertTableViewCell.swift */,
 				2D52ADC720E46E1600018FC0 /* TransactionHistory */,
 				2D52ADCD20E46E1600018FC0 /* MainView.swift */,
 				2D52ADCE20E46E1600018FC0 /* priceNotificationCell.swift */,
@@ -540,8 +539,8 @@
 				2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */,
 				2D52AE5620E46E1900018FC0 /* NewsFlashViewController.swift~HEAD */,
 				2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */,
-				5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */,
 				2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */,
+				5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */,
 				5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */,
 				57BAD9D0210503A100973B45 /* ShareNewsFlashControllerV2.swift */,
 				57BBAB532108E1F600984AA4 /* NewsFlashController.swift */,
@@ -723,6 +722,7 @@
 		571F68312101710B00342198 /* View */ = {
 			isa = PBXGroup;
 			children = (
+				2D52ADC620E46E1600018FC0 /* alertTableViewCell.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";

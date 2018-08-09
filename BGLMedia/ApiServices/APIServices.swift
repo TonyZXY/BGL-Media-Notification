@@ -125,7 +125,6 @@ class APIServices:NSObject{
             switch response.result {
             case .success(let value):
                 let res = JSON(value)
-                print(res)
                 let specificData = res["data"]
 //                print(specificData["quotes"][priceType]["total_market_cap"].double)
                 self.realm.beginWrite()

@@ -76,9 +76,10 @@ class OnBoardingUIPageViewController: UIPageViewController{
     
     var pageControl = UIPageControl()
     func configurePageControl() {
-        let factor = view.frame.width / 414
+        let factor2 = view.frame.height / 736
+        print(factor2)
         // The total number of pages that are available is based on how many available colors we have.
-        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 120 * factor,width: UIScreen.main.bounds.width,height: 20 * factor))
+        pageControl = UIPageControl(frame: CGRect(x: 0,y: UIScreen.main.bounds.maxY - 100 * factor2,width: UIScreen.main.bounds.width,height: 20 * factor2))
         self.pageControl.numberOfPages = allPages.count
         self.pageControl.currentPage = 0
         self.pageControl.tintColor = ThemeColor().greyColor()

@@ -11,6 +11,7 @@ import UIKit
 class ShareNewsFlashControllerV2: UIViewController {
     var newsdate:String = ""
     var newsdescriptions: String = ""
+    var newsTitle: String = ""
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -19,6 +20,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         cancelButton.addTarget(self, action: #selector(cancelView), for: .touchUpInside)
         dateLabel.text = newsdate
         flashNewsDescription.text = newsdescriptions
+        titleLabel.text = newsTitle
         
         
         // Do any additional setup after loading the view.
@@ -37,7 +39,7 @@ class ShareNewsFlashControllerV2: UIViewController {
             (activityType, completed, items, error) in
             
             guard completed else {
-                print("User cancelled.")
+//                print("User cancelled.")
                 return
                 //                if user cancels activityVC preview can also be dismissed
                 //            self.dismiss(animated: true, completion: nil)
@@ -66,6 +68,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         shareImage.addSubview(dateLabel)
         shareImage.addSubview(flashNewsDescription)
         shareImage.addSubview(downloadAppImage)
+        shareImage.addSubview(titleLabel)
         view.addSubview(selectBarView)
         selectBarView.addSubview(shareButton)
         selectBarView.addSubview(cancelButton)
@@ -143,21 +146,21 @@ class ShareNewsFlashControllerV2: UIViewController {
          NSLayoutConstraint(item: clockImage, attribute: .centerY, relatedBy: .equal, toItem: dateLabel, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor)-[v2]-\(20*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
-        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(20*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
+        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(20*factor)-[v4]-\(20*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage,"v4":titleLabel]))
+        
+        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(20*factor)-[v4]-\(10*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage,"v4":titleLabel]))
+        
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v3]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v3(\(150*factor))]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         
-//        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(80)]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
+
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
-//        NSLayoutConstraint(item: shareButton, attribute: .centerY, relatedBy: .equal, toItem: selectBarView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-         NSLayoutConstraint(item: shareButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 10*factor).isActive = true
-//        NSLayoutConstraint(item: shareButton, attribute: .bottom, relatedBy: .equal, toItem: selectBarView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
+
+        NSLayoutConstraint(item: shareButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 10*factor).isActive = true
         NSLayoutConstraint(item: shareButton, attribute: .right, relatedBy: .equal, toItem: selectBarView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
-//        NSLayoutConstraint(item: cancelButton, attribute: .centerY, relatedBy: .equal, toItem: selectBarView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: cancelButton, attribute: .left, relatedBy: .equal, toItem: selectBarView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
         NSLayoutConstraint(item: cancelButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 10*factor).isActive = true
         NSLayoutConstraint(item: cancelButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 10*factor).isActive = true
-//        NSLayoutConstraint(item: cancelButton, attribute: .bottom, relatedBy: .equal, toItem: selectBarView, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
     }
     
     var shareImage:UIView = {
@@ -193,16 +196,25 @@ class ShareNewsFlashControllerV2: UIViewController {
         imageView.image = UIImage(named: "alarm")
         return imageView
     }()
+    lazy var titleLabel: UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.font = UIFont.boldFont(18)
+        label.numberOfLines = 2
+        return label
+    }()
     
     lazy var flashNewsDescription:UILabel = {
        var label = UILabel()
         label.font = UIFont.regularFont(17*view.frame.width/375)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.lineBreakMode = .byWordWrapping
+        label.textAlignment = .justified
         label.numberOfLines = 0
         label.textColor = ThemeColor().darkBlackColor()
         return label
     }()
+    
     
     var downloadAppImage:UIImageView = {
         var imageView = UIImageView()
@@ -226,7 +238,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     
     lazy var cancelButton:UIButton = {
         var button = UIButton()
-        button.setTitle("Cancel", for: .normal)
+        button.setTitle(textValue(name: "cancel_flash"), for: .normal)
         button.titleLabel?.font = UIFont.regularFont(20*view.frame.width/375)
         button.setTitleColor(ThemeColor().darkGreyColor(), for: .normal)
         button.contentEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 50)

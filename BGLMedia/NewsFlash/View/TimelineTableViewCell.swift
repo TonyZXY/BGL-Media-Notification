@@ -19,7 +19,8 @@ open class TimelineTableViewCell: UITableViewCell {
     
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
-
+    @IBOutlet weak var txtTitleLabel: UILabel!
+    
     var object: NewsFlash?{
         didSet{
             let watchList = try!Realm().objects(NewsInFlashNewsRealm.self).filter("symbol = %@",object!.id)
@@ -66,9 +67,10 @@ open class TimelineTableViewCell: UITableViewCell {
         }
         
 //        likeButton.setTitle("♡", for: .normal)
-        
         likeButton.addTarget(self, action: #selector(likeButtonClicked), for: .touchUpInside)
         
+        txtTitleLabel.sizeToFit()
+
         lineInfoLabel.sizeToFit()
         titleLabel.sizeToFit()
         descriptionLabel.sizeToFit()
@@ -111,12 +113,15 @@ open class TimelineTableViewCell: UITableViewCell {
     }
     
     func setUpView(){
-        titleLabel.font = UIFont.semiBoldFont(18)
+        titleLabel.font = UIFont.semiBoldFont(12)
         descriptionLabel.font = UIFont.regularFont(15)
-        
+        txtTitleLabel.font = UIFont.boldFont(18)
+        txtTitleLabel.numberOfLines = 2
+        txtTitleLabel.textColor = ThemeColor().whiteColor()
         addSubview(sharesbutton)
-        NSLayoutConstraint(item: sharesbutton, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -5).isActive = true
-        NSLayoutConstraint(item: sharesbutton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 10).isActive = true
+        NSLayoutConstraint(item: sharesbutton, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -15).isActive = true
+        NSLayoutConstraint(item: sharesbutton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
+//        shareButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
 //        NSLayoutConstraint(item: sharesbutton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 30).isActive = true
 //        NSLayoutConstraint(item: sharesbutton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 120).isActive = true
     }

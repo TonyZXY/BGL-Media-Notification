@@ -36,8 +36,11 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
         cell.factor = view.frame.width/375
-        cell.dateLabel.text = dateFormatter.string(from: object.dateTime)
+        cell.dateLabel.text = Extension.method.convertTimetoLocalization(convert: dateFormatter.string(from: object.dateTime))
+        
         cell.detailLabel.text = object.contents
+        print(object.title)
+        cell.titleLabel.text = object.title
         cell.shareButton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
         return cell
     }
@@ -58,19 +61,33 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         let shareView = ShareNewsFlashControllerV2()
         shareView.newsdate = cell.dateLabel.text!
         shareView.newsdescriptions = cell.detailLabel.text!
+        shareView.newsTitle = cell.titleLabel.text!
         present(shareView, animated: true, completion: nil)
     }
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
+        view.endEditing(true)
+    }
+    
+    func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
+        searchBar.setShowsCancelButton(true, animated: true)
+        return true
+    }
+    
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(false, animated: true)
         searchBar.resignFirstResponder()
     }
     
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         if searchBar.text == nil || searchBar.text == ""{
+            searchBar.setShowsCancelButton(false, animated: true)
             view.endEditing(true)
             newsFlashResult.removeAll()
             searchFlashNewsTableView.reloadData()
         } else{
+            searchBar.setShowsCancelButton(true, animated: true)
             storeData() { (response, success) in
                 if success{
                     self.newsFlashResult.removeAll()
@@ -104,6 +121,7 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
                         let searchObject = NewsFlash()
                         searchObject.id = item["_id"].string!
                         searchObject.contents = item["shortMassage"].string!
+                        searchObject.title = item["title"].string!
                         searchObject.dateTime = dateFormatter.date(from: item["publishedTime"].string!)!
                         searchArrayObject.append(searchObject)
                     }
@@ -180,7 +198,14 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
         searchBar.tintColor = ThemeColor().darkBlackColor()
         searchBar.barTintColor = ThemeColor().darkBlackColor()
         searchBar.layer.borderColor = ThemeColor().darkBlackColor().cgColor
-        
+        searchBar.layer.borderWidth = 1
+//        searchBar.showsCancelButton = true
+        let attributes = [
+            NSAttributedStringKey.foregroundColor : ThemeColor().whiteColor(),
+            NSAttributedStringKey.font: UIFont.regularFont(13)
+        ]
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).setTitleTextAttributes(attributes, for: .normal)
+        UIBarButtonItem.appearance(whenContainedInInstancesOf: [UISearchBar.self]).title = textValue(name: "searchBar_cancel")
         var searchTextField:UITextField? = searchBar.value(forKey: "searchField") as? UITextField
         if (searchTextField?.responds(to: #selector(getter: UITextField.attributedPlaceholder)))!{
             searchTextField!.attributedPlaceholder = NSAttributedString(string:textValue(name: "search_placeholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()])
@@ -214,7 +239,7 @@ class FlashNewsResultCell:UITableViewCell{
     
     var object:String?{
         didSet{
-            print("dateLabel.frame.height")
+          
 //            NSLayoutConstraint(item: self, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: detailLabel.frame.height + 200).isActive = true
             
 //            self.frame =  CGRect(x: 0, y: 0, width: self.frame.width, height: dateLabel.frame.height + 200)
@@ -228,11 +253,13 @@ class FlashNewsResultCell:UITableViewCell{
         cellView.addSubview(dateLabel)
         cellView.addSubview(detailLabel)
         cellView.addSubview(shareButton)
+        cellView.addSubview(titleLabel)
         
         
         cellView.layer.cornerRadius = 8 * factor!
         dateLabel.font = UIFont.semiBoldFont(18 * factor!)
         detailLabel.font = UIFont.regularFont(15 * factor!)
+        titleLabel.font = UIFont.boldFont(16 * factor!)
         shareButton.layer.cornerRadius = 15 * factor!
         shareButton.contentEdgeInsets = UIEdgeInsetsMake(5 * factor!, 10 * factor!, 5 * factor!, 10 * factor!)
         shareButton.imageEdgeInsets = UIEdgeInsetsMake(20 * factor!, 0, 20 * factor!, 0)
@@ -243,9 +270,9 @@ class FlashNewsResultCell:UITableViewCell{
         
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-0-[v1]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v1(\(40*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v4]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton,"v4":titleLabel]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v2]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
-        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
+        cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(10*factor!)-[v4]-\(8 * factor!)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton,"v4":titleLabel]))
         
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v3]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
         cellView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(5*factor!)-[v3]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cellView,"v1":dateLabel,"v2":detailLabel,"v3":shareButton]))
@@ -274,6 +301,13 @@ class FlashNewsResultCell:UITableViewCell{
         label.textColor = ThemeColor().whiteColor()
         label.backgroundColor = ThemeColor().darkBlackColor()
         label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    var titleLabel: UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = ThemeColor().whiteColor()
+        label.numberOfLines = 2
         return label
     }()
     
