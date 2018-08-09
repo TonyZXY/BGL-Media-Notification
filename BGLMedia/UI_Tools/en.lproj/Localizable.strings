@@ -153,6 +153,7 @@ alertDelete_history = "Delete";
 
 //Setting Page
 settingTitle = "More Options";
+help = "Help";
 aboutUs_section = "Blockchain Global";
 setting_section = "Setting";
 account_section = "Account";
