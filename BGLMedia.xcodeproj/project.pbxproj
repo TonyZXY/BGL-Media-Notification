@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2D3AF495211BBEC900F5AA51 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF494211BBEC900F5AA51 /* HelpViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
 		2D52AE9A20E46E1A00018FC0 /* AlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADBA20E46E1600018FC0 /* AlertController.swift */; };
@@ -204,6 +205,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2D3AF494211BBEC900F5AA51 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
 		2D52ADB920E46E1600018FC0 /* DetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DetailController.swift; sourceTree = "<group>"; };
@@ -408,6 +410,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2D3AF493211BBEA900F5AA51 /* Help */ = {
+			isa = PBXGroup;
+			children = (
+				2D3AF494211BBEC900F5AA51 /* HelpViewController.swift */,
+			);
+			path = Help;
+			sourceTree = "<group>";
+		};
 		2D52ADB620E46E1600018FC0 /* DetailPage */ = {
 			isa = PBXGroup;
 			children = (
@@ -985,6 +995,7 @@
 		57FC41F020FAD2930052EE02 /* More */ = {
 			isa = PBXGroup;
 			children = (
+				2D3AF493211BBEA900F5AA51 /* Help */,
 				57FC41F720FAFFEF0052EE02 /* Language */,
 				57FC41F620FAFFE80052EE02 /* Currency */,
 				57FC41F320FADC760052EE02 /* Community */,
@@ -1315,6 +1326,7 @@
 				57355C6220F718CC002E70E4 /* SaveStructToRealmObjects.swift in Sources */,
 				2D52AEA720E46E1A00018FC0 /* HistoryLine.swift in Sources */,
 				57BBAB6D210962C300984AA4 /* WatchListRealm.swift in Sources */,
+				2D3AF495211BBEC900F5AA51 /* HelpViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

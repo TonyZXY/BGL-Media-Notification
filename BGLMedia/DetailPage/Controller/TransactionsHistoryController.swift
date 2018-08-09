@@ -155,6 +155,9 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         
         
     }
+    @objc func addTransaction(sender: UIButton){
+        
+    }
     
 //    lazy var refresher: UIRefreshControl = {
 //        let refreshControl = UIRefreshControl()
@@ -198,6 +201,15 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         view.backgroundColor = ThemeColor().themeColor()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
+    }()
+    
+    var addHistoryButton: UIButton = {
+        let button = UIButton(type: .custom)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.backgroundColor = ThemeColor().themeWidgetColor()
+        button.setImage(UIImage(named: "AddButton"), for: .normal)
+        button.addTarget(self, action: #selector(addTransaction), for: .touchUpInside)
+        return button
     }()
     
     @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
