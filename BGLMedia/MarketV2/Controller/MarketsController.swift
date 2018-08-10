@@ -33,21 +33,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         menuBar.collectionView.reloadData()
-        
-//        global = GlobalMarketsController()
-//        watchList = WatchListsController()
-//        collectionviews.reloadData()
-//        global.mainTotalCollectionView.reloadData()
-//        global.sortdoneclick()
-//        global.coinList.reloadData()
-//        global.filterDate.reloadData()
-//
-//        watchList.coinList.reloadData()
-//
-//        watchList.watchList.sortDate.reloadData()
-//        watchList.watchList.coinList.reloadData()
-//        watchList.watchList.marketSortPickerView.setPickerViewDoneButton()
-        
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
     }
     
     @objc func changeCurrency(){
@@ -141,14 +127,12 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         return mb
     }()
     
-    lazy var collectionviews: UICollectionView = {
+    var collectionviews: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout:layout)
         collectionview.isPagingEnabled = true
-        collectionview.delegate = self
-        collectionview.dataSource = self
         collectionview.showsHorizontalScrollIndicator = false
         return collectionview
     }()
@@ -164,9 +148,13 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     }()
     
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/414
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
+        
+        collectionviews.delegate = self
+        collectionviews.dataSource = self
         
         //Set Up Menu Bar
         view.addSubview(menuBar)

@@ -29,6 +29,15 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+//        self.navigationController.bar
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        /*Changing color*/
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+//        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
+        self.navigationItem.backBarButtonItem = backItem
+         
         network.reachability.whenUnreachable = { _ in
             print("offline----------------------")
             self.view.addSubview(self.networkLabel)

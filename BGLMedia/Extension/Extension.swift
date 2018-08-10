@@ -150,6 +150,13 @@ class Extension:NSObject{
     }
     
     
+    func reloadNavigationBarBackButton(navigationBarItem:UINavigationItem){
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        navigationBarItem.backBarButtonItem = backItem
+    }
 }
 
 extension UIViewController{

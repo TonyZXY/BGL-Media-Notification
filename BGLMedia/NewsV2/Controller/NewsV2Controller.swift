@@ -12,7 +12,6 @@ import SwiftyJSON
 import SafariServices
 
 class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelegate{
-    let realm = try! Realm()
     var displayNumber:Int = 0
     var loadMoreData:Bool = false
     var changeLanguageStatus:Bool = false
@@ -21,7 +20,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     var newsObject:Results<NewsObject>{
         get{
-            return realm.objects(NewsObject.self).sorted(byKeyPath: "publishedTime", ascending: false)
+            return try! Realm().objects(NewsObject.self).sorted(byKeyPath: "publishedTime", ascending: false)
         }
     }
     
@@ -124,7 +123,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     @objc func deleteCache(){
         deleteCacheStatus = true
-        print(realm.objects(NewsObject.self).count)
+        print(try! Realm().objects(NewsObject.self).count)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -161,6 +160,11 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         //                //                        })
         //            }
         //        }
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
     }
     
     func addRefreshHeader(completion:@escaping (Bool)->Void){
@@ -243,7 +247,8 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     
     func storeDataToRealm(res:JSON,completion:@escaping (Bool)->Void){
-        self.realm.beginWrite()
+        let realm = try! Realm()
+        realm.beginWrite()
         if let collection = res.array{
             for result in collection{
                 let id = result["_id"].string ?? "0"
@@ -263,14 +268,14 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 }
                 
                 if id != "0" {
-                    if self.realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
-                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, lanugageTag,source,contentTag])
+                    if realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
+                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, lanugageTag,source,contentTag])
                     } else {
-                        self.realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,lanugageTag,source,contentTag], update: true)
+                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,lanugageTag,source,contentTag], update: true)
                     }
                 }
             }
-            try! self.realm.commitWrite()
+            try! realm.commitWrite()
             completion(true)
         }
     }

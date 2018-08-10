@@ -220,6 +220,11 @@ class DetailController: UIViewController{
         //Constraints
         childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
         childViewControllers.view.topAnchor.constraint(equalTo: views.topAnchor).isActive = true
+//        if #available(iOS 11.0, *) {
+//            childViewControllers.view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: views.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//        } else {
+//           childViewControllers.view.bottomAnchor.constraint(equalTo: views.bottomAnchor).isActive = true
+//        }
         childViewControllers.view.leftAnchor.constraint(equalTo: views.leftAnchor).isActive = true
         childViewControllers.view.widthAnchor.constraint(equalTo: views.widthAnchor).isActive = true
         childViewControllers.view.heightAnchor.constraint(equalTo: views.heightAnchor).isActive = true
@@ -227,6 +232,7 @@ class DetailController: UIViewController{
     
     //Set up layout constraints
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         coinDetailController.gerneralController.factor = factor
         allLossView.factor = factor
@@ -234,7 +240,7 @@ class DetailController: UIViewController{
         //        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
         coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)
         coinDetailController.gerneralController.tradingPairButton.addTarget(self, action: #selector(editTradingPairs), for: .touchUpInside)
-        view.backgroundColor = ThemeColor().themeColor()
+        view.backgroundColor = ThemeColor().blueColor()
         let titleLabel = UILabel()
         titleLabel.font = UIFont.boldFont(17*factor)
         titleLabel.text = coinDetails.selectCoinName
@@ -256,6 +262,15 @@ class DetailController: UIViewController{
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         addChildViewControllers(childViewControllers: coinDetailController, views: coinDetailView)
+//        if #available(iOS 11.0, *) {
+//            coinDetailView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//        } else {
+//           coinDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+//        }
+
+        
+        
+        
         let generalPage = coinDetailController.gerneralController
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()

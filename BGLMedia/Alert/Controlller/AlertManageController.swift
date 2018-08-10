@@ -37,7 +37,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     var newTransaction = Transactions()
     let cryptoCompareClient = CryptoCompareClient()
-    let realm = try! Realm()
+    
     var sectionPrice:Double = 0
     var inputPrice:String = ""
     var intersetObject = alertObjects()
@@ -349,6 +349,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     @objc func deleteAlert(){
+        let realm = try! Realm()
         let body:[String:Any] = ["email":email,"token":token,"interest":[["_id":intersetObject.id]]]
         URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: body) { (response, success) in
             if success{
@@ -356,14 +357,14 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 let filterId = "id = " + String(self.intersetObject.id)
                 let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "
                 
-                let coinsAlert = self.realm.objects(alertObject.self).filter(filterName)
+                let coinsAlert = realm.objects(alertObject.self).filter(filterName)
                 
-                try! self.realm.write {
-                    self.realm.delete(self.realm.objects(alertObject.self).filter(filterId))
+                try! realm.write {
+                    realm.delete(realm.objects(alertObject.self).filter(filterId))
                 }
                 if coinsAlert.count == 0{
-                    try! self.realm.write {
-                        self.realm.delete(self.realm.objects(alertCoinNames.self).filter(filterName))
+                    try! realm.write {
+                        realm.delete(realm.objects(alertCoinNames.self).filter(filterName))
                     }
                 }
                 self.navigationController?.popViewController(animated: true)
@@ -401,6 +402,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     }()
     
     @objc func addNewAlert(){
+        let realm = try! Realm()
         if intersetObject.coinName != "" && intersetObject.exchangName != "" && intersetObject.tradingPairs != ""{
             var compareStatus:Int = 0
             let Inputprice = Double(inputPrice) ?? 0
@@ -420,14 +422,14 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterest"], httpMethod: "POST", parameters: body) { (response, success) in
                     print(response)
                     if success{
-                        self.realm.beginWrite()
+                        realm.beginWrite()
                         let realmData:[Any] = [self.intersetObject.id,self.intersetObject.coinName,self.intersetObject.coinAbbName,self.intersetObject.tradingPairs,self.intersetObject.exchangName,self.intersetObject.compare,self.intersetObject.compareStatus,self.intersetObject.switchStatus,Date()]
-                        if self.realm.object(ofType: alertObject.self, forPrimaryKey: self.intersetObject.id) == nil {
-                            self.realm.create(alertObject.self, value: realmData)
+                        if realm.object(ofType: alertObject.self, forPrimaryKey: self.intersetObject.id) == nil {
+                            realm.create(alertObject.self, value: realmData)
                         } else {
-                            self.realm.create(alertObject.self, value: realmData, update: true)
+                            realm.create(alertObject.self, value: realmData, update: true)
                         }
-                        try! self.realm.commitWrite()
+                        try! realm.commitWrite()
                     }
                     self.navigationController?.popViewController(animated: true)
                 }

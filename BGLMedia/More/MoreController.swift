@@ -14,7 +14,7 @@ import JGProgressHUD
 
 class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
-    let realm = try! Realm()
+  
     var loginStatus:Bool{
         get{
             return  UserDefaults.standard.bool(forKey: "isLoggedIn")
@@ -54,20 +54,20 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
+            return [[textValue(name: "help")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
     }
     
     var sections:[String]?{
         get{
-            return [textValue(name: "aboutUs_section"),textValue(name: "setting_section"),textValue(name: "account_section")]
+            return [textValue(name: "help"),textValue(name: "setting_section"),textValue(name: "account_section")]
         }
     }
     
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[AboutUsViewController(), BGLCommunityController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController(usedPlace: 0)]]
+            return [[HelpViewController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController(usedPlace: 0)]]
         }
     }
     
@@ -98,6 +98,8 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     @objc func changeLanguage(){
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
+//        self.tabBarController?.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
         optionTableView.reloadData()
     }
     
@@ -157,6 +159,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
 //    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let realm = try! Realm()
         if indexPath.section < 2{
             //            if indexPath.section == 1 && indexPath.row == 2{
             //                if notificationStatus{
@@ -164,9 +167,9 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
             if indexPath.section == 1 && indexPath.row == 3{
                 let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "title_clearCache"), comment: ""), message: NSLocalizedString(textValue(name: "confirm_clearCache"), comment: ""), preferredStyle: .alert)
                 let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "delete_clearCache"), comment: ""), style: .destructive) { (_) in
-                    try! self.realm.write {
-                        self.realm.delete(self.realm.objects(NewsFlash.self))
-                        self.realm.delete(self.realm.objects(NewsObject.self))
+                    try! realm.write {
+                        realm.delete(realm.objects(NewsFlash.self))
+                        realm.delete(realm.objects(NewsObject.self))
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
                     }
                 }
@@ -255,6 +258,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
 //
     
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         view.addSubview(optionTableView)

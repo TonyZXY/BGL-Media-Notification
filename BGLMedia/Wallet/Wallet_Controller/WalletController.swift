@@ -13,7 +13,7 @@ import RealmSwift
 
 class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate{
     var image = AppImage()
-    let realm = try! Realm()
+//    let realm = try! Realm()
     //    var all = try! Realm().objects(MarketTradingPairs.self)
     let cryptoCompareClient = CryptoCompareClient()
     //    var walletResults = [MarketTradingPairs]()
@@ -27,7 +27,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     var assetss: Results<Transactions>{
         get{
-            return realm.objects(Transactions.self).sorted(byKeyPath: "publishDate")
+            return try! Realm().objects(Transactions.self).sorted(byKeyPath: "publishDate")
         }
     }
     
@@ -85,6 +85,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     @objc func changeLanguage(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         checkTransaction()
         changeLaugageStatus = true
     }
@@ -165,8 +166,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                             self.totalAssets += tran.currentTotalPrice
                                             self.totalProfit += tran.totalRiseFallNumber
                                             
-                                            let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
-                                            try! self.realm.write {
+                                            let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
+                                            try! Realm().write {
                                                 if object.count != 0{
                                                     object[0].transactionPrice = transactionPrice
                                                     object[0].currentSinglePrice = singlePrice * currency
@@ -212,8 +213,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                 self.totalAssets += tran.currentTotalPrice
                                 self.totalProfit += tran.totalRiseFallNumber
                                 
-                                let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
-                                try! self.realm.write {
+                                let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
+                                try! Realm().write {
                                     if object.count != 0{
                                         object[0].transactionPrice = transactionPrice
                                         object[0].currentSinglePrice = singlePrice * currency
@@ -284,9 +285,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         if editingStyle == UITableViewCellEditingStyle.delete{
             let item = assetss[indexPath.row]
             let eachTransaction = item.everyTransactions
-            try! realm.write {
-                realm.delete(eachTransaction)
-                realm.delete(item)
+            try! Realm().write {
+                try! Realm().delete(eachTransaction)
+                try! Realm().delete(item)
             }
             refreshData()
         }
@@ -300,7 +301,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
         coinDetail = cell.selectCoin
         detailPage.coinDetails = coinDetail
-        detailPage.coinDetailController.alertControllers.status = "setting"
+        detailPage.coinDetailController.alertControllers.status = "detailPage"
         navigationController?.pushViewController(detailPage, animated: true)
     }
     
@@ -379,6 +380,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Set Up View Layout
     func setupView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         totalLabel.text = textValue(name:"mainBalance")
         totalLabel.font = UIFont.regularFont(20*factor)

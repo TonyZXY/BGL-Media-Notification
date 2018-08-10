@@ -30,7 +30,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     }
     
     let sortPickerView = UIPickerView()
-    let realm = try! Realm()
+    
     var filterOption:Int = 0
     var isSearching = false
     var filterItem:[String] = ["percent1h","percent24h","percent7d"]
@@ -45,47 +45,51 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     
     var coinAlphabeticalObjects:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self).sorted(byKeyPath: "coinAbbName", ascending: true)
+            return try! Realm().objects(GlobalAverageObject.self).sorted(byKeyPath: "coinAbbName", ascending: true)
         }
     }
     
     var coinHightestCapObjects:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self).sorted(byKeyPath: "marketCap", ascending: false)
+            return try! Realm().objects(GlobalAverageObject.self).sorted(byKeyPath: "marketCap", ascending: false)
         }
     }
     
     var coinLowestCapObjects:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self).sorted(byKeyPath: "marketCap", ascending: true)
+            return try! Realm().objects(GlobalAverageObject.self).sorted(byKeyPath: "marketCap", ascending: true)
         }
     }
     
     var coinGainersObjects:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self).sorted(byKeyPath: filterItem[filterOption], ascending: false)
+            return try! Realm().objects(GlobalAverageObject.self).sorted(byKeyPath: filterItem[filterOption], ascending: false)
         }
     }
     
     var coinLosersObjects:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self).sorted(byKeyPath: filterItem[filterOption], ascending: true)
+            return try! Realm().objects(GlobalAverageObject.self).sorted(byKeyPath: filterItem[filterOption], ascending: true)
         }
     }
     
     var allCoinData:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self)
+            return try! Realm().objects(GlobalAverageObject.self)
         }
     }
     
     var globalMarket:Results<GlobalMarketValueRealm>{
         get{
-            return realm.objects(GlobalMarketValueRealm.self)
+            return try! Realm().objects(GlobalMarketValueRealm.self)
         }
     }
     
-    var filterObject = try! Realm().objects(GlobalAverageObject.self)
+    var filterObject:Results<GlobalAverageObject>{
+        get{
+            return try! Realm().objects(GlobalAverageObject.self)
+        }
+    }
     
 //    var sortCoinList:[GlobalAverageObject]{
 //        didSet{
@@ -486,7 +490,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             let global = GloabalController()
             global.hidesBottomBarWhenPushed = true
             global.pageStatus = "Global"
-            global.coinDetailController.alertControllers.status = "setting"
+            global.coinDetailController.alertControllers.status = "detailPage"
             global.coinDetail.coinName = cell.coinLabel.text!
             navigationController?.pushViewController(global, animated: true)
         }
@@ -499,7 +503,8 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             coinList.reloadData()
         } else{
             isSearching = true
-            filterObject = coinAlphabeticalObjects.filter("coinAbbName CONTAINS %@", searchBar.text!.uppercased())
+            var filter = filterObject
+            filter = coinAlphabeticalObjects.filter("coinAbbName CONTAINS %@", searchBar.text!.uppercased())
             coinList.reloadData()
         }
     }

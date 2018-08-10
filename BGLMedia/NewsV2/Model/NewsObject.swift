@@ -19,10 +19,11 @@ class NewsObject: Object {
     @objc dynamic var publishedTime: Date = Date()
     @objc dynamic var author: String? = ""
     @objc dynamic var localeTag: String? = ""
-//    @objc dynamic var contentTag: String? = ""
     @objc dynamic var languageTag:String? = ""
     @objc dynamic var source:String? = ""
     var contentTag = List<String>()
+    
+    
     
     override class func primaryKey() -> String {
         return "_id"

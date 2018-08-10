@@ -23,7 +23,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     var color = ThemeColor()
     var transaction:String = "Buy"
     let cryptoCompareClient = CryptoCompareClient()
-    let realm = try! Realm()
+   
 //    var transcationData = TransactionFormData()
     var updateTransaction = EachTransactions()
     var transactionStatus = "Add"
@@ -79,8 +79,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             cell.factor = factor
             cell.coinLabel.text = textValue(name: "coinForm")
             cell.coin.text = newTransaction.coinName
-            if transactionStatus == "Update"{
+            if transactionStatus == "Update" || transactionStatus == "AddSpecific"{
                 cell.isUserInteractionEnabled = false
+                cell.accessoryType = .none
             }
             return cell
         }else if indexPath.row == 1{
@@ -265,15 +266,16 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func AddTransactionToRealm(completion:@escaping (Bool)->Void){
-        let lastId = (self.realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
+        let realm = try! Realm()
+        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
         self.newTransaction.id = lastId + 1
         let tran = Transactions()
         tran.coinAbbName = self.newTransaction.coinAbbName
         tran.coinName = self.newTransaction.coinName
         tran.exchangeName = self.newTransaction.exchangeName
         tran.tradingPairsName = self.newTransaction.tradingPairsName
-        let object = self.realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
-        try! self.realm.write {
+        let object = realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
+        try! realm.write {
             if object.count != 0{
 //                if self.newTransaction.exchangeName != "Global Average"{
                     object[0].exchangeName = self.newTransaction.exchangeName
@@ -282,15 +284,16 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 object[0].everyTransactions.append(self.newTransaction)
             } else{
                 tran.everyTransactions.append(self.newTransaction)
-                self.realm.add(tran)
+                realm.add(tran)
             }
         }
         completion(true)
     }
     
     func UpdateTransactionToRealm(completion:@escaping (Bool)->Void){
-        try! self.realm.write {
-            self.realm.add(newTransaction, update: true)
+        let realm = try! Realm()
+        try! realm.write {
+            realm.add(newTransaction, update: true)
         }
         completion(true)
     }
@@ -570,10 +573,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     func languageLabel(){
         buy.setTitle(textValue(name: "buy"), for: .normal)
         sell.setTitle(textValue(name: "sell"), for: .normal)
-        if transactionStatus == "Add" {
-            transactionButton.setTitle(textValue(name: "addTransaction"), for: .normal)
-        } else if transactionStatus == "Update" {
+        if transactionStatus == "Update" {
             transactionButton.setTitle(textValue(name: "updateTransaction"), for: .normal)
+        } else {
+            transactionButton.setTitle(textValue(name: "addTransaction"), for: .normal)
         }
     }
     
