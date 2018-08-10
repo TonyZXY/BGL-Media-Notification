@@ -115,9 +115,7 @@ class AlertTableViewCell:UITableViewCell{
     }()
     
     @objc func switchIsInAction(sender:UISwitch){
-        
         let realm = try! Realm()
-        
         let alertStatus = try! Realm().objects(alertObject.self).filter("id = %@", object?.id ?? 0)
         
         if let object = alertStatus.first{

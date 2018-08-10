@@ -52,9 +52,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 1,
+            schemaVersion: 2,
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 1) {
+                if (oldSchemaVersion < 2) {
                     // The enumerateObjects(ofType:_:) method iterates
                     // over every Person object stored in the Realm file
                     //                    migration.enumerateObjects(ofType: Person.className()) { oldObject, newObject in
@@ -137,6 +137,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(false, forKey: "buildInterest")
             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
             UserDefaults.standard.set(false, forKey: "getDeviceToken")
+            UserDefaults.standard.set(false, forKey: "changeAlertStatus")
             UserDefaults.standard.set("null", forKey: "UserEmail")
             UserDefaults.standard.set("null", forKey: "CertificateToken")
             UserDefaults.standard.set("null", forKey: "UserToken")

@@ -10,18 +10,18 @@ import UIKit
 import RealmSwift
 
 class WatchListsController: UIViewController, UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
-    let realm = try! Realm()
+
     var index = 0
     var changeLaugageStatus:Bool = false
     var watchListObjects:Results<WatchListRealm>{
         get{
-            return realm.objects(WatchListRealm.self).sorted(byKeyPath: "date", ascending: false)
+            return try! Realm().objects(WatchListRealm.self).sorted(byKeyPath: "date", ascending: false)
         }
     }
     
     var realmObject:Results<GlobalAverageObject>{
         get{
-            return realm.objects(GlobalAverageObject.self)
+            return try! Realm().objects(GlobalAverageObject.self)
         }
     }
     
@@ -121,15 +121,16 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     func getCoinData(completion:@escaping (Bool)->Void){
+        let realm = try! Realm()
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
             if success{
-                let objectResult = self.realm.objects(WatchListRealm.self)
+                let objectResult = try! Realm().objects(WatchListRealm.self)
                 let dispatchGroup = DispatchGroup()
                 for result in objectResult{
                     if result.isGlobalAverage{
                         let coinObject = self.realmObject.filter("coinAbbName = %@", result.coinAbbName)
                         let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
-                        try! self.realm.write {
+                        try! realm.write {
                             watchListCoinObject[0].price = coinObject[0].price
                             watchListCoinObject[0].profitChange = coinObject[0].percent24h
                         }
@@ -138,7 +139,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
                         APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.market) { (success,response) in
                             if success{
                                 let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
-                                try! self.realm.write {
+                                try! realm.write {
                                     watchListCoinObject[0].price = response["RAW"]["PRICE"].double ?? 0
                                     watchListCoinObject[0].profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
                                 }

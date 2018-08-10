@@ -447,6 +447,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         childViewControllers.view.topAnchor.constraint(equalTo: views.topAnchor).isActive = true
         childViewControllers.view.leftAnchor.constraint(equalTo: views.leftAnchor).isActive = true
         childViewControllers.view.widthAnchor.constraint(equalTo: views.widthAnchor).isActive = true
+//        childViewControllers.view.bottomAnchor.constraint(equalTo: views.bottomAnchor).isActive = true
         childViewControllers.view.heightAnchor.constraint(equalTo: views.heightAnchor).isActive = true
     }
     

@@ -51,7 +51,7 @@ class APIServices:NSObject{
     typealias exchangeChoose = [String:chooseCoin]
     
     static let fetchInstance = APIServices()
-    let realm = try! Realm()
+//    let realm = try! Realm()
     let cryptoCompare = "https://min-api.cryptocompare.com/data/"
     let marketCap = "https://api.coinmarketcap.com/v2/"
     
@@ -113,6 +113,7 @@ class APIServices:NSObject{
     
     //Get Global Average Market Cap Value
     func getGlobalMarketData(completion:@escaping (Bool)-> Void){
+        let realm = try! Realm()
         let baseUrl = marketCap + "global/"
         let converUrl = baseUrl + "?convert=" + priceType
         
@@ -127,18 +128,18 @@ class APIServices:NSObject{
                 let res = JSON(value)
                 let specificData = res["data"]
 //                print(specificData["quotes"][priceType]["total_market_cap"].double)
-                self.realm.beginWrite()
+                realm.beginWrite()
                 let marketCap = String(((specificData["quotes"][priceType]["total_market_cap"].double ?? 0)! / 10000000.0).rounded() / 100.0)
                 let volume24 = String(((specificData["quotes"][priceType]["total_volume_24h"].double ?? 0)! / 10000000.0).rounded() / 100.0)
                 let btcDominance = String(specificData["bitcoin_percentage_of_market_cap"].double?.rounded() ?? 0)
                 let realmData:[Any] = [btcDominance,marketCap,volume24,"0"]
 
-                if self.realm.object(ofType: GlobalMarketValueRealm.self, forPrimaryKey: "0") == nil {
-                    self.realm.create(GlobalMarketValueRealm.self, value: realmData)
+                if realm.object(ofType: GlobalMarketValueRealm.self, forPrimaryKey: "0") == nil {
+                    realm.create(GlobalMarketValueRealm.self, value: realmData)
                 } else {
-                    self.realm.create(GlobalMarketValueRealm.self, value: realmData, update: true)
+                    realm.create(GlobalMarketValueRealm.self, value: realmData, update: true)
                 }
-                try! self.realm.commitWrite()
+                try! realm.commitWrite()
                 
                 completion(true)
             case .failure(let error):
@@ -226,6 +227,7 @@ class APIServices:NSObject{
     }
     
     func getMarketCapOneCoinData(coinId:Int, completion:@escaping (Bool,JSON)->Void){
+        let realm = try! Realm()
         let urlString = marketCap + "ticker/" + String(coinId) + "/?convert=" + priceType
         
         let url = URL(string: urlString)
@@ -253,13 +255,13 @@ class APIServices:NSObject{
                 let max_supply = result["max_supply"].double ?? 0
                 let rank = result["rank"].int ?? 0
                 let realmData:[Any] = ["0",coinId,symbol,coinName,totalSupply,circulatingSupply,currency,percent24h,percent1h,percent7d,volume24,max_supply,marketCap,price,rank]
-                self.realm.beginWrite()
-                if self.realm.object(ofType: GlobalAverageObject.self, forPrimaryKey: symbol) == nil {
-                    self.realm.create(GlobalAverageObject.self, value: realmData)
+                realm.beginWrite()
+                if realm.object(ofType: GlobalAverageObject.self, forPrimaryKey: symbol) == nil {
+                    realm.create(GlobalAverageObject.self, value: realmData)
                 } else {
-                    self.realm.create(GlobalAverageObject.self, value: realmData, update: true)
+                    realm.create(GlobalAverageObject.self, value: realmData, update: true)
                 }
-                try! self.realm.commitWrite()
+                try! realm.commitWrite()
                 
                 completion(true,response)
             case .failure(let error):

@@ -33,19 +33,29 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             
         }
     }
-    
-    var realm = try! Realm()
+//       var notificationToken: NotificationToken? = nil
+    var token : NotificationToken?
+
     var alerts:[alertResult] = [alertResult]()
     var coinName = coinAlert()
     var coinAbbName = "null"
     var status = ""
+    var alertList = [alertObject]()
     var TransactionDelegate:TransactionFrom?
-    var changeSwitchStatus = false
+    var changeSwitchStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "changeAlertStatus")
+        }
+    }
+    
+    var changeStatus:Bool = false
+    
+    
     var allAlert:[alertResult]{
         get{
             var allResult = [alertResult]()
-            let results = realm.objects(alertObject.self)
-            var coinNameResults = realm.objects(alertCoinNames.self)
+            let results = try! Realm().objects(alertObject.self)
+            var coinNameResults = try! Realm().objects(alertCoinNames.self)
             if coinName.status{
                 coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName + "' ")
             }
@@ -67,7 +77,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     var allAlerts:Results<alertObject>{
         get{
-            return realm.objects(alertObject.self)
+            return try! Realm().objects(alertObject.self)
         }
     }
     
@@ -103,21 +113,65 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     
+    
+    var alertStatus:Results<alertObject>{
+        get{
+            return try! Realm().objects(alertObject.self)
+        }
+    }
     var twoDimension = [ExpandableNames(isExpanded: true, name: ["ds"]),ExpandableNames(isExpanded: true, name: ["sdf","sfsdfsf"])]
     
     var showIndexPaths = false
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         alerts = allAlert
         view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+//        let alertsss = alertObject()
+//        token = alertsss.observe { change  in
+//            switch change {
+////            case .update(_):
+////                self.changeStatus = true
+////                print("dddd")
+////            case .initial(_):
+////                print("s")
+////            case .error(let error):
+////                print(error)
+////            }
+//            
+//            
+//                
+//                
+//            case .change(let properties):
+//                
+//                for property in properties {
+//                    if property.name == "switchStatus"{
+//                        print("Congratulations, you've exceeded 1000 steps.")
+//                        self.token = nil
+//                    }
+//                }
+//            case .error(let error):
+//                print("An error occurred: \(error)")
+//            case .deleted:
+//                print("The object was deleted.")
+//            }
+//        }
+        
+        
+        for result in alertStatus{
+            alertList.append(result)
+        }
+        
+        
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addAlert"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
+        token?.invalidate()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -140,13 +194,32 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             writeAlertToRealm()
         }
     }
+    
+ 
 
     override func viewDidDisappear(_ animated: Bool){
+        
         if status == "setting"{
-            sendNotification()
+//            if changeSwitchStatus{
+                 self.sendNotification()
+//            }
         } else if status == "detailPage"{
-            sendNotification()
+            checkAlertStatusChange()
+//            if changeStatus{
+//                sendNotification()
+//                self.checkAlertStatusChange()
+//            }
         }
+    }
+    
+
+
+    
+    func checkAlertStatusChange(){
+        
+        
+        print(alertList)
+        print(allAlerts)
     }
     
     func sendNotification(){
@@ -671,9 +744,10 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
+        let realm = try! Realm()
         if json["success"].bool!{
             for result in json["data"].array!{
-                self.realm.beginWrite()
+                realm.beginWrite()
                 let id = result["_id"].int ?? 0
                 let coinName = result["from"].string ?? "null"
                 let coinAbbName = result["from"].string ?? "null"
@@ -685,18 +759,18 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 
                 
                 let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date()]
-                if self.realm.object(ofType: alertObject.self, forPrimaryKey: id) == nil {
-                    self.realm.create(alertObject.self, value: realmData)
+                if realm.object(ofType: alertObject.self, forPrimaryKey: id) == nil {
+                    realm.create(alertObject.self, value: realmData)
                 } else {
-                    self.realm.create(alertObject.self, value: realmData, update: true)
+                    realm.create(alertObject.self, value: realmData, update: true)
                 }
                 
-                if self.realm.object(ofType: alertCoinNames.self, forPrimaryKey: coinAbbName) == nil {
-                    self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!])
+                if realm.object(ofType: alertCoinNames.self, forPrimaryKey: coinAbbName) == nil {
+                    realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!])
                 } else {
-                    self.realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
+                    realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
                 }
-                try! self.realm.commitWrite()
+                try! realm.commitWrite()
             }
             completion(true)
         } else{
