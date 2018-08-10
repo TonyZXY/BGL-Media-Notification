@@ -84,8 +84,8 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
             navigationController?.pushViewController(nextPage, animated: true)
         } else if indexPath.section == 1 {
             if indexPath.row == 0{
-                let appID = "1340353421"
-                let urlStr = "itms-apps://itunes.apple.com/app/id\(appID)" // (Option 1) Open App Page
+                let appID = "414478124"
+//                let urlStr = "itms-apps://itunes.apple.com/app/id\(appID)" // (Option 1) Open App Page
                 let urlStr2 = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=\(appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software" // (Option 2) Open App Review Tab
                 
                 
