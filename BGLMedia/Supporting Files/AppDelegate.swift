@@ -53,12 +53,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 1,
+            schemaVersion: 2,
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 1) {
-                    migration.enumerateObjects(ofType: NewsObject.className()) { (_, news) in
-                        news?["test"] = ""
-                    }
+                if (oldSchemaVersion < 2) {
                     // The enumerateObjects(ofType:_:) method iterates
                     // over every Person object stored in the Realm file
                     //                    migration.enumerateObjects(ofType: Person.className()) { oldObject, newObject in
@@ -105,6 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().isTranslucent = false
+//        UINavigationBar.appearance().back
         
 
 //        let backItem = UIBarButtonItem()
@@ -163,6 +161,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(false, forKey: "buildInterest")
             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
             UserDefaults.standard.set(false, forKey: "getDeviceToken")
+            UserDefaults.standard.set(false, forKey: "changeAlertStatus")
             UserDefaults.standard.set("null", forKey: "UserEmail")
             UserDefaults.standard.set("null", forKey: "CertificateToken")
             UserDefaults.standard.set("null", forKey: "UserToken")
@@ -256,18 +255,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
 }
 
-extension UINavigationItem{
-    override open func awakeFromNib() {
-        super.awakeFromNib()
-        let backItem = UIBarButtonItem()
-        backItem.title = textValue(name: "back_button")
-        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-        /*Changing color*/
-        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
-        self.backBarButtonItem = backItem
-    }
-    
-//    func changeBackButton(){
+//extension UINavigationItem{
+//    override open func awakeFromNib() {
+//        super.awakeFromNib()
 //        let backItem = UIBarButtonItem()
 //        backItem.title = textValue(name: "back_button")
 //        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
@@ -275,7 +265,16 @@ extension UINavigationItem{
 //        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
 //        self.backBarButtonItem = backItem
 //    }
-    
+//
+////    func changeBackButton(){
+////        let backItem = UIBarButtonItem()
+////        backItem.title = textValue(name: "back_button")
+////        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+////        /*Changing color*/
+////        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+////        self.backBarButtonItem = backItem
+////    }
+//
 //    class var customNavBar : UINavigationBar{
 //        let backItem = UIBarButtonItem()
 //        backItem.title = textValue(name: "back_button")
@@ -284,5 +283,5 @@ extension UINavigationItem{
 //        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
 //        self.backBarButtonItem = backItem
 //    }
-
-}
+//
+//}

@@ -2,17 +2,15 @@
   "images" : [
     {
       "idiom" : "universal",
-      "filename" : "CryptoGeekLogo2@1x.png",
+      "filename" : "news24.png",
       "scale" : "1x"
     },
     {
       "idiom" : "universal",
-      "filename" : "CryptoGeekLogo2@2x.png",
       "scale" : "2x"
     },
     {
       "idiom" : "universal",
-      "filename" : "CryptoGeekLogo2@3x.png",
       "scale" : "3x"
     }
   ],

@@ -150,28 +150,12 @@ class Extension:NSObject{
     }
     
     
-    func reloadNavigationBarBackButton(){
-//        let backItem = UIBarButtonItem()
-//        backItem.title = textValue(name: "back_button")
-//        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-//        /*Changing color*/
-//        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
-//        UINavigationItem().backBarButtonItem = backItem
-        
-
-        UINavigationItem().awakeFromNib()
-//            UINavigationItem override open func awakeFromNib() {
-//                super.awakeFromNib()
-//
-//                let backItem = UIBarButtonItem()
-//                backItem.title = textValue(name: "back_button")
-//                backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-//                /*Changing color*/
-//                backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
-//
-//                self.backBarButtonItem = backItem
-//            }
-    
+    func reloadNavigationBarBackButton(navigationBarItem:UINavigationItem){
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        navigationBarItem.backBarButtonItem = backItem
     }
 }
 

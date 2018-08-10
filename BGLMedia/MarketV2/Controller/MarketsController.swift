@@ -33,25 +33,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         menuBar.collectionView.reloadData()
-        let backItem = UIBarButtonItem()
-        backItem.title = textValue(name: "back_button")
-        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
-        self.tabBarController?.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
-//        global = GlobalMarketsController()
-//        watchList = WatchListsController()
-//        collectionviews.reloadData()
-//        global.mainTotalCollectionView.reloadData()
-//        global.sortdoneclick()
-//        global.coinList.reloadData()
-//        global.filterDate.reloadData()
-//
-//        watchList.coinList.reloadData()
-//
-//        watchList.watchList.sortDate.reloadData()
-//        watchList.watchList.coinList.reloadData()
-//        watchList.watchList.marketSortPickerView.setPickerViewDoneButton()
-        
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
     }
     
     @objc func changeCurrency(){
@@ -166,6 +148,7 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     }()
     
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/414
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel

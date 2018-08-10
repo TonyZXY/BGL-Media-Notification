@@ -392,6 +392,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(notificationTableView)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":notificationTableView,"v1":loginStatusView]))

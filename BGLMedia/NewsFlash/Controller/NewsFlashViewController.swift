@@ -34,11 +34,9 @@ class NewsFlashViewController: UIViewController {
     
     @objc func changeLanguage(){
         setUpNavigationTitle()
-        let backItem = UIBarButtonItem()
-        backItem.title = textValue(name: "back_button")
-        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
-        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
+        
+//        navigationController?.navigationBar.backItem? .backBarButtonItem = backItem
     }
     
     deinit {
@@ -52,6 +50,7 @@ class NewsFlashViewController: UIViewController {
 //        navigationController?.navigationBar.isTranslucent = false
         let navigationDoneButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchResult))
         self.navigationItem.setRightBarButton(navigationDoneButton, animated: true)
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
 
     }
     
@@ -68,6 +67,7 @@ class NewsFlashViewController: UIViewController {
     @objc func searchResult(){
         let search = FlashSearchController()
         search.hidesBottomBarWhenPushed = true
+
         navigationController?.pushViewController(search, animated: true)
     }
     
