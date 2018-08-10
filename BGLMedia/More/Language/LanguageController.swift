@@ -55,14 +55,6 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
     //    }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        //        let str = storeData[indexPath.row]
-        //        UserDefaults.standard.set(str, forKey: "defaultCurrency")
-        //        let selectedCell = tableView.cellForRow(at: indexPath)! as! currencyCell
-        //        selectedCell.isHighlighted = true
-        //        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
-        //        navigationController?.popViewController(animated: true)
-        
-        
         let str = storeData[indexPath.row]
         UserDefaults.standard.set(str, forKey: "defaultLanguage")
         UserDefaults.standard.synchronize()
@@ -70,27 +62,13 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let selectedCell = tableView.cellForRow(at: indexPath)! as! languageCell
         selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
         selectedCell.languageLabel.textColor = ThemeColor().darkBlackColor()
-//        communityTableView.deselectRow(at: indexPath, animated: true)
-
-//        selectedCell.isHighlighted = true
         
-        
+//        let backItem = UIBarButtonItem()
+//        backItem.title = textValue(name: "back_button")
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+//        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
         navigationController?.popViewController(animated: true)
-        
-        //        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "alertTitle_language"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_language"), comment: ""), preferredStyle: .alert)
-        //        let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertChange_language"), comment: ""), style: .destructive) { (_) in
-        //            UserDefaults.standard.set(str, forKey: "defaultLanguage")
-        //            UserDefaults.standard.synchronize()
-        //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
-        //            self.navigationController?.popToRootViewController(animated: true)
-        //        }
-        //
-        //        confirmAlertCtrl.addAction(confirmAction)
-        //        let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertCancel_language"), comment: ""), style: .cancel, handler:nil)
-        //        confirmAlertCtrl.addAction(cancelAction)
-        //        self.present(confirmAlertCtrl, animated: true, completion: nil)
-        
-        
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

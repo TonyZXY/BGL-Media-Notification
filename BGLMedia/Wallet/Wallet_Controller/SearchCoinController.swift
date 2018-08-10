@@ -26,12 +26,13 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         searchBar.becomeFirstResponder()
         
         
-        let result = try! Realm().objects(CoinList.self)
+        let result = try! Realm().objects(CoinList.self).sorted(byKeyPath: "coinName")
 //        let data = GetDataResult().getExchangeList()
 //        let exactMarket = data[(delegate?.getExchangeName())!]
         for coin in result {
 //            let filterCoin = exactMarket?.filter{(name,_) in return name == coin.Name}
 //            if filterCoin?.count != 0{
+//            coin.coinName = coin.coinName.trimmingCharacters(in: NSCharacterSet.whitespaces)
                 allCoinObject.append(coin)
 //            }
         }

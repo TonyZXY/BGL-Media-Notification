@@ -34,6 +34,11 @@ class NewsFlashViewController: UIViewController {
     
     @objc func changeLanguage(){
         setUpNavigationTitle()
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
     }
     
     deinit {

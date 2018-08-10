@@ -129,7 +129,7 @@ class OnBoardingPageViewController: UIViewController {
         let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
         // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
         
-        
+        vc.navigationController?.awakeFromNib()
         vc.modalTransitionStyle = .flipHorizontal
 //        vc.modalTransitionStyle = .crossDissolve // another form of animations
         self.present(vc, animated: true){

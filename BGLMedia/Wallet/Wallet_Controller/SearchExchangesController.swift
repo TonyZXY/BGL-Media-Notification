@@ -27,19 +27,22 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     //Get trading Pairs Name
     func getExchangeList()->Void{
-        allExchanges.append("Global Average")
+//        allExchanges.append("Global Average")
         let data = APIServices.fetchInstance.getExchangeList()
+//        print(data)
         for (key,value) in data{
             if delegate?.getCoinName() != ""{
                 let exactMarket = value.filter{name in return name.key == delegate?.getCoinName()}
                 if exactMarket.count != 0{
                     self.allExchanges.append(key)
+                    self.allExchanges.sort{ $0.lowercased() < $1.lowercased() }
                 }
-            }
-            else {
+            } else {
                 self.allExchanges.append(key)
+                self.allExchanges.sort{ $0.lowercased() < $1.lowercased() }
             }
         }
+        allExchanges.insert("Global Average", at: 0)
         self.searchResult.reloadData()
     }
     
@@ -67,8 +70,25 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let table:UITableViewCell = searchResult.cellForRow(at: indexPath)!
-        delegate?.setExchangesName(exchangeName: (table.textLabel?.text)!)
-        delegate?.setTradingPairsName(tradingPairsName: "")
+        let market = (table.textLabel?.text)!
+        delegate?.setExchangesName(exchangeName: market)
+        if delegate?.getCoinName() != ""{
+            var allTradingPairs = [String]()
+            if market == "Global Average"{
+                    allTradingPairs.append(priceType)
+            } else{
+                let data = APIServices.fetchInstance.getTradingCoinList(market: market,coin:(delegate?.getCoinName())!)
+                if data != []{
+                    for pairs in data{
+                        allTradingPairs.append(pairs)
+                    }
+                }
+            }
+            if allTradingPairs.count != 0{
+                delegate?.setTradingPairsName(tradingPairsName: allTradingPairs[0])
+            }
+        }
+//        delegate?.setTradingPairsName(tradingPairsName: "")
         delegate?.setLoadPrice()
         tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.popViewController(animated: true)
