@@ -6,6 +6,9 @@
   Copyright © 2018 Xuyang Zheng. All rights reserved.
 */
 
+//navigationBar
+back_button = "后退";
+
 //TabBar
 wallet_tab = "钱包";
 market_tab = "行情";

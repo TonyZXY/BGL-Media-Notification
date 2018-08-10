@@ -161,6 +161,11 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         //                //                        })
         //            }
         //        }
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
     }
     
     func addRefreshHeader(completion:@escaping (Bool)->Void){

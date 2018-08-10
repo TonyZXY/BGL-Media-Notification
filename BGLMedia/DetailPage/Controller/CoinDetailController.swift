@@ -11,6 +11,8 @@ import UIKit
 class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     var observer:NSObjectProtocol?
     var observer1:NSObject?
+    var alertGetStatus:Bool = false
+//    var alertSendStatus:Bool = false
     let gerneralController = GerneralController()
     let transactionHistoryController = TransactionsHistoryController()
     let alertControllers = AlertController()
@@ -20,7 +22,17 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         setUpView()
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        if alertGetStatus{
+            alertControllers.getNotification()
+        }
+    }
     
+//    override func viewDidDisappear(_ animated: Bool) {
+//        if alertSendStatus{
+//            self.alert.sendNotification()
+//        }
+//    }
     
     func setUpView(){
         let factor = view.frame.width/375
@@ -101,6 +113,24 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
+    
+    func collectionView(_ collectionView: UICollectionView, willDisplay cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+        if indexPath.row == 2{
+            if !alertGetStatus{
+                alertControllers.getNotification()
+                alertGetStatus = true
+            }
+        }
+    }
+    
+//    func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
+//        if indexPath.row == 2{
+//            alertGetStatus = false
+//            alertSendStatus = false
+//            alertControllers.sendNotification()
+//
+//        }
+//    }
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

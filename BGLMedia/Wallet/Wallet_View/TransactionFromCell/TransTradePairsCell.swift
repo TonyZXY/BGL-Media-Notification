@@ -61,6 +61,7 @@ class TransTradePairsCell:UITableViewCell{
         NSLayoutConstraint(item: trade, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(16*factor!)-[v0]-\(10*factor!)-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":tradeLabel,"v1":trade]))
+        trade.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -40*factor!).isActive = true
          addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":tradeLabel,"v1":trade]))
     }
 }

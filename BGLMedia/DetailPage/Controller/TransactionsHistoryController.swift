@@ -126,6 +126,19 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         cell.selectionStyle = .none
     }
     
+//    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+//        if section == 0{
+//            let footerView = UIView()
+//            footerView.backgroundColor = ThemeColor().redColor()
+//            return footerView
+//        }
+//        return UIView()
+//    }
+//
+//    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+//        return 50
+//    }
+    
     @objc func deleteTransaction(sender:UIButton){
         let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "alertTitle_history"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
         let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .destructive) { (_) in
@@ -156,7 +169,11 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         
     }
     @objc func addTransaction(sender: UIButton){
-        
+        let transaction = TransactionsController()
+        transaction.newTransaction.coinAbbName = generalData.coinAbbName
+        transaction.newTransaction.coinName = generalData.coinName
+        transaction.transactionStatus = "AddSpecific"
+        self.navigationController?.pushViewController(transaction, animated: true)
     }
     
 //    lazy var refresher: UIRefreshControl = {
@@ -170,18 +187,32 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(historyTableView)
         view.addSubview(averageView)
+        view.addSubview(addHistoryButton)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: averageView)
         view.addConstraintsWithFormat(format: "V:|[v0(\(10*factor!))]", views: averageView)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: historyTableView,averageView)
-        view.addConstraintsWithFormat(format: "V:[v1]-0-[v0]|", views: historyTableView,averageView)
+        view.addConstraintsWithFormat(format: "V:[v1]-0-[v0]", views: historyTableView,averageView)
+        
+        
+//        NSLayoutConstraint(item: addHistoryButton, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        
+        addHistoryButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        addHistoryButton.heightAnchor.constraint(equalToConstant: 60).isActive = true
+        addHistoryButton.widthAnchor.constraint(equalToConstant: 60).isActive = true
+        historyTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+        if #available(iOS 11.0, *) {
+            addHistoryButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20).isActive = true
+        } else {
+            addHistoryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
+        }
     }
     
     lazy var historyTableView:UITableView = {
         var tableView = UITableView()
         tableView.separatorStyle = .none
-        tableView.backgroundColor = ThemeColor().themeColor()
+        tableView.backgroundColor = ThemeColor().darkGreyColor()
         let timelineTableViewCellNib = UINib(nibName: "TimeHistoryTableViewCell", bundle: Bundle(for: HistoryTableViewCell.self))
         let SellTableViewCellNib = UINib(nibName: "SellTableViewCell", bundle: Bundle(for: HistoryTableViewCell.self))
         tableView.register(timelineTableViewCellNib, forCellReuseIdentifier: "BuyHistory")
@@ -191,7 +222,10 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         tableView.delegate = self
         tableView.dataSource = self
         tableView.bounces = false
-        tableView.tableFooterView = UIView()
+        let footerView = UIView()
+        footerView.backgroundColor = ThemeColor().darkGreyColor()
+        footerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
+        tableView.tableFooterView = footerView
         tableView.separatorStyle = .none
         return tableView
     }()
@@ -205,10 +239,17 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     var addHistoryButton: UIButton = {
         let button = UIButton(type: .custom)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.backgroundColor = ThemeColor().themeWidgetColor()
         button.setImage(UIImage(named: "AddButton"), for: .normal)
         button.addTarget(self, action: #selector(addTransaction), for: .touchUpInside)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.layer.cornerRadius = 30
+        button.backgroundColor = ThemeColor().darkGreyColor()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.layer.shadowColor = UIColor.black.cgColor
+        button.layer.shadowOffset = CGSize(width: 0.0, height: 5.0)
+        button.layer.masksToBounds = false
+        button.layer.shadowRadius = 2.0
+        button.layer.shadowOpacity = 0.5
         return button
     }()
     
