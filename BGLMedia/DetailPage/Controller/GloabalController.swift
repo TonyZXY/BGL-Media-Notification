@@ -171,6 +171,7 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         coinDetailController.gerneralController.factor = factor
         coinDetailController.transactionHistoryController.factor = factor

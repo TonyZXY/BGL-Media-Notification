@@ -227,6 +227,7 @@ class DetailController: UIViewController{
     
     //Set up layout constraints
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         coinDetailController.gerneralController.factor = factor
         allLossView.factor = factor

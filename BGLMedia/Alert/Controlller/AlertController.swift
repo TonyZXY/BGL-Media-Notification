@@ -319,6 +319,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         view.backgroundColor = ThemeColor().blueColor()
         view.addSubview(alertView)
         alertButton.titleLabel?.font = UIFont.semiBoldFont(18*factor!)

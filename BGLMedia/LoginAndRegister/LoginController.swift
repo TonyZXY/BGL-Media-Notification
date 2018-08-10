@@ -469,10 +469,10 @@ class LoginController: UIViewController {
         
         view.addSubview(logoImage)
         logoImage.translatesAutoresizingMaskIntoConstraints = false
-        logoImage.heightAnchor.constraint(equalToConstant: 150 * height).isActive = true
-        logoImage.widthAnchor.constraint(equalToConstant:250 * height).isActive = true
+        logoImage.heightAnchor.constraint(equalToConstant: 200 * height).isActive = true
+        logoImage.widthAnchor.constraint(equalToConstant:200 * height).isActive = true
         logoImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 80 * height).isActive = true
+        logoImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 50 * height).isActive = true
         
         
         view.addSubview(emailLabel)
@@ -480,7 +480,7 @@ class LoginController: UIViewController {
         emailLabel.heightAnchor.constraint(equalToConstant: 20 * height).isActive = true
         emailLabel.widthAnchor.constraint(equalToConstant:200 * width).isActive = true
         emailLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        emailLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 30 * height).isActive = true
+        emailLabel.topAnchor.constraint(equalTo: logoImage.bottomAnchor, constant: 10 * height).isActive = true
         
         view.addSubview(emailTextField)
         emailTextField.translatesAutoresizingMaskIntoConstraints = false

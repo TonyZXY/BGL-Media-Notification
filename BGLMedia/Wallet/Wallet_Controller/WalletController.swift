@@ -85,12 +85,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     @objc func changeLanguage(){
-        let backItem = UIBarButtonItem()
-        backItem.title = "lllll"
-        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
-//        self .navigationItem.backBarButtonItem = backItem
-        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         checkTransaction()
         changeLaugageStatus = true
     }
@@ -385,6 +380,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Set Up View Layout
     func setupView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         totalLabel.text = textValue(name:"mainBalance")
         totalLabel.font = UIFont.regularFont(20*factor)
