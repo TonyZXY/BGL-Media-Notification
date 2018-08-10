@@ -79,8 +79,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             cell.factor = factor
             cell.coinLabel.text = textValue(name: "coinForm")
             cell.coin.text = newTransaction.coinName
-            if transactionStatus == "Update"{
+            if transactionStatus == "Update" || transactionStatus == "AddSpecific"{
                 cell.isUserInteractionEnabled = false
+                cell.accessoryType = .none
             }
             return cell
         }else if indexPath.row == 1{
@@ -570,10 +571,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     func languageLabel(){
         buy.setTitle(textValue(name: "buy"), for: .normal)
         sell.setTitle(textValue(name: "sell"), for: .normal)
-        if transactionStatus == "Add" {
-            transactionButton.setTitle(textValue(name: "addTransaction"), for: .normal)
-        } else if transactionStatus == "Update" {
+        if transactionStatus == "Update" {
             transactionButton.setTitle(textValue(name: "updateTransaction"), for: .normal)
+        } else {
+            transactionButton.setTitle(textValue(name: "addTransaction"), for: .normal)
         }
     }
     

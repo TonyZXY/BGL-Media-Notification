@@ -144,6 +144,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     override func viewDidDisappear(_ animated: Bool){
         if status == "setting"{
             sendNotification()
+        } else if status == "detailPage"{
+            sendNotification()
         }
     }
     

@@ -33,7 +33,11 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         menuBar.collectionView.reloadData()
-        
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        self.tabBarController?.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
 //        global = GlobalMarketsController()
 //        watchList = WatchListsController()
 //        collectionviews.reloadData()
@@ -141,14 +145,12 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         return mb
     }()
     
-    lazy var collectionviews: UICollectionView = {
+    var collectionviews: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout:layout)
         collectionview.isPagingEnabled = true
-        collectionview.delegate = self
-        collectionview.dataSource = self
         collectionview.showsHorizontalScrollIndicator = false
         return collectionview
     }()
@@ -167,6 +169,9 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         let factor = view.frame.width/414
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
+        
+        collectionviews.delegate = self
+        collectionviews.dataSource = self
         
         //Set Up Menu Bar
         view.addSubview(menuBar)

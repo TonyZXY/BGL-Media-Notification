@@ -85,6 +85,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     @objc func changeLanguage(){
+        let backItem = UIBarButtonItem()
+        backItem.title = "lllll"
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+//        self .navigationItem.backBarButtonItem = backItem
+        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
         checkTransaction()
         changeLaugageStatus = true
     }
@@ -300,7 +306,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
         coinDetail = cell.selectCoin
         detailPage.coinDetails = coinDetail
-        detailPage.coinDetailController.alertControllers.status = "setting"
+        detailPage.coinDetailController.alertControllers.status = "detailPage"
         navigationController?.pushViewController(detailPage, animated: true)
     }
     

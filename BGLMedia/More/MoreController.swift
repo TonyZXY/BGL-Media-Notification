@@ -98,6 +98,12 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     @objc func changeLanguage(){
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        navigationController?.navigationBar.backItem? .backBarButtonItem = backItem
+//        self.tabBarController?.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
         optionTableView.reloadData()
     }
     

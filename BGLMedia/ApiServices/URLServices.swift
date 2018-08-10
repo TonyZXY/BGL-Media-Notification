@@ -75,9 +75,9 @@ class URLServices:NSObject{
             if success{
                 self.realm.beginWrite()
                 for result in response.array!{
-                    let id = result["_id"].string!
-                    let coinName = result["coinName"].string!
-                    let coinSymbol = result["coinSymbol"].string!
+                    let id = result["_id"].string ?? ""
+                    let coinName = result["coinName"].string?.trimmingCharacters(in: NSCharacterSet.whitespaces) ?? ""
+                    let coinSymbol = result["coinSymbol"].string?.trimmingCharacters(in: NSCharacterSet.whitespaces) ?? ""
                     var logoURL:String = ""
                     if let logoUrl = result["logoUrl"].string{
                         logoURL = logoUrl
@@ -104,11 +104,11 @@ class URLServices:NSObject{
                 self.realm.beginWrite()
                 let realmObject = self.realm.objects(GlobalAverageObject.self)
                 for result in response.array!{
-                    let coinAbbName = result["symbol"].string ?? ""
+                    let coinAbbName = result["symbol"].string?.trimmingCharacters(in: NSCharacterSet.whitespaces) ?? ""
                     if self.realm.objects(CoinList.self).filter("coinSymbol = %@", coinAbbName).count != 0{
                         let id = result["_id"].string ?? ""
                         let coinId = result["id"].int ?? 0
-                        let coinName = result["name"].string ?? ""
+                        let coinName = result["name"].string?.trimmingCharacters(in: NSCharacterSet.whitespaces) ?? ""
                         let totalSupply = result["total_supply"].double ?? 0
                         let circulatingSupply = result["circulating_supply"].double ?? 0
                         let currency = result["quotes"][0]["currency"].string ?? ""

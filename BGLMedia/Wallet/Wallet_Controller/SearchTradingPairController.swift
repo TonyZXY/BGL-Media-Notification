@@ -31,6 +31,7 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
             if data != []{
                 for pairs in data{
                     self.allTradingPairs.append(pairs)
+                    self.allTradingPairs.sort{ $0.lowercased() < $1.lowercased() }
                 }
             }
         }
@@ -61,6 +62,7 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
         //Delegate selected tradingPairsName to the transaction page
         delegate?.setTradingPairsName(tradingPairsName: (table.textLabel?.text)!)
         delegate?.setTradingPairsSecondType(secondCoinType: allPairs)
+        delegate?.setLoadPrice()
         tableView.deselectRow(at: indexPath, animated: true)
         navigationController?.popViewController(animated: true)
     }

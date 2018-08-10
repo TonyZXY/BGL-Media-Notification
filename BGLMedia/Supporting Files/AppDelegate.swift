@@ -78,6 +78,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UINavigationBar.appearance().titleTextAttributes = [NSAttributedStringKey.foregroundColor:UIColor.white]
         UINavigationBar.appearance().tintColor = .white
         UINavigationBar.appearance().isTranslucent = false
+        
+
+//        let backItem = UIBarButtonItem()
+//        backItem.title = textValue(name: "back_button")
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+//        UINavigationItem().backBarButtonItem = backItem
        
         
         UNUserNotificationCenter.current().delegate = self
@@ -218,4 +225,35 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
     }
     
+}
+
+extension UINavigationItem{
+    override open func awakeFromNib() {
+        super.awakeFromNib()
+        let backItem = UIBarButtonItem()
+        backItem.title = textValue(name: "back_button")
+        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        /*Changing color*/
+        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+        self.backBarButtonItem = backItem
+    }
+    
+//    func changeBackButton(){
+//        let backItem = UIBarButtonItem()
+//        backItem.title = textValue(name: "back_button")
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+//        /*Changing color*/
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+//        self.backBarButtonItem = backItem
+//    }
+    
+//    class var customNavBar : UINavigationBar{
+//        let backItem = UIBarButtonItem()
+//        backItem.title = textValue(name: "back_button")
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+//                /*Changing color*/
+//        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
+//        self.backBarButtonItem = backItem
+//    }
+
 }

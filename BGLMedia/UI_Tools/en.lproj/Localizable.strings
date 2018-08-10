@@ -6,6 +6,10 @@
   Copyright © 2018 Xuyang Zheng. All rights reserved.
 */
 
+//navigationBar
+back_button = "Back";
+
+
 //TabBar
 wallet_tab = "Asset";
 market_tab = "Market";

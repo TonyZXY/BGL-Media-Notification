@@ -486,7 +486,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             let global = GloabalController()
             global.hidesBottomBarWhenPushed = true
             global.pageStatus = "Global"
-            global.coinDetailController.alertControllers.status = "setting"
+            global.coinDetailController.alertControllers.status = "detailPage"
             global.coinDetail.coinName = cell.coinLabel.text!
             navigationController?.pushViewController(global, animated: true)
         }
