@@ -59,6 +59,7 @@ class NewsFlashViewController: UIViewController {
         titleLabel.text = textValue(name: "navigationTitle_flash")
         titleLabel.font = UIFont.semiBoldFont(17)
         titleLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
+        titleLabel.textAlignment = .center
         titleLabel.textColor = UIColor.white
         navigationItem.titleView = titleLabel
     }

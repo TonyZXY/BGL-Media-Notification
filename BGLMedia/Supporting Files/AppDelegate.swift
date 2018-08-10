@@ -12,6 +12,7 @@ import UserNotifications
 import SwiftyJSON
 import Alamofire
 import RealmSwift
+import StoreKit
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {   
@@ -65,7 +66,30 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     //                    }
                 }
         })
-        _ = try! Realm()
+//        _ = try! Realm()
+        
+        var appOpenCount = UserDefaults.standard.integer(forKey: "APP_OPENED_COUNT")
+        if appOpenCount > 100 {
+            UserDefaults.standard.set(1, forKey: "APP_OPENED_COUNT")
+        } else{
+            appOpenCount += 1
+        }
+
+        UserDefaults.standard.set(appOpenCount, forKey: "APP_OPENED_COUNT")
+        appOpenCount = UserDefaults.standard.integer(forKey: "APP_OPENED_COUNT")
+        switch appOpenCount {
+        case 10,50:
+            if #available(iOS 10.3, *) {
+                SKStoreReviewController.requestReview()
+            }
+        case _ where appOpenCount%100 == 0 :
+            if #available(iOS 10.3, *) {
+                SKStoreReviewController.requestReview()
+            }
+            UserDefaults.standard.set(0, forKey: "APP_OPENED_COUNT")
+        default:
+            break;
+        }
         
         
         application.statusBarStyle = .lightContent
@@ -187,6 +211,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //            }
         }
     }
+    
         
     
     
@@ -205,6 +230,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
 
     func applicationDidBecomeActive(_ application: UIApplication) {
+
        UIApplication.shared.applicationIconBadgeNumber = 0
 //        let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
 //        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"

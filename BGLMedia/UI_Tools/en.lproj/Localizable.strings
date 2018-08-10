@@ -157,8 +157,16 @@ alertDelete_history = "Delete";
 
 //Setting Page
 settingTitle = "More Options";
-help = "Help";
-aboutUs_section = "Blockchain Global";
+help = "Help & Feedback";
+aboutUs_section = "About";
+about_app = "About CryptoGeek";
+feedback_section = "Feedback";
+feedback_rateus = "Rate Us";
+feedBack_reportbug = "Report Bug";
+help_section = "Help";
+help_FAQ = "Frequent Asked Question";
+help_userAgreement = "User Agreement";
+help_privacy = "Privacy Policy";
 setting_section = "Setting";
 account_section = "Account";
 register_cell = "Create Account";
@@ -298,6 +306,7 @@ needLoginLabel = "Please Login First";
 needLoginText = "Login to access this function";
 
 back = "back";
+back2 = "Back";
 
 onboardingPage1 = "You can add record of your cryptocurrency to keep track of them";
 onboardingPage2 = "Save your favorite market into watchlist and come back later";

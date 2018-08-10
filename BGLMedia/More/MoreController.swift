@@ -54,20 +54,20 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[textValue(name: "aboutUs_cell"),textValue(name: "community_cell"),textValue(name: "help")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
+            return [[textValue(name: "help")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
         }
     }
     
     var sections:[String]?{
         get{
-            return [textValue(name: "aboutUs_section"),textValue(name: "setting_section"),textValue(name: "account_section")]
+            return [textValue(name: "help"),textValue(name: "setting_section"),textValue(name: "account_section")]
         }
     }
     
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[AboutUsViewController(), BGLCommunityController(),HelpViewController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController(usedPlace: 0)]]
+            return [[HelpViewController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController(usedPlace: 0)]]
         }
     }
     
