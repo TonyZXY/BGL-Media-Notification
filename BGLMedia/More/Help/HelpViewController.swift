@@ -46,7 +46,7 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     var pushItems:[[UIViewController]]{
         get{
-            return [[AboutUsViewController(), BGLCommunityController(),AboutAppViewController()],[CurrencyController(),LanguageController(),AlertNotificationController()]]
+            return [[AboutUsViewController(), BGLCommunityController(),AboutAppViewController()],[],[FAQViewController(),AgreementViewController(),PrivacyViewController()]]
         }
     }
     
@@ -79,11 +79,33 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.section == 0 {
-            
+            let nextPage = pushItems[indexPath.section][indexPath.row]
+            nextPage.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(nextPage, animated: true)
         } else if indexPath.section == 1 {
+            if indexPath.row == 0{
+                let appID = "1340353421"
+                let urlStr = "itms-apps://itunes.apple.com/app/id\(appID)" // (Option 1) Open App Page
+                let urlStr2 = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=\(appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software" // (Option 2) Open App Review Tab
+                
+                
+                if let url = URL(string: urlStr2), UIApplication.shared.canOpenURL(url) {
+                    if #available(iOS 10.0, *) {
+                        UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                    } else {
+                        UIApplication.shared.openURL(url)
+                    }
+                }
+            } else{
+                let nextPage = ReportProblemViewController()
+                nextPage.hidesBottomBarWhenPushed = true
+                navigationController?.pushViewController(nextPage, animated: true)
+            }
             
         } else if indexPath.section == 2 {
-            
+            let nextPage = pushItems[indexPath.section][indexPath.row]
+            nextPage.hidesBottomBarWhenPushed = true
+            navigationController?.pushViewController(nextPage, animated: true)
         }
         tableView.deselectRow(at: indexPath, animated: true)
     }
@@ -120,9 +142,6 @@ class HelpViewController: UIViewController, UITableViewDataSource, UITableViewDe
     @objc func changeLanguage(){
         titleLabel.text = textValue(name: "help")
         navigationItem.titleView = titleLabel
-        let backItem = UIBarButtonItem()
-        backItem.title = textValue(name: "back")
-        navigationItem.backBarButtonItem = backItem
         helpTableView.reloadData()
     }
     
