@@ -43,11 +43,11 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-        cell.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
-        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
-        cell.layer.shadowOpacity = 1
-        cell.layer.shadowRadius = 0
-        cell.layer.masksToBounds = false
+//        cell.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        cell.layer.shadowOffset = CGSize(width: 0, height: 2)
+//        cell.layer.shadowOpacity = 1
+//        cell.layer.shadowRadius = 0
+//        cell.layer.masksToBounds = false
         cell.textLabel?.text = allTradingPairs[indexPath.row]
         return cell
     }
@@ -83,9 +83,10 @@ class SearchTradingPairController:UIViewController,UITableViewDelegate,UITableVi
 //        tableViews.separatorInset = UIEdgeInsets.zero
         tableViews.delegate = self
         tableViews.dataSource = self
-        tableViews.separatorStyle = .none
         tableViews.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
         tableViews.translatesAutoresizingMaskIntoConstraints = false
+        tableViews.separatorInset = UIEdgeInsets.zero
+        tableViews.separatorColor = ThemeColor().darkGreyColor()
         return tableViews
     }()
 }

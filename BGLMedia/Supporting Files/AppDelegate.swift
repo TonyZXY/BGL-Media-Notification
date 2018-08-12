@@ -66,7 +66,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     //                    }
                 }
         })
-//        _ = try! Realm()
+        _ = try! Realm()
         
         var appOpenCount = UserDefaults.standard.integer(forKey: "APP_OPENED_COUNT")
         if appOpenCount > 100 {

@@ -40,7 +40,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var coinName = coinAlert()
     var coinAbbName = "null"
     var status = ""
-    var alertList = [alertObject]()
+    var oldAlerts = [Int:Bool]()
     var TransactionDelegate:TransactionFrom?
     var changeSwitchStatus:Bool{
         get{
@@ -77,7 +77,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     var allAlerts:Results<alertObject>{
         get{
-            return try! Realm().objects(alertObject.self)
+            return try! Realm().objects(alertObject.self).sorted(byKeyPath: "dateTime",ascending: false)
         }
     }
     
@@ -114,9 +114,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     
     
-    var alertStatus:Results<alertObject>{
+    var alertStatuss:Results<alertObject>{
         get{
-            return try! Realm().objects(alertObject.self)
+            return try! Realm().objects(alertObject.self).sorted(byKeyPath: "dateTime",ascending: false)
         }
     }
     var twoDimension = [ExpandableNames(isExpanded: true, name: ["ds"]),ExpandableNames(isExpanded: true, name: ["sdf","sfsdfsf"])]
@@ -130,42 +130,10 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-//        let alertsss = alertObject()
-//        token = alertsss.observe { change  in
-//            switch change {
-////            case .update(_):
-////                self.changeStatus = true
-////                print("dddd")
-////            case .initial(_):
-////                print("s")
-////            case .error(let error):
-////                print(error)
-////            }
-//            
-//            
-//                
-//                
-//            case .change(let properties):
-//                
-//                for property in properties {
-//                    if property.name == "switchStatus"{
-//                        print("Congratulations, you've exceeded 1000 steps.")
-//                        self.token = nil
-//                    }
-//                }
-//            case .error(let error):
-//                print("An error occurred: \(error)")
-//            case .deleted:
-//                print("The object was deleted.")
-//            }
-//        }
-        
-        
-        for result in alertStatus{
-            alertList.append(result)
+
+        for result in alertStatuss{
+            oldAlerts[result.id] = result.switchStatus
         }
-        
-        
     }
     
     deinit {
@@ -198,28 +166,41 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
  
 
     override func viewDidDisappear(_ animated: Bool){
-        
         if status == "setting"{
-//            if changeSwitchStatus{
+            if checkAlertStatusChange(){
                  self.sendNotification()
-//            }
+            }
         } else if status == "detailPage"{
-            checkAlertStatusChange()
-//            if changeStatus{
-//                sendNotification()
-//                self.checkAlertStatusChange()
-//            }
+            if checkAlertStatusChange(){
+                sendNotification()
+            }
         }
     }
     
 
 
     
-    func checkAlertStatusChange(){
+    func checkAlertStatusChange()->Bool{
+        for results in allAlerts{
+            if results.switchStatus != oldAlerts[results.id]{
+                print("switch data")
+                return true
+            }
+        }
+        return false
         
         
-        print(alertList)
-        print(allAlerts)
+        
+//        for i in 0...10 - 1 {
+//            print(newAlert[i].coinAbbName + "/" + String(newAlert[i].switchStatus) + "/" + String(oldAlert[i].switchStatus))
+//
+//            if newAlert[i].switchStatus != oldAlert[i].switchStatus {
+////                print(newAlert[i])
+////                print(oldAlert[i])
+//                changeStatus = true
+//                print("successooooooooo")
+//            }
+//        }
     }
     
     func sendNotification(){
@@ -685,6 +666,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                         if pass{
                             DispatchQueue.main.async {
                                 self.alerts = self.allAlert
+                                
+                                
                                 self.alertTableView.reloadData()
                                 DispatchQueue.main.asyncAfter(deadline: .now()) {
                                     hud.dismiss()
@@ -757,7 +740,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 let compareStatus = result["isgreater"].int ?? 0
                 let switchStatus = result["status"].bool ?? true
                 
-                
                 let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date()]
                 if realm.object(ofType: alertObject.self, forPrimaryKey: id) == nil {
                     realm.create(alertObject.self, value: realmData)
@@ -771,6 +753,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                     realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
                 }
                 try! realm.commitWrite()
+                oldAlerts[id] = switchStatus
             }
             completion(true)
         } else{
