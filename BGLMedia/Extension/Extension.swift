@@ -12,6 +12,7 @@ import SwiftyJSON
 import Alamofire
 import Kingfisher
 import RealmSwift
+import SwiftKeychainWrapper
 
 class Extension:NSObject{
     var realm = try! Realm()
@@ -56,27 +57,53 @@ class Extension:NSObject{
     
     func scientificMethod(number:Double)->String{
         var value:String = ""
-        var getNumber:String =  String(number)
+        var getNumber:String = String(format:"%f",number)
         
-        if number == 0.0{
-            value = "--"
-        } else{
-            if getNumber.prefix(1) != "-" {
-                getNumber = "+" + getNumber
-            }
-            
-            if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 2)] == "."{
-                if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 1)] == "0"{
-//                   value = String(format:"%.6f",number)
-                    value = String(format:"%.3f",number)
+        let formatValue = Extension.method.formatNumber(number)
+        if formatValue == "nil"{
+            if number == 0.0{
+                value = "--"
+            } else{
+                if getNumber.prefix(1) != "-" {
+                    getNumber = "+" + getNumber
+                }
+                
+//                let ss = String(format:"%f",number)
+                
+                print(getNumber)
+//                print(ss)
+                
+                
+                
+                
+                if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 2)] == "."{
+                    if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 1)] == "0"{
+                        //                   value = String(format:"%.6f",number)
+                        for i in 3...getNumber.count-3{
+                            if getNumber[getNumber.index(getNumber.startIndex, offsetBy: i)] != "0"{
+                                return String(format:"%." + String(i-2) + "f",number)
+                            }
+                        }
+                        //
+                        //                        return String(format:"%.6f",number)
+                    } else{
+                        value = String(format:"%.3f",number)
+                    }
                 } else{
                     value = String(format:"%.2f",number)
                 }
-            } else{
-                value = String(format:"%.2f",number)
             }
+            return value
+        } else{
+            return formatValue
         }
-        return value
+    }
+    
+    func doubleToInteger(data:Double)-> Int {
+        let doubleToString = "\(data)"
+        let stringToInteger = (doubleToString as NSString).integerValue
+        
+        return stringToInteger
     }
     
     func checkInputVaild(value:String)->Bool{
@@ -156,6 +183,82 @@ class Extension:NSObject{
         backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
         backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
         navigationBarItem.backBarButtonItem = backItem
+    }
+    
+//    func formatPoints(from: Double) -> String {
+//
+//        let number = from
+//        let thousand = number / 1000
+//        let million = number / 1000000
+//        let billion = number / 1000000000
+//        let ss =  String(format:"%.2f",billion)
+//        print(ss)
+//        print(billion)
+//        if billion >= 1.0 {
+//            return "\(round(billion*10)/10)B"
+//        } else if million >= 1.0 {
+//            return "\(round(million*10)/10)M"
+//        }
+////        else if thousand >= 1.0 {
+////            return ("\(round(thousand*10/10))K")
+////        }
+//        else {
+////            return "\(Int(number))"
+//            return "nil"
+//        }
+//    }
+    
+    func formatNumber(_ n: Double) -> String {
+        
+        let num = abs(n)
+        let sign = (n < 0) ? "-" : ""
+        
+        switch num {
+            
+        case 1_000_000_000_000_000...:
+            var formatted = num / 1_000_000_000_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)P"
+        
+        case 1_000_000_000_000...:
+            var formatted = num / 1_000_000_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)T"
+            
+        case 1_000_000_000...:
+            var formatted = num / 1_000_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)B"
+            
+        case 1_000_000...:
+            var formatted = num / 1_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)M"
+            
+            //        case 1_000...:
+            //            var formatted = num / 1_000
+            //            formatted = formatted.truncate(places: 1)
+            //            return "\(sign)\(formatted)K"
+            
+            //        case 0...:
+            //            return "\(n)"
+            
+        default:
+//                        return "\(sign)\(n)"
+            return "nil"
+        }
+    }
+
+    
+
+}
+
+
+
+
+extension Double {
+    func truncate(places: Int) -> Double {
+        return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
     }
 }
 
@@ -395,6 +498,7 @@ func deleteMemory(){
     UserDefaults.standard.set(false, forKey: "SendDeviceToken")
     UserDefaults.standard.set(false, forKey: "getDeviceToken")
     UserDefaults.standard.set("null", forKey: "UserEmail")
+    KeychainWrapper.standard.set("null", forKey: "Email")
     UserDefaults.standard.set("null", forKey: "CertificateToken")
     UserDefaults.standard.set("null", forKey: "UserToken")
     let realm = try! Realm()

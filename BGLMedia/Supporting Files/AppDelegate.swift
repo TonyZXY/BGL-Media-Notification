@@ -6,13 +6,15 @@
 //  Copyright © 2018 Sheng Li. All rights reserved.
 //
 
-
+ 
 import UIKit
 import UserNotifications
 import SwiftyJSON
 import Alamofire
 import RealmSwift
 import StoreKit
+import SwiftKeychainWrapper
+import Darwin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {   
@@ -27,7 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var email:String{
         get{
-            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+//            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
     
@@ -52,6 +55,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
+
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
             schemaVersion: 2,
             migrationBlock: { migration, oldSchemaVersion in
@@ -165,6 +169,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set("null", forKey: "UserEmail")
             UserDefaults.standard.set("null", forKey: "CertificateToken")
             UserDefaults.standard.set("null", forKey: "UserToken")
+            
+            KeychainWrapper.standard.set("null", forKey: "Email")
         }
         return true
     }

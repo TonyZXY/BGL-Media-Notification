@@ -12,6 +12,7 @@ import UserNotifications
 import Alamofire
 import SwiftyJSON
 import JGProgressHUD
+import SwiftKeychainWrapper
 
 struct alertResult{
     var isExpanded:Bool = true
@@ -83,7 +84,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     var email:String{
         get{
-            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+//            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
     
@@ -261,7 +263,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         coinLabel.text = alerts[section].coinName
         
         let button = UIButton(type:.system)
-        button.setTitle("Close", for: .normal)
+        button.setTitle("▲", for: .normal)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 10)
+        button.titleLabel?.font = UIFont.regularFont(25*factor!)
         //        button.backgroundColor = ThemeColor().bglColor()
         button.setTitleColor(UIColor.white, for: .normal)
         button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
@@ -301,8 +305,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alerts[section].isExpanded = !isExpanded
         
         
-        button.setTitle(isExpanded ? "Open":"Close", for: .normal)
-        button.titleLabel?.font = UIFont.regularFont(14*factor!)
+        button.setTitle(isExpanded ? "▼":"▲", for: .normal)
+        button.titleLabel?.font = UIFont.regularFont(25*factor!)
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 10)
+        button.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
+//        button.titleLabel?.font = UIFont.regularFont(14*factor!)
         if !isExpanded{
             alertTableView.insertRows(at: indexPaths, with: .fade)
         } else{
@@ -652,7 +659,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeAlertToRealm(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+//        let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
         let body:[String:Any] = ["email":email,"token":certificateToken]
         

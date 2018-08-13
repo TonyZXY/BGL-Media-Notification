@@ -145,7 +145,7 @@ buyCost = "Cost";
 buyWorth = "Worth";
 buyDelta = "Delta";
 
-sellPirce = "Buy Price";
+sellPirce = "Sell Price";
 sellTradingPair = "Trading Pair";
 soldAmount = "Amount";
 sellProceeds = "Proceeds";
@@ -303,7 +303,7 @@ registerfailed = "Register failed";
 emailExist = "Email Exists";
 
 needLoginLabel = "Please Login First";
-needLoginText = "Login to access this function";
+needLoginText = "Login to access alert function";
 
 back = "back";
 back2 = "Back";
@@ -323,7 +323,7 @@ dr = "Dr";
 //reset Password alert
 placeholder_reset = "Enter your email...";
 title_reset = "Reset Password";
-description_reset = "Enter the email for reset password, link will expire after 15 min";
+description_reset = "Enter the email for resetting password, link will expire after 15 min";
 sendButton_reset = "Send Email";
 checkSend_reset = "Send Again After";
 second_reset = "s";

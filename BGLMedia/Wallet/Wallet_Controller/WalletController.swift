@@ -106,7 +106,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         cell.factor = factor
         let assets = assetss[indexPath.row]
         cell.coinName.text = assets.coinName
-        cell.coinAmount.text = String(assets.totalAmount) + assets.coinAbbName
+        cell.coinAmount.text = Extension.method.scientificMethod(number: assets.totalAmount) + " " + assets.coinAbbName
+            
+//            String(assets.totalAmount) + assets.coinAbbName
         checkDataRiseFallColor(risefallnumber: assets.currentSinglePrice, label: cell.coinSinglePrice, type: "Default")
         checkDataRiseFallColor(risefallnumber: assets.currentTotalPrice, label: cell.coinTotalPrice, type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
@@ -251,7 +253,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     func caculateTotal(){
-        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
+//        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
+        self.checkDataRiseFallColor(risefallnumber: totalAssets, label: totalNumber, type: "Default")
         self.checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange, type: "Number")
     }
     
@@ -411,6 +414,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalChange, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
+        totalNumber.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
+        totalNumber.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
+        totalChange.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
+        totalChange.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
+        
         totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(10*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
         totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(10*factor)-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
         
@@ -500,6 +508,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         label.text = "--"
         label.font = label.font.withSize(30)
         label.textColor = UIColor.white
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -508,6 +517,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         var label = UILabel()
 //        label.text = "--"
         label.font = label.font.withSize(20)
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

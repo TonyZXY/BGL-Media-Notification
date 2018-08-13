@@ -14,8 +14,16 @@ import SwiftyJSON
 import Alamofire
 import RealmSwift
 import JGProgressHUD
+import SwiftKeychainWrapper
 
 class URLServices:NSObject{
+    
+    var email:String{
+        get{
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
     static let fetchInstance = URLServices()
     let realm = try! Realm()
 //    "https://bglnewsbkend.tk"
@@ -143,7 +151,7 @@ class URLServices:NSObject{
     
     
     func storeNotificationDataToRealm(completion:@escaping (Bool)->Void){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+//        let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
         let body:[String:Any] = ["email":email,"token":certificateToken]
         

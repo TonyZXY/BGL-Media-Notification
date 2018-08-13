@@ -39,6 +39,8 @@ class AllLossView:UIView{
         //ProfitLoss
         NSLayoutConstraint(item: profitLoss, attribute: .left, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: +5).isActive = true
         NSLayoutConstraint(item: profitLoss, attribute: .centerY, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: .centerY, multiplier: 1, constant:0).isActive = true
+        
+        profitLoss.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -10).isActive = true
     }
     
     lazy var allTimeLoss:UILabel = {

@@ -105,6 +105,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.sellTradingPairResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.sellAmountResult.text = Extension.method.scientificMethod(number:object.amount)
             cell.sellProceedsResult.text = Extension.method.scientificMethod(number:object.totalPrice)
+            cell.sellMarket.text = textValue(name: "tradingMarket_history") + ":" + object.exchangeName
             cell.sellDeleteButton.tag = object.id
             cell.sellDeleteButton.addTarget(self, action: #selector(deleteTransaction), for: .touchUpInside)
             return cell

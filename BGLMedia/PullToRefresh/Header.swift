@@ -398,7 +398,7 @@ open class RefreshHeaderContainer:UIView{
 //        }else{
 //            if state != .refreshing{
 //                self.state = .willRefresh
-//            }
+//            } 
 //    }
         self.state = .refreshing
     }

@@ -11,6 +11,7 @@ import UserNotifications
 import Alamofire
 import SwiftyJSON
 import JGProgressHUD
+import SwiftKeychainWrapper
 
 class switchObject{
     var type:String?
@@ -19,7 +20,8 @@ class switchObject{
 
 class AlertNotificationController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var switchStatus = switchObject()
-    var changeSwitchStatus = false
+//    var changeSwitchStatus = false
+    var oldAlert = [String:Bool]()
     var cellItems:[[String]]{
         get{
             var allowStatus:String = ""
@@ -42,6 +44,17 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         }
     }
     
+    var flashSwitchStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "flashSwitch")
+        }
+    }
+    
+    var priceSwitchStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "priceSwitch")
+        }
+    }
     
     var buildInterestStatus:Bool{
         get{
@@ -76,6 +89,12 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         }
     }
     
+    var email:String{
+        get{
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
     func numberOfSections(in tableView: UITableView) -> Int {
         if SwitchOption[1] == false{
             return 2
@@ -83,6 +102,8 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             return 3
         }
     }
+    
+    
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let factor = view.frame.width/375
@@ -312,6 +333,10 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         super.viewDidLoad()
         getNotificationStatus()
         setUpView()
+        
+        oldAlert["Flash"] = flashSwitchStatus
+        oldAlert["Currency"] = priceSwitchStatus
+        
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshUserStatus), name:NSNotification.Name(rawValue: "logIn"), object: nil)
     }
@@ -335,6 +360,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     override func viewWillAppear(_ animated: Bool) {
         getNotificationStatus()
         getNotificationStatusData()
+    }
+    
+    func checkAlertChange()->Bool{
+        if flashSwitchStatus != oldAlert["Flash"] || priceSwitchStatus != oldAlert["Currency"]{
+            return true
+        } else{
+            return false
+        }
     }
     
     func getNotificationStatus(){
@@ -388,7 +421,6 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         DispatchQueue.main.async {
             self.notificationTableView.reloadData()
         }
-        changeSwitchStatus = true
     }
     
     func setUpView(){
@@ -464,7 +496,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(true)
-        postNotificationStatusData()
+        if checkAlertChange(){
+            postNotificationStatusData()
+        }
     }
     
     //    override func viewWillDisappear(_ animated: Bool) {
@@ -476,7 +510,10 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             let hud = JGProgressHUD(style: .light)
             hud.show(in: (self.parent?.view)!)
             
-            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+//            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+            
+//            let eamil = KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+            
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
             let parameter = ["email":email,"token":certificateToken]
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getNotificationStatus"], httpMethod: "POST", parameters: parameter) { (response, success) in
@@ -533,11 +570,11 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     func postNotificationStatusData(){
         //        if buildInterestStatus{
-        if changeSwitchStatus == true && UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
+        if UserDefaults.standard.bool(forKey: "isLoggedIn") != false {
             let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
             let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
-            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+//            let email = UserDefaults.standard.string(forKey: "UserEmail")!
             let parameter:[String:Any] = ["email":email,"token":certificateToken,"flash":flashNotification,"interest":priceAlert]
             URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in
                 print(response)

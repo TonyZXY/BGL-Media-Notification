@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 import Alamofire
 import SwiftyJSON
+import SwiftKeychainWrapper
 
 struct interset{
     var _id:Int = 0
@@ -84,7 +85,8 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     var email:String{
         get{
-            return UserDefaults.standard.string(forKey: "UserEmail")!
+//            return UserDefaults.standard.string(forKey: "UserEmail")!
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
     

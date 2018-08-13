@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import JGProgressHUD
+import SwiftKeychainWrapper
 
 class LoginController: UIViewController {
     let resendVerifyEmailAlert = CustomAlertController()
@@ -327,6 +328,7 @@ class LoginController: UIViewController {
                     let token = response["token"].string ?? ""
                     UserDefaults.standard.set(token, forKey: "CertificateToken")
                     UserDefaults.standard.set(un.lowercased(), forKey: "UserEmail")
+                    KeychainWrapper.standard.set(un.lowercased(), forKey: "Email")
                     UserDefaults.standard.set(true, forKey: "isLoggedIn")
                     
                     

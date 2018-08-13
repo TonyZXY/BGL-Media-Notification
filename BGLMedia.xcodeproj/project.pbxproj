@@ -186,6 +186,8 @@
 		57BBAB6D210962C300984AA4 /* WatchListRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB61210962C300984AA4 /* WatchListRealm.swift */; };
 		57BBAB6E210962C300984AA4 /* GlobalMarketValueRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB62210962C300984AA4 /* GlobalMarketValueRealm.swift */; };
 		57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB63210962C300984AA4 /* GlobalAverageObject.swift */; };
+		57EB4CEC2120517B0083B123 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; };
+		57EB4CED2120517B0083B123 /* SwiftKeychainWrapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
 		57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */; };
 		57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FA20FB00320052EE02 /* CurrencyController.swift */; };
@@ -201,6 +203,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				57EB4CED2120517B0083B123 /* SwiftKeychainWrapper.framework in Embed Frameworks */,
 				5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */,
 				576751FF210556E8006DB67C /* JGProgressHUD.framework in Embed Frameworks */,
 			);
@@ -389,6 +392,8 @@
 		57BBAB61210962C300984AA4 /* WatchListRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchListRealm.swift; sourceTree = "<group>"; };
 		57BBAB62210962C300984AA4 /* GlobalMarketValueRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalMarketValueRealm.swift; sourceTree = "<group>"; };
 		57BBAB63210962C300984AA4 /* GlobalAverageObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalAverageObject.swift; sourceTree = "<group>"; };
+		57EB4CE92120514E0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
+		57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		57FC41F120FAD2D20052EE02 /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
 		57FC41F420FADC8A0052EE02 /* BGLCommunityController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BGLCommunityController.swift; sourceTree = "<group>"; };
 		57FC41FA20FB00320052EE02 /* CurrencyController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CurrencyController.swift; sourceTree = "<group>"; };
@@ -412,6 +417,7 @@
 				5752745620FEBB0200562060 /* RevealingSplashView.framework in Frameworks */,
 				3D1332ED20E9FA5700D3CAE6 /* Realm.framework in Frameworks */,
 				3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */,
+				57EB4CEC2120517B0083B123 /* SwiftKeychainWrapper.framework in Frameworks */,
 				3D1332EF20E9FA5700D3CAE6 /* Reachability.framework in Frameworks */,
 				3D1332F020E9FA5700D3CAE6 /* Kingfisher.framework in Frameworks */,
 			);
@@ -660,6 +666,7 @@
 		2D6F5EF420E324D4006264BB = {
 			isa = PBXGroup;
 			children = (
+				57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */,
 				576751FD210556E8006DB67C /* JGProgressHUD.framework */,
 				578FE8C620FEEE220027F17E /* Font */,
 				2D6F5EFF20E324D4006264BB /* BGLMedia */,
@@ -1047,6 +1054,7 @@
 		F249FBEA6AE0F53C3BA5FC1E /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				57EB4CE92120514E0083B123 /* SwiftKeychainWrapper.framework */,
 				57FC420820FEB8230052EE02 /* RevealingSplashView.framework */,
 				3D1332E720E9FA5600D3CAE6 /* Alamofire.framework */,
 				3D1332E920E9FA5600D3CAE6 /* Kingfisher.framework */,
