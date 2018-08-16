@@ -78,9 +78,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     @objc func changeCurrency(){
-        DispatchQueue.main.async(execute: {
-            self.coinList.reloadData()
-        })
+        self.coinList.switchRefreshHeader(to: .refreshing)
     }
 
     deinit {
@@ -151,6 +149,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
                         try! realm.write {
                             watchListCoinObject[0].price = coinObject[0].price
                             watchListCoinObject[0].profitChange = coinObject[0].percent24h
+                            watchListCoinObject[0].tradingPairsName = priceType
                         }
                     } else{
                         dispatchGroup.enter()

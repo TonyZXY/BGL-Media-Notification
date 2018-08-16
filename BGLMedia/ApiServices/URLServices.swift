@@ -82,6 +82,7 @@ class URLServices:NSObject{
         URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (response, success) in
             if success{
                 self.realm.beginWrite()
+                print(response)
                 for result in response.array!{
                     let id = result["_id"].string ?? ""
                     let coinName = result["coinName"].string?.trimmingCharacters(in: NSCharacterSet.whitespaces) ?? ""
@@ -90,7 +91,7 @@ class URLServices:NSObject{
                     if let logoUrl = result["logoUrl"].string{
                         logoURL = logoUrl
                     }
-                    if self.realm.object(ofType: CoinList.self, forPrimaryKey: id) == nil {
+                    if self.realm.object(ofType: CoinList.self, forPrimaryKey: coinSymbol) == nil {
                         self.realm.create(CoinList.self, value: [id, coinName, coinSymbol,logoURL])
                     } else {
                         self.realm.create(CoinList.self, value: [id, coinName, coinSymbol,logoURL], update: true)

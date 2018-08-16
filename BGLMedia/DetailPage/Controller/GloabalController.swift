@@ -184,6 +184,8 @@ class GloabalController: UIViewController,ExchangeSelect{
     }
     
     func refreshData(completion: @escaping (Bool)->Void){
+        let dispatchGroup = DispatchGroup()
+        dispatchGroup.enter()
         if pageStatus == "WatchList"{
             if WatchListData.first?.market == "Global Average"{
                 if let coin = WatchListData.first{
@@ -193,20 +195,20 @@ class GloabalController: UIViewController,ExchangeSelect{
                                 self.WatchListData[0].price = response["data"]["quotes"][priceType]["price"].double ?? 0
                                 self.WatchListData[0].profitChange = response["data"]["quotes"][priceType]["percent_change_24h"].double ?? 0
                             }
-                            completion(true)
+                            dispatchGroup.leave()
                         } else{
-                            completion(false)
+                            dispatchGroup.leave()
                         }
                     }
                 } else{
-                    completion(false)
+                    dispatchGroup.leave()
                 }
             } else{
                 reloadData(){success in
                     if success{
-                        completion(true)
+                        dispatchGroup.leave()
                     }else{
-                        completion(false)
+                        dispatchGroup.leave()
                     }
                 }
             }
@@ -218,39 +220,31 @@ class GloabalController: UIViewController,ExchangeSelect{
                             self.GlobalData[0].price = response["data"]["quotes"][priceType]["price"].double ?? 0
                             self.GlobalData[0].percent24h = response["data"]["quotes"][priceType]["percent_change_24h"].double ?? 0
                         }
-                        completion(true)
+                        dispatchGroup.leave()
                     } else{
-                        completion(false)
+                         dispatchGroup.leave()
                     }
                 }
             } else{
-                completion(false)
+                dispatchGroup.leave()
             }
+        }
+        
+        dispatchGroup.enter()
+        getRiseFallData(){success in
+            if success{
+                dispatchGroup.leave()
+            } else{
+                dispatchGroup.leave()
+            }
+        }
+        
+        dispatchGroup.notify(queue:.main){
+            completion(true)
         }
     }
     
     @objc func editMarket(){
-        ////        let searchMarket = SearchExchangesController()
-        //////        searchMarket.delegate = self
-        ////        searchMarket.hidesBottomBarWhenPushed = true
-        ////        navigationController?.pushViewController(searchMarket, animated: true)
-        //        let alert = UIAlertController(style: .actionSheet, title: "Market")
-        //
-        //        alert.addLocalePicker()
-        ////            alert.title = info?.currencyCode
-        ////            alert.message = "is selected"
-        //            // action with selected object
-        //
-        //        alert.addAction(title: "OK", style: .cancel)
-        //        alert.show()
-        
-        //        let alert = UIAlertController(style: .actionSheet, message: "Select Country")
-        //        alert.addLocalePicker(type: .country) { info in
-        //            // action with selected object
-        //        }
-        //        alert.addAction(title: "OK", style: .cancel)
-        //        alert.show()
-        
         var picker: TCPickerViewInput = TCPickerView()
         picker.title = "Market"
         let exchangList = getExchangeList()
@@ -370,7 +364,9 @@ class GloabalController: UIViewController,ExchangeSelect{
             candleChartDatas.coinTradingPairsName = general.tradingPairs
             generalPage.candleChartDatas = candleChartDatas
             
-            generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:WatchListData[0].price)
+            checkDataRiseFallColor(risefallnumber: WatchListData[0].price, label: generalPage.totalNumber, currency: WatchListData[0].tradingPairsName, type: "Default")
+            
+//            generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:WatchListData[0].price)
             generalPage.exchangeButton.setTitle(WatchListData[0].market, for: .normal)
             generalPage.tradingPairButton.setTitle(WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName, for: .normal)
             
@@ -464,14 +460,14 @@ class GloabalController: UIViewController,ExchangeSelect{
     //    }
     
     @objc func setPriceChange() {
-//        print(coinAbbName)
-//        print(tradingPairs)
-//        print(exchangeName)
-        
+        getRiseFallData(){_ in}
+    }
+    
+    
+    func getRiseFallData(completion:@escaping (Bool)->Void){
         var realmCoinAbbName = ""
         var realmTradingPairsName = ""
         var realmMarket = ""
-        
         if pageStatus == "WatchList"{
             if let coin = WatchListData.first{
                 realmCoinAbbName = coin.coinAbbName
@@ -485,67 +481,31 @@ class GloabalController: UIViewController,ExchangeSelect{
                 realmMarket = "Global Average"
             }
         }
-        print(realmMarket)
-        print("second")
         
         if realmCoinAbbName != "" && realmTradingPairsName != "" && realmMarket != ""{
             APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
                 if success{
                     if response["Response"].string ?? "" == "Success"{
                         if let periodData = response["Data"].array{
-                            print(response["Data"].array)
+                            //                            print(response["Data"].array)
                             if periodData != []{
                                 let price = periodData.last!["close"].double! - periodData.first!["open"].double!
                                 let change = (price /  periodData.first!["open"].double!) * 100
                                 checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
                                 checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
                                 self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                                completion(true)
                             }
                         }
                     }
+                } else{
+                    completion(false)
                 }
             }
+        } else{
+            completion(false)
         }
-    
-
-        
-        
-//        APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: coinAbbName, to: tradingPairs, market: exchangeName) { (success, response) in
-//            if success{
-//                if response["Response"].string ?? "" == "Success"{
-//                    if let periodData = response["Data"].array{
-//                        let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-//                        let change = (price /  periodData.first!["open"].double!) * 100
-//                        self.checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,type: "number")
-//                        self.checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
-//                        self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-//                    }
-//                }
-//            }
-//        }
-        
-        
-        
-//        getRiseFallData(period: chartPeriod, from: coinAbbName, to: tradingPairs, market: exchangeName) { (success, price, change) in
-//            if success{
-//                print(price)
-//                print(change)
-//                self.checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,type: "number")
-//                self.checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
-//                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-//            } else{
-//
-//            }
-//        }
-        
-//        let candleData = coinDetailController.gerneralController.vc
-//        if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
-//            checkDataRiseFallColor(risefallnumber: priceChange, label: coinDetailController.gerneralController.totalRiseFall,type: "number")
-//            checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
-//            coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-//        }
     }
-    
     
     
     

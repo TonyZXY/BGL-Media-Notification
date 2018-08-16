@@ -16,6 +16,6 @@ class CoinList:Object{
     @objc dynamic var logoUrl = ""
     
     override class func primaryKey() -> String {
-        return "id"
+        return "coinSymbol"
     }
 }
