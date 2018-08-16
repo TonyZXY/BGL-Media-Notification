@@ -13,8 +13,9 @@ import Alamofire
 import JGProgressHUD
 import SwiftKeychainWrapper
 import SafariServices
+import MessageUI
 
-class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource, MFMailComposeViewControllerDelegate {
     
   
     var loginStatus:Bool{
@@ -208,6 +209,12 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     self.present(vc, animated: true, completion: nil)
                     //            navigationController?.pushViewController(vc, animated: true)
                 }
+            }else if indexPath.section == 3 && indexPath.row == 1{
+                if MFMailComposeViewController.canSendMail() {
+                    self.present(configuredMailComposeViewController(), animated: true, completion: nil)
+                } else {
+                    showSendMailErrorAlert()
+                }
             }else{
                 let changePage = pushItems[indexPath.section][indexPath.row]
                 changePage.hidesBottomBarWhenPushed = true
@@ -319,6 +326,33 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         titleLabel.textAlignment = .center
         return titleLabel
     }()
+    
+    func configuredMailComposeViewController() -> MFMailComposeViewController {
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self
+        
+        mailComposerVC.setToRecipients(["cryptogeekapp@gmail.com"])
+        mailComposerVC.setSubject("Report Feedback")
+        mailComposerVC.setMessageBody("", isHTML: false)
+        mailComposerVC.navigationBar.tintColor = ThemeColor().whiteColor()
+        
+        return mailComposerVC
+    }
+    
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertController(title: "Report Feedback at:\ncryptogeekapp@gmail.com", message: "Want to give us some feedback?\n Contact us at Email: cryptogeekapp@gmail.com", preferredStyle: .alert)
+        let copyEmailaddressaction = UIAlertAction(title: "Copy Email Address", style: .default, handler: { (_) in
+            UIPasteboard.general.string = "cryptogeekapp@gmail.com"
+        })
+        sendMailErrorAlert.addAction(copyEmailaddressaction)
+        let cancelAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        sendMailErrorAlert.addAction(cancelAlertAction)
+        self.present(sendMailErrorAlert, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
     
     
     
