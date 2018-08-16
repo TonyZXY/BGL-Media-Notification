@@ -157,18 +157,19 @@ aboutUs_section = "关于";
 setting_section = "应用设置选项";
 help = "帮助及反馈";
 about_app = "关于CryptoGeek";
+about_function = "功能介绍";
+more_disclaimer = "免责声明";
 feedback_section = "意见反馈";
 feedback_rateus = "给我们打分";
 feedBack_reportbug = "问题反馈";
 help_section = "帮助中心";
 help_FAQ = "常见问题";
-help_userAgreement = "用户协议";
-help_privacy = "隐私协议";
+help_privacy = "用户与隐私协议";
 account_section = "帐户";
 register_cell = "创建帐号";
 login_cell = "登录";
 logout_cell = "登出";
-aboutUs_cell = "关于我们";
+aboutUs_cell = "关于BlockChain Global";
 community_cell = "社区";
 defaultCurrency_cell = "默认法定货币";
 notification_cell = "应用通知选项";
@@ -332,6 +333,10 @@ searchBar_cancel = "取消";
 resetDevice_title = "登出";
 resetDevice_description = "您的密码已经被重置，需要重新登陆";
 resetDevice_confirm = "确认";
+
+submit = "提  交";
+
+email_report = "(选填)填写邮箱以便联系您";
 
 
 

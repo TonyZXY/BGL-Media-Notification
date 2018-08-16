@@ -12,6 +12,7 @@ import RealmSwift
 import Alamofire
 import JGProgressHUD
 import SwiftKeychainWrapper
+import SafariServices
 
 class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
@@ -56,20 +57,20 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[textValue(name: "help")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
+            return [[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[textValue(name: "aboutUs_cell"),textValue(name: "about_app"),textValue(name: "more_disclaimer"), textValue(name: "help_privacy")],[textValue(name: "help_section"), textValue(name: "feedback_section")]]
         }
     }
     
     var sections:[String]?{
         get{
-            return [textValue(name: "help"),textValue(name: "setting_section"),textValue(name: "account_section")]
+            return [textValue(name: "account_section"),textValue(name: "setting_section"), textValue(name: "aboutUs_section"),textValue(name: "help")]
         }
     }
     
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[HelpViewController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController(usedPlace: 0)]]
+            return [[LoginController(usedPlace: 0)],[CurrencyController(),LanguageController(),AlertNotificationController()],[AboutUsViewController(),AboutAppViewController()],[FAQViewController(),ReportProblemViewController()]]
         }
     }
     
@@ -115,7 +116,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         let sectionLabel = UILabel()
-        sectionLabel.font = UIFont.semiBoldFont(17*factor)
+        sectionLabel.font = UIFont.semiBoldFont(14*factor)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
         sectionLabel.textColor = ThemeColor().textGreycolor()
@@ -128,7 +129,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50 * view.frame.width/375
+        return 25 * view.frame.width/375
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -162,7 +163,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let realm = try! Realm()
-        if indexPath.section < 2{
+        if indexPath.section > 0{
             //            if indexPath.section == 1 && indexPath.row == 2{
             //                if notificationStatus{
             
@@ -179,7 +180,35 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "cancel_clearCache"), comment: ""), style: .cancel, handler:nil)
                 confirmAlertCtrl.addAction(cancelAction)
                 self.present(confirmAlertCtrl, animated: true, completion: nil)
-            } else{
+            } else if indexPath.section == 2 && indexPath.row == 3 {
+                let urlString = "https://cryptogeekapp.com/policy"
+                if let url = URL(string: urlString) {
+                    let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+                    if #available(iOS 11.0, *) {
+                        vc.dismissButtonStyle = .close
+                    } else {
+                        
+                    }
+                    vc.hidesBottomBarWhenPushed = true
+                    vc.accessibilityNavigationStyle = .separate
+                    self.present(vc, animated: true, completion: nil)
+                    //            navigationController?.pushViewController(vc, animated: true)
+                }
+            } else if indexPath.section == 2 && indexPath.row == 2{
+                let urlString = "https://cryptogeekapp.com/terms"
+                if let url = URL(string: urlString) {
+                    let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+                    if #available(iOS 11.0, *) {
+                        vc.dismissButtonStyle = .close
+                    } else {
+                        
+                    }
+                    vc.hidesBottomBarWhenPushed = true
+                    vc.accessibilityNavigationStyle = .separate
+                    self.present(vc, animated: true, completion: nil)
+                    //            navigationController?.pushViewController(vc, animated: true)
+                }
+            }else{
                 let changePage = pushItems[indexPath.section][indexPath.row]
                 changePage.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(changePage, animated: true)
@@ -201,7 +230,6 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             self.optionTableView.reloadData()
                             hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                             hud.textLabel.text = "Success"
-                            
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                 hud.dismiss()
                             }
@@ -265,7 +293,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         navigationItem.titleView = titleLabel
         view.addSubview(optionTableView)
         view.backgroundColor = ThemeColor().themeColor()
-        optionTableView.rowHeight = 50 * view.frame.width/375
+        optionTableView.rowHeight = 45 * view.frame.width/375
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":optionTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":optionTableView]))
     }
@@ -276,7 +304,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.dataSource = self
-        tableView.rowHeight = 50
+        tableView.rowHeight = 45
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
