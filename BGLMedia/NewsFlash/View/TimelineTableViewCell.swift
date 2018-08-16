@@ -13,9 +13,9 @@ open class TimelineTableViewCell: UITableViewCell {
     
     @IBOutlet weak open var titleLabel: UILabel!
     @IBOutlet weak open var descriptionLabel: UILabel!
-    @IBOutlet weak open var lineInfoLabel: UILabel!
-    @IBOutlet weak open var thumbnailImageView: UIImageView!
-    @IBOutlet weak open var illustrationImageView: UIImageView!
+//    @IBOutlet weak open var lineInfoLabel: UILabel!
+//    @IBOutlet weak open var thumbnailImageView: UIImageView!
+//    @IBOutlet weak open var illustrationImageView: UIImageView!
     
     @IBOutlet weak var likeButton: UIButton!
     @IBOutlet weak var shareButton: UIButton!
@@ -71,7 +71,7 @@ open class TimelineTableViewCell: UITableViewCell {
         
         txtTitleLabel.sizeToFit()
 
-        lineInfoLabel.sizeToFit()
+//        lineInfoLabel.sizeToFit()
         titleLabel.sizeToFit()
         descriptionLabel.sizeToFit()
 //        sharesbutton.sizeToFit()
@@ -116,7 +116,8 @@ open class TimelineTableViewCell: UITableViewCell {
         titleLabel.font = UIFont.semiBoldFont(12)
         descriptionLabel.font = UIFont.regularFont(15)
         txtTitleLabel.font = UIFont.boldFont(18)
-        txtTitleLabel.numberOfLines = 2
+        txtTitleLabel.numberOfLines = 0
+        txtTitleLabel.lineBreakMode = .byWordWrapping
         txtTitleLabel.textColor = ThemeColor().whiteColor()
         addSubview(sharesbutton)
         NSLayoutConstraint(item: sharesbutton, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -15).isActive = true

@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import JGProgressHUD
 
 class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
@@ -81,7 +82,14 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
         selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
         selectedCell.currencyLabel.textColor = ThemeColor().darkBlackColor()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
-        navigationController?.popViewController(animated: true)
+        let hud = JGProgressHUD(style: .light)
+        hud.show(in: (self.parent?.view)!)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            hud.dismiss()
+            self.navigationController?.popViewController(animated: true)
+        }
+        
+
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

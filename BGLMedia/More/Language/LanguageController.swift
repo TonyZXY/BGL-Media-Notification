@@ -7,6 +7,7 @@
 //
 
 import UIKit
+import JGProgressHUD
 
 class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSource {
     
@@ -68,7 +69,19 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
 //        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
 //        backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
 //        self.navigationController?.navigationBar.backItem?.backBarButtonItem = backItem
-        navigationController?.popViewController(animated: true)
+        
+        let hud = JGProgressHUD(style: .light)
+        hud.show(in: (self.parent?.view)!)
+        
+//        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+//        hud.textLabel.text = "Success"
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+            hud.dismiss()
+            self.navigationController?.popViewController(animated: true)
+        }
+        
+      
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {

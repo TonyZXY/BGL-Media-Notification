@@ -64,11 +64,21 @@ class GloabalController: UIViewController,ExchangeSelect{
         }
     }
     
+    var chartPeriod:String{
+        get{
+            return UserDefaults.standard.string(forKey: "chartPeriod") ?? "Minute"
+        }
+    }
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         loadData()
+        setPriceChange()
+        
+        
+//        getRiseFallData(period: "Hour")
         //        getCoinGloablDetail()
         
 //        coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
@@ -347,7 +357,6 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     func getExchangeList()->[String]{
         var allExchanges = [String]()
-        allExchanges.append("Global Average")
         let data = APIServices.fetchInstance.getExchangeList()
         for (key,value) in data{
             let exactMarket = value.filter{name in return name.key == coinDetail.coinName}
@@ -355,6 +364,8 @@ class GloabalController: UIViewController,ExchangeSelect{
                 allExchanges.append(key)
             }
         }
+        allExchanges.sort{ $0.lowercased() < $1.lowercased() }
+        allExchanges.insert("Global Average", at: 0)
         return allExchanges
     }
     
@@ -368,6 +379,7 @@ class GloabalController: UIViewController,ExchangeSelect{
                 for pairs in data{
                     allTradingPairs.append(pairs)
                 }
+                allTradingPairs.sort{ $0.lowercased() < $1.lowercased() }
             }
         }
         return allTradingPairs
@@ -491,13 +503,153 @@ class GloabalController: UIViewController,ExchangeSelect{
     //    }
     
     @objc func setPriceChange() {
-        let candleData = coinDetailController.gerneralController.vc
-        if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
-            checkDataRiseFallColor(risefallnumber: priceChange, label: coinDetailController.gerneralController.totalRiseFall,type: "number")
-            checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
-            coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+//        print(coinAbbName)
+//        print(tradingPairs)
+//        print(exchangeName)
+        
+        var realmCoinAbbName = ""
+        var realmTradingPairsName = ""
+        var realmMarket = ""
+        
+        if pageStatus == "WatchList"{
+            if let coin = WatchListData.first{
+                realmCoinAbbName = coin.coinAbbName
+                realmTradingPairsName = coin.tradingPairsName
+                realmMarket = coin.market
+            }
+        }else{
+            if let coin = coinRealm.first{
+                realmCoinAbbName = coin.coinAbbName
+                realmTradingPairsName = priceType
+                realmMarket = "Global Average"
+            }
+        }
+        print(realmMarket)
+        print("second")
+        
+        if realmCoinAbbName != "" && realmTradingPairsName != "" && realmMarket != ""{
+            APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
+                if success{
+                    if response["Response"].string ?? "" == "Success"{
+                        if let periodData = response["Data"].array{
+                            print(response["Data"].array)
+                            if periodData != []{
+                                let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                                let change = (price /  periodData.first!["open"].double!) * 100
+                                self.checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,type: "number")
+                                self.checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
+                                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    
+
+        
+        
+//        APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: coinAbbName, to: tradingPairs, market: exchangeName) { (success, response) in
+//            if success{
+//                if response["Response"].string ?? "" == "Success"{
+//                    if let periodData = response["Data"].array{
+//                        let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+//                        let change = (price /  periodData.first!["open"].double!) * 100
+//                        self.checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,type: "number")
+//                        self.checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
+//                        self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+//                    }
+//                }
+//            }
+//        }
+        
+        
+        
+//        getRiseFallData(period: chartPeriod, from: coinAbbName, to: tradingPairs, market: exchangeName) { (success, price, change) in
+//            if success{
+//                print(price)
+//                print(change)
+//                self.checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,type: "number")
+//                self.checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
+//                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+//            } else{
+//
+//            }
+//        }
+        
+//        let candleData = coinDetailController.gerneralController.vc
+//        if let priceChange = candleData.priceChange, let priceChangeRatio = candleData.priceChangeRatio {
+//            checkDataRiseFallColor(risefallnumber: priceChange, label: coinDetailController.gerneralController.totalRiseFall,type: "number")
+//            checkDataRiseFallColor(risefallnumber: priceChangeRatio, label: coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
+//            coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+//        }
+    }
+    
+    
+    
+    
+    func getRiseFallData(period:String,from:String, to:String, market:String,complection:@escaping (Bool,Double,Double)->Void){
+        if period == "Week"{
+            APIServices.fetchInstance.getRiseFallWeek(from: "BTC", to: "USD", market: "Coinbase", limit: 5) { (success, response) in
+                if success{
+                    if response["Response"].string ?? "" == "Success"{
+                        print(response)
+                        if let periodData = response["Data"].array{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price /  periodData.first!["open"].double!) * 100
+                            complection(true,price,change)
+                        } else{
+                            complection(false,0,0)
+                        }
+                    } else{
+                        complection(false,0,0)
+                    }
+                } else{
+                    complection(false,0,0)
+                }
+            }
+        } else if period == "Day"{
+            APIServices.fetchInstance.getRiseFallDay(from: "BTC", to: "USD", market: "Bitstamp", limit: 23) { (success, response) in
+                if success{
+                    if response["Response"].string ?? "" == "Success"{
+                        print(response)
+                        if let periodData = response["Data"].array{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price /  periodData.first!["open"].double!) * 100
+                            complection(true,price,change)
+                        }
+                    }
+                }
+            }
+        }else if period == "Hour"{
+            APIServices.fetchInstance.getRiseFallHour(from: "BTC", to: "USD", market: "Bitstamp", limit: 3) { (success, response) in
+                if success{
+                    if response["Response"].string ?? "" == "Success"{
+                        print(response)
+                        if let periodData = response["Data"].array{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price /  periodData.first!["open"].double!) * 100
+                            complection(true,price,change)
+                        }
+                    }
+                }
+            }
+        }else if period == "Minute"{
+            APIServices.fetchInstance.getRiseFallMin(from: "BTC", to: "USD", market: "Bitstamp", limit: 29) { (success, response) in
+                if success{
+                    if response["Response"].string ?? "" == "Success"{
+                        print(response)
+                        if let periodData = response["Data"].array{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price /  periodData.first!["open"].double!) * 100
+                            complection(true,price,change)
+                        }
+                    }
+                }
+            }
         }
     }
+    
     
 }
 

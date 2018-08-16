@@ -76,6 +76,7 @@ globalAverage_market = "Global Average";
 
 
 //WatchList Page
+listView_watchlist = "24 Hour";
 sortByLetter_watchlist = "Alphabetical";
 sortByHighestPrice_watchlist = "Highest Price";
 filterByWeek_watchlist = "1W";
@@ -231,6 +232,8 @@ notlogin_alert = "Please login to use the Alert function. Login";
 alertStatus_alert = "Notification Setting";
 alertUnavaliable_alert = "Unavaliable";
 alertavaliable_alert = "Avaliable";
+alertCoinUnavaliable_alert = "Unavaliable!";
+
 
 //Alert Edit Page
 exampleLabel_alert = "Market Price";

@@ -61,39 +61,45 @@ class Extension:NSObject{
         
         let formatValue = Extension.method.formatNumber(number)
         if formatValue == "nil"{
-            if number == 0.0{
-                value = "--"
-            } else{
-                if getNumber.prefix(1) != "-" {
-                    getNumber = "+" + getNumber
-                }
-                
-//                let ss = String(format:"%f",number)
-                
-                print(getNumber)
-//                print(ss)
-                
-                
-                
-                
+            //            if number == 0.0{
+            //                value = "--"
+            //            } else{
+            if getNumber.prefix(1) != "-" {
+                getNumber = "+" + getNumber
+            }
+            if getNumber.count > 3 {
                 if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 2)] == "."{
                     if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 1)] == "0"{
-                        //                   value = String(format:"%.6f",number)
-                        for i in 3...getNumber.count-3{
+                        for i in 3...getNumber.count-1{
                             if getNumber[getNumber.index(getNumber.startIndex, offsetBy: i)] != "0"{
-                                return String(format:"%." + String(i-2) + "f",number)
+                                //                                    //                                print(getNumber)
+                                //                                    //                                print(String(format:"%." + String(i-1) + "f",number))
+                                if getNumber.count-1 != i{
+                                    if getNumber[getNumber.index(getNumber.startIndex, offsetBy: i+1)] != "0"{
+                                        return String(format:"%." + String(i-1) + "f",number)
+                                    } else{
+                                        return String(format:"%." + String(i-2) + "f",number)
+                                    }
+                                } else{
+                                    return String(format:"%." + String(i-2) + "f",number)
+                                }
                             }
                         }
-                        //
-                        //                        return String(format:"%.6f",number)
                     } else{
                         value = String(format:"%.3f",number)
                     }
                 } else{
                     value = String(format:"%.2f",number)
                 }
+                //                    } else{
+                //                        value = String(format:"%.2f",number)
+                //                    }
+            }else{
+                return String(format:"%.2f",number)
             }
             return value
+            //        }
+            //            return value
         } else{
             return formatValue
         }

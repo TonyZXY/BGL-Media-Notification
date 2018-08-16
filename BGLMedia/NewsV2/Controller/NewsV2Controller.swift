@@ -84,11 +84,12 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         setUpView()
         newsTableView.switchRefreshFooter(to: .removed)
         
-        //        DispatchQueue.main.async(execute: {
-        //            self.newsTableView.beginHeaderRefreshing()
-        //        })
+                DispatchQueue.main.async(execute: {
+//                    self.newsTableView.beginHeaderRefreshing()
+                    self.newsTableView.switchRefreshHeader(to: .refreshing)
+                })
         
-        self.newsTableView.switchRefreshHeader(to: .refreshing)
+//        self.newsTableView.switchRefreshHeader(to: .refreshing)
         
         self.displayNumber += 20
         getData(skip:0,limit: 20){ success in
@@ -122,29 +123,36 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     
     @objc func deleteCache(){
-        deleteCacheStatus = true
-        print(try! Realm().objects(NewsObject.self).count)
+//        deleteCacheStatus = true
+//        print(try! Realm().objects(NewsObject.self).count)
+        self.newsTableView.reloadData()
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLanguageStatus || deleteCacheStatus{
-            if deleteCacheStatus{
-                self.newsTableView.reloadData()
-            }
-            self.newsTableView.switchRefreshHeader(to: .removed)
-            newsTableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-                self.handleRefresh(self.newsTableView)
-            })
-            self.changeLanguageStatus = false
-            self.deleteCacheStatus = false
-            newsTableView.switchRefreshHeader(to: .refreshing)
-        }
+//        if changeLanguageStatus || deleteCacheStatus{
+//            if deleteCacheStatus{
+//                self.newsTableView.reloadData()
+//            }
+//
+//        }
     }
     
     @objc func changeLanguage(){
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
-        changeLanguageStatus = true
+//        changeLanguageStatus = true
+        
+        self.newsTableView.switchRefreshHeader(to: .removed)
+        newsTableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+            self.handleRefresh(self.newsTableView)
+        })
+        self.changeLanguageStatus = false
+        self.deleteCacheStatus = false
+        newsTableView.switchRefreshHeader(to: .refreshing)
+        
+        
+        
+        
         //        addRefreshHeader(){success in
         //            if success{
         //                let header = DefaultRefreshHeader.header()

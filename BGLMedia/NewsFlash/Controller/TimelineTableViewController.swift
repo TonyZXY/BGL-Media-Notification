@@ -79,11 +79,21 @@ class TimelineTableViewController: UITableViewController {
     }
     
     @objc func deleteCache(){
-        deleteCacheStatus = true
+        self.tableView.reloadData()
+        
+        
+//        deleteCacheStatus = true
     }
     
     @objc func changeLanguage(){
-        changeLaugageStatus = true
+//        changeLaugageStatus = true
+        tableView.switchRefreshHeader(to: .removed)
+        tableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+            self.handleRefresh(self.tableView)
+        })
+//        self.changeLaugageStatus = false
+//        self.deleteCacheStatus = false
+        tableView.switchRefreshHeader(to: .refreshing)
     }
     
     deinit {
@@ -102,18 +112,18 @@ class TimelineTableViewController: UITableViewController {
     //    }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLaugageStatus || deleteCacheStatus{
-            if deleteCacheStatus{
-                self.tableView.reloadData()
-            }
-            tableView.switchRefreshHeader(to: .removed)
-            tableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-                self.handleRefresh(self.tableView)
-            })
-            self.changeLaugageStatus = false
-            self.deleteCacheStatus = false
-            tableView.switchRefreshHeader(to: .refreshing)
-        }
+//        if changeLaugageStatus || deleteCacheStatus{
+//            if deleteCacheStatus{
+//                self.tableView.reloadData()
+//            }
+//            tableView.switchRefreshHeader(to: .removed)
+//            tableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+//                self.handleRefresh(self.tableView)
+//            })
+//            self.changeLaugageStatus = false
+//            self.deleteCacheStatus = false
+//            tableView.switchRefreshHeader(to: .refreshing)
+//        }
     }
     
     
@@ -246,8 +256,6 @@ class TimelineTableViewController: UITableViewController {
         shareView.newsdescriptions = cell.descriptionLabel.text!
         shareView.newsTitle = cell.txtTitleLabel.text!
         present(shareView, animated: true, completion: nil)
-        
-        
     }
     
     

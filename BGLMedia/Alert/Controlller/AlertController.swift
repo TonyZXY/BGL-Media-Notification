@@ -15,9 +15,10 @@ import JGProgressHUD
 import SwiftKeychainWrapper
 
 struct alertResult{
-    var isExpanded:Bool = true
+    var isExpanded:Bool = false
     var coinName:String = ""
     var coinAbbName:String = ""
+    var avaliable:Bool = true
     var name:[alertObject] = [alertObject]()
 }
 
@@ -64,11 +65,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             for value in coinNameResults{
                 var alertResults = alertResult()
                 let speCoin = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
-                alertResults.isExpanded = true
+                alertResults.isExpanded = false
                 alertResults.coinAbbName = value.coinAbbName
                 alertResults.coinName = value.coinName
-                for data in speCoin{
-                    alertResults.name.append(data)
+                for result in speCoin{
+                    alertResults.avaliable = result.available
+                    alertResults.name.append(result)
                 }
                 allResult.append(alertResults)
             }
@@ -249,6 +251,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sectionView = UIView()
         let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
         coinImage.frame = CGRect(x: 0, y: 0, width: 30*factor!, height: 30*factor!)
         coinImage.clipsToBounds = true
@@ -262,34 +265,57 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         coinLabel.font = UIFont.regularFont(17*factor!)
         coinLabel.text = alerts[section].coinName
         
+        let avaliableLabel = UILabel()
+        avaliableLabel.textColor = ThemeColor().redColor()
+        avaliableLabel.translatesAutoresizingMaskIntoConstraints = false
+        avaliableLabel.font = UIFont.regularFont(17*factor!)
+        if !alerts[section].avaliable{
+            avaliableLabel.text = "Unavaliable!"
+        }
+        
+        
+        
         let button = UIButton(type:.system)
-        button.setTitle("▲", for: .normal)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 10)
+        button.setTitle("▼", for: .normal)
+        print(sectionView.frame.width)
+//        button.backgroundColor = ThemeColor().greenColor()
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, view.frame.width, 0, 0)
         button.titleLabel?.font = UIFont.regularFont(25*factor!)
         //        button.backgroundColor = ThemeColor().bglColor()
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
         button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
         button.tag = section
         
-        let sectionView = UIView()
+      
         sectionView.clipsToBounds = true
         sectionView.addSubview(button)
         sectionView.addSubview(coinImage)
         sectionView.addSubview(coinLabel)
+        sectionView.addSubview(avaliableLabel)
+
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         //        views.translatesAutoresizingMaskIntoConstraints = false
         
-        
         sectionView.layer.borderWidth = 0.5
-        
         NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: avaliableLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        
+        
         sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v0(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
         sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-\(10*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-\(10*factor!)-[v0]-\(5*factor!)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage,"v2":avaliableLabel]))
+        
+//        avaliableLabel.rightAnchor.constraint(lessThanOrEqualTo: button.leftAnchor, constant: 10).isActive = true
+//        avaliableLabel.rightAnchor.constraint(greaterThanOrEqualTo: button.leftAnchor, constant: 10).isActive = true
+        avaliableLabel.trailingAnchor.constraint(lessThanOrEqualTo: sectionView.trailingAnchor, constant: -40*factor!).isActive = true
+       
+        
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button,"v1":avaliableLabel]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
+        
         
         return sectionView
     }
@@ -306,9 +332,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         
         button.setTitle(isExpanded ? "▼":"▲", for: .normal)
-        button.titleLabel?.font = UIFont.regularFont(25*factor!)
-        button.contentEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 10)
-        button.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
+//        button.titleLabel?.font = UIFont.regularFont(25*factor!)
+//        button.contentEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 10)
+//        button.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
 //        button.titleLabel?.font = UIFont.regularFont(14*factor!)
         if !isExpanded{
             alertTableView.insertRows(at: indexPaths, with: .fade)
@@ -673,8 +699,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                         if pass{
                             DispatchQueue.main.async {
                                 self.alerts = self.allAlert
-                                
-                                
                                 self.alertTableView.reloadData()
                                 DispatchQueue.main.asyncAfter(deadline: .now()) {
                                     hud.dismiss()
@@ -734,6 +758,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
+//        print(json)
         let realm = try! Realm()
         if json["success"].bool!{
             for result in json["data"].array!{
@@ -746,8 +771,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 let comparePice = result["price"].double ?? 0
                 let compareStatus = result["isgreater"].int ?? 0
                 let switchStatus = result["status"].bool ?? true
+                let available = result["available"].bool ?? true
                 
-                let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date()]
+                let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date(),available]
                 if realm.object(ofType: alertObject.self, forPrimaryKey: id) == nil {
                     realm.create(alertObject.self, value: realmData)
                 } else {
@@ -770,5 +796,10 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             completion(false)
         }
     }
+    
+    
+    
+    
+    
     
 }

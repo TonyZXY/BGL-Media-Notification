@@ -40,8 +40,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
 //        print(realm.objects(EachTransactions.self))
 //        print(realm.objects(Transactions.self))
 //        print(realm.objects(EachCurrency.self))
-        
-        walletList.switchRefreshHeader(to: .refreshing)
+        DispatchQueue.main.async(execute: {
+            //                    self.newsTableView.beginHeaderRefreshing()
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
+//        walletList.switchRefreshHeader(to: .refreshing)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
@@ -63,17 +66,19 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLaugageStatus || changeCurrencyStatus{
-            if changeLaugageStatus{
-                walletList.switchRefreshHeader(to: .removed)
-                walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-                    self.handleRefresh(self.walletList)
-                })
-            }
-            self.changeLaugageStatus = false
-            self.changeCurrencyStatus = false
-            walletList.switchRefreshHeader(to: .refreshing)
-        }
+//        if changeLaugageStatus || changeCurrencyStatus{
+//            if changeLaugageStatus{
+//                walletList.switchRefreshHeader(to: .removed)
+//                walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+//                    self.handleRefresh(self.walletList)
+//                })
+//            }
+//            self.changeLaugageStatus = false
+//            self.changeCurrencyStatus = false
+//            DispatchQueue.main.async(execute: {
+//            self.walletList.switchRefreshHeader(to: .refreshing)
+//            })
+//        }
     }
     
     func checkTransaction(){
@@ -87,11 +92,20 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     @objc func changeLanguage(){
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         checkTransaction()
-        changeLaugageStatus = true
+        walletList.switchRefreshHeader(to: .removed)
+        walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+            self.handleRefresh(self.walletList)
+        })
+        DispatchQueue.main.async(execute: {
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
     }
     
     @objc func changeCurrency(){
-        changeCurrencyStatus = true
+//        changeCurrencyStatus = true
+        DispatchQueue.main.async(execute: {
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
     }
     
     //TableView Cell Number
