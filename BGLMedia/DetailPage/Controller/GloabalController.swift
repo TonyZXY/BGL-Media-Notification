@@ -107,78 +107,31 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     @objc func reloadData(completion:@escaping (Bool)->Void){
         let filterName = "coinAbbName = '" + coinDetail.coinName + "' "
-        let selectItem = realm.objects(WatchListRealm.self).filter(filterName)
+        let selectItem = realm.objects(WatchListRealm.self).filter(filterName).sorted(byKeyPath: "date")
         for value in selectItem{
             coinAbbName = value.coinAbbName
             exchangeName = value.market
             tradingPairs = value.tradingPairsName
         }
         
-        APIServices.fetchInstance.getExchangePriceData(from: coinAbbName, to: tradingPairs, market: exchangeName) { (success, response) in
+        if selectItem.count != 0{
+            APIServices.fetchInstance.getExchangePriceData(from: (selectItem.first?.coinAbbName)!, to: (selectItem.first?.tradingPairsName)!, market: (selectItem.first?.market)!) { (success, response) in
             if success{
                 let singlePrice = response["RAW"]["PRICE"].double ?? 0
-                APIServices.fetchInstance.getCryptoCurrencyApis(from: self.tradingPairs, to: [priceType]) { (success, response) in
-                    if success{
-                        var currency:Double = 0
-                        for result in response{
-                            currency = (result.1.double) ?? 0
-                        }
-                        let filterName = "coinAbbName = '" + self.coinAbbName + "' "
-                        let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
-                        if let object = statusItem.first{
-                            try! self.realm.write {
-                                object.price = currency * singlePrice
-                            }
-                        }
-                        completion(true)
-                    }else{
-                        completion(false)
+                let filterName = "coinAbbName = '" + self.coinAbbName + "' "
+                let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
+                if let object = statusItem.first{
+                    try! self.realm.write {
+                        object.price = singlePrice
                     }
                 }
+                completion(true)
             }else{
                 completion(false)
             }
         }
     }
-    
-    
-//        cryptoCompareClient.getTradePrice(from: coinAbbName, to: tradingPairs, exchange: exchangeName){ result in
-//            //            print(result)
-//            switch result{
-//            case .success(let resultData):
-//                for results in resultData!{
-//                    let single = Double(results.value)
-//                    //                    print(single)
-//                    APIServices.fetchInstance.getCryptoCurrencyApi(from: self.tradingPairs, to: [priceType], price: single){success,jsonResult in
-//                        //                        print(jsonResult)
-//                        if success{
-//                            DispatchQueue.main.async {
-//                                var pricess:Double = 0
-//                                for result in jsonResult{
-//                                    pricess = Double(result.value) * single
-//                                }
-//
-//                                let filterName = "coinAbbName = '" + self.coinAbbName + "' "
-//                                let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
-//                                if let object = statusItem.first{
-//                                    try! self.realm.write {
-//                                        object.price = pricess
-//                                    }
-//                                }
-//                                completion(true)
-//                            }
-//                        } else{
-//                            self.coinDetailController.gerneralController.spinner.stopAnimating()
-//                            completion(false)
-//                            //                            print("fail")
-//                        }
-//                    }
-//                }
-//            case .failure(let error):
-//                print("the error \(error.localizedDescription)")
-//            }
-//        }
-    
+    }
     
     func setUpView(){
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
@@ -318,7 +271,11 @@ class GloabalController: UIViewController,ExchangeSelect{
                         try! self.realm.write {
                             object.market = values[i].title
                             object.tradingPairsName = tradingPairList[0]
-                            object.isGlobalAverage = false
+                            if values[i].title == "Global Average"{
+                                object.isGlobalAverage = true
+                            } else{
+                                object.isGlobalAverage = false
+                            }
                         }
                     }
                 }
@@ -346,7 +303,11 @@ class GloabalController: UIViewController,ExchangeSelect{
                 if let object = statusItem.first{
                     try! self.realm.write {
                         object.tradingPairsName = values[i].title
-                        object.isGlobalAverage = false
+                        if self.WatchListData[0].market == "Global Average" {
+                            object.isGlobalAverage = true
+                        } else {
+                            object.isGlobalAverage = false
+                        }
                     }
                 }
                self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
@@ -536,8 +497,8 @@ class GloabalController: UIViewController,ExchangeSelect{
                             if periodData != []{
                                 let price = periodData.last!["close"].double! - periodData.first!["open"].double!
                                 let change = (price /  periodData.first!["open"].double!) * 100
-                                self.checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,type: "number")
-                                self.checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
+                                checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                                checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
                                 self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
                             }
                         }

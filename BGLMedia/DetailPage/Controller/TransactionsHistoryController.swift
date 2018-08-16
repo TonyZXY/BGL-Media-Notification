@@ -82,7 +82,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             }
             cell.worthResult.text = Extension.method.scientificMethod(number:currentWorthData)
             let delta = ((currentWorthData - object.totalPrice) / object.totalPrice) * 100
-            checkDataRiseFallColor(risefallnumber: delta, label: cell.deltaResult, type: "Percent")
+            checkDataRiseFallColor(risefallnumber: delta, label: cell.deltaResult,currency:object.tradingPairsName, type: "Percent")
             
 //            cell.deltaResult.text = Extension.method.scientificMethod(number:delta) + "%"
             let dateFormatter = DateFormatter()

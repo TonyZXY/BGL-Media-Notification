@@ -123,13 +123,13 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         cell.coinAmount.text = Extension.method.scientificMethod(number: assets.totalAmount) + " " + assets.coinAbbName
             
 //            String(assets.totalAmount) + assets.coinAbbName
-        checkDataRiseFallColor(risefallnumber: assets.currentSinglePrice, label: cell.coinSinglePrice, type: "Default")
-        checkDataRiseFallColor(risefallnumber: assets.currentTotalPrice, label: cell.coinTotalPrice, type: "Default")
+        checkDataRiseFallColor(risefallnumber: assets.currentSinglePrice, label: cell.coinSinglePrice,currency:priceType, type: "Default")
+        checkDataRiseFallColor(risefallnumber: assets.currentTotalPrice, label: cell.coinTotalPrice,currency:priceType, type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
         cell.coinTotalPrice.textColor = ThemeColor().textGreycolor()
-        self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
+        checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange,currency:priceType, type: "Percent")
         cell.profitChange.text = "(" + cell.profitChange.text! + ")"
-        self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallNumber, label: cell.profitChangeNumber, type: "Number")
+        checkDataRiseFallColor(risefallnumber: assets.totalRiseFallNumber, label: cell.profitChangeNumber,currency:priceType, type: "Number")
         cell.selectCoin.selectCoinAbbName = assets.coinAbbName
         cell.selectCoin.selectCoinName = assets.coinName
         cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
@@ -268,8 +268,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func caculateTotal(){
 //        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
-        self.checkDataRiseFallColor(risefallnumber: totalAssets, label: totalNumber, type: "Default")
-        self.checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange, type: "Number")
+        checkDataRiseFallColor(risefallnumber: totalAssets, label: totalNumber,currency:priceType, type: "Default")
+        checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange,currency:priceType, type: "Number")
     }
     
     //Click Add Transaction Button Method

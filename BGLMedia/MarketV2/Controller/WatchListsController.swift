@@ -202,7 +202,7 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
                 let object = watchListObjects[indexPath.row-1]
                 cell.object = object
                 cell.addWish.addTarget(self, action: #selector(deleteitem), for: .touchUpInside)
-                checkDataRiseFallColor(risefallnumber: object.profitChange, label: cell.coinChange, type: "PercentDown")
+                checkDataRiseFallColor(risefallnumber: object.profitChange, label: cell.coinChange,currency:object.tradingPairsName,type: "PercentDown")
                 return cell
             }
         }else{

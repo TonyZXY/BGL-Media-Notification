@@ -58,6 +58,7 @@ class DetailController: UIViewController{
         super.viewDidLoad()
         setUpView()
         refreshPage()
+        setPriceChange()
         
 //        self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
         
@@ -87,11 +88,11 @@ class DetailController: UIViewController{
             candleChartDatas.coinTradingPairsName = value.tradingPairsName
             generalPage.candleChartDatas = candleChartDatas
                 
-            checkDataRiseFallColor(risefallnumber: value.totalRiseFallNumber, label: allLossView.profitLoss,type:"Number")
+            checkDataRiseFallColor(risefallnumber: value.totalRiseFallNumber, label: allLossView.profitLoss,currency:value.tradingPairsName, type:"Number")
             mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.totalAmount) + " " + value.coinAbbName
-            checkDataRiseFallColor(risefallnumber: value.currentTotalPrice, label: mainView.marketValueRsult, type: "Default")
-            checkDataRiseFallColor(risefallnumber: value.transactionPrice, label: mainView.netCostResult, type: "Default")
-            checkDataRiseFallColor(risefallnumber: value.currentSinglePrice, label:  generalPage.totalNumber, type: "Default")
+            checkDataRiseFallColor(risefallnumber: value.currentTotalPrice, label: mainView.marketValueRsult,currency:value.tradingPairsName, type: "Default")
+            checkDataRiseFallColor(risefallnumber: value.transactionPrice, label: mainView.netCostResult,currency:value.tradingPairsName, type: "Default")
+            checkDataRiseFallColor(risefallnumber: value.currentSinglePrice, label:  generalPage.totalNumber,currency:value.tradingPairsName, type: "Default")
             generalPage.exchangeButton.setTitle(value.exchangeName, for: .normal)
             generalPage.tradingPairButton.setTitle(value.coinAbbName + "/" +  value.tradingPairsName, for: .normal)
             general.coinAbbName = value.coinAbbName
@@ -243,8 +244,8 @@ class DetailController: UIViewController{
                         if let periodData = response["Data"].array{
                             let price = periodData.last!["close"].double! - periodData.first!["open"].double!
                             let change = (price /  periodData.first!["open"].double!) * 100
-                            self.checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,type: "number")
-                            self.checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,type: "Percent")
+                            checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                            checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
                             self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
                         }
                     }

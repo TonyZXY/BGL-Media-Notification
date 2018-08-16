@@ -442,7 +442,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
                 object = filterObject[indexPath.row]
             }
             cell.object = object
-            checkDataRiseFallColor(risefallnumber: [object.percent1h,object.percent24h,object.percent7d][filterOption], label: cell.coinChange, type: "PercentDown")
+            checkDataRiseFallColor(risefallnumber: [object.percent1h,object.percent24h,object.percent7d][filterOption], label: cell.coinChange,currency:priceType,type: "PercentDown")
             return cell
         }else{
             return UICollectionViewCell()
