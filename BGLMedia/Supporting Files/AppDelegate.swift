@@ -74,9 +74,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         } else{
             appOpenCount += 1
         }
-
+        
         UserDefaults.standard.set(appOpenCount, forKey: "APP_OPENED_COUNT")
         appOpenCount = UserDefaults.standard.integer(forKey: "APP_OPENED_COUNT")
+        print("\(appOpenCount) is the times of open time")
         switch appOpenCount {
         case 10,50:
             if #available(iOS 10.3, *) {
