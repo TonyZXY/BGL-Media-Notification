@@ -19,6 +19,7 @@ class alertObject:Object{
     @objc dynamic var compareStatus:Int = 0
     @objc dynamic var switchStatus:Bool = true
     @objc dynamic var dateTime = Date()
+    @objc dynamic var available = true
     
     override class func primaryKey() -> String {
         return "id"

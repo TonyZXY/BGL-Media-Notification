@@ -10,6 +10,8 @@ import UIKit
 import RealmSwift
 import Alamofire
 import SwiftyJSON
+import SwiftKeychainWrapper
+import JGProgressHUD
 
 struct interset{
     var _id:Int = 0
@@ -84,7 +86,8 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     var email:String{
         get{
-            return UserDefaults.standard.string(forKey: "UserEmail")!
+//            return UserDefaults.standard.string(forKey: "UserEmail")!
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
     
@@ -279,8 +282,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             let exchangeSection = "Exchange: " + intersetObject.exchangName
             let tradingPairs = intersetObject.tradingPairs == "" ? "TradingPairs: " : "TradingPairs: " + intersetObject.coinAbbName + "/" + intersetObject.tradingPairs
             cell.textLabel?.text = indexPath.row == 0 ?  exchangeSection : tradingPairs
-            
-            
             return cell
         } else {
             let cell = tableView.dequeueReusableCell(withIdentifier: "priceTextFieldCell", for: indexPath) as! priceNotificationCell
@@ -288,7 +289,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             cell.backgroundColor = ThemeColor().greyColor()
             cell.priceTextField.tag = indexPath.row
             cell.priceTextField.delegate = self
-            cell.priceTextField.text = String(intersetObject.compare)
+//            cell.priceTextField.text = String(intersetObject.compare)
             cell.priceTypeLabel.text = intersetObject.tradingPairs
             
             return cell
@@ -403,15 +404,18 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     @objc func addNewAlert(){
         let realm = try! Realm()
-        if intersetObject.coinName != "" && intersetObject.exchangName != "" && intersetObject.tradingPairs != ""{
+        let Inputprice = Double(inputPrice) ?? 0
+        intersetObject.compare = Double(inputPrice) ?? 0
+        if intersetObject.coinName != "" && intersetObject.exchangName != "" && intersetObject.tradingPairs != "" && String(intersetObject.compare) != "0.0"{
+            alertButton.isUserInteractionEnabled = false
             var compareStatus:Int = 0
-            let Inputprice = Double(inputPrice) ?? 0
+//            let Inputprice = Double(inputPrice) ?? 0
             if sectionPrice < Inputprice {
                 compareStatus = 1
             } else {
                 compareStatus = 2
             }
-            intersetObject.compare = Inputprice
+//            intersetObject.compare = Inputprice
             intersetObject.compareStatus = compareStatus
             if intersetObject.exchangName == "Global Average"{
                 intersetObject.exchangName = "GLOBAL"
@@ -444,8 +448,14 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
                         self.navigationController?.popViewController(animated: true)
                     } else{
-                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-                        self.navigationController?.popViewController(animated: true)
+                        let hud = JGProgressHUD(style: .light)
+                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_transaction")
+                        hud.show(in: self.view)
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                            hud.dismiss()
+                        }
+                        self.alertButton.isUserInteractionEnabled = true
                     }
                 }
             }
@@ -484,7 +494,14 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
             //            navigationController?.popViewController(animated: true)
         } else {
-            navigationController?.popViewController(animated: true)
+            let hud = JGProgressHUD(style: .light)
+            hud.indicatorView = JGProgressHUDErrorIndicatorView()
+            hud.textLabel.text = textValue(name: "error_transaction")
+            hud.show(in: self.view)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                hud.dismiss()
+            }
+            alertButton.isUserInteractionEnabled = true
         }
     }
     
@@ -544,10 +561,13 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text == "" || textField.text == nil{
-            textField.text = "0"
+            textField.text = ""
+            intersetObject.compare = 0
         } else{
             if Extension.method.checkInputVaild(value: textField.text!){
                inputPrice = textField.text!
+            } else{
+                intersetObject.compare = 0
             }
         }
     }

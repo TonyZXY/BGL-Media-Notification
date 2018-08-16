@@ -11,6 +11,7 @@ import UserNotifications
 import RealmSwift
 import Alamofire
 import JGProgressHUD
+import SwiftKeychainWrapper
 import SafariServices
 
 class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource {
@@ -24,7 +25,8 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     var email:String{
         get{
-            return UserDefaults.standard.string(forKey: "UserEmail") ?? ""
+//            return UserDefaults.standard.string(forKey: "UserEmail") ?? ""
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
     

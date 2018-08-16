@@ -26,10 +26,10 @@ class WatchListCell:UICollectionViewCell{
     
     var object: WatchListRealm? {
         didSet {
-            var roundedPrice = object?.price ?? 0.0
-            roundedPrice = round(roundedPrice * 100) / 100
+//            var roundedPrice = object?.price ?? 0.0
+//            roundedPrice = round(roundedPrice * 100) / 100
             coinLabel.text = object?.coinAbbName
-            coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
+            coinNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: (object?.price)!)
             //            coinChange.text = object?.percent7d
             coinImage.coinImageSetter(coinName: (object?.coinAbbName)!,width: 50*factor!,height: 50*factor!,fontSize: 20*factor!)
             market.text = object?.market

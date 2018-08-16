@@ -212,6 +212,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Click add Transaction button, it will transfer the current trading price to specific price type, for example: USD -> AUD
     @objc func addTransaction(){
+        transactionButton.isUserInteractionEnabled = false
         newTransaction.totalPrice = Double(newTransaction.amount) * newTransaction.singlePrice
         newTransaction.status = transaction
         
@@ -262,6 +263,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                 hud.dismiss()
             }
+            transactionButton.isUserInteractionEnabled = true
         }
     }
     
@@ -275,6 +277,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         tran.exchangeName = self.newTransaction.exchangeName
         tran.tradingPairsName = self.newTransaction.tradingPairsName
         let object = realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
+        
         try! realm.write {
             if object.count != 0{
 //                if self.newTransaction.exchangeName != "Global Average"{
@@ -535,6 +538,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         if textField.tag == 3{
             if textField.text == "" || textField.text == nil{
                 textField.text = ""
+                newTransaction.singlePrice = 0
             }
             if Extension.method.checkInputVaild(value: textField.text!){
                 transactions.singlePrice = Double(textField.text!)!
@@ -544,6 +548,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         if textField.tag == 4{
             if textField.text == "" || textField.text == nil{
                 textField.text = ""
+                newTransaction.amount = 0
             }
             if Extension.method.checkInputVaild(value: textField.text!){
                 transactions.amount = Double(textField.text!)!

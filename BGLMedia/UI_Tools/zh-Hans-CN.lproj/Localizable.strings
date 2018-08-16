@@ -72,6 +72,7 @@ filterByHour_market = "1小时";
 globalAverage_market = "全球平均价格";
 
 //WatchList Page
+listView_watchlist = "24小时";
 sortByLetter_watchlist = "按字母排序";
 sortByHighestPrice_watchlist = "按最高价排序";
 filterByWeek_watchlist = "1周";
@@ -226,6 +227,7 @@ notlogin_alert = "需要登陆后才允许使用推送功能. 登陆";
 alertStatus_alert = "推送通知设置";
 alertUnavaliable_alert = "禁用";
 alertavaliable_alert = "允许";
+alertCoinUnavaliable_alert = "禁用!";
 
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";

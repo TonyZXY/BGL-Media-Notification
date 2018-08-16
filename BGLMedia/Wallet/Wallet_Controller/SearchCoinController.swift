@@ -192,8 +192,8 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
     
     lazy var searchResult:UITableView = {
         tableViews.separatorInset = UIEdgeInsets.zero
+        tableViews.separatorColor = ThemeColor().darkGreyColor()
         tableViews.backgroundColor = color.themeColor()
-        tableViews.separatorColor = ThemeColor().themeColor()
         tableViews.delegate = self
         tableViews.dataSource = self
         tableViews.rowHeight = 60

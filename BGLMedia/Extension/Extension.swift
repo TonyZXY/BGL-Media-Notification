@@ -12,11 +12,12 @@ import SwiftyJSON
 import Alamofire
 import Kingfisher
 import RealmSwift
+import SwiftKeychainWrapper
 
 class Extension:NSObject{
     var realm = try! Realm()
     static let method = Extension()
-    
+   
     //Convert String to Date
     func convertStringToDate(date:String) -> Date{
 //        let dateFormat1 = "yyyy-MM-dd"
@@ -56,27 +57,59 @@ class Extension:NSObject{
     
     func scientificMethod(number:Double)->String{
         var value:String = ""
-        var getNumber:String =  String(number)
+        var getNumber:String = String(format:"%f",number)
         
-        if number == 0.0{
-            value = "--"
-        } else{
+        let formatValue = Extension.method.formatNumber(number)
+        if formatValue == "nil"{
+            //            if number == 0.0{
+            //                value = "--"
+            //            } else{
             if getNumber.prefix(1) != "-" {
                 getNumber = "+" + getNumber
             }
-            
-            if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 2)] == "."{
-                if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 1)] == "0"{
-//                   value = String(format:"%.6f",number)
-                    value = String(format:"%.3f",number)
+            if getNumber.count > 3 {
+                if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 2)] == "."{
+                    if getNumber[getNumber.index(getNumber.startIndex, offsetBy: 1)] == "0"{
+                        for i in 3...getNumber.count-1{
+                            if getNumber[getNumber.index(getNumber.startIndex, offsetBy: i)] != "0"{
+                                //                                    //                                print(getNumber)
+                                //                                    //                                print(String(format:"%." + String(i-1) + "f",number))
+                                if getNumber.count-1 != i{
+                                    if getNumber[getNumber.index(getNumber.startIndex, offsetBy: i+1)] != "0"{
+                                        return String(format:"%." + String(i-1) + "f",number)
+                                    } else{
+                                        return String(format:"%." + String(i-2) + "f",number)
+                                    }
+                                } else{
+                                    return String(format:"%." + String(i-2) + "f",number)
+                                }
+                            }
+                        }
+                    } else{
+                        value = String(format:"%.3f",number)
+                    }
                 } else{
                     value = String(format:"%.2f",number)
                 }
-            } else{
-                value = String(format:"%.2f",number)
+                //                    } else{
+                //                        value = String(format:"%.2f",number)
+                //                    }
+            }else{
+                return String(format:"%.2f",number)
             }
+            return value
+            //        }
+            //            return value
+        } else{
+            return formatValue
         }
-        return value
+    }
+    
+    func doubleToInteger(data:Double)-> Int {
+        let doubleToString = "\(data)"
+        let stringToInteger = (doubleToString as NSString).integerValue
+        
+        return stringToInteger
     }
     
     func checkInputVaild(value:String)->Bool{
@@ -88,6 +121,13 @@ class Extension:NSObject{
             return false
         }
     }
+    
+//    func getCurrencyType(type:String){
+//        let logo = ["AUD":"A$","JPY":"¥","USD":"$","CNY":"¥","EUR":"€"]
+//        if let logos = logo[type]{
+//
+//        }
+//    }
     
     func convertTimetoLocalization(convert date: String) -> String{
         let cnTimeArray = ["1","2","3","4","5","6","7","8","9","10","11","12"]
@@ -157,11 +197,88 @@ class Extension:NSObject{
         backItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().whiteColor()], for: .normal)
         navigationBarItem.backBarButtonItem = backItem
     }
+    
+//    func formatPoints(from: Double) -> String {
+//
+//        let number = from
+//        let thousand = number / 1000
+//        let million = number / 1000000
+//        let billion = number / 1000000000
+//        let ss =  String(format:"%.2f",billion)
+//        print(ss)
+//        print(billion)
+//        if billion >= 1.0 {
+//            return "\(round(billion*10)/10)B"
+//        } else if million >= 1.0 {
+//            return "\(round(million*10)/10)M"
+//        }
+////        else if thousand >= 1.0 {
+////            return ("\(round(thousand*10/10))K")
+////        }
+//        else {
+////            return "\(Int(number))"
+//            return "nil"
+//        }
+//    }
+    
+    func formatNumber(_ n: Double) -> String {
+        
+        let num = abs(n)
+        let sign = (n < 0) ? "-" : ""
+        
+        switch num {
+            
+        case 1_000_000_000_000_000...:
+            var formatted = num / 1_000_000_000_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)P"
+        
+        case 1_000_000_000_000...:
+            var formatted = num / 1_000_000_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)T"
+            
+        case 1_000_000_000...:
+            var formatted = num / 1_000_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)B"
+            
+        case 1_000_000...:
+            var formatted = num / 1_000_000
+            formatted = formatted.truncate(places: 1)
+            return "\(sign)\(formatted)M"
+            
+            //        case 1_000...:
+            //            var formatted = num / 1_000
+            //            formatted = formatted.truncate(places: 1)
+            //            return "\(sign)\(formatted)K"
+            
+            //        case 0...:
+            //            return "\(n)"
+            
+        default:
+//                        return "\(sign)\(n)"
+            return "nil"
+        }
+    }
+
+    
+
+}
+
+
+
+
+extension Double {
+    func truncate(places: Int) -> Double {
+        return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
+    }
 }
 
 extension UIViewController{
-    func checkDataRiseFallColor(risefallnumber: Double,label:UILabel,type:String) {
-        //        let currecyLogo = ["AUD":"A$","JPY":"JP¥","USD":"$","CNY":"RMB¥","EUR":"€"]
+    func checkDataRiseFallColors(risefallnumber: Double,label:UILabel,type:String) {
+        let currecyLogo = ["AUD":"A$","JPY":"JP¥","USD":"$","CNY":"RMB¥","EUR":"€"]
+        
         
         if type == "Default"{
             label.textColor = UIColor.white
@@ -194,6 +311,98 @@ extension UIViewController{
             }
         }
     }
+}
+
+func checkDataRiseFallColor(risefallnumber: Double,label:UILabel,currency:String,type:String) {
+    let logo = ["AUD":"A$","JPY":"¥","USD":"$","CNY":"¥","EUR":"€"]
+    
+    
+    switch type {
+    case "Default":
+        label.textColor = UIColor.white
+        if let logos = logo[currency]{
+            label.text = logos + Extension.method.scientificMethod(number: risefallnumber)
+        } else{
+            label.text = Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+        }
+        
+        
+    case "Percent":
+         if String(risefallnumber).prefix(1) == "-" {
+            label.textColor = ThemeColor().redColor()
+         } else{
+            label.textColor = ThemeColor().greenColor()
+         }
+         label.text = Extension.method.scientificMethod(number: risefallnumber) + "%"
+        
+    case "PercentDown":
+        if String(risefallnumber).prefix(1) == "-" {
+            label.textColor = ThemeColor().redColor()
+            label.text =  "▼ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+        } else if String(risefallnumber) == "0.0"{
+            label.text = "--"
+            label.textColor = UIColor.white
+        }else{
+            label.textColor = ThemeColor().greenColor()
+            label.text =  "▲ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+        }
+        
+    case "Number":
+        if String(risefallnumber).prefix(1) == "-" {
+            label.textColor = ThemeColor().redColor()
+            if let logos = logo[currency]{
+                label.text = "▼ " + logos + Extension.method.scientificMethod(number: risefallnumber)
+            } else{
+                label.text = "▼ " + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+            }
+        } else if String(risefallnumber) == "0.0"{
+            label.text = "--"
+            label.textColor = UIColor.white
+        }else{
+            label.textColor = ThemeColor().greenColor()
+            if let logos = logo[currency]{
+                label.text = "▲ " + logos + Extension.method.scientificMethod(number: risefallnumber)
+            } else{
+                label.text = "▲ "  + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+            }
+            
+        }
+    default:
+        label.textColor = UIColor.white
+        label.text = Extension.method.scientificMethod(number: risefallnumber)
+    }
+    
+    
+//    if type == "Default"{
+//        label.textColor = UIColor.white
+//        label.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: risefallnumber)
+//    } else {
+//        if String(risefallnumber).prefix(1) == "-" {
+//            // lost with red
+//            label.textColor = ThemeColor().redColor()
+//            if type == "Percent"{
+//                label.text = Extension.method.scientificMethod(number: risefallnumber) + "%"
+//            } else if type == "PercentDown"{
+//                label.text =  "▼ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+//            } else{
+//                label.text = "▼ " + currecyLogo[priceType]! + Extension.method.scientificMethod(number: risefallnumber)
+//            }
+//        } else if String(risefallnumber) == "0.0"{
+//            // Not any change with white
+//            label.text = "--"
+//            label.textColor = UIColor.white
+//        } else {
+//            //Profit with green
+//            label.textColor = ThemeColor().greenColor()
+//            if type == "Percent"{
+//                label.text =  Extension.method.scientificMethod(number: risefallnumber) + "%"
+//            } else if type == "PercentDown"{
+//                label.text =  "▲ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+//            } else{
+//                label.text = "▲ " + currecyLogo[priceType]! + Extension.method.scientificMethod(number: risefallnumber)
+//            }
+//        }
+//    }
 }
 
 class InsetLabel: UILabel {
@@ -395,6 +604,7 @@ func deleteMemory(){
     UserDefaults.standard.set(false, forKey: "SendDeviceToken")
     UserDefaults.standard.set(false, forKey: "getDeviceToken")
     UserDefaults.standard.set("null", forKey: "UserEmail")
+    KeychainWrapper.standard.set("null", forKey: "Email")
     UserDefaults.standard.set("null", forKey: "CertificateToken")
     UserDefaults.standard.set("null", forKey: "UserToken")
     let realm = try! Realm()

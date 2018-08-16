@@ -85,11 +85,13 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         }
     }
     
-    var filterObject:Results<GlobalAverageObject>{
-        get{
-            return try! Realm().objects(GlobalAverageObject.self)
-        }
-    }
+    var filterObject = [GlobalAverageObject]()
+    
+//    var filterObject:Results<GlobalAverageObject>{
+//        get{
+//            return try! Realm().objects(GlobalAverageObject.self)
+//        }
+//    }
     
 //    var sortCoinList:[GlobalAverageObject]{
 //        didSet{
@@ -130,31 +132,38 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLaugageStatus || changeCurrencyStatus {
-            if changeLaugageStatus{
-                coinList.switchRefreshHeader(to: .removed)
-                coinList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-                    self.handleRefresh(self.coinList)
-                    
-                })
-            }
-            self.changeLaugageStatus = false
-            self.changeCurrencyStatus = false
-            coinList.switchRefreshHeader(to: .refreshing)
-        }
+//        if changeLaugageStatus || changeCurrencyStatus {
+//            if changeLaugageStatus{
+//                coinList.switchRefreshHeader(to: .removed)
+//                coinList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+//                    self.handleRefresh(self.coinList)
+//
+//                })
+//            }
+//            self.changeLaugageStatus = false
+//            self.changeCurrencyStatus = false
+//            coinList.switchRefreshHeader(to: .refreshing)
+//        }
     }
     
     @objc func changeCurrency(){
-        changeCurrencyStatus = true
+//        DispatchQueue.main.async(execute: {
+            self.coinList.switchRefreshHeader(to: .refreshing)
+//        })
     }
     
     @objc func changeLanguage(){
-        changeLaugageStatus = true
+        coinList.switchRefreshHeader(to: .removed)
+        coinList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+            self.handleRefresh(self.coinList)
+            
+        })
+        coinList.switchRefreshHeader(to: .refreshing)
+//        changeLaugageStatus = true
         mainTotalCollectionView.reloadData()
         filterDate.reloadData()
         sortdoneclick()
         filterDate.selectItem(at: IndexPath(row: 0, section: 0), animated: true, scrollPosition: [])
-
     }
     
     deinit {
@@ -181,6 +190,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         
         dispatchGroup.enter()
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
+            print()
             if success{
                 dispatchGroup.leave()
             } else{
@@ -432,7 +442,7 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
                 object = filterObject[indexPath.row]
             }
             cell.object = object
-            checkDataRiseFallColor(risefallnumber: [object.percent1h,object.percent24h,object.percent7d][filterOption], label: cell.coinChange, type: "PercentDown")
+            checkDataRiseFallColor(risefallnumber: [object.percent1h,object.percent24h,object.percent7d][filterOption], label: cell.coinChange,currency:priceType,type: "PercentDown")
             return cell
         }else{
             return UICollectionViewCell()
@@ -503,8 +513,12 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
             coinList.reloadData()
         } else{
             isSearching = true
-            var filter = filterObject
-            filter = coinAlphabeticalObjects.filter("coinAbbName CONTAINS %@", searchBar.text!.uppercased())
+//            var filter = filterObject
+            filterObject = [GlobalAverageObject]()
+            let filter = coinAlphabeticalObjects.filter("coinAbbName CONTAINS %@", searchBar.text!.uppercased())
+            for result in filter{
+                filterObject.append(result)
+            }
             coinList.reloadData()
         }
     }
@@ -547,9 +561,10 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
 //    }
     
     func searchBarShouldBeginEditing(_ searchBar: UISearchBar) -> Bool {
-        if searchBar.text == nil || searchBar.text == ""{
-            searchBar.setShowsCancelButton(true, animated: true)
-        }
+//        if searchBar.text == nil || searchBar.text == ""{
+//            searchBar.setShowsCancelButton(true, animated: true)
+//        }
+        searchBar.setShowsCancelButton(true, animated: true)
         return true
     }
     

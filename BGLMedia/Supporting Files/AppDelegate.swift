@@ -6,13 +6,15 @@
 //  Copyright © 2018 Sheng Li. All rights reserved.
 //
 
-
+ 
 import UIKit
 import UserNotifications
 import SwiftyJSON
 import Alamofire
 import RealmSwift
 import StoreKit
+import SwiftKeychainWrapper
+import Darwin
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterDelegate {   
@@ -27,7 +29,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     var email:String{
         get{
-            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+//            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
     
@@ -52,10 +55,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey : Any]? = nil) -> Bool {
         
+
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 2,
+            schemaVersion: 4,
+            //old 2
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 2) {
+                if (oldSchemaVersion < 4) {
                     // The enumerateObjects(ofType:_:) method iterates
                     // over every Person object stored in the Realm file
                     //                    migration.enumerateObjects(ofType: Person.className()) { oldObject, newObject in
@@ -66,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     //                    }
                 }
         })
-//        _ = try! Realm()
+        _ = try! Realm()
         
         var appOpenCount = UserDefaults.standard.integer(forKey: "APP_OPENED_COUNT")
         if appOpenCount > 100 {
@@ -166,6 +171,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set("null", forKey: "UserEmail")
             UserDefaults.standard.set("null", forKey: "CertificateToken")
             UserDefaults.standard.set("null", forKey: "UserToken")
+            
+            KeychainWrapper.standard.set("null", forKey: "Email")
         }
         return true
     }

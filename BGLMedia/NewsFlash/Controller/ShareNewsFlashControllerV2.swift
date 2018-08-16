@@ -60,7 +60,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     
     func setUpView(){
         let factor = view.frame.width/375
-        view.backgroundColor = ThemeColor().whiteColor()
+        view.backgroundColor = ThemeColor().grayLightColor()
         view.addSubview(scrollView)
         scrollView.addSubview(shareImage)
         shareImage.addSubview(mainLogoImage)
@@ -126,13 +126,19 @@ class ShareNewsFlashControllerV2: UIViewController {
         
         
         scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0(\(view.frame.width))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
-        scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0(\(view.frame.height))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
+        scrollView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
+        
+        shareImage.heightAnchor.constraint(greaterThanOrEqualToConstant: view.frame.height).isActive = true
+        shareImage.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
+        
         
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "v:|[v0(300)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
         
         
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(\(200*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
+        
+        
         
         
 //        shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v1]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage,"v4":clockImage]))
@@ -153,7 +159,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v3]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         shareImage.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v3(\(150*factor))]-0-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":mainLogoImage,"v1":dateLabel,"v2":flashNewsDescription,"v3":downloadAppImage]))
         
-
+        flashNewsDescription.bottomAnchor.constraint(lessThanOrEqualTo: downloadAppImage.topAnchor, constant: -10).isActive = true
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":selectBarView]))
 
         NSLayoutConstraint(item: shareButton, attribute: .top, relatedBy: .equal, toItem: selectBarView, attribute: .top, multiplier: 1, constant: 10*factor).isActive = true
@@ -200,7 +206,8 @@ class ShareNewsFlashControllerV2: UIViewController {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldFont(18)
-        label.numberOfLines = 2
+        label.numberOfLines = 0
+        label.lineBreakMode = .byWordWrapping
         return label
     }()
     
@@ -248,7 +255,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     
     var selectBarView:UIView = {
         var view = UIView()
-        view.backgroundColor = ThemeColor().whiteColor()
+        view.backgroundColor = ThemeColor().grayLightColor()
         view.translatesAutoresizingMaskIntoConstraints = false
         return view
     }()
@@ -256,6 +263,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     var scrollView:UIScrollView = {
         var scrollView = UIScrollView()
         scrollView.translatesAutoresizingMaskIntoConstraints = false
+        scrollView.backgroundColor = ThemeColor().whiteColor()
 //        scrollView.showsVerticalScrollIndicator = true
 //        scrollView.alwaysBounceVertical = true
         return scrollView
