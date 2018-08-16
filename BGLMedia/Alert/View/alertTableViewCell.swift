@@ -28,7 +28,7 @@ class AlertTableViewCell:UITableViewCell{
             } else {
                 compare = "="
             }
-            let compareLabels = "1 " + (object?.coinAbbName)! + " " + compare + " " + String((object?.price)!)
+            let compareLabels = "1 " + (object?.coinAbbName)! + " " + compare + " " +  Extension.method.scientificMethod(number: (object?.price)!)
             var exchangeName = (object?.exchangName)!
             if exchangeName == "GLOBAL"{
                 exchangeName = "Global Average"
@@ -42,6 +42,9 @@ class AlertTableViewCell:UITableViewCell{
             compareLabel.text = compareLabels
             coinDetailLabel.text = coinDetail
             swithButton.isOn = (object?.switchStatus)!
+            
+           
+            
         }
     }
     //        didSet{

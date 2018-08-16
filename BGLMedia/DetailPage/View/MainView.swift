@@ -48,6 +48,13 @@ class MainView:UIView{
         NSLayoutConstraint(item: portfolioResult, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: portfolio, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: portfolioResult, attribute: NSLayoutAttribute.top, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: +5*factor!).isActive = true
         
+        portfolioResult.leadingAnchor.constraint(greaterThanOrEqualTo: self.leadingAnchor, constant: 5).isActive = true
+//        portfolioResult.rightAnchor.constraint(lessThanOrEqualTo: marketValueRsult.leftAnchor, constant: -5).isActive = true
+        marketValueRsult.leftAnchor.constraint(greaterThanOrEqualTo: portfolioResult.rightAnchor, constant: 5).isActive = true
+        marketValueRsult.rightAnchor.constraint(lessThanOrEqualTo: netCostResult.leftAnchor, constant: -5).isActive = true
+        
+        netCostResult.trailingAnchor.constraint(lessThanOrEqualTo: self.trailingAnchor, constant: -5).isActive = true
+        
         //marketValue
         NSLayoutConstraint(item: marketValue, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: marketValue, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: self, attribute: NSLayoutAttribute.width, multiplier: 1/3, constant: 0).isActive = true

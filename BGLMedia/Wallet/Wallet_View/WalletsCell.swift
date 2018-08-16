@@ -86,27 +86,14 @@ class WalletsCell:UITableViewCell{
         NSLayoutConstraint(item: coinSinglePrice, attribute: .right, relatedBy: .equal, toItem: profitChangeNumber, attribute: .right, multiplier: 1, constant: 0).isActive = true
         //        NSLayoutConstraint(item: coinSinglePrice, attribute: .top, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: 0).isActive = true
         
+        
         //ProfitChange
         NSLayoutConstraint(item: profitChange, attribute: .top, relatedBy: .equal, toItem: profitChangeNumber, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: profitChange, attribute: .right, relatedBy: .equal, toItem: profitChangeNumber, attribute: .right, multiplier: 1, constant: 0).isActive = true
         //        NSLayoutConstraint(item: profitChange, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
-        
-        
-        
-        //        walletView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v2]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":profitChange,"v3":coinAmount,"v4":coinTotalPrice,"v5":coinSinglePrice]))
-        //        NSLayoutConstraint(item: profitChange, attribute: .centerY, relatedBy: .equal, toItem: coinName, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        //
-        //
-        //
-        //
-        //
-        //        //CoinSinglePrice
-        //        walletView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5]-10-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":profitChange,"v3":coinAmount,"v4":coinTotalPrice,"v5":coinSinglePrice]))
-        //        NSLayoutConstraint(item: coinSinglePrice, attribute: .centerY, relatedBy: .equal, toItem: coinAmount, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        //
-        //        walletView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v4]-5-[v5]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":profitChange,"v3":coinAmount,"v4":coinTotalPrice,"v5":coinSinglePrice]))
-        //
-        //        walletView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-5-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage,"v1":coinName,"v2":profitChange,"v3":coinAmount,"v4":coinTotalPrice,"v5":coinSinglePrice]))
+        coinName.rightAnchor.constraint(lessThanOrEqualTo: coinSinglePrice.leftAnchor, constant: -10).isActive = true
+        coinAmount.rightAnchor.constraint(lessThanOrEqualTo: profitChangeNumber.leftAnchor, constant: -10).isActive = true
+        coinTotalPrice.rightAnchor.constraint(lessThanOrEqualTo: profitChange.leftAnchor, constant: -10).isActive = true
     }
     
     let walletView:UIView = {

@@ -40,8 +40,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
 //        print(realm.objects(EachTransactions.self))
 //        print(realm.objects(Transactions.self))
 //        print(realm.objects(EachCurrency.self))
-        
-        walletList.switchRefreshHeader(to: .refreshing)
+        DispatchQueue.main.async(execute: {
+            //                    self.newsTableView.beginHeaderRefreshing()
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
+//        walletList.switchRefreshHeader(to: .refreshing)
         
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
@@ -63,17 +66,19 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if changeLaugageStatus || changeCurrencyStatus{
-            if changeLaugageStatus{
-                walletList.switchRefreshHeader(to: .removed)
-                walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-                    self.handleRefresh(self.walletList)
-                })
-            }
-            self.changeLaugageStatus = false
-            self.changeCurrencyStatus = false
-            walletList.switchRefreshHeader(to: .refreshing)
-        }
+//        if changeLaugageStatus || changeCurrencyStatus{
+//            if changeLaugageStatus{
+//                walletList.switchRefreshHeader(to: .removed)
+//                walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+//                    self.handleRefresh(self.walletList)
+//                })
+//            }
+//            self.changeLaugageStatus = false
+//            self.changeCurrencyStatus = false
+//            DispatchQueue.main.async(execute: {
+//            self.walletList.switchRefreshHeader(to: .refreshing)
+//            })
+//        }
     }
     
     func checkTransaction(){
@@ -87,11 +92,20 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     @objc func changeLanguage(){
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         checkTransaction()
-        changeLaugageStatus = true
+        walletList.switchRefreshHeader(to: .removed)
+        walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
+            self.handleRefresh(self.walletList)
+        })
+        DispatchQueue.main.async(execute: {
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
     }
     
     @objc func changeCurrency(){
-        changeCurrencyStatus = true
+//        changeCurrencyStatus = true
+        DispatchQueue.main.async(execute: {
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
     }
     
     //TableView Cell Number
@@ -106,14 +120,16 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         cell.factor = factor
         let assets = assetss[indexPath.row]
         cell.coinName.text = assets.coinName
-        cell.coinAmount.text = String(assets.totalAmount) + assets.coinAbbName
-        checkDataRiseFallColor(risefallnumber: assets.currentSinglePrice, label: cell.coinSinglePrice, type: "Default")
-        checkDataRiseFallColor(risefallnumber: assets.currentTotalPrice, label: cell.coinTotalPrice, type: "Default")
+        cell.coinAmount.text = Extension.method.scientificMethod(number: assets.totalAmount) + " " + assets.coinAbbName
+            
+//            String(assets.totalAmount) + assets.coinAbbName
+        checkDataRiseFallColor(risefallnumber: assets.currentSinglePrice, label: cell.coinSinglePrice,currency:priceType, type: "Default")
+        checkDataRiseFallColor(risefallnumber: assets.currentTotalPrice, label: cell.coinTotalPrice,currency:priceType, type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
         cell.coinTotalPrice.textColor = ThemeColor().textGreycolor()
-        self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange, type: "Percent")
+        checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange,currency:priceType, type: "Percent")
         cell.profitChange.text = "(" + cell.profitChange.text! + ")"
-        self.checkDataRiseFallColor(risefallnumber: assets.totalRiseFallNumber, label: cell.profitChangeNumber, type: "Number")
+        checkDataRiseFallColor(risefallnumber: assets.totalRiseFallNumber, label: cell.profitChangeNumber,currency:priceType, type: "Number")
         cell.selectCoin.selectCoinAbbName = assets.coinAbbName
         cell.selectCoin.selectCoinName = assets.coinName
         cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
@@ -251,8 +267,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     func caculateTotal(){
-        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
-        self.checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange, type: "Number")
+//        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
+        checkDataRiseFallColor(risefallnumber: totalAssets, label: totalNumber,currency:priceType, type: "Default")
+        checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange,currency:priceType, type: "Number")
     }
     
     //Click Add Transaction Button Method
@@ -411,6 +428,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalChange, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
+        totalNumber.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
+        totalNumber.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
+        totalChange.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
+        totalChange.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
+        
         totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(10*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
         totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(10*factor)-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
         
@@ -500,6 +522,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         label.text = "--"
         label.font = label.font.withSize(30)
         label.textColor = UIColor.white
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -508,6 +531,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         var label = UILabel()
 //        label.text = "--"
         label.font = label.font.withSize(20)
+        label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

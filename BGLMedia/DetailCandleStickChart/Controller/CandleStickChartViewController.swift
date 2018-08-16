@@ -16,7 +16,7 @@ class candleChartData{
 
 class CandleStickChartViewController: UIViewController, UICollectionViewDelegate, UICollectionViewDataSource, UICollectionViewDelegateFlowLayout {
     // MARK: Instance variables
-    
+    var selectPeriod = ["Minute","Hour","Day","Week"]
     private var fetcher = HistoricalDataFetcher()
     
     private var historicalDataStruct: HistoricalDataStruct? {
@@ -26,37 +26,37 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
             chart.configure(historicalDataStruct: historicalDataStruct)
             yAxisLabelView.configure(historicalDataStruct: historicalDataStruct)
             xAxisLabelView.configure(historicalDataStruct: historicalDataStruct)
-            if historicalDataStruct?.selectedData.count != 0 {
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
-            }
+//            if historicalDataStruct?.selectedData.count != 0 {
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+//            }
         }
     }
     
-    var priceChange: Double? {
-        get {
-            if let data = historicalDataStruct {
-                let lastIndex = data.selectedData.count
-                if let last = data.selectedData[lastIndex - 1]?.close, let secondLast = data.selectedData[0]?.close
-                {
-                    return last - secondLast
-                }
-            }
-            return nil
-        }
-    }
+//    var priceChange: Double? {
+//        get {
+//            if let data = historicalDataStruct {
+//                let lastIndex = data.selectedData.count
+//                if let last = data.selectedData[lastIndex - 1]?.close, let secondLast = data.selectedData[0]?.close
+//                {
+//                    return last - secondLast
+//                }
+//            }
+//            return nil
+//        }
+//    }
     
-    var priceChangeRatio: Double? {
-        get {
-            if let data = historicalDataStruct {
-                let lastIndex = data.selectedData.count
-                if let last = data.selectedData[lastIndex - 1]?.close, let secondLast = data.selectedData[0]?.close
-                {
-                    return (last - secondLast) / last * 100.0
-                }
-            }
-            return nil
-        }
-    }
+//    var priceChangeRatio: Double? {
+//        get {
+//            if let data = historicalDataStruct {
+//                let lastIndex = data.selectedData.count
+//                if let last = data.selectedData[lastIndex - 1]?.close, let secondLast = data.selectedData[0]?.close
+//                {
+//                    return (last - secondLast) / last * 100.0
+//                }
+//            }
+//            return nil
+//        }
+//    }
     
     var coinSymbol: candleChartData? {
         didSet {
@@ -207,6 +207,7 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     override func viewDidLoad() {
         super.viewDidLoad()
         intervalBarCollectionView.selectItem(at: CandleStickChartViewController.selectedIntervalIndexPath, animated: true, scrollPosition: [])
+//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
     }
     
     override func didMove(toParentViewController parent: UIViewController?) {
@@ -232,6 +233,9 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         Params.category = indexPath.row
         CandleStickChartViewController.selectedIntervalIndexPath = indexPath
+        UserDefaults.standard.set(selectPeriod[indexPath.row], forKey: "chartPeriod")
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+        print("get data")
         setupNewChart()
     }
     

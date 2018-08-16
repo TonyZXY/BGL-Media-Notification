@@ -27,10 +27,10 @@ class GlobalCoinListCell:UICollectionViewCell{
     
     var object: GlobalAverageObject? {
         didSet {
-            var roundedPrice = object?.price ?? 0.0
-            roundedPrice = round(roundedPrice * 100) / 100
+//            var roundedPrice = object?.price ?? 0.0
+//            roundedPrice = round(roundedPrice * 100) / 100
             coinLabel.text = object?.coinAbbName
-            coinNumber.text = currecyLogo[priceType]! + "\(roundedPrice)"
+            coinNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: (object?.price)!)
             coinType.text = textValue(name: "globalAverage_market")
 //            coinChange.text = object?.percent7d
             rankLabel.text = String((object?.rank)!)

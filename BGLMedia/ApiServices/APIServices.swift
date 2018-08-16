@@ -272,6 +272,8 @@ class APIServices:NSObject{
     }
     
     
+    
+    
     func getMarketCapOneCoinWatchListData(coinId:Int, completion:@escaping (Bool,JSON)->Void){
         let urlString = marketCap + "ticker/" + String(coinId) + "/?convert=" + priceType
         
@@ -292,4 +294,111 @@ class APIServices:NSObject{
         }
     }
     
+    func getRiseFallWeek(from:String,to:String,market:String,limit:Int,completion:@escaping (Bool,JSON)->Void){
+        let urlString = cryptoCompare + "histoday?" + "fsym=" + from + "&tsym=" + to + "&e=" + market + "&limit=" + String(limit)
+        print(urlString)
+        let url = URL(string: urlString)
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "GET"
+        
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        Alamofire.request(urlRequest).responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                let response = JSON(value)
+                completion(true,response)
+            case .failure(let error):
+                print(error)
+                completion(false,JSON())
+            }
+        }
+    }
+    
+    func getRiseFallDay(from:String,to:String,market:String,limit:Int,completion:@escaping (Bool,JSON)->Void){
+        let urlString = cryptoCompare + "histohour?" + "fsym=" + from + "&tsym=" + to + "&e=" + market + "&limit=" + String(limit)
+        print(urlString)
+        let url = URL(string: urlString)
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "GET"
+        
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        Alamofire.request(urlRequest).responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                let response = JSON(value)
+                completion(true,response)
+            case .failure(let error):
+                print(error)
+                completion(false,JSON())
+            }
+        }
+    }
+    
+    func getRiseFallHour(from:String,to:String,market:String,limit:Int,completion:@escaping (Bool,JSON)->Void){
+        let urlString = cryptoCompare + "histohour?" + "fsym=" + from + "&tsym=" + to + "&e=" + market + "&limit=" + String(limit)
+        print(urlString)
+        let url = URL(string: urlString)
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "GET"
+        
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        Alamofire.request(urlRequest).responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                let response = JSON(value)
+                completion(true,response)
+            case .failure(let error):
+                print(error)
+                completion(false,JSON())
+            }
+        }
+    }
+    
+    func getRiseFallMin(from:String,to:String,market:String,limit:Int,completion:@escaping (Bool,JSON)->Void){
+        let urlString = cryptoCompare + "histominute?" + "fsym=" + from + "&tsym=" + to + "&e=" + market + "&limit=" + String(limit)
+        let url = URL(string: urlString)
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "GET"
+        
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        Alamofire.request(urlRequest).responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                let response = JSON(value)
+                completion(true,response)
+            case .failure(let error):
+                print(error)
+                completion(false,JSON())
+            }
+        }
+    }
+    
+    func getRiseFallPeriod(period:String,from:String,to:String,market:String,completion:@escaping (Bool,JSON)->Void){
+        var exactMarket = market
+        if exactMarket == "Global Average"{
+            exactMarket = "CCCAGG"
+        }
+        
+        let urlParam:[String:[String]] = ["Minute":["histominute?","29"],"Hour":["histohour?","3"],"Day":["histohour?","23"],"Week":["histoday?","5"]]
+        if period == "Minute" || period == "Hour" || period == "Day" || period == "Week"{
+            let urlString = cryptoCompare + ((urlParam[period]) ?? ["histominute?","29"])[0] + "fsym=" + from + "&tsym=" + to + "&e=" + exactMarket + "&limit=" + ((urlParam[period]) ?? ["histominute?","29"])[1]
+            let url = URL(string: urlString)
+            var urlRequest = URLRequest(url: url!)
+            urlRequest.httpMethod = "GET"
+            
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            Alamofire.request(urlRequest).responseJSON { (response) in
+                switch response.result {
+                case .success(let value):
+                    let response = JSON(value)
+                    completion(true,response)
+                case .failure(let error):
+                    print(error)
+                    completion(false,JSON())
+                }
+            }
+        } else{
+            completion(false,JSON())
+        }
+    }
 }

@@ -12,11 +12,13 @@ import UserNotifications
 import Alamofire
 import SwiftyJSON
 import JGProgressHUD
+import SwiftKeychainWrapper
 
 struct alertResult{
-    var isExpanded:Bool = true
+    var isExpanded:Bool = false
     var coinName:String = ""
     var coinAbbName:String = ""
+    var avaliable:Bool = true
     var name:[alertObject] = [alertObject]()
 }
 
@@ -40,7 +42,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var coinName = coinAlert()
     var coinAbbName = "null"
     var status = ""
-    var alertList = [alertObject]()
+    var oldAlerts = [Int:Bool]()
     var TransactionDelegate:TransactionFrom?
     var changeSwitchStatus:Bool{
         get{
@@ -63,11 +65,12 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             for value in coinNameResults{
                 var alertResults = alertResult()
                 let speCoin = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
-                alertResults.isExpanded = true
+                alertResults.isExpanded = false
                 alertResults.coinAbbName = value.coinAbbName
                 alertResults.coinName = value.coinName
-                for data in speCoin{
-                    alertResults.name.append(data)
+                for result in speCoin{
+                    alertResults.avaliable = result.available
+                    alertResults.name.append(result)
                 }
                 allResult.append(alertResults)
             }
@@ -77,13 +80,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     var allAlerts:Results<alertObject>{
         get{
-            return try! Realm().objects(alertObject.self)
+            return try! Realm().objects(alertObject.self).sorted(byKeyPath: "dateTime",ascending: false)
         }
     }
     
     var email:String{
         get{
-            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+//            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
     
@@ -114,9 +118,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     
     
-    var alertStatus:Results<alertObject>{
+    var alertStatuss:Results<alertObject>{
         get{
-            return try! Realm().objects(alertObject.self)
+            return try! Realm().objects(alertObject.self).sorted(byKeyPath: "dateTime",ascending: false)
         }
     }
     var twoDimension = [ExpandableNames(isExpanded: true, name: ["ds"]),ExpandableNames(isExpanded: true, name: ["sdf","sfsdfsf"])]
@@ -130,42 +134,10 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-//        let alertsss = alertObject()
-//        token = alertsss.observe { change  in
-//            switch change {
-////            case .update(_):
-////                self.changeStatus = true
-////                print("dddd")
-////            case .initial(_):
-////                print("s")
-////            case .error(let error):
-////                print(error)
-////            }
-//            
-//            
-//                
-//                
-//            case .change(let properties):
-//                
-//                for property in properties {
-//                    if property.name == "switchStatus"{
-//                        print("Congratulations, you've exceeded 1000 steps.")
-//                        self.token = nil
-//                    }
-//                }
-//            case .error(let error):
-//                print("An error occurred: \(error)")
-//            case .deleted:
-//                print("The object was deleted.")
-//            }
-//        }
-        
-        
-        for result in alertStatus{
-            alertList.append(result)
+
+        for result in alertStatuss{
+            oldAlerts[result.id] = result.switchStatus
         }
-        
-        
     }
     
     deinit {
@@ -198,28 +170,41 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
  
 
     override func viewDidDisappear(_ animated: Bool){
-        
         if status == "setting"{
-//            if changeSwitchStatus{
+            if checkAlertStatusChange(){
                  self.sendNotification()
-//            }
+            }
         } else if status == "detailPage"{
-            checkAlertStatusChange()
-//            if changeStatus{
-//                sendNotification()
-//                self.checkAlertStatusChange()
-//            }
+            if checkAlertStatusChange(){
+                sendNotification()
+            }
         }
     }
     
 
 
     
-    func checkAlertStatusChange(){
+    func checkAlertStatusChange()->Bool{
+        for results in allAlerts{
+            if results.switchStatus != oldAlerts[results.id]{
+                print("switch data")
+                return true
+            }
+        }
+        return false
         
         
-        print(alertList)
-        print(allAlerts)
+        
+//        for i in 0...10 - 1 {
+//            print(newAlert[i].coinAbbName + "/" + String(newAlert[i].switchStatus) + "/" + String(oldAlert[i].switchStatus))
+//
+//            if newAlert[i].switchStatus != oldAlert[i].switchStatus {
+////                print(newAlert[i])
+////                print(oldAlert[i])
+//                changeStatus = true
+//                print("successooooooooo")
+//            }
+//        }
     }
     
     func sendNotification(){
@@ -266,6 +251,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sectionView = UIView()
         let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
         coinImage.frame = CGRect(x: 0, y: 0, width: 30*factor!, height: 30*factor!)
         coinImage.clipsToBounds = true
@@ -279,32 +265,57 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         coinLabel.font = UIFont.regularFont(17*factor!)
         coinLabel.text = alerts[section].coinName
         
+        let avaliableLabel = UILabel()
+        avaliableLabel.textColor = ThemeColor().redColor()
+        avaliableLabel.translatesAutoresizingMaskIntoConstraints = false
+        avaliableLabel.font = UIFont.regularFont(17*factor!)
+        if !alerts[section].avaliable{
+            avaliableLabel.text = "Unavaliable!"
+        }
+        
+        
+        
         let button = UIButton(type:.system)
-        button.setTitle("Close", for: .normal)
+        button.setTitle("▼", for: .normal)
+        print(sectionView.frame.width)
+//        button.backgroundColor = ThemeColor().greenColor()
+        button.contentEdgeInsets = UIEdgeInsetsMake(0, view.frame.width, 0, 0)
+        button.titleLabel?.font = UIFont.regularFont(25*factor!)
         //        button.backgroundColor = ThemeColor().bglColor()
-        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
         button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
         button.tag = section
         
-        let sectionView = UIView()
+      
         sectionView.clipsToBounds = true
         sectionView.addSubview(button)
         sectionView.addSubview(coinImage)
         sectionView.addSubview(coinLabel)
+        sectionView.addSubview(avaliableLabel)
+
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         button.translatesAutoresizingMaskIntoConstraints = false
         //        views.translatesAutoresizingMaskIntoConstraints = false
         
-        
         sectionView.layer.borderWidth = 0.5
-        
         NSLayoutConstraint(item: button, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinImage, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: coinLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: avaliableLabel, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        
+        
         sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor!)-[v0(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
         sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinImage]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-\(10*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage]))
-        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v1]-\(10*factor!)-[v0]-\(5*factor!)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinLabel,"v1":coinImage,"v2":avaliableLabel]))
+        
+//        avaliableLabel.rightAnchor.constraint(lessThanOrEqualTo: button.leftAnchor, constant: 10).isActive = true
+//        avaliableLabel.rightAnchor.constraint(greaterThanOrEqualTo: button.leftAnchor, constant: 10).isActive = true
+        avaliableLabel.trailingAnchor.constraint(lessThanOrEqualTo: sectionView.trailingAnchor, constant: -40*factor!).isActive = true
+       
+        
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0]-\(10*factor!)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button,"v1":avaliableLabel]))
+        sectionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":button]))
+        
         
         return sectionView
     }
@@ -320,8 +331,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alerts[section].isExpanded = !isExpanded
         
         
-        button.setTitle(isExpanded ? "Open":"Close", for: .normal)
-        button.titleLabel?.font = UIFont.regularFont(14*factor!)
+        button.setTitle(isExpanded ? "▼":"▲", for: .normal)
+//        button.titleLabel?.font = UIFont.regularFont(25*factor!)
+//        button.contentEdgeInsets = UIEdgeInsetsMake(0, 100, 0, 10)
+//        button.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
+//        button.titleLabel?.font = UIFont.regularFont(14*factor!)
         if !isExpanded{
             alertTableView.insertRows(at: indexPaths, with: .fade)
         } else{
@@ -671,7 +685,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeAlertToRealm(){
-        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+//        let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
         let body:[String:Any] = ["email":email,"token":certificateToken]
         
@@ -744,6 +758,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
+//        print(json)
         let realm = try! Realm()
         if json["success"].bool!{
             for result in json["data"].array!{
@@ -756,9 +771,9 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 let comparePice = result["price"].double ?? 0
                 let compareStatus = result["isgreater"].int ?? 0
                 let switchStatus = result["status"].bool ?? true
+                let available = result["available"].bool ?? true
                 
-                
-                let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date()]
+                let realmData:[Any] = [id,coinName,coinAbbName,tradingPairs,exchangName,comparePice,compareStatus,switchStatus,Date(),available]
                 if realm.object(ofType: alertObject.self, forPrimaryKey: id) == nil {
                     realm.create(alertObject.self, value: realmData)
                 } else {
@@ -771,6 +786,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                     realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
                 }
                 try! realm.commitWrite()
+                oldAlerts[id] = switchStatus
             }
             completion(true)
         } else{
@@ -780,5 +796,10 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             completion(false)
         }
     }
+    
+    
+    
+    
+    
     
 }

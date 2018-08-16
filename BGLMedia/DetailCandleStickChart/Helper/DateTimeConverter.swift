@@ -10,7 +10,7 @@ import Foundation
 
 class DateTimeConverter {
     var strDate = ""
-    let dateFormat = ["HH:mm", "HH:mm", "MM月dd日", "MM月dd日"]
+    let dateFormat = ["HH:mm", "HH:mm", "MM/dd", "MM/dd"]
     
     func convert(timestamp: Double) -> String {
         let date = Date(timeIntervalSince1970: timestamp)

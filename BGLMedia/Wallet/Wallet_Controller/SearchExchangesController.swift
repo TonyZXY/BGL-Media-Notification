@@ -167,8 +167,8 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     
     lazy var searchResult:UITableView = {
         tableViews.rowHeight = 80
-       tableViews.separatorInset = UIEdgeInsets.zero
-//        tableViews.contentInset = UIEdgeInsets.zero
+        tableViews.separatorInset = UIEdgeInsets.zero
+        tableViews.separatorColor = ThemeColor().darkGreyColor()
 //        tableViews.scrollIndicatorInsets = UIEdgeInsets.zero
         tableViews.backgroundColor = color.themeColor()
         tableViews.delegate = self

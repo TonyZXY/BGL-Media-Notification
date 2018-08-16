@@ -56,7 +56,9 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     
     override func viewDidDisappear(_ animated: Bool) {
         if alertSendStatus{
-            self.alert.sendNotification()
+            if self.alert.checkAlertStatusChange(){
+                self.alert.sendNotification()
+            }
         }
     }
     
@@ -99,8 +101,9 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         if indexPath.row == 2{
             alertGetStatus = false
             alertSendStatus = false
-            self.alert.sendNotification()
-            
+            if self.alert.checkAlertStatusChange(){
+                self.alert.sendNotification()
+            }
         }
     }
     

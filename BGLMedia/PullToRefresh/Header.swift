@@ -338,9 +338,9 @@ open class RefreshHeaderContainer:UIView{
             fireHeight = self.delegate?.heightForHeader()
         }
         if state == .refreshing {
-            guard self.window != nil else{
-                return
-            }
+//            guard self.window != nil else{
+//                return
+//            }
             let offset = attachedScrollView.contentOffset
             let inset = originalInset!
             var insetT = -1 * offset.y > inset.top ? (-1 * offset.y):inset.top
@@ -398,7 +398,7 @@ open class RefreshHeaderContainer:UIView{
 //        }else{
 //            if state != .refreshing{
 //                self.state = .willRefresh
-//            }
+//        }
 //    }
         self.state = .refreshing
     }
