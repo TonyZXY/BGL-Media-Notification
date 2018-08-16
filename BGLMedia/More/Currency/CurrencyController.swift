@@ -78,18 +78,16 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let str = storeData[indexPath.row]
         UserDefaults.standard.set(str, forKey: "defaultCurrency")
         let selectedCell = tableView.cellForRow(at: indexPath)! as! currencyCell
-//        selectedCell.isHighlighted = true
-        selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
-        selectedCell.currencyLabel.textColor = ThemeColor().darkBlackColor()
+        selectedCell.isHighlighted = true
+//        selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
+//        selectedCell.currencyLabel.textColor = ThemeColor().darkBlackColor()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         let hud = JGProgressHUD(style: .light)
         hud.show(in: (self.parent?.view)!)
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2)) {
             hud.dismiss()
             self.navigationController?.popViewController(animated: true)
         }
-        
-
     }
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
@@ -100,7 +98,7 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
     lazy var communityTableView:UITableView = {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.backgroundColor = ThemeColor().themeColor()
+//        tableView.backgroundColor = ThemeColor().themeColor()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 70
@@ -169,22 +167,22 @@ class currencyCell:UITableViewCell{
         return label
     }()
     
-//    override var isHighlighted: Bool {
-//        didSet {
-//            if isHighlighted{
-//                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
-//                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
-//            }
-//
-//        }
-//    }
+    override var isHighlighted: Bool {
+        didSet {
+            if isHighlighted{
+                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
+                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
+            }
+
+        }
+    }
     
-    //    override var isSelected: Bool {
-    //        didSet {
-    //            currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
-    //            cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
-    //        }
-    //    }
+    override var isSelected: Bool {
+            didSet {
+                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
+                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
+            }
+    }
     
     func setupviews(){
         selectionStyle = .none
