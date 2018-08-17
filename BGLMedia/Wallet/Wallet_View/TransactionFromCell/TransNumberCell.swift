@@ -12,7 +12,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
     var factor:CGFloat?{
         didSet{
             setupviews()
-            _ = createKeyboarddonebutton()
+//            _ = createKeyboarddonebutton()
         }
     }
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -24,13 +24,13 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
     }
     
     func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        textField.resignFirstResponder()
+        self.endEditing(true)
         return true
     }
     
     lazy var numberLabel:UILabel = {
         let label = UILabel()
-        label.font = UIFont.semiBoldFont(18*factor!)
+        label.font = UIFont.semiBoldFont(15*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -52,6 +52,12 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
 //        textfield.clipsToBounds = false
         textfield.backgroundColor = ThemeColor().greyColor()
         textfield.layer.cornerRadius = 8*factor!
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+        textfield.inputAccessoryView = toolbar
         return textfield
     }()
     
@@ -77,15 +83,15 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate{
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1(\(30*factor!))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":numberLabel,"v1":number]))
     }
     
-    func createKeyboarddonebutton()->UIToolbar {
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done
-            , target: self, action: #selector(doneclick))
-        toolbar.setItems([donebutton], animated: false)
-        number.inputAccessoryView = toolbar
-        return toolbar
-    }
+//    func createKeyboarddonebutton()->UIToolbar {
+////        let toolbar = UIToolbar()
+////        toolbar.sizeToFit()
+////        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+////        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+////        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+////        number.inputAccessoryView = toolbar
+////        return toolbar
+//    }
     
     @objc func doneclick(){
         self.endEditing(true)

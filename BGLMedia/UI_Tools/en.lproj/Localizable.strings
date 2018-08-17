@@ -53,7 +53,7 @@ additionalForm = "Notes";
 pricePlaceholder = "Enter the price here...";
 amountPlaceholder = "Enter amount here...";
 additional_Placeholder = "Notes...";
-error_transaction = "Invalid Input";
+error_transaction = "Invalid Format";
 
 //Market Page
 globalMarket = "Markets";
@@ -354,7 +354,9 @@ submit = "Submit";
 email_report = "(Optional)Enter your Email for future contact";
 
 
-
+//hub progress
+hud_success = "Success";
+hud_Error = "Error";
 
 
 

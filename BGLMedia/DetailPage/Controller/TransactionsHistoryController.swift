@@ -20,26 +20,39 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     var transactionHistory:Results<EachTransactions>{
         get{
-            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName)
+            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "date",ascending:false).sorted(byKeyPath: "time",ascending:false)
         }
     }
     
+    var assetsData:Results<Transactions>{
+        get{
+            let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
+            let objects = realm.objects(Transactions.self).filter(filterName)
+            return objects
+        }
+    }
     
     let realm = try! Realm()
 //    var results = try! Realm().objects(AllTransactions.self)
     var indexSelected:Int = 0
     var generalData = generalDetail()
+    var worthData = [String:Double]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
 //        let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
 //        results = realm.objects(AllTransactions.self).filter(filterName)
-        NotificationCenter.default.addObserver(self, selector: #selector(handleRefresh(_:)), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+        historyTableView.switchRefreshHeader(to: .refreshing)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
         setUpView()
     }
     
+    @objc func refreshData(){
+        historyTableView.switchRefreshHeader(to: .refreshing)
+    }
+    
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -61,28 +74,32 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.labelPoint.layer.backgroundColor = ThemeColor().blueColor().cgColor
             cell.dateLabel.text = object.date + " " + object.time
             cell.timeline.backColor = ThemeColor().blueColor()
-            cell.buyMarket.text = textValue(name: "tradingMarket_history") + ":" + object.exchangeName
-//            cell.buyDeleteButton.setimage
-            for result in object.currency{
-                if result.name == priceType{
-                    cell.SinglePriceResult.text = Extension.method.scientificMethod(number:result.price)
-                    cell.costResult.text = Extension.method.scientificMethod(number:result.price * object.amount)
-                }
-            }
+            cell.buyMarket.text = textValue(name: "tradingMarket_history") + ": " + object.exchangeName
+            
+            
+//            for result in object.currency{
+//                if result.name == priceType{
+//                    cell.SinglePriceResult.text = Extension.method.scientificMethod(number:result.price) + " " + object.tradingPairsName
+//                    cell.costResult.text = Extension.method.scientificMethod(number:result.price * object.amount) + " " + object.tradingPairsName
+//                }
+//            }
+            
+            cell.SinglePriceResult.text = Extension.method.scientificMethod(number:object.singlePrice) + " " + object.tradingPairsName
+            cell.costResult.text = Extension.method.scientificMethod(number:object.totalPrice) + " " + object.tradingPairsName
+            
             cell.tradingPairsResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.amountResult.text = Extension.method.scientificMethod(number:object.amount)
             cell.buyDeleteButton.tag = object.id
-//            cell.buyDeleteButton.setImage(UIImage(named: "wastebin.png", for: .normal)
             cell.buyDeleteButton.addTarget(self, action: #selector(deleteTransaction), for: .touchUpInside)
-            let filterName = "coinAbbName = '" + object.coinAbbName + "' "
-            let currentWorth = try! Realm().objects(Transactions.self).filter(filterName)
-            var currentWorthData:Double = 0
-            for value in currentWorth{
-                currentWorthData = value.currentSinglePrice * object.amount
-            }
-            cell.worthResult.text = Extension.method.scientificMethod(number:currentWorthData)
-            let delta = ((currentWorthData - object.totalPrice) / object.totalPrice) * 100
-            checkDataRiseFallColor(risefallnumber: delta, label: cell.deltaResult,currency:object.tradingPairsName, type: "Percent")
+//            let filterName = "coinAbbName = '" + object.coinAbbName + "' "
+//            let currentWorth = try! Realm().objects(Transactions.self).filter(filterName)
+//            var currentWorthData:Double = 0
+//            for value in currentWorth{
+//                currentWorthData = value.defaultCurrencyPrice * object.amount
+//            }
+            cell.worthResult.text = Extension.method.scientificMethod(number:object.worth) + " " + object.tradingPairsName
+//            let delta = ((currentWorthData - object.totalPrice) / object.totalPrice) * 100
+            checkDataRiseFallColor(risefallnumber: object.delta, label: cell.deltaResult,currency:object.tradingPairsName, type: "Percent")
             
 //            cell.deltaResult.text = Extension.method.scientificMethod(number:delta) + "%"
             let dateFormatter = DateFormatter()
@@ -101,11 +118,11 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.timeline.backColor = ThemeColor().redColor()
             cell.labelPoint.layer.backgroundColor = ThemeColor().redColor().cgColor
             cell.sellDateLabel.text = object.date + " " + object.time
-            cell.sellPriceResult.text = Extension.method.scientificMethod(number:object.singlePrice)
+            cell.sellPriceResult.text = Extension.method.scientificMethod(number:object.singlePrice) + " " + object.tradingPairsName
             cell.sellTradingPairResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.sellAmountResult.text = Extension.method.scientificMethod(number:object.amount)
-            cell.sellProceedsResult.text = Extension.method.scientificMethod(number:object.totalPrice)
-            cell.sellMarket.text = textValue(name: "tradingMarket_history") + ":" + object.exchangeName
+            cell.sellProceedsResult.text = Extension.method.scientificMethod(number:object.totalPrice) + " " + object.tradingPairsName
+            cell.sellMarket.text = textValue(name: "tradingMarket_history") + ": " + object.exchangeName
             cell.sellDeleteButton.tag = object.id
             cell.sellDeleteButton.addTarget(self, action: #selector(deleteTransaction), for: .touchUpInside)
             return cell
@@ -222,12 +239,20 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         tableView.rowHeight = 200
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.bounces = false
+//        tableView.bounces = false
         let footerView = UIView()
         footerView.backgroundColor = ThemeColor().darkGreyColor()
         footerView.frame = CGRect(x: 0, y: 0, width: view.frame.width, height: 100)
         tableView.tableFooterView = footerView
         tableView.separatorStyle = .none
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        tableView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(tableView)
+        })
         return tableView
     }()
     
@@ -254,9 +279,80 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         return button
     }()
     
-    @objc func handleRefresh(_ refreshControl: UIRefreshControl) {
-        historyTableView.reloadData()
-//        self.refresher.endRefreshing()
+    @objc func handleRefresh(_ tableView: UITableView){
+//        loadData(){success in
+//            if success{
+//                self.historyTableView.reloadData()
+//                self.historyTableView.switchRefreshHeader(to: .normal(.success, 0.5))
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+////                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadDetailPage"), object: nil)
+//            } else{
+//                self.historyTableView.switchRefreshHeader(to: .normal(.failure, 0.5))
+//            }
+//        }
+//         var worthData = [String:Double]()
+        
+        getWorthData(){success in
+            if success{
+                self.historyTableView.reloadData()
+                self.historyTableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            } else{
+                self.historyTableView.switchRefreshHeader(to: .normal(.failure, 0.5))
+            }
+        }
     }
     
+    func getWorthData(completion:@escaping (Bool)->Void){
+        if transactionHistory.count > 0{
+//        var singlePrice:Double = 0
+        let dispatchGroup = DispatchGroup()
+        
+        for result in transactionHistory{
+            dispatchGroup.enter()
+            if result.exchangeName == "Global Average"{
+                URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + result.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
+                    if success{
+                        if let responseResult = response["quotes"].array{
+                            for results in responseResult{
+                                if results["currency"].string ?? "" == result.tradingPairsName{
+                                    let singlePrice = results["data"]["price"].double ?? 0
+                                    try! self.realm.write {
+                                            result.worth = singlePrice * result.amount
+                                            result.delta = (((singlePrice * result.amount) - result.totalPrice) / result.totalPrice) * 100
+                                    }
+                                    dispatchGroup.leave()
+                                }
+                            }
+                        } else{
+                           dispatchGroup.leave()
+                        }
+                    } else{
+                        dispatchGroup.leave()
+                    }
+                }
+            } else{
+                APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.exchangeName) { (success, response) in
+                    if success{
+                        let singlePrice = response["RAW"]["PRICE"].double ?? 0
+                        try! self.realm.write {
+                            result.worth = singlePrice * result.amount
+                            result.delta = (((singlePrice * result.amount) - result.totalPrice) / result.totalPrice) * 100
+                        }
+                        dispatchGroup.leave()
+                    } else{
+                       dispatchGroup.leave()
+                    }
+                }
+            }
+        }
+        
+        dispatchGroup.notify(queue:.main){
+            completion(true)
+        }
+            
+        
+        } else{
+            completion(false)
+        }
+    }
 }

@@ -113,8 +113,6 @@ class GerneralController: UIViewController {
         NSLayoutConstraint(item: totalRiseFallPercent, attribute: .top, relatedBy: .equal, toItem: totalRiseFall, attribute: .bottom, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalRiseFall, attribute: .centerX, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalRiseFallPercent, attribute: .centerX, relatedBy: .equal, toItem: FirstView, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        
-        
         NSLayoutConstraint(item: spinner, attribute: .right, relatedBy: .equal, toItem: FirstView, attribute: .right, multiplier: 1, constant: -10*factor!).isActive = true
         NSLayoutConstraint(item: spinner, attribute: .centerY, relatedBy: .equal, toItem: FirstView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         

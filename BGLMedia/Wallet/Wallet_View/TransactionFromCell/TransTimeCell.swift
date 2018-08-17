@@ -39,7 +39,7 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
         let label = UILabel()
         label.text = "购买时间"
         label.textColor = ThemeColor().textGreycolor()
-        label.font = UIFont.semiBoldFont(18*factor!)
+        label.font = UIFont.semiBoldFont(15*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -54,7 +54,7 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
         let rightview = UIView(frame: CGRect(x: 0, y: 0, width: 30*factor!, height: textfield.frame.height))
         let label = UILabel()
         label.text = "▼"
-        label.font = UIFont.regularFont(15*factor!)
+        label.font = UIFont.semiBoldFont(13*factor!)
         label.textColor = ThemeColor().whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         rightview.addSubview(label)
@@ -89,14 +89,16 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
     }
     
     func createdatepicker(){
-        //toolbar
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
-        
-        //bar button item
-        let done = UIBarButtonItem(barButtonSystemItem:.done, target: self, action:#selector(doneclick))
-        toolbar.setItems([done], animated: false)
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelclick))
+        toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
+        toolbar.backgroundColor = ThemeColor().whiteColor()
+        datepicker.backgroundColor = ThemeColor().whiteColor()
         datepicker.datePickerMode = .time
+        datepicker.maximumDate = Date()
         time.inputAccessoryView = toolbar
         time.inputView = datepicker
     }
@@ -107,6 +109,10 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
         formatter.timeStyle = .short
         let dataString = formatter.string(from: datepicker.date)
         time.text = "\(dataString)"
+        self.endEditing(true)
+    }
+    
+    @objc func cancelclick(){
         self.endEditing(true)
     }
 }

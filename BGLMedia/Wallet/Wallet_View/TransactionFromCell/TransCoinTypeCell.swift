@@ -28,7 +28,7 @@ class TransCoinTypeCell:UITableViewCell{
         let label = UILabel()
         label.text = "币种"
 //        label.font = UIFont(name: "Montserrat-Italic", size: 18)
-        label.font = UIFont.semiBoldFont(18*factor!)
+        label.font = UIFont.semiBoldFont(15*factor!)
         label.textAlignment = .left
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -40,7 +40,7 @@ class TransCoinTypeCell:UITableViewCell{
         label.textColor = UIColor.white
         label.layer.cornerRadius = 8*factor!
         label.layer.backgroundColor = ThemeColor().greyColor().cgColor
-        label.font = UIFont.regularFont(15*factor!)
+        label.font = UIFont.semiBoldFont(13*factor!)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

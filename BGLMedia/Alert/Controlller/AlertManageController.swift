@@ -79,7 +79,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
     }
     func setSinglePrice(single: Double) {
-        newTransaction.currentSinglePrice = single
+        newTransaction.defaultCurrencyPrice = single
     }
     
     
@@ -450,6 +450,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                     } else{
                         let hud = JGProgressHUD(style: .light)
                         hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        hud.tintColor = ThemeColor().darkBlackColor()
                         hud.textLabel.text = textValue(name: "error_transaction")
                         hud.show(in: self.view)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
@@ -548,14 +549,14 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                         
                         
                         //                    self.alertTableView.reloadData()
-                        self.newTransaction.currentSinglePrice = Double(String(readData))!
+                        self.newTransaction.defaultCurrencyPrice = Double(String(readData))!
                     case .failure(let error):
                         print("the error \(error.localizedDescription)")
                     }
                 }
             }
         } else{
-            newTransaction.currentSinglePrice = 0
+            newTransaction.defaultCurrencyPrice = 0
         }
     }
     

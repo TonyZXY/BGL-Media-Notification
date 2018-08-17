@@ -45,9 +45,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             self.walletList.switchRefreshHeader(to: .refreshing)
         })
 //        walletList.switchRefreshHeader(to: .refreshing)
-        
+
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
@@ -56,6 +57,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
@@ -63,6 +65,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     @objc func reloadNewMarketData(){
         walletList.reloadData()
+        caculateTotal()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -123,8 +126,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         cell.coinAmount.text = Extension.method.scientificMethod(number: assets.totalAmount) + " " + assets.coinAbbName
             
 //            String(assets.totalAmount) + assets.coinAbbName
-        checkDataRiseFallColor(risefallnumber: assets.currentSinglePrice, label: cell.coinSinglePrice,currency:priceType, type: "Default")
-        checkDataRiseFallColor(risefallnumber: assets.currentTotalPrice, label: cell.coinTotalPrice,currency:priceType, type: "Default")
+        checkDataRiseFallColor(risefallnumber: assets.defaultCurrencyPrice, label: cell.coinSinglePrice,currency:priceType, type: "Default")
+        checkDataRiseFallColor(risefallnumber: assets.defaultTotalPrice, label: cell.coinTotalPrice,currency:priceType, type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
         cell.coinTotalPrice.textColor = ThemeColor().textGreycolor()
         checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange,currency:priceType, type: "Percent")
@@ -173,23 +176,26 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                             let tran = Transactions()
                                             tran.coinAbbName = result.coinAbbName
                                             tran.transactionPrice = transactionPrice
-                                            tran.currentSinglePrice = singlePrice * currency
-                                            tran.currentTotalPrice = tran.currentSinglePrice * amount
+                                            tran.defaultCurrencyPrice = singlePrice * currency
+                                            tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
                                             tran.totalAmount = amount
-                                            tran.totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                            tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
                                             tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
                                             
-                                            self.totalAssets += tran.currentTotalPrice
+                                            self.totalAssets += tran.defaultTotalPrice
                                             self.totalProfit += tran.totalRiseFallNumber
                                             
                                             let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
                                             try! Realm().write {
                                                 if object.count != 0{
+                                                    object[0].currentSinglePrice = singlePrice
+                                                    object[0].currentTotalPrice = singlePrice * amount
+                                                    object[0].currentNetValue = transactionPrice * (1/currency)
                                                     object[0].transactionPrice = transactionPrice
-                                                    object[0].currentSinglePrice = singlePrice * currency
-                                                    object[0].currentTotalPrice = (singlePrice * currency) * amount
+                                                    object[0].defaultCurrencyPrice = singlePrice * currency
+                                                    object[0].defaultTotalPrice = (singlePrice * currency) * amount
                                                     object[0].totalAmount = amount
-                                                    object[0].totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                                    object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
                                                     object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
                                                 }
                                             }
@@ -220,23 +226,27 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                 let tran = Transactions()
                                 tran.coinAbbName = result.coinAbbName
                                 tran.transactionPrice = transactionPrice
-                                tran.currentSinglePrice = singlePrice * currency
-                                tran.currentTotalPrice = tran.currentSinglePrice * amount
+                                tran.defaultCurrencyPrice = singlePrice * currency
+                                tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
                                 tran.totalAmount = amount
-                                tran.totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
                                 tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
                                 
-                                self.totalAssets += tran.currentTotalPrice
+                                self.totalAssets += tran.defaultTotalPrice
                                 self.totalProfit += tran.totalRiseFallNumber
                                 
                                 let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
                                 try! Realm().write {
                                     if object.count != 0{
+                                        object[0].currentSinglePrice = singlePrice
+                                        object[0].currentTotalPrice = singlePrice * amount
+                                        object[0].currentNetValue = transactionPrice * (1/currency)
+                                        object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))                  
                                         object[0].transactionPrice = transactionPrice
-                                        object[0].currentSinglePrice = singlePrice * currency
-                                        object[0].currentTotalPrice = (singlePrice * currency) * amount
+                                        object[0].defaultCurrencyPrice = singlePrice * currency
+                                        object[0].defaultTotalPrice = (singlePrice * currency) * amount
                                         object[0].totalAmount = amount
-                                        object[0].totalRiseFallNumber = tran.currentTotalPrice - tran.transactionPrice
+                                        object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
                                         object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
                                     }
                                 }
@@ -259,7 +269,16 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     
-    
+    @objc func updateTransaction(){
+        checkTransaction()
+        loadData(){success in
+            if success{
+                self.caculateTotal()
+                self.walletList.reloadData()
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+            }
+        }
+    }
     
     @objc func refreshData(){
         checkTransaction()
@@ -268,8 +287,14 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     func caculateTotal(){
 //        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
-        checkDataRiseFallColor(risefallnumber: totalAssets, label: totalNumber,currency:priceType, type: "Default")
-        checkDataRiseFallColor(risefallnumber: totalProfit, label: totalChange,currency:priceType, type: "Number")
+        var totalNumbers:Double = 0
+        var totalChanges:Double = 0
+        for result in assetss{
+            totalNumbers += result.defaultTotalPrice
+            totalChanges += result.totalRiseFallNumber
+        }
+        checkDataRiseFallColor(risefallnumber: totalNumbers, label: totalNumber,currency:priceType, type: "Default")
+        checkDataRiseFallColor(risefallnumber: totalChanges, label: totalChange,currency:priceType, type: "Number")
     }
     
     //Click Add Transaction Button Method

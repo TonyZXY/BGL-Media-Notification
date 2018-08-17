@@ -11,6 +11,10 @@ import RealmSwift
 import JGProgressHUD
 
 class TransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout,TransactionFrom,UITextFieldDelegate{
+    
+    
+//   var datepickerView = UIDatePicker()
+    
     func setLoadPrice() {
         let index = IndexPath(row: 3, section: 0)
         let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
@@ -151,6 +155,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             cell.date.tag = indexPath.row
             textFieldDidEndEditing(cell.date)
             cell.date.delegate = self
+            cell.pickerButton.addTarget(self, action: #selector(showPickerView), for: .touchUpInside)
             return cell
         } else if indexPath.row == 6{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[6], for: indexPath) as! TransTimeCell
@@ -190,6 +195,26 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             return UITableViewCell()
         }
     }
+    
+    @objc func showPickerView(){
+//        let datePickerContainer = UIView()
+//        datePickerContainer.frame = CGRect(x: 0, y: view.frame.height-300, width: view.frame.width, height: 300)
+//        datePickerContainer.backgroundColor = UIColor.white
+//        datepickerView.frame = CGRect(x: 0, y: 30, width: view.frame.width, height: 250)
+//        datepickerView.maximumDate = Date()
+//        datepickerView.datePickerMode = UIDatePickerMode.date
+////        datepickerView.addTarget(self, action: "dateChangedInDate:", forControlEvents: .valueChanged)
+//        datePickerContainer.addSubview(datepickerView)
+//        var doneButton = UIButton()
+//        doneButton.setTitle("Done", for: .normal)
+//        doneButton.titleLabel?.font = UIFont.semiBoldFont(18)
+//        doneButton.setTitleColor(UIColor.blue, for: .normal)
+////        doneButton.addTarget(self, action: Selector("dismissPicker:"), forControlEvents: UIControlEvents.TouchUpInside)
+//        doneButton.frame = CGRect(x: view.frame.width-50, y: 5, width: 70.0, height: 30.0)
+//        datePickerContainer.addSubview(doneButton)
+//        self.view.addSubview(datePickerContainer)
+    }
+    
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if indexPath.row == 0{
@@ -235,7 +260,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                     if self.transactionStatus == "Update"{
                         self.UpdateTransactionToRealm(){succees in
                             if success{
-                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
                                 self.navigationController?.popViewController(animated: true)
                             } else{
                                 self.navigationController?.popViewController(animated: true)
@@ -244,6 +270,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                     }else{
                         self.AddTransactionToRealm(){success in
                             if success{
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
                                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
                                 self.navigationController?.popViewController(animated: true)
                             }else{
@@ -258,6 +285,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else{
             let hud = JGProgressHUD(style: .light)
             hud.indicatorView = JGProgressHUDErrorIndicatorView()
+            hud.tintColor = ThemeColor().darkBlackColor()
             hud.textLabel.text = textValue(name: "error_transaction")
             hud.show(in: self.view)
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
@@ -359,9 +387,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Load current selected coins trading price
     func loadPrice(){
-        if transactionNumber == 1 {
-            transactionNumber = 0
-        } else {
+//        if transactionNumber == 1 {
+//            transactionNumber = 0
+//        } else {
             var readData:Double = 0
             if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
                 if newTransaction.exchangeName == "Global Average"{
@@ -423,13 +451,13 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             } else{
                 newTransaction.singlePrice = 0
             }
-        }
+//        }
     }
     
     //If this page is open from transaction history page, it can display the data in the transaction form and allow them to update
     func updateTransactionDetail(){
         if transactionStatus == "Update"{
-            transactionNumber = 1
+//            transactionNumber = 1
             newTransaction.id = updateTransaction.id
             newTransaction.coinAbbName = updateTransaction.coinAbbName
             newTransaction.coinName = updateTransaction.coinName
@@ -651,5 +679,13 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(sellPage), for: .touchUpInside)
         return button
+    }()
+    
+    
+    var datepickerView:UIDatePicker = {
+        var pickerView = UIDatePicker()
+        pickerView.backgroundColor = ThemeColor().whiteColor()
+        pickerView.datePickerMode = .date
+        return pickerView
     }()
 }

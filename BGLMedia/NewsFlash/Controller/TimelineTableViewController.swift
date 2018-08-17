@@ -444,7 +444,7 @@ class TimelineTableViewController: UITableViewController {
         if displayNumber <= results.count{
             self.displayNumber += 5
             if displayNumber != 0{
-                getNews(skip: displayNumber-5, limit: 2){ success in
+                getNews(skip: displayNumber-5, limit: 5){ success in
                     if success{
                         //                        DispatchQueue.main.async {
                         self.tableView.reloadData()
@@ -455,6 +455,7 @@ class TimelineTableViewController: UITableViewController {
                 }
             }
         }
+        print(resultNumber)
         if self.displayNumber >= self.results.count {
             self.tableView.switchRefreshFooter(to: .normal)
             

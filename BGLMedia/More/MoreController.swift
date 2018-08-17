@@ -225,6 +225,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let hud = JGProgressHUD(style: .light)
                 hud.textLabel.text = "Log Out"
                 hud.backgroundColor = ThemeColor().progressColor()
+                hud.tintColor = ThemeColor().darkBlackColor()
                 hud.show(in: (self.parent?.view)!)
                 
                 let body = ["email":email,"token":certificateToken,"deviceToken":deviceToken]
@@ -236,7 +237,8 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             deleteMemory()
                             self.optionTableView.reloadData()
                             hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                            hud.textLabel.text = "Success"
+                           
+                            hud.textLabel.text = textValue(name: "hud_success")
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                 hud.dismiss()
                             }
@@ -244,13 +246,13 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             let manager = NetworkReachabilityManager()
                             hud.indicatorView = JGProgressHUDErrorIndicatorView()
                             if !(manager?.isReachable)! {
-                                hud.textLabel.text = "Error"
+                                hud.textLabel.text = textValue(name: "hud_Error")
                                 hud.detailTextLabel.text = "No Network" // To change?
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     hud.dismiss()
                                 }
                             } else {
-                                hud.textLabel.text = "Error"
+                                hud.textLabel.text = textValue(name: "hud_Error")
                                 hud.detailTextLabel.text = "Time Out" // To change?
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     hud.dismiss()
@@ -262,8 +264,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     deleteMemory()
                     self.optionTableView.reloadData()
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                    hud.textLabel.text = "Success"
-                    
+                    hud.textLabel.text = textValue(name: "hud_success")
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         hud.dismiss()
                     }

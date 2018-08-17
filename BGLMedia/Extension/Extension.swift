@@ -86,20 +86,15 @@ class Extension:NSObject{
                             }
                         }
                     } else{
-                        value = String(format:"%.3f",number)
+                        value = String(format:"%.2f",number)
                     }
                 } else{
-                    value = String(format:"%.2f",number)
+                    value = String(format:"%.1f",number)
                 }
-                //                    } else{
-                //                        value = String(format:"%.2f",number)
-                //                    }
             }else{
                 return String(format:"%.2f",number)
             }
             return value
-            //        }
-            //            return value
         } else{
             return formatValue
         }
