@@ -229,7 +229,6 @@ class OnBoardingPageViewController: UIViewController {
     func setupSkipButton(){
         let factor = view.frame.width/414
         let factor2 = view.frame.height/736
-        print(factor2)
 
         view.addSubview(skipButton)
         skipButton.translatesAutoresizingMaskIntoConstraints = false

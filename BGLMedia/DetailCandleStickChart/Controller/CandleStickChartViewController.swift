@@ -235,7 +235,6 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
         CandleStickChartViewController.selectedIntervalIndexPath = indexPath
         UserDefaults.standard.set(selectPeriod[indexPath.row], forKey: "chartPeriod")
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
-        print("get data")
         setupNewChart()
     }
     

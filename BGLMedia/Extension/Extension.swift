@@ -315,59 +315,122 @@ func checkDataRiseFallColor(risefallnumber: Double,label:UILabel,currency:String
     switch type {
     case "Default":
         label.textColor = UIColor.white
-        if let logos = logo[currency]{
-            label.text = logos + Extension.method.scientificMethod(number: risefallnumber)
-        }else if String(risefallnumber) == "0.0"{
+        if risefallnumber == 0{
             label.text = "--"
             label.textColor = UIColor.white
         } else{
-            label.text = Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+            if let logos = logo[currency]{
+                label.text = logos + Extension.method.scientificMethod(number: risefallnumber)
+            }else{
+                label.text = Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+            }
         }
+        
+        
+//        if let logos = logo[currency]{
+//            label.text = logos + Extension.method.scientificMethod(number: risefallnumber)
+//        }else if String(risefallnumber) == "0.0"{
+//            label.text = "--"
+//            label.textColor = UIColor.white
+//        } else{
+//            label.text = Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+//        }
         
         
     case "Percent":
-         if String(risefallnumber).prefix(1) == "-" {
-            label.textColor = ThemeColor().redColor()
-         }else if String(risefallnumber) == "0.0"{
+        if risefallnumber == 0{
             label.text = "--"
             label.textColor = UIColor.white
-         } else{
-            label.textColor = ThemeColor().greenColor()
-         }
-         label.text = Extension.method.scientificMethod(number: risefallnumber) + "%"
+        } else{
+            if String(risefallnumber).prefix(1) == "-" {
+                label.textColor = ThemeColor().redColor()
+            }else{
+                label.textColor = ThemeColor().greenColor()
+            }
+            label.text = Extension.method.scientificMethod(number: risefallnumber) + "%"
+        }
+        
+        
+//         if String(risefallnumber).prefix(1) == "-" {
+//            label.textColor = ThemeColor().redColor()
+//         }else if String(risefallnumber) == "0.0"{
+//            label.text = "--"
+//            label.textColor = UIColor.white
+//         } else{
+//            label.textColor = ThemeColor().greenColor()
+//         }
+//         label.text = Extension.method.scientificMethod(number: risefallnumber) + "%"
         
     case "PercentDown":
-        if String(risefallnumber).prefix(1) == "-" {
-            label.textColor = ThemeColor().redColor()
-            label.text =  "▼ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
-        } else if String(risefallnumber) == "0.0"{
+        if risefallnumber == 0{
             label.text = "--"
             label.textColor = UIColor.white
-        }else{
-            label.textColor = ThemeColor().greenColor()
-            label.text =  "▲ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+        } else{
+            if String(risefallnumber).prefix(1) == "-" {
+                label.textColor = ThemeColor().redColor()
+                label.text =  "▼ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+            }else{
+                label.textColor = ThemeColor().greenColor()
+                label.text =  "▲ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+            }
         }
         
+        
+//        if String(risefallnumber).prefix(1) == "-" {
+//            label.textColor = ThemeColor().redColor()
+//            label.text =  "▼ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+//        } else if String(risefallnumber) == "0.0"{
+//            label.text = "--"
+//            label.textColor = UIColor.white
+//        }else{
+//            label.textColor = ThemeColor().greenColor()
+//            label.text =  "▲ " + Extension.method.scientificMethod(number: risefallnumber) + "%"
+//        }
+        
     case "Number":
-        if String(risefallnumber).prefix(1) == "-" {
-            label.textColor = ThemeColor().redColor()
-            if let logos = logo[currency]{
-                label.text = "▼ " + logos + Extension.method.scientificMethod(number: risefallnumber)
-            } else{
-                label.text = "▼ " + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
-            }
-        } else if String(risefallnumber) == "0.0"{
+        if risefallnumber == 0{
             label.text = "--"
             label.textColor = UIColor.white
         }else{
-            label.textColor = ThemeColor().greenColor()
-            if let logos = logo[currency]{
-                label.text = "▲ " + logos + Extension.method.scientificMethod(number: risefallnumber)
-            } else{
-                label.text = "▲ "  + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+            if String(risefallnumber).prefix(1) == "-" {
+                label.textColor = ThemeColor().redColor()
+                if let logos = logo[currency]{
+                    label.text = "▼ " + logos + Extension.method.scientificMethod(number: risefallnumber)
+                } else{
+                    label.text = "▼ " + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+                }
+            }else{
+                label.textColor = ThemeColor().greenColor()
+                if let logos = logo[currency]{
+                    label.text = "▲ " + logos + Extension.method.scientificMethod(number: risefallnumber)
+                } else{
+                    label.text = "▲ "  + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+                }
+                
             }
-            
         }
+        
+        
+//        if String(risefallnumber).prefix(1) == "-" {
+//            label.textColor = ThemeColor().redColor()
+//            if let logos = logo[currency]{
+//                label.text = "▼ " + logos + Extension.method.scientificMethod(number: risefallnumber)
+//            } else{
+//                label.text = "▼ " + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+//            }
+//        } else if String(risefallnumber) == "0.0"{
+//            label.text = "--"
+//            label.textColor = UIColor.white
+//        }else{
+//            label.textColor = ThemeColor().greenColor()
+//            if let logos = logo[currency]{
+//                label.text = "▲ " + logos + Extension.method.scientificMethod(number: risefallnumber)
+//            } else{
+//                label.text = "▲ "  + Extension.method.scientificMethod(number: risefallnumber) + " " + currency
+//            }
+//
+//        }
+        
     default:
         label.textColor = UIColor.white
         label.text = Extension.method.scientificMethod(number: risefallnumber)

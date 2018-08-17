@@ -577,9 +577,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
 //            let email = UserDefaults.standard.string(forKey: "UserEmail")!
             let parameter:[String:Any] = ["email":email,"token":certificateToken,"flash":flashNotification,"interest":priceAlert]
             URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in
-                print(response)
             }
         }
-        //        }
     }
 }
