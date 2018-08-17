@@ -66,14 +66,19 @@ class DetailController: UIViewController{
         
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+         NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
     }
     
     
     //Remove the refresh notification (From market and tradingpairs change)
     deinit {
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+    }
+    
+    @objc func updateMarketData(){
+        refreshPage()
     }
     
     //Load page data
@@ -88,10 +93,10 @@ class DetailController: UIViewController{
             candleChartDatas.coinTradingPairsName = value.tradingPairsName
             generalPage.candleChartDatas = candleChartDatas
                 
-            checkDataRiseFallColor(risefallnumber: value.totalRiseFallNumber, label: allLossView.profitLoss,currency:value.tradingPairsName, type:"Number")
+            checkDataRiseFallColor(risefallnumber: value.currentRiseFall, label: allLossView.profitLoss,currency:value.tradingPairsName, type:"Number")
             mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.totalAmount) + " " + value.coinAbbName
             checkDataRiseFallColor(risefallnumber: value.currentTotalPrice, label: mainView.marketValueRsult,currency:value.tradingPairsName, type: "Default")
-            checkDataRiseFallColor(risefallnumber: value.transactionPrice, label: mainView.netCostResult,currency:value.tradingPairsName, type: "Default")
+            checkDataRiseFallColor(risefallnumber: value.currentNetValue, label: mainView.netCostResult,currency:value.tradingPairsName, type: "Default")
             checkDataRiseFallColor(risefallnumber: value.currentSinglePrice, label:  generalPage.totalNumber,currency:value.tradingPairsName, type: "Default")
             generalPage.exchangeButton.setTitle(value.exchangeName, for: .normal)
             generalPage.tradingPairButton.setTitle(value.coinAbbName + "/" +  value.tradingPairsName, for: .normal)
@@ -132,21 +137,19 @@ class DetailController: UIViewController{
     
     func loadData(completion:@escaping (Bool)->Void){
         let dispatchGroup = DispatchGroup()
-        dispatchGroup.enter()
+        var currency:Double = 0
+        var singlePrice:Double = 0
+        
+        
         if let assets = assetsData.first {
+            dispatchGroup.enter()
             if assets.exchangeName == "Global Average"{
                 URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + assets.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
                     if success{
                         if let responseResult = response["quotes"].array{
                             for results in responseResult{
                                 if results["currency"].string ?? "" == priceType{
-                                    let singlePrice = results["data"]["price"].double ?? 0
-                                    try! self.realm.write {
-                                        assets.currentSinglePrice = singlePrice
-                                        assets.currentTotalPrice = assets.currentSinglePrice * assets.totalAmount
-                                        assets.totalRiseFallNumber = ((assets.currentTotalPrice - assets.transactionPrice) / assets.transactionPrice) * 100
-                                        assets.totalRiseFallPercent = assets.currentTotalPrice - assets.transactionPrice
-                                    }
+                                    singlePrice = results["data"]["price"].double ?? 0
                                 }
                             }
                         }
@@ -158,17 +161,23 @@ class DetailController: UIViewController{
             } else{
                 APIServices.fetchInstance.getExchangePriceData(from: assets.coinAbbName, to: assets.tradingPairsName, market: assets.exchangeName) { (success, response) in
                     if success{
-                        let singlePrice = response["RAW"]["PRICE"].double ?? 0
-                        try! self.realm.write {
-                            assets.currentSinglePrice = singlePrice
-                            assets.currentTotalPrice = assets.currentSinglePrice * assets.totalAmount
-                            assets.totalRiseFallNumber = ((assets.currentTotalPrice - assets.transactionPrice) / assets.transactionPrice) * 100
-                            assets.totalRiseFallPercent = assets.currentTotalPrice - assets.transactionPrice
-                        }
+                        singlePrice = response["RAW"]["PRICE"].double ?? 0
                         dispatchGroup.leave()
                     } else{
                         dispatchGroup.leave()
                     }
+                }
+            }
+            
+            dispatchGroup.enter()
+            APIServices.fetchInstance.getCryptoCurrencyApis(from: assets.tradingPairsName, to: [priceType]){ (success, response) in
+                if success{
+                    for result in response{
+                        currency = (result.1.double) ?? 0
+                    }
+                    dispatchGroup.leave()
+                } else{
+                    dispatchGroup.leave()
                 }
             }
         }
@@ -183,6 +192,18 @@ class DetailController: UIViewController{
         }
         
         dispatchGroup.notify(queue:.main){
+            if let assets = self.assetsData.first{
+                try! self.realm.write {
+                    assets.currentSinglePrice = singlePrice
+                    assets.currentTotalPrice = assets.currentSinglePrice * assets.totalAmount
+                    assets.currentNetValue = assets.transactionPrice * (1/currency)
+                    assets.currentRiseFall = (assets.currentSinglePrice * assets.totalAmount) - (assets.transactionPrice * (1/currency))
+                    assets.defaultCurrencyPrice = singlePrice * currency
+                    assets.defaultTotalPrice = assets.defaultCurrencyPrice * assets.totalAmount
+                    assets.totalRiseFallNumber = assets.defaultTotalPrice - assets.transactionPrice
+                    assets.totalRiseFallPercent = ((assets.defaultTotalPrice - assets.transactionPrice) / assets.transactionPrice) * 100
+                }
+            }
             completion(true)
         }
     }

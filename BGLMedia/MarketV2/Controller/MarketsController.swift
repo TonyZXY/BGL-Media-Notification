@@ -105,6 +105,9 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
                 self.alert.sendNotification()
             }
         }
+//        if indexPath.row == 0{
+//            self.global.searchBar.resignFirstResponder()
+//        }
     }
     
 

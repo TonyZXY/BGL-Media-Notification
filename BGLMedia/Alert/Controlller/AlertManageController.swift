@@ -79,7 +79,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
     }
     func setSinglePrice(single: Double) {
-        newTransaction.currentSinglePrice = single
+        newTransaction.defaultCurrencyPrice = single
     }
     
     
@@ -134,7 +134,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             coinLabel.textColor = ThemeColor().whiteColor()
             
             let button = UIButton(type:.system)
-            button.setTitle("Edit", for: .normal)
+            button.setTitle(textValue(name: "edit_alert"), for: .normal)
             button.setTitleColor(UIColor.white, for: .normal)
             button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
             button.tag = section
@@ -149,7 +149,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             }
             
             coinImage.coinImageSetter(coinName: intersetObject.coinAbbName, width: 30*factor, height: 30*factor, fontSize: 5*factor)
-            coinLabel.text = "Coin Name: " + intersetObject.coinName
+            coinLabel.text = textValue(name: "coinName_alert") + intersetObject.coinName
             coinLabel.font = UIFont.regularFont(14*factor)
             
             
@@ -229,7 +229,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
         
         
-        button.setTitle(isExpanded ? "Edit":"Edit", for: .normal)
+        button.setTitle(isExpanded ? textValue(name: "edit_alert"):textValue(name: "edit_alert"), for: .normal)
         
         //        if !isExpanded{
         //            alertTableView.insertRows(at: indexPaths, with: .fade)
@@ -279,8 +279,8 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             cell.textLabel?.textColor = ThemeColor().whiteColor()
             cell.textLabel?.font = UIFont.regularFont(15*factor)
             cell.backgroundColor = ThemeColor().greyColor()
-            let exchangeSection = "Exchange: " + intersetObject.exchangName
-            let tradingPairs = intersetObject.tradingPairs == "" ? "TradingPairs: " : "TradingPairs: " + intersetObject.coinAbbName + "/" + intersetObject.tradingPairs
+            let exchangeSection = textValue(name: "exchange_alert") + intersetObject.exchangName
+            let tradingPairs = intersetObject.tradingPairs == "" ? textValue(name: "tradingPair_alert") : textValue(name: "tradingPair_alert") + intersetObject.coinAbbName + "/" + intersetObject.tradingPairs
             cell.textLabel?.text = indexPath.row == 0 ?  exchangeSection : tradingPairs
             return cell
         } else {
@@ -450,6 +450,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                     } else{
                         let hud = JGProgressHUD(style: .light)
                         hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        hud.tintColor = ThemeColor().darkBlackColor()
                         hud.textLabel.text = textValue(name: "error_transaction")
                         hud.show(in: self.view)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
@@ -548,14 +549,14 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                         
                         
                         //                    self.alertTableView.reloadData()
-                        self.newTransaction.currentSinglePrice = Double(String(readData))!
+                        self.newTransaction.defaultCurrencyPrice = Double(String(readData))!
                     case .failure(let error):
                         print("the error \(error.localizedDescription)")
                     }
                 }
             }
         } else{
-            newTransaction.currentSinglePrice = 0
+            newTransaction.defaultCurrencyPrice = 0
         }
     }
     

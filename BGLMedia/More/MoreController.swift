@@ -225,11 +225,9 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let hud = JGProgressHUD(style: .light)
                 hud.textLabel.text = textValue(name: "logout_hud")
                 hud.backgroundColor = ThemeColor().progressColor()
+                hud.tintColor = ThemeColor().darkBlackColor()
                 hud.show(in: (self.parent?.view)!)
-                
                 let body = ["email":email,"token":certificateToken,"deviceToken":deviceToken]
-                
-                
                 if sendDeviceTokenStatus{
                     URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","logoutIOSDevice"], httpMethod: "POST", parameters: body) { (response, success) in
                         if success{

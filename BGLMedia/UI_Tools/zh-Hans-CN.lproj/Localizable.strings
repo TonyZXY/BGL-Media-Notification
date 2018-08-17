@@ -58,6 +58,7 @@ error_transaction = "输入格式有误";
 //Market Page
 globalMarket = "市场行情";
 watchlistMarket = "收藏列表";
+alertMarket = "提醒";
 marketCap_Market = "市场总资产";
 market_24hVolume = "24小时交易量";
 btcDominance_market = "BTC占比";
@@ -230,9 +231,14 @@ alertavaliable_alert = "允许";
 alertCoinUnavaliable_alert = "禁用!";
 and = "和";
 
+
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";
 alertDone_alert = "完成";
+edit_alert = "编辑";
+coinName_alert = "币名: ";
+exchange_alert = "交易所: ";
+tradingPair_alert = "交易对: ";
 
 //Pull to refresh
 pullDownToRefresh = "下拉可以刷新";
@@ -365,5 +371,11 @@ a7 = "          应用所有的数据都会自动更新。 偶尔应用会出现
 a8 = "          CryptoGeek支持多设备同时使用。 您可以在已登录的所有设备中查看快讯，新闻，自定义提醒通知。但您无法在多设备中检查您钱包里的加密货币，因为它当前处于脱机状态。 当您成功重置密码后，其他设备将自动注销。";
 a9 = "          您可以在更多选项卡中找到清除缓存。 缓存是首次加载时保存的快讯和新闻的地方。清除缓存可以提升应用的性能。 清除缓存将清除所有的快讯和新闻。";
 
+//hub progress
+hud_success = "成功";
+hud_Error = "错误";
+hud_passwordReset = "密码重置";
+hud_noNetwork = "无网络连接";
+hud_timeOut = "请求超时";
 
 

@@ -134,7 +134,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         for result in alertStatuss{
             oldAlerts[result.id] = result.switchStatus
         }
@@ -142,6 +142,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         token?.invalidate()
     }
@@ -159,6 +160,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         }
         
         
+    }
+    
+    @objc func changeLanguage(){
+        checkSetUpView()
+        alertButton.setTitle(textValue(name: "addAlert_alert"), for: .normal)
+        loginMainLabel.text = textValue(name: "needLoginLabel")
+        loginLabel.text = textValue(name: "needLoginText")
+        loginButton.setTitle(textValue(name: "login"), for: .normal)
     }
     
     func getNotification(){
@@ -276,7 +285,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         
         
         let button = UIButton(type:.system)
-        button.setTitle("▼", for: .normal)
+        let isExpanded = alerts[section].isExpanded
+        button.setTitle(!isExpanded ? "▼":"▲", for: .normal)
         print(sectionView.frame.width)
 //        button.backgroundColor = ThemeColor().greenColor()
         button.contentEdgeInsets = UIEdgeInsetsMake(0, view.frame.width, 0, 0)
@@ -406,6 +416,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
+        
+        
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         view.backgroundColor = ThemeColor().blueColor()
         view.addSubview(alertView)
@@ -422,12 +434,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertButton.topAnchor.constraint(equalTo: alertTableView.bottomAnchor).isActive = true
         alertButton.heightAnchor.constraint(equalToConstant: 60*factor!).isActive = true
         if #available(iOS 11.0, *) {
-            alertButton.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            alertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
         } else {
             alertButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
-        
-        
+
 //        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(3*factor!)-[v0(\(80*factor!))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
     }
     
@@ -460,7 +471,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func setUpLoginView(){
         view.addSubview(loginView)
         loginLabel.font = UIFont.regularFont(13*factor!)
-        loginButton.layer.cornerRadius = 15*factor!
+        loginButton.layer.cornerRadius = 20*factor!
+        loginButton.titleLabel?.font = UIFont.semiBoldFont(18*factor!)
         loginMainLabel.font = UIFont.regularFont(20*factor!)
         loginView.addSubview(loginLabel)
         loginView.addSubview(loginButton)
@@ -577,7 +589,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         var button = UIButton()
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitle(textValue(name: "login"), for: .normal)
-        button.layer.cornerRadius = 15
+        button.layer.cornerRadius = 20
         button.addTarget(self, action: #selector(Login), for: .touchUpInside)
         button.setTitleColor(UIColor.white, for: .normal)
         button.backgroundColor = ThemeColor().blueColor()
@@ -638,7 +650,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 50*factor!
+        tableView.rowHeight = 30*factor!
         tableView.bounces = false
         tableView.separatorStyle = .none
         return tableView
@@ -718,8 +730,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                         
                         deleteMemory()
                         hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                        hud.textLabel.text = "Error"
-                        hud.detailTextLabel.text = "Password Reset" // To change?
+                        hud.textLabel.text = textValue(name: "hud_Error")
+                        hud.detailTextLabel.text = textValue(name: "hud_passwordReset") // To change?
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()
                         }
@@ -739,14 +751,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 let manager = NetworkReachabilityManager()
                 hud.indicatorView = JGProgressHUDErrorIndicatorView()
                 if !(manager?.isReachable)! {
-                    hud.textLabel.text = "Error"
+                    hud.textLabel.text = textValue(name: "hud_Error")
                     hud.detailTextLabel.text = "No Network" // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     
                 } else {
-                    hud.textLabel.text = "Error"
+                    hud.textLabel.text = textValue(name: "hud_Error")
                     hud.detailTextLabel.text = "Time Out" // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()

@@ -179,7 +179,6 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
     }()
     
     func setupView(){
-        
         view.addSubview(searchBar)
         view.addSubview(searchResult)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":searchBar]))

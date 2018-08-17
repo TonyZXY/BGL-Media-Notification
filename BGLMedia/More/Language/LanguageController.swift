@@ -20,11 +20,13 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     var logoItems = ["CN","EN"]
     
-    
+    let rowNumber = ["CN":0,"EN":1]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+        
+         communityTableView.selectRow(at: IndexPath(row: rowNumber[defaultLanguage] ?? 0, section: 0), animated: true, scrollPosition: UITableViewScrollPosition.none)
         // Do any additional setup after loading the view.
     }
     
@@ -38,10 +40,10 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.factor = factor
         cell.languageLabel.text = language[indexPath.row]
         cell.languageLogoLabel.text = logoItems[indexPath.row]
-        if storeData[indexPath.row] == defaultLanguage{
-            cell.cellView.backgroundColor = ThemeColor().whiteColor()
-            cell.languageLabel.textColor = ThemeColor().darkBlackColor()
-        }
+//        if storeData[indexPath.row] == defaultLanguage{
+//            cell.cellView.backgroundColor = ThemeColor().whiteColor()
+//            cell.languageLabel.textColor = ThemeColor().darkBlackColor()
+//        }
         return cell
     }
     
@@ -61,9 +63,11 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
         UserDefaults.standard.synchronize()
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         let selectedCell = tableView.cellForRow(at: indexPath)! as! languageCell
-        selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
-        selectedCell.languageLabel.textColor = ThemeColor().darkBlackColor()
+//        selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
+//        selectedCell.languageLabel.textColor = ThemeColor().darkBlackColor()
         
+        
+        selectedCell.isSelected = true
 //        let backItem = UIBarButtonItem()
 //        backItem.title = textValue(name: "back_button")
 //        backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
@@ -86,7 +90,7 @@ class LanguageController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let selectedCell = tableView.cellForRow(at: indexPath)! as! languageCell
-        selectedCell.isHighlighted = false
+        selectedCell.isSelected = false
     }
     
     lazy var communityTableView:UITableView = {
@@ -192,12 +196,12 @@ class languageCell:UITableViewCell{
 //        }
 //    }
     
-    //    override var isSelected: Bool {
-    //        didSet {
-    //            currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
-    //            cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
-    //        }
-    //    }
+        override var isSelected: Bool {
+            didSet {
+                languageLabel.textColor = isSelected ? ThemeColor().themeColor() : UIColor.white
+                cellView.backgroundColor = isSelected ? UIColor.white : ThemeColor().walletCellcolor()
+            }
+        }
     
     func setupviews(){
         selectionStyle = .none
