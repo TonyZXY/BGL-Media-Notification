@@ -26,6 +26,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
     var email  = ""
     var password  = ""
     var conPassword  = ""
+    var isChecked = false
     
     let titleView: UIView = {
         let view = UIView()
@@ -66,22 +67,19 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         view.dataSource = self
         return view
     }()
-    lazy var checkboxImage: UIButton = {
-        let width = view.frame.width
+    let checkboxImage: UIButton = {
         let image = UIButton()
-        let image2 = UIImageView()
-        image2.contentMode = .scaleAspectFit
-        image2.layer.masksToBounds = true
-        image2.frame = CGRect(x: 0, y: 0, width: 15 * width, height: 15 * width)
-        image2.image = UIImage(named: "checkbox")
-        image.addSubview(image2)
+        image.setImage(UIImage(named: "checkbox"), for: .normal)
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.addTarget(self, action: #selector(checkbox), for: .touchUpInside)
+        image.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .touchUpInside)
         return image
     }()
     let textlabel: UILabel = {
         let label = UILabel()
-        label.text = textValue(name: "email")
+        label.text = textValue(name: "read")
         label.textAlignment = .left
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 13)
+        label.font = UIFont(name: "Montserrat-SemiBold", size: 12)
         label.textColor = ThemeColor().whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -90,10 +88,10 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         let button = UIButton()
         button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = UIFont.semiBoldFont(13)
+        button.titleLabel?.font = UIFont.semiBoldFont(12)
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        let myAttribute = [NSAttributedStringKey.font: UIFont.semiBoldFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().blueColor(),NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue] as [NSAttributedStringKey : Any]
+        let myAttribute = [NSAttributedStringKey.font: UIFont.semiBoldFont(12), NSAttributedStringKey.foregroundColor: ThemeColor().blueColor(),NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue] as [NSAttributedStringKey : Any]
         let myString = NSMutableAttributedString(string: textValue(name: "more_disclaimer"), attributes: myAttribute )
         
         button.setAttributedTitle(myString, for: .normal)
@@ -102,10 +100,10 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
     }()
     let textlabel2: UILabel = {
         let label = UILabel()
-        label.text = textValue(name: "email")
+        label.text = textValue(name: "and")
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .left
-        label.font = UIFont(name: "Montserrat-SemiBold", size: 13)
+        label.font = UIFont(name: "Montserrat-SemiBold", size: 12)
         label.textColor = ThemeColor().whiteColor()
         return label
     }()
@@ -113,10 +111,10 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         let button = UIButton()
         button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.titleLabel?.font = UIFont.semiBoldFont(13)
+        button.titleLabel?.font = UIFont.semiBoldFont(12)
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        let myAttribute = [NSAttributedStringKey.font: UIFont.semiBoldFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().blueColor(),NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue] as [NSAttributedStringKey : Any]
+        let myAttribute = [NSAttributedStringKey.font: UIFont.semiBoldFont(12), NSAttributedStringKey.foregroundColor: ThemeColor().blueColor(),NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue] as [NSAttributedStringKey : Any]
         let myString = NSMutableAttributedString(string: textValue(name: "help_privacy"), attributes: myAttribute )
         
         button.setAttributedTitle(myString, for: .normal)
@@ -276,6 +274,17 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         self.dismiss(animated: true, completion: nil)
     }
     
+    @objc func checkbox(sender: UIButton) {
+        if isChecked == false{
+            isChecked = true
+            sender.setImage(UIImage(named: "checktick"), for: .normal)
+        } else {
+            isChecked = false
+            sender.setImage(UIImage(named: "checkbox"), for: .normal)
+        }
+        
+    }
+    
     
     @objc func termsOpenURL(sender: UIButton){
         let urlString = "https://cryptogeekapp.com/policy"
@@ -402,7 +411,6 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         if (textField.text?.count)! < 8{
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
-            
             cell.contentLabel.text = textValue(name: "passwordTooShort")
             cell.contentLabel.textColor = ThemeColor().redColor()
             password = ""
@@ -447,7 +455,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
             trimmedLastName != "" &&
             emailPredicate.evaluate(with: email) &&
             password.count >= 8 &&
-            conPassword == password {
+            conPassword == password  && isChecked{
             signUpButton.backgroundColor = ThemeColor().themeWidgetColor()
             signUpButton.isEnabled = true
         }else{
@@ -639,26 +647,48 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(termButton1)
         view.addSubview(textlabel2)
         view.addSubview(termButton2)
-        checkboxImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15 * width).isActive = true
+        checkboxImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 38 * width).isActive = true
         checkboxImage.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
         checkboxImage.bottomAnchor.constraint(equalTo: signUpButton.topAnchor, constant: -15 * height).isActive  = true
+        checkboxImage.widthAnchor.constraint(equalToConstant: 15 * height).isActive = true
         textlabel.leftAnchor.constraint(equalTo: checkboxImage.rightAnchor, constant: 7.5 * width).isActive = true
-        textlabel.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
-        textlabel.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+        termButton1.leftAnchor.constraint(equalTo: textlabel.rightAnchor, constant: 2.5 * width).isActive = true
+        textlabel2.leftAnchor.constraint(equalTo: termButton1.rightAnchor, constant: 2.5 * width).isActive = true
 
-        
-        termButton1.leftAnchor.constraint(equalTo: textlabel.rightAnchor, constant: 5 * width).isActive = true
-        termButton1.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
-        termButton1.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
 
-        textlabel2.leftAnchor.constraint(equalTo: termButton1.rightAnchor, constant: 5 * width).isActive = true
-        textlabel2.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
-        textlabel2.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
 
-        
-        termButton2.leftAnchor.constraint(equalTo: textlabel2.rightAnchor, constant: 5 * width).isActive = true
-        termButton2.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
-        termButton2.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+        if defaultLanguage == "CN"{
+            
+            textlabel.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+            textlabel.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+            
+            termButton1.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+            termButton1.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+            
+            
+            textlabel2.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+            textlabel2.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+            
+            termButton2.leftAnchor.constraint(equalTo: textlabel2.rightAnchor, constant: 2.5 * width).isActive = true
+            termButton2.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+            termButton2.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+        } else {
+
+            textlabel.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 5 * height).isActive = true
+            textlabel.heightAnchor.constraint(equalToConstant: 10 * height).isActive = true
+            
+            termButton1.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 5 * height).isActive = true
+            termButton1.centerYAnchor.constraint(equalTo: textlabel.centerYAnchor).isActive = true
+            
+            textlabel2.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 5 * height).isActive = true
+            textlabel2.centerYAnchor.constraint(equalTo: textlabel.centerYAnchor).isActive = true
+
+            
+            termButton2.leftAnchor.constraint(equalTo: checkboxImage.rightAnchor, constant: 7.5 * width).isActive = true
+            termButton2.topAnchor.constraint(equalTo: textlabel.bottomAnchor).isActive = true
+        }
+
+
 
         
         

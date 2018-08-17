@@ -345,6 +345,8 @@ done_resend = "Done";
 
 //SearchBar
 searchBar_cancel = "Cancel";
+and = "and";
+read = "I have read and understood";
 
 //reset Password from other device
 resetDevice_title = "LogOut";

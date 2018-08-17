@@ -228,6 +228,7 @@ alertStatus_alert = "推送通知设置";
 alertUnavaliable_alert = "禁用";
 alertavaliable_alert = "允许";
 alertCoinUnavaliable_alert = "禁用!";
+and = "和";
 
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";
@@ -317,6 +318,7 @@ sendButton_reset = "发送邮件";
 checkSend_reset = "发送剩余时间";
 second_reset = "秒";
 done_reset = "取消";
+read = "我已阅读并理解";
 
 
 //resend Password alert
@@ -355,13 +357,13 @@ q9 = "如何清除缓存";
 
 a1 = "          CryptoGeek是一个由Blockchain Global研发的应用程序. 它可以提供诸如每日新闻，快讯，数字货币市场信息，自定义数字资产追踪服务，数字货币价格提醒等功能。";
 a2 = "   CryptoGeek的功能包括:\n\n        自定义数字资产追踪服务\n\n        数字货币市场信息\n\n        每日新闻\n\n        快讯\n\n        数字货币价格提醒功能等。 ";
-a3 = "Your email address need to be verified to use further function. After signing up for your account, an email will be sent to the email address you have signed up in a minute.When viewing the email, please click the button or the address under the email. The email address will be verified automatically after clicking either of them.If you have missed or lost your verification email, you could will be shown a pop up window when you login to ask you to resend the verification email. ";
-a4 = "You might need to reset your password if you forgot it. By clicking the link \"Forgot Password?\", a popup window will be shown to you to let you enter your email to reset. After clicking the send email, you will recieve an email. When viewing the email, please click the button or the address under the email. Your web page will jump to the reset password page. After enter your new password ,the confirmation of your new password and click the reset button, your password will be reset and all your device that has been login with that account need to be re-login";
-a5 = "You can add and check alert in your added transaction or in market(including a sepecific ) or in alert line of more tab.\n\nTo add a alert, you could click on \"Add\" button in either of these place. By finishing editing coin name, exchange, trading and price to focused, an alert will be added by clicking done. \n\nTo edit or delete these alert, you could tap into the alert and find the delete button in the sepecific alert.\n\nIf you are adding a price that is higher than current price, the app will notify you when the price reach above your watching price. If you are adding a price that is lower than current price, the app will notify you when the price reach below your watching price";
-a6 = "Watchlist can be checked in watchlist tab of market. The price and the percentage of changing is stand for a 24-hour change";
-a7 = "The data are all updated regularly and automatically. There are occasional system faults, but if you are seeing old data its most likely that you are having a problem with caching. Either your page is holding an old version of the product you want and not fetching a new one from our application. Make sure you slide down to \"Refresh\". Or your Internet Service Provider (ISP) is caching (keeping a copy of the web pages) on their server(s). You may have to contact your ISP.";
-a8 = "CryptoGeek does support multi-device. You could check news flash, daily news, your customised alert notification in all devices you have logged in. You could not check your crytocurrency in multi-devices because it is currently offline. After you successfully reset your password, other devices will log out automatically.";
-a9 = "Clear cache could be found in more tab. Cache is where news and news flash saved when first loaded. This is for better application performance. When clearing cache, all news flash and news will be cleaned.";
+a3 = "          您需要验证您的电子邮箱地址后才能使用一些特定功能。 注册帐户后，系统会在一分钟内将电子邮件发送到您已注册的电子邮箱里。查看电子邮件时，请点击电子邮件下的按钮或连接地址。 点击后，系统将自动验证该电子邮件地址。如果您错过验证邮件，当您登录时，您可能会看到一个弹出窗口，要求您重新发送验证邮件。";
+a4 = "          如果忘记密码，您需要重置密码。 通过单击“忘记密码”，系统将弹出一个窗口，需要输入您的电子邮件。 点击发送后，您将收到一封电子邮件。请单击电子邮件下的按钮或地址，您的网页将跳转到重置密码页面。 输入新密码，确认新密码并单击重置按钮后，您的密码将被重置，并且所有使用该帐户登录的设备都需要重新登录。";
+a5 = "您可以在已添加的交易，行情（包括特定的行情）或更多里的推送通知中添加和查询货币价格提醒。\n\n添加货币价格提醒，您可以点击其中任何一个位置的“添加提醒”按钮。 填写币名，交易所，交易对和价格，点击完成即可添加提醒。\n\n要编辑或删除这些提醒，您可以点击提醒并在特定提醒中点击删除按钮。\n\n如果您需要添加的价格高于当前价格，则应用会在价格高于您设定的价格时通知您。 如果您要添加的价格低于当前价格，当价格低于您设定的价格时，应用会通知您。";
+a6 = "          您可以在行情的关注列表选项卡中查看关注列表。 价格和变化百分比代表24小时变化";
+a7 = "          应用所有的数据都会自动更新。 偶尔应用会出现系统故障，但如果您看到的是旧数据，则很可能是您遇到缓存问题。 如果您的页面包含的是旧数据，而不是从我们的应用程序中获取的新数据。 您可以向下滑动“刷新”。 这也可能是源于您的网络服务提供商（ISP）正在其服务器上进行缓存（保留网页的副本）。 这种情况您则需要联系您的网络服务提供商。";
+a8 = "          CryptoGeek支持多设备同时使用。 您可以在已登录的所有设备中查看快讯，新闻，自定义提醒通知。但您无法在多设备中检查您钱包里的加密货币，因为它当前处于脱机状态。 当您成功重置密码后，其他设备将自动注销。";
+a9 = "          您可以在更多选项卡中找到清除缓存。 缓存是首次加载时保存的快讯和新闻的地方。清除缓存可以提升应用的性能。 清除缓存将清除所有的快讯和新闻。";
 
 
 
