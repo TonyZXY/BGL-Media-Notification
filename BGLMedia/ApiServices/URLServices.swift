@@ -82,7 +82,6 @@ class URLServices:NSObject{
         URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoinList"], httpMethod: "Get", parameters: [String:Any]()) { (response, success) in
             if success{
                 self.realm.beginWrite()
-                print(response)
                 for result in response.array!{
                     let id = result["_id"].string ?? ""
                     let coinName = result["coinName"].string?.trimmingCharacters(in: NSCharacterSet.whitespaces) ?? ""

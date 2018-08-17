@@ -191,6 +191,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                                     object[0].currentSinglePrice = singlePrice
                                                     object[0].currentTotalPrice = singlePrice * amount
                                                     object[0].currentNetValue = transactionPrice * (1/currency)
+                                                    object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
                                                     object[0].transactionPrice = transactionPrice
                                                     object[0].defaultCurrencyPrice = singlePrice * currency
                                                     object[0].defaultTotalPrice = (singlePrice * currency) * amount
