@@ -271,7 +271,11 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                         self.AddTransactionToRealm(){success in
                             if success{
                                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                if self.transactionStatus == "AddSpecific"{
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                } else{
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                }
                                 self.navigationController?.popViewController(animated: true)
                             }else{
                                  self.navigationController?.popViewController(animated: true)
