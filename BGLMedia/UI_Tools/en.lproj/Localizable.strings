@@ -58,6 +58,7 @@ error_transaction = "Invalid Format";
 //Market Page
 globalMarket = "Markets";
 watchlistMarket = "Watchlist";
+alertMarket = "Alert";
 marketCap_Market = "Market Cap";
 market_24hVolume = "24h Volume";
 btcDominance_market = "BTC Dominance";
@@ -231,14 +232,18 @@ editSection_alert = "Edit Alerts";
 notallow_alert = "Unavailable to use alert function without notification allow in Setting. Go to Setting";
 notlogin_alert = "Please login to use the Alert function. Login";
 alertStatus_alert = "Notification Setting";
-alertUnavaliable_alert = "Unavaliable";
-alertavaliable_alert = "Avaliable";
-alertCoinUnavaliable_alert = "Unavaliable!";
+alertUnavaliable_alert = "Unavailable";
+alertavaliable_alert = "Available";
+alertCoinUnavaliable_alert = "Unavailable!";
 
 
 //Alert Edit Page
 exampleLabel_alert = "Market Price";
 alertDone_alert = "Done";
+edit_alert = "Edit";
+coinName_alert = "Coin: ";
+exchange_alert = "Exchange: ";
+tradingPair_alert = "TradingPairs: ";
 
 //Pull to refresh
 pullDownToRefresh = "Pull to refresh";
@@ -357,6 +362,9 @@ email_report = "(Optional)Enter your Email for future contact";
 //hub progress
 hud_success = "Success";
 hud_Error = "Error";
+hud_passwordReset = "Password Reset";
+hud_noNetwork = "No Network";
+hud_timeOut = "Time Out";
 
 
 

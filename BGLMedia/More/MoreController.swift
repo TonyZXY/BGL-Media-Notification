@@ -227,17 +227,13 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 hud.backgroundColor = ThemeColor().progressColor()
                 hud.tintColor = ThemeColor().darkBlackColor()
                 hud.show(in: (self.parent?.view)!)
-                
                 let body = ["email":email,"token":certificateToken,"deviceToken":deviceToken]
-                
-                
                 if sendDeviceTokenStatus{
                     URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","logoutIOSDevice"], httpMethod: "POST", parameters: body) { (response, success) in
                         if success{
                             deleteMemory()
                             self.optionTableView.reloadData()
                             hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                           
                             hud.textLabel.text = textValue(name: "hud_success")
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                 hud.dismiss()

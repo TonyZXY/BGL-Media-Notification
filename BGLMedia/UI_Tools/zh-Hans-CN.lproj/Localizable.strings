@@ -58,6 +58,7 @@ error_transaction = "输入格式有误";
 //Market Page
 globalMarket = "市场行情";
 watchlistMarket = "收藏列表";
+alertMarket = "提醒";
 marketCap_Market = "市场总资产";
 market_24hVolume = "24小时交易量";
 btcDominance_market = "BTC占比";
@@ -229,9 +230,14 @@ alertUnavaliable_alert = "禁用";
 alertavaliable_alert = "允许";
 alertCoinUnavaliable_alert = "禁用!";
 
+
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";
 alertDone_alert = "完成";
+edit_alert = "编辑";
+coinName_alert = "币名: ";
+exchange_alert = "交易所: ";
+tradingPair_alert = "交易对: ";
 
 //Pull to refresh
 pullDownToRefresh = "下拉可以刷新";
@@ -339,7 +345,10 @@ submit = "提  交";
 email_report = "(选填)填写邮箱以便联系您";
 
 //hub progress
-hub_success = "成功";
-hub_Error = "错误";
+hud_success = "成功";
+hud_Error = "错误";
+hud_passwordReset = "密码重置";
+hud_noNetwork = "无网络连接";
+hud_timeOut = "请求超时";
 
 
