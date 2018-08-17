@@ -60,6 +60,7 @@ class FAQViewController: UIViewController, UITableViewDataSource, UITableViewDel
                 ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a7")),
                 ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a8")),
                 ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a9"))
+
         ]
     override func viewDidLoad() {
         super.viewDidLoad()

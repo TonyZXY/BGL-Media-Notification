@@ -29,7 +29,14 @@ class WatchListCell:UICollectionViewCell{
 //            var roundedPrice = object?.price ?? 0.0
 //            roundedPrice = round(roundedPrice * 100) / 100
             coinLabel.text = object?.coinAbbName
-            coinNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: (object?.price)!)
+//            if object?.tradingPairsName == "Global Average"{
+//                checkDataRiseFallColor(risefallnumber: (object?.price)!, label: coinNumber, currency: priceType, type: "Default")
+//            } else{
+//                 checkDataRiseFallColor(risefallnumber: (object?.price)!, label: coinNumber, currency: (object?.tradingPairsName)!, type: "Default")
+//            }
+            
+             checkDataRiseFallColor(risefallnumber: (object?.price)!, label: coinNumber, currency: (object?.tradingPairsName)!, type: "Default")
+//            coinNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: (object?.price)!)
             //            coinChange.text = object?.percent7d
             coinImage.coinImageSetter(coinName: (object?.coinAbbName)!,width: 50*factor!,height: 50*factor!,fontSize: 20*factor!)
             market.text = object?.market

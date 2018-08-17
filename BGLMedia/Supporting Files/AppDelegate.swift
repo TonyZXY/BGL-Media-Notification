@@ -57,10 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
 
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 4,
+            schemaVersion: 5,
             //old 2
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 4) {
+                if (oldSchemaVersion < 5) {
                     // The enumerateObjects(ofType:_:) method iterates
                     // over every Person object stored in the Realm file
                     //                    migration.enumerateObjects(ofType: Person.className()) { oldObject, newObject in
@@ -99,8 +99,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
         
         application.statusBarStyle = .lightContent
-        UITabBar.appearance().tintColor = .white
-        UITabBar.appearance().barTintColor = ThemeColor().themeColor()
+//        UITabBar.appearance().tintColor = .white
+        UITabBar.appearance().barTintColor = ThemeColor().darkBlackColor()
 //        UITabBar.appearance().isTranslucent = false
         
         UINavigationBar.appearance().tintColor = ThemeColor().navigationBarColor()

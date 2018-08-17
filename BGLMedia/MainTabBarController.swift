@@ -96,11 +96,16 @@ class MainTabBarController: UITabBarController {
     
     @objc func setUpTab(){
         viewControllers![0].tabBarItem.title = textValue(name: "wallet_tab")
+//        viewControllers![0].tabBarItem.setsel
+        viewControllers![0].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![1].tabBarItem.title = textValue(name: "market_tab")
+        viewControllers![1].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![2].tabBarItem.title = textValue(name: "flash_tab")
+        viewControllers![2].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![3].tabBarItem.title = textValue(name: "news_tab")
+        viewControllers![3].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![4].tabBarItem.title = textValue(name: "more_tab")
-        
+        viewControllers![4].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         let networkLabelFrame = CGRect(x: 0, y: tabBar.frame.minY-80,  width: UIScreen.main.bounds.width, height: 40)
         
 //        print(tabBar.frame.minY)
@@ -109,6 +114,8 @@ class MainTabBarController: UITabBarController {
         networkLabel.frame = networkLabelFrame
         
     }
+    
+    
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

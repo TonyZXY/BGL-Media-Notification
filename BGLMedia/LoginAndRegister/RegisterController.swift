@@ -66,10 +66,15 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         view.dataSource = self
         return view
     }()
-    let checkboxImage: UIButton = {
+    lazy var checkboxImage: UIButton = {
+        let width = view.frame.width
         let image = UIButton()
-        image.setImage(UIImage(named: "checkbox"), for: .normal)
-        image.translatesAutoresizingMaskIntoConstraints = false
+        let image2 = UIImageView()
+        image2.contentMode = .scaleAspectFit
+        image2.layer.masksToBounds = true
+        image2.frame = CGRect(x: 0, y: 0, width: 15 * width, height: 15 * width)
+        image2.image = UIImage(named: "checkbox")
+        image.addSubview(image2)
         return image
     }()
     let textlabel: UILabel = {
@@ -636,7 +641,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(termButton2)
         checkboxImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15 * width).isActive = true
         checkboxImage.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
-        checkboxImage.bottomAnchor.constraint(equalTo: signUpButton.topAnchor, constant: 15 * height).isActive  = true
+        checkboxImage.bottomAnchor.constraint(equalTo: signUpButton.topAnchor, constant: -15 * height).isActive  = true
         textlabel.leftAnchor.constraint(equalTo: checkboxImage.rightAnchor, constant: 7.5 * width).isActive = true
         textlabel.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
         textlabel.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
