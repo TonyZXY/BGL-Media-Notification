@@ -27,7 +27,7 @@ class TransCoinMarketCell:UITableViewCell{
     lazy var marketLabel:UILabel = {
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
-       label.font = UIFont.semiBoldFont(18*factor!)
+       label.font = UIFont.semiBoldFont(15*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -36,7 +36,7 @@ class TransCoinMarketCell:UITableViewCell{
         let label = InsetLabel()
         label.layer.cornerRadius = 8*factor!
         label.layer.backgroundColor = ThemeColor().greyColor().cgColor
-        label.font = UIFont.regularFont(15*factor!)
+        label.font = UIFont.semiBoldFont(13*factor!)
         label.textColor = ThemeColor().whiteColor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

@@ -338,5 +338,8 @@ submit = "提  交";
 
 email_report = "(选填)填写邮箱以便联系您";
 
+//hub progress
+hub_success = "成功";
+hub_Error = "错误";
 
 

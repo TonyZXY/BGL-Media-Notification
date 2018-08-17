@@ -578,4 +578,5 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         self.view.endEditing(true)
     }
     
+    
 }

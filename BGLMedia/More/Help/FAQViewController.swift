@@ -27,6 +27,8 @@ class FAQViewController: UIViewController, UITableViewDataSource, UITableViewDel
         tableView.dataSource = self
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
+        tableView.separatorStyle = .singleLineEtched
+        
         tableView.translatesAutoresizingMaskIntoConstraints = false
         return tableView
     }()
@@ -49,13 +51,13 @@ class FAQViewController: UIViewController, UITableViewDataSource, UITableViewDel
     
     var answers:[ExpandableAnswers] =  [
                 ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek is an application powered by Blockchain Global. It provides up to date cryptocurrencies market data, News Flash, Daily News and customised cryptocurrencies asset tracking services. "),
-                ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek features include:\nCustomised cryptocurrencies asset tracking services\nCryptocurrencies market data\nNews Flash\nDaily News "),
+                ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek features include:\nCustomised cryptocurrencies asset tracking services\n\nCryptocurrencies market data\n\nNews Flash\n\nDaily News "),
                 ExpandableAnswers(isExpandabed: false, answer: "Your email address need to be verified to use further function. After signing up for your account, an email will be sent to the email address you have signed up in a minute.When viewing the email, please click the button or the address under the email. The email address will be verified automatically after clicking either of them.If you have missed or lost your verification email, you could will be shown a pop up window when you login to ask you to resend the verification email. "),
                 ExpandableAnswers(isExpandabed: false, answer: "You might need to reset your password if you forgot it. By clicking the link \"Forgot Password?\", a popup window will be shown to you to let you enter your email to reset. After clicking the send email, you will recieve an email. When viewing the email, please click the button or the address under the email. Your web page will jump to the reset password page. After enter your new password ,the confirmation of your new password and click the reset button, your password will be reset and all your device that has been login with that account need to be re-login"),
-                ExpandableAnswers(isExpandabed: false, answer: "You can add and check alert in your added transaction or in market(including a sepecific ) or in alert line of more tab.\nTo add a alert, you could click on \"Add\" button in either of these place. By finishing editing coin name, exchange, trading and price to focused, an alert will be added by clicking done. \nTo edit or delete these alert, you could tap into the alert and find the delete button in the sepecific alert.\n If you are adding a price that is higher than current price, the app will notify you when the price reach above your watching price. If you are adding a price that is lower than current price, the app will notify you when the price reach below your watching price"),
+                ExpandableAnswers(isExpandabed: false, answer: "You can add and check alert in your added transaction or in market(including a sepecific ) or in alert line of more tab.\n\nTo add a alert, you could click on \"Add\" button in either of these place. By finishing editing coin name, exchange, trading and price to focused, an alert will be added by clicking done. \n\nTo edit or delete these alert, you could tap into the alert and find the delete button in the sepecific alert.\n\nIf you are adding a price that is higher than current price, the app will notify you when the price reach above your watching price. If you are adding a price that is lower than current price, the app will notify you when the price reach below your watching price"),
                 ExpandableAnswers(isExpandabed: false, answer: "Watchlist can be checked in watchlist tab of market. The price and the percentage of changing is stand for a 24-hour change"),
                 ExpandableAnswers(isExpandabed: false, answer: "The data are all updated regularly and automatically. There are occasional system faults, but if you are seeing old data its most likely that you are having a problem with caching. Either your page is holding an old version of the product you want and not fetching a new one from our application. Make sure you slide down to \"Refresh\". Or your Internet Service Provider (ISP) is caching (keeping a copy of the web pages) on their server(s). You may have to contact your ISP."),
-                ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek does support multi-device. You could check news flash, daily news, your customised alert notification in all devices you have logged in. You could not check your crytocurrency in multi-devices because it is currently offline. When you reset your password, after you successfully reset your password, other devices will log out automatically."),
+                ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek does support multi-device. You could check news flash, daily news, your customised alert notification in all devices you have logged in. You could not check your crytocurrency in multi-devices because it is currently offline. After you successfully reset your password, other devices will log out automatically."),
                 ExpandableAnswers(isExpandabed: false, answer: "Clear cache could be found in more tab. Cache is where news and news flash saved when first loaded. This is for better application performance. When clearing cache, all news flash and news will be cleaned."),
 
         ]
@@ -112,6 +114,15 @@ class FAQViewController: UIViewController, UITableViewDataSource, UITableViewDel
             image2.heightAnchor.constraint(equalToConstant: 17 * width).isActive = true
             button.addTarget(self, action: #selector(collapse), for: .touchUpInside)
             button.tag = section
+        
+            let emptyLabel = UILabel()
+            button.addSubview(emptyLabel)
+            emptyLabel.translatesAutoresizingMaskIntoConstraints = false
+            emptyLabel.backgroundColor = UIColor.lightGray
+            emptyLabel.heightAnchor.constraint(equalToConstant: 0.5).isActive = true
+            emptyLabel.leftAnchor.constraint(equalTo: button.leftAnchor).isActive = true
+            emptyLabel.bottomAnchor.constraint(equalTo: button.bottomAnchor).isActive = true
+            emptyLabel.rightAnchor.constraint(equalTo: button.rightAnchor).isActive = true
             return button
         
         
@@ -157,6 +168,7 @@ class FAQViewController: UIViewController, UITableViewDataSource, UITableViewDel
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "OptionCell", for: indexPath)
         cell.textLabel?.text = answers[indexPath.section].answer
+        cell.textLabel?.lineBreakMode = .byWordWrapping
         cell.textLabel?.textColor = UIColor.white
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.font = UIFont.regularFont(16)

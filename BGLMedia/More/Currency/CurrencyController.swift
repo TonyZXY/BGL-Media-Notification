@@ -17,13 +17,22 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
         }
     }
     
+    
     let storeData = ["USD","AUD","CNY","EUR","JPY"]
+    let rowNumber = ["USD":0,"AUD":1,"CNY":2,"EUR":3,"JPY":4]
     var logoItems = ["$","A＄","R￥","€","J￥"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+//        communityTableView.selectItem(at: CandleStickChartViewController.selectedIntervalIndexPath, animated: true, scrollPosition: [])
+//        communityTableView.deselectRow(at: indexPath, animated: true)
+        
+        
+        
+        communityTableView.selectRow(at: IndexPath(row: rowNumber[priceType] ?? 0, section: 0), animated: true, scrollPosition: UITableViewScrollPosition.none)
         // Do any additional setup after loading the view.
+        
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -35,10 +44,12 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
         cell.factor = view.frame.width/375
         cell.currencyLabel.text = currencyLabel[indexPath.row]
         cell.currencyLogoLabel.text = logoItems[indexPath.row]
-        if storeData[indexPath.row] == priceType{
-            cell.cellView.backgroundColor = ThemeColor().whiteColor()
-            cell.currencyLabel.textColor = ThemeColor().darkBlackColor()
-        }
+//        if storeData[indexPath.row] == priceType{
+////            cell.cellView.backgroundColor = ThemeColor().whiteColor()
+////            cell.currencyLabel.textColor = ThemeColor().darkBlackColor()
+////            cell.isSelected = true
+//        }
+        
         return cell
     }
     
@@ -78,9 +89,7 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
         let str = storeData[indexPath.row]
         UserDefaults.standard.set(str, forKey: "defaultCurrency")
         let selectedCell = tableView.cellForRow(at: indexPath)! as! currencyCell
-        selectedCell.isHighlighted = true
-//        selectedCell.cellView.backgroundColor = ThemeColor().whiteColor()
-//        selectedCell.currencyLabel.textColor = ThemeColor().darkBlackColor()
+        selectedCell.isSelected = true
         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         let hud = JGProgressHUD(style: .light)
         hud.show(in: (self.parent?.view)!)
@@ -92,13 +101,13 @@ class CurrencyController: UIViewController,UITableViewDelegate,UITableViewDataSo
     
     func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
         let selectedCell = tableView.cellForRow(at: indexPath)! as! currencyCell
-        selectedCell.isHighlighted = false
+        selectedCell.isSelected = false
     }
     
     lazy var communityTableView:UITableView = {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-//        tableView.backgroundColor = ThemeColor().themeColor()
+        tableView.backgroundColor = ThemeColor().darkGreyColor()
         tableView.delegate = self
         tableView.dataSource = self
         tableView.rowHeight = 70
@@ -167,20 +176,20 @@ class currencyCell:UITableViewCell{
         return label
     }()
     
-    override var isHighlighted: Bool {
-        didSet {
-            if isHighlighted{
-                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
-                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
-            }
-
-        }
-    }
+//    override var isHighlighted: Bool {
+//        didSet {
+//            if isHighlighted{
+//                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
+//                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
+//            }
+//
+//        }
+//    }
     
     override var isSelected: Bool {
             didSet {
-                currencyLabel.textColor = isHighlighted ? ThemeColor().themeColor() : UIColor.white
-                cellView.backgroundColor = isHighlighted ? UIColor.white : ThemeColor().walletCellcolor()
+                currencyLabel.textColor = isSelected ? ThemeColor().themeColor() : UIColor.white
+                cellView.backgroundColor = isSelected ? UIColor.white : ThemeColor().walletCellcolor()
             }
     }
     

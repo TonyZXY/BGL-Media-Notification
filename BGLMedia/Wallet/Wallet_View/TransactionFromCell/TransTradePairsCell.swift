@@ -28,7 +28,7 @@ class TransTradePairsCell:UITableViewCell{
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
-       label.font = UIFont.semiBoldFont(18*factor!)
+       label.font = UIFont.semiBoldFont(15*factor!)
         return label
     }()
     
@@ -36,7 +36,7 @@ class TransTradePairsCell:UITableViewCell{
         let label = InsetLabel()
         label.textColor = ThemeColor().whiteColor()
         label.layer.cornerRadius = 8*factor!
-        label.font = UIFont.regularFont(15*factor!)
+        label.font = UIFont.semiBoldFont(13*factor!)
         label.layer.backgroundColor = ThemeColor().greyColor().cgColor
         label.translatesAutoresizingMaskIntoConstraints = false
         return label

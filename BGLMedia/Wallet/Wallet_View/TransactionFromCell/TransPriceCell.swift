@@ -33,7 +33,7 @@ class TransPriceCell:UITableViewCell{
     lazy var priceLabel:UILabel = {
         let label = UILabel()
         label.text = "买入价格"
-        label.font = UIFont.semiBoldFont(18*factor!)
+        label.font = UIFont.semiBoldFont(15*factor!)
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -54,6 +54,18 @@ class TransPriceCell:UITableViewCell{
 //        textfield.rightView = UIView(frame: CGRect(x: 0, y: 0, width: 15, height: textfield.frame.height))
 //        textfield.rightViewMode = .always
 //        textfield.clipsToBounds = false
+        
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        //        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done
+        //            , target: self, action: #selector(pricedoneclick))
+        //        toolbar.setItems([donebutton], animated: false)
+        
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(pricedoneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+        textfield.inputAccessoryView = toolbar
+        
         return textfield
     }()
     
@@ -64,7 +76,7 @@ class TransPriceCell:UITableViewCell{
         label.layer.backgroundColor = ThemeColor().greyColor().cgColor
         label.layer.cornerRadius = 8*factor!
         label.textColor = ThemeColor().whiteColor()
-        label.font = UIFont.regularFont(13*factor!)
+        label.font = UIFont.semiBoldFont(13*factor!)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
@@ -101,12 +113,16 @@ class TransPriceCell:UITableViewCell{
     }
     
     func createpricedonebutton() {
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done
-            , target: self, action: #selector(pricedoneclick))
-        toolbar.setItems([donebutton], animated: false)
-        price.inputAccessoryView = toolbar
+//        let toolbar = UIToolbar()
+//        toolbar.sizeToFit()
+////        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done
+////            , target: self, action: #selector(pricedoneclick))
+////        toolbar.setItems([donebutton], animated: false)
+//
+//        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(pricedoneclick))
+//        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+//        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+//        price.inputAccessoryView = toolbar
     }
 
     

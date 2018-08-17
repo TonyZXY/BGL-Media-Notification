@@ -78,7 +78,7 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
     }()
     var items:[String]? {
         get{
-            return [textValue(name: "feedback_rateus"),textValue(name: "about_function")]
+            return [textValue(name: "feedback_rateus")]
         }
     }
 
@@ -90,7 +90,7 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 2
+        return 1
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {

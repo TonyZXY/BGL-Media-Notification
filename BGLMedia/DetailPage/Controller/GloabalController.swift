@@ -78,30 +78,23 @@ class GloabalController: UIViewController,ExchangeSelect{
         setPriceChange()
         
         
-//        getRiseFallData(period: "Hour")
-        //        getCoinGloablDetail()
-        
-//        coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
-        
         
        
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+        
+//        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
     @objc func updateMarketData(){
-        reloadData(){ success in
-            if success{
-                self.loadData()
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateWatchList"), object: nil)
-            }
-        }
+        loadData()
     }
     
     
@@ -416,7 +409,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         childViewControllers.view.topAnchor.constraint(equalTo: views.topAnchor).isActive = true
         childViewControllers.view.leftAnchor.constraint(equalTo: views.leftAnchor).isActive = true
         childViewControllers.view.widthAnchor.constraint(equalTo: views.widthAnchor).isActive = true
-//        childViewControllers.view.bottomAnchor.constraint(equalTo: views.bottomAnchor).isActive = true
+        childViewControllers.view.bottomAnchor.constraint(equalTo: views.bottomAnchor).isActive = true
         childViewControllers.view.heightAnchor.constraint(equalTo: views.heightAnchor).isActive = true
     }
     

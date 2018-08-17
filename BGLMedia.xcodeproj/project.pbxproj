@@ -80,7 +80,6 @@
 		2D67306C211C2A0100EE49A5 /* ReportProblemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D67306B211C2A0100EE49A5 /* ReportProblemViewController.swift */; };
 		2D67306E211C2A1E00EE49A5 /* FAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D67306D211C2A1E00EE49A5 /* FAQViewController.swift */; };
 		2D67307421225B4000EE49A5 /* AboutFunctionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D67307321225B4000EE49A5 /* AboutFunctionController.swift */; };
-		2D6730762122662800EE49A5 /* FAQSubViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D6730752122662800EE49A5 /* FAQSubViewController.swift */; };
 		3D1332EA20E9FA5700D3CAE6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */; };
 		3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */; };
 		3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */; };
@@ -289,7 +288,6 @@
 		2D67306B211C2A0100EE49A5 /* ReportProblemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReportProblemViewController.swift; sourceTree = "<group>"; };
 		2D67306D211C2A1E00EE49A5 /* FAQViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQViewController.swift; sourceTree = "<group>"; };
 		2D67307321225B4000EE49A5 /* AboutFunctionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutFunctionController.swift; sourceTree = "<group>"; };
-		2D6730752122662800EE49A5 /* FAQSubViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQSubViewController.swift; sourceTree = "<group>"; };
 		2D6F5EFD20E324D4006264BB /* BGLMedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BGLMedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubePlayer.framework; path = Carthage/Build/iOS/YouTubePlayer.framework; sourceTree = "<group>"; };
@@ -435,7 +433,6 @@
 				2D67306B211C2A0100EE49A5 /* ReportProblemViewController.swift */,
 				2D67306D211C2A1E00EE49A5 /* FAQViewController.swift */,
 				2D67307321225B4000EE49A5 /* AboutFunctionController.swift */,
-				2D6730752122662800EE49A5 /* FAQSubViewController.swift */,
 			);
 			path = Help;
 			sourceTree = "<group>";
@@ -1262,7 +1259,6 @@
 				57355C0D20F7188B002E70E4 /* NewsV2Controller.swift in Sources */,
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */,
-				2D6730762122662800EE49A5 /* FAQSubViewController.swift in Sources */,
 				57355C5020F718CC002E70E4 /* CryptoCompareEndpoint.swift in Sources */,
 				57BBAB6E210962C300984AA4 /* GlobalMarketValueRealm.swift in Sources */,
 				57355C0E20F7188B002E70E4 /* NewsDetailtableView.swift in Sources */,
