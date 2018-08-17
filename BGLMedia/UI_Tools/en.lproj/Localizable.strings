@@ -187,6 +187,7 @@ title_clearCache = "Clear Cache";
 confirm_clearCache = "Do you confirm to delete all the news and newsflash cache?";
 delete_clearCache = "Delete";
 cancel_clearCache = "Cancel";
+logout_hud = "Log out";
 
 
 
@@ -351,7 +352,31 @@ resetDevice_description = "You have already reset the password, you need to logi
 resetDevice_confirm = "Confirm";
 
 submit = "Submit";
-email_report = "(Optional)Enter your Email for future contact";
+report_feedback = "Report Feedback";
+feedback_error_title = "Report Feedback at:\ncryptogeekapp@gmail.com";
+feedback_error_message = "Want to give us some feedback?\n Contact us at Email: cryptogeekapp@gmail.com";
+feedback_error_button1 = "Copy Email Address";
+feedback_error_button2 = "OK";
+
+q1 = "What is CryptoGeek？";
+q2 = "What are CryptoGeek features?";
+q3 = "How to verify email address?";
+q4 = "How to reset password?";
+q5 = "How to use Alert function?";
+q6 = "Where can I check My watchlist? ";
+q7 = "Why data is not updated?";
+q8 = "Does it support multi-devices?";
+q9 = "How to clear cache";
+
+a1 = "CryptoGeek is an application powered by Blockchain Global. It provides up to date cryptocurrencies market data, News Flash, Daily News and customised cryptocurrencies asset tracking services. ";
+a2 = "CryptoGeek features include:\n\nCustomised cryptocurrencies asset tracking services\n\nCryptocurrencies market data\n\nNews Flash\n\nDaily News ";
+a3 = "Your email address need to be verified to use further function. After signing up for your account, an email will be sent to the email address you have signed up in a minute.When viewing the email, please click the button or the address under the email. The email address will be verified automatically after clicking either of them.If you have missed or lost your verification email, you could will be shown a pop up window when you login to ask you to resend the verification email. ";
+a4 = "You might need to reset your password if you forgot it. By clicking the link \"Forgot Password?\", a popup window will be shown to you to let you enter your email to reset. After clicking the send email, you will recieve an email. When viewing the email, please click the button or the address under the email. Your web page will jump to the reset password page. After enter your new password ,the confirmation of your new password and click the reset button, your password will be reset and all your device that has been login with that account need to be re-login";
+a5 = "You can add and check alert in your added transaction or in market(including a sepecific ) or in alert line of more tab.\n\nTo add a alert, you could click on \"Add\" button in either of these place. By finishing editing coin name, exchange, trading and price to focused, an alert will be added by clicking done. \n\nTo edit or delete these alert, you could tap into the alert and find the delete button in the sepecific alert.\n\nIf you are adding a price that is higher than current price, the app will notify you when the price reach above your watching price. If you are adding a price that is lower than current price, the app will notify you when the price reach below your watching price";
+a6 = "Watchlist can be checked in watchlist tab of market. The price and the percentage of changing is stand for a 24-hour change";
+a7 = "The data are all updated regularly and automatically. There are occasional system faults, but if you are seeing old data its most likely that you are having a problem with caching. Either your page is holding an old version of the product you want and not fetching a new one from our application. Make sure you slide down to \"Refresh\". Or your Internet Service Provider (ISP) is caching (keeping a copy of the web pages) on their server(s). You may have to contact your ISP.";
+a8 = "CryptoGeek does support multi-device. You could check news flash, daily news, your customised alert notification in all devices you have logged in. You could not check your crytocurrency in multi-devices because it is currently offline. After you successfully reset your password, other devices will log out automatically.";
+a9 = "Clear cache could be found in more tab. Cache is where news and news flash saved when first loaded. This is for better application performance. When clearing cache, all news flash and news will be cleaned.";
 
 
 

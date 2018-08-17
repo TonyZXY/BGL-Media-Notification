@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import JGProgressHUD
+import SafariServices
 
 class RegisterController: UIViewController, UITableViewDelegate, UITableViewDataSource,UITextFieldDelegate {
     
@@ -64,6 +65,58 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         view.delegate = self
         view.dataSource = self
         return view
+    }()
+    let checkboxImage: UIButton = {
+        let image = UIButton()
+        image.setImage(UIImage(named: "checkbox"), for: .normal)
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+    let textlabel: UILabel = {
+        let label = UILabel()
+        label.text = textValue(name: "email")
+        label.textAlignment = .left
+        label.font = UIFont(name: "Montserrat-SemiBold", size: 13)
+        label.textColor = ThemeColor().whiteColor()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    let termButton1: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.semiBoldFont(13)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        let myAttribute = [NSAttributedStringKey.font: UIFont.semiBoldFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().blueColor(),NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue] as [NSAttributedStringKey : Any]
+        let myString = NSMutableAttributedString(string: textValue(name: "more_disclaimer"), attributes: myAttribute )
+        
+        button.setAttributedTitle(myString, for: .normal)
+        button.addTarget(self, action: #selector(termsOpenURL), for: .touchUpInside)
+        return button
+    }()
+    let textlabel2: UILabel = {
+        let label = UILabel()
+        label.text = textValue(name: "email")
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .left
+        label.font = UIFont(name: "Montserrat-SemiBold", size: 13)
+        label.textColor = ThemeColor().whiteColor()
+        return label
+    }()
+    let termButton2: UIButton = {
+        let button = UIButton()
+        button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.titleLabel?.font = UIFont.semiBoldFont(13)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        
+        let myAttribute = [NSAttributedStringKey.font: UIFont.semiBoldFont(13), NSAttributedStringKey.foregroundColor: ThemeColor().blueColor(),NSAttributedStringKey.underlineStyle:NSUnderlineStyle.styleSingle.rawValue] as [NSAttributedStringKey : Any]
+        let myString = NSMutableAttributedString(string: textValue(name: "help_privacy"), attributes: myAttribute )
+        
+        button.setAttributedTitle(myString, for: .normal)
+        button.addTarget(self, action: #selector(privacyOpenURL), for: .touchUpInside)
+        return button
     }()
     
     let signUpButton: UIButton = {
@@ -219,7 +272,35 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
     }
     
     
+    @objc func termsOpenURL(sender: UIButton){
+        let urlString = "https://cryptogeekapp.com/policy"
+        if let url = URL(string: urlString) {
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            if #available(iOS 11.0, *) {
+                vc.dismissButtonStyle = .close
+            } else {
+                
+            }
+            vc.hidesBottomBarWhenPushed = true
+            vc.accessibilityNavigationStyle = .separate
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
     
+    @objc func privacyOpenURL(sender: UIButton){
+        let urlString = "https://cryptogeekapp.com/policy"
+        if let url = URL(string: urlString) {
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            if #available(iOS 11.0, *) {
+                vc.dismissButtonStyle = .close
+            } else {
+                
+            }
+            vc.hidesBottomBarWhenPushed = true
+            vc.accessibilityNavigationStyle = .separate
+            self.present(vc, animated: true, completion: nil)
+        }
+    }
     
     
     @objc func showSelection(_ textField: UITextField){
@@ -546,7 +627,38 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         signUpButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
         signUpButton.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
         signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        signUpButton.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 20 * height).isActive = true
+        signUpButton.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 40 * height).isActive = true
+        
+        view.addSubview(checkboxImage)
+        view.addSubview(textlabel)
+        view.addSubview(termButton1)
+        view.addSubview(textlabel2)
+        view.addSubview(termButton2)
+        checkboxImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 15 * width).isActive = true
+        checkboxImage.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+        checkboxImage.bottomAnchor.constraint(equalTo: signUpButton.topAnchor, constant: 15 * height).isActive  = true
+        textlabel.leftAnchor.constraint(equalTo: checkboxImage.rightAnchor, constant: 7.5 * width).isActive = true
+        textlabel.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+        textlabel.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+
+        
+        termButton1.leftAnchor.constraint(equalTo: textlabel.rightAnchor, constant: 5 * width).isActive = true
+        termButton1.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+        termButton1.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+
+        textlabel2.leftAnchor.constraint(equalTo: termButton1.rightAnchor, constant: 5 * width).isActive = true
+        textlabel2.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+        textlabel2.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+
+        
+        termButton2.leftAnchor.constraint(equalTo: textlabel2.rightAnchor, constant: 5 * width).isActive = true
+        termButton2.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
+        termButton2.centerYAnchor.constraint(equalTo: checkboxImage.centerYAnchor).isActive = true
+
+        
+        
+        
+
         
     }
     

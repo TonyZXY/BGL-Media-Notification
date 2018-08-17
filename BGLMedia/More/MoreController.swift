@@ -223,7 +223,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         } else{
             if loginStatus{
                 let hud = JGProgressHUD(style: .light)
-                hud.textLabel.text = "Log Out"
+                hud.textLabel.text = textValue(name: "logout_hud")
                 hud.backgroundColor = ThemeColor().progressColor()
                 hud.show(in: (self.parent?.view)!)
                 
@@ -236,7 +236,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             deleteMemory()
                             self.optionTableView.reloadData()
                             hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                            hud.textLabel.text = "Success"
+                            hud.textLabel.text = textValue(name: "success_success")
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                 hud.dismiss()
                             }
@@ -244,14 +244,14 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             let manager = NetworkReachabilityManager()
                             hud.indicatorView = JGProgressHUDErrorIndicatorView()
                             if !(manager?.isReachable)! {
-                                hud.textLabel.text = "Error"
-                                hud.detailTextLabel.text = "No Network" // To change?
+                                hud.textLabel.text = textValue(name: "error_error")
+                                hud.detailTextLabel.text = textValue(name: "noNetwork") // To change?
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     hud.dismiss()
                                 }
                             } else {
-                                hud.textLabel.text = "Error"
-                                hud.detailTextLabel.text = "Time Out" // To change?
+                                hud.textLabel.text = textValue(name: "error_error")
+                                hud.detailTextLabel.text = textValue(name: "timeout") // To change?
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     hud.dismiss()
                                 }
@@ -262,7 +262,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     deleteMemory()
                     self.optionTableView.reloadData()
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                    hud.textLabel.text = "Success"
+                    hud.textLabel.text = textValue(name: "success_success")
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         hud.dismiss()
@@ -332,7 +332,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         mailComposerVC.mailComposeDelegate = self
         
         mailComposerVC.setToRecipients(["cryptogeekapp@gmail.com"])
-        mailComposerVC.setSubject("Report Feedback")
+        mailComposerVC.setSubject(textValue(name: "report_feedback"))
         mailComposerVC.setMessageBody("", isHTML: false)
         mailComposerVC.navigationBar.tintColor = ThemeColor().whiteColor()
         
@@ -340,12 +340,12 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func showSendMailErrorAlert() {
-        let sendMailErrorAlert = UIAlertController(title: "Report Feedback at:\ncryptogeekapp@gmail.com", message: "Want to give us some feedback?\n Contact us at Email: cryptogeekapp@gmail.com", preferredStyle: .alert)
-        let copyEmailaddressaction = UIAlertAction(title: "Copy Email Address", style: .default, handler: { (_) in
+        let sendMailErrorAlert = UIAlertController(title: textValue(name: "feedback_error_title"), message: textValue(name: "feedback_error_message"), preferredStyle: .alert)
+        let copyEmailaddressaction = UIAlertAction(title: textValue(name: "feedback_error_button1"), style: .default, handler: { (_) in
             UIPasteboard.general.string = "cryptogeekapp@gmail.com"
         })
         sendMailErrorAlert.addAction(copyEmailaddressaction)
-        let cancelAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        let cancelAlertAction = UIAlertAction(title: textValue(name: "feedback_error_button2"), style: .cancel, handler: nil)
         sendMailErrorAlert.addAction(cancelAlertAction)
         self.present(sendMailErrorAlert, animated: true, completion: nil)
     }

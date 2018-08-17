@@ -37,29 +37,29 @@ class FAQViewController: UIViewController, UITableViewDataSource, UITableViewDel
     var questions:[String]? {
         get{
             return [
-                    "What is CryptoGeek？",
-                    "What are CryptoGeek features?",
-                    "How to verify email address?",
-                    "How to reset password?",
-                    "How to use Alert function?",
-                    "Where can I check My watchlist? ",
-                    "Why data is not updated?",
-                    "Does it support multi-devices?",
-                    "How to clear cache"]
+                    textValue(name: "q1"),
+                    textValue(name: "q2"),
+                    textValue(name: "q3"),
+                    textValue(name: "q4"),
+                    textValue(name: "q5"),
+                    textValue(name: "q6"),
+                    textValue(name: "q7"),
+                    textValue(name: "q8"),
+                    textValue(name: "q9")
+                    ]
         }
     }
     
     var answers:[ExpandableAnswers] =  [
-                ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek is an application powered by Blockchain Global. It provides up to date cryptocurrencies market data, News Flash, Daily News and customised cryptocurrencies asset tracking services. "),
-                ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek features include:\nCustomised cryptocurrencies asset tracking services\n\nCryptocurrencies market data\nNews Flash\nDaily News "),
-                ExpandableAnswers(isExpandabed: false, answer: "Your email address need to be verified to use further function. After signing up for your account, an email will be sent to the email address you have signed up in a minute.When viewing the email, please click the button or the address under the email. The email address will be verified automatically after clicking either of them.If you have missed or lost your verification email, you could will be shown a pop up window when you login to ask you to resend the verification email. "),
-                ExpandableAnswers(isExpandabed: false, answer: "You might need to reset your password if you forgot it. By clicking the link \"Forgot Password?\", a popup window will be shown to you to let you enter your email to reset. After clicking the send email, you will recieve an email. When viewing the email, please click the button or the address under the email. Your web page will jump to the reset password page. After enter your new password ,the confirmation of your new password and click the reset button, your password will be reset and all your device that has been login with that account need to be re-login"),
-                ExpandableAnswers(isExpandabed: false, answer: "You can add and check alert in your added transaction or in market(including a sepecific ) or in alert line of more tab.\n\nTo add a alert, you could click on \"Add\" button in either of these place. By finishing editing coin name, exchange, trading and price to focused, an alert will be added by clicking done. \n\nTo edit or delete these alert, you could tap into the alert and find the delete button in the sepecific alert.\n\nIf you are adding a price that is higher than current price, the app will notify you when the price reach above your watching price. If you are adding a price that is lower than current price, the app will notify you when the price reach below your watching price"),
-                ExpandableAnswers(isExpandabed: false, answer: "Watchlist can be checked in watchlist tab of market. The price and the percentage of changing is stand for a 24-hour change"),
-                ExpandableAnswers(isExpandabed: false, answer: "The data are all updated regularly and automatically. There are occasional system faults, but if you are seeing old data its most likely that you are having a problem with caching. Either your page is holding an old version of the product you want and not fetching a new one from our application. Make sure you slide down to \"Refresh\". Or your Internet Service Provider (ISP) is caching (keeping a copy of the web pages) on their server(s). You may have to contact your ISP."),
-                ExpandableAnswers(isExpandabed: false, answer: "CryptoGeek does support multi-device. You could check news flash, daily news, your customised alert notification in all devices you have logged in. You could not check your crytocurrency in multi-devices because it is currently offline. When you reset your password, after you successfully reset your password, other devices will log out automatically."),
-                ExpandableAnswers(isExpandabed: false, answer: "Clear cache could be found in more tab. Cache is where news and news flash saved when first loaded. This is for better application performance. When clearing cache, all news flash and news will be cleaned."),
-
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a1")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a2")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a3")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a4")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a5")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a6")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a7")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a8")),
+                ExpandableAnswers(isExpandabed: false, answer: textValue(name: "a9"))
         ]
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -106,7 +106,13 @@ class FAQViewController: UIViewController, UITableViewDataSource, UITableViewDel
             image2.layer.masksToBounds = true
             image2.frame = CGRect(x: 0, y: 0, width: 17 * width, height: 17 * width)
             image2.image = UIImage(named: "arrow")
-            image2.transform = image2.transform.rotated(by: CGFloat(Double.pi/2))
+        
+            let isExpanded = answers[section].isExpandabed
+            if isExpanded{
+                image2.transform = image2.transform.rotated(by: -CGFloat(Double.pi/2))
+            } else {
+                image2.transform = image2.transform.rotated(by: CGFloat(Double.pi/2))
+            }
             button.addSubview(image2)
             image2.centerYAnchor.constraint(equalTo: button.centerYAnchor).isActive = true
             image2.rightAnchor.constraint(equalTo: button.rightAnchor, constant: -14 * width).isActive = true
