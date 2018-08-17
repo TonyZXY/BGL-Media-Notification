@@ -114,11 +114,11 @@ open class DefaultRefreshFooter:UIView, RefreshableFooter{
         super.init(frame: frame)
         addSubview(spinner)
         addSubview(textLabel)
-        textDic[.pullToRefresh] = PullToRefreshKitFooterString.pullUpToRefresh
-        textDic[.refreshing] = PullToRefreshKitFooterString.refreshing
-        textDic[.noMoreData] = PullToRefreshKitFooterString.noMoreData
-        textDic[.tapToRefresh] = PullToRefreshKitFooterString.tapToRefresh
-        textDic[.scrollAndTapToRefresh] = PullToRefreshKitFooterString.scrollAndTapToRefresh
+        textDic[.pullToRefresh] = PullToRefreshKitFooterString().pullUpToRefresh
+        textDic[.refreshing] = PullToRefreshKitFooterString().refreshing
+        textDic[.noMoreData] = PullToRefreshKitFooterString().noMoreData
+        textDic[.tapToRefresh] = PullToRefreshKitFooterString().tapToRefresh
+        textDic[.scrollAndTapToRefresh] = PullToRefreshKitFooterString().scrollAndTapToRefresh
         udpateTextLabelWithMode(refreshMode)
         textLabel.font = UIFont.systemFont(ofSize: 14)
         textLabel.textAlignment = .center

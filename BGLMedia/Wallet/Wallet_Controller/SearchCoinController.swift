@@ -161,6 +161,7 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
         let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(sortCancel))
         toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
+        toolbar.backgroundColor = ThemeColor().whiteColor()
         searchBar.inputAccessoryView = toolbar
         return searchBar
     }()

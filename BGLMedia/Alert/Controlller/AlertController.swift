@@ -196,7 +196,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func checkAlertStatusChange()->Bool{
         for results in allAlerts{
             if results.switchStatus != oldAlerts[results.id]{
-                print("switch data")
                 return true
             }
         }
@@ -228,10 +227,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         if alertStatus.count != 0{
             let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterestStatus"], httpMethod: "POST", parameters: body) { (response, success) in
-                if success{
-                    print("send success")
-                } else{
-                }
+                if success{}
             }
         }
     }
@@ -287,7 +283,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let button = UIButton(type:.system)
         let isExpanded = alerts[section].isExpanded
         button.setTitle(!isExpanded ? "▼":"▲", for: .normal)
-        print(sectionView.frame.width)
 //        button.backgroundColor = ThemeColor().greenColor()
         button.contentEdgeInsets = UIEdgeInsetsMake(0, view.frame.width, 0, 0)
         button.titleLabel?.font = UIFont.regularFont(25*factor!)
@@ -508,8 +503,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             
             if UIApplication.shared.canOpenURL(settingsUrl) {
                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                    // Checking for setting is opened or not
-                    //                    print("Setting is opened: \(success)")
                 })
             }
         }
@@ -770,7 +763,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
-//        print(json)
         let realm = try! Realm()
         if json["success"].bool!{
             for result in json["data"].array!{

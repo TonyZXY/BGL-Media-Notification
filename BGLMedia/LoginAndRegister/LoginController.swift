@@ -122,14 +122,12 @@ class LoginController: UIViewController {
             hud.backgroundColor = ThemeColor().progressColor()
             hud.show(in: self.view)
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","resendVerifyLink",self.emailTextField.text!], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
-                print(response)
                 if success{
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                     hud.textLabel.text = textValue(name: "success_success")
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
-                    print(response)
                 } else{
                     hud.indicatorView = JGProgressHUDErrorIndicatorView()
                     hud.textLabel.text = textValue(name: "error_error")
@@ -601,9 +599,9 @@ class LoginController: UIViewController {
             hud.backgroundColor = ThemeColor().progressColor()
             hud.show(in: self.view)
 //            if emailPredicate.evaluate(with: vcs.emailTextField.text){
-            print(resetPasswordAlert.emailTextField.text!)
+            
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","resetPassword",resetPasswordAlert.emailTextField.text!], httpMethod: "Get", parameters: [String:Any]()) { (response, success) in
-                    print(response)
+            
                     if success{
                         let request = response["success"].bool ?? false
                         

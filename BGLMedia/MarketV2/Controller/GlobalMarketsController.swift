@@ -190,7 +190,6 @@ class GlobalMarketsController:  UIViewController, UICollectionViewDelegate,UICol
         
         dispatchGroup.enter()
         URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
-            print()
             if success{
                 dispatchGroup.leave()
             } else{

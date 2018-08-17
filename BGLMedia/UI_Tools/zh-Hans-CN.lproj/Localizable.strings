@@ -36,9 +36,9 @@ loading = "加载中...";
 
 //Transaciton Page Table View
 navigationbar_transa = "添加交易";
-coinForm = "币种";
-exchangeForm = "交易市场";
-tradingPairForm = "兑换币种";
+coinForm = "币名";
+exchangeForm = "交易所";
+tradingPairForm = "交易对";
 buyPriceForm = "买入价格(单价)";
 sellPriceForm = "卖出价格(单价)";
 amountBoughtForm = "买入数量";
@@ -222,7 +222,7 @@ price_alert = "货币价格提醒";
 edit_alert = "设置需要提醒的货币";
 addAlert_alert = "添加提醒";
 pushSection_alert = "推送通知功能";
-editSection_alert = "币种提醒";
+editSection_alert = "币种价格提醒";
 notallow_alert = "需要在设置里打开允许才能使用推送功能. 设置";
 notlogin_alert = "需要登陆后才允许使用推送功能. 登陆";
 alertStatus_alert = "推送通知设置";

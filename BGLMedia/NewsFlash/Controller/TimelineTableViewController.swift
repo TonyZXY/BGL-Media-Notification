@@ -91,8 +91,15 @@ class TimelineTableViewController: UITableViewController {
         tableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
             self.handleRefresh(self.tableView)
         })
-//        self.changeLaugageStatus = false
-//        self.deleteCacheStatus = false
+        let footer = DefaultRefreshFooter.footer()
+        footer.textLabel.textColor = ThemeColor().whiteColor()
+        footer.tintColor = ThemeColor().whiteColor()
+        footer.textLabel.backgroundColor = ThemeColor().themeColor()
+        tableView.switchRefreshFooter(to: .removed)
+  
+        tableView.configRefreshFooter(with:footer, container: self, action: {
+             self.handleFooter()
+        })
         tableView.switchRefreshHeader(to: .refreshing)
     }
     
