@@ -19,6 +19,7 @@ class AboutUsViewController: UIViewController {
     func setUpView(){
         let factor = view.frame.width/375
         view.addSubview(scrollView)
+        scrollView.addSubview(imageLogo)
         scrollView.addSubview(imageView)
         scrollView.addSubview(introduceLabel)
         scrollView.addSubview(introDescription)
@@ -30,16 +31,25 @@ class AboutUsViewController: UIViewController {
         scrollView.addConstraintsWithFormat(format: "V:|-\(5*factor)-[v0(\(150*factor))]", views: imageView)
         NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: scrollView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.width, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.width, multiplier: 1, constant: view.frame.width-30*factor).isActive = true
-        //        NSLayoutConstraint(item: imageView, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.height, multiplier: 1, constant: 200).isActive = true
         
-        NSLayoutConstraint(item: introduceLabel, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: introduceLabel, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: introduceLabel, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: introduceLabel, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 0).isActive = true
         scrollView.addConstraintsWithFormat(format: "V:[v1]-\(10*factor)-[v0]", views: introduceLabel,imageView)
+        
+       
         
         
         NSLayoutConstraint(item: introDescription, attribute: NSLayoutAttribute.trailing, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.trailing, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: introDescription, attribute: NSLayoutAttribute.leading, relatedBy: NSLayoutRelation.equal, toItem: imageView, attribute: NSLayoutAttribute.leading, multiplier: 1, constant: 0).isActive = true
         scrollView.addConstraintsWithFormat(format: "V:[v1]-\(20*factor)-[v0]|", views: introDescription,introduceLabel)
+        
+        imageLogo.leftAnchor.constraint(equalTo: introDescription.leftAnchor).isActive = true
+        imageLogo.centerYAnchor.constraint(equalTo: introduceLabel.centerYAnchor).isActive = true
+        imageLogo.heightAnchor.constraint(equalToConstant: 25 * factor).isActive = true
+        imageLogo.widthAnchor.constraint(equalToConstant: 25 * factor).isActive = true
+        scrollView.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-[v1]", views: imageLogo,introduceLabel)
+
+        
         
         introduceLabel.font = UIFont.regularFont(14*factor)
         introDescription.font = UIFont.regularFont(14*factor)
@@ -83,6 +93,18 @@ class AboutUsViewController: UIViewController {
         label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
+    }()
+    
+   lazy var imageLogo: UIImageView = {
+        let width = view.frame.width/375
+        let image = UIImageView()
+        image.translatesAutoresizingMaskIntoConstraints = false
+        image.contentMode = .scaleAspectFit
+        image.layer.masksToBounds = true
+        image.layer.cornerRadius = 8.5
+        image.frame = CGRect(x: 0, y: 0, width: 25 * width, height: 25 * width)
+        image.image = UIImage(named: "logo_small")
+        return image
     }()
     
     var introDescription:UILabel={
