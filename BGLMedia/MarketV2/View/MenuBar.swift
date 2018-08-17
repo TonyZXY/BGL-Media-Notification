@@ -13,7 +13,7 @@ class MenuBar:UIView,UICollectionViewDelegate,UICollectionViewDataSource,UIColle
     
     var menuitems:[String]{
         get{
-            return [textValue(name:"globalMarket"),textValue(name:"watchlistMarket"),textValue(name: "Alert")]
+            return [textValue(name:"globalMarket"),textValue(name:"watchlistMarket"),textValue(name: "alertMarket")]
         }
     }
     

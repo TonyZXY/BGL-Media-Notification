@@ -89,7 +89,6 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
     }
     
     @objc func updateWatchList(){
-        print(watchListObjects.count)
         if watchListObjects.count == 0{
             //            coinList.removeFromSuperview()
             setUpHintView()

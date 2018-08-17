@@ -134,7 +134,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             coinLabel.textColor = ThemeColor().whiteColor()
             
             let button = UIButton(type:.system)
-            button.setTitle("Edit", for: .normal)
+            button.setTitle(textValue(name: "edit_alert"), for: .normal)
             button.setTitleColor(UIColor.white, for: .normal)
             button.addTarget(self, action: #selector(handleExpandClose), for: .touchUpInside)
             button.tag = section
@@ -149,7 +149,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             }
             
             coinImage.coinImageSetter(coinName: intersetObject.coinAbbName, width: 30*factor, height: 30*factor, fontSize: 5*factor)
-            coinLabel.text = "Coin Name: " + intersetObject.coinName
+            coinLabel.text = textValue(name: "coinName_alert") + intersetObject.coinName
             coinLabel.font = UIFont.regularFont(14*factor)
             
             
@@ -229,7 +229,7 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         
         
         
-        button.setTitle(isExpanded ? "Edit":"Edit", for: .normal)
+        button.setTitle(isExpanded ? textValue(name: "edit_alert"):textValue(name: "edit_alert"), for: .normal)
         
         //        if !isExpanded{
         //            alertTableView.insertRows(at: indexPaths, with: .fade)
@@ -279,8 +279,8 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             cell.textLabel?.textColor = ThemeColor().whiteColor()
             cell.textLabel?.font = UIFont.regularFont(15*factor)
             cell.backgroundColor = ThemeColor().greyColor()
-            let exchangeSection = "Exchange: " + intersetObject.exchangName
-            let tradingPairs = intersetObject.tradingPairs == "" ? "TradingPairs: " : "TradingPairs: " + intersetObject.coinAbbName + "/" + intersetObject.tradingPairs
+            let exchangeSection = textValue(name: "exchange_alert") + intersetObject.exchangName
+            let tradingPairs = intersetObject.tradingPairs == "" ? textValue(name: "tradingPair_alert") : textValue(name: "tradingPair_alert") + intersetObject.coinAbbName + "/" + intersetObject.tradingPairs
             cell.textLabel?.text = indexPath.row == 0 ?  exchangeSection : tradingPairs
             return cell
         } else {
@@ -354,7 +354,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         let body:[String:Any] = ["email":email,"token":token,"interest":[["_id":intersetObject.id]]]
         URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteInterest"], httpMethod: "POST", parameters: body) { (response, success) in
             if success{
-                print(response)
                 let filterId = "id = " + String(self.intersetObject.id)
                 let filterName = "coinAbbName = '" + self.intersetObject.coinAbbName + "' "
                 
@@ -424,7 +423,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 let interest:[String:Any] = ["_id":intersetObject.id,"from":intersetObject.coinAbbName,"to":intersetObject.tradingPairs,"market":intersetObject.exchangName,"price":intersetObject.compare,"isGreater":intersetObject.compareStatus]
                 let body:[String:Any] = ["email":email,"token":token,"interest":interest]
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterest"], httpMethod: "POST", parameters: body) { (response, success) in
-                    print(response)
                     if success{
                         realm.beginWrite()
                         let realmData:[Any] = [self.intersetObject.id,self.intersetObject.coinName,self.intersetObject.coinAbbName,self.intersetObject.tradingPairs,self.intersetObject.exchangName,self.intersetObject.compare,self.intersetObject.compareStatus,self.intersetObject.switchStatus,Date()]
@@ -444,7 +442,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                 
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addInterest"], httpMethod: "POST", parameters: parameter) { (response, success) in
                     if success{
-                        print(response)
                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
                         self.navigationController?.popViewController(animated: true)
                     } else{

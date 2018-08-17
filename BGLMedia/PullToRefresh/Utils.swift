@@ -41,11 +41,11 @@ struct PullToRefreshKitHeaderString{
 }
 
 struct PullToRefreshKitFooterString{
-    static let pullUpToRefresh = textValue(name: "pullUpToRefresh")
-    static let refreshing = textValue(name: "refreshing")
-    static let noMoreData = textValue(name: "noMoreData")
-    static let tapToRefresh = textValue(name: "tapToRefresh")
-    static let scrollAndTapToRefresh = textValue(name: "scrollAndTapToRefresh")
+    var pullUpToRefresh = textValue(name: "pullUpToRefresh")
+    var refreshing = textValue(name: "refreshing")
+    var noMoreData = textValue(name: "noMoreData")
+    var tapToRefresh = textValue(name: "tapToRefresh")
+    var scrollAndTapToRefresh = textValue(name: "scrollAndTapToRefresh")
 }
 
 struct PullToRefreshKitLeftString{

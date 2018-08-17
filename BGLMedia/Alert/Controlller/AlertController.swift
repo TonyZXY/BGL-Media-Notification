@@ -134,7 +134,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         for result in alertStatuss{
             oldAlerts[result.id] = result.switchStatus
         }
@@ -142,6 +142,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         token?.invalidate()
     }
@@ -159,6 +160,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         }
         
         
+    }
+    
+    @objc func changeLanguage(){
+        checkSetUpView()
+        alertButton.setTitle(textValue(name: "addAlert_alert"), for: .normal)
+        loginMainLabel.text = textValue(name: "needLoginLabel")
+        loginLabel.text = textValue(name: "needLoginText")
+        loginButton.setTitle(textValue(name: "login"), for: .normal)
     }
     
     func getNotification(){
@@ -187,7 +196,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func checkAlertStatusChange()->Bool{
         for results in allAlerts{
             if results.switchStatus != oldAlerts[results.id]{
-                print("switch data")
                 return true
             }
         }
@@ -219,10 +227,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         if alertStatus.count != 0{
             let body:[String:Any] = ["email":email,"token":certificateToken,"interest":alertStatus]
             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","editInterestStatus"], httpMethod: "POST", parameters: body) { (response, success) in
-                if success{
-                    print("send success")
-                } else{
-                }
+                if success{}
             }
         }
     }
@@ -278,7 +283,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let button = UIButton(type:.system)
         let isExpanded = alerts[section].isExpanded
         button.setTitle(!isExpanded ? "▼":"▲", for: .normal)
-        print(sectionView.frame.width)
 //        button.backgroundColor = ThemeColor().greenColor()
         button.contentEdgeInsets = UIEdgeInsetsMake(0, view.frame.width, 0, 0)
         button.titleLabel?.font = UIFont.regularFont(25*factor!)
@@ -499,8 +503,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
             
             if UIApplication.shared.canOpenURL(settingsUrl) {
                 UIApplication.shared.open(settingsUrl, completionHandler: { (success) in
-                    // Checking for setting is opened or not
-                    //                    print("Setting is opened: \(success)")
                 })
             }
         }
@@ -641,7 +643,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.rowHeight = 50*factor!
+        tableView.rowHeight = 30*factor!
         tableView.bounces = false
         tableView.separatorStyle = .none
         return tableView
@@ -721,8 +723,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                         
                         deleteMemory()
                         hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                        hud.textLabel.text = "Error"
-                        hud.detailTextLabel.text = "Password Reset" // To change?
+                        hud.textLabel.text = textValue(name: "hud_Error")
+                        hud.detailTextLabel.text = textValue(name: "hud_passwordReset") // To change?
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                             hud.dismiss()
                         }
@@ -742,14 +744,14 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 let manager = NetworkReachabilityManager()
                 hud.indicatorView = JGProgressHUDErrorIndicatorView()
                 if !(manager?.isReachable)! {
-                    hud.textLabel.text = "Error"
+                    hud.textLabel.text = textValue(name: "hud_Error")
                     hud.detailTextLabel.text = "No Network" // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
                     }
                     
                 } else {
-                    hud.textLabel.text = "Error"
+                    hud.textLabel.text = textValue(name: "hud_Error")
                     hud.detailTextLabel.text = "Time Out" // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
                         hud.dismiss()
@@ -761,7 +763,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func writeRealm(json:JSON,completion:@escaping (Bool)->Void){
-//        print(json)
         let realm = try! Realm()
         if json["success"].bool!{
             for result in json["data"].array!{

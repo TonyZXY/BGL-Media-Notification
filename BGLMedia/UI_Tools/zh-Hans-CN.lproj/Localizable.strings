@@ -36,9 +36,9 @@ loading = "加载中...";
 
 //Transaciton Page Table View
 navigationbar_transa = "添加交易";
-coinForm = "币种";
-exchangeForm = "交易市场";
-tradingPairForm = "兑换币种";
+coinForm = "币名";
+exchangeForm = "交易所";
+tradingPairForm = "交易对";
 buyPriceForm = "买入价格(单价)";
 sellPriceForm = "卖出价格(单价)";
 amountBoughtForm = "买入数量";
@@ -58,6 +58,7 @@ error_transaction = "输入格式有误";
 //Market Page
 globalMarket = "市场行情";
 watchlistMarket = "收藏列表";
+alertMarket = "提醒";
 marketCap_Market = "市场总资产";
 market_24hVolume = "24小时交易量";
 btcDominance_market = "BTC占比";
@@ -221,17 +222,23 @@ price_alert = "货币价格提醒";
 edit_alert = "设置需要提醒的货币";
 addAlert_alert = "添加提醒";
 pushSection_alert = "推送通知功能";
-editSection_alert = "币种提醒";
+editSection_alert = "币种价格提醒";
 notallow_alert = "需要在设置里打开允许才能使用推送功能. 设置";
 notlogin_alert = "需要登陆后才允许使用推送功能. 登陆";
 alertStatus_alert = "推送通知设置";
 alertUnavaliable_alert = "禁用";
 alertavaliable_alert = "允许";
 alertCoinUnavaliable_alert = "禁用!";
+and = "和";
+
 
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";
 alertDone_alert = "完成";
+edit_alert = "编辑";
+coinName_alert = "币名: ";
+exchange_alert = "交易所: ";
+tradingPair_alert = "交易对: ";
 
 //Pull to refresh
 pullDownToRefresh = "下拉可以刷新";
@@ -299,6 +306,7 @@ error_verifyEmail = "请验证你的邮件";
 error_usernotfound = "账户不存在";
 error_error = "错误";
 success_success = "成功";
+logout_hud = "登出中";
 
 back = "< 返  回";
 back2 = "返回";
@@ -316,6 +324,7 @@ sendButton_reset = "发送邮件";
 checkSend_reset = "发送剩余时间";
 second_reset = "秒";
 done_reset = "取消";
+read = "我已阅读并理解";
 
 
 //resend Password alert
@@ -336,10 +345,37 @@ resetDevice_confirm = "确认";
 
 submit = "提  交";
 
-email_report = "(选填)填写邮箱以便联系您";
+report_feedback = "提交反馈";
+feedback_error_title = "向我们的邮箱提交反馈:\ncryptogeekapp@gmail.com";
+feedback_error_message = "需要向我们提交任何建议?\n 请通过邮箱联系我们: cryptogeekapp@gmail.com";
+feedback_error_button1 = "复制邮箱地址";
+feedback_error_button2 = "确认";
+
+q1 = "关于CryptoGeek？";
+q2 = "CryptoGeek有哪些功能？";
+q3 = "如何验证邮箱地址？";
+q4 = "如何重设密码？";
+q5 = "如何使用提醒功能？";
+q6 = "哪里可以查看我的收藏列表？";
+q7 = "为什么数据没有更新";
+q8 = "CrytoGeek支持多设备应用吗？";
+q9 = "如何清除缓存";
+
+a1 = "          CryptoGeek是一个由Blockchain Global研发的应用程序. 它可以提供诸如每日新闻，快讯，数字货币市场信息，自定义数字资产追踪服务，数字货币价格提醒等功能。";
+a2 = "   CryptoGeek的功能包括:\n\n        自定义数字资产追踪服务\n\n        数字货币市场信息\n\n        每日新闻\n\n        快讯\n\n        数字货币价格提醒功能等。 ";
+a3 = "          您需要验证您的电子邮箱地址后才能使用一些特定功能。 注册帐户后，系统会在一分钟内将电子邮件发送到您已注册的电子邮箱里。查看电子邮件时，请点击电子邮件下的按钮或连接地址。 点击后，系统将自动验证该电子邮件地址。如果您错过验证邮件，当您登录时，您可能会看到一个弹出窗口，要求您重新发送验证邮件。";
+a4 = "          如果忘记密码，您需要重置密码。 通过单击“忘记密码”，系统将弹出一个窗口，需要输入您的电子邮件。 点击发送后，您将收到一封电子邮件。请单击电子邮件下的按钮或地址，您的网页将跳转到重置密码页面。 输入新密码，确认新密码并单击重置按钮后，您的密码将被重置，并且所有使用该帐户登录的设备都需要重新登录。";
+a5 = "您可以在已添加的交易，行情（包括特定的行情）或更多里的推送通知中添加和查询货币价格提醒。\n\n添加货币价格提醒，您可以点击其中任何一个位置的“添加提醒”按钮。 填写币名，交易所，交易对和价格，点击完成即可添加提醒。\n\n要编辑或删除这些提醒，您可以点击提醒并在特定提醒中点击删除按钮。\n\n如果您需要添加的价格高于当前价格，则应用会在价格高于您设定的价格时通知您。 如果您要添加的价格低于当前价格，当价格低于您设定的价格时，应用会通知您。";
+a6 = "          您可以在行情的关注列表选项卡中查看关注列表。 价格和变化百分比代表24小时变化";
+a7 = "          应用所有的数据都会自动更新。 偶尔应用会出现系统故障，但如果您看到的是旧数据，则很可能是您遇到缓存问题。 如果您的页面包含的是旧数据，而不是从我们的应用程序中获取的新数据。 您可以向下滑动“刷新”。 这也可能是源于您的网络服务提供商（ISP）正在其服务器上进行缓存（保留网页的副本）。 这种情况您则需要联系您的网络服务提供商。";
+a8 = "          CryptoGeek支持多设备同时使用。 您可以在已登录的所有设备中查看快讯，新闻，自定义提醒通知。但您无法在多设备中检查您钱包里的加密货币，因为它当前处于脱机状态。 当您成功重置密码后，其他设备将自动注销。";
+a9 = "          您可以在更多选项卡中找到清除缓存。 缓存是首次加载时保存的快讯和新闻的地方。清除缓存可以提升应用的性能。 清除缓存将清除所有的快讯和新闻。";
 
 //hub progress
-hub_success = "成功";
-hub_Error = "错误";
+hud_success = "成功";
+hud_Error = "错误";
+hud_passwordReset = "密码重置";
+hud_noNetwork = "无网络连接";
+hud_timeOut = "请求超时";
 
 

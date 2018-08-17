@@ -89,19 +89,24 @@ class AlertTableViewCell:UITableViewCell{
         coinDetailLabel.font = UIFont.regularFont(11*factor!)
         addSubview(swithButton)
         addSubview(compareLabel)
-        addSubview(dateLabel)
+//        addSubview(dateLabel)
         addSubview(coinDetailLabel)
         backgroundColor = ThemeColor().greyColor()
         swithButton.addTarget(self, action: #selector(switchIsInAction), for: .touchUpInside)
         
         NSLayoutConstraint(item: swithButton, attribute: .trailing, relatedBy: .equal, toItem: self, attribute: .trailing, multiplier: 1, constant: -10).isActive = true
         NSLayoutConstraint(item: swithButton, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: compareLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: compareLabel, attribute: .centerY, relatedBy: .equal, toItem: self, attribute: .centerY, multiplier: 1, constant: -5).isActive = true
         NSLayoutConstraint(item: compareLabel, attribute: .leading, relatedBy: .equal, toItem: self, attribute: .leading, multiplier: 1, constant: 10).isActive = true
-        NSLayoutConstraint(item: dateLabel, attribute: .leading, relatedBy: .equal, toItem: compareLabel, attribute: .leading, multiplier: 1, constant: 0).isActive = true
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(5*factor!)-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":dateLabel,"v1":compareLabel]))
+        
+        
+        
+//        NSLayoutConstraint(item: dateLabel, attribute: .leading, relatedBy: .equal, toItem: compareLabel, attribute: .leading, multiplier: 1, constant: 0).isActive = true
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-\(5*factor!)-[v1]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":dateLabel,"v1":compareLabel]))
         NSLayoutConstraint(item: coinDetailLabel, attribute: .leading, relatedBy: .equal, toItem: compareLabel, attribute: .leading, multiplier: 1, constant: 0).isActive = true
-        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(5*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailLabel,"v1":compareLabel]))
+        NSLayoutConstraint(item: coinDetailLabel, attribute: .top, relatedBy: .equal, toItem: compareLabel, attribute: .bottom, multiplier: 1, constant: 2).isActive = true
+        
+//        addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(5*factor!)-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailLabel,"v1":compareLabel]))
         
     }
     
@@ -131,7 +136,7 @@ class AlertTableViewCell:UITableViewCell{
             }
         }
         
-        //            print(alertStatus)
+
         
         //        realm.beginWrite()
         //        if alertStatus.count == 1{

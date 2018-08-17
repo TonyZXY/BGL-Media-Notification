@@ -228,12 +228,14 @@ class DetailController: UIViewController{
                 if success{
                     if response["Response"].string ?? "" == "Success"{
                         if let periodData = response["Data"].array{
-                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                            let change = (price /  periodData.first!["open"].double!) * 100
-                            checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
-                            checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
-                            self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-                            completion(true)
+                            if periodData != []{
+                                let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                                let change = (price /  periodData.first!["open"].double!) * 100
+                                checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                                checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
+                                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                                completion(true)
+                            }
                         }
                     }
                 } else{

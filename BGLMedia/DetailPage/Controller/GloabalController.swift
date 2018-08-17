@@ -110,12 +110,15 @@ class GloabalController: UIViewController,ExchangeSelect{
         if selectItem.count != 0{
             APIServices.fetchInstance.getExchangePriceData(from: (selectItem.first?.coinAbbName)!, to: (selectItem.first?.tradingPairsName)!, market: (selectItem.first?.market)!) { (success, response) in
             if success{
+                print(response)
                 let singlePrice = response["RAW"]["PRICE"].double ?? 0
+                let profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
                 let filterName = "coinAbbName = '" + self.coinAbbName + "' "
                 let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
                 if let object = statusItem.first{
                     try! self.realm.write {
                         object.price = singlePrice
+                        object.profitChange = profitChange
                     }
                 }
                 completion(true)
@@ -502,67 +505,65 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     
     
-    func getRiseFallData(period:String,from:String, to:String, market:String,complection:@escaping (Bool,Double,Double)->Void){
-        if period == "Week"{
-            APIServices.fetchInstance.getRiseFallWeek(from: "BTC", to: "USD", market: "Coinbase", limit: 5) { (success, response) in
-                if success{
-                    if response["Response"].string ?? "" == "Success"{
-                        print(response)
-                        if let periodData = response["Data"].array{
-                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                            let change = (price /  periodData.first!["open"].double!) * 100
-                            complection(true,price,change)
-                        } else{
-                            complection(false,0,0)
-                        }
-                    } else{
-                        complection(false,0,0)
-                    }
-                } else{
-                    complection(false,0,0)
-                }
-            }
-        } else if period == "Day"{
-            APIServices.fetchInstance.getRiseFallDay(from: "BTC", to: "USD", market: "Bitstamp", limit: 23) { (success, response) in
-                if success{
-                    if response["Response"].string ?? "" == "Success"{
-                        print(response)
-                        if let periodData = response["Data"].array{
-                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                            let change = (price /  periodData.first!["open"].double!) * 100
-                            complection(true,price,change)
-                        }
-                    }
-                }
-            }
-        }else if period == "Hour"{
-            APIServices.fetchInstance.getRiseFallHour(from: "BTC", to: "USD", market: "Bitstamp", limit: 3) { (success, response) in
-                if success{
-                    if response["Response"].string ?? "" == "Success"{
-                        print(response)
-                        if let periodData = response["Data"].array{
-                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                            let change = (price /  periodData.first!["open"].double!) * 100
-                            complection(true,price,change)
-                        }
-                    }
-                }
-            }
-        }else if period == "Minute"{
-            APIServices.fetchInstance.getRiseFallMin(from: "BTC", to: "USD", market: "Bitstamp", limit: 29) { (success, response) in
-                if success{
-                    if response["Response"].string ?? "" == "Success"{
-                        print(response)
-                        if let periodData = response["Data"].array{
-                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                            let change = (price /  periodData.first!["open"].double!) * 100
-                            complection(true,price,change)
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    func getRiseFallData(period:String,from:String, to:String, market:String,complection:@escaping (Bool,Double,Double)->Void){
+//        if period == "Week"{
+//            APIServices.fetchInstance.getRiseFallWeek(from: "BTC", to: "USD", market: "Coinbase", limit: 5) { (success, response) in
+//                if success{
+//                    if response["Response"].string ?? "" == "Success"{
+//                        if let periodData = response["Data"].array{
+//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+//                            let change = (price /  periodData.first!["open"].double!) * 100
+//                            complection(true,price,change)
+//                        } else{
+//                            complection(false,0,0)
+//                        }
+//                    } else{
+//                        complection(false,0,0)
+//                    }
+//                } else{
+//                    complection(false,0,0)
+//                }
+//            }
+//        } else if period == "Day"{
+//            APIServices.fetchInstance.getRiseFallDay(from: "BTC", to: "USD", market: "Bitstamp", limit: 23) { (success, response) in
+//                if success{
+//                    if response["Response"].string ?? "" == "Success"{
+//                        if let periodData = response["Data"].array{
+//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+//                            let change = (price /  periodData.first!["open"].double!) * 100
+//                            complection(true,price,change)
+//                        }
+//                    }
+//                }
+//            }
+//        }else if period == "Hour"{
+//            APIServices.fetchInstance.getRiseFallHour(from: "BTC", to: "USD", market: "Bitstamp", limit: 3) { (success, response) in
+//                if success{
+//                    if response["Response"].string ?? "" == "Success"{
+//                        print(response)
+//                        if let periodData = response["Data"].array{
+//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+//                            let change = (price /  periodData.first!["open"].double!) * 100
+//                            complection(true,price,change)
+//                        }
+//                    }
+//                }
+//            }
+//        }else if period == "Minute"{
+//            APIServices.fetchInstance.getRiseFallMin(from: "BTC", to: "USD", market: "Bitstamp", limit: 29) { (success, response) in
+//                if success{
+//                    if response["Response"].string ?? "" == "Success"{
+//                        print(response)
+//                        if let periodData = response["Data"].array{
+//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+//                            let change = (price /  periodData.first!["open"].double!) * 100
+//                            complection(true,price,change)
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     
 }
