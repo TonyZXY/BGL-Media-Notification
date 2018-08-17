@@ -12,8 +12,10 @@ import RealmSwift
 import Alamofire
 import JGProgressHUD
 import SwiftKeychainWrapper
+import SafariServices
+import MessageUI
 
-class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource {
+class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource, MFMailComposeViewControllerDelegate {
     
   
     var loginStatus:Bool{
@@ -56,20 +58,20 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[textValue(name: "help")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")]]
+            return [[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[textValue(name: "aboutUs_cell"),textValue(name: "about_app"),textValue(name: "more_disclaimer"), textValue(name: "help_privacy")],[textValue(name: "help_section"), textValue(name: "feedback_section")]]
         }
     }
     
     var sections:[String]?{
         get{
-            return [textValue(name: "help"),textValue(name: "setting_section"),textValue(name: "account_section")]
+            return [textValue(name: "account_section"),textValue(name: "setting_section"), textValue(name: "aboutUs_section"),textValue(name: "help")]
         }
     }
     
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[HelpViewController()],[CurrencyController(),LanguageController(),AlertNotificationController()],[LoginController(usedPlace: 0)]]
+            return [[LoginController(usedPlace: 0)],[CurrencyController(),LanguageController(),AlertNotificationController()],[AboutUsViewController(),AboutAppViewController()],[FAQViewController(),ReportProblemViewController()]]
         }
     }
     
@@ -115,7 +117,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         let sectionView = UIView()
         sectionView.backgroundColor = ThemeColor().darkGreyColor()
         let sectionLabel = UILabel()
-        sectionLabel.font = UIFont.semiBoldFont(17*factor)
+        sectionLabel.font = UIFont.semiBoldFont(14*factor)
         sectionLabel.translatesAutoresizingMaskIntoConstraints = false
         sectionView.addSubview(sectionLabel)
         sectionLabel.textColor = ThemeColor().textGreycolor()
@@ -128,7 +130,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
-        return 50 * view.frame.width/375
+        return 25 * view.frame.width/375
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -162,7 +164,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let realm = try! Realm()
-        if indexPath.section < 2{
+        if indexPath.section > 0{
             //            if indexPath.section == 1 && indexPath.row == 2{
             //                if notificationStatus{
             
@@ -179,7 +181,41 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "cancel_clearCache"), comment: ""), style: .cancel, handler:nil)
                 confirmAlertCtrl.addAction(cancelAction)
                 self.present(confirmAlertCtrl, animated: true, completion: nil)
-            } else{
+            } else if indexPath.section == 2 && indexPath.row == 3 {
+                let urlString = "https://cryptogeekapp.com/policy"
+                if let url = URL(string: urlString) {
+                    let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+                    if #available(iOS 11.0, *) {
+                        vc.dismissButtonStyle = .close
+                    } else {
+                        
+                    }
+                    vc.hidesBottomBarWhenPushed = true
+                    vc.accessibilityNavigationStyle = .separate
+                    self.present(vc, animated: true, completion: nil)
+                    //            navigationController?.pushViewController(vc, animated: true)
+                }
+            } else if indexPath.section == 2 && indexPath.row == 2{
+                let urlString = "https://cryptogeekapp.com/terms"
+                if let url = URL(string: urlString) {
+                    let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+                    if #available(iOS 11.0, *) {
+                        vc.dismissButtonStyle = .close
+                    } else {
+                        
+                    }
+                    vc.hidesBottomBarWhenPushed = true
+                    vc.accessibilityNavigationStyle = .separate
+                    self.present(vc, animated: true, completion: nil)
+                    //            navigationController?.pushViewController(vc, animated: true)
+                }
+            }else if indexPath.section == 3 && indexPath.row == 1{
+                if MFMailComposeViewController.canSendMail() {
+                    self.present(configuredMailComposeViewController(), animated: true, completion: nil)
+                } else {
+                    showSendMailErrorAlert()
+                }
+            }else{
                 let changePage = pushItems[indexPath.section][indexPath.row]
                 changePage.hidesBottomBarWhenPushed = true
                 navigationController?.pushViewController(changePage, animated: true)
@@ -189,6 +225,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let hud = JGProgressHUD(style: .light)
                 hud.textLabel.text = "Log Out"
                 hud.backgroundColor = ThemeColor().progressColor()
+                hud.tintColor = ThemeColor().darkBlackColor()
                 hud.show(in: (self.parent?.view)!)
                 
                 let body = ["email":email,"token":certificateToken,"deviceToken":deviceToken]
@@ -200,8 +237,8 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             deleteMemory()
                             self.optionTableView.reloadData()
                             hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                            hud.textLabel.text = "Success"
-                            
+                           
+                            hud.textLabel.text = textValue(name: "hud_success")
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                 hud.dismiss()
                             }
@@ -209,13 +246,13 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             let manager = NetworkReachabilityManager()
                             hud.indicatorView = JGProgressHUDErrorIndicatorView()
                             if !(manager?.isReachable)! {
-                                hud.textLabel.text = "Error"
+                                hud.textLabel.text = textValue(name: "hud_Error")
                                 hud.detailTextLabel.text = "No Network" // To change?
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     hud.dismiss()
                                 }
                             } else {
-                                hud.textLabel.text = "Error"
+                                hud.textLabel.text = textValue(name: "hud_Error")
                                 hud.detailTextLabel.text = "Time Out" // To change?
                                 DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                     hud.dismiss()
@@ -227,8 +264,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     deleteMemory()
                     self.optionTableView.reloadData()
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                    hud.textLabel.text = "Success"
-                    
+                    hud.textLabel.text = textValue(name: "hud_success")
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         hud.dismiss()
                     }
@@ -265,7 +301,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         navigationItem.titleView = titleLabel
         view.addSubview(optionTableView)
         view.backgroundColor = ThemeColor().themeColor()
-        optionTableView.rowHeight = 50 * view.frame.width/375
+        optionTableView.rowHeight = 45 * view.frame.width/375
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":optionTableView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":optionTableView]))
     }
@@ -276,7 +312,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         tableView.delegate = self
         tableView.separatorStyle = .none
         tableView.dataSource = self
-        tableView.rowHeight = 50
+        tableView.rowHeight = 45
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
@@ -291,6 +327,33 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
         titleLabel.textAlignment = .center
         return titleLabel
     }()
+    
+    func configuredMailComposeViewController() -> MFMailComposeViewController {
+        let mailComposerVC = MFMailComposeViewController()
+        mailComposerVC.mailComposeDelegate = self
+        
+        mailComposerVC.setToRecipients(["cryptogeekapp@gmail.com"])
+        mailComposerVC.setSubject("Report Feedback")
+        mailComposerVC.setMessageBody("", isHTML: false)
+        mailComposerVC.navigationBar.tintColor = ThemeColor().whiteColor()
+        
+        return mailComposerVC
+    }
+    
+    func showSendMailErrorAlert() {
+        let sendMailErrorAlert = UIAlertController(title: "Report Feedback at:\ncryptogeekapp@gmail.com", message: "Want to give us some feedback?\n Contact us at Email: cryptogeekapp@gmail.com", preferredStyle: .alert)
+        let copyEmailaddressaction = UIAlertAction(title: "Copy Email Address", style: .default, handler: { (_) in
+            UIPasteboard.general.string = "cryptogeekapp@gmail.com"
+        })
+        sendMailErrorAlert.addAction(copyEmailaddressaction)
+        let cancelAlertAction = UIAlertAction(title: "OK", style: .cancel, handler: nil)
+        sendMailErrorAlert.addAction(cancelAlertAction)
+        self.present(sendMailErrorAlert, animated: true, completion: nil)
+    }
+    
+    func mailComposeController(_ controller: MFMailComposeViewController, didFinishWith result: MFMailComposeResult, error: Error?) {
+        controller.dismiss(animated: true, completion: nil)
+    }
     
     
     

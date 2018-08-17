@@ -89,6 +89,22 @@ open class HistoryTableViewCell: UITableViewCell {
         cost.text = textValue(name: "buyCost")
         worth.text = textValue(name: "buyWorth")
         delta.text = textValue(name: "buyDelta")
+        
+        buyMarket.font = UIFont.semiBoldFont(13)
+        dateLabel.font = UIFont.semiBoldFont(18)
+        SinglePrice.font = UIFont.semiBoldFont(13)
+        tradingPairs.font = UIFont.semiBoldFont(13)
+        amount.font = UIFont.semiBoldFont(13)
+        cost.font = UIFont.semiBoldFont(13)
+        worth.font = UIFont.semiBoldFont(13)
+        delta.font = UIFont.semiBoldFont(13)
+        SinglePriceResult.font = UIFont.semiBoldFont(10)
+        tradingPairsResult.font = UIFont.semiBoldFont(10)
+        amountResult.font = UIFont.semiBoldFont(10)
+        costResult.font = UIFont.semiBoldFont(10)
+        worthResult.font = UIFont.semiBoldFont(10)
+        deltaResult.font = UIFont.semiBoldFont(10)
+        
     }
     
     func sellLanguage(){
@@ -96,6 +112,18 @@ open class HistoryTableViewCell: UITableViewCell {
         sellAmount.text = textValue(name: "soldAmount")
         sellProceeds.text = textValue(name: "Proceeds")
         sellTradingPairs.text = textValue(name: "sellTradingPair")
+        
+        
+        sellMarket.font = UIFont.semiBoldFont(13)
+        sellDateLabel.font = UIFont.semiBoldFont(18)
+        sellPrice.font = UIFont.semiBoldFont(13)
+        sellAmount.font = UIFont.semiBoldFont(13)
+        sellProceeds.font = UIFont.semiBoldFont(13)
+        sellTradingPairs.font = UIFont.semiBoldFont(13)
+        sellPriceResult.font = UIFont.semiBoldFont(10)
+        sellAmountResult.font = UIFont.semiBoldFont(10)
+        sellProceedsResult.font = UIFont.semiBoldFont(10)
+        sellTradingPairResult.font = UIFont.semiBoldFont(10)
     }
     
     func setUpLabelPoint(){

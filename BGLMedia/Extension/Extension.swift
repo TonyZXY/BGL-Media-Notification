@@ -86,20 +86,15 @@ class Extension:NSObject{
                             }
                         }
                     } else{
-                        value = String(format:"%.3f",number)
+                        value = String(format:"%.2f",number)
                     }
                 } else{
-                    value = String(format:"%.2f",number)
+                    value = String(format:"%.1f",number)
                 }
-                //                    } else{
-                //                        value = String(format:"%.2f",number)
-                //                    }
             }else{
                 return String(format:"%.2f",number)
             }
             return value
-            //        }
-            //            return value
         } else{
             return formatValue
         }
@@ -322,6 +317,9 @@ func checkDataRiseFallColor(risefallnumber: Double,label:UILabel,currency:String
         label.textColor = UIColor.white
         if let logos = logo[currency]{
             label.text = logos + Extension.method.scientificMethod(number: risefallnumber)
+        }else if String(risefallnumber) == "0.0"{
+            label.text = "--"
+            label.textColor = UIColor.white
         } else{
             label.text = Extension.method.scientificMethod(number: risefallnumber) + " " + currency
         }
@@ -330,6 +328,9 @@ func checkDataRiseFallColor(risefallnumber: Double,label:UILabel,currency:String
     case "Percent":
          if String(risefallnumber).prefix(1) == "-" {
             label.textColor = ThemeColor().redColor()
+         }else if String(risefallnumber) == "0.0"{
+            label.text = "--"
+            label.textColor = UIColor.white
          } else{
             label.textColor = ThemeColor().greenColor()
          }

@@ -1,14 +1,14 @@
 //
-//  PrivacyViewController.swift
+//  AboutFunctionController.swift
 //  BGLMedia
 //
-//  Created by ZHANG ZEYAO on 9/8/18.
+//  Created by ZHANG ZEYAO on 14/8/18.
 //  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
 import UIKit
 
-class PrivacyViewController: UIViewController {
+class AboutFunctionController: UIViewController {
     
     let titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -19,22 +19,26 @@ class PrivacyViewController: UIViewController {
         return titleLabel
     }()
 
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ThemeColor().themeColor()
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         setupView()
+        // Do any additional setup after loading the view.
     }
+    
     @objc func changeLanguage(){
-        titleLabel.text = textValue(name: "help_privacy")
+        titleLabel.text = textValue(name: "help_FAQ")
         navigationItem.titleView = titleLabel
     }
     func setupView(){
-        titleLabel.text = textValue(name: "help_privacy")
+        titleLabel.text = textValue(name: "help_FAQ")
         navigationItem.titleView = titleLabel
     }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
+
 }

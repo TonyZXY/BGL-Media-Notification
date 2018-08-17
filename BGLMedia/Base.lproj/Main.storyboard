@@ -67,6 +67,7 @@
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <viewLayoutGuide key="safeArea" id="979-U3-Aue"/>
+                        <color key="selectedImageTintColor" red="0.21176470588235294" green="0.8666666666666667" blue="0.6705882352941176" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                     </tabBar>
                     <connections>
                         <outlet property="mainTabBar" destination="n1N-YU-9Bc" id="cmr-u6-Ld0"/>

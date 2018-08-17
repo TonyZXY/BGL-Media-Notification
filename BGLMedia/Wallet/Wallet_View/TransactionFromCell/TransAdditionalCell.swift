@@ -26,7 +26,7 @@ class TransAdditionalCell:UITableViewCell{
     
     lazy var additionalLabel:UILabel = {
         let label = UILabel()
-        label.text = "附加信息"
+        label.font = UIFont.semiBoldFont(15*factor!)
         label.textColor = UIColor.init(red:187/255.0, green:187/255.0, blue:187/255.0, alpha:1)
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -81,9 +81,9 @@ class TransAdditionalCell:UITableViewCell{
     func createKeyboarddonebutton(){
         let toolbar = UIToolbar()
         toolbar.sizeToFit()
-        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done
-            , target: self, action: #selector(doneclick))
-        toolbar.setItems([donebutton], animated: false)
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([flexible,flexible,donebutton], animated: false)
         additional.inputAccessoryView = toolbar
     }
     

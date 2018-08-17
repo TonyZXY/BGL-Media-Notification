@@ -53,7 +53,7 @@ additionalForm = "Notes";
 pricePlaceholder = "Enter the price here...";
 amountPlaceholder = "Enter amount here...";
 additional_Placeholder = "Notes...";
-error_transaction = "Invalid Input";
+error_transaction = "Invalid Format";
 
 //Market Page
 globalMarket = "Markets";
@@ -158,22 +158,23 @@ alertDelete_history = "Delete";
 
 //Setting Page
 settingTitle = "More Options";
-help = "Help & Feedback";
+help = "Helping & Feedback";
 aboutUs_section = "About";
+more_disclaimer = "Disclaimer";
 about_app = "About CryptoGeek";
 feedback_section = "Feedback";
 feedback_rateus = "Rate Us";
+about_function = "About Functions";
 feedBack_reportbug = "Report Bug";
 help_section = "Help";
-help_FAQ = "Frequent Asked Question";
-help_userAgreement = "User Agreement";
-help_privacy = "Privacy Policy";
+help_FAQ = "FAQs";
+help_privacy = "Privacy Statement";
 setting_section = "Setting";
 account_section = "Account";
 register_cell = "Create Account";
 login_cell = "Log In";
 logout_cell = "Log Out";
-aboutUs_cell = "About Us";
+aboutUs_cell = "About BlockChain Global";
 community_cell = "Our Community";
 defaultCurrency_cell = "Default Currency";
 notification_cell = "Notification Option";
@@ -349,8 +350,13 @@ resetDevice_title = "LogOut";
 resetDevice_description = "You have already reset the password, you need to login again";
 resetDevice_confirm = "Confirm";
 
+submit = "Submit";
+email_report = "(Optional)Enter your Email for future contact";
 
 
+//hub progress
+hud_success = "Success";
+hud_Error = "Error";
 
 
 
