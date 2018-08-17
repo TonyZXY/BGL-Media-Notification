@@ -136,7 +136,7 @@ class AlertTableViewCell:UITableViewCell{
             }
         }
         
-        //            print(alertStatus)
+
         
         //        realm.beginWrite()
         //        if alertStatus.count == 1{

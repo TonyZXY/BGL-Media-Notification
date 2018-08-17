@@ -146,8 +146,18 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         newsTableView.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
             self.handleRefresh(self.newsTableView)
         })
-        self.changeLanguageStatus = false
-        self.deleteCacheStatus = false
+        
+        let footer = DefaultRefreshFooter.footer()
+        footer.textLabel.textColor = ThemeColor().whiteColor()
+        footer.tintColor = ThemeColor().whiteColor()
+        footer.textLabel.backgroundColor = ThemeColor().themeColor()
+        self.newsTableView.switchRefreshFooter(to: .removed)
+        
+        self.newsTableView.configRefreshFooter(with:footer, container: self, action: {
+            self.handleFooter()
+        })
+//        self.changeLanguageStatus = false
+//        self.deleteCacheStatus = false
         newsTableView.switchRefreshHeader(to: .refreshing)
         
         
@@ -357,7 +367,6 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     
     func handleFooter(){
         if displayNumber <= newsObject.count{
-            print(displayNumber)
             if displayNumber != 0{
                 self.displayNumber += 20
                 getData(skip: displayNumber-20, limit: 20){ success in

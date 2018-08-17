@@ -70,6 +70,9 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
     let checkboxImage: UIButton = {
         let image = UIButton()
         image.setImage(UIImage(named: "checkbox"), for: .normal)
+//        image.contentEdgeInsets = UIEdgeInsetsMake(0, 50, 0, 0)
+//        image.imageEdgeInsets = UIEdgeInsetsMake(20, 20, 20, 20)
+//        image.contentEdgeInsets = uiedg
         image.translatesAutoresizingMaskIntoConstraints = false
         image.addTarget(self, action: #selector(checkbox), for: .touchUpInside)
         image.addTarget(self, action: #selector(checkValuesAndChangeButton), for: .touchUpInside)
@@ -346,14 +349,12 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         let cell = superview as! RegisterCellA
         let trimmedFirstName = cell.contentTextField.text?.trimmingCharacters(in: NSCharacterSet.whitespaces)
         if textField.isTouchInside && trimmedFirstName == ""{
-            print(cell.contentTextField.isTouchInside)
             textField.layer.borderWidth = 1.8
             textField.layer.borderColor = ThemeColor().redColor().cgColor
             cell.contentLabel.text = textValue(name: "firstNameNeeded")
             cell.contentLabel.textColor = ThemeColor().redColor()
             firstName = ""
         } else {
-            print(cell.contentTextField.isTouchInside)
             textField.layer.borderWidth = 0
             textField.layer.borderColor = UIColor.clear.cgColor
             cell.contentLabel.text = textValue(name: "firstName")
@@ -480,7 +481,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         } else {
             titleOfUser = cell.titleTextField.text!
         }
-        print(firstName + "   " + lastName + "   " + titleOfUser + "    " + email + "   " + password)
+//        print(firstName + "   " + lastName + "   " + titleOfUser + "    " + email + "   " + password)
         let hud = JGProgressHUD(style: .light)
         hud.textLabel.text = textValue(name: "registing")
         hud.backgroundColor = UIColor(displayP3Red: 191, green: 191, blue: 191, alpha: 0.5)
@@ -594,7 +595,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         
         let width = view.frame.width/375
         let height = view.frame.height/736
-        print("width: \(width), height: \(height)")
+//        print("width: \(width), height: \(height)")
         // Add First Name Label
         view.addSubview(titleView)
         titleView.translatesAutoresizingMaskIntoConstraints = false
@@ -635,12 +636,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         tableVC.tableView = self.registerTable
         self.addChildViewController(tableVC)
         
-        view.addSubview(signUpButton)
-        signUpButton.translatesAutoresizingMaskIntoConstraints = false
-        signUpButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
-        signUpButton.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
-        signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
-        signUpButton.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 40 * height).isActive = true
+        
         
         view.addSubview(checkboxImage)
         view.addSubview(textlabel)
@@ -649,7 +645,7 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         view.addSubview(termButton2)
         checkboxImage.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 38 * width).isActive = true
         checkboxImage.topAnchor.constraint(equalTo: registerTable.bottomAnchor, constant: 10 * height).isActive = true
-        checkboxImage.bottomAnchor.constraint(equalTo: signUpButton.topAnchor, constant: -15 * height).isActive  = true
+        checkboxImage.heightAnchor.constraint(equalToConstant: 15 * height).isActive  = true
         checkboxImage.widthAnchor.constraint(equalToConstant: 15 * height).isActive = true
         textlabel.leftAnchor.constraint(equalTo: checkboxImage.rightAnchor, constant: 7.5 * width).isActive = true
         termButton1.leftAnchor.constraint(equalTo: textlabel.rightAnchor, constant: 2.5 * width).isActive = true
@@ -689,7 +685,12 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         }
 
 
-
+        view.addSubview(signUpButton)
+        signUpButton.translatesAutoresizingMaskIntoConstraints = false
+        signUpButton.heightAnchor.constraint(equalToConstant: 60 * height).isActive = true
+        signUpButton.widthAnchor.constraint(equalToConstant:200  * width).isActive = true
+        signUpButton.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
+        signUpButton.topAnchor.constraint(equalTo: termButton2.bottomAnchor, constant: 20 * height).isActive = true
         
         
         

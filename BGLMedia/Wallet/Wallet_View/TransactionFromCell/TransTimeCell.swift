@@ -96,7 +96,7 @@ class TransTimeCell:UITableViewCell, UITextFieldDelegate{
         let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelclick))
         toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
         toolbar.backgroundColor = ThemeColor().whiteColor()
-        datepicker.backgroundColor = ThemeColor().whiteColor()
+//        datepicker.backgroundColor = ThemeColor().whiteColor()
         datepicker.datePickerMode = .time
         datepicker.maximumDate = Date()
         time.inputAccessoryView = toolbar

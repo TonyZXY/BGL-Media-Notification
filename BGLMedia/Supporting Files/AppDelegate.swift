@@ -231,9 +231,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         UserDefaults.standard.set(false, forKey: "NotificationSetting")
         print("success to open notification")
-        print("\(userInfo)")
-        let aps = userInfo["aps"] as! [String: Any]
-        print("\(aps)")
+//        print("\(userInfo)")
+//        let aps = userInfo["aps"] as! [String: Any]
+//        print("\(aps)")
     }
     
 
@@ -249,7 +249,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
                     URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
                         if success{
-                            print(response)
+//                            print(response)
                         }
                     }
                 }

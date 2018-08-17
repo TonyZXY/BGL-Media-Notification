@@ -55,7 +55,6 @@ extension UIImageView {
         let result = realm.objects(CoinList.self).filter("coinSymbol = %@", coinName)
         if result.count == 1 {
             let coin = result[0]
-            print("https://www.cryptocompare.com" + coin.logoUrl)
             let url = URL(string: "https://www.cryptocompare.com" + coin.logoUrl)
             self.kf.setImage(with: url, completionHandler: {
                 (image, error, cacheType, imageUrl) in
