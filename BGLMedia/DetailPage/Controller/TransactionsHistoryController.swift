@@ -42,7 +42,9 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         super.viewDidLoad()
 //        let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
 //        results = realm.objects(AllTransactions.self).filter(filterName)
+        if transactionHistory.count > 0{
         historyTableView.switchRefreshHeader(to: .refreshing)
+        }
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
         setUpView()
     }
@@ -304,9 +306,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     func getWorthData(completion:@escaping (Bool)->Void){
         if transactionHistory.count > 0{
-//        var singlePrice:Double = 0
         let dispatchGroup = DispatchGroup()
-        
         for result in transactionHistory{
             dispatchGroup.enter()
             if result.exchangeName == "Global Average"{
@@ -345,14 +345,12 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                 }
             }
         }
-        
         dispatchGroup.notify(queue:.main){
             completion(true)
         }
             
-        
         } else{
-            completion(false)
+            completion(true)
         }
     }
 }

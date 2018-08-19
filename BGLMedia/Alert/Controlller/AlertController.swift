@@ -138,6 +138,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         for result in alertStatuss{
             oldAlerts[result.id] = result.switchStatus
         }
+//        print(factor)
     }
     
     deinit {
@@ -411,8 +412,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func setUpView(){
-        
-        
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         view.backgroundColor = ThemeColor().blueColor()
         view.addSubview(alertView)

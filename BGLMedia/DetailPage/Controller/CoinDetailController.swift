@@ -37,6 +37,7 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
 //    }
     
     func setUpView(){
+//        view.backgroundColor = ThemeColor().blueColor()
         let factor = view.frame.width/375
         //Menu Bar
         menuBar.factor = factor
@@ -103,7 +104,8 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
             addChildViewController(childViewControllers: transactionHistoryController,cell:cell)
             return cell
         } else if indexPath.row == 2{
-            addChildViewController(childViewControllers: alertControllers,cell:cell)
+            addChildViewAlertController(childViewControllers: alertControllers,cell:cell)
+            cell.backgroundColor = ThemeColor().blueColor()
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
@@ -141,6 +143,25 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         // Dispose of any resources that can be recreated.
     }
     
+    func addChildViewAlertController(childViewControllers:UIViewController,cell:UICollectionViewCell){
+        addChildViewController(childViewControllers)
+        cell.contentView.addSubview(childViewControllers.view)
+        childViewControllers.view.frame = view.bounds
+        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        childViewControllers.didMove(toParentViewController: self)
+        
+        //Constraints
+        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
+        childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        childViewControllers.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
+        childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
+        if #available(iOS 11.0, *) {
+            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.safeAreaLayoutGuide.bottomAnchor).isActive = true
+        } else {
+            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+        }
+        //        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
+    }
     
     
 }
