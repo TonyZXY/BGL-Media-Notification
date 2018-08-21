@@ -332,8 +332,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 try! Realm().delete(eachTransaction)
                 try! Realm().delete(item)
             }
+            checkTransaction()
             caculateTotal()
             self.walletList.reloadData()
+          
 //            refreshData()
         }
     }
