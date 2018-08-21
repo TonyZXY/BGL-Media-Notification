@@ -62,7 +62,7 @@ class URLServices:NSObject{
             switch response.result {
             case .success(let value):
                 let res = JSON(value)
-                print("get success")
+//                print("get success")
 //                print(res)
                 completion(res,true)
             case .failure(let error):
