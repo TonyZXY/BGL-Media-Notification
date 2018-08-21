@@ -194,7 +194,10 @@ class TimelineTableViewController: UITableViewController {
         let year = "\(Int(dateArr[0])!)"
         let month = "\(Int(dateArr[1])!)"
         let day = "\(Int(dateArr[2])!)"
-        if Date().description.components(separatedBy: " ")[0] == date{
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
+        let date2 = Date()
+        if dateFormatter.string(from: date2).components(separatedBy: " ")[0] == date{
             return textValue(name: "timeToday_flash") + month + textValue(name: "timeMonth_flash") + day + textValue(name: "timeDay_flash")
         }else{
             return year + textValue(name: "timeYear_flash") + month + textValue(name: "timeMonth_flash") + day + textValue(name: "timeDay_flash")
