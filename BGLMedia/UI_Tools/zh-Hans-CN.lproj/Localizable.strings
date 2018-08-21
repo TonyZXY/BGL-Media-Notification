@@ -33,6 +33,8 @@ sell = "卖出";
 addTransaction = "添加交易";
 updateTransaction = "更新交易";
 loading = "加载中...";
+picker_done = "完成";
+picker_cancel = "取消";
 
 //Transaciton Page Table View
 navigationbar_transa = "添加交易";

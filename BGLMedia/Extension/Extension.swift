@@ -37,6 +37,38 @@ class Extension:NSObject{
         return newDate
     }
     
+    func convertDateToStringPickerDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        let dateFormat2 = "yyyy-MM-dd"
+        dateFormatter.dateFormat = dateFormat2
+        let newDate: String = dateFormatter.string(from: date)
+        return newDate
+    }
+    
+    func convertStringToDatePickerDate(date: String) -> Date {
+        let dateFormat2 = "yyyy-MM-dd"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat2
+        let newDate:Date = dateFormatter.date(from: date) ?? Date()
+        return newDate
+    }
+    
+    func convertTimeToStringPickerDate(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        let dateFormat2 = "HH:mm:ss"
+        dateFormatter.dateFormat = dateFormat2
+        let newDate: String = dateFormatter.string(from: date)
+        return newDate
+    }
+    
+    func convertStringToTimePickerDate(date: String) -> Date {
+        let dateFormat2 = "HH:mm:ss"
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat2
+        let newDate:Date = dateFormatter.date(from: date) ?? Date()
+        return newDate
+    }
+    
     
     func checkUsernameAndPassword(username: String, password: String) -> (String?, Bool) {
         let emailFormat = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,64}"

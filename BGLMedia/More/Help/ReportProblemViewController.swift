@@ -102,7 +102,7 @@ class ReportProblemViewController: UIViewController, MFMailComposeViewController
         case .sent:
             print("sent")
         case .failed:
-            print(error)
+            print("error")
         }
         self.dismiss(animated: true, completion: nil)
     }
