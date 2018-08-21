@@ -74,7 +74,22 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.buyMarket.textColor = UIColor.white
             cell.labelPoint.text = "B"
             cell.labelPoint.layer.backgroundColor = ThemeColor().blueColor().cgColor
-            cell.dateLabel.text = object.date + " " + object.time
+            let date = Extension.method.convertStringToDatePickerDate(date: object.date)
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .none
+            let formatter2 = DateFormatter()
+            formatter2.dateStyle = .none
+            formatter2.timeStyle = .short
+            if defaultLanguage == "CN"{
+                formatter.locale = Locale(identifier: "zh")
+                formatter2.locale = Locale(identifier: "zh")
+            } else {
+                formatter.locale = Locale(identifier: "en")
+                formatter2.locale = Locale(identifier: "en")
+            }
+            let time = Extension.method.convertStringToTimePickerDate(date: object.time)
+            cell.dateLabel.text = formatter.string(from: date) + " " + formatter2.string(from: time)
             cell.timeline.backColor = ThemeColor().blueColor()
             cell.buyMarket.text = textValue(name: "tradingMarket_history") + ": " + object.exchangeName
             
@@ -119,6 +134,11 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             cell.labelPoint.text = "S"
             cell.timeline.backColor = ThemeColor().redColor()
             cell.labelPoint.layer.backgroundColor = ThemeColor().redColor().cgColor
+            
+            
+            
+            
+            
             cell.sellDateLabel.text = object.date + " " + object.time
             cell.sellPriceResult.text = Extension.method.scientificMethod(number:object.singlePrice) + " " + object.tradingPairsName
             cell.sellTradingPairResult.text = object.coinAbbName + "/" + object.tradingPairsName

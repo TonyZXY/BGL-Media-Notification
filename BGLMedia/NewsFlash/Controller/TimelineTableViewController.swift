@@ -79,8 +79,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     @objc func deleteCache(){
-        self.tableView.reloadData()
-        
+        self.tableView.switchRefreshHeader(to: .refreshing)
         
 //        deleteCacheStatus = true
     }

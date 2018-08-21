@@ -33,6 +33,8 @@ sell = "Sell";
 addTransaction = "Add Transaction";
 updateTransaction = "Update Transaction";
 loading = "Loading...";
+picker_done = "Done";
+picker_cancel = "Cancel";
 
 //Transaciton Page Table View
 navigationbar_transa = "Add Transaction";
