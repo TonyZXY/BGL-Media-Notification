@@ -9,14 +9,14 @@
 import UIKit
 
 class TransDateCell:UITableViewCell,UITextFieldDelegate {
-    let datepicker = UIDatePicker()
+//    let datepicker = UIDatePicker()
     
     var factor:CGFloat?{
         didSet{
             setupviews()
-            date.delegate = self
-            createdatepicker()
-            doneclick()
+//            date.delegate = self
+//            createdatepicker()
+//            doneclick()
         }
     }
     
@@ -47,26 +47,26 @@ class TransDateCell:UITableViewCell,UITextFieldDelegate {
         textfield.backgroundColor = ThemeColor().greyColor()
         textfield.tintColor = .clear
         textfield.autocorrectionType = .yes
-        
-        let rightview = UIView(frame: CGRect(x: 0, y: 0, width: 20*factor!, height: textfield.frame.height))
-        let label = UILabel()
-        label.text = "▼"
-        label.font = UIFont.semiBoldFont(13*factor!)
-        label.textColor = ThemeColor().whiteColor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-//        textfield.rightViewRect(forBounds: CGRect(x: 0, y: 0, width: 30*factor!, height: textfield.frame.height))
-        rightview.addSubview(label)
-        NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: rightview, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: rightview, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15*factor!, height: textfield.frame.height))
-        textfield.leftViewMode = .always
-        textfield.rightView = rightview
-        textfield.rightViewMode = .always
-//        textfield.textRect(forBounds: CGRect(x: 10, y: 0, width: 80, height: 30))
-//        textfield.rightViewRect(forBounds: CGRect( CGRect(x: 10, y: 0, width: 80, height: 30))
-        textfield.clipsToBounds = true
+//        let rightview = UIView(frame: CGRect(x: 0, y: 0, width: 20*factor!, height: textfield.frame.height))
+//        let label = UILabel()
+//        label.text = "▼"
+//        label.font = UIFont.semiBoldFont(13*factor!)
+//        label.textColor = ThemeColor().whiteColor()
+//        label.translatesAutoresizingMaskIntoConstraints = false
+//        rightview.addSubview(label)
+//        NSLayoutConstraint(item: label, attribute: .centerX, relatedBy: .equal, toItem: rightview, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: label, attribute: .centerY, relatedBy: .equal, toItem: rightview, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+//        textfield.leftView = UIView(frame: CGRect(x: 0, y: 0, width: 15*factor!, height: textfield.frame.height))
+//        textfield.leftViewMode = .always
+//        textfield.rightView = rightview
+//        textfield.rightViewMode = .always
+//        textfield.clipsToBounds = true
+    
+        textfield.borderStyle = UITextBorderStyle.roundedRect
+        textfield.textAlignment = .center
+        textfield.adjustsFontSizeToFitWidth=true  //当文字超出文本框宽度时，自动调整文字大小
+        textfield.minimumFontSize=14  //最小可缩小的字号
         textfield.layer.cornerRadius = 8*factor!
-//        textfield.backgroundColor = ThemeColor().blueColor()
         return textfield
     }()
     
@@ -100,28 +100,44 @@ class TransDateCell:UITableViewCell,UITextFieldDelegate {
     }
     
     func createdatepicker(){
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelclick))
-        toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
-        datepicker.datePickerMode = .date
-        datepicker.maximumDate = Date()
-        date.inputAccessoryView = toolbar
-        date.inputView = datepicker
+//        let toolbar = UIToolbar()
+//        toolbar.sizeToFit()
+//        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+//        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+//        let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelclick))
+//        toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
+//        datepicker.datePickerMode = .date
+//        datepicker.maximumDate = Date()
+//        date.inputAccessoryView = toolbar
+//        date.inputView = datepicker
     }
     
-    @objc func doneclick(){
-        let formatter = DateFormatter()
-        formatter.dateStyle = .medium
-        formatter.timeStyle = .none
-        let dataString = formatter.string(from: datepicker.date)
-        date.text = "\(dataString)"
-        self.endEditing(true)
-    }
+//    lazy var datePicker:UIDatePicker = {
+//        var datePick = UIDatePicker()
+//        let toolbar = UIToolbar()
+//        toolbar.sizeToFit()
+//        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+//        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+//        let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelclick))
+//        toolbar.setItems([cancelbutton,flexible,donebutton], animated: false)
+//        datePick.datePickerMode = .date
+//        datePick.maximumDate = Date()
+//        date.inputAccessoryView = toolbar
+//        date.inputView = datePick
+//        return datePick
+//    }()
     
-    @objc func cancelclick(){
-        self.endEditing(true)
-    }
+//    @objc func doneclick(){
+////        let formatter = DateFormatter()
+////        formatter.dateStyle = .medium
+////        formatter.timeStyle = .none
+////
+////        let dataString = formatter.string(from: datePicker.date)
+//        date.text = Extension.method.convertDateToStringPickerDate(date: datePicker.date)
+//        self.endEditing(true)
+//    }
+//
+//    @objc func cancelclick(){
+//        self.endEditing(true)
+//    }
 }

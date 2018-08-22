@@ -211,6 +211,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 }
             }else if indexPath.section == 3 && indexPath.row == 1{
                 if MFMailComposeViewController.canSendMail() {
+//                   self.navigationController?.pushViewController(configuredMailComposeViewController(), animated: true)
                     self.present(configuredMailComposeViewController(), animated: true, completion: nil)
                 } else {
                     showSendMailErrorAlert()

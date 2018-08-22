@@ -21,7 +21,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         cell.priceType.text = nil
     }
     
-    
     var newTransaction = EachTransactions()
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
     var color = ThemeColor()
@@ -40,6 +39,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         super.viewDidLoad()
         setupView()
         updateTransactionDetail()
+        
     }
     
     //Every time this page appear
@@ -144,13 +144,45 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else if indexPath.row == 5{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! TransDateCell
             cell.factor = factor
+//            let toolbar = UIToolbar()
+//            toolbar.sizeToFit()
+//
+//            let doneItem = UIBarButtonItem()
+//            doneItem.title = textValue(name: "back_button")
+//            doneItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+//            doneItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
+//
+//
+//
+////            let donebutton = UIBarButtonItem(barButtonSystemItem: , target: self, action: #selector(doneclick))
+//            let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+//            let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelclick))
+//            toolbar.setItems([cancelbutton,flexible,doneItem], animated: false)
+//            datePicker.datePickerMode = .date
+//            datePicker.maximumDate = Date()
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .none
+            if defaultLanguage == "CN"{
+                datePicker.locale = Locale.init(identifier: "zh")
+                formatter.locale = Locale(identifier: "zh")
+            } else {
+                datePicker.locale = Locale.init(identifier: "en")
+                formatter.locale = Locale(identifier: "en")
+            }
+            cell.date.inputAccessoryView = toolBarDate
+            cell.date.inputView = datePicker
+            cell.date.text = formatter.string(from: datePicker.date) + " ▼"
+            newTransaction.date = Extension.method.convertDateToStringPickerDate(date: datePicker.date)
+//            cell.date.frame = CGRect(x: 0, y: 0, width: cell.date.frame.width+30, height: 20)
             if transaction == "Buy"{
                 cell.dateLabel.text = textValue(name: "buyDateForm")
             } else if transaction == "Sell"{
                 cell.dateLabel.text = textValue(name: "sellDateForm")
             }
             if transactionStatus == "Update"{
-                cell.date.text = String(newTransaction.date)
+                let updateDate = Extension.method.convertStringToDatePickerDate(date: newTransaction.date)
+                cell.date.text = formatter.string(from: updateDate) + " ▼"
             }
             cell.date.tag = indexPath.row
             textFieldDidEndEditing(cell.date)
@@ -160,14 +192,35 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else if indexPath.row == 6{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[6], for: indexPath) as! TransTimeCell
             cell.factor = factor
+            
+            let formatter = DateFormatter()
+            formatter.dateStyle = .none
+            formatter.timeStyle = .short
+            if defaultLanguage == "CN"{
+                timePicker.locale = Locale.init(identifier: "zh")
+                formatter.locale = Locale(identifier: "zh")
+            } else {
+                timePicker.locale = Locale.init(identifier: "en")
+                formatter.locale = Locale(identifier: "en")
+            }
+            cell.time.inputAccessoryView = toolBarTime
+            cell.time.inputView = timePicker
             if transaction == "Buy"{
                 cell.timeLabel.text = textValue(name: "buyTimeForm")
             } else if transaction == "Sell"{
                 cell.timeLabel.text = textValue(name: "sellTimeForm")
             }
+            
             if transactionStatus == "Update"{
-                cell.time.text = String(newTransaction.time)
+                let updateTime = Extension.method.convertStringToTimePickerDate(date: newTransaction.time)
+                cell.time.text = formatter.string(from: updateTime) + " ▼"
+            } else{
+                cell.time.text = formatter.string(from: timePicker.date) + " ▼"
+                newTransaction.time = Extension.method.convertTimeToStringPickerDate(date: timePicker.date)
             }
+            
+            
+            
             cell.time.tag = indexPath.row
             textFieldDidEndEditing(cell.time)
             cell.time.delegate = self
@@ -520,10 +573,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             transactionButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
         
-        
         let tableVC = UITableViewController.init(style: .plain)
         tableVC.tableView = self.transactionTableView
         self.addChildViewController(tableVC)
+        
     }
     
     //Delegate from search Page
@@ -590,12 +643,13 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
 //            self.newTransaction.audTotalPrice = newTransaction.audSinglePrice * Double(self.newTransaction.amount)
         }
         if textField.tag == 5{
-            transactions.date = textField.text!
-            newTransaction.date = textField.text!
+//            transactions.date = textField.text!
+//            print(textField.text!)
+//            newTransaction.date = textField.text!
         }
         if textField.tag == 6{
-            transactions.time = textField.text!
-            newTransaction.time = textField.text!
+//            transactions.time = textField.text!
+//            newTransaction.time = textField.text!
         }
         if textField.tag == 7{
             transactions.expenses = textField.text!
@@ -632,7 +686,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         tableViews.rowHeight = 80
         tableViews.delegate = self
         tableViews.dataSource = self
-        tableViews.bounces = false
+//        tableViews.bounces = false
         tableViews.separatorColor = ThemeColor().darkBlackColor()
         tableViews.separatorInset = UIEdgeInsets.zero
 //        tableViews.separatorColor = UIColor.black
@@ -692,4 +746,96 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         pickerView.datePickerMode = .date
         return pickerView
     }()
+    
+    lazy var datePicker:UIDatePicker = {
+        var datePick = UIDatePicker()
+        datePick.datePickerMode = .date
+        datePick.maximumDate = Date()
+        return datePick
+    }()
+    
+    lazy var timePicker:UIDatePicker = {
+         var timePick = UIDatePicker()
+         timePick.datePickerMode = .time
+         return timePick
+    }()
+    
+    @objc func doneDateclick(){
+        let formatter = DateFormatter()
+        formatter.dateStyle = .medium
+        formatter.timeStyle = .none
+        if defaultLanguage == "CN"{
+            formatter.locale = Locale(identifier: "zh")
+        } else {
+            formatter.locale = Locale(identifier: "en")
+        }
+        let index = IndexPath(row: 5, section: 0)
+        let cell:TransDateCell = self.transactionTableView.cellForRow(at: index) as! TransDateCell
+        cell.date.text = formatter.string(from: datePicker.date) + " ▼"
+        newTransaction.date = Extension.method.convertDateToStringPickerDate(date: datePicker.date)
+        view.endEditing(true)
+    }
+    
+    @objc func cancelclick(){
+        view.endEditing(true)
+    }
+    
+    lazy var toolBarDate:UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let doneItem = UIBarButtonItem(title: textValue(name: "picker_done"), style: .done, target: self, action: #selector(doneDateclick))
+        doneItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        doneItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
+        let cancelItem = UIBarButtonItem(title: textValue(name: "picker_cancel"), style: .done, target: self, action: #selector(cancelclick))
+        cancelItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        cancelItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([cancelItem,flexible,doneItem], animated: false)
+        return toolbar
+    }()
+    
+    lazy var toolBarTime:UIToolbar = {
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let doneItem = UIBarButtonItem(title: textValue(name: "picker_done"), style: .done, target: self, action: #selector(doneTimeClick))
+        doneItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        doneItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
+        let cancelItem = UIBarButtonItem(title: textValue(name: "picker_cancel"), style: .done, target: self, action: #selector(cancelclick))
+        cancelItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+        cancelItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([cancelItem,flexible,doneItem], animated: false)
+        return toolbar
+    }()
+    
+    @objc func doneTimeClick(){
+        let formatter = DateFormatter()
+        formatter.dateStyle = .none
+        formatter.timeStyle = .short
+        if defaultLanguage == "CN"{
+            formatter.locale = Locale(identifier: "zh")
+        } else {
+            formatter.locale = Locale(identifier: "en")
+        }
+        let index = IndexPath(row: 6, section: 0)
+        let cell:TransTimeCell = self.transactionTableView.cellForRow(at: index) as! TransTimeCell
+        cell.time.text = formatter.string(from: timePicker.date) + " ▼"
+        newTransaction.time = Extension.method.convertTimeToStringPickerDate(date: timePicker.date)
+        view.endEditing(true)
+    }
+    
+//    lazy var toolBar:UIToolbar = {
+//        let toolbar = UIToolbar()
+//        toolbar.sizeToFit()
+//        let doneItem = UIBarButtonItem(title: textValue(name: "back_button"), style: .done, target: self, action: #selector(doneclick))
+//        doneItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+//        doneItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
+//        let cancelItem = UIBarButtonItem(title: textValue(name: "back_button"), style: .done, target: self, action: #selector(cancelclick))
+//        cancelItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
+//        cancelItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
+//        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+//        toolbar.setItems([cancelItem,flexible,doneItem], animated: false)
+//        return toolbar
+//    }()
+    
 }

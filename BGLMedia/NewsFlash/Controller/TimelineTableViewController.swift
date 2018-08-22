@@ -81,7 +81,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     @objc func deleteCache(){
-        self.tableView.reloadData()
+        self.tableView.switchRefreshHeader(to: .refreshing)
 //        deleteCacheStatus = true
         resultNumber = 5
     }
@@ -195,9 +195,9 @@ class TimelineTableViewController: UITableViewController {
         let year = "\(Int(dateArr[0])!)"
         let month = "\(Int(dateArr[1])!)"
         let day = "\(Int(dateArr[2])!)"
+        let date2 = Date()
         let dateFormatter = DateFormatter()
         dateFormatter.dateFormat = "yyyy-MM-dd hh:mm:ss"
-        let date2 = Date()
         if dateFormatter.string(from: date2).components(separatedBy: " ")[0] == date{
             return textValue(name: "timeToday_flash") + month + textValue(name: "timeMonth_flash") + day + textValue(name: "timeDay_flash")
         }else{
