@@ -22,6 +22,7 @@ class TimelineTableViewController: UITableViewController {
     var loadMoreData:Bool = false
     var resultNumber: Int = 0
     var deleteCacheStatus:Bool = false
+    var deletedNumber: Int = 0;
     
     //    var results:Results<NewsFlash>{
     //        get{
@@ -36,6 +37,7 @@ class TimelineTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //        self.resultsUpdated = false
         let timelineTableViewCellNib = UINib(nibName: "TimelineTableViewCell", bundle: Bundle(for: TimelineTableViewCell.self))
         self.tableView.register(timelineTableViewCellNib, forCellReuseIdentifier: "TimelineTableViewCell")
@@ -80,9 +82,8 @@ class TimelineTableViewController: UITableViewController {
     
     @objc func deleteCache(){
         self.tableView.reloadData()
-        
-        
 //        deleteCacheStatus = true
+        resultNumber = 5
     }
     
     @objc func changeLanguage(){
@@ -408,11 +409,16 @@ class TimelineTableViewController: UITableViewController {
                 let id = "\(item["_id"].string!)"
                 let toSent = item["toSent"].bool ?? false
                 let title = item["title"].string ?? ""
+                let availabilty = item["available"].bool ?? true
                 if realm.object(ofType: NewsFlash.self, forPrimaryKey: id) == nil {
                     realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title])
                 } else {
                     //                    print("updating")
-                    realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title], update: true)
+                    if !availabilty {
+                        realm.delete(self.realm.objects(NewsFlash.self).filter("id = %@",id))
+                    }else{
+                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title], update: true)
+                    }
                 }
             }
         }
@@ -451,6 +457,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     func handleFooter(){
+        print("\(displayNumber)+VS+\(results.count)")
         if displayNumber <= results.count{
             self.displayNumber += 5
             if displayNumber != 0{
@@ -465,7 +472,7 @@ class TimelineTableViewController: UITableViewController {
                 }
             }
         }
-        print(resultNumber)
+        print(resultNumber*1000000000)
         if self.displayNumber >= self.results.count {
             self.tableView.switchRefreshFooter(to: .normal)
             

@@ -123,7 +123,10 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
                         searchObject.contents = item["shortMassage"].string!
                         searchObject.title = item["title"].string!
                         searchObject.dateTime = dateFormatter.date(from: item["publishedTime"].string!)!
-                        searchArrayObject.append(searchObject)
+                        let avaliablity = item["available"].bool ?? true
+                        if avaliablity {
+                            searchArrayObject.append(searchObject)
+                        }
                     }
                 }
                 completion(searchArrayObject,true)
