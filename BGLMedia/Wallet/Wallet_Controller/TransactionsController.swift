@@ -9,10 +9,27 @@
 import UIKit
 import RealmSwift
 import JGProgressHUD
+import SwiftKeychainWrapper
+
+
+struct transactionList{
+    var status:String = "Buy"
+    var coinName:String = "Bitcoin"
+    var coinAddName:String = "BTC"
+    var exchangeName:String = "BTCMarket"
+    var tradingPairName:String = "ETH"
+    var singlePrice:Double = 150.123
+    var amount:Double = 40.0123
+    var currencyAUD:Double = 12323.123123
+    var currencyUSD:Double = 12000.231231
+    var currencyJPY:Double = 124142414
+    var currencyEUR:Double = 10000.123123
+    var currencyCNY:Double = 12123231
+    var date:String = "2018-08-21T19:19:40.058Z"
+    var note:String = "note 1"
+}
 
 class TransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout,TransactionFrom,UITextFieldDelegate{
-    
-    
 //   var datepickerView = UIDatePicker()
     
     func setLoadPrice() {
@@ -34,6 +51,27 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     var transactions = EachTransactions()
 //    var inputStatus = false
     
+    
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
+    var email:String{
+        get{
+            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
+    
+    
     //First load the page
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -44,27 +82,27 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Every time this page appear
     override func viewWillAppear(_ animated: Bool) {
-        DispatchQueue.main.async {
+//        DispatchQueue.main.async {
             self.loadPrice()
             self.transactionTableView.reloadData()
-        }
+//        }
     }
     
     
-    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let sectionView = UIView()
-        if transaction == "Buy"{
-            sectionView.backgroundColor = ThemeColor().blueColor()
-            view.backgroundColor = ThemeColor().blueColor()
-        }else if transaction == "Sell" {
-            sectionView.backgroundColor = ThemeColor().redColor()
-            view.backgroundColor = ThemeColor().redColor()
-        } else{
-            sectionView.backgroundColor = ThemeColor().blueColor()
-            view.backgroundColor = ThemeColor().blueColor()
-        }
-        return sectionView
-    }
+//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+//        let sectionView = UIView()
+//        if transaction == "Buy"{
+//            sectionView.backgroundColor = ThemeColor().blueColor()
+////            view.backgroundColor = ThemeColor().blueColor()
+//        }else if transaction == "Sell" {
+//            sectionView.backgroundColor = ThemeColor().redColor()
+////            view.backgroundColor = ThemeColor().redColor()
+//        } else{
+//            sectionView.backgroundColor = ThemeColor().blueColor()
+////            view.backgroundColor = ThemeColor().blueColor()
+//        }
+//        return sectionView
+//    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 5
@@ -321,19 +359,58 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                             }
                         }
                     }else{
-                        self.AddTransactionToRealm(){success in
-                            if success{
-                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                if self.transactionStatus == "AddSpecific"{
-                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                } else{
-                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                        let realm = try! Realm()
+                        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
+                        self.newTransaction.id = lastId + 1
+//                        let newDate = self.newTransaction.date + " " + self.newTransaction.time
+////                        print(Extension.method.convertStringToDate2(date: newDate))
+//                        if self.loginStatus{
+//                            let transactions:[String:Any] = [
+//                                "status":self.newTransaction.status,
+//                                "coinName":self.newTransaction.coinName,
+//                                "coinAddName":self.newTransaction.coinAbbName,
+//                                "exchangeName":self.newTransaction.exchangeName,
+//                                "tradingPairName":self.newTransaction.tradingPairsName,
+//                                "singlePrice":self.newTransaction.singlePrice,
+//                                "amount":self.newTransaction.amount,
+//                                "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
+//                                "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
+//                                "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
+//                                "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
+//                                "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
+//                                "date":Extension.method.convertStringToDate2(date: newDate),
+//                                "note":self.newTransaction.additional,
+//                                ]
+//                            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":[transactions]]
+//                            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
+//                                if success{
+//                                    print(response)
+////                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+//                                    if self.transactionStatus == "AddSpecific"{
+//                                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+//                                    } else{
+//                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+//                                    }
+//                                    self.navigationController?.popViewController(animated: true)
+//                                } else{
+//                                    self.navigationController?.popViewController(animated: true)
+//                                }
+//                            })
+//                        } else{
+                            self.AddTransactionToRealm(){success in
+                                if success{
+//                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+                                    if self.transactionStatus == "AddSpecific"{
+                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                    } else{
+                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                    }
+                                    self.navigationController?.popViewController(animated: true)
+                                }else{
+                                    self.navigationController?.popViewController(animated: true)
                                 }
-                                self.navigationController?.popViewController(animated: true)
-                            }else{
-                                 self.navigationController?.popViewController(animated: true)
                             }
-                        }
+//                        }
                     }
                 } else{
                     self.navigationController?.popViewController(animated: true)
@@ -354,24 +431,26 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     func AddTransactionToRealm(completion:@escaping (Bool)->Void){
         let realm = try! Realm()
-        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
-        self.newTransaction.id = lastId + 1
+//        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
+//        self.newTransaction.id = lastId + 1
         let tran = Transactions()
         tran.coinAbbName = self.newTransaction.coinAbbName
         tran.coinName = self.newTransaction.coinName
-        tran.exchangeName = self.newTransaction.exchangeName
-        tran.tradingPairsName = self.newTransaction.tradingPairsName
+//        tran.exchangeName = self.newTransaction.exchangeName
+//        tran.tradingPairsName = self.newTransaction.tradingPairsName
+        tran.exchangeName = "Global Average"
+        tran.tradingPairsName = priceType
         let object = realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
-        
         try! realm.write {
             if object.count != 0{
 //                if self.newTransaction.exchangeName != "Global Average"{
-                    object[0].exchangeName = self.newTransaction.exchangeName
-                    object[0].tradingPairsName = self.newTransaction.tradingPairsName
+//                    object[0].exchangeName = self.newTransaction.exchangeName
+//                    object[0].tradingPairsName = self.newTransaction.tradingPairsName
 //                }
                 object[0].everyTransactions.append(self.newTransaction)
             } else{
                 tran.everyTransactions.append(self.newTransaction)
+                
                 realm.add(tran)
             }
         }
@@ -419,7 +498,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         transaction = "Buy"
         buy.backgroundColor = ThemeColor().themeWidgetColor()
         sell.backgroundColor = ThemeColor().redColorTran()
-        view.backgroundColor = ThemeColor().blueColor()
+        safeAreaView.backgroundColor = ThemeColor().blueColor()
         buy.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         sell.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
         transactionButton.backgroundColor = ThemeColor().themeWidgetColor()
@@ -433,7 +512,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         transaction = "Sell"
         sell.backgroundColor = ThemeColor().redColor()
         buy.backgroundColor = ThemeColor().blueColorTran()
-        view.backgroundColor = ThemeColor().redColor()
+        safeAreaView.backgroundColor = ThemeColor().redColor()
         buy.setTitleColor(ThemeColor().textGreycolor(), for: .normal)
         sell.setTitleColor(ThemeColor().whiteColor(), for: .normal)
         transactionButton.backgroundColor = ThemeColor().redColor()
@@ -534,7 +613,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     //Set up all the layout constraint
     func setupView(){
         let factor = view.frame.width/375
-        view.backgroundColor = ThemeColor().blueColor()
+        view.backgroundColor = ThemeColor().darkGreyColor()
         let titleLabel = UILabel()
         titleLabel.text = textValue(name: "navigationbar_transa")
         titleLabel.textColor = UIColor.white
@@ -569,6 +648,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         
         if #available(iOS 11.0, *) {
             transactionButton.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            view.addSubview(safeAreaView)
+            safeAreaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+            safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+            safeAreaView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
         } else {
             transactionButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
@@ -808,6 +891,13 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         return toolbar
     }()
     
+    var safeAreaView:UIView = {
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor().blueColor()
+        return view
+    }()
+    
     @objc func doneTimeClick(){
         let formatter = DateFormatter()
         formatter.dateStyle = .none
@@ -823,6 +913,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         newTransaction.time = Extension.method.convertTimeToStringPickerDate(date: timePicker.date)
         view.endEditing(true)
     }
+    
+    
     
 //    lazy var toolBar:UIToolbar = {
 //        let toolbar = UIToolbar()

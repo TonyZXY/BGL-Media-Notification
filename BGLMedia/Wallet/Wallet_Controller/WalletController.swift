@@ -119,7 +119,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     //Each Table View Cell Create
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let factor = view.frame.width/375
-        let cell = tableView.dequeueReusableCell(withIdentifier: "WalletCell", for: indexPath) as! WalletsCell
+//        let cell = tableView.dequeueReusableCell(withIdentifier: "WalletCell", for: indexPath) as! WalletsCell
+        let cell = WalletsCell(style: UITableViewCellStyle.default, reuseIdentifier: "WalletCell")
         cell.factor = factor
         let assets = assetss[indexPath.row]
         cell.coinName.text = assets.coinName
@@ -130,12 +131,23 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         checkDataRiseFallColor(risefallnumber: assets.defaultTotalPrice, label: cell.coinTotalPrice,currency:priceType, type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
         cell.coinTotalPrice.textColor = ThemeColor().textGreycolor()
-        checkDataRiseFallColor(risefallnumber: assets.totalRiseFallPercent, label: cell.profitChange,currency:priceType, type: "Percent")
+        checkDataRiseFallColor(risefallnumber: assets.floatingPercent, label: cell.profitChange,currency:priceType, type: "Percent")
         cell.profitChange.text = "(" + cell.profitChange.text! + ")"
         checkDataRiseFallColor(risefallnumber: assets.totalRiseFallNumber, label: cell.profitChangeNumber,currency:priceType, type: "Number")
         cell.selectCoin.selectCoinAbbName = assets.coinAbbName
         cell.selectCoin.selectCoinName = assets.coinName
         cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
+        checkDataRiseFallColor(risefallnumber: assets.floatingPrice, label: cell.profitChangeNumber,currency:priceType, type: "Number")
+        
+        if assets.unrealizedPrice != 0{
+            cell.unrealisedPrice.text = String(Extension.method.scientificMethod(number: assets.unrealizedPrice))
+            if String(assets.unrealizedPrice).prefix(1) != "-" {
+                 cell.unrealisedLabel.text = "Realized Profit:"
+            } else{
+                cell.unrealisedLabel.text = "Realized Loss:"
+            }
+        }
+        
         return cell
     }
     
@@ -149,6 +161,40 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             var singlePrice:Double = 0
             var currency:Double = 0
             
+            
+            var singleAverageBuyPrice:Double = 0
+            var buyTotalPrice:Double = 0
+            var buyAmount:Double = 0
+            var sellTotalPrice:Double = 0
+            var totalAmount:Double = 0
+            var floatingPrice:Double = 0
+            var unrealizedPrice:Double = 0
+            
+            
+            for each in result.everyTransactions{
+                let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
+                if each.status == "Buy"{
+                    buyAmount += each.amount
+                    totalAmount += each.amount
+                    buyTotalPrice += ((each.amount) * (currencyResult.first?.price)!)
+                }
+                else if each.status == "Sell"{
+                    totalAmount -= each.amount
+                }
+            }
+            
+            singleAverageBuyPrice = buyTotalPrice / buyAmount
+            
+            
+            for each in result.everyTransactions{
+                let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
+                if each.status == "Sell"{
+                   sellTotalPrice += (((currencyResult.first?.price)!) - singleAverageBuyPrice) * each.amount
+                }
+            }
+            
+            unrealizedPrice = sellTotalPrice
+            
             for each in result.everyTransactions{
                 let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
                 if each.status == "Buy"{
@@ -159,6 +205,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                     transactionPrice -= ((each.amount) * (currencyResult.first?.price)!)
                 }
             }
+            
             
             dispatchGroup.enter()
             if result.exchangeName == "Global Average"{
@@ -185,6 +232,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                             self.totalAssets += tran.defaultTotalPrice
                                             self.totalProfit += tran.totalRiseFallNumber
                                             
+                                            
+                                            
+                                            floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
+                                            
+                                            
                                             let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
                                             try! Realm().write {
                                                 if object.count != 0{
@@ -198,6 +250,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                                     object[0].totalAmount = amount
                                                     object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
                                                     object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
+                                                    object[0].floatingPrice = floatingPrice
+                                                    object[0].unrealizedPrice = unrealizedPrice
+                                                    object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
                                                 }
                                             }
                                             dispatchGroup.leave()
@@ -236,6 +291,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                 self.totalAssets += tran.defaultTotalPrice
                                 self.totalProfit += tran.totalRiseFallNumber
                                 
+                                floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
+                                
+                                
+                                
+                                
                                 let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
                                 try! Realm().write {
                                     if object.count != 0{
@@ -249,6 +309,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                         object[0].totalAmount = amount
                                         object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
                                         object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
+                                        object[0].floatingPrice = floatingPrice
+                                        object[0].unrealizedPrice = unrealizedPrice
+                                        object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
                                     }
                                 }
                                 dispatchGroup.leave()
@@ -287,13 +350,23 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     func caculateTotal(){
-//        totalNumber.text = currencyName[priceType]! + " " + Extension.method.scientificMethod(number: totalAssets)
+
         var totalNumbers:Double = 0
         var totalChanges:Double = 0
+        var totalUnrealized:Double = 0
+        var totalRealized:Double = 0
         for result in assetss{
             totalNumbers += result.defaultTotalPrice
-            totalChanges += result.totalRiseFallNumber
+            totalChanges += result.floatingPrice
+            totalUnrealized += result.floatingPrice
+            totalRealized += result.unrealizedPrice
+//            totalChanges += result.totalRiseFallNumber
         }
+        
+        
+        checkDataRiseFallColor(risefallnumber: totalUnrealized, label: unrealizedResult,currency:priceType, type: "Number")
+        checkDataRiseFallColor(risefallnumber: totalRealized, label: realizedResult,currency:priceType, type: "Number")
+        
         checkDataRiseFallColor(risefallnumber: totalNumbers, label: totalNumber,currency:priceType, type: "Default")
         checkDataRiseFallColor(risefallnumber: totalChanges, label: totalChange,currency:priceType, type: "Number")
     }
@@ -335,10 +408,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             checkTransaction()
             caculateTotal()
             self.walletList.reloadData()
-          
-//            refreshData()
         }
     }
+    
+    
+
     
     
     //Select specific coins and change to detail page
@@ -443,36 +517,72 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         existTransactionView.addSubview(walletList)
         totalProfitView.addSubview(totalLabel)
         totalProfitView.addSubview(totalNumber)
-        totalProfitView.addSubview(totalChange)
-        buttonView.addSubview(addTransactionButton)
+//        totalProfitView.addSubview(totalChange)
+        realizedView.addSubview(addTransactionButton)
+        existTransactionView.addSubview(realizedView)
+        realizedView.addSubview(unrealizedLabel)
+        realizedView.addSubview(realizedLabel)
+        realizedView.addSubview(unrealizedResult)
+        realizedView.addSubview(realizedResult)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         
+        
+        
         //        Total Profit View Constraints(总资产)
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0(\(150*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-0-[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView]))
         
         NSLayoutConstraint(item: totalLabel, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: totalChange, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: totalChange, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
         totalNumber.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
         totalNumber.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
-        totalChange.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
-        totalChange.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
+//        totalChange.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
+//        totalChange.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
         
-        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(10*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
-        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(10*factor)-[v3]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
+        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v1]-\(10*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
+        totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
+        
+        
+        
+        
+        //Realized View
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v4]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView,"v4":realizedView]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-0-[v4(\(60*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView,"v4":realizedView]))
+        
+        addTransactionButton.centerXAnchor.constraint(equalTo: realizedView.centerXAnchor, constant: 0).isActive = true
+        addTransactionButton.centerYAnchor.constraint(equalTo: realizedView.bottomAnchor, constant: 0).isActive = true
+        addTransactionButton.heightAnchor.constraint(equalToConstant: 50*factor).isActive = true
+        addTransactionButton.widthAnchor.constraint(equalToConstant: 50*factor).isActive = true
+        unrealizedLabel.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
+        unrealizedLabel.leftAnchor.constraint(equalTo: realizedView.leftAnchor, constant: 0).isActive = true
+        unrealizedLabel.bottomAnchor.constraint(equalTo: realizedView.centerYAnchor, constant: 0).isActive = true
+        realizedLabel.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
+        realizedLabel.rightAnchor.constraint(equalTo: realizedView.rightAnchor, constant: 0).isActive = true
+        realizedLabel.bottomAnchor.constraint(equalTo: realizedView.centerYAnchor, constant: 0).isActive = true
+        
+        unrealizedResult.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
+        unrealizedResult.leftAnchor.constraint(equalTo: realizedView.leftAnchor, constant: 0).isActive = true
+        unrealizedResult.topAnchor.constraint(equalTo: realizedView.centerYAnchor, constant: 0).isActive = true
+        realizedResult.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
+        realizedResult.rightAnchor.constraint(equalTo: realizedView.rightAnchor, constant: 0).isActive = true
+        realizedResult.topAnchor.constraint(equalTo: realizedView.centerYAnchor, constant: 0).isActive = true
+        
+        
+        
+        
         
         //Add Transaction Button Constraints
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v4]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView,"v4":buttonView]))
-        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-[v4(\(60*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":totalProfitView,"v4":buttonView]))
-        NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
-        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v4]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":realizedView,"v4":buttonView]))
+        existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-0-[v4(\(30*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":realizedView,"v4":buttonView]))
+//        NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
+//        NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
+//        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
+//        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
         
         //Wallet List Constraints
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":buttonView,"v6":walletList]))
@@ -480,6 +590,64 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
     }
     
+//    func getTransaction(){
+//        let ss = ["email":""]
+//        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: <#T##String#>, parameters: <#T##[String : Any]#>, completion: <#T##(JSON, Bool) -> Void#>)
+//    }
+    
+    
+    var realizedView:UIView = {
+       var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor().greyColor()
+        return view
+    }()
+    
+    var unrealizedLabel:UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.white
+        label.numberOfLines = 0
+        label.text = "Unrealized"
+        label.font = label.font.withSize(15)
+        label.textAlignment = .center
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        return label
+    }()
+    
+    var realizedLabel:UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.white
+        label.numberOfLines = 0
+        label.text = "Realized"
+        label.font = label.font.withSize(15)
+        label.textAlignment = .center
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        return label
+    }()
+    
+    var unrealizedResult:UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.white
+        label.numberOfLines = 0
+        label.font = label.font.withSize(13)
+        label.textAlignment = .center
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        return label
+    }()
+    
+    var realizedResult:UILabel = {
+        var label = UILabel()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textColor = UIColor.white
+        label.numberOfLines = 0
+        label.font = label.font.withSize(13)
+        label.textAlignment = .center
+        label.lineBreakMode = NSLineBreakMode.byWordWrapping
+        return label
+    }()
     
     var hintMainLabel:UILabel = {
         var label = UILabel()
@@ -605,17 +773,40 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         tableView.configRefreshHeader(with:header, container: self, action: {
             self.handleRefresh(tableView)
         })
-        tableView.rowHeight = 70*factor
+//        tableView.rowHeight = 70*factor
+        
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
     }()
-}
-
-
-class newAlert:SCLAlertView{
+    
+//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+//        if scrollView.contentOffset.y >= 0 {
+//            var offset = scrollView.contentOffset
+//            offset.y = 0
+//            scrollView.contentOffset = CGPoint.zero
+//        }
+//    }
     
 }
+
+//extension UITableView{
+//    override func scrollViewDidScroll(scrollView: UIScrollView)
+//    {
+//        if scrollView.contentOffset.y <= 0 {
+//            var offset = scrollView.contentOffset
+//            offset.y = 0
+//            scrollView.contentOffset = offset
+//        }
+//
+//    }
+//}
+
+//
+//
+//class newAlert:SCLAlertView{
+//
+//}
 
 
 

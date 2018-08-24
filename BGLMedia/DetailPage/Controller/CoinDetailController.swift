@@ -157,6 +157,7 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
         if #available(iOS 11.0, *) {
             childViewControllers.view.bottomAnchor.constraint(equalTo: cell.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            
         } else {
             childViewControllers.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
         }

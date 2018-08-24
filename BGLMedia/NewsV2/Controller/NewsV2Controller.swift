@@ -125,16 +125,20 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     @objc func deleteCache(){
 //        deleteCacheStatus = true
 //        print(try! Realm().objects(NewsObject.self).count)
-       self.newsTableView.switchRefreshHeader(to: .refreshing)
+        deleteCacheStatus = true
     }
     
     override func viewWillAppear(_ animated: Bool) {
-//        if changeLanguageStatus || deleteCacheStatus{
+        if deleteCacheStatus{
+            newsTableView.reloadData()
+            self.newsTableView.switchRefreshHeader(to: .refreshing)
+            self.newsTableView.switchRefreshFooter(to: .normal)
+            deleteCacheStatus = false
 //            if deleteCacheStatus{
 //                self.newsTableView.reloadData()
 //            }
 //
-//        }
+        }
     }
     
     @objc func changeLanguage(){
