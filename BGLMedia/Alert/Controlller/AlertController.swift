@@ -241,9 +241,11 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     func checkSetUpView(){
         if loginStatus{
             setUpView()
+//            parent?.parent?.view.backgroundColor = ThemeColor().redColor()
             //                view.willRemoveSubview(setUpLoginView)
         } else{
             setUpLoginView()
+//            parent?.parent?.view.backgroundColor = ThemeColor().redColor()
         }
     }
     
@@ -429,12 +431,24 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertButton.heightAnchor.constraint(equalToConstant: 60*factor!).isActive = true
         if #available(iOS 11.0, *) {
             alertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//            parent?.view.addSubview(safeAreaView)
+//            safeAreaView.topAnchor.constraint(equalTo: (parent?.view.safeAreaLayoutGuide.bottomAnchor)!, constant: 0).isActive = true
+//            safeAreaView.bottomAnchor.constraint(equalTo: (parent?.view.bottomAnchor)!, constant: 0).isActive = true
+//            safeAreaView.widthAnchor.constraint(equalToConstant: (parent?.view.frame.width)!).isActive = true
         } else {
             alertButton.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         }
 
 //        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-\(3*factor!)-[v0(\(80*factor!))]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton,"v1":alertTableView]))
     }
+    
+    
+    var safeAreaView:UIView = {
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor().blueColor()
+        return view
+    }()
     
     func setUpNoNotificationView(){
         view.addSubview(alertHintView)
@@ -471,6 +485,8 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         loginView.addSubview(loginLabel)
         loginView.addSubview(loginButton)
         loginView.addSubview(loginMainLabel)
+        
+//        parent?.parent?.view.backgroundColor = ThemeColor().redColor()
         
         //        alertOpenButton.setTitle("Open Notification", for: .normal)
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":loginView]))
