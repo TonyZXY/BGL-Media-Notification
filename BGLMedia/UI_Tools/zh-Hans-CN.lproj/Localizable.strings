@@ -15,6 +15,11 @@ market_tab = "行情";
 flash_tab = "快讯";
 news_tab = "新闻";
 more_tab = "更多";
+updateAlert_tab = "更新";
+updateAlert_cancel = "取消";
+updateTitle_tab = "更新发布！";
+updateDescription_tab = "请到Appstore更新到最新版本";
+
 
 //Assets Page Hint page
 mainHint = "开始你的数字货币资产管理！";
@@ -24,6 +29,10 @@ hintLabel = "请通过点击 + 按钮添加你的第一个历史交易";
 mainBalance = "总资产";
 totalNumber = "涨幅";
 totalPercent = "总数";
+hintRealizedTitle = "已实现收益/损失";
+hintRealizedDescription = "此数据是完成交易买卖后的已实现收益/损失，通过特定的买入和卖出价格计算得出。";
+hintUnrealizedTitle = "未实现收益/损失";
+hintUnrealizedDescription = "此数据是与当前市场价格相比，资产购入价格的未实现收益/损失。";
 
 
 

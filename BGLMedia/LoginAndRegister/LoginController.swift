@@ -10,6 +10,7 @@ import UIKit
 import Alamofire
 import JGProgressHUD
 import SwiftKeychainWrapper
+import RealmSwift
 
 class LoginController: UIViewController {
     let resendVerifyEmailAlert = CustomAlertController()
@@ -296,7 +297,52 @@ class LoginController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    
+    
+    
+    
+    
     @objc func login(sender: UIButton){
+        loginAccount()
+//        let realm = try! Realm()
+//        let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "Do you"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
+//        let confirmDeleteAction = UIAlertAction(title: NSLocalizedString(textValue(name: "delete"), comment: ""), style: .destructive) { (_) in
+//            try! realm.write {
+//            realm.delete(realm.objects(Transactions.self))
+//            }
+//            self.loginAccount()
+//        }
+//        confirmAlertCtrl.addAction(confirmDeleteAction)
+//        let confirmSynAction = UIAlertAction(title: NSLocalizedString(textValue(name: "Sync"), comment: ""), style: .destructive) { (_) in
+//            let hud = JGProgressHUD(style: .light)
+//            hud.backgroundColor = ThemeColor().progressColor()
+//            hud.show(in: self.view)
+//            URLServices.fetchInstance.sendAssets(){success in
+//                if success{
+//                    try! realm.write {
+//                    realm.delete(realm.objects(Transactions.self))
+//                    }
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                        hud.dismiss()
+//                        self.loginAccount()
+//                    }
+//                } else{
+//                    hud.indicatorView = JGProgressHUDErrorIndicatorView()
+//                    hud.textLabel.text = textValue(name: "errorShow")
+//                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                        hud.dismiss()
+//                    }
+//                }
+//            }
+//        }
+//        confirmAlertCtrl.addAction(confirmSynAction)
+//        let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "Cancel"), comment: ""), style: .cancel, handler:nil)
+//        confirmAlertCtrl.addAction(cancelAction)
+//        self.present(confirmAlertCtrl, animated: true, completion: nil)
+        
+    }
+    
+    func loginAccount(){
         if usedPlace == 1 {
             UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
@@ -331,19 +377,54 @@ class LoginController: UIViewController {
                     
                     
                     if self.getDeviceToken{
-                    if !self.sendDeviceToken{
-                        let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
-                        let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
-                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
-                            if success{
-                                UserDefaults.standard.set(true, forKey: "SendDeviceToken")
-                            }
-                        })
-                    }
+                        if !self.sendDeviceToken{
+                            let deviceTokenString = UserDefaults.standard.string(forKey: "UserToken")!
+                            let sendDeviceTokenParameter = ["email":self.emailTextField.text!.lowercased(),"token":token,"deviceToken":deviceTokenString]
+                            URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
+                                if success{
+                                    UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                                }
+                            })
+                        }
                     }
                     
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "logIn"), object: nil)
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
 
+//                    URLServices.fetchInstance.sendAssets(){success in
+//                        if success{
+//                            hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+//                            hud.textLabel.text = textValue(name: "successSigningIn")
+//
+//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+//                                hud.dismiss()
+//                                if self.usedPlace == 1{
+//                                    let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
+//                                    // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
+//                                    vc.modalTransitionStyle = .flipHorizontal
+//                                    //        vc.modalTransitionStyle = .crossDissolve // another form of animations
+//                                    self.present(vc, animated: true, completion: nil)
+//                                } else {
+//                                    self.dismiss(animated: true, completion: nil)
+//                                }
+//                            }
+//                        } else{
+//
+//                        }
+//                    }
+                    
+                    
                     hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                     hud.textLabel.text = textValue(name: "successSigningIn")
                     
@@ -352,22 +433,64 @@ class LoginController: UIViewController {
                         if self.usedPlace == 1{
                             let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
                             // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
-                            
-                            
                             vc.modalTransitionStyle = .flipHorizontal
                             //        vc.modalTransitionStyle = .crossDissolve // another form of animations
-                            
-                            
                             self.present(vc, animated: true, completion: nil)
                         } else {
-                            self.dismiss(animated: true, completion: nil)
+//                            self.dismiss(animated: true, completion: nil)
+                            let hud = JGProgressHUD(style: .light)
+                            hud.backgroundColor = ThemeColor().progressColor()
+                            hud.show(in: self.view)
+                            
+                            
+                            let realm = try! Realm()
+                            let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "Do you"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
+                            let confirmDeleteAction = UIAlertAction(title: NSLocalizedString(textValue(name: "delete"), comment: ""), style: .destructive) { (_) in
+                                try! realm.write {
+                                    realm.delete(realm.objects(Transactions.self))
+                                }
+                                hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                                hud.textLabel.text = textValue(name: "successSigningIn")
+                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                    hud.dismiss()
+                                    self.dismiss(animated: true, completion: nil)
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                }
+                            }
+                            confirmAlertCtrl.addAction(confirmDeleteAction)
+                            let confirmSynAction = UIAlertAction(title: NSLocalizedString(textValue(name: "Sync"), comment: ""), style: .destructive) { (_) in
+                                URLServices.fetchInstance.sendAssets(){success in
+                                    if success{
+                                        try! realm.write {
+                                            realm.delete(realm.objects(Transactions.self))
+                                        }
+                                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                                        hud.textLabel.text = textValue(name: "successSigningIn")
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            hud.dismiss()
+                                            self.dismiss(animated: true, completion: nil)
+                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                        }
+                                    } else{
+                                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                                        hud.textLabel.text = textValue(name: "errorShow")
+                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                                            hud.dismiss()
+                                        }
+                                    }
+                                }
+                            }
+                            confirmAlertCtrl.addAction(confirmSynAction)
+//                            let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "Cancel"), comment: ""), style: .cancel, handler:nil)
+//                            confirmAlertCtrl.addAction(cancelAction)
+                            self.present(confirmAlertCtrl, animated: true, completion: nil)
                         }
                     }
                 } else {
                     let loginCode = response["code"].int ?? 0
                     if loginCode == 888{
                         self.resendVerifyEmailAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-//                        vc.email = un
+                        //                        vc.email = un
                         self.resendVerifyEmailAlert.cancelButton.addTarget(self, action: #selector(self.cancelResendVerifyEmailAlert), for: .touchUpInside)
                         self.resendVerifyEmailAlert.sendEmailButton.addTarget(self, action: #selector(self.resendVerifyEmailSendEmail), for: .touchUpInside)
                         self.addChildViewController(self.resendVerifyEmailAlert)
@@ -422,6 +545,7 @@ class LoginController: UIViewController {
             }
         })
     }
+    
     
     @objc func register(sender: UIButton){
 //        let vc = CustomAlertController()

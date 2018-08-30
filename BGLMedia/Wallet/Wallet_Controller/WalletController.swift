@@ -8,6 +8,7 @@
 
 import UIKit
 import RealmSwift
+import SwiftKeychainWrapper
 
 
 
@@ -25,18 +26,44 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     var countField:String = ""
     //    var walletResults = [MarketTradingPairs]()
     
+    let realizedHint = HintAlertController()
+    let unrealizedHint = HintAlertController()
+    
     var assetss: Results<Transactions>{
         get{
             return try! Realm().objects(Transactions.self).sorted(byKeyPath: "publishDate")
         }
     }
     
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
+    var email:String{
+        get{
+            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
+    
     //The First Time load the Page
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
         setUpBasicView()
         checkTransaction()
-        
+//        if loginStatus{
+//            getAssets(){success in}
+//        }
 //        print(realm.objects(EachTransactions.self))
 //        print(realm.objects(Transactions.self))
 //        print(realm.objects(EachCurrency.self))
@@ -52,6 +79,13 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+        
+        
+//        for result in assetss{
+//            print(result.everyTransactions)
+//        }
+//        print(assetss)
+        print(try! Realm().objects(EachTransactions.self))
     }
     
     deinit {
@@ -349,6 +383,11 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         self.walletList.beginHeaderRefreshing()
     }
     
+    @objc func refreshPage(){
+        self.walletList.beginHeaderRefreshing()
+    }
+    
+    
     func caculateTotal(){
 
         var totalNumbers:Double = 0
@@ -386,13 +425,29 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Refresh Method
     @objc func handleRefresh(_ tableView:UITableView) {
-        loadData(){success in
-            if success{
-                self.caculateTotal()
-                self.walletList.reloadData()
-                self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-            } else{
-                self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+        if loginStatus{
+            URLServices.fetchInstance.getAssets(){success in
+                self.checkTransaction()
+                self.loadData(){success in
+                    if success{
+                        self.caculateTotal()
+                        self.walletList.reloadData()
+                        self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+                    } else{
+                        self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+                    }
+                }
+            }
+        } else{
+            self.checkTransaction()
+            loadData(){success in
+                if success{
+                    self.caculateTotal()
+                    self.walletList.reloadData()
+                    self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+                } else{
+                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+                }
             }
         }
     }
@@ -401,8 +456,24 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         if editingStyle == UITableViewCellEditingStyle.delete{
             let item = assetss[indexPath.row]
             let eachTransaction = item.everyTransactions
+            var deleteID = [Int]()
+            for result in eachTransaction{
+                deleteID.append(result.id)
+            }
+            
+            if loginStatus{
+                let body:[String:Any] = ["email":email,"token":certificateToken,"transactionID":deleteID]
+                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteTransaction"], httpMethod: "POST", parameters: body) { (response, success) in
+                    if success{
+                        print("success")
+                    }else{
+                        print("error")
+                    }
+                }
+            }
+            
             try! Realm().write {
-                try! Realm().delete(eachTransaction)
+//                try! Realm().delete(eachTransaction)
                 try! Realm().delete(item)
             }
             checkTransaction()
@@ -504,6 +575,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         totalLabel.text = textValue(name:"mainBalance")
+        unrealizedLabel.setTitle(textValue(name: "hintUnrealizedTitle"), for: .normal)
+        realizedLabel.setTitle(textValue(name: "hintRealizedTitle"), for: .normal)
         totalLabel.font = UIFont.regularFont(20*factor)
         totalNumber.font = UIFont.boldFont(30*factor)
         totalChange.font = UIFont.regularFont(20*factor)
@@ -524,6 +597,8 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         realizedView.addSubview(realizedLabel)
         realizedView.addSubview(unrealizedResult)
         realizedView.addSubview(realizedResult)
+//        realizedView.addSubview(realizedButton)
+//        realizedView.addSubview(unrealizedButton)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
@@ -572,8 +647,15 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         realizedResult.rightAnchor.constraint(equalTo: realizedView.rightAnchor, constant: 0).isActive = true
         realizedResult.topAnchor.constraint(equalTo: realizedView.centerYAnchor, constant: 0).isActive = true
         
-        
-        
+//        realizedButton.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
+//        realizedButton.topAnchor.constraint(equalTo: realizedView.topAnchor, constant: 0).isActive = true
+//        realizedButton.bottomAnchor.constraint(equalTo: realizedView.bottomAnchor, constant: 0).isActive = true
+//        realizedButton.rightAnchor.constraint(equalTo: realizedView.rightAnchor, constant: 0).isActive = true
+//
+//        unrealizedButton.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
+//        unrealizedButton.topAnchor.constraint(equalTo: realizedView.topAnchor, constant: 0).isActive = true
+//        unrealizedButton.bottomAnchor.constraint(equalTo: realizedView.bottomAnchor, constant: 0).isActive = true
+//        unrealizedButton.leftAnchor.constraint(equalTo: realizedView.leftAnchor, constant: 0).isActive = true
         
         
         //Add Transaction Button Constraints
@@ -590,10 +672,49 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
     }
     
-//    func getTransaction(){
-//        let ss = ["email":""]
-//        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: <#T##String#>, parameters: <#T##[String : Any]#>, completion: <#T##(JSON, Bool) -> Void#>)
-//    }
+    @objc func realizedHintshow(){
+        realizedHint.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        realizedHint.cancelButton.addTarget(self, action: #selector(cancelRealizeHint), for: .touchUpInside)
+        realizedHint.titleLabel.text = textValue(name: "hintRealizedTitle")
+        realizedHint.descriptionLabel.text = textValue(name: "hintRealizedDescription")
+        realizedHint.cancelButton.setTitle(textValue(name: "done_resend"), for: .normal)
+        self.parent?.addChildViewController(realizedHint)
+        self.parent?.view.addSubview(realizedHint.view)
+    }
+    
+    @objc func unrealizedHintshow(){
+        unrealizedHint.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+        unrealizedHint.cancelButton.addTarget(self, action: #selector(cancelUnrealizeHint), for: .touchUpInside)
+        unrealizedHint.titleLabel.text = textValue(name: "hintUnrealizedTitle")
+        unrealizedHint.descriptionLabel.text = textValue(name: "hintUnrealizedDescription")
+        unrealizedHint.cancelButton.setTitle(textValue(name: "done_resend"), for: .normal)
+        self.parent?.addChildViewController(unrealizedHint)
+        self.parent?.view.addSubview(unrealizedHint.view)
+    }
+    
+    @objc func cancelRealizeHint(){
+        realizedHint.removeFromParentViewController()
+        realizedHint.view.removeFromSuperview()
+    }
+    
+    @objc func cancelUnrealizeHint(){
+        unrealizedHint.removeFromParentViewController()
+        unrealizedHint.view.removeFromSuperview()
+    }
+
+//    var realizedButton:UIButton = {
+//       var button = UIButton()
+//        button.addTarget(self, action: #selector(realizedHint), for: .touchUpInside)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//       return button
+//    }()
+//
+//    var unrealizedButton:UIButton = {
+//        var button = UIButton()
+//        button.addTarget(self, action: #selector(unrealizedHint), for: .touchUpInside)
+//        button.translatesAutoresizingMaskIntoConstraints = false
+//        return button
+//    }()
     
     
     var realizedView:UIView = {
@@ -603,28 +724,38 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         return view
     }()
     
-    var unrealizedLabel:UILabel = {
-        var label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.white
-        label.numberOfLines = 0
-        label.text = "Unrealized"
-        label.font = label.font.withSize(15)
-        label.textAlignment = .center
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        return label
+    var unrealizedLabel:UIButton = {
+        var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitle(textValue(name: "hintUnrealizedTitle"), for: .normal)
+        button.titleLabel?.numberOfLines = 0
+        button.titleLabel?.font = UIFont.regularFont(15)
+        button.contentMode = .scaleAspectFit
+        button.imageEdgeInsets = UIEdgeInsetsMake(0, -2, 0, 2)
+        let hintImage = UIImage(named: "help")?.reSizeImage(reSize: CGSize(width: 10, height: 10))
+        button.setImage(hintImage, for: .normal)
+        button.addTarget(self, action: #selector(unrealizedHintshow), for: .touchUpInside)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        return button
     }()
     
-    var realizedLabel:UILabel = {
-        var label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = UIColor.white
-        label.numberOfLines = 0
-        label.text = "Realized"
-        label.font = label.font.withSize(15)
-        label.textAlignment = .center
-        label.lineBreakMode = NSLineBreakMode.byWordWrapping
-        return label
+    var realizedLabel:UIButton = {
+        var button = UIButton()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitleColor(UIColor.white, for: .normal)
+        button.setTitle(textValue(name: "hintRealizedTitle"), for: .normal)
+        button.titleLabel?.numberOfLines = 0
+        button.contentMode = .scaleAspectFit
+        button.imageEdgeInsets = UIEdgeInsetsMake(0, -2, 0, 2)
+        let hintImage = UIImage(named: "help")?.reSizeImage(reSize: CGSize(width: 10, height: 10))
+        button.setImage(hintImage, for: .normal)
+        button.titleLabel?.font = UIFont.regularFont(15)
+        button.addTarget(self, action: #selector(realizedHintshow), for: .touchUpInside)
+        button.titleLabel?.textAlignment = .center
+        button.titleLabel?.lineBreakMode = NSLineBreakMode.byWordWrapping
+        return button
     }()
     
     var unrealizedResult:UILabel = {
@@ -780,6 +911,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         return tableView
     }()
     
+//    func getAssetsData(){
+//        URLServices
+//    }
+    
 //    func scrollViewDidScroll(_ scrollView: UIScrollView) {
 //        if scrollView.contentOffset.y >= 0 {
 //            var offset = scrollView.contentOffset
@@ -809,5 +944,14 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
 //}
 
 
+//class CustomAlertView:UIAlertView{
+//    override func dismiss(withClickedButtonIndex buttonIndex: Int, animated: Bool) {
+//        print("sdfsd")
+//    }
+//}
+//
+//class ss:UIAlertAction{
+//    override dismiss
+//}
 
 

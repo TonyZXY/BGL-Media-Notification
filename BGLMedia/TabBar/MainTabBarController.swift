@@ -12,7 +12,7 @@ import UIKit
 class MainTabBarController: UITabBarController {
     
     let network = NetworkManager.sharedInstance
-    
+    let forceUpdateAlert = ForceUpdateAlertController()
     
     let networkLabel:UILabel = {
         let label = UILabel()
@@ -28,6 +28,69 @@ class MainTabBarController: UITabBarController {
     @IBOutlet weak var mainTabBar: UITabBar!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","update"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+            print(response)
+            
+            let versionNumber: Any? = Bundle.main.infoDictionary!["CFBundleShortVersionString"]
+            let buildVersion: Any? = Bundle.main.infoDictionary!["CFBundleVersion"]
+            print(versionNumber)
+            print(buildVersion)
+            if success{
+                if let version = response["version"].string{
+                    if version != "\(String(describing: versionNumber))(\(String(describing: buildVersion)))"{
+                        if let critical = response["critical"].bool{
+                            if critical{
+                                let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "alertTitle_history"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
+                                let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "alertDelete_history"), comment: ""), style: .default) { (_) in
+                                    let appID = "1406241883"
+                                    let urlStr2 = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=\(appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software" // (Option 2) Open App Review Tab
+                                    
+                                    if let url = URL(string: urlStr2), UIApplication.shared.canOpenURL(url) {
+                                        if #available(iOS 10.0, *) {
+                                            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                                        } else {
+                                            UIApplication.shared.openURL(url)
+                                        }
+                                    }
+                                }
+                                confirmAlertCtrl.addAction(confirmAction)
+                                self.present(confirmAlertCtrl, animated: true, completion: nil)
+                            } else{
+                                self.forceUpdateAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+                                self.forceUpdateAlert.cancelButton.addTarget(self, action: #selector(self.forceUpdate), for: .touchUpInside)
+                                self.forceUpdateAlert.titleLabel.text = textValue(name: "updateTitle_tab")
+                                self.forceUpdateAlert.descriptionLabel.text = textValue(name: "updateDescription_tab")
+                                self.forceUpdateAlert.cancelButton.setTitle(textValue(name: "updateAlert_tab"), for: .normal)
+                                self.addChildViewController(self.forceUpdateAlert)
+                                self.view.addSubview(self.forceUpdateAlert.view)
+                            }
+                        }
+                        
+                        
+                    }
+                }else{}
+                
+                
+                
+            } else{
+                
+            }
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
 //        self.navigationController.bar
         let backItem = UIBarButtonItem()
@@ -93,6 +156,19 @@ class MainTabBarController: UITabBarController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
+    
+    @objc func forceUpdate(){
+        let appID = "1406241883"
+        let urlStr2 = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=\(appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software" // (Option 2) Open App Review Tab
+        
+        if let url = URL(string: urlStr2), UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
     
     @objc func setUpTab(){
         viewControllers![0].tabBarItem.title = textValue(name: "wallet_tab")

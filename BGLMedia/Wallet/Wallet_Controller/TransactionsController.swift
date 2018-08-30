@@ -82,27 +82,27 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Every time this page appear
     override func viewWillAppear(_ animated: Bool) {
-//        DispatchQueue.main.async {
+        DispatchQueue.main.async {
             self.loadPrice()
             self.transactionTableView.reloadData()
-//        }
+        }
     }
     
     
-//    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-//        let sectionView = UIView()
-//        if transaction == "Buy"{
-//            sectionView.backgroundColor = ThemeColor().blueColor()
-////            view.backgroundColor = ThemeColor().blueColor()
-//        }else if transaction == "Sell" {
-//            sectionView.backgroundColor = ThemeColor().redColor()
-////            view.backgroundColor = ThemeColor().redColor()
-//        } else{
-//            sectionView.backgroundColor = ThemeColor().blueColor()
-////            view.backgroundColor = ThemeColor().blueColor()
-//        }
-//        return sectionView
-//    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let sectionView = UIView()
+        if transaction == "Buy"{
+            sectionView.backgroundColor = ThemeColor().blueColor()
+//            view.backgroundColor = ThemeColor().blueColor()
+        }else if transaction == "Sell" {
+            sectionView.backgroundColor = ThemeColor().redColor()
+//            view.backgroundColor = ThemeColor().redColor()
+        } else{
+            sectionView.backgroundColor = ThemeColor().blueColor()
+//            view.backgroundColor = ThemeColor().blueColor()
+        }
+        return sectionView
+    }
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 5
@@ -349,54 +349,85 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                    
 
                     if self.transactionStatus == "Update"{
-                        self.UpdateTransactionToRealm(){succees in
-                            if success{
-                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                self.navigationController?.popViewController(animated: true)
-                            } else{
-                                self.navigationController?.popViewController(animated: true)
+                        if self.loginStatus{
+                             let newDate = self.newTransaction.date + " " + self.newTransaction.time
+                            let transactions:[String:Any] = [
+                                "transactionID":self.newTransaction.id,
+                                "status":self.newTransaction.status,
+                                "coinName":self.newTransaction.coinName,
+                                "coinAddName":self.newTransaction.coinAbbName,
+                                "exchangeName":self.newTransaction.exchangeName,
+                                "tradingPairName":self.newTransaction.tradingPairsName,
+                                "singlePrice":self.newTransaction.singlePrice,
+                                "amount":self.newTransaction.amount,
+                                "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
+                                "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
+                                "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
+                                "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
+                                "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
+                                "date":Extension.method.convertStringToDate2(date: newDate),
+                                "note":self.newTransaction.additional,
+                                ]
+                            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":transactions]
+                            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","updateTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
+                                if success{
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                    self.navigationController?.popViewController(animated: true)
+                                } else{
+                                    self.navigationController?.popViewController(animated: true)
+                                }
+                            })
+                        } else{
+                            self.UpdateTransactionToRealm(){succees in
+                                if success{
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                    self.navigationController?.popViewController(animated: true)
+                                } else{
+                                    self.navigationController?.popViewController(animated: true)
+                                }
                             }
                         }
                     }else{
                         let realm = try! Realm()
                         let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
                         self.newTransaction.id = lastId + 1
-//                        let newDate = self.newTransaction.date + " " + self.newTransaction.time
-////                        print(Extension.method.convertStringToDate2(date: newDate))
-//                        if self.loginStatus{
-//                            let transactions:[String:Any] = [
-//                                "status":self.newTransaction.status,
-//                                "coinName":self.newTransaction.coinName,
-//                                "coinAddName":self.newTransaction.coinAbbName,
-//                                "exchangeName":self.newTransaction.exchangeName,
-//                                "tradingPairName":self.newTransaction.tradingPairsName,
-//                                "singlePrice":self.newTransaction.singlePrice,
-//                                "amount":self.newTransaction.amount,
-//                                "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
-//                                "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
-//                                "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
-//                                "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
-//                                "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
-//                                "date":Extension.method.convertStringToDate2(date: newDate),
-//                                "note":self.newTransaction.additional,
-//                                ]
-//                            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":[transactions]]
-//                            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
-//                                if success{
-//                                    print(response)
-////                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-//                                    if self.transactionStatus == "AddSpecific"{
-//                                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-//                                    } else{
-//                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-//                                    }
-//                                    self.navigationController?.popViewController(animated: true)
-//                                } else{
-//                                    self.navigationController?.popViewController(animated: true)
-//                                }
-//                            })
-//                        } else{
+                        let newDate = self.newTransaction.date + " " + self.newTransaction.time
+//                        print(Extension.method.convertStringToDate2(date: newDate))
+                        if self.loginStatus{
+                            let transactions:[String:Any] = [
+                                "status":self.newTransaction.status,
+                                "coinName":self.newTransaction.coinName,
+                                "coinAddName":self.newTransaction.coinAbbName,
+                                "exchangeName":self.newTransaction.exchangeName,
+                                "tradingPairName":self.newTransaction.tradingPairsName,
+                                "singlePrice":self.newTransaction.singlePrice,
+                                "amount":self.newTransaction.amount,
+                                "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
+                                "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
+                                "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
+                                "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
+                                "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
+                                "date":Extension.method.convertStringToDate2(date: newDate),
+                                "note":self.newTransaction.additional,
+                                ]
+                            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":[transactions]]
+                            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
+                                if success{
+                                    print(response)
+//                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+                                    if self.transactionStatus == "AddSpecific"{
+                                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                    } else{
+                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                    }
+                                    self.navigationController?.popViewController(animated: true)
+                                } else{
+                                    self.navigationController?.popViewController(animated: true)
+                                }
+                            })
+                        } else{
                             self.AddTransactionToRealm(){success in
                                 if success{
 //                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
@@ -410,7 +441,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                                     self.navigationController?.popViewController(animated: true)
                                 }
                             }
-//                        }
+                        }
                     }
                 } else{
                     self.navigationController?.popViewController(animated: true)

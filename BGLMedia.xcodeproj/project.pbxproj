@@ -140,6 +140,9 @@
 		5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57650895210D9AFE007368CC /* Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57650894210D9AFE007368CC /* Transactions.swift */; };
 		57650899210FE463007368CC /* RegisterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57650898210FE463007368CC /* RegisterCell.swift */; };
+		57663B572134E2DA00E09754 /* HintAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57663B562134E2DA00E09754 /* HintAlertController.swift */; };
+		57663B5A2137796D00E09754 /* ForceUpdateAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57663B592137796D00E09754 /* ForceUpdateAlertController.swift */; };
+		57663B5C21377D2B00E09754 /* UpdateAlertViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57663B5B21377D2B00E09754 /* UpdateAlertViewController.swift */; };
 		576751FC2105556E006DB67C /* RegisterController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576751FB2105556E006DB67C /* RegisterController.swift */; };
 		576751FE210556E8006DB67C /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; };
 		576751FF210556E8006DB67C /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -347,6 +350,9 @@
 		573C96AA20EF068A00B667AB /* Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extension.swift; sourceTree = "<group>"; };
 		57650894210D9AFE007368CC /* Transactions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Transactions.swift; sourceTree = "<group>"; };
 		57650898210FE463007368CC /* RegisterCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RegisterCell.swift; sourceTree = "<group>"; };
+		57663B562134E2DA00E09754 /* HintAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HintAlertController.swift; sourceTree = "<group>"; };
+		57663B592137796D00E09754 /* ForceUpdateAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ForceUpdateAlertController.swift; sourceTree = "<group>"; };
+		57663B5B21377D2B00E09754 /* UpdateAlertViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UpdateAlertViewController.swift; sourceTree = "<group>"; };
 		576751FB2105556E006DB67C /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		576751FD210556E8006DB67C /* JGProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JGProgressHUD.framework; path = Carthage/Build/iOS/JGProgressHUD.framework; sourceTree = "<group>"; };
 		576752002105597C006DB67C /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
@@ -684,6 +690,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				57663B582137794A00E09754 /* TabBar */,
 				5772046821186B420049BBE8 /* MPAchart */,
 				57AEA179211276ED00042CF6 /* SCLAlertView */,
 				57BBAB3E2107085F00984AA4 /* PullToRefresh */,
@@ -705,7 +712,6 @@
 				2D52AE6520E46E1900018FC0 /* DetailCandleStickChart */,
 				2D52ADB620E46E1600018FC0 /* DetailPage */,
 				2D52AE1E20E46E1800018FC0 /* Info.plist */,
-				2D52ADD420E46E1700018FC0 /* MainTabBarController.swift */,
 				2D52AE5120E46E1900018FC0 /* NewsFlash */,
 				2D52AE0C20E46E1700018FC0 /* UI_Tools */,
 			);
@@ -853,6 +859,7 @@
 				57355C3120F718CC002E70E4 /* SearchTradingPairController.swift */,
 				57355C3220F718CC002E70E4 /* WalletController.swift */,
 				57355C3320F718CC002E70E4 /* SearchCoinController.swift */,
+				57663B562134E2DA00E09754 /* HintAlertController.swift */,
 			);
 			path = Wallet_Controller;
 			sourceTree = "<group>";
@@ -903,6 +910,16 @@
 				57355C0A20F7188B002E70E4 /* View */,
 			);
 			path = NewsV2;
+			sourceTree = "<group>";
+		};
+		57663B582137794A00E09754 /* TabBar */ = {
+			isa = PBXGroup;
+			children = (
+				2D52ADD420E46E1700018FC0 /* MainTabBarController.swift */,
+				57663B592137796D00E09754 /* ForceUpdateAlertController.swift */,
+				57663B5B21377D2B00E09754 /* UpdateAlertViewController.swift */,
+			);
+			path = TabBar;
 			sourceTree = "<group>";
 		};
 		5772046821186B420049BBE8 /* MPAchart */ = {
@@ -1232,6 +1249,7 @@
 				2D52AE9D20E46E1A00018FC0 /* GerneralController.swift in Sources */,
 				57355C6B20F718CC002E70E4 /* Exchange.swift in Sources */,
 				54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */,
+				57663B572134E2DA00E09754 /* HintAlertController.swift in Sources */,
 				2D52AF2520E46E1A00018FC0 /* DateTimeConverter.swift in Sources */,
 				576752012105597C006DB67C /* LoginController.swift in Sources */,
 				57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */,
@@ -1254,6 +1272,7 @@
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,
+				57663B5A2137796D00E09754 /* ForceUpdateAlertController.swift in Sources */,
 				57355C5120F718CC002E70E4 /* MarketCapClient.swift in Sources */,
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				57355C0D20F7188B002E70E4 /* NewsV2Controller.swift in Sources */,
@@ -1309,6 +1328,7 @@
 				2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */,
 				2D52AEFE20E46E1A00018FC0 /* AlertObject.swift in Sources */,
 				57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */,
+				57663B5C21377D2B00E09754 /* UpdateAlertViewController.swift in Sources */,
 				57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */,
 				2D52AF1820E46E1A00018FC0 /* FlashSearchTableViewCell.swift in Sources */,
 				57BAD9582104D58300973B45 /* testViewController.swift in Sources */,

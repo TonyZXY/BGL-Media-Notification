@@ -10,6 +10,7 @@ import UIKit
 import SwiftyJSON
 import Alamofire
 import RealmSwift
+import SwiftKeychainWrapper
 
 class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITableViewDelegate{
     
@@ -18,9 +19,28 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         }
     }
     
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
+    var email:String{
+        get{
+            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
+    
     var transactionHistory:Results<EachTransactions>{
         get{
-            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "date",ascending:false).sorted(byKeyPath: "time",ascending:false)
+            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "date",ascending:true).sorted(byKeyPath: "time",ascending:true)
         }
     }
     
@@ -186,6 +206,21 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             let coinObject = self.realm.objects(Transactions.self).filter("coinAbbName = %@",self.generalData.coinAbbName)
             if let coinTransactionCount = coinObject.first?.everyTransactions.count{
                 let coinSelected = self.realm.objects(EachTransactions.self).filter("id = %@",sender.tag)
+                
+                if self.loginStatus{
+                    let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactionID":[sender.tag]]
+                    URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","deleteTransaction"], httpMethod: "POST", parameters: body) { (response, success) in
+                        if success{
+                            print("success")
+                        }else{
+                            print("error")
+                        }
+                    }
+                }
+                
+                
+                
+                
                 if coinTransactionCount == 1{
                     try! self.realm.write {
                         self.realm.delete(coinSelected)
