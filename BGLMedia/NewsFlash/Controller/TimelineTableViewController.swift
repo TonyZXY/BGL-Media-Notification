@@ -25,12 +25,7 @@ class TimelineTableViewController: UITableViewController {
     var testNumber: Int = 0
     var times: Int = 0
     
-    //    var results:Results<NewsFlash>{
-    //        get{
-    //            let filterName = "languageTag = '" + self.defaultLanguage + "' "
-    //            return try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false).filter(filterName)
-    //        }
-    //    }
+
     
     var sectionArray = [Int]()
     var dates = [String]()
@@ -41,62 +36,6 @@ class TimelineTableViewController: UITableViewController {
             return try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)
         }
     }
-//    var results2: [String:[NewsFlash]]{
-//        get{
-//            let realmData = try! Realm().objects(NewsFlash.self).sorted(byKeyPath: "dateTime", ascending: false)
-//            var flashResult = [String:[NewsFlash]]()
-//            for item in realmData {
-//                let timeArr:[String] = Extension.method.convertDateToString(date: item.dateTime).description.components(separatedBy: " ")
-//                if flashResult.keys.contains(timeArr[0]){
-//                    flashResult[timeArr[0]]?.append(item)
-//
-//                }else{
-//                    flashResult[timeArr[0]] = [NewsFlash]()
-//                    flashResult[timeArr[0]]?.append(item)
-//                }
-//            }
-//            return flashResult
-//        }
-//    }
-    
-//    var dateArray:[Date]{
-//        get{
-//            var index = 0
-//            var array = [Date]()
-//            let dateFormatter = DateFormatter()
-//            dateFormatter.dateFormat = "yyyy-MM-dd"
-//            var timeArray = [Date]()
-//            for result in results2{
-//                timeArray.append(dateFormatter.date(from:result.key)!)
-//            }
-//            timeArray = timeArray.sorted(by: { $0.compare($1) == .orderedDescending })
-//
-//            if timeArray.count != 0{
-//                array.append(dateFormatter.date(from: dateFormatter.string(from:timeArray.first!))!)
-//                index = (results2[dateFormatter.string(from:timeArray[0])]?.count)!
-//                if timeArray.count > 1{
-//                    for i in 1...timeArray.count-1 {
-//                        index += (results2[dateFormatter.string(from:timeArray[i])]?.count)!
-//                        if index <= 5{
-//                            array.append(dateFormatter.date(from: dateFormatter.string(from:timeArray[i]))!)
-//                        }
-//                    }
-//                }
-//
-//                array = array.sorted(by: { $0.compare($1) == .orderedDescending })
-//
-//
-//
-//                return array
-//            }else{
-//                return [Date]()
-//            }
-//
-////            print(array)
-//
-//        }
-//    }
-    
     var resultNew = [Int:[NewsFlash]]()
     
 
@@ -170,7 +109,6 @@ class TimelineTableViewController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(deleteCache), name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
-
     }
     
     @objc func deleteCache(){
@@ -222,11 +160,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     
-    //    override func viewWillAppear(_ animated: Bool) {
-    //        super.viewWillAppear(animated)
-    ////        getNews()
-    //        self.tableView.reloadData()
-    //    }
+
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
