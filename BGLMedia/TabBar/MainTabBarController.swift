@@ -12,7 +12,8 @@ import UIKit
 class MainTabBarController: UITabBarController {
     
     let network = NetworkManager.sharedInstance
-    
+    let forceUpdateAlert = ForceUpdateAlertController()
+    let updateAlert = UpdateAlertViewController()
     
     let networkLabel:UILabel = {
         let label = UILabel()
@@ -28,6 +29,54 @@ class MainTabBarController: UITabBarController {
     @IBOutlet weak var mainTabBar: UITabBar!
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","update"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+            print(response)
+            
+            let versionNumber: Any = Bundle.main.infoDictionary!["CFBundleShortVersionString"] ?? ""
+            let buildVersion: Any = Bundle.main.infoDictionary!["CFBundleVersion"] ?? ""
+            if success{
+                if let version = response["version"].string{
+                    if version != "\(versionNumber)(\(buildVersion))"{
+                        if let critical = response["critical"].bool{
+                            if critical{
+                                self.forceUpdateAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+                                self.forceUpdateAlert.updateButton.addTarget(self, action: #selector(self.forceUpdate), for: .touchUpInside)
+                                self.forceUpdateAlert.titleLabel.text = textValue(name: "updateTitle_tab")
+                                self.forceUpdateAlert.descriptionLabel.text = textValue(name: "updateDescription_tab")
+                                self.forceUpdateAlert.updateButton.setTitle(textValue(name: "updateAlert_tab"), for: .normal)
+                                self.addChildViewController(self.forceUpdateAlert)
+                                self.view.addSubview(self.forceUpdateAlert.view)
+                            } else{
+                                self.updateAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+                                self.updateAlert.updateButton.addTarget(self, action: #selector(self.forceUpdate), for: .touchUpInside)
+                                self.updateAlert.titleLabel.text = textValue(name: "updateTitle_tab")
+                                self.updateAlert.descriptionLabel.text = textValue(name: "updateDescription_tab")
+                                self.updateAlert.cancelButton.setTitle(textValue(name: "cancelAlert_tab"), for: .normal)
+                                self.updateAlert.updateButton.setTitle(textValue(name: "updateAlert_tab"), for: .normal)
+                                self.updateAlert.cancelButton.addTarget(self, action: #selector(self.cancelAlert), for: .touchUpInside)
+                                self.addChildViewController(self.updateAlert)
+                                self.view.addSubview(self.updateAlert.view)
+                            }
+                        }
+                    }
+                }
+            } else{}
+        }
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
         
 //        self.navigationController.bar
         let backItem = UIBarButtonItem()
@@ -93,6 +142,24 @@ class MainTabBarController: UITabBarController {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
+    
+    @objc func forceUpdate(){
+        let appID = "1406241883"
+        let urlStr2 = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=\(appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software" // (Option 2) Open App Review Tab
+        
+        if let url = URL(string: urlStr2), UIApplication.shared.canOpenURL(url) {
+            if #available(iOS 10.0, *) {
+                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            } else {
+                UIApplication.shared.openURL(url)
+            }
+        }
+    }
+    
+    @objc func cancelAlert(){
+        updateAlert.removeFromParentViewController()
+        updateAlert.view.removeFromSuperview()
+    }
     
     @objc func setUpTab(){
         viewControllers![0].tabBarItem.title = textValue(name: "wallet_tab")
