@@ -84,23 +84,18 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
 
     }
     
+    
     override func viewWillAppear(_ animated: Bool) {
-        
         if deleteCacheStatus{
-            self.newsTableView.reloadData()
+            newsTableView.reloadData()
             self.newsTableView.switchRefreshHeader(to: .refreshing)
             self.newsTableView.switchRefreshFooter(to: .normal)
-            self.deleteCacheStatus = false
+            deleteCacheStatus = false
+//            if deleteCacheStatus{
+//                self.newsTableView.reloadData()
+//            }
+//
         }
-
-//        if changeLanguageStatus || deleteCacheStatus{
-////            if deleteCacheStatus{
-////                self.newsTableView.reloadData()
-////            }
-////
-//            self.newsTableView.remembersLastFocusedIndexPath = true
-//        }
-        
     }
     
     @objc func changeLanguage(){

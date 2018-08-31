@@ -10,6 +10,12 @@ import UIKit
 
 class ThemeColor:UIColor{
     
+    func unrealisedPriceColor() -> UIColor {
+        _ = #colorLiteral(red: 0.1215686275, green: 0.7450980392, blue: 0.7647058824, alpha: 1)
+        let color = UIColor.init(red:31/255.0, green:190/255.0, blue:195/255.0, alpha:1)
+        return color
+    }
+    
     func logoBackgroundColor() -> UIColor {
         _ = #colorLiteral(red: 0.1882352941, green: 0.3803921569, blue: 0.5764705882, alpha: 1)
         let color = UIColor.init(red:48/255.0, green:97/255.0, blue:147/255.0, alpha:1)
@@ -17,7 +23,7 @@ class ThemeColor:UIColor{
     }
     
     func systemBarButtonColor() -> UIColor {
-        _ = #colorLiteral(red: 0.1882352941, green: 0.3803921569, blue: 0.5764705882, alpha: 1)
+        _ = #colorLiteral(red: 0.09803921569, green: 0.5019607843, blue: 0.9764705882, alpha: 1)
         let color = UIColor.init(red:25/255.0, green:128/255.0, blue:249/255.0, alpha:1)
         return color
     }

@@ -637,7 +637,6 @@ class RegisterController: UIViewController, UITableViewDelegate, UITableViewData
         self.addChildViewController(tableVC)
         
         
-        
         view.addSubview(checkboxImage)
         view.addSubview(textlabel)
         view.addSubview(termButton1)
