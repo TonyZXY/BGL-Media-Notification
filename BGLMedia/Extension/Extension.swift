@@ -196,6 +196,29 @@ class Extension:NSObject{
 //        }
 //    }
     
+    func convertTimetoLocalization2(convert date: String) -> Date{
+        let dateFormat1 = "yyyy-MM-dd  HH:mm:ss "
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = dateFormat1
+        let newDate1:Date = dateFormatter1.date(from: date) ?? Date()
+//        let formatter = DateFormatter()
+//        if defaultLanguage == "CN"{
+//            formatter.locale = Locale(identifier: "zh")
+//        }else{
+//            formatter.locale = Locale(identifier: "en")
+//        }
+        return newDate1
+        
+        
+//        let dateFormatter = DateFormatter()
+//        let dateFormat2 = "yyyy-MM-dd  HH:mm:ss "
+//        dateFormatter.dateFormat = dateFormat2
+//        let newDate2: String = dateFormatter.string(from: newDate1)
+//        return newDate2
+
+        
+    }
+    
     func convertTimetoLocalization(convert date: String) -> String{
         let cnTimeArray = ["1","2","3","4","5","6","7","8","9","10","11","12"]
         let enTimeArray = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"]

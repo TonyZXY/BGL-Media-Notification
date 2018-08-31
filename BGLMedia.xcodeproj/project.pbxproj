@@ -775,7 +775,6 @@
 		57355C0820F7188B002E70E4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				57355C0920F7188B002E70E4 /* NewsV2Controller.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -905,6 +904,7 @@
 		573C96AC20F2D5CC00B667AB /* NewsV2 */ = {
 			isa = PBXGroup;
 			children = (
+				57355C0920F7188B002E70E4 /* NewsV2Controller.swift */,
 				57355C0820F7188B002E70E4 /* Controller */,
 				57355C0620F7188B002E70E4 /* Model */,
 				57355C0A20F7188B002E70E4 /* View */,

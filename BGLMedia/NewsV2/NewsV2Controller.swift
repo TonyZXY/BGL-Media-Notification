@@ -30,51 +30,6 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         }
     }
     
-    //    func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
-    //        let spinner = UIActivityIndicatorView(activityIndicatorStyle: .white)
-    //        spinner.startAnimating()
-    //        spinner.frame = CGRect(x: CGFloat(0), y: CGFloat(0), width: tableView.bounds.width, height: CGFloat(60))
-    //        self.newsTableView.tableFooterView = spinner
-    //        self.newsTableView.tableFooterView?.isHidden = false
-    //
-    //        let lastItem = displayNumber - 1
-    //        if tableView == newsTableView {
-    //            if indexPath.row == lastItem && displayNumber <= newsObject.count{
-    //                print(displayNumber)
-    //                if displayNumber != 0{
-    //                    self.displayNumber += 5
-    //                    getData(skip: displayNumber, limit: 5){ success in
-    //                        if success{
-    //                            DispatchQueue.main.async {
-    //                                self.newsTableView.reloadData()
-    //                                //                            self.refresher.endRefreshing()
-    //                            }
-    //                        }
-    //                    }
-    //                }
-    //            }
-    //            if displayNumber >= newsObject.count {
-    //                spinner.stopAnimating()
-    //            }
-    //        }
-    
-    //        newsTableView.visibleCells
-    
-    //        cell.alpha = 0
-    //        UIView.animate(withDuration: 0.5) {
-    //            cell.alpha = 1.0
-    //            cell.layer.transform = CATransform3DIdentity
-    //        }
-    
-    //        cell.alpha = 0
-    //        let transform = CATransform3DTranslate(CATransform3DIdentity, -250, 20, 0)
-    //        cell.layer.transform = transform
-    //        UIView.animate(withDuration: 1.0) {
-    //            cell.alpha = 1.0
-    //            cell.layer.transform = CATransform3DIdentity
-    //        }
-    
-    
     func tableView(_ tableView: UITableView, didEndDisplaying cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         self.newsTableView.switchRefreshFooter(to: .normal)
     }
@@ -126,7 +81,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
 //        deleteCacheStatus = true
 //        print(try! Realm().objects(NewsObject.self).count)
         deleteCacheStatus = true
+
     }
+    
     
     override func viewWillAppear(_ animated: Bool) {
         if deleteCacheStatus{
@@ -164,24 +121,6 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
 //        self.deleteCacheStatus = false
         newsTableView.switchRefreshHeader(to: .refreshing)
         
-        
-        
-        
-        //        addRefreshHeader(){success in
-        //            if success{
-        //                let header = DefaultRefreshHeader.header()
-        //                header.textLabel.textColor = ThemeColor().whiteColor()
-        //                header.textLabel.font = UIFont.regularFont(12)
-        //                header.tintColor = ThemeColor().whiteColor()
-        //                header.imageRenderingWithTintColor = true
-        //                self.newsTableView.configRefreshHeader(with:header, container: self, action: {
-        //                    self.handleRefresh(self.newsTableView)
-        //                })
-        //                //                        DispatchQueue.main.async(execute: {
-        //                self.newsTableView.beginHeaderRefreshing()
-        //                //                        })
-        //            }
-        //        }
         let backItem = UIBarButtonItem()
         backItem.title = textValue(name: "back_button")
         backItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
@@ -219,8 +158,10 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         if indexPath.row <= displayNumber{
             let width = self.view.frame.width
             cell.width = width
-            let object = newsObject[indexPath.row]
-            cell.news = object
+            if newsObject.count != 0{
+                let object = newsObject[indexPath.row]
+                cell.news = object
+            }
             return cell
         } else{
             return cell
@@ -308,9 +249,13 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 self.displayNumber = 20
                 self.newsTableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+//                tableView.scrollToRow(at: indexPath, at: .top, animated: true)
                 //                self.refresher.endRefreshing()
             } else{
                 tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
+//                let indexPath = IndexPath.init(row: 0, section: 0)
+//                tableView.scrollToRow(at: indexPath, at: .top, animated: true)
+
                 //                self.refresher.endRefreshing()
             }
         }
@@ -338,6 +283,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.register(NewsTableViewCell.self, forCellReuseIdentifier: "NewsCell")
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.separatorStyle = .none
+
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()
         header.textLabel.font = UIFont.regularFont(12)
@@ -377,19 +323,38 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                     if success{
                         self.newsTableView.reloadData()
                         self.newsTableView.switchRefreshFooter(to: .normal)
+                        print("Already get: \(self.resultNumber)")
+                        if self.displayNumber >= self.newsObject.count {
+                            self.newsTableView.switchRefreshFooter(to: .normal)
+                            
+                        }
+                        if self.resultNumber < 20 {
+                            self.newsTableView.switchRefreshFooter(to: .noMoreData)
+                        }
                         //                            self.refresher.endRefreshing()
+                    } else {
+                        print("Already get: \(self.resultNumber)")
+                        if self.displayNumber >= self.newsObject.count {
+                            self.newsTableView.switchRefreshFooter(to: .normal)
+                            
+                        }
+                        if self.resultNumber < 20 {
+                            self.newsTableView.switchRefreshFooter(to: .noMoreData)
+                        }
                     }
                 }
             }
+        } else{
+            print("Already get: \(self.resultNumber)")
+            if self.displayNumber >= self.newsObject.count {
+                self.newsTableView.switchRefreshFooter(to: .normal)
+                
+            }
+            if self.resultNumber < 20 {
+                self.newsTableView.switchRefreshFooter(to: .noMoreData)
+            }
         }
-        print("Already get: \(resultNumber)")
-        if self.displayNumber >= self.newsObject.count {
-            self.newsTableView.switchRefreshFooter(to: .normal)
-            
-        }
-        if resultNumber < 20 {
-            self.newsTableView.switchRefreshFooter(to: .noMoreData)
-        }
+
         
     }
     
