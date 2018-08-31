@@ -373,7 +373,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                                 if success{
                                     self.UpdateTransactionToRealm(){succees in
                                         if success{
-                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+//                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
                                             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
                                             self.navigationController?.popViewController(animated: true)
                                         } else{
@@ -387,7 +387,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                         } else{
                             self.UpdateTransactionToRealm(){succees in
                                 if success{
-                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+//                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
                                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
                                     self.navigationController?.popViewController(animated: true)
                                 } else{
