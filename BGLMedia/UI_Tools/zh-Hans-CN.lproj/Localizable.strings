@@ -295,6 +295,13 @@ errorShow = "错误";
 noNetwork = "无网络连接";
 timeout = "连接超时";
 errorHandle_login = "邮箱或密码错误";
+realmDes_login = "您是否需要删除或同步历史资产信息？";
+realmTitle_login = "删除或同步";
+realm_delete_login = "删除";
+realm_sync_login = "同步";
+
+
+
 
 firstName = "名  字";
 firstNameNeeded = "请输入您的名字";
@@ -318,6 +325,9 @@ error_usernotfound = "账户不存在";
 error_error = "错误";
 success_success = "成功";
 logout_hud = "登出中";
+
+
+
 
 back = "< 返  回";
 back2 = "返回";

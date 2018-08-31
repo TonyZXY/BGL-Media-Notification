@@ -444,8 +444,8 @@ class LoginController: UIViewController {
                             
                             
                             let realm = try! Realm()
-                            let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "Do you"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
-                            let confirmDeleteAction = UIAlertAction(title: NSLocalizedString(textValue(name: "delete"), comment: ""), style: .destructive) { (_) in
+                            let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "realmTitle_login"), comment: ""), message: NSLocalizedString(textValue(name: "realmDes_login"), comment: ""), preferredStyle: .alert)
+                            let confirmDeleteAction = UIAlertAction(title: NSLocalizedString(textValue(name: "realm_delete_login"), comment: ""), style: .destructive) { (_) in
                                 try! realm.write {
                                     realm.delete(realm.objects(EachTransactions.self))
                                     realm.delete(realm.objects(Transactions.self))
@@ -460,7 +460,7 @@ class LoginController: UIViewController {
                                 }
                             }
                             confirmAlertCtrl.addAction(confirmDeleteAction)
-                            let confirmSynAction = UIAlertAction(title: NSLocalizedString(textValue(name: "Sync"), comment: ""), style: .destructive) { (_) in
+                            let confirmSynAction = UIAlertAction(title: NSLocalizedString(textValue(name: "realm_sync_login"), comment: ""), style: .destructive) { (_) in
                                 URLServices.fetchInstance.sendAssets(){success in
                                     if success{
                                         try! realm.write {

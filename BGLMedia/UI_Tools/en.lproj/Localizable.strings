@@ -302,7 +302,10 @@ error_verifyEmail = "Please Verify Email";
 error_usernotfound = "No User Found";
 error_error = "Error";
 success_success = "Success";
-
+realmDes_login = "Do you want to delete or Sync previous assets before login?";
+realmTitle_login = "Delete or Sync";
+realm_delete_login = "Delete";
+realm_sync_login = "Sync";
 
 //Sign Up
 firstName = "First Name";

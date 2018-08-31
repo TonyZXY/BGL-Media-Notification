@@ -79,6 +79,9 @@ class DetailController: UIViewController{
     
     @objc func updateMarketData(){
         refreshPage()
+//        DispatchQueue.main.async {
+            self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+//        }
     }
     
     //Load page data
@@ -110,7 +113,9 @@ class DetailController: UIViewController{
 //            marketSelectedData.tradingPairsName = value.tradingPairsName
 //            marketSelectedData.transactionPrice = value.transactionPrice
 //            marketSelectedData.coinAmount = value.totalAmount
-            coinDetailController.transactionHistoryController.generalData = general
+            
+            
+//            coinDetailController.transactionHistoryController.generalData = general
             coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
             coinDetailController.alertControllers.coinName.status = true
             coinDetailController.alertControllers.coinAbbName = general.coinAbbName
@@ -273,6 +278,7 @@ class DetailController: UIViewController{
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         coinDetailController.gerneralController.factor = factor
+        coinDetailController.transactionHistoryController.generalData = general
         allLossView.factor = factor
         mainView.factor = factor
         //        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
