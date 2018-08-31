@@ -222,6 +222,8 @@ class URLServices:NSObject{
                 if let dataResult = response["data"].array{
                     try! realm.write{
                         realm.delete(realm.objects(Transactions.self))
+                        realm.delete(realm.objects(EachTransactions.self))
+                        realm.delete(realm.objects(EachCurrency.self))
                     }
                     
                     for result in dataResult{
@@ -280,6 +282,82 @@ class URLServices:NSObject{
                 }
                 completion(false)
             } else{
+                completion(false)
+            }
+        }
+    }
+    
+    func getSpecificAssets(coinAbbName:String, completion:@escaping (Bool)->Void){
+        let body:[String:Any] = ["email":email,"token":certificateToken]
+        let realm = try! Realm()
+        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","getTransactions"], httpMethod: "POST", parameters: body) { (response, success) in
+            if success{
+                let coinObject = realm.objects(Transactions.self).filter("coinAbbName = %@",coinAbbName)
+                if coinObject.count > 0{
+                    if let dataResult = response["data"].array{
+                        for result in dataResult{
+                            if let coinNameResult = result["coin_add_name"].string{
+                                if coinNameResult == coinAbbName{
+//                                    try! realm.write{
+//                                        realm.delete(coinObject[0])
+////                                        realm.delete(coinObject[0].everyTransactions)
+//                                    }
+                                    let newTransactions = EachTransactions()
+                                    newTransactions.coinAbbName = result["coin_add_name"].string ?? ""
+                                    newTransactions.singlePrice = result["single_price"].double ?? 0
+                                    newTransactions.additional = result["note"].string ?? ""
+                                    newTransactions.coinName = result["coin_name"].string ?? ""
+                                    newTransactions.amount = result["amount"].double ?? 0
+                                    newTransactions.id = result["transaction_id"].int ?? 0
+                                    newTransactions.status = result["status"].string ?? ""
+                                    newTransactions.tradingPairsName = result["trading_pair_name"].string ?? ""
+                                    newTransactions.exchangeName = result["exchange_name"].string ?? ""
+                                    newTransactions.totalPrice = newTransactions.singlePrice * newTransactions.amount
+                                    let currencyUSD = result["currency_usd"].double ?? 0
+                                    let currencyEUR = result["currency_eur"].double ?? 0
+                                    let currencyCNY = result["currency_cny"].double ?? 0
+                                    let currencyAUD = result["currency_aud"].double ?? 0
+                                    let currencyJPY = result["currency_jpy"].double ?? 0
+                                    let Longdate = result["date"].string ?? ""
+                                    newTransactions.date = Extension.method.convertStringToDate3(date:Longdate)
+                                    newTransactions.time = Extension.method.convertStringToDate4(date:Longdate)
+                                    let allCurrencys = List<EachCurrency>()
+                                    let ac:[String:Double] = ["USD":currencyUSD,"AUD":currencyAUD,"CNY":currencyCNY,"EUR":currencyEUR,"JPY":currencyJPY]
+                                    for results in ac{
+                                        let currencys = EachCurrency()
+                                        currencys.name = results.key
+                                        currencys.price = results.value
+                                        allCurrencys.append(currencys)
+                                    }
+                                    newTransactions.currency = allCurrencys
+                                    let tran = Transactions()
+                                    tran.coinAbbName = newTransactions.coinAbbName
+                                    tran.coinName = newTransactions.coinName
+                                    tran.exchangeName = "Global Average"
+                                    tran.tradingPairsName = priceType
+                                    
+                                    realm.beginWrite()
+                                    if realm.object(ofType: Transactions.self, forPrimaryKey: newTransactions.coinAbbName) == nil {
+                                        tran.everyTransactions.append(newTransactions)
+                                        realm.add(tran, update: true)
+                                    } else{
+                                        let object = realm.objects(Transactions.self).filter("coinAbbName == %@", newTransactions.coinAbbName)
+                                        if object.count != 0{
+                                            let newT = realm.create(EachTransactions.self, value: newTransactions, update: true)
+                                            object[0].everyTransactions.append(newT)
+                                        }
+                                    }
+                                    try! realm.commitWrite()
+                                    completion(true)
+                                }
+                            } else{
+                                completion(false)
+                            }
+                        }
+                        completion(false)
+                    }
+                }
+            }else{
                 completion(false)
             }
         }

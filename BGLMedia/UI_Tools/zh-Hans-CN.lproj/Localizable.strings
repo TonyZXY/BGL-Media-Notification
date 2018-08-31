@@ -16,7 +16,7 @@ flash_tab = "快讯";
 news_tab = "新闻";
 more_tab = "更多";
 updateAlert_tab = "更新";
-updateAlert_cancel = "取消";
+cancelAlert_tab = "取消";
 updateTitle_tab = "更新发布！";
 updateDescription_tab = "请到Appstore更新到最新版本";
 

@@ -17,7 +17,7 @@ flash_tab = "News Flash";
 news_tab = "News";
 more_tab = "More";
 updateAlert_tab = "Update";
-updateAlert_cancel = "Cancel";
+cancelAlert_tab = "Cancel";
 updateTitle_tab = "New Update!";
 updateDescription_tab = "Please go to Appstore update to the new version";
 

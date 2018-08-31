@@ -447,7 +447,9 @@ class LoginController: UIViewController {
                             let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "Do you"), comment: ""), message: NSLocalizedString(textValue(name: "alertHint_history"), comment: ""), preferredStyle: .alert)
                             let confirmDeleteAction = UIAlertAction(title: NSLocalizedString(textValue(name: "delete"), comment: ""), style: .destructive) { (_) in
                                 try! realm.write {
+                                    realm.delete(realm.objects(EachTransactions.self))
                                     realm.delete(realm.objects(Transactions.self))
+                                    realm.delete(realm.objects(EachCurrency.self))
                                 }
                                 hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                                 hud.textLabel.text = textValue(name: "successSigningIn")

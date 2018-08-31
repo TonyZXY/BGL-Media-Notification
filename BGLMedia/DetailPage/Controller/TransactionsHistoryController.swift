@@ -65,6 +65,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         if transactionHistory.count > 0{
         historyTableView.switchRefreshHeader(to: .refreshing)
         }
+        
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
         setUpView()
     }
@@ -157,9 +158,27 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
             
             
             
+            let date = Extension.method.convertStringToDatePickerDate(date: object.date)
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .none
+            let formatter2 = DateFormatter()
+            formatter2.dateStyle = .none
+            formatter2.timeStyle = .short
+            if defaultLanguage == "CN"{
+                formatter.locale = Locale(identifier: "zh")
+                formatter2.locale = Locale(identifier: "zh")
+            } else {
+                formatter.locale = Locale(identifier: "en")
+                formatter2.locale = Locale(identifier: "en")
+            }
+            let time = Extension.method.convertStringToTimePickerDate(date: object.time)
+            cell.sellDateLabel.text = formatter.string(from: date) + " " + formatter2.string(from: time)
             
             
-            cell.sellDateLabel.text = object.date + " " + object.time
+            
+            
+//            cell.sellDateLabel.text = object.date + " " + object.time
             cell.sellPriceResult.text = Extension.method.scientificMethod(number:object.singlePrice) + " " + object.tradingPairsName
             cell.sellTradingPairResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.sellAmountResult.text = Extension.method.scientificMethod(number:object.amount)

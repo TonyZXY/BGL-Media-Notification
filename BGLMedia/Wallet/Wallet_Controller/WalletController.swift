@@ -272,6 +272,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                             
                                             
                                             let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
+                                            
                                             try! Realm().write {
                                                 if object.count != 0{
                                                     object[0].currentSinglePrice = singlePrice
@@ -368,14 +369,43 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     
     @objc func updateTransaction(){
-        checkTransaction()
-        loadData(){success in
-            if success{
-                self.caculateTotal()
-                self.walletList.reloadData()
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+//        checkTransaction()
+//        loadData(){success in
+//            if success{
+//                self.caculateTotal()
+//                self.walletList.reloadData()
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+//            }
+//        }
+        
+        if loginStatus{
+            URLServices.fetchInstance.getAssets(){success in
+                self.checkTransaction()
+                self.loadData(){success in
+                    if success{
+                        self.caculateTotal()
+                        self.walletList.reloadData()
+                        self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+                    } else{
+                        self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+                    }
+                }
+            }
+        } else{
+            self.checkTransaction()
+            loadData(){success in
+                if success{
+                    self.caculateTotal()
+                    self.walletList.reloadData()
+                    self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+                } else{
+                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+                }
             }
         }
+        
     }
     
     @objc func refreshData(){
@@ -473,7 +503,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             }
             
             try! Realm().write {
-//                try! Realm().delete(eachTransaction)
+                try! Realm().delete(eachTransaction)
                 try! Realm().delete(item)
             }
             checkTransaction()

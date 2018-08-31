@@ -22,7 +22,7 @@ class ForceUpdateAlertController: UIViewController {
         view.addSubview(alertView)
         alertView.addSubview(logoImage)
         logoImage.addSubview(logo)
-        alertView.addSubview(cancelButton)
+        alertView.addSubview(updateButton)
         //        alertView.addSubview(sendEmailButton)
         alertView.addSubview(titleLabel)
         alertView.addSubview(descriptionLabel)
@@ -37,8 +37,8 @@ class ForceUpdateAlertController: UIViewController {
         NSLayoutConstraint(item: logo, attribute: .centerY, relatedBy: .equal, toItem: logoImage, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
         
         NSLayoutConstraint(item: logo, attribute: .centerX, relatedBy: .equal, toItem: logoImage, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(\(60*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":logo]))
-        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(60*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":logo]))
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":logo]))
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":logo]))
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v0(\(80*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":logoImage]))
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0(\(80*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":logoImage]))
         
@@ -47,10 +47,10 @@ class ForceUpdateAlertController: UIViewController {
         
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(10*factor)-[v0]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":descriptionLabel]))
         NSLayoutConstraint(item: descriptionLabel, attribute: .top, relatedBy: .equal, toItem: titleLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
-        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor)-[v0]-\(30*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":cancelButton]))
-        NSLayoutConstraint(item: cancelButton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 20).isActive = true
-        cancelButton.heightAnchor.constraint(equalToConstant: 50*factor).isActive = true
-        NSLayoutConstraint(item: cancelButton, attribute: .bottom, relatedBy: .equal, toItem: alertView, attribute: .bottom, multiplier: 1, constant: -10).isActive = true
+        alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|-\(30*factor)-[v0]-\(30*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":updateButton]))
+        NSLayoutConstraint(item: updateButton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 20).isActive = true
+        updateButton.heightAnchor.constraint(equalToConstant: 50*factor).isActive = true
+        NSLayoutConstraint(item: updateButton, attribute: .bottom, relatedBy: .equal, toItem: alertView, attribute: .bottom, multiplier: 1, constant: -10).isActive = true
     }
     
     var alertView:UIView = {
@@ -95,7 +95,7 @@ class ForceUpdateAlertController: UIViewController {
     //        return button
     //    }()
     
-    lazy var cancelButton:UIButton = {
+    lazy var updateButton:UIButton = {
         var button = UIButton()
         button.layer.cornerRadius = 8*view.frame.width/375
         button.backgroundColor = ThemeColor().redColor()
@@ -121,7 +121,7 @@ class ForceUpdateAlertController: UIViewController {
     lazy var logo:UIImageView = {
         var imageView = UIImageView()
         imageView.backgroundColor = ThemeColor().blueColor()
-        imageView.layer.cornerRadius = 30*view.frame.width/375
+        imageView.layer.cornerRadius = 25*view.frame.width/375
         imageView.image = UIImage(named: "refresh-button")
         imageView.contentMode = .scaleAspectFit
         imageView.clipsToBounds = true
