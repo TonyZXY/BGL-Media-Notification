@@ -113,9 +113,9 @@ open class TimelineTableViewCell: UITableViewCell {
     }
     
     func setUpView(){
-        titleLabel.font = UIFont.semiBoldFont(12)
-        descriptionLabel.font = UIFont.regularFont(15)
-        txtTitleLabel.font = UIFont.boldFont(18)
+        titleLabel.font = UIFont.semiBoldFont(10)
+        descriptionLabel.font = UIFont.regularFont(13)
+        txtTitleLabel.font = UIFont.boldFont(16)
         txtTitleLabel.numberOfLines = 0
         txtTitleLabel.lineBreakMode = .byWordWrapping
         txtTitleLabel.textColor = ThemeColor().whiteColor()
