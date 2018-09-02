@@ -172,6 +172,30 @@ class Extension:NSObject{
         }
     }
     
+    func scientificMethodInLike(number: Int) -> String{
+        
+        var value = ""
+        if defaultLanguage == "CN"{
+            if number > 9999 {
+                let left = Double(number) / 10000.00
+                value = String(format:"%.1f",left) + "万"
+            } else {
+                return "\(number)"
+            }
+        } else {
+            if number > 999 && number < 1000000{
+                let left = Double(number) / 1000.00
+                value = String(format:"%.1f",left) + "k"
+            } else if number > 1000000 {
+                let left = Double(number) / 1000.00
+                value = String(format:"%.1f",left) + "m"
+            } else {
+                return "\(number)"
+            }
+        }
+        return value
+    }
+    
     func doubleToInteger(data:Double)-> Int {
         let doubleToString = "\(data)"
         let stringToInteger = (doubleToString as NSString).integerValue
@@ -772,5 +796,46 @@ func deleteMemory(){
         realm.delete(realm.objects(alertCoinNames.self))
     }
 }
+
+extension UIButton{
+    func loadingIndicator(_ show : Bool){
+        let tag = 808404
+        if show {
+            self.isEnabled = false
+            self.alpha = 0.5
+            let indicator = UIActivityIndicatorView()
+            let buttonHeight = self.bounds.size.height
+            let buttonWidth = self.bounds.size.width
+            indicator.center = CGPoint(x: buttonWidth/2, y: buttonHeight/2)
+            indicator.tag = tag
+            self.addSubview(indicator)
+            indicator.startAnimating()
+        } else {
+            self.isEnabled = true
+            self.alpha = 1.0
+            if let indicator = self.viewWithTag(tag) as? UIActivityIndicatorView {
+                indicator.stopAnimating()
+                indicator.removeFromSuperview()
+            }
+        }
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 

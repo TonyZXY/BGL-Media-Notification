@@ -263,7 +263,17 @@ class TimelineTableViewController: UITableViewController {
                 cell.descriptionLabel.text = object.contents
             
                 cell.object = object
+                cell.likesButton.setTitle(Extension.method.scientificMethodInLike(number: object.like), for: .normal)
             
+                let imageOfLike = UIImage(named: "likeButton")
+                let tintedImage = imageOfLike?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+                cell.likesButton.setImage(tintedImage, for: .normal)
+            if object.checked{
+                cell.likesButton.tintColor = ThemeColor().redColor()
+            } else{
+                cell.likesButton.tintColor = ThemeColor().whiteColor()
+            }
+                cell.likesButton.addTarget(self, action: #selector(likeButtonClicked), for: .touchUpInside)
                 cell.sharesbutton.addTarget(self, action: #selector(shareButtonClicked), for: .touchUpInside)
            
         }
@@ -271,6 +281,103 @@ class TimelineTableViewController: UITableViewController {
         
     }
 
+    @objc func likeButtonClicked(sender: UIButton){
+        if !UserDefaults.standard.bool(forKey: "isLoggedIn"){
+            let login = LoginController(usedPlace: 0)
+            self.present(login, animated: true, completion: nil)
+        } else {
+        let buttonPosition:CGPoint = sender.convert(CGPoint(x: 0, y: 0), to:self.tableView)
+        let indexPath = self.tableView.indexPathForRow(at: buttonPosition)
+        let cell = tableView.cellForRow(at: indexPath!)! as! TimelineTableViewCell
+        sender.setImage(nil, for: .normal)
+        sender.setTitle("", for: .normal)
+        sender.loadingIndicator(true)
+        sender.widthAnchor.constraint(equalToConstant: sender.frame.width).isActive = true
+        sender.heightAnchor.constraint(equalToConstant: sender.frame.height).isActive = true
+        if (cell.object?.checked)!{
+            sender.tintColor = ThemeColor().whiteColor()
+            changelikeNumberAndcheck(object: cell.object!) { success in
+                    sender.loadingIndicator(false)
+                sender.widthAnchor.constraint(equalToConstant: sender.frame.width).isActive = false
+                sender.heightAnchor.constraint(equalToConstant: sender.frame.height).isActive = false
+                cell.likesButton.setTitle(Extension.method.scientificMethodInLike(number: (cell.object?.like)!), for: .normal)
+                
+                let imageOfLike = UIImage(named: "likeButton")
+                let tintedImage = imageOfLike?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+                cell.likesButton.setImage(tintedImage, for: .normal)
+            }
+//            cell.object?.checked = false
+            }       else{
+                    sender.tintColor = ThemeColor().redColor()
+                    changelikeNumberAndcheck(object: cell.object!) { success in
+                    sender.loadingIndicator(false)
+                    sender.widthAnchor.constraint(equalToConstant: sender.frame.width).isActive = false
+                    sender.heightAnchor.constraint(equalToConstant: sender.frame.height).isActive = false
+                    cell.likesButton.setTitle(Extension.method.scientificMethodInLike(number: (cell.object?.like)!), for: .normal)
+                
+                    let imageOfLike = UIImage(named: "likeButton")
+                    let tintedImage = imageOfLike?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
+                    cell.likesButton.setImage(tintedImage, for: .normal)
+                }
+//            cell.object?.checked = true
+            }
+        }
+    }
+    
+    func changelikeNumberAndcheck(object: NewsFlash ,completion:@escaping (Bool)->Void){
+        
+        let body = ["email":UserDefaults.standard.string(forKey: "UserEmail")!,"token": UserDefaults.standard.string(forKey: "CertificateToken")!, "newsID": object.id]
+        
+        
+            self.realm.beginWrite()
+            if object.checked {
+                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","unlike"], httpMethod: "POST", parameters: body,
+                                                         completion: { (response, success) in
+                                                            if success{
+                                                                print(response)
+                                                                if response["success"].bool! {
+                                                                    object.like = response["data"]["likes"].int ?? 0
+                                                                    object.checked = !object.checked
+                                                                    try! self.realm.commitWrite()
+                                                                    completion(true)
+                                                                } else{
+                                                                    try! self.realm.commitWrite()
+                                                                    completion(false)
+                                                                }
+
+                                                            } else{
+                                                                try! self.realm.commitWrite()
+                                                                completion(false)
+                                                            }
+                })
+            } else{
+                URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","like"], httpMethod: "POST", parameters: body,
+                                                         completion: { (response, success) in
+                    if success{
+                        print(response)
+                        if response["success"].bool! {
+                        object.like = response["data"]["likes"].int ?? 0
+                        object.checked = !object.checked
+                        try! self.realm.commitWrite()
+                        completion(true)
+                        } else {
+                            try! self.realm.commitWrite()
+                            completion(false)
+                        }
+                    } else{
+                        try! self.realm.commitWrite()
+                        completion(false)
+                    }
+                })
+                
+            }
+
+        
+        
+        
+    }
+    
+    
     
     @objc func shareButtonClicked(sender: UIButton){
         
@@ -384,6 +491,7 @@ class TimelineTableViewController: UITableViewController {
     func getNews(skip:Int,limit:Int,completion:@escaping (Bool)->Void){
         URLServices.fetchInstance.passServerData(urlParameters: ["api","getFlashWithLan?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             if success{
+                print(response)
                 self.resultNumber = response.count
                 self.JSONtoData(json: response){ success in
                     completion(true)
@@ -405,9 +513,10 @@ class TimelineTableViewController: UITableViewController {
                 let toSent = item["toSent"].bool ?? false
                 let title = item["title"].string ?? ""
                 let availabilty = item["available"].bool ?? true
+                let like = item["like"].int ?? 0
                 if realm.object(ofType: NewsFlash.self, forPrimaryKey: id) == nil {
                     if availabilty{
-                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title])
+                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title,like])
                     } else{
                         deletedNumber += 1
                     }
@@ -416,7 +525,7 @@ class TimelineTableViewController: UITableViewController {
                     if !availabilty {
                         realm.delete(self.realm.objects(NewsFlash.self).filter("id = %@",id))
                     }else{
-                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title], update: true)
+                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title, like], update: true)
                     }
                 }
             }
@@ -474,7 +583,11 @@ class TimelineTableViewController: UITableViewController {
                             startNumber -= 1
                             print(startNumber)
                             if(self.resultNumber != 0){
-                                for i in startNumber+1...startNumber+5{
+                                var addNumber = 5
+                                if self.resultNumber < 5{
+                                    addNumber = self.resultNumber
+                                }
+                                for i in startNumber+1...startNumber + addNumber {
                                     let timeArray:[String] = Extension.method.convertDateToString(date: self.results[i-1].dateTime).description.components(separatedBy: " ")
                                     let timeArray2:[String] = Extension.method.convertDateToString(date: self.results[i].dateTime).description.components(separatedBy: " ")
                                     

@@ -57,10 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
 
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 7,
+            schemaVersion: 8,
             //old 2
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 7) {
+                if (oldSchemaVersion < 8) {
                     // The enumerateObjects(ofType:_:) method iterates
                     // over every Person object stored in the Realm file
                     //                    migration.enumerateObjects(ofType: Person.className()) { oldObject, newObject in
