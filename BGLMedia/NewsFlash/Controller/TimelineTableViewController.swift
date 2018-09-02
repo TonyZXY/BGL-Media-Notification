@@ -295,9 +295,9 @@ class TimelineTableViewController: UITableViewController {
         sender.widthAnchor.constraint(equalToConstant: sender.frame.width).isActive = true
         sender.heightAnchor.constraint(equalToConstant: sender.frame.height).isActive = true
         if (cell.object?.checked)!{
-            sender.tintColor = ThemeColor().whiteColor()
+            
             changelikeNumberAndcheck(object: cell.object!) { success in
-                    sender.loadingIndicator(false)
+                sender.loadingIndicator(false)
                 sender.widthAnchor.constraint(equalToConstant: sender.frame.width).isActive = false
                 sender.heightAnchor.constraint(equalToConstant: sender.frame.height).isActive = false
                 cell.likesButton.setTitle(Extension.method.scientificMethodInLike(number: (cell.object?.like)!), for: .normal)
@@ -305,20 +305,32 @@ class TimelineTableViewController: UITableViewController {
                 let imageOfLike = UIImage(named: "likeButton")
                 let tintedImage = imageOfLike?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
                 cell.likesButton.setImage(tintedImage, for: .normal)
-            }
-//            cell.object?.checked = false
-            }       else{
+                self.tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.none)
+                if success {
+                    sender.tintColor = ThemeColor().whiteColor()
+                    
+                } else {
                     sender.tintColor = ThemeColor().redColor()
-                    changelikeNumberAndcheck(object: cell.object!) { success in
+                }
+                
+            }
+        } else {
+               changelikeNumberAndcheck(object: cell.object!) { success in
                     sender.loadingIndicator(false)
                     sender.widthAnchor.constraint(equalToConstant: sender.frame.width).isActive = false
                     sender.heightAnchor.constraint(equalToConstant: sender.frame.height).isActive = false
                     cell.likesButton.setTitle(Extension.method.scientificMethodInLike(number: (cell.object?.like)!), for: .normal)
-                
+                        
                     let imageOfLike = UIImage(named: "likeButton")
                     let tintedImage = imageOfLike?.withRenderingMode(UIImageRenderingMode.alwaysTemplate)
                     cell.likesButton.setImage(tintedImage, for: .normal)
-                }
+                    self.tableView.reloadRows(at: [indexPath!], with: UITableViewRowAnimation.none)
+                    if success {
+                        sender.tintColor = ThemeColor().redColor()
+                    } else {
+                        sender.tintColor = ThemeColor().whiteColor()
+                    }
+        }
 //            cell.object?.checked = true
             }
         }
