@@ -95,6 +95,7 @@ class GloabalController: UIViewController,ExchangeSelect{
     
     @objc func updateMarketData(){
         loadData()
+       self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
     }
     
     

@@ -587,7 +587,8 @@ class TimelineTableViewController: UITableViewController {
                                 if self.resultNumber < 5{
                                     addNumber = self.resultNumber
                                 }
-                                for i in startNumber+1...startNumber + addNumber {
+                                
+                                for i in startNumber+1...startNumber+addNumber{
                                     let timeArray:[String] = Extension.method.convertDateToString(date: self.results[i-1].dateTime).description.components(separatedBy: " ")
                                     let timeArray2:[String] = Extension.method.convertDateToString(date: self.results[i].dateTime).description.components(separatedBy: " ")
                                     
