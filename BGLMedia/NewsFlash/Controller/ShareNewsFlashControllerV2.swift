@@ -15,6 +15,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setUpView()
         shareButton.addTarget(self, action: #selector(createImage), for: .touchUpInside)
         cancelButton.addTarget(self, action: #selector(cancelView), for: .touchUpInside)
@@ -87,8 +88,8 @@ class ShareNewsFlashControllerV2: UIViewController {
         let reSizeDownLoadApp = CGSize(width: view.frame.width, height: 150*factor)
 //        shareImage.frame = CGRect(x: 0, y: 0, width: view.frame.width,height: 800)
         
-        mainLogoImage.image = UIImage(named: "cryptogeek_flash_news_top")?.reSizeImage(reSize: reSizeMain)
-        downloadAppImage.image = UIImage(named: "cryptogeek_flash_news_bottom")?.reSizeImage(reSize: reSizeDownLoadApp)
+        mainLogoImage.image = UIImage(named: "CryptoGeek_news_top")?.reSizeImage(reSize: reSizeMain)
+        downloadAppImage.image = UIImage(named: "CryptoGeek_news_bottom")?.reSizeImage(reSize: reSizeDownLoadApp)
 //
 //        if #available(iOS 11.0, *) {
 //            scrollView.safeAreaLayoutGuide.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor).isActive = true
@@ -172,7 +173,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     var shareImage:UIView = {
        var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ThemeColor().whiteColor()
+        view.backgroundColor = ThemeColor().shareImageBackgroundColor()
 //        view.frame = CGRect(x: 0, y: 0, width: view.frame.width,height: 300)
         return view
     }()
@@ -191,7 +192,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         let factor = view.frame.width/375
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = ThemeColor().darkBlackColor()
+        label.textColor = ThemeColor().whiteColor()
         label.font = UIFont.semiBoldFont(17*factor)
         return label
     }()
@@ -206,6 +207,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.font = UIFont.boldFont(18)
+        label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
         return label
@@ -218,7 +220,8 @@ class ShareNewsFlashControllerV2: UIViewController {
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .justified
         label.numberOfLines = 0
-        label.textColor = ThemeColor().darkBlackColor()
+        label.backgroundColor = ThemeColor().shareImageBackgroundColor()
+        label.textColor = ThemeColor().whiteColor()
         return label
     }()
     

@@ -129,16 +129,15 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        print(view.frame.height)
         alerts = allAlert
-        view.backgroundColor = ThemeColor().blueColor()
+//        view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         for result in alertStatuss{
             oldAlerts[result.id] = result.switchStatus
         }
-//        print(factor)
     }
     
     deinit {
@@ -159,7 +158,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         if status == "setting"{
             getNotification()
         }
-        
         
     }
     
@@ -239,6 +237,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func checkSetUpView(){
+        print(view.frame.height)
         if loginStatus{
             setUpView()
 //            parent?.parent?.view.backgroundColor = ThemeColor().redColor()
@@ -415,7 +414,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     func setUpView(){
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
-        view.backgroundColor = ThemeColor().blueColor()
+//        view.backgroundColor = ThemeColor().blueColor()
         view.addSubview(alertView)
         alertButton.titleLabel?.font = UIFont.semiBoldFont(18*factor!)
         alertView.addSubview(alertTableView)
@@ -426,11 +425,15 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertTableView]))
         alertView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":alertButton]))
         
-        
         alertButton.topAnchor.constraint(equalTo: alertTableView.bottomAnchor).isActive = true
         alertButton.heightAnchor.constraint(equalToConstant: 60*factor!).isActive = true
         if #available(iOS 11.0, *) {
             alertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
+            view.addSubview(safeAreaView)
+            safeAreaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+            safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+            safeAreaView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+//            alertButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -30).isActive = true
 //            parent?.view.addSubview(safeAreaView)
 //            safeAreaView.topAnchor.constraint(equalTo: (parent?.view.safeAreaLayoutGuide.bottomAnchor)!, constant: 0).isActive = true
 //            safeAreaView.bottomAnchor.constraint(equalTo: (parent?.view.bottomAnchor)!, constant: 0).isActive = true
@@ -607,7 +610,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     var alertView:UIView = {
         var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ThemeColor().blueColor()
+//        view.backgroundColor = ThemeColor().blueColor()
         return view
     }()
     

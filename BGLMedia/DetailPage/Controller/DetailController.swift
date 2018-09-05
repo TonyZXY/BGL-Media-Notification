@@ -54,6 +54,18 @@ class DetailController: UIViewController{
         }
     }
     
+    var assetss: Results<Transactions>{
+        get{
+            return try! Realm().objects(Transactions.self).filter("coinAbbName = %@", coinDetails.selectCoinAbbName)
+        }
+    }
+    
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -67,6 +79,7 @@ class DetailController: UIViewController{
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
          NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadMarketData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
     }
     
@@ -75,14 +88,45 @@ class DetailController: UIViewController{
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
     }
     
     @objc func updateMarketData(){
-        refreshPage()
-//        DispatchQueue.main.async {
-            self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
-//        }
+//        refreshPage()
+//        self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+        if loginStatus{
+//            URLServices.fetchInstance.getSpecificAssets(coinAbbName: coinDetails.selectCoinAbbName){success in
+//                if success{
+                    RefreshDataService.refresh.caculateAssetsData(coinAbbName: self.coinDetails.selectCoinAbbName){success in
+                        if success{
+                            self.refreshPage()
+                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
+                        }
+                    }
+                    self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+//                }
+//            }
+        }else{
+            RefreshDataService.refresh.caculateAssetsData(coinAbbName: coinDetails.selectCoinAbbName){success in
+                if success{
+                    self.refreshPage()
+                    self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
+                }
+            }
+        }
     }
+    
+    @objc func reloadMarketData(){
+            RefreshDataService.refresh.caculateAssetsData(coinAbbName: coinDetails.selectCoinAbbName){success in
+                if success{
+                    self.refreshPage()
+//                    self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
+                }
+            }
+    }
+    
     
     //Load page data
     @objc func refreshPage(){
@@ -95,7 +139,7 @@ class DetailController: UIViewController{
             candleChartDatas.coinExchangeName = value.exchangeName
             candleChartDatas.coinTradingPairsName = value.tradingPairsName
             generalPage.candleChartDatas = candleChartDatas
-                
+            
             checkDataRiseFallColor(risefallnumber: value.currentRiseFall, label: allLossView.profitLoss,currency:value.tradingPairsName, type:"Number")
             mainView.portfolioResult.text = Extension.method.scientificMethod(number:value.totalAmount) + " " + value.coinAbbName
             checkDataRiseFallColor(risefallnumber: value.currentTotalPrice, label: mainView.marketValueRsult,currency:value.tradingPairsName, type: "Default")
@@ -132,7 +176,7 @@ class DetailController: UIViewController{
             if success{
                 self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.success, 0.5))
                 self.refreshPage()
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
             } else{
                 self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.failure, 0.5))
             }

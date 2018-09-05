@@ -40,7 +40,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     var transactionHistory:Results<EachTransactions>{
         get{
-            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "date",ascending:true).sorted(byKeyPath: "time",ascending:true)
+            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "date",ascending:false).sorted(byKeyPath: "time",ascending:false)
         }
     }
     
@@ -66,7 +66,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         historyTableView.switchRefreshHeader(to: .refreshing)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
         setUpView()
     }
     
@@ -75,7 +75,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -238,8 +238,6 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                 }
                 
                 
-                
-                
                 if coinTransactionCount == 1{
                     try! self.realm.write {
                         self.realm.delete(coinSelected)
@@ -251,6 +249,10 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                     }
                 }
             }
+            
+            
+            
+            
             self.historyTableView.reloadData()
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         }

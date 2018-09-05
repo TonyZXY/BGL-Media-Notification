@@ -189,6 +189,7 @@
 		57BBAB6D210962C300984AA4 /* WatchListRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB61210962C300984AA4 /* WatchListRealm.swift */; };
 		57BBAB6E210962C300984AA4 /* GlobalMarketValueRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB62210962C300984AA4 /* GlobalMarketValueRealm.swift */; };
 		57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB63210962C300984AA4 /* GlobalAverageObject.swift */; };
+		57C2F412213E16B50065F0B9 /* RefreshDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2F411213E16B50065F0B9 /* RefreshDataService.swift */; };
 		57EB4CEC2120517B0083B123 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; };
 		57EB4CED2120517B0083B123 /* SwiftKeychainWrapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
@@ -398,6 +399,7 @@
 		57BBAB61210962C300984AA4 /* WatchListRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WatchListRealm.swift; sourceTree = "<group>"; };
 		57BBAB62210962C300984AA4 /* GlobalMarketValueRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalMarketValueRealm.swift; sourceTree = "<group>"; };
 		57BBAB63210962C300984AA4 /* GlobalAverageObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalAverageObject.swift; sourceTree = "<group>"; };
+		57C2F411213E16B50065F0B9 /* RefreshDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshDataService.swift; sourceTree = "<group>"; };
 		57EB4CE92120514E0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		57FC41F120FAD2D20052EE02 /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
@@ -775,6 +777,7 @@
 		57355C0820F7188B002E70E4 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				57355C0920F7188B002E70E4 /* NewsV2Controller.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -793,6 +796,7 @@
 			children = (
 				57355C1020F7189D002E70E4 /* APIServices.swift */,
 				57355C1120F7189D002E70E4 /* URLServices.swift */,
+				57C2F411213E16B50065F0B9 /* RefreshDataService.swift */,
 			);
 			path = ApiServices;
 			sourceTree = "<group>";
@@ -904,7 +908,6 @@
 		573C96AC20F2D5CC00B667AB /* NewsV2 */ = {
 			isa = PBXGroup;
 			children = (
-				57355C0920F7188B002E70E4 /* NewsV2Controller.swift */,
 				57355C0820F7188B002E70E4 /* Controller */,
 				57355C0620F7188B002E70E4 /* Model */,
 				57355C0A20F7188B002E70E4 /* View */,
@@ -1262,6 +1265,7 @@
 				57355C6720F718CC002E70E4 /* WalletDetail.swift in Sources */,
 				2D52AEA520E46E1A00018FC0 /* HistoryTableViewCell.swift in Sources */,
 				57355C4B20F718CC002E70E4 /* TransAdditionalCell.swift in Sources */,
+				57C2F412213E16B50065F0B9 /* RefreshDataService.swift in Sources */,
 				573C96AB20EF068A00B667AB /* Extension.swift in Sources */,
 				2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */,
 				2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */,

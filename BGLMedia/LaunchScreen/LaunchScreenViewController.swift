@@ -29,6 +29,7 @@ class LaunchScreenViewController: UIViewController {
             dispatchGroup.enter()
             APIServices.fetchInstance.writeJsonExchange(){ success in
                 if success{
+                    print("success")
                      dispatchGroup.leave()
                 } else{
                      dispatchGroup.leave()
@@ -38,6 +39,7 @@ class LaunchScreenViewController: UIViewController {
             dispatchGroup.enter()
             URLServices.fetchInstance.getCoinList(){ success in
                 if success{
+                    print("success")
                     dispatchGroup.leave()
                 } else{
                     dispatchGroup.leave()
@@ -47,6 +49,7 @@ class LaunchScreenViewController: UIViewController {
             dispatchGroup.enter()
             URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
             if success{
+               
                 dispatchGroup.leave()
             } else{
                 dispatchGroup.leave()

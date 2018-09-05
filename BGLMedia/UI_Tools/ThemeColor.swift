@@ -10,6 +10,13 @@ import UIKit
 
 class ThemeColor:UIColor{
     
+    
+    func shareImageBackgroundColor() -> UIColor {
+        _ = #colorLiteral(red: 0.1215686275, green: 0.7450980392, blue: 0.7647058824, alpha: 1)
+        let color = UIColor.init(red:40/255.0, green:98/255.0, blue:168/255.0, alpha:1)
+        return color
+    }
+    
     func unrealisedPriceColor() -> UIColor {
         _ = #colorLiteral(red: 0.1215686275, green: 0.7450980392, blue: 0.7647058824, alpha: 1)
         let color = UIColor.init(red:31/255.0, green:190/255.0, blue:195/255.0, alpha:1)

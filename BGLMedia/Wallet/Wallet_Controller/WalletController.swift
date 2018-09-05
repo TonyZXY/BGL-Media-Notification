@@ -73,33 +73,45 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         })
 //        walletList.switchRefreshHeader(to: .refreshing)
 
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(refreshNewAssetsData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
         
         
 //        for result in assetss{
 //            print(result.everyTransactions)
 //        }
 //        print(assetss)
-        print(try! Realm().objects(EachTransactions.self))
+//        print(try! Realm().objects(EachTransactions.self))
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
     }
     
     @objc func reloadNewMarketData(){
         walletList.reloadData()
         caculateTotal()
+    }
+    
+    @objc func refreshNewAssetsData(){
+        self.checkTransaction()
+        loadData(){success in
+            if success{
+                self.caculateTotal()
+                self.walletList.reloadData()
+            }
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -210,7 +222,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 if each.status == "Buy"{
                     buyAmount += each.amount
                     totalAmount += each.amount
-                    buyTotalPrice += ((each.amount) * (currencyResult.first?.price)!)
+                    buyTotalPrice += ((each.amount) * (currencyResult.first?.price ?? 0))
                 }
                 else if each.status == "Sell"{
                     totalAmount -= each.amount
@@ -233,10 +245,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
                 if each.status == "Buy"{
                     amount += each.amount
-                    transactionPrice += ((each.amount) * (currencyResult.first?.price)!)
+                    transactionPrice += ((each.amount) * (currencyResult.first?.price ?? 0))
                 } else if each.status == "Sell"{
                     amount -= each.amount
-                    transactionPrice -= ((each.amount) * (currencyResult.first?.price)!)
+                    transactionPrice -= ((each.amount) * (currencyResult.first?.price ?? 0))
                 }
             }
             
@@ -386,7 +398,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                         self.caculateTotal()
                         self.walletList.reloadData()
                         self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+//                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
                     } else{
                         self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                     }
@@ -399,7 +411,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                     self.caculateTotal()
                     self.walletList.reloadData()
                     self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+//                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
                 } else{
                     self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                 }
