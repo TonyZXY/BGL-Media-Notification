@@ -23,11 +23,22 @@ class ShareNewsFlashControllerV2: UIViewController {
         flashNewsDescription.text = newsdescriptions
         titleLabel.text = newsTitle
         
-        
         // Do any additional setup after loading the view.
     }
     
-    
+//    override func viewWillAppear(_ animated: Bool) {
+//        createGra()
+//    }
+//
+//    func createGra(){
+//        let gradientLayer: CAGradientLayer = CAGradientLayer()
+//        gradientLayer.frame = shareImage.bounds
+//        gradientLayer.colors = [ThemeColor().redColor().cgColor, ThemeColor().blueColor().cgColor]
+//        gradientLayer.locations = [0.0,1.0]
+//        gradientLayer.startPoint = CGPoint(x: 1.0, y: 1.0)
+//        gradientLayer.endPoint = CGPoint(x: 0.0, y: 0.0)
+//        shareImage.layer.insertSublayer(gradientLayer, at: 0)
+//    }
     
     @objc func createImage(){
 //        let ss = UIImage.imageWithView(view: shareImage)
@@ -133,6 +144,8 @@ class ShareNewsFlashControllerV2: UIViewController {
         shareImage.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor).isActive = true
         
         
+        
+        
 //        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "v:|[v0(300)]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":shareImage]))
         
         
@@ -174,7 +187,6 @@ class ShareNewsFlashControllerV2: UIViewController {
        var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = ThemeColor().shareImageBackgroundColor()
-//        view.frame = CGRect(x: 0, y: 0, width: view.frame.width,height: 300)
         return view
     }()
 
@@ -218,7 +230,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         label.font = UIFont.regularFont(17*view.frame.width/375)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.lineBreakMode = .byWordWrapping
-        label.textAlignment = .justified
+        label.textAlignment = .left
         label.numberOfLines = 0
         label.backgroundColor = ThemeColor().shareImageBackgroundColor()
         label.textColor = ThemeColor().whiteColor()
@@ -268,7 +280,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         scrollView.translatesAutoresizingMaskIntoConstraints = false
         scrollView.backgroundColor = ThemeColor().whiteColor()
 //        scrollView.showsVerticalScrollIndicator = true
-//        scrollView.alwaysBounceVertical = true
+        scrollView.bounces = false
         return scrollView
     }()
 //    var testImages:UIImage = {
