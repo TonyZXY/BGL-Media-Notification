@@ -190,6 +190,9 @@
 		57BBAB6E210962C300984AA4 /* GlobalMarketValueRealm.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB62210962C300984AA4 /* GlobalMarketValueRealm.swift */; };
 		57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BBAB63210962C300984AA4 /* GlobalAverageObject.swift */; };
 		57C2F412213E16B50065F0B9 /* RefreshDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2F411213E16B50065F0B9 /* RefreshDataService.swift */; };
+		57E67D0521408977005F290E /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E67D0421408977005F290E /* NewsViewController.swift */; };
+		57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E67D06214089F1005F290E /* NewsMenuBar.swift */; };
+		57E67D0A21408C8D005F290E /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E67D0921408C8D005F290E /* EventsViewController.swift */; };
 		57EB4CEC2120517B0083B123 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; };
 		57EB4CED2120517B0083B123 /* SwiftKeychainWrapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
@@ -400,6 +403,9 @@
 		57BBAB62210962C300984AA4 /* GlobalMarketValueRealm.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalMarketValueRealm.swift; sourceTree = "<group>"; };
 		57BBAB63210962C300984AA4 /* GlobalAverageObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlobalAverageObject.swift; sourceTree = "<group>"; };
 		57C2F411213E16B50065F0B9 /* RefreshDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshDataService.swift; sourceTree = "<group>"; };
+		57E67D0421408977005F290E /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
+		57E67D06214089F1005F290E /* NewsMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsMenuBar.swift; sourceTree = "<group>"; };
+		57E67D0921408C8D005F290E /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		57EB4CE92120514E0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		57FC41F120FAD2D20052EE02 /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
@@ -692,6 +698,8 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				57E67D0821408C71005F290E /* Event */,
+				57E67D032140893B005F290E /* NewV3 */,
 				57663B582137794A00E09754 /* TabBar */,
 				5772046821186B420049BBE8 /* MPAchart */,
 				57AEA179211276ED00042CF6 /* SCLAlertView */,
@@ -1034,6 +1042,24 @@
 			path = Model;
 			sourceTree = "<group>";
 		};
+		57E67D032140893B005F290E /* NewV3 */ = {
+			isa = PBXGroup;
+			children = (
+				57E67D0421408977005F290E /* NewsViewController.swift */,
+				57E67D06214089F1005F290E /* NewsMenuBar.swift */,
+			);
+			name = NewV3;
+			path = New;
+			sourceTree = "<group>";
+		};
+		57E67D0821408C71005F290E /* Event */ = {
+			isa = PBXGroup;
+			children = (
+				57E67D0921408C8D005F290E /* EventsViewController.swift */,
+			);
+			path = Event;
+			sourceTree = "<group>";
+		};
 		57FC41F020FAD2930052EE02 /* More */ = {
 			isa = PBXGroup;
 			children = (
@@ -1280,6 +1306,7 @@
 				57355C5120F718CC002E70E4 /* MarketCapClient.swift in Sources */,
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				57355C0D20F7188B002E70E4 /* NewsV2Controller.swift in Sources */,
+				57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */,
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */,
 				57355C5020F718CC002E70E4 /* CryptoCompareEndpoint.swift in Sources */,
@@ -1334,6 +1361,7 @@
 				57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */,
 				57663B5C21377D2B00E09754 /* UpdateAlertViewController.swift in Sources */,
 				57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */,
+				57E67D0A21408C8D005F290E /* EventsViewController.swift in Sources */,
 				2D52AF1820E46E1A00018FC0 /* FlashSearchTableViewCell.swift in Sources */,
 				57BAD9582104D58300973B45 /* testViewController.swift in Sources */,
 				57BBAB4D2107085F00984AA4 /* Utils.swift in Sources */,
@@ -1348,6 +1376,7 @@
 				57355C5B20F718CC002E70E4 /* SearchTradingPairController.swift in Sources */,
 				57BBAB64210962C300984AA4 /* WatchListsController.swift in Sources */,
 				2D52AEB220E46E1A00018FC0 /* AppDelegate.swift in Sources */,
+				57E67D0521408977005F290E /* NewsViewController.swift in Sources */,
 				2D52AE9F20E46E1A00018FC0 /* MarketSelectController.swift in Sources */,
 				576751FC2105556E006DB67C /* RegisterController.swift in Sources */,
 				2D52AF0F20E46E1A00018FC0 /* NewsFlashViewController.swift in Sources */,
