@@ -122,6 +122,10 @@ open class TimelineTableViewCell: UITableViewCell {
         addSubview(sharesbutton)
         NSLayoutConstraint(item: sharesbutton, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -15).isActive = true
         NSLayoutConstraint(item: sharesbutton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
+        
+        addSubview(likesButton)
+        NSLayoutConstraint(item: likesButton, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1, constant: 35).isActive = true
+        NSLayoutConstraint(item: likesButton, attribute: .top, relatedBy: .equal, toItem: descriptionLabel, attribute: .bottom, multiplier: 1, constant: 5).isActive = true
 //        shareButton.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
 //        NSLayoutConstraint(item: sharesbutton, attribute: .height, relatedBy: .equal, toItem: nil, attribute: .height, multiplier: 1, constant: 30).isActive = true
 //        NSLayoutConstraint(item: sharesbutton, attribute: .width, relatedBy: .equal, toItem: nil, attribute: .width, multiplier: 1, constant: 120).isActive = true
@@ -147,4 +151,22 @@ open class TimelineTableViewCell: UITableViewCell {
 //        button.transform = CGAffineTransform(scaleX: 1, y: -1)
         return button
     }()
+    
+    var likesButton: UIButton = {
+        var button = UIButton()
+        button.backgroundColor = ThemeColor().darkBlackColor()
+        button.layer.cornerRadius = 15
+        button.imageView?.contentMode = .scaleAspectFit
+        button.contentEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10)
+        button.imageEdgeInsets = UIEdgeInsetsMake(20, 0, 20, 0)
+        //        but
+        button.titleLabel!.font =  UIFont.semiBoldFont(10)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.setTitle("551", for: .normal)
+        
+        button.setImage(UIImage(named: "likeButton.png"), for: .normal)
+        return button
+    }()
+    
+    
 }
