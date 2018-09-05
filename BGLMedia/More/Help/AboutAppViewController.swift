@@ -60,7 +60,7 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
         label.textColor = ThemeColor().whiteColor()
         label.font = UIFont.semiBoldFont(14)
         label.textAlignment = .center
-        label.text = "Support: cryptogeek@gmail.com"
+        label.text = "Support: info@Cryptogeekapp.com"
         return label
     }()
     
