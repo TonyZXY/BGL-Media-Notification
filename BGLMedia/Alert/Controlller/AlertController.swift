@@ -129,7 +129,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print(view.frame.height)
         alerts = allAlert
 //        view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
@@ -237,7 +236,6 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
     }
     
     func checkSetUpView(){
-        print(view.frame.height)
         if loginStatus{
             setUpView()
 //            parent?.parent?.view.backgroundColor = ThemeColor().redColor()
