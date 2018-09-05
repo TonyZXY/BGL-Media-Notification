@@ -20,6 +20,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         coinDetailController.gerneralController.exchangeButton.setTitle(exchangeName, for: .normal)
         
     }
+    
 
     var newTransaction = Transactions()
     var selectStatus = "Global"
@@ -41,6 +42,12 @@ class GloabalController: UIViewController,ExchangeSelect{
     var coinAbbName = ""
     var exchangeName = ""
     var tradingPairs = ""
+    
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
     
     var coinRealm:Results<GlobalAverageObject>{
         get{
@@ -82,7 +89,7 @@ class GloabalController: UIViewController,ExchangeSelect{
        
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-        
+        NotificationCenter.default.addObserver(self, selector: #selector(reloadMarketData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
@@ -90,12 +97,36 @@ class GloabalController: UIViewController,ExchangeSelect{
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
 //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
     @objc func updateMarketData(){
-        loadData()
-       self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+//        if loginStatus{
+//            URLServices.fetchInstance.caculateAssetsData(coinAbbName: coinDetail.coinName){success in
+//                if success{
+//
+//                }else{
+//
+//                }
+//
+//            }
+            
+            self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
+//        }
+        
+       
+    }
+    
+    @objc func reloadMarketData(){
+//        URLServices.fetchInstance.caculateAssetsData(coinAbbName: coinDetails.selectCoinAbbName){success in
+//            if success{
+//                self.refreshPage()
+//                //                    self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
+//            }
+//        }
     }
     
     

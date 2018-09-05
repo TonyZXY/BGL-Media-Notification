@@ -42,6 +42,8 @@ class Extension:NSObject{
         return newDates
     }
     
+    
+    
     func convertStringToDate3(date:String) -> String{
         let dateFormat1 = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
         let dateFormatter1 = DateFormatter()
@@ -67,6 +69,40 @@ class Extension:NSObject{
         let newDates: String = dateFormatter2.string(from: newDate)
         return newDates
     }
+    
+    func convertStringToDate5(date:String) -> Date{
+        //        let dateFormat1 = "yyyy-MM-dd"
+        let dateFormat1 = "yyyy-MM-dd  HH:mm:ss "
+        let dateFormatter1 = DateFormatter()
+        dateFormatter1.dateFormat = dateFormat1
+        let newDate:Date = dateFormatter1.date(from: date) ?? Date()
+        return newDate
+    }
+    
+    func convertDateToString6(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        let dateFormat2 = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        dateFormatter.dateFormat = dateFormat2
+        let newDate: String = dateFormatter.string(from: date)
+        return newDate
+    }
+    
+    func convertDateToString7(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        let dateFormat2 = "yyyy-MM-dd HH:mm:ss"
+        dateFormatter.dateFormat = dateFormat2
+        let newDate: String = dateFormatter.string(from: date)
+        return newDate
+    }
+    
+    func convertDateToString8(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        let dateFormat2 = "HH:mm:ss"
+        dateFormatter.dateFormat = dateFormat2
+        let newDate: String = dateFormatter.string(from: date)
+        return newDate
+    }
+    
     
     /// Convert Date to String
     func convertDateToString(date: Date) -> String {

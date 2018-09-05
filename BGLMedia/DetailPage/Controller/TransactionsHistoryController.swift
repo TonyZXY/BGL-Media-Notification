@@ -40,7 +40,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     
     var transactionHistory:Results<EachTransactions>{
         get{
-            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "date",ascending:true).sorted(byKeyPath: "time",ascending:true)
+            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "time",ascending:false).sorted(byKeyPath: "date",ascending:false)
         }
     }
     
@@ -66,7 +66,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
         historyTableView.switchRefreshHeader(to: .refreshing)
         }
         
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+//        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
         setUpView()
     }
     
@@ -75,7 +75,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
     }
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -109,6 +109,25 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                 formatter.locale = Locale(identifier: "en")
                 formatter2.locale = Locale(identifier: "en")
             }
+            
+//            let formatter3 = DateFormatter()
+//            formatter3.dateStyle = .medium
+//            formatter3.timeStyle = .short
+//            if defaultLanguage == "CN"{
+//                formatter3.locale = Locale(identifier: "zh")
+//            } else {
+//                formatter3.locale = Locale(identifier: "en")
+//            }
+            
+//            print(object.date + " " + object.time)
+////            print(object.transactionDate)
+//            print(Extension.method.convertStringToDate5(date: object.date + " " + object.time))
+//            let ss = Extension.method.convertStringToDate5(date: object.date + " " + object.time)
+//            print(Extension.method.convertDateToString6(date: ss))
+//            print(Extension.method.convertDateToString7(date: ss))
+//            print(Extension.method.convertDateToString8(date: ss))
+//            print(formatter3.string(from: ss))
+            
             let time = Extension.method.convertStringToTimePickerDate(date: object.time)
             cell.dateLabel.text = formatter.string(from: date) + " " + formatter2.string(from: time)
             cell.timeline.backColor = ThemeColor().blueColor()
@@ -172,6 +191,7 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                 formatter.locale = Locale(identifier: "en")
                 formatter2.locale = Locale(identifier: "en")
             }
+            
             let time = Extension.method.convertStringToTimePickerDate(date: object.time)
             cell.sellDateLabel.text = formatter.string(from: date) + " " + formatter2.string(from: time)
             
@@ -238,8 +258,6 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                 }
                 
                 
-                
-                
                 if coinTransactionCount == 1{
                     try! self.realm.write {
                         self.realm.delete(coinSelected)
@@ -251,6 +269,10 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                     }
                 }
             }
+            
+            
+            
+            
             self.historyTableView.reloadData()
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         }

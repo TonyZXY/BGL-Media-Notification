@@ -138,8 +138,6 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print("\(section)ppppppppp")
-        print(self.items![section].count)
         return self.items![section].count
     }
     

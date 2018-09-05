@@ -57,10 +57,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         
 
         Realm.Configuration.defaultConfiguration = Realm.Configuration(
-            schemaVersion: 8,
+            schemaVersion: 9,
             //old 2
             migrationBlock: { migration, oldSchemaVersion in
-                if (oldSchemaVersion < 8) {
+                if (oldSchemaVersion < 9) {
                     // The enumerateObjects(ofType:_:) method iterates
                     // over every Person object stored in the Realm file
                     //                    migration.enumerateObjects(ofType: Person.className()) { oldObject, newObject in
@@ -130,7 +130,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         UIApplication.shared.registerForRemoteNotifications()
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
-        
+        let uploadAssetsToServer = UserDefaults.standard.bool(forKey: "UploadAssetsToServer")
         
         
         
@@ -177,6 +177,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set("null", forKey: "UserToken")
             
             KeychainWrapper.standard.set("null", forKey: "Email")
+        }
+        
+        if !uploadAssetsToServer{
+            let realm = try! Realm()
+            URLServices.fetchInstance.sendAssets(){success in
+                if success{
+                    try! realm.write {
+                        realm.delete(realm.objects(Transactions.self))
+                    }
+                    UserDefaults.standard.set(true, forKey: "UploadAssetsToServer")
+                }
+            }
         }
         return true
     }

@@ -18,6 +18,12 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     let transactionHistoryController = TransactionsHistoryController()
     let alertControllers = AlertController()
     
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -26,7 +32,28 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     override func viewWillAppear(_ animated: Bool) {
         if alertGetStatus{
             alertControllers.getNotification()
+            if loginStatus{
+                safeAreaView.backgroundColor = ThemeColor().blueColor()
+            } else{
+                safeAreaView.backgroundColor = ThemeColor().themeColor()
+            }
+            
+            
+            
+            
+//            DispatchQueue.main.async {
+//                self.collectionviews.reloadData()
+//            }
+//            collectionviews.reloadData()
         }
+//        let index = IndexPath(row: 2, section: 0)
+//        let cell:UICollectionViewCell = collectionviews.cellForItem(at: index)!
+////        collectionviews.selectItem(at: selectedIntervalIndexPath, animated: true, scrollPosition: [])
+//        if alertControllers.loginStatus{
+//            cell.backgroundColor = ThemeColor().blueColor()
+//        }else{
+//            cell.backgroundColor = ThemeColor().themeColor()
+//        }
     }
     
 //    override func viewDidDisappear(_ animated: Bool) {
@@ -37,6 +64,8 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
 //    }
     
     func setUpView(){
+        collectionviews.delegate = self
+        collectionviews.dataSource = self
 //        view.backgroundColor = ThemeColor().blueColor()
         let factor = view.frame.width/375
         //Menu Bar
@@ -55,6 +84,16 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews,"v1":menuBar]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews,"v1":menuBar]))
         collectionviews.backgroundColor = ThemeColor().themeColor()
+//        view.addSubview(safeAreaView)
+//
+//        if #available(iOS 11.0, *) {
+//            safeAreaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+//            safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+//            safeAreaView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+//        } else {
+//
+//        }
+        
     }
     
     func scrollViewDidScroll(_ scrollView: UIScrollView) {
@@ -73,14 +112,13 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         return mb
     }()
     
-    lazy var collectionviews: UICollectionView = {
+    var collectionviews: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout:layout)
         collectionview.isPagingEnabled = true
-        collectionview.delegate = self
-        collectionview.dataSource = self
+        
         collectionview.showsHorizontalScrollIndicator = false
         return collectionview
     }()
@@ -105,7 +143,21 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
             return cell
         } else if indexPath.row == 2{
             addChildViewAlertController(childViewControllers: alertControllers,cell:cell)
-            cell.backgroundColor = ThemeColor().blueColor()
+//            cell.addSubview(safeAreaView)
+//            if #available(iOS 11.0, *) {
+//                safeAreaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+//                safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
+//                safeAreaView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
+//            } else {
+//
+//            }
+            
+//            cell.backgroundColor = ThemeColor().blueColor()
+//            if loginStatus{
+//                cell.backgroundColor = ThemeColor().blueColor()
+//            }else{
+//                cell.backgroundColor = ThemeColor().themeColor()
+//            }
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
@@ -126,6 +178,22 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
                 }
                 alertGetStatus = true
             }
+            
+            if indexPath.row == 2{
+                cell.addSubview(safeAreaView)
+                if #available(iOS 11.0, *) {
+                    safeAreaView.topAnchor.constraint(equalTo: cell.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
+                    safeAreaView.bottomAnchor.constraint(equalTo: cell.bottomAnchor, constant: 0).isActive = true
+                    safeAreaView.widthAnchor.constraint(equalToConstant: cell.frame.width).isActive = true
+                } else {
+                    
+                }
+                if loginStatus{
+                    safeAreaView.backgroundColor = ThemeColor().blueColor()
+                }else{
+                    safeAreaView.backgroundColor = ThemeColor().themeColor()
+                }
+            }
         }
     }
     
@@ -135,6 +203,10 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
 //            alertSendStatus = false
 //            alertControllers.sendNotification()
 
+        }
+        
+        if indexPath.row == 2{
+//            safeAreaView.removeFromSuperview()
         }
     }
     
@@ -164,5 +236,34 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         //        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
     }
     
+    
+    func addChildViewAlertControllers(childViewControllers:UIViewController,cell:UICollectionViewCell){
+        addChildViewController(childViewControllers)
+        cell.contentView.addSubview(childViewControllers.view)
+        childViewControllers.view.frame = view.bounds
+        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        childViewControllers.didMove(toParentViewController: self)
+        
+        //Constraints
+        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
+        childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
+        childViewControllers.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
+        childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
+        childViewControllers.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+//        if #available(iOS 11.0, *) {
+//            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.safeAreaLayoutGuide.bottomAnchor).isActive = true
+//
+//        } else {
+//            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
+//        }
+        //        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
+    }
+    
+    var safeAreaView:UIView = {
+        var view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.backgroundColor = ThemeColor().blueColor()
+        return view
+    }()
     
 }

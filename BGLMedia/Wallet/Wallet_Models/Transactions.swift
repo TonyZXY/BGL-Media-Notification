@@ -53,7 +53,8 @@ class EachTransactions:Object{
     var currency = List<EachCurrency>()
     @objc dynamic var worth:Double = 0
     @objc dynamic var delta:Double = 0
-   
+//    @objc dynamic var transactionDate = Date()
+    
     override class func primaryKey() -> String {
         return "id"
     }

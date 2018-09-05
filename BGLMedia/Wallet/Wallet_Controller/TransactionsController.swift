@@ -371,14 +371,19 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                             let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":transactions]
                             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","updateTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
                                 if success{
-                                    self.UpdateTransactionToRealm(){succees in
-                                        if success{
-//                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                            self.navigationController?.popViewController(animated: true)
-                                        } else{
-                                            self.navigationController?.popViewController(animated: true)
+                                    if let transactionId = response["data"][0]["transaction_id"].int{
+                                        self.newTransaction.id = transactionId
+                                        self.UpdateTransactionToRealm(){succees in
+                                            if success{
+                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+//                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                                self.navigationController?.popViewController(animated: true)
+                                            } else{
+                                                self.navigationController?.popViewController(animated: true)
+                                            }
                                         }
+                                    } else{
+                                         self.navigationController?.popViewController(animated: true)
                                     }
                                 } else{
                                     self.navigationController?.popViewController(animated: true)
@@ -387,8 +392,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                         } else{
                             self.UpdateTransactionToRealm(){succees in
                                 if success{
-//                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+//                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
                                     self.navigationController?.popViewController(animated: true)
                                 } else{
                                     self.navigationController?.popViewController(animated: true)
@@ -421,18 +426,25 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                             let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":[transactions]]
                             URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
                                 if success{
-                                    self.AddTransactionToRealm(){success in
-                                        if success{
-                                            //                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                            if self.transactionStatus == "AddSpecific"{
-                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                            } else{
-                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                    print(response)
+                                    if let transactionId = response["data"][0]["transaction_id"].int{
+                                        self.newTransaction.id = transactionId
+                                        self.AddTransactionToRealm(){success in
+                                            if success{
+                                                //                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+                                                if self.transactionStatus == "AddSpecific"{
+                                                    //                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+                                                } else{
+                                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+                                                }
+                                                self.navigationController?.popViewController(animated: true)
+                                            }else{
+                                                self.navigationController?.popViewController(animated: true)
                                             }
-                                            self.navigationController?.popViewController(animated: true)
-                                        }else{
-                                            self.navigationController?.popViewController(animated: true)
                                         }
+                                    } else{
+                                        self.navigationController?.popViewController(animated: true)
                                     }
                                 } else{
                                     self.navigationController?.popViewController(animated: true)
@@ -443,7 +455,8 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                                 if success{
 //                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
                                     if self.transactionStatus == "AddSpecific"{
-                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+//                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
                                     } else{
                                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
                                     }
