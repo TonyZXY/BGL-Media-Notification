@@ -51,10 +51,10 @@ class APIServices:NSObject{
     typealias exchangeChoose = [String:chooseCoin]
     
     static let fetchInstance = APIServices()
-//    let realm = try! Realm()
+    //    let realm = try! Realm()
     let cryptoCompare = "https://min-api.cryptocompare.com/data/"
     let marketCap = "https://api.coinmarketcap.com/v2/"
-    
+    let itunes = "http://itunes.apple.com/lookup?bundleId="
     
     func writeJsonExchange(completion:@escaping (Bool)-> Void){
         Alamofire.request("https://min-api.cryptocompare.com/data/all/exchanges", method: .get).validate().responseJSON { response in
@@ -127,13 +127,13 @@ class APIServices:NSObject{
             case .success(let value):
                 let res = JSON(value)
                 let specificData = res["data"]
-//                print(specificData["quotes"][priceType]["total_market_cap"].double)
+                //                print(specificData["quotes"][priceType]["total_market_cap"].double)
                 realm.beginWrite()
                 let marketCap = String(((specificData["quotes"][priceType]["total_market_cap"].double ?? 0)! / 10000000.0).rounded() / 100.0)
                 let volume24 = String(((specificData["quotes"][priceType]["total_volume_24h"].double ?? 0)! / 10000000.0).rounded() / 100.0)
                 let btcDominance = String(specificData["bitcoin_percentage_of_market_cap"].double?.rounded() ?? 0)
                 let realmData:[Any] = [btcDominance,marketCap,volume24,"0"]
-
+                
                 if realm.object(ofType: GlobalMarketValueRealm.self, forPrimaryKey: "0") == nil {
                     realm.create(GlobalMarketValueRealm.self, value: realmData)
                 } else {
@@ -174,7 +174,7 @@ class APIServices:NSObject{
     }
     
     typealias StringCompletion = (_ success: Bool, _ jsonResult: [String:Double]) -> Void
-
+    
     //Get currency rate and transfer the coin trading price to specific price type
     func getCryptoCurrencyApi(from:String,to:[String],price:Double,completion: @escaping StringCompletion){
         let baseUrl = "https://min-api.cryptocompare.com/data/price?"
@@ -183,9 +183,9 @@ class APIServices:NSObject{
             currencyPairs = currencyPairs + value + ","
         }
         let urlString = baseUrl + currencyPairs
-
+        
         let queue = DispatchQueue(label: "currency rate")
-
+        
         queue.sync {
             guard let url = URL(string: urlString) else { return completion(false,["":0])}
             let transferPrices = URLSession.shared.dataTask(with: url) { (data, response, error) in
@@ -212,7 +212,7 @@ class APIServices:NSObject{
         let url = URL(string: urlString)
         var urlRequest = URLRequest(url: url!)
         urlRequest.httpMethod = "GET"
-
+        
         urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
         Alamofire.request(urlRequest).responseJSON { (response) in
             switch response.result {
@@ -399,6 +399,30 @@ class APIServices:NSObject{
             }
         } else{
             completion(false,JSON())
+        }
+    }
+    
+    func getLatestVersion(completion:@escaping (JSON,Bool)->Void){
+        let url = URL(string: itunes + "com.blockchainglobal.bglmedia")
+        var urlRequest = URLRequest(url: url!)
+        //        URLRequest(url: url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20)
+        urlRequest.httpMethod = "GET"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.timeoutInterval = 10
+        Alamofire.request(urlRequest).validate().responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                let res = JSON(value)
+                completion(res,true)
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    completion(JSON(),false)
+                } else{
+                    print(error)
+                    print("get faliure")
+                    completion(JSON(),false)
+                }
+            }
         }
     }
 }
