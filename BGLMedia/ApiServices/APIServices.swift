@@ -54,7 +54,7 @@ class APIServices:NSObject{
 //    let realm = try! Realm()
     let cryptoCompare = "https://min-api.cryptocompare.com/data/"
     let marketCap = "https://api.coinmarketcap.com/v2/"
-    
+    let itunes = "http://itunes.apple.com/lookup?bundleId="
     
     func writeJsonExchange(completion:@escaping (Bool)-> Void){
         Alamofire.request("https://min-api.cryptocompare.com/data/all/exchanges", method: .get).validate().responseJSON { response in
@@ -399,6 +399,30 @@ class APIServices:NSObject{
             }
         } else{
             completion(false,JSON())
+        }
+    }
+    
+    func getLatestVersion(completion:@escaping (JSON,Bool)->Void){
+        let url = URL(string: itunes + "com.blockchainglobal.bglmedia")
+        var urlRequest = URLRequest(url: url!)
+        //        URLRequest(url: url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20)
+        urlRequest.httpMethod = "GET"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.timeoutInterval = 10
+        Alamofire.request(urlRequest).validate().responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                let res = JSON(value)
+                completion(res,true)
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    completion(JSON(),false)
+                } else{
+                    print(error)
+                    print("get faliure")
+                    completion(JSON(),false)
+                }
+            }
         }
     }
 }
