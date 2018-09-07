@@ -164,7 +164,7 @@ class Extension:NSObject{
     
     
     func scientificMethod(number:Double)->String{
-        var value:String = ""
+//        var value:String = ""
         var getNumber:String = String(format:"%f",number)
         
         let formatValue = Extension.method.formatNumber(number)
@@ -194,15 +194,15 @@ class Extension:NSObject{
                             }
                         }
                     } else{
-                        value = String(format:"%.2f",number)
+                        return String(format:"%.2f",number)
                     }
                 } else{
-                    value = String(format:"%.1f",number)
+                    return String(format:"%.1f",number)
                 }
             }else{
                 return String(format:"%.2f",number)
             }
-            return value
+            return String(format:"%.2f",number)
         } else{
             return formatValue
         }

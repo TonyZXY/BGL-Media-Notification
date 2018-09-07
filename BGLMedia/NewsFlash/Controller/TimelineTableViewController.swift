@@ -38,7 +38,6 @@ class TimelineTableViewController: UITableViewController {
     }
     var resultNew = [Int:[NewsFlash]]()
     
-
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -54,7 +53,6 @@ class TimelineTableViewController: UITableViewController {
         self.tableView.separatorStyle = .none
         self.tableView.autoresizingMask = .flexibleHeight
         self.tableView.switchRefreshFooter(to: .removed)
-        
         
         DispatchQueue.main.async(execute: {
             self.tableView.switchRefreshHeader(to: .refreshing)
@@ -172,6 +170,17 @@ class TimelineTableViewController: UITableViewController {
 
     }
     
+//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//        print("hhahhah")
+//    }
+    
+//    override func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+//        print("hhahhah")
+//    }
+//
+//    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        print("sfsdfdsfs")
+//    }
     
     override func numberOfSections(in tableView: UITableView) -> Int {
         if !resultNew.isEmpty{
@@ -310,19 +319,22 @@ class TimelineTableViewController: UITableViewController {
         let body = ["email":UserDefaults.standard.string(forKey: "UserEmail")!,"token": UserDefaults.standard.string(forKey: "CertificateToken")!, "newsID": object.id]
         
         
-            self.realm.beginWrite()
+//            self.realm.beginWrite()
             if object.checked {
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","unlike"], httpMethod: "POST", parameters: body,
                                                          completion: { (response, success) in
                                                             if success{
                                                                 print(response)
                                                                 if response["success"].bool! {
-                                                                    object.like = response["data"]["likes"].int ?? 0
-                                                                    object.checked = !object.checked
-                                                                    try! self.realm.commitWrite()
+                                                                    try! self.realm.write {
+                                                                        object.like = response["data"]["likes"].int ?? 0
+                                                                        object.checked = !object.checked
+                                                                    }
+                                                                    
+//                                                                    try! self.realm.commitWrite()
                                                                     completion(true)
                                                                 } else{
-                                                                    try! self.realm.commitWrite()
+//                                                                    try! self.realm.commitWrite()
                                                                     completion(false)
                                                                 }
 
@@ -337,16 +349,19 @@ class TimelineTableViewController: UITableViewController {
                     if success{
                         print(response)
                         if response["success"].bool! {
-                        object.like = response["data"]["likes"].int ?? 0
-                        object.checked = !object.checked
-                        try! self.realm.commitWrite()
+                             try! self.realm.write {
+                                object.like = response["data"]["likes"].int ?? 0
+                                object.checked = !object.checked
+                            }
+                       
+//                        try! self.realm.commitWrite()
                         completion(true)
                         } else {
-                            try! self.realm.commitWrite()
+//                            try! self.realm.commitWrite()
                             completion(false)
                         }
                     } else{
-                        try! self.realm.commitWrite()
+//                        try! self.realm.commitWrite()
                         completion(false)
                     }
                 })

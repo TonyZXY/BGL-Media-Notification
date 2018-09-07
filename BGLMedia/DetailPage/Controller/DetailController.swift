@@ -280,6 +280,9 @@ class DetailController: UIViewController{
                             if periodData != []{
                                 let price = periodData.last!["close"].double! - periodData.first!["open"].double!
                                 let change = (price /  periodData.first!["open"].double!) * 100
+                                print("\(change)sdfsdfdfsdfs")
+                                print("\(price)sdfsdfdfsdfs")
+                                
                                 checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
                                 checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
                                 self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"

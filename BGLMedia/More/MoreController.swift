@@ -181,7 +181,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "cancel_clearCache"), comment: ""), style: .cancel, handler:nil)
                 confirmAlertCtrl.addAction(cancelAction)
                 self.present(confirmAlertCtrl, animated: true, completion: nil)
-            } else if indexPath.section == 2 && indexPath.row == 3 {
+            } else if indexPath.section == 2 && indexPath.row == 2 {
                 let urlString = "https://cryptogeekapp.com/policy"
                 if let url = URL(string: urlString) {
                     let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
@@ -195,7 +195,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     self.present(vc, animated: true, completion: nil)
                     //            navigationController?.pushViewController(vc, animated: true)
                 }
-            } else if indexPath.section == 2 && indexPath.row == 2{
+            } else if indexPath.section == 2 && indexPath.row == 1{
                 let urlString = "https://cryptogeekapp.com/terms"
                 if let url = URL(string: urlString) {
                     let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
