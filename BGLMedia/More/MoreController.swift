@@ -58,7 +58,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[textValue(name: "aboutUs_cell"),textValue(name: "about_app"),textValue(name: "more_disclaimer"), textValue(name: "help_privacy")],[textValue(name: "help_section"), textValue(name: "feedback_section")]]
+            return [[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[textValue(name: "about_app"),textValue(name: "more_disclaimer"), textValue(name: "help_privacy")],[textValue(name: "help_section"), textValue(name: "feedback_section")]]
         }
     }
     
@@ -71,7 +71,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[LoginController(usedPlace: 0)],[CurrencyController(),LanguageController(),AlertNotificationController()],[AboutUsViewController(),AboutAppViewController()],[FAQViewController(),ReportProblemViewController()]]
+            return [[LoginController(usedPlace: 0)],[CurrencyController(),LanguageController(),AlertNotificationController()],[AboutAppViewController()],[FAQViewController(),ReportProblemViewController()]]
         }
     }
     
@@ -181,7 +181,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                 let cancelAction = UIAlertAction(title: NSLocalizedString(textValue(name: "cancel_clearCache"), comment: ""), style: .cancel, handler:nil)
                 confirmAlertCtrl.addAction(cancelAction)
                 self.present(confirmAlertCtrl, animated: true, completion: nil)
-            } else if indexPath.section == 2 && indexPath.row == 3 {
+            } else if indexPath.section == 2 && indexPath.row == 2 {
                 let urlString = "https://cryptogeekapp.com/policy"
                 if let url = URL(string: urlString) {
                     let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
@@ -195,7 +195,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     self.present(vc, animated: true, completion: nil)
                     //            navigationController?.pushViewController(vc, animated: true)
                 }
-            } else if indexPath.section == 2 && indexPath.row == 2{
+            } else if indexPath.section == 2 && indexPath.row == 1{
                 let urlString = "https://cryptogeekapp.com/terms"
                 if let url = URL(string: urlString) {
                     let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)

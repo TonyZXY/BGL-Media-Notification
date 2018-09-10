@@ -199,6 +199,8 @@ confirm_clearCache = "Do you confirm to delete all the news and newsflash cache?
 delete_clearCache = "Delete";
 cancel_clearCache = "Cancel";
 logout_hud = "Log out";
+update = "Update to";
+cryptoGeekInfo = "CryptoGeek is the one stop app for all your cryptocurrency investment needs. The app currently provides the best designed free Bitcoin & cryptocurrency portfolio tracker as well as keeping you up to date with the latest news around the industry. Track all your cryptocoins such as Bitcoin, Ethereum, Litecoin and over 1800 altcoins and be on top of the latest news information from range of most popular crypto news media. Use the free app to get the latest coin prices and market charts in your local currency and get alerts to make sure you don’t miss out on your next crypto investment!";
 
 
 

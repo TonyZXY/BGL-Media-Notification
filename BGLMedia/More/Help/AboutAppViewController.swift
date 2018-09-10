@@ -9,7 +9,6 @@
 import UIKit
 
 class AboutAppViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
-
     
     let titleLabel: UILabel = {
         let titleLabel = UILabel()
@@ -44,11 +43,13 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
         return label
     }()
     
+    private var newestVersion = ""
+    
     let companyLabel: UILabel = {
         let label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
-        label.font = UIFont.semiBoldFont(14)
+        label.font = UIFont.boldFont(16)
         label.textAlignment = .center
         label.text = "BlockChain Global"
         return label
@@ -60,12 +61,12 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
         label.textColor = ThemeColor().whiteColor()
         label.font = UIFont.semiBoldFont(14)
         label.textAlignment = .center
-        label.text = "Support: cryptogeek@gmail.com"
+        label.text = "Support: info@Cryptogeekapp.com"
         return label
     }()
     
     lazy var helpTableView:UITableView = {
-        var tableView = UITableView(frame: .zero, style: .grouped)
+        var tableView = UITableView()
         tableView.backgroundColor = ThemeColor().themeColor()
         tableView.delegate = self
         tableView.separatorStyle = .none
@@ -74,23 +75,51 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
         tableView.bounces = false
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "OptionCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
+        tableView.isScrollEnabled = false
         return tableView
     }()
     var items:[String]? {
         get{
-            return [textValue(name: "feedback_rateus")]
+            return [textValue(name: "feedback_rateus"), "\(textValue(name: "update")) \(newestVersion)"]
         }
     }
+    
+    var cryptoGeekInfoTextView: UITextView = {
+        let textView = UITextView()
+        textView.text = textValue(name: "cryptoGeekInfo")
+        textView.translatesAutoresizingMaskIntoConstraints = false
+        textView.isEditable = false
+        textView.backgroundColor = ThemeColor().themeColor()
+        textView.textColor = ThemeColor().whiteColor()
+        textView.font = UIFont.semiBoldFont(14)
+        return textView
+    }()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = ThemeColor().themeColor()
         setUpView()
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","update"], httpMethod: "GET", parameters: [String:Any]()) { [weak self] (response, success) in
+            if success{
+                if let version = response["version"].string {
+                    self?.newestVersion = "v" + version
+                }
+                DispatchQueue.main.async {
+                    self?.helpTableView.reloadData()
+                }
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 1
+        if newestVersion != "" && newestVersion != versionLabel.text {
+            return items?.count ?? 0
+        } else
+        {
+            return 1
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -103,7 +132,7 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if indexPath.row == 0 {
+
             let appID = "1406241883"
             //                let urlStr = "itms-apps://itunes.apple.com/app/id\(appID)" // (Option 1) Open App Page
             let urlStr2 = "itms-apps://itunes.apple.com/app/viewContentsUserReviews?id=\(appID)&onlyLatestVersion=true&pageNumber=0&sortOrdering=1&type=Purple+Software" // (Option 2) Open App Review Tab
@@ -116,11 +145,12 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
                     UIApplication.shared.openURL(url)
                 }
             }
-        } else if indexPath.row == 1 {
-            let nextPage = AboutFunctionController()
-            nextPage.hidesBottomBarWhenPushed = true
-            navigationController?.pushViewController(nextPage, animated: true)
-        }
+        
+//        else if indexPath.row == 1 {
+//            let nextPage = AboutFunctionController()
+//            nextPage.hidesBottomBarWhenPushed = true
+//            navigationController?.pushViewController(nextPage, animated: true)
+//        }
         tableView.deselectRow(at: indexPath, animated: true)
     }
     
@@ -134,11 +164,12 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
         view.addSubview(companyLabel)
         view.addSubview(supportLabel)
         view.addSubview(helpTableView)
+        view.addSubview(cryptoGeekInfoTextView)
         
         iconImage.topAnchor.constraint(equalTo: view.topAnchor, constant: 50 * height ).isActive = true
         iconImage.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         iconImage.widthAnchor.constraint(equalToConstant: 120 * width).isActive = true
-        iconImage.heightAnchor.constraint(equalToConstant: 120 * width).isActive = true
+        iconImage.heightAnchor.constraint(equalToConstant: 60 * width).isActive = true
         
         versionLabel.topAnchor.constraint(equalTo: iconImage.bottomAnchor, constant: 5 * height).isActive = true
         versionLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
@@ -148,7 +179,7 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
         helpTableView.topAnchor.constraint(equalTo: versionLabel.bottomAnchor,constant: 20 * height).isActive = true
         helpTableView.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         helpTableView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-        helpTableView.heightAnchor.constraint(equalToConstant: 150 * height).isActive = true
+        helpTableView.heightAnchor.constraint(equalToConstant: 100 * height).isActive = true
         
         if #available(iOS 11.0, *) {
             supportLabel.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -20 * height).isActive = true
@@ -163,7 +194,11 @@ class AboutAppViewController: UIViewController, UITableViewDelegate, UITableView
         companyLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor).isActive = true
         companyLabel.widthAnchor.constraint(equalToConstant: 300 * width).isActive = true
         companyLabel.heightAnchor.constraint(equalToConstant: 30 * height).isActive = true
-
+        
+        cryptoGeekInfoTextView.topAnchor.constraint(equalTo: helpTableView.bottomAnchor).isActive = true
+        cryptoGeekInfoTextView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        cryptoGeekInfoTextView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        cryptoGeekInfoTextView.bottomAnchor.constraint(equalTo: companyLabel.topAnchor).isActive = true
     }
     
     @objc func changeLanguage(){
