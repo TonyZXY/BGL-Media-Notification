@@ -106,6 +106,8 @@ class TimelineTableViewController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(deleteCache), name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeFontSize), name: NSNotification.Name(rawValue: "changeFontSize"), object: nil)
+        
     }
     
     @objc func deleteCache(){
@@ -133,8 +135,13 @@ class TimelineTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    @objc func changeFontSize(){
+        self.tableView.reloadData()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver("changeLanguage")
+        NotificationCenter.default.removeObserver("changeFontSize")
         NotificationCenter.default.removeObserver("deleteCache")
     }
     

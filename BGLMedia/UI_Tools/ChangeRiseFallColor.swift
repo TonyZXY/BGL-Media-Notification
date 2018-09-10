@@ -21,6 +21,18 @@ var priceType:String {
     }
 }
 
+var fontSize: Int {
+    set {
+        UserDefaults.standard.set(newValue, forKey: "defaultFontSize")
+    }
+    get {
+        if UserDefaults.standard.integer(forKey: "defaultFontSize") == 0 {
+            return 13
+        }
+        return UserDefaults.standard.integer(forKey: "defaultFontSize")
+    }
+}
+
 
 var currecyLogo:[String:String] {
     get{

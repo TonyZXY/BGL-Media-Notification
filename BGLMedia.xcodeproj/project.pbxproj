@@ -201,6 +201,7 @@
 		57FC41FD20FB08560052EE02 /* LanguageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FC20FB08560052EE02 /* LanguageController.swift */; };
 		57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC420420FDC7260052EE02 /* FlashSearchController.swift */; };
 		57FC420920FEB8230052EE02 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -416,6 +417,7 @@
 		57FC420320FBA0310052EE02 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "../zh-Hans-CN.lproj/Main.strings"; sourceTree = "<group>"; };
 		57FC420420FDC7260052EE02 /* FlashSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashSearchController.swift; sourceTree = "<group>"; };
 		57FC420820FEB8230052EE02 /* RevealingSplashView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RevealingSplashView.framework; path = Carthage/Build/iOS/RevealingSplashView.framework; sourceTree = "<group>"; };
+		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1063,6 +1065,7 @@
 		57FC41F020FAD2930052EE02 /* More */ = {
 			isa = PBXGroup;
 			children = (
+				B959EF592146170700930DD6 /* Font */,
 				2D3AF493211BBEA900F5AA51 /* Help */,
 				57FC41F720FAFFEF0052EE02 /* Language */,
 				57FC41F620FAFFE80052EE02 /* Currency */,
@@ -1095,6 +1098,14 @@
 				57FC41FC20FB08560052EE02 /* LanguageController.swift */,
 			);
 			path = Language;
+			sourceTree = "<group>";
+		};
+		B959EF592146170700930DD6 /* Font */ = {
+			isa = PBXGroup;
+			children = (
+				B959EF5A2146172500930DD6 /* FontController.swift */,
+			);
+			path = Font;
 			sourceTree = "<group>";
 		};
 		F249FBEA6AE0F53C3BA5FC1E /* Frameworks */ = {
@@ -1259,6 +1270,7 @@
 				2D52AEE920E46E1A00018FC0 /* MarketsTotalView.swift in Sources */,
 				2D67306C211C2A0100EE49A5 /* ReportProblemViewController.swift in Sources */,
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,
+				B959EF5B2146172500930DD6 /* FontController.swift in Sources */,
 				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
 				2D52AF1D20E46E1A00018FC0 /* Params.swift in Sources */,
 				57355C5920F718CC002E70E4 /* SearchExchangesController.swift in Sources */,
