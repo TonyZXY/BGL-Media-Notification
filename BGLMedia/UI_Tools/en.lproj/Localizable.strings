@@ -14,6 +14,7 @@ back_button = "Back";
 wallet_tab = "Asset";
 market_tab = "Market";
 flash_tab = "News Flash";
+event_tab = "Events";
 news_tab = "News";
 more_tab = "More";
 updateAlert_tab = "Update";

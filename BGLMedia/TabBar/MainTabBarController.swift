@@ -122,6 +122,45 @@ class MainTabBarController: UITabBarController {
                 }
             }
         }
+    
+                
+                        
+                        
+                        
+
+            
+            
+            
+            
+//            if success{
+//                if let version = response["version"].string{
+//                    if version != "\(versionNumber)(\(buildVersion))"{
+//                        if let critical = response["critical"].bool{
+//                            if critical{
+//                                self.forceUpdateAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//                                self.forceUpdateAlert.updateButton.addTarget(self, action: #selector(self.forceUpdate), for: .touchUpInside)
+//                                self.forceUpdateAlert.titleLabel.text = textValue(name: "updateTitle_tab")
+//                                self.forceUpdateAlert.descriptionLabel.text = textValue(name: "updateDescription_tab")
+//                                self.forceUpdateAlert.updateButton.setTitle(textValue(name: "updateAlert_tab"), for: .normal)
+//                                self.addChildViewController(self.forceUpdateAlert)
+//                                self.view.addSubview(self.forceUpdateAlert.view)
+//                            } else{
+//                                self.updateAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
+//                                self.updateAlert.updateButton.addTarget(self, action: #selector(self.forceUpdate), for: .touchUpInside)
+//                                self.updateAlert.titleLabel.text = textValue(name: "updateTitle_tab")
+//                                self.updateAlert.descriptionLabel.text = textValue(name: "updateDescription_tab")
+//                                self.updateAlert.cancelButton.setTitle(textValue(name: "cancelAlert_tab"), for: .normal)
+//                                self.updateAlert.updateButton.setTitle(textValue(name: "updateAlert_tab"), for: .normal)
+//                                self.updateAlert.cancelButton.addTarget(self, action: #selector(self.cancelAlert), for: .touchUpInside)
+//                                self.addChildViewController(self.updateAlert)
+//                                self.view.addSubview(self.updateAlert.view)
+//                            }
+//                        }
+//                    }
+//                }
+//            } else{}
+//        }
+    
         
         
         
@@ -223,9 +262,9 @@ class MainTabBarController: UITabBarController {
         viewControllers![0].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![1].tabBarItem.title = textValue(name: "market_tab")
         viewControllers![1].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
-        viewControllers![2].tabBarItem.title = textValue(name: "flash_tab")
+        viewControllers![2].tabBarItem.title = textValue(name: "news_tab")
         viewControllers![2].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
-        viewControllers![3].tabBarItem.title = textValue(name: "news_tab")
+        viewControllers![3].tabBarItem.title = textValue(name: "event_tab")
         viewControllers![3].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![4].tabBarItem.title = textValue(name: "more_tab")
         viewControllers![4].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)

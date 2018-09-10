@@ -13,7 +13,6 @@ import RealmSwift
 
 class TimelineTableViewController: UITableViewController {
     
-    let realm = try! Realm()
     var dictionary = [String:Int]()
     //    var resultsUpdated = false
     var changeLaugageStatus:Bool = false
@@ -161,7 +160,6 @@ class TimelineTableViewController: UITableViewController {
 
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        
         if !resultNew.isEmpty && !(resultNew[section]?.isEmpty)!{
             return (resultNew[section]?.count)!
         } else {
@@ -193,9 +191,9 @@ class TimelineTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let width =  tableView.frame.size.width
-        let sectionHeaderView = UIView(frame: CGRect(x: 0, y: 0, width: width, height: tableView.sectionHeaderHeight))
+        let sectionHeaderView = UIView(frame: CGRect(x: 0, y: 10, width: 200, height: 80))
         sectionHeaderView.backgroundColor = ThemeColor().themeColor()
-        let label = UILabel(frame: CGRect(x: 20, y: 0, width: width-2*20, height: tableView.sectionHeaderHeight))
+        let label = UILabel(frame: CGRect(x: 20, y: 0, width: width-2*20, height: 20))
         
         label.font = UIFont.boldFont(15)
         label.textColor = ThemeColor().blueColor()
@@ -208,7 +206,7 @@ class TimelineTableViewController: UITableViewController {
         let currentDay = resultNew[section]![0].dateTime
         let timeArr = Extension.method.convertDateToString(date: currentDay).description.components(separatedBy: " ")
         label.text = convertDateForDisplay(convert: timeArr[0])
-        label.layer.cornerRadius = tableView.sectionHeaderHeight/2
+        label.layer.cornerRadius = 8
         label.clipsToBounds = true
         label.layer.borderWidth = 3
         label.layer.borderColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
@@ -315,7 +313,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     func changelikeNumberAndcheck(object: NewsFlash ,completion:@escaping (Bool)->Void){
-        
+        let realm = try! Realm()
         let body = ["email":UserDefaults.standard.string(forKey: "UserEmail")!,"token": UserDefaults.standard.string(forKey: "CertificateToken")!, "newsID": object.id]
         
         
@@ -326,7 +324,7 @@ class TimelineTableViewController: UITableViewController {
                                                             if success{
                                                                 print(response)
                                                                 if response["success"].bool! {
-                                                                    try! self.realm.write {
+                                                                    try! realm.write {
                                                                         object.like = response["data"]["likes"].int ?? 0
                                                                         object.checked = !object.checked
                                                                     }
@@ -339,7 +337,7 @@ class TimelineTableViewController: UITableViewController {
                                                                 }
 
                                                             } else{
-                                                                try! self.realm.commitWrite()
+                                                                try! realm.commitWrite()
                                                                 completion(false)
                                                             }
                 })
@@ -349,7 +347,7 @@ class TimelineTableViewController: UITableViewController {
                     if success{
                         print(response)
                         if response["success"].bool! {
-                             try! self.realm.write {
+                             try! realm.write {
                                 object.like = response["data"]["likes"].int ?? 0
                                 object.checked = !object.checked
                             }
@@ -499,6 +497,7 @@ class TimelineTableViewController: UITableViewController {
     }
     
     private func JSONtoData(json: JSON,completion:@escaping (Bool)->Void) {
+        let realm = try! Realm()
         deletedNumber = 0
         realm.beginWrite()
         if let collection = json.array {
@@ -519,7 +518,7 @@ class TimelineTableViewController: UITableViewController {
                 } else {
                                         print("updating")
                     if !availabilty {
-                        realm.delete(self.realm.objects(NewsFlash.self).filter("id = %@",id))
+                        realm.delete(realm.objects(NewsFlash.self).filter("id = %@",id))
                     }else{
                         realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title, like], update: true)
                     }
