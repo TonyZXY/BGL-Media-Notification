@@ -947,7 +947,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             self.handleRefresh(tableView)
         })
 //        tableView.rowHeight = 70*factor
-        
+        tableView.estimatedRowHeight = 70*factor
         tableView.delegate = self
         tableView.dataSource = self
         return tableView

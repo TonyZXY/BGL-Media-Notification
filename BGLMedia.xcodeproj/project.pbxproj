@@ -147,6 +147,8 @@
 		576751FE210556E8006DB67C /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; };
 		576751FF210556E8006DB67C /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		576752012105597C006DB67C /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576752002105597C006DB67C /* LoginController.swift */; };
+		578452C0214628DB00053814 /* PerDayEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452BF214628DB00053814 /* PerDayEventViewController.swift */; };
+		578452C2214628EC00053814 /* AllEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452C1214628EC00053814 /* AllEventViewController.swift */; };
 		578FE8CF20FEEEB20027F17E /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8C720FEEEB00027F17E /* Montserrat-Medium.ttf */; };
 		578FE8D020FEEEB20027F17E /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8C820FEEEB10027F17E /* Montserrat-Regular.ttf */; };
 		578FE8D120FEEEB20027F17E /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8C920FEEEB10027F17E /* Montserrat-Light.ttf */; };
@@ -360,6 +362,8 @@
 		576751FB2105556E006DB67C /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		576751FD210556E8006DB67C /* JGProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JGProgressHUD.framework; path = Carthage/Build/iOS/JGProgressHUD.framework; sourceTree = "<group>"; };
 		576752002105597C006DB67C /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
+		578452BF214628DB00053814 /* PerDayEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerDayEventViewController.swift; sourceTree = "<group>"; };
+		578452C1214628EC00053814 /* AllEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventViewController.swift; sourceTree = "<group>"; };
 		578FE8C720FEEEB00027F17E /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.ttf"; sourceTree = "<group>"; };
 		578FE8C820FEEEB10027F17E /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		578FE8C920FEEEB10027F17E /* Montserrat-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.ttf"; sourceTree = "<group>"; };
@@ -1056,6 +1060,8 @@
 			isa = PBXGroup;
 			children = (
 				57E67D0921408C8D005F290E /* EventsViewController.swift */,
+				578452BF214628DB00053814 /* PerDayEventViewController.swift */,
+				578452C1214628EC00053814 /* AllEventViewController.swift */,
 			);
 			path = Event;
 			sourceTree = "<group>";
@@ -1337,6 +1343,7 @@
 				2D52AEAE20E46E1A00018FC0 /* MainTabBarController.swift in Sources */,
 				57BBAB4A2107085F00984AA4 /* Availability.swift in Sources */,
 				57BBAB6A210962C300984AA4 /* GlobalFilterCollectionView.swift in Sources */,
+				578452C0214628DB00053814 /* PerDayEventViewController.swift in Sources */,
 				57355C8720F71931002E70E4 /* ThemeColor.swift in Sources */,
 				578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */,
 				57BBAB6B210962C300984AA4 /* WatchListCell.swift in Sources */,
@@ -1372,6 +1379,7 @@
 				2D52AEDC20E46E1A00018FC0 /* AppImage.swift in Sources */,
 				2D52AF2020E46E1A00018FC0 /* CandleStick.swift in Sources */,
 				57355C4420F718CC002E70E4 /* TransExpensesCell.swift in Sources */,
+				578452C2214628EC00053814 /* AllEventViewController.swift in Sources */,
 				57355C6A20F718CC002E70E4 /* AllTransactions.swift in Sources */,
 				57355C5B20F718CC002E70E4 /* SearchTradingPairController.swift in Sources */,
 				57BBAB64210962C300984AA4 /* WatchListsController.swift in Sources */,
