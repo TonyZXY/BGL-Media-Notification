@@ -170,6 +170,7 @@ aboutUs_section = "关于";
 setting_section = "应用设置选项";
 help = "帮助及反馈";
 about_app = "关于CryptoGeek";
+font = "字体";
 about_function = "功能介绍";
 more_disclaimer = "免责声明";
 feedback_section = "意见反馈";
@@ -245,6 +246,9 @@ alertavaliable_alert = "允许";
 alertCoinUnavaliable_alert = "禁用!";
 and = "和";
 
+//Font Page
+flashNews_font = "快讯字体";
+font_size = "字体大小";
 
 //Alert Edit Page
 exampleLabel_alert = "参考市场价格";

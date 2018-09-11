@@ -58,7 +58,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     var items:[[String]]? {
         get{
             let loginStatus = UserDefaults.standard.bool(forKey: "isLoggedIn")
-            return [[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "alert_clearCache")],[textValue(name: "about_app"),textValue(name: "more_disclaimer"), textValue(name: "help_privacy")],[textValue(name: "help_section"), textValue(name: "feedback_section")]]
+            return [[loginStatus == true ? textValue(name: "logout_cell") : textValue(name: "login_cell")],[textValue(name: "defaultCurrency_cell"),textValue(name: "language_cell"),textValue(name: "alert_cell"),textValue(name: "font"),textValue(name: "alert_clearCache")],[textValue(name: "about_app"),textValue(name: "more_disclaimer"), textValue(name: "help_privacy")],[textValue(name: "help_section"), textValue(name: "feedback_section")]]
         }
     }
     
@@ -71,7 +71,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
     
     var pushItems:[[UIViewController]]{
         get{
-            return [[LoginController(usedPlace: 0)],[CurrencyController(),LanguageController(),AlertNotificationController()],[AboutAppViewController()],[FAQViewController(),ReportProblemViewController()]]
+            return [[LoginController(usedPlace: 0)],[CurrencyController(),LanguageController(),AlertNotificationController(),FontController()],[AboutAppViewController()],[FAQViewController(),ReportProblemViewController()]]
         }
     }
     
@@ -168,7 +168,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
             //            if indexPath.section == 1 && indexPath.row == 2{
             //                if notificationStatus{
             
-            if indexPath.section == 1 && indexPath.row == 3{
+            if indexPath.section == 1 && indexPath.row == 4{
                 let confirmAlertCtrl = UIAlertController(title: NSLocalizedString(textValue(name: "title_clearCache"), comment: ""), message: NSLocalizedString(textValue(name: "confirm_clearCache"), comment: ""), preferredStyle: .alert)
                 let confirmAction = UIAlertAction(title: NSLocalizedString(textValue(name: "delete_clearCache"), comment: ""), style: .destructive) { (_) in
                     try! realm.write {
