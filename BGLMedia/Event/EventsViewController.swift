@@ -11,7 +11,11 @@ import UIKit
 class EventsViewController: UIViewController {
 
     var firstPage:Bool = true
-    
+    var navigationBarItem:String{
+        get{
+            return textValue(name: "navigationTitle_event")
+        }
+    }
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
@@ -21,7 +25,9 @@ class EventsViewController: UIViewController {
     
 
     func setUpView(){
-   let reSizeMain = CGSize(width: 20, height: 20)
+        titleLabel.text = navigationBarItem
+        navigationItem.titleView = titleLabel
+        let reSizeMain = CGSize(width: 20, height: 20)
         let btn1 = UIButton(type: .system)
         btn1.layer.borderColor = ThemeColor().whiteColor().cgColor
         btn1.layer.cornerRadius = 8
@@ -150,6 +156,16 @@ class EventsViewController: UIViewController {
         button.addTarget(self, action: #selector(modeChange), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
+    }()
+    
+    lazy var titleLabel: UILabel = {
+        let factor = view.frame.width/375
+        let titleLabel = UILabel()
+        titleLabel.textColor = UIColor.white
+        titleLabel.font = UIFont.semiBoldFont(17*factor)
+        titleLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
+        titleLabel.textAlignment = .center
+        return titleLabel
     }()
     
 }

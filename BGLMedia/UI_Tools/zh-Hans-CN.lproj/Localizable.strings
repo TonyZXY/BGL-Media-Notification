@@ -406,4 +406,6 @@ hud_passwordReset = "密码重置";
 hud_noNetwork = "无网络连接";
 hud_timeOut = "请求超时";
 
+//Event Page
+navigationTitle_event = "活动";
 

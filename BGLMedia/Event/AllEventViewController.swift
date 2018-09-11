@@ -15,7 +15,10 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return UIView()
+        let label = UILabel()
+        label.textColor = ThemeColor().whiteColor()
+        label.text = "2018-03-04"
+        return label
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -23,11 +26,11 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 6
+        return 3
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "EventList") as! EventListTabelViewCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "EventList") as! EventListTableViewCell
         return cell
     }
     
@@ -38,6 +41,7 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
     }
 
     func setUpView(){
+        view.backgroundColor = ThemeColor().darkGreyColor()
         view.addSubview(listTableView)
         listTableView.topAnchor.constraint(equalTo: view.topAnchor, constant: 0).isActive = true
         listTableView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
@@ -48,11 +52,12 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
     lazy var listTableView:UITableView = {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(EventListTabelViewCell.self, forCellReuseIdentifier: "EventList")
+        tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: "EventList")
         tableView.delegate = self
         tableView.dataSource = self
         tableView.estimatedRowHeight = 50
-        tableView.rowHeight = 50
+        tableView.separatorStyle = .none
+        tableView.backgroundColor = ThemeColor().darkGreyColor()
         return tableView
     }()
     
@@ -61,7 +66,7 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
 
 }
 
-class EventListTabelViewCell:UITableViewCell{
+class EventListTableViewCell:UITableViewCell{
     
     
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
@@ -71,13 +76,21 @@ class EventListTabelViewCell:UITableViewCell{
     
     
     func setUpView(){
+        selectionStyle = .none
+        backgroundColor = ThemeColor().darkGreyColor()
         addSubview(cellView)
+        cellView.addSubview(titleLabel)
         cellView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0).isActive = true
         cellView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
         cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
         cellView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
         cellView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+        
+        titleLabel.topAnchor.constraint(equalTo: cellView.topAnchor, constant: 5).isActive = true
+        titleLabel.bottomAnchor.constraint(equalTo: cellView.bottomAnchor, constant: -5).isActive = true
+        titleLabel.leftAnchor.constraint(equalTo: cellView.leftAnchor, constant: 10).isActive = true
+        titleLabel.rightAnchor.constraint(equalTo: cellView.rightAnchor, constant: -10).isActive = true
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -98,34 +111,10 @@ class EventListTabelViewCell:UITableViewCell{
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 2
+        label.text = "The Future of Blockchain, Digital Assets & Interoperability"
         return label
     }()
     
-    var detailLabel:UILabel = {
-        var label = UILabel()
-        label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 0
-        label.backgroundColor = ThemeColor().greyColor()
-        label.font = UIFont.regularFont(15)
-        label.textColor = ThemeColor().textGreycolor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    var shareButton:UIButton = {
-        var button = UIButton()
-        button.backgroundColor = ThemeColor().darkBlackColor()
-        button.setTitleColor(ThemeColor().whiteColor(), for: .normal)
-        button.layer.cornerRadius = 15
-        button.imageView?.contentMode = .scaleAspectFit
-        button.contentEdgeInsets = UIEdgeInsetsMake(5, 10, 5, 10)
-        button.imageEdgeInsets = UIEdgeInsetsMake(20, 0, 20, 0)
-        button.titleLabel!.font =  UIFont.semiBoldFont(13)
-        button.translatesAutoresizingMaskIntoConstraints = false
-        button.setTitle("Share", for: .normal)
-        button.setImage(UIImage(named: "share_.png"), for: .normal)
-        return button
-    }()
     
 }
 

@@ -412,6 +412,8 @@ hud_passwordReset = "Password Reset";
 hud_noNetwork = "No Network";
 hud_timeOut = "Time Out";
 
+//Event Page
+navigationTitle_event = "Events";
 
 
 
