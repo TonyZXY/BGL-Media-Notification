@@ -182,9 +182,9 @@ class TimelineTableViewController: UITableViewController {
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let width =  tableView.frame.size.width
-        let sectionHeaderView = UIView(frame: CGRect(x: 0, y: 10, width: 200, height: 80))
+        let sectionHeaderView = UIView(frame: CGRect(x: 0, y: 20, width: 200, height: 80))
         sectionHeaderView.backgroundColor = ThemeColor().themeColor()
-        let label = UILabel(frame: CGRect(x: 20, y: 0, width: width-2*20, height: 20))
+        let label = UILabel(frame: CGRect(x: 20, y: 10, width: width-2*20, height: 20))
         
         label.font = UIFont.boldFont(15)
         label.textColor = ThemeColor().blueColor()

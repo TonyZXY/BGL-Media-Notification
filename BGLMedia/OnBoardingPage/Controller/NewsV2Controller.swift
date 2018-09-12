@@ -154,6 +154,14 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // dequeue first cell and make it the sliderCell(Modified)
+        if indexPath.row == 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: TableCellForSlider.registerID,for: indexPath) as! TableCellForSlider
+            cell.width = view.frame.width
+            cell.backgroundColor = .red
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsTableViewCell
         if indexPath.row <= displayNumber{
             let width = self.view.frame.width
@@ -302,6 +310,10 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.rowHeight = 120 * self.view.frame.width/414
         tableView.delegate = self
         tableView.dataSource = self
+        
+        //add identifier for first cell(Modified)
+        tableView.register(TableCellForSlider.self, forCellReuseIdentifier: TableCellForSlider.registerID)
+        
         return tableView
     }()
     
@@ -367,4 +379,3 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     //            return refreshControl
     //    }()
 }
-

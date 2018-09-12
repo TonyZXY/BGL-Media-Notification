@@ -769,6 +769,22 @@ extension UIView {
         }
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
     }
+    
+    func safeArea() ->UILayoutGuide{
+        if #available(iOS 11.0, *) {
+            return self.safeAreaLayoutGuide
+        } else {
+            return self.layoutMarginsGuide
+        }
+    }
+    
+    func equalToAllAnchors(top:NSLayoutYAxisAnchor,bottom:NSLayoutYAxisAnchor,leading:NSLayoutXAxisAnchor,trailing:NSLayoutXAxisAnchor){
+        translatesAutoresizingMaskIntoConstraints = false
+        topAnchor.constraint(equalTo: top).isActive = true
+        bottomAnchor.constraint(equalTo: bottom).isActive = true
+        leadingAnchor.constraint(equalTo: leading).isActive = true
+        trailingAnchor.constraint(equalTo: trailing).isActive = true
+    }
 }
 
 public extension UIViewController {
@@ -856,8 +872,6 @@ extension UIButton{
         }
     }
 }
-
-
 
 
 
