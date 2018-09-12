@@ -140,24 +140,46 @@ class GloabalController: UIViewController,ExchangeSelect{
         }
         
         if selectItem.count != 0{
-            APIServices.fetchInstance.getExchangePriceData(from: (selectItem.first?.coinAbbName)!, to: (selectItem.first?.tradingPairsName)!, market: (selectItem.first?.market)!) { (success, response) in
-            if success{
-                print(response)
-                let singlePrice = response["RAW"]["PRICE"].double ?? 0
-                let profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
-                let filterName = "coinAbbName = '" + self.coinAbbName + "' "
-                let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
-                if let object = statusItem.first{
-                    try! self.realm.write {
-                        object.price = singlePrice
-                        object.profitChange = profitChange
+            if (selectItem.first?.market)! == "Huobi Australia"{
+                APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: (selectItem.first?.coinAbbName)!, tradingPairName: (selectItem.first?.tradingPairsName)!, exchangeName: (selectItem.first?.market)!) { (response, success) in
+                    if success{
+                        print(response)
+                        let closePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
+                        let openPrice = Double(response["tick"]["open"].string ?? "0") ?? 0
+                        let price = ((closePrice - openPrice) / openPrice) * 100
+                        let filterName = "coinAbbName = '" + self.coinAbbName + "' "
+                        let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
+                        if let object = statusItem.first{
+                            try! self.realm.write {
+                                object.price = closePrice
+                                object.profitChange = price
+                            }
+                        }
+                        completion(true)
+                    }else{
+                        completion(false)
                     }
                 }
-                completion(true)
             }else{
-                completion(false)
+                APIServices.fetchInstance.getExchangePriceData(from: (selectItem.first?.coinAbbName)!, to: (selectItem.first?.tradingPairsName)!, market: (selectItem.first?.market)!) { (success, response) in
+                    if success{
+                        print(response)
+                        let singlePrice = response["RAW"]["PRICE"].double ?? 0
+                        let profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
+                        let filterName = "coinAbbName = '" + self.coinAbbName + "' "
+                        let statusItem = self.realm.objects(WatchListRealm.self).filter(filterName)
+                        if let object = statusItem.first{
+                            try! self.realm.write {
+                                object.price = singlePrice
+                                object.profitChange = profitChange
+                            }
+                        }
+                        completion(true)
+                    }else{
+                        completion(false)
+                    }
+                }
             }
-        }
     }
     }
     
@@ -231,7 +253,7 @@ class GloabalController: UIViewController,ExchangeSelect{
                 } else{
                     dispatchGroup.leave()
                 }
-            } else{
+            }else{
                 reloadData(){success in
                     if success{
                         dispatchGroup.leave()
@@ -515,6 +537,8 @@ class GloabalController: UIViewController,ExchangeSelect{
             }
         }
         
+        print(realmMarket)
+        
         if realmCoinAbbName != "" && realmTradingPairsName != "" && realmMarket != ""{
             APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
                 if success{
@@ -527,9 +551,11 @@ class GloabalController: UIViewController,ExchangeSelect{
                                 checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
                                 checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
                                 self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-                                completion(true)
                             }
                         }
+                        completion(true)
+                    } else{
+                        completion(false)
                     }
                 } else{
                     completion(false)

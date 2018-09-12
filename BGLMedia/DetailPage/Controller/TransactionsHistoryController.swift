@@ -426,6 +426,19 @@ class TransactionsHistoryController: UIViewController,UITableViewDataSource,UITa
                         dispatchGroup.leave()
                     }
                 }
+            }else if result.exchangeName == "Huobi Australia"{
+                APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: result.coinAbbName, tradingPairName: result.tradingPairsName, exchangeName: result.exchangeName) { (response, success) in
+                    if success{
+                        let singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
+                        try! self.realm.write {
+                            result.worth = singlePrice * result.amount
+                            result.delta = (((singlePrice * result.amount) - result.totalPrice) / result.totalPrice) * 100
+                        }
+                        dispatchGroup.leave()
+                    } else{
+                        dispatchGroup.leave()
+                    }
+                }
             } else{
                 APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.exchangeName) { (success, response) in
                     if success{

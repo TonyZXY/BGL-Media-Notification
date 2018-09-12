@@ -43,10 +43,16 @@ class HistoricalDataFetcher {
     }
     
     func fetcher(coinSymbol: String, currency: String, exchangeName:String, completionHandler: CompletionHandler = nil) {
-        let url = URL(string: "https://min-api.cryptocompare.com/data/\(Params.intervalParam)?fsym=\(coinSymbol)&tsym=\(currency)&e=\(exchangeName)&limit=\(limit)")
+        let urlString:String? = "https://min-api.cryptocompare.com/data/\(Params.intervalParam)?fsym=\(coinSymbol)&tsym=\(currency)&e=\(exchangeName.replacingOccurrences(of: " ", with: ""))&limit=\(limit)"
+        print(urlString)
         
+        guard let urlStrings = urlString, let url = URL(string: urlStrings)else{return (completionHandler?())! }
+
+        print(url)
         DispatchQueue.global(qos: .userInitiated).async { [unowned self] in
-            let urlRequest = URLRequest(url: url!)
+            
+            
+            let urlRequest = URLRequest(url: url)
             HistoricalDataFetcher.dataTask = self.defaultSession.dataTask(with: urlRequest, completionHandler: { (data, response, error) in
                 if let _ = error {
                     return

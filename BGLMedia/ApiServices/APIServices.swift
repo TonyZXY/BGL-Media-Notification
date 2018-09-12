@@ -55,6 +55,8 @@ class APIServices:NSObject{
     let cryptoCompare = "https://min-api.cryptocompare.com/data/"
     let marketCap = "https://api.coinmarketcap.com/v2/"
     let itunes = "http://itunes.apple.com/lookup?bundleId="
+    let HuobiAu = "https://api.huobi.com.au/"
+    
     
     func writeJsonExchange(completion:@escaping (Bool)-> Void){
         Alamofire.request("https://min-api.cryptocompare.com/data/all/exchanges", method: .get).validate().responseJSON { response in
@@ -62,14 +64,36 @@ class APIServices:NSObject{
             case .success(let value):
                 let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
                 let fileURL = documentsURL.appendingPathComponent("Exchanges.json")
-                let json = JSON(value)
-                do {
-                    let rawData = try json.rawData()
-                    try rawData.write(to: fileURL, options: .atomic)
-                } catch {
-                    print("Error \(error)")
-                }
-                completion(true)
+                var json = JSON(value)
+                
+                APIServices.fetchInstance.getHuobiAuCoinList(completion: { (HuobiResponse, success) in
+                    if success{
+                        if let coinlist = HuobiResponse["data"].array{
+                            var exchangeCoinList = [String:[String]]()
+                            for result in coinlist{
+                                if let coin = result["base-currency"].string?.uppercased(), let tradingPairs = result["quote-currency"].string?.uppercased(){
+                                        exchangeCoinList[coin] = [tradingPairs]
+                                }
+                            }
+                             json["Huobi Australia"] = JSON(exchangeCoinList)
+                        }
+                        do {
+                            let rawData = try json.rawData()
+                            try rawData.write(to: fileURL, options: .atomic)
+                        } catch {
+                            print("Error \(error)")
+                        }
+                        completion(true)
+                    }else{
+                        do {
+                            let rawData = try json.rawData()
+                            try rawData.write(to: fileURL, options: .atomic)
+                        } catch {
+                            print("Error \(error)")
+                        }
+                        completion(true)
+                    }
+                })
             case .failure(let error):
                 print(error)
                 completion(false)
@@ -378,12 +402,12 @@ class APIServices:NSObject{
         if exactMarket == "Global Average"{
             exactMarket = "CCCAGG"
         }
-        
         let urlParam:[String:[String]] = ["Minute":["histominute?","29"],"Hour":["histohour?","3"],"Day":["histohour?","23"],"Week":["histoday?","5"]]
         if period == "Minute" || period == "Hour" || period == "Day" || period == "Week"{
-            let urlString = cryptoCompare + ((urlParam[period]) ?? ["histominute?","29"])[0] + "fsym=" + from + "&tsym=" + to + "&e=" + exactMarket + "&limit=" + ((urlParam[period]) ?? ["histominute?","29"])[1]
-            let url = URL(string: urlString)
-            var urlRequest = URLRequest(url: url!)
+            let urlString:String? = cryptoCompare + ((urlParam[period]) ?? ["histominute?","29"])[0] + "fsym=" + from + "&tsym=" + to + "&e=" + exactMarket + "&limit=" + ((urlParam[period]) ?? ["histominute?","29"])[1]
+            guard let urlStrings = urlString,
+                let url = URL(string: urlStrings)else{return completion(false,JSON())}
+            var urlRequest = URLRequest(url: url)
             urlRequest.httpMethod = "GET"
             
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
@@ -423,6 +447,59 @@ class APIServices:NSObject{
                     completion(JSON(),false)
                 }
             }
+        }
+    }
+    
+    func getHuobiAuCoinList(completion:@escaping (JSON,Bool)->Void){
+        let parameterUrl = "v1/common/symbols"
+        let url = URL(string: HuobiAu + parameterUrl)
+        var urlRequest = URLRequest(url: url!)
+        urlRequest.httpMethod = "GET"
+        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        urlRequest.timeoutInterval = 10
+        Alamofire.request(urlRequest).validate().responseJSON { (response) in
+            switch response.result {
+            case .success(let value):
+                let res = JSON(value)
+                completion(res,true)
+            case .failure(let error):
+                if error._code == NSURLErrorTimedOut {
+                    completion(JSON(),false)
+                } else{
+                    print(error)
+                    print("get faliure")
+                    completion(JSON(),false)
+                }
+            }
+        }
+    }
+    
+    func getHuobiAuCoinPrice(coinAbbName:String,tradingPairName:String,exchangeName:String, completion:@escaping (JSON,Bool)->Void){
+        let baseUrl = "market/detail?symbol="
+        let parameterUrl = baseUrl + coinAbbName.lowercased() + tradingPairName.lowercased()
+        if exchangeName == "Huobi Australia"{
+            let url = URL(string: HuobiAu + parameterUrl)
+            var urlRequest = URLRequest(url: url!)
+            urlRequest.httpMethod = "GET"
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            urlRequest.timeoutInterval = 10
+            Alamofire.request(urlRequest).validate().responseJSON { (response) in
+                switch response.result {
+                case .success(let value):
+                    let res = JSON(value)
+                    completion(res,true)
+                case .failure(let error):
+                    if error._code == NSURLErrorTimedOut {
+                        completion(JSON(),false)
+                    } else{
+                        print(error)
+                        print("get faliure")
+                        completion(JSON(),false)
+                    }
+                }
+            }
+        }else{
+            completion(JSON(),false)
         }
     }
 }
