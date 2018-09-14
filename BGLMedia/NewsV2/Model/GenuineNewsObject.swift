@@ -9,7 +9,7 @@
 import Foundation
 import RealmSwift
 
-class NewsSliderObject : Object{
+class GenuineNewsObject : Object{
     @objc dynamic var _id: String? = ""
     @objc dynamic var author: String? = ""
     @objc dynamic var genuineDescription: String? = ""

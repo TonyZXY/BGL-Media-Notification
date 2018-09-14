@@ -10,11 +10,11 @@ import Foundation
 
 import UIKit
 
-//import SwiftyJSON
-//import SafariServices
-//import RealmSwift
+import SwiftyJSON
+import SafariServices
+import RealmSwift
 
-extension NewsV2Controller{
+extension NewsV2Controller : TableCellForSliderDelegate{
     
     // change first row's height and remain the same for other
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -25,11 +25,25 @@ extension NewsV2Controller{
         return 120 * view.frame.width/414
     }
     
+    func didTryToOpenURL(sliderView: UICollectionView, urlString: String) {
+        if let url = URL(string: urlString) {
+            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            print(vc.description)
+            if #available(iOS 11.0, *) {
+                vc.dismissButtonStyle = .close
+            } else {
+                
+            }
+            vc.hidesBottomBarWhenPushed = true
+            vc.accessibilityNavigationStyle = .separate
+            self.present(vc, animated: true, completion: nil)
+        }else{
+            print("selected url invalid")
+        }
+    }
 }
 
 class NewsSliderCollectionView: UICollectionView{
-    
-    @IBInspectable let cellNumber = 5
     
     open static let layout:UICollectionViewLayout = {
         var layout = UICollectionViewFlowLayout()
@@ -114,7 +128,7 @@ class NewsSliderCollectionViewCell : UICollectionViewCell{
         addConstraintsWithFormat(format: "V:[v0]|", views: descriptionLabel)
     }
     /**
-        return value * factorNumber
+     return value * factorNumber
      */
     private func timesFactor(value :CGFloat) -> CGFloat{
         return value * self.factorNumber!
@@ -129,6 +143,8 @@ class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionV
     
     open static let registerID = "TableCellForSlider"
     
+    var customDelegate : TableCellForSliderDelegate?
+    
     // factor Number is used to calculate height and constraint
     var factorNumber:CGFloat?
     var width:CGFloat?{
@@ -136,7 +152,7 @@ class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionV
             // change factorNumber as width change and reset view
             factorNumber = width!/414
             setupView()
-            print("this has been changed")
+            setupSliderContent()
         }
     }
     
@@ -146,7 +162,7 @@ class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionV
     //===================slider collectionView=======
     let sliderView :NewsSliderCollectionView = {
         var slider = NewsSliderCollectionView(frame: NewsSliderCollectionView.frame,
-        collectionViewLayout: NewsSliderCollectionView.layout)
+                                              collectionViewLayout: NewsSliderCollectionView.layout)
         return slider
     }()
     
@@ -154,8 +170,11 @@ class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionV
      number of sldiercell
      */
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let collection = collectionView as! NewsSliderCollectionView
-        return collection.cellNumber
+        if(genuineNewsObject.count > displayLimit){
+            return displayLimit
+        }else{
+            return genuineNewsObject.count
+        }
     }
     /**
      define slidercell type
@@ -171,15 +190,30 @@ class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionV
      */
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
         
-//        return CGSize(width: self.width!, height: self.heightOfSlider * self.factorNumber!)
+        //        return CGSize(width: self.width!, height: self.heightOfSlider * self.factorNumber!)
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
+    }
+    /**
+     did select at row
+     */
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let genuine = genuineNewsObject[indexPath.row]
+        let urlString = genuine.url
+        
+        self.customDelegate?.didTryToOpenURL(sliderView: collectionView, urlString: urlString!)
     }
     
     //=====================page control==============
     lazy var pageControl: UIPageControl = {
         var pageC = UIPageControl()
         pageC.currentPage = 0
-        pageC.numberOfPages = sliderView.cellNumber
+        pageC.numberOfPages = {
+            if(genuineNewsObject.count > displayLimit){
+                return displayLimit
+            }else{
+                return genuineNewsObject.count
+            }
+        }()
         pageC.currentPageIndicatorTintColor = .white
         pageC.pageIndicatorTintColor = .gray
         return pageC
@@ -197,76 +231,78 @@ class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionV
         addSubview(pageControl)
         addConstraintsWithFormat(format: "H:|[v0]|", views: sliderView)
         addConstraintsWithFormat(format: "H:|[v0]|", views: pageControl)
-        addConstraintsWithFormat(format: "V:|[v0(\(heightOfSlider * factorNumber!))]-0-[v1(\(heightOfPageControl * factorNumber!))]|", views: sliderView,pageControl)
+        addConstraintsWithFormat(format: "V:|[v0(\(heightOfSlider * factorNumber!))]-0-[v1(\(heightOfPageControl * factorNumber!))]", views: sliderView,pageControl)
     }
     
     //=====================data storing and getting==========
     
-//    var NewsSliderObjects:Results<NewsSliderObject>{
-//        get{
-//            return try! Realm().objects(NewsSliderObject.self).sorted(byKeyPath: "publishedTime", ascending: false)
-//        }
-//    }
+    var genuineNewsObject:Results<GenuineNewsObject>{
+        get{
+            return try! Realm().objects(GenuineNewsObject.self).sorted(byKeyPath: "publishedTime", ascending: false)
+        }
+    }
     
-//    func getData(genuineTag: String,skip:Int,limit:Int,completion: @escaping (Bool)->Void){
-//        URLServices.fetchInstance.passServerData(urlParameters: ["api","getgenuine?genuineTag=" + genuineTag + "&languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
-//            if pass{
-////                self.resultNumber = res.count
-////                self.storeDataToRealm(res:res){success in
-////                    if success{
-////                        completion(true)
-////                    }
-////                }
-//                self.parseData(json: res)
-//                completion(true)
-//            } else{
-//                completion(false)
-//            }
-//        }
-//    }
-//
-//    func parseData(json:JSON){
-//        print(json.array?.count)
-//    }
+    let displayLimit = 10
     
+    @objc func setupSliderContent(){
+        getData(skip: 0, limit: displayLimit){ success in
+            if success {
+                // thing to do if successfully get data
+                print("got data")
+            }else{
+                // thing to do if fail to load data
+                print("failed to get data")
+            }
+        }
+    }
     
-//    func storeDataToRealm(res:JSON,completion: @escaping (Bool)->Void){
-//        let realm = try! Realm()
-//        realm.beginWrite()
-//        if let collection = res.array {
-//            for result in collection{
-//
-//            }
-//        }
-////        realm.beginWrite()
-////        if let collection = res.array{
-////            for result in collection{
-////                let id = result["_id"].string ?? "0"
-////                let title = result["title"].string ?? ""
-////                let newsDescription = result["newsDescription"].string ?? ""
-////                let imageURL = result["imageURL"].string ?? ""
-////                let url = result["url"].string ?? ""
-////                let publishedTime = Extension.method.convertStringToDate(date: result["publishedTime"].string ?? "")
-////                let author = result["author"].string ?? ""
-////                let localeTag = result["localeTag"].string ?? ""
-////                let lanugageTag = result["languageTag"].string ?? ""
-////                let source = result["source"].string ?? ""
-////                let contentTagResult = result["contentTag"].array ?? [""]
-////                let contentTag = List<String>()
-////                for result in contentTagResult{
-////                    contentTag.append(result.string!)
-////                }
-////
-////                if id != "0" {
-////                    if realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
-////                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, lanugageTag,source,contentTag])
-////                    } else {
-////                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,lanugageTag,source,contentTag], update: true)
-////                    }
-////                }
-////            }
-////            try! realm.commitWrite()
-////            completion(true)
-////        }
-//    }
+    func getData(skip:Int,limit:Int,completion: @escaping (Bool)->Void){
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","getgenuine?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
+            if pass{
+                self.storeDataToRealm(res:res){success in
+                    if success{
+                        completion(true)
+                    }
+                }
+            } else{
+                completion(false)
+            }
+        }
+    }
+    
+    func storeDataToRealm(res:JSON,completion: @escaping (Bool)->Void){
+        let realm = try! Realm()
+        realm.beginWrite()
+        if let collection = res.array {
+            for result in collection{
+                let id = result["_id"].string ?? "0"
+                let author = result["author"].string ?? ""
+                let genuineDescription = "genuineDescription"
+                let imageURL = result["imageURL"].string ?? ""
+                let url = result["url"].string ?? ""
+                let genuineTag = result["genuineTag"].string ?? ""
+                let publishedTime = Extension.method.convertStringToDate(date: result["publishedTime"].string ?? "")
+                let languageTag = ""
+                
+                // if id is valid
+                if(id != "0"){
+                    // if object not stored
+                    if(realm.object(ofType: GenuineNewsObject.self, forPrimaryKey: id) == nil){
+                        realm.create(GenuineNewsObject.self, value: [id, author, genuineDescription, imageURL, url, genuineTag, publishedTime, languageTag])
+                    } else {
+                        realm.create(GenuineNewsObject.self, value: [id, author, genuineDescription, imageURL, url, genuineTag, publishedTime, languageTag], update:true)
+                    }
+                }
+            }
+            try! realm.commitWrite()
+            completion(true)
+        }
+    }
+}
+
+protocol TableCellForSliderDelegate {
+    /**
+     try to open url for selected slider News
+     */
+    func didTryToOpenURL(sliderView: UICollectionView,urlString:String)
 }
