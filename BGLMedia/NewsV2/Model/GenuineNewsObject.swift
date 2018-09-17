@@ -11,6 +11,7 @@ import RealmSwift
 
 class GenuineNewsObject : Object{
     @objc dynamic var _id: String? = ""
+    @objc dynamic var title: String? = ""
     @objc dynamic var author: String? = ""
     @objc dynamic var genuineDescription: String? = ""
     @objc dynamic var imageURL: String? = ""
