@@ -101,7 +101,10 @@ class FlashSearchController: UIViewController,UITableViewDataSource,UITableViewD
                     self.searchFlashNewsTableView.reloadData()
                     self.spinner.stopAnimating()
                 } else{
+                    self.newsFlashResult.removeAll()
+                    self.searchFlashNewsTableView.reloadData()
                     self.spinner.stopAnimating()
+                    
                 }
             }
         }

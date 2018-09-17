@@ -155,7 +155,12 @@ class SearchNewsFlashController: UIViewController,UISearchBarDelegate,UITableVie
                             self.newsFlashResult.append(value)
                         }
                         self.flashTableView.reloadData()
+                    } else{
+                        self.flashTableView.reloadData()
                     }
+                } else{
+                    self.newsFlashResult.removeAll()
+                    self.flashTableView.reloadData()
                 }
             }
             

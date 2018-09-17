@@ -716,6 +716,22 @@ extension UIFont
     {
         return UIFont(name: "Montserrat-Thin", size: size)!
     }
+    class func CandaraBoldItalic(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Candara-Bold-Italic", size: size)!
+    }
+    class func CandaraBold(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Candara-Bold", size: size)!
+    }
+    class func CandaraItalic(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Candara-Italic", size: size)!
+    }
+    class func Candara(_ size: CGFloat) -> UIFont
+    {
+        return UIFont(name: "Candara", size: size)!
+    }
 }
 
 extension Date {
@@ -828,6 +844,9 @@ func deleteMemory(){
     UserDefaults.standard.set("null", forKey: "UserToken")
     let realm = try! Realm()
     try! realm.write {
+        realm.delete(realm.objects(Transactions.self))
+        realm.delete(realm.objects(EachTransactions.self))
+        realm.delete(realm.objects(EachCurrency.self))
         realm.delete(realm.objects(alertObject.self))
         realm.delete(realm.objects(alertCoinNames.self))
     }

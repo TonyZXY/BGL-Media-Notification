@@ -42,6 +42,10 @@
 		<string>Montserrat-Regular.ttf</string>
 		<string>Montserrat-SemiBold.ttf</string>
 		<string>Montserrat-Thin.ttf</string>
+		<string>Candara-Bold-Italic.ttf</string>
+		<string>Candara-Bold.ttf</string>
+		<string>Candara-Italic.ttf</string>
+		<string>Candara-Italic.ttf</string>
 	</array>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>

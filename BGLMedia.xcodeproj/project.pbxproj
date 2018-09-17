@@ -92,6 +92,10 @@
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
 		5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5719D5E32122B5D10048B579 /* ListViewCell.swift */; };
 		5719D5E62123B54C0048B579 /* AlertInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5719D5E52123B54C0048B579 /* AlertInterest.swift */; };
+		571EA24D214F432400922228 /* Candara-Bold-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 571EA24B214F410C00922228 /* Candara-Bold-Italic.ttf */; };
+		571EA24E214F432D00922228 /* Candara-Bold.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 571EA249214F410C00922228 /* Candara-Bold.ttf */; };
+		571EA24F214F433000922228 /* Candara-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 571EA24A214F410C00922228 /* Candara-Italic.ttf */; };
+		571EA250214F433300922228 /* Candara.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 571EA24C214F410C00922228 /* Candara.ttf */; };
 		57355C0C20F7188B002E70E4 /* NewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C0720F7188B002E70E4 /* NewsObject.swift */; };
 		57355C0D20F7188B002E70E4 /* NewsV2Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C0920F7188B002E70E4 /* NewsV2Controller.swift */; };
 		57355C0E20F7188B002E70E4 /* NewsDetailtableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C0B20F7188B002E70E4 /* NewsDetailtableView.swift */; };
@@ -305,6 +309,10 @@
 		54AA279520E9B28E0026701A /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		5719D5E32122B5D10048B579 /* ListViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListViewCell.swift; sourceTree = "<group>"; };
 		5719D5E52123B54C0048B579 /* AlertInterest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertInterest.swift; sourceTree = "<group>"; };
+		571EA249214F410C00922228 /* Candara-Bold.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Candara-Bold.ttf"; sourceTree = "<group>"; };
+		571EA24A214F410C00922228 /* Candara-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Candara-Italic.ttf"; sourceTree = "<group>"; };
+		571EA24B214F410C00922228 /* Candara-Bold-Italic.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Candara-Bold-Italic.ttf"; sourceTree = "<group>"; };
+		571EA24C214F410C00922228 /* Candara.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = Candara.ttf; sourceTree = "<group>"; };
 		57355C0720F7188B002E70E4 /* NewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsObject.swift; sourceTree = "<group>"; };
 		57355C0920F7188B002E70E4 /* NewsV2Controller.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsV2Controller.swift; sourceTree = "<group>"; };
 		57355C0B20F7188B002E70E4 /* NewsDetailtableView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsDetailtableView.swift; sourceTree = "<group>"; };
@@ -728,6 +736,32 @@
 			path = NetworkManager;
 			sourceTree = "<group>";
 		};
+		571EA23F214F3DF000922228 /* Montserrat */ = {
+			isa = PBXGroup;
+			children = (
+				578FE8CC20FEEEB10027F17E /* Montserrat-Bold.ttf */,
+				578FE8CE20FEEEB10027F17E /* Montserrat-Italic.ttf */,
+				578FE8C920FEEEB10027F17E /* Montserrat-Light.ttf */,
+				578FE8C720FEEEB00027F17E /* Montserrat-Medium.ttf */,
+				578FE8C820FEEEB10027F17E /* Montserrat-Regular.ttf */,
+				578FE8CA20FEEEB10027F17E /* Montserrat-SemiBold.ttf */,
+				578FE8CB20FEEEB10027F17E /* Montserrat-Thin.ttf */,
+				578FE8CD20FEEEB10027F17E /* OFL.txt */,
+			);
+			path = Montserrat;
+			sourceTree = "<group>";
+		};
+		571EA240214F3E1900922228 /* Candara */ = {
+			isa = PBXGroup;
+			children = (
+				571EA24B214F410C00922228 /* Candara-Bold-Italic.ttf */,
+				571EA249214F410C00922228 /* Candara-Bold.ttf */,
+				571EA24A214F410C00922228 /* Candara-Italic.ttf */,
+				571EA24C214F410C00922228 /* Candara.ttf */,
+			);
+			path = Candara;
+			sourceTree = "<group>";
+		};
 		571F682E210170CF00342198 /* Alert */ = {
 			isa = PBXGroup;
 			children = (
@@ -935,14 +969,8 @@
 		578FE8C620FEEE220027F17E /* Font */ = {
 			isa = PBXGroup;
 			children = (
-				578FE8CC20FEEEB10027F17E /* Montserrat-Bold.ttf */,
-				578FE8CE20FEEEB10027F17E /* Montserrat-Italic.ttf */,
-				578FE8C920FEEEB10027F17E /* Montserrat-Light.ttf */,
-				578FE8C720FEEEB00027F17E /* Montserrat-Medium.ttf */,
-				578FE8C820FEEEB10027F17E /* Montserrat-Regular.ttf */,
-				578FE8CA20FEEEB10027F17E /* Montserrat-SemiBold.ttf */,
-				578FE8CB20FEEEB10027F17E /* Montserrat-Thin.ttf */,
-				578FE8CD20FEEEB10027F17E /* OFL.txt */,
+				571EA240214F3E1900922228 /* Candara */,
+				571EA23F214F3DF000922228 /* Montserrat */,
 			);
 			path = Font;
 			sourceTree = "<group>";
@@ -1159,21 +1187,25 @@
 				578FE8D020FEEEB20027F17E /* Montserrat-Regular.ttf in Resources */,
 				578FE8D120FEEEB20027F17E /* Montserrat-Light.ttf in Resources */,
 				578FE8D220FEEEB20027F17E /* Montserrat-SemiBold.ttf in Resources */,
+				571EA24E214F432D00922228 /* Candara-Bold.ttf in Resources */,
 				578FE8D320FEEEB20027F17E /* Montserrat-Thin.ttf in Resources */,
 				578FE8D420FEEEB20027F17E /* Montserrat-Bold.ttf in Resources */,
 				578FE8D520FEEEB20027F17E /* OFL.txt in Resources */,
 				578FE8D620FEEEB20027F17E /* Montserrat-Italic.ttf in Resources */,
 				2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */,
 				2D52AF1620E46E1A00018FC0 /* TimelineTableViewCell.swift~FlashNews in Resources */,
+				571EA250214F433300922228 /* Candara.ttf in Resources */,
 				57AEA17F211276ED00042CF6 /* Info.plist in Resources */,
 				2D52AEE320E46E1A00018FC0 /* Main.storyboard in Resources */,
 				57355C5220F718CC002E70E4 /* README.md in Resources */,
 				2D52AF0D20E46E1A00018FC0 /* NewsFlashViewController.swift~HEAD in Resources */,
+				571EA24D214F432400922228 /* Candara-Bold-Italic.ttf in Resources */,
 				2D52AF1720E46E1A00018FC0 /* TimelineTableViewCell.swift~HEAD in Resources */,
 				2D52AEA620E46E1A00018FC0 /* TimeHistoryTableViewCell.xib in Resources */,
 				2D52AEB120E46E1A00018FC0 /* LaunchScreen.storyboard in Resources */,
 				2D52AEDE20E46E1A00018FC0 /* Localizable.strings in Resources */,
 				2D52AEB320E46E1A00018FC0 /* LaunchScreen.strings in Resources */,
+				571EA24F214F433000922228 /* Candara-Italic.ttf in Resources */,
 				2D52AEA820E46E1A00018FC0 /* SellTableViewCell.xib in Resources */,
 				2D52AF1920E46E1A00018FC0 /* TimelineTableViewCell.xib in Resources */,
 				573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */,

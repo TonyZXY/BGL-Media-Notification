@@ -238,6 +238,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                             hud.textLabel.text = textValue(name: "success_success")
                             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                                 hud.dismiss()
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
                             }
                         } else{
                             let manager = NetworkReachabilityManager()
@@ -265,6 +266,7 @@ class MoreController: UIViewController,UITableViewDelegate,UITableViewDataSource
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1)) {
                         hud.dismiss()
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
                     }
                 }
             } else{

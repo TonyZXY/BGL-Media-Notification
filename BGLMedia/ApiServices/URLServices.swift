@@ -47,8 +47,17 @@ class URLServices:NSObject{
         for path in urlParameters{
             BaseURl = BaseURl + "/" + path
         }
-        let url = URL(string: BaseURl)
-        var urlRequest = URLRequest(url: url!)
+        let urlSetting = BaseURl.trimmingCharacters(in: NSCharacterSet.whitespaces).replacingOccurrences(of: " ", with: "")
+        
+        
+        guard let url = URL(string: urlSetting) else { return completion(JSON(),false)}
+        
+        
+//        let url = URL(string: urlSetting)
+//        print(url)
+        
+//         let url = URL(string: urlSetting)
+        var urlRequest = URLRequest(url: url)
 //        URLRequest(url: url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20)
         urlRequest.httpMethod = httpMethod
         
