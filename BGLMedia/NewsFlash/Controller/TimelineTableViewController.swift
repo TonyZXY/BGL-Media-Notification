@@ -329,7 +329,7 @@ class TimelineTableViewController: UITableViewController {
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","unlike"], httpMethod: "POST", parameters: body,
                                                          completion: { (response, success) in
                                                             if success{
-                                                                print(response)
+//                                                                print(response)
                                                                 if response["success"].bool! {
                                                                     try! realm.write {
                                                                         object.like = response["data"]["likes"].int ?? 0
@@ -352,7 +352,7 @@ class TimelineTableViewController: UITableViewController {
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","like"], httpMethod: "POST", parameters: body,
                                                          completion: { (response, success) in
                     if success{
-                        print(response)
+//                        print(response)
                         if response["success"].bool! {
                              try! realm.write {
                                 object.like = response["data"]["likes"].int ?? 0
@@ -492,7 +492,7 @@ class TimelineTableViewController: UITableViewController {
     func getNews(skip:Int,limit:Int,completion:@escaping (Bool)->Void){
         URLServices.fetchInstance.passServerData(urlParameters: ["api","getFlashWithLan?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             if success{
-                print(response)
+//                print(response)
                 self.resultNumber = response.count
                 self.JSONtoData(json: response){ success in
                     completion(true)
@@ -518,7 +518,7 @@ class TimelineTableViewController: UITableViewController {
                 let like = item["like"].int ?? 0
                 if realm.object(ofType: NewsFlash.self, forPrimaryKey: id) == nil {
                     if availabilty{
-                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title,like])
+                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string ?? "","EN",toSent,title,like])
                     } else{
                         deletedNumber += 1
                     }
@@ -527,7 +527,7 @@ class TimelineTableViewController: UITableViewController {
                     if !availabilty {
                         realm.delete(realm.objects(NewsFlash.self).filter("id = %@",id))
                     }else{
-                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title, like], update: true)
+                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string ?? "","EN",toSent,title, like], update: true)
                     }
                 }
             }
