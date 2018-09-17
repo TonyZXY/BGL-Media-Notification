@@ -203,6 +203,7 @@
 		57FC41FD20FB08560052EE02 /* LanguageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FC20FB08560052EE02 /* LanguageController.swift */; };
 		57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC420420FDC7260052EE02 /* FlashSearchController.swift */; };
 		57FC420920FEB8230052EE02 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		B930B6E9214F3D5900685F64 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = B930B6E8214F3D5900685F64 /* Event.swift */; };
 		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
 /* End PBXBuildFile section */
 
@@ -421,6 +422,7 @@
 		57FC420320FBA0310052EE02 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "../zh-Hans-CN.lproj/Main.strings"; sourceTree = "<group>"; };
 		57FC420420FDC7260052EE02 /* FlashSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashSearchController.swift; sourceTree = "<group>"; };
 		57FC420820FEB8230052EE02 /* RevealingSplashView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RevealingSplashView.framework; path = Carthage/Build/iOS/RevealingSplashView.framework; sourceTree = "<group>"; };
+		B930B6E8214F3D5900685F64 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1061,6 +1063,7 @@
 		57E67D0821408C71005F290E /* Event */ = {
 			isa = PBXGroup;
 			children = (
+				B930B6E7214F3D3500685F64 /* Models */,
 				57E67D0921408C8D005F290E /* EventsViewController.swift */,
 				578452BF214628DB00053814 /* PerDayEventViewController.swift */,
 				578452C1214628EC00053814 /* AllEventViewController.swift */,
@@ -1104,6 +1107,14 @@
 				57FC41FC20FB08560052EE02 /* LanguageController.swift */,
 			);
 			path = Language;
+			sourceTree = "<group>";
+		};
+		B930B6E7214F3D3500685F64 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				B930B6E8214F3D5900685F64 /* Event.swift */,
+			);
+			path = Models;
 			sourceTree = "<group>";
 		};
 		B959EF592146170700930DD6 /* Font */ = {
@@ -1322,6 +1333,7 @@
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,
 				57663B5A2137796D00E09754 /* ForceUpdateAlertController.swift in Sources */,
 				57355C5120F718CC002E70E4 /* MarketCapClient.swift in Sources */,
+				B930B6E9214F3D5900685F64 /* Event.swift in Sources */,
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				57355C0D20F7188B002E70E4 /* NewsV2Controller.swift in Sources */,
 				57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */,
