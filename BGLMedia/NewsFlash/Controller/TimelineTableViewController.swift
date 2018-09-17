@@ -512,7 +512,7 @@ class TimelineTableViewController: UITableViewController {
                 let like = item["like"].int ?? 0
                 if realm.object(ofType: NewsFlash.self, forPrimaryKey: id) == nil {
                     if availabilty{
-                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title,like])
+                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string ?? "","EN",toSent,title,like])
                     } else{
                         deletedNumber += 1
                     }
@@ -521,7 +521,7 @@ class TimelineTableViewController: UITableViewController {
                     if !availabilty {
                         realm.delete(self.realm.objects(NewsFlash.self).filter("id = %@",id))
                     }else{
-                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string!,"EN",toSent,title, like], update: true)
+                        realm.create(NewsFlash.self, value: [id, date, item["shortMassage"].string ?? "","EN",toSent,title, like], update: true)
                     }
                 }
             }
