@@ -14,6 +14,7 @@ import SwiftyJSON
 import SafariServices
 import RealmSwift
 
+import Kingfisher
 extension NewsV2Controller : TableCellForSliderDelegate,TableCellForSliderDataSource{
     
     // change first row's height and remain the same for other
@@ -87,7 +88,7 @@ extension NewsV2Controller : TableCellForSliderDelegate,TableCellForSliderDataSo
     func getGenuineData(skip:Int,limit:Int,completion: @escaping (Bool)->Void){
         URLServices.fetchInstance.passServerData(urlParameters: ["api","getgenuine?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()){ (res,pass) in
             if pass{
-                print("GET Genuine Data count: " + (JSON(res).array?.count.description)!)
+                //print("GET Genuine Data count: " + (JSON(res).array?.count.description)!)
                 self.storeGenuineDataToRealm(res:res){success in
                     if success{
                         completion(true)
@@ -185,8 +186,14 @@ class NewsSliderCollectionViewCell : UICollectionViewCell{
     
     var genuineNews: GenuineNewsObject?{
         didSet{
-            imageView.load(urlString: genuineNews?.imageURL ?? "")
-            if imageView.image == nil {imageView.image = UIImage(named: "notfound.png")}
+//            imageView.load(urlString: genuineNews?.imageURL ?? "")
+//            if imageView.image == nil {imageView.image = UIImage(named: "notfound.png")}
+            if genuineNews?.imageURL != nil {
+                let url = URL(string: (genuineNews?.imageURL)!)
+                imageView.kf.setImage(with: url)
+            } else {
+                imageView.image = UIImage(named: "notfound.png")
+            }
             titleLabel.text = genuineNews?.title ?? "Missing Title"
             authorLabel.text = genuineNews?.author ?? "Unknown Author"
             publishedTimeLabel.text = Extension.method.convertDateToString(date: (genuineNews?.publishedTime)!)
