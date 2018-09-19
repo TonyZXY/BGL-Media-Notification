@@ -40,7 +40,6 @@
 		2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE1220E46E1700018FC0 /* ScientificMethod.swift */; };
 		2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE1320E46E1700018FC0 /* LanguagePackage.swift */; };
 		2D52AEE320E46E1A00018FC0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE1720E46E1700018FC0 /* Main.storyboard */; };
-		2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE1E20E46E1800018FC0 /* Info.plist */; };
 		2D52AEE920E46E1A00018FC0 /* MarketsTotalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2420E46E1800018FC0 /* MarketsTotalView.swift */; };
 		2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2520E46E1800018FC0 /* MarketFilterCollectionView.swift */; };
 		2D52AEF020E46E1A00018FC0 /* MarketCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2B20E46E1800018FC0 /* MarketCollectionViewCell.swift */; };
@@ -162,7 +161,6 @@
 		578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578FE8DA20FF1FF40027F17E /* LaunchScreenViewController.swift */; };
 		57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17A211276ED00042CF6 /* SCLAlertView.swift */; };
 		57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17B211276ED00042CF6 /* SCLExtensions.swift */; };
-		57AEA17F211276ED00042CF6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 57AEA17C211276ED00042CF6 /* Info.plist */; };
 		57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA1822112C0A200042CF6 /* CustomAlertController.swift */; };
 		57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA1842112D11F00042CF6 /* CustomPasswordAlertController.swift */; };
 		57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD8682104540B00973B45 /* ExchangeSelect.swift */; };
@@ -1195,7 +1193,6 @@
 				2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */,
 				2D52AF1620E46E1A00018FC0 /* TimelineTableViewCell.swift~FlashNews in Resources */,
 				571EA250214F433300922228 /* Candara.ttf in Resources */,
-				57AEA17F211276ED00042CF6 /* Info.plist in Resources */,
 				2D52AEE320E46E1A00018FC0 /* Main.storyboard in Resources */,
 				57355C5220F718CC002E70E4 /* README.md in Resources */,
 				2D52AF0D20E46E1A00018FC0 /* NewsFlashViewController.swift~HEAD in Resources */,
@@ -1209,7 +1206,6 @@
 				2D52AEA820E46E1A00018FC0 /* SellTableViewCell.xib in Resources */,
 				2D52AF1920E46E1A00018FC0 /* TimelineTableViewCell.xib in Resources */,
 				573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */,
-				2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1235,7 +1231,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "/usr/local/bin/carthage copy-frameworks";
+			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
 		3DF3A5762101CCA0002A3B0A /* ShellScript */ = {
 			isa = PBXShellScriptBuildPhase;
@@ -1248,7 +1244,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "APP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\n\n# This script loops through the frameworks embedded in the application and\n# removes unused architectures.\nfind \"$APP_PATH\" -name '*.framework' -type d | while read -r FRAMEWORK\ndo\nFRAMEWORK_EXECUTABLE_NAME=$(defaults read \"$FRAMEWORK/Info.plist\" CFBundleExecutable)\nFRAMEWORK_EXECUTABLE_PATH=\"$FRAMEWORK/$FRAMEWORK_EXECUTABLE_NAME\"\necho \"Executable is $FRAMEWORK_EXECUTABLE_PATH\"\n\nEXTRACTED_ARCHS=()\n\nfor ARCH in $ARCHS\ndo\necho \"Extracting $ARCH from $FRAMEWORK_EXECUTABLE_NAME\"\nlipo -extract \"$ARCH\" \"$FRAMEWORK_EXECUTABLE_PATH\" -o \"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\"\nEXTRACTED_ARCHS+=(\"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\")\ndone\n\necho \"Merging extracted architectures: ${ARCHS}\"\nlipo -o \"$FRAMEWORK_EXECUTABLE_PATH-merged\" -create \"${EXTRACTED_ARCHS[@]}\"\nrm \"${EXTRACTED_ARCHS[@]}\"\n\necho \"Replacing original executable with thinned version\"\nrm \"$FRAMEWORK_EXECUTABLE_PATH\"\nmv \"$FRAMEWORK_EXECUTABLE_PATH-merged\" \"$FRAMEWORK_EXECUTABLE_PATH\"\n\ndone";
+			shellScript = "APP_PATH=\"${TARGET_BUILD_DIR}/${WRAPPER_NAME}\"\n\n# This script loops through the frameworks embedded in the application and\n# removes unused architectures.\nfind \"$APP_PATH\" -name '*.framework' -type d | while read -r FRAMEWORK\ndo\nFRAMEWORK_EXECUTABLE_NAME=$(defaults read \"$FRAMEWORK/Info.plist\" CFBundleExecutable)\nFRAMEWORK_EXECUTABLE_PATH=\"$FRAMEWORK/$FRAMEWORK_EXECUTABLE_NAME\"\necho \"Executable is $FRAMEWORK_EXECUTABLE_PATH\"\n\nEXTRACTED_ARCHS=()\n\nfor ARCH in $ARCHS\ndo\necho \"Extracting $ARCH from $FRAMEWORK_EXECUTABLE_NAME\"\nlipo -extract \"$ARCH\" \"$FRAMEWORK_EXECUTABLE_PATH\" -o \"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\"\nEXTRACTED_ARCHS+=(\"$FRAMEWORK_EXECUTABLE_PATH-$ARCH\")\ndone\n\necho \"Merging extracted architectures: ${ARCHS}\"\nlipo -o \"$FRAMEWORK_EXECUTABLE_PATH-merged\" -create \"${EXTRACTED_ARCHS[@]}\"\nrm \"${EXTRACTED_ARCHS[@]}\"\n\necho \"Replacing original executable with thinned version\"\nrm \"$FRAMEWORK_EXECUTABLE_PATH\"\nmv \"$FRAMEWORK_EXECUTABLE_PATH-merged\" \"$FRAMEWORK_EXECUTABLE_PATH\"\n\ndone\n";
 		};
 /* End PBXShellScriptBuildPhase section */
 
