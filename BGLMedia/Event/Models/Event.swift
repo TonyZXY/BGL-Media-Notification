@@ -41,7 +41,5 @@ struct Event {
         eventName = json["eventName"].stringValue
         eventStartTime = Extension.method.convertStringToDate(date: json["eventStartTime"].stringValue)
         eventURL = json["eventURL"].stringValue
-        print(json["eventStartTime"].stringValue)
-        print(eventStartTime)
     }
 }

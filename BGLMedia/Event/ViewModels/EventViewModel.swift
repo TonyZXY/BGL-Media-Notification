@@ -18,6 +18,7 @@ struct EventViewModel {
     let weekOfEventStartTime: String
     let dayOfEventStartTime: String
     let timeOfEventStartTime: String
+    var dateFilter: String
     
     let components: DateComponents
     
@@ -31,10 +32,11 @@ struct EventViewModel {
         address = "\(event.eventAddress) \(event.eventCity)"
         self.eventStartTime = event.eventStartTime
         yearOfEventStartTime = String(year)
-        monthOfEventStartTime = String(month)
+        monthOfEventStartTime = "\(year)-\(month)"
         
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
         timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate(date: event.eventStartTime)
+        dateFilter = dayOfEventStartTime
         
         components = DateComponents(weekOfYear: week, yearForWeekOfYear: year)
         if let firstDayOfTheWeek = Calendar.current.date(from: components),
