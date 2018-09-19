@@ -14,15 +14,15 @@ struct Event {
     let eventAddress: String
     let eventCity: String
     let eventDescription: String
-    let eventCreatedTime: String
-    let eventEndTime: String
+    let eventCreatedTime: Date
+    let eventEndTime: Date
     let eventHost: String
     let eventHostPage: String
     let eventImageURL: String
     let eventLati: String
     let eventLong: String
     let eventName: String
-    let eventStartTime: String
+    let eventStartTime: Date
     let eventURL: String
     
     
@@ -31,15 +31,17 @@ struct Event {
         eventAddress = json["eventAddress"].stringValue
         eventCity = json["eventCity"].stringValue
         eventDescription = json["eventDescription"].stringValue
-        eventCreatedTime = json["eventCreatedTime"].stringValue
-        eventEndTime = json["eventEndTime"].stringValue
+        eventCreatedTime = Extension.method.convertStringToDate(date: json["eventCreatedTime"].stringValue)
+        eventEndTime = Extension.method.convertStringToDate(date: json["eventEndTime"].stringValue)
         eventHost = json["eventHost"].stringValue
         eventHostPage = json["eventHostPage"].stringValue
         eventImageURL = json["eventImageURL"].stringValue
         eventLati = json["eventLati"].stringValue
         eventLong = json["eventLong"].stringValue
         eventName = json["eventName"].stringValue
-        eventStartTime = json["eventStartTime"].stringValue
+        eventStartTime = Extension.method.convertStringToDate(date: json["eventStartTime"].stringValue)
         eventURL = json["eventURL"].stringValue
+        print(json["eventStartTime"].stringValue)
+        print(eventStartTime)
     }
 }

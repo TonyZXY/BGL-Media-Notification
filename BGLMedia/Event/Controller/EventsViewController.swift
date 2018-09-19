@@ -21,17 +21,6 @@ class EventsViewController: UIViewController {
         setUpView()
         addViewControllerAsChildViewController(childViewControllers: perdayEventViewController, view: view)
         // Do any additional setup after loading the view.
-        
-        
-        
-        
-        URLServices.fetchInstance.passServerData(urlParameters: ["api","eventAll"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
-            //print(response)
-            let events = response.arrayValue.map({ (item) -> Event in
-                Event(item)
-            })
-            print(events[0])
-        }
     }
     
 

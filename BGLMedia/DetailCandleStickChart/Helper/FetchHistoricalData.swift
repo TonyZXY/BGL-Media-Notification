@@ -44,7 +44,7 @@ class HistoricalDataFetcher {
     
     func fetcher(coinSymbol: String, currency: String, exchangeName:String, completionHandler: CompletionHandler = nil) {
         let urlString:String? = "https://min-api.cryptocompare.com/data/\(Params.intervalParam)?fsym=\(coinSymbol)&tsym=\(currency)&e=\(exchangeName.replacingOccurrences(of: " ", with: ""))&limit=\(limit)"
-        print(urlString)
+        print(urlString ?? "nil")
         
         guard let urlStrings = urlString, let url = URL(string: urlStrings)else{return (completionHandler?())! }
 

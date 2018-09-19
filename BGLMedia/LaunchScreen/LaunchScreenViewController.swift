@@ -27,36 +27,36 @@ class LaunchScreenViewController: UIViewController {
             let dispatchGroup = DispatchGroup()
 
             dispatchGroup.enter()
-            APIServices.fetchInstance.writeJsonExchange(){ success in
-                if success{
-                    print("success")
-                     dispatchGroup.leave()
-                } else{
-                     dispatchGroup.leave()
-                }
-            }
-
-            dispatchGroup.enter()
-            URLServices.fetchInstance.getCoinList(){ success in
-                if success{
-                    print("success")
-                    dispatchGroup.leave()
-                } else{
-                    dispatchGroup.leave()
-                }
-            }
+//            APIServices.fetchInstance.writeJsonExchange(){ success in
+//                if success{
+//                    print("success")
+//                     dispatchGroup.leave()
+//                } else{
+//                     dispatchGroup.leave()
+//                }
+//            }
+//
+//            dispatchGroup.enter()
+//            URLServices.fetchInstance.getCoinList(){ success in
+//                if success{
+//                    print("success")
+//                    dispatchGroup.leave()
+//                } else{
+//                    dispatchGroup.leave()
+//                }
+//            }
+//
+//            dispatchGroup.enter()
+//            URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
+//            if success{
+//
+//                dispatchGroup.leave()
+//            } else{
+//                dispatchGroup.leave()
+//            }
+//            }
         
-            dispatchGroup.enter()
-            URLServices.fetchInstance.getGlobalAverageCoinList(){ success in
-            if success{
-               
-                dispatchGroup.leave()
-            } else{
-                dispatchGroup.leave()
-            }
-            }
-        
-        
+        dispatchGroup.leave()
 
             dispatchGroup.notify(queue:.main){
                 if  UserDefaults.standard.bool(forKey: "launchedBefore"){
