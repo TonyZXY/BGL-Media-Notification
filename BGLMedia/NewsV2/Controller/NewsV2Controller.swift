@@ -321,7 +321,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.configRefreshFooter(with: footer, container: self, action: {
             self.handleFooter()
         })
-        tableView.rowHeight = 120 * self.view.frame.width/414
+        //tableView.rowHeight = 120 * self.view.frame.width/414
         tableView.delegate = self
         tableView.dataSource = self
         
