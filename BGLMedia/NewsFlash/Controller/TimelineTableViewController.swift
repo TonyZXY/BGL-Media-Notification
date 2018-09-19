@@ -239,7 +239,7 @@ class TimelineTableViewController: UITableViewController {
         
         
         let identifier = "TimelineTableViewCell"
-        var cell:TimelineTableViewCell! = tableView.dequeueReusableCell(withIdentifier: identifier) as! TimelineTableViewCell
+        var cell:TimelineTableViewCell! = tableView.dequeueReusableCell(withIdentifier: identifier) as? TimelineTableViewCell
         if cell == nil {
             tableView.register(UINib(nibName: "TimelineTableViewCell", bundle: nil), forCellReuseIdentifier: identifier)
             cell = TimelineTableViewCell(style:UITableViewCellStyle.default,reuseIdentifier:"TimelineTableViewCell")

@@ -30,42 +30,6 @@ class MainTabBarController: UITabBarController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
-//        URLServices.fetchInstance.passServerData(urlParameters: ["api","update"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
-//            print(response)
-//
-//            let versionNumber: Any = Bundle.main.infoDictionary!["CFBundleShortVersionString"] ?? ""
-//            let buildVersion: Any = Bundle.main.infoDictionary!["CFBundleVersion"] ?? ""
-//            if success{
-//                if let version = response["version"].string{
-//                    if version != "\(versionNumber)(\(buildVersion))"{
-//                        if let critical = response["critical"].bool{
-//                            if critical{
-//                                self.forceUpdateAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-//                                self.forceUpdateAlert.updateButton.addTarget(self, action: #selector(self.forceUpdate), for: .touchUpInside)
-//                                self.forceUpdateAlert.titleLabel.text = textValue(name: "updateTitle_tab")
-//                                self.forceUpdateAlert.descriptionLabel.text = textValue(name: "updateDescription_tab")
-//                                self.forceUpdateAlert.updateButton.setTitle(textValue(name: "updateAlert_tab"), for: .normal)
-//                                self.addChildViewController(self.forceUpdateAlert)
-//                                self.view.addSubview(self.forceUpdateAlert.view)
-//                            } else{
-//                                self.updateAlert.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-//                                self.updateAlert.updateButton.addTarget(self, action: #selector(self.forceUpdate), for: .touchUpInside)
-//                                self.updateAlert.titleLabel.text = textValue(name: "updateTitle_tab")
-//                                self.updateAlert.descriptionLabel.text = textValue(name: "updateDescription_tab")
-//                                self.updateAlert.cancelButton.setTitle(textValue(name: "cancelAlert_tab"), for: .normal)
-//                                self.updateAlert.updateButton.setTitle(textValue(name: "updateAlert_tab"), for: .normal)
-//                                self.updateAlert.cancelButton.addTarget(self, action: #selector(self.cancelAlert), for: .touchUpInside)
-//                                self.addChildViewController(self.updateAlert)
-//                                self.view.addSubview(self.updateAlert.view)
-//                            }
-//                        }
-//                    }
-//                }
-//            } else{}
-//        }
-        
-        
         let versionNumber: String = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         //            let buildVersion: Any = Bundle.main.infoDictionary!["CFBundleVersion"] ?? ""
         

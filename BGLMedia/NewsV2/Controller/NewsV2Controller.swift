@@ -173,7 +173,8 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         
         let urlString = object.url
         if let url = URL(string: urlString!) {
-            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: true)
+            let vc = safariStatusController(url: url, entersReaderIfAvailable: true)
+            vc.setNeedsStatusBarAppearanceUpdate()
             if #available(iOS 11.0, *) {
                 vc.dismissButtonStyle = .close
             } else {
@@ -368,3 +369,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     //    }()
 }
 
+
+class safariStatusController:SFSafariViewController{
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        return .default
+    }
+}

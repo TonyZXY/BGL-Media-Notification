@@ -139,7 +139,6 @@
 		57355C8720F71931002E70E4 /* ThemeColor.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C8620F71931002E70E4 /* ThemeColor.swift */; };
 		573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 573C96A720EB5B8700B667AB /* Assets.xcassets */; };
 		573C96AB20EF068A00B667AB /* Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 573C96AA20EF068A00B667AB /* Extension.swift */; };
-		5752745620FEBB0200562060 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; };
 		5752745720FEBB0200562060 /* RevealingSplashView.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57650895210D9AFE007368CC /* Transactions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57650894210D9AFE007368CC /* Transactions.swift */; };
 		57650899210FE463007368CC /* RegisterCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57650898210FE463007368CC /* RegisterCell.swift */; };
@@ -428,7 +427,6 @@
 				576751FE210556E8006DB67C /* JGProgressHUD.framework in Frameworks */,
 				3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */,
 				3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */,
-				5752745620FEBB0200562060 /* RevealingSplashView.framework in Frameworks */,
 				3D1332ED20E9FA5700D3CAE6 /* Realm.framework in Frameworks */,
 				3D1332EE20E9FA5700D3CAE6 /* Alamofire.framework in Frameworks */,
 				57EB4CEC2120517B0083B123 /* SwiftKeychainWrapper.framework in Frameworks */,
@@ -1143,7 +1141,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0940;
-				LastUpgradeCheck = 0940;
+				LastUpgradeCheck = 1000;
 				ORGANIZATIONNAME = "ZHANG ZEYAO";
 				TargetAttributes = {
 					2D6F5EFC20E324D4006264BB = {
@@ -1455,6 +1453,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
@@ -1515,6 +1514,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";

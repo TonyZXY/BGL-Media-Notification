@@ -77,11 +77,11 @@ public enum RefreshMode{
 }
 
 open class DefaultRefreshFooter:UIView, RefreshableFooter{
-    open static func footer()-> DefaultRefreshFooter{
+    public static func footer()-> DefaultRefreshFooter{
         return DefaultRefreshFooter()
     }
-    open let spinner:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
-    open  let textLabel:UILabel = UILabel(frame: CGRect(x: 0,y: 0,width: 140,height: 40))
+    public let spinner:UIActivityIndicatorView = UIActivityIndicatorView(activityIndicatorStyle: .gray)
+    public  let textLabel:UILabel = UILabel(frame: CGRect(x: 0,y: 0,width: 140,height: 40))
     /// 触发刷新的模式
     open var refreshMode = RefreshMode.scrollAndTap{
         didSet{

@@ -102,7 +102,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
         }
         
         
-        application.statusBarStyle = .lightContent
+//        application.statusBarStyle = .lightContent
 //        UITabBar.appearance().tintColor = .white
         UITabBar.appearance().barTintColor = ThemeColor().darkBlackColor()
 //        UITabBar.appearance().isTranslucent = false
