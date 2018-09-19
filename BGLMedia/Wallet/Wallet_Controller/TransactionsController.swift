@@ -601,29 +601,16 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                             }
                         }
                     }
-                } else{
-//                    APIServices.fetchInstance.getExchangePriceData(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, market:  newTransaction.exchangeName) { (success, response) in
-//                        if #imageLiteral(resourceName: "success"){
-//
-//                        }
-//
-//
-//                        result in
-//                        switch result{
-//                        case .success(let resultData):
-//                            for(_, value) in resultData!{
-//                                readData = value
-//                            }
-//                            let index = IndexPath(row: 3, section: 0)
-//                            let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-//                            cell.priceType.text = Extension.method.scientificMethod(number: readData)
-//                        case .failure(let error):
-//                            print("the error \(error.localizedDescription)")
-//                        }
-//                    }
-                    
-                    
-                    
+                }else if newTransaction.exchangeName == "Huobi Australia"{
+                    APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: newTransaction.coinAbbName, tradingPairName: newTransaction.tradingPairsName, exchangeName: newTransaction.exchangeName) { (response, success) in
+                        if success{
+                                let index = IndexPath(row: 3, section: 0)
+                                let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                                let price = Double(response["tick"]["close"].string ?? "0") ?? 0
+                                cell.priceType.text = Extension.method.scientificMethod(number: price)
+                        }
+                    }
+                }else{
                     cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangeName){
                         result in
                         switch result{

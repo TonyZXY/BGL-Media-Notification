@@ -150,18 +150,37 @@ class WatchListsController: UIViewController, UICollectionViewDelegate,UICollect
                             watchListCoinObject[0].profitChange = coinObject[0].percent24h
                             watchListCoinObject[0].tradingPairsName = priceType
                         }
-                    } else{
-                        dispatchGroup.enter()
-                        APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.market) { (success,response) in
-                            if success{
-                                let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
-                                try! realm.write {
-                                    watchListCoinObject[0].price = response["RAW"]["PRICE"].double ?? 0
-                                    watchListCoinObject[0].profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
+                    }else{
+                        if result.market == "Huobi Australia"{
+                            dispatchGroup.enter()
+                            APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: result.coinAbbName, tradingPairName: result.tradingPairsName, exchangeName: result.market) { (response, success) in
+                                if success{
+                                    let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
+                                    let closePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
+                                    let openPrice = Double(response["tick"]["open"].string ?? "0") ?? 0
+                                    let price = ((closePrice - openPrice) / openPrice) * 100
+                                    try! realm.write {
+                                        watchListCoinObject[0].price = closePrice
+                                        watchListCoinObject[0].profitChange = price
+                                    }
+                                    dispatchGroup.leave()
+                                }else{
+                                    dispatchGroup.leave()
                                 }
-                                dispatchGroup.leave()
-                            } else{
-                                dispatchGroup.leave()
+                            }
+                        }else{
+                            dispatchGroup.enter()
+                            APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.market) { (success,response) in
+                                if success{
+                                    let watchListCoinObject = objectResult.filter("coinAbbName = %@", result.coinAbbName)
+                                    try! realm.write {
+                                        watchListCoinObject[0].price = response["RAW"]["PRICE"].double ?? 0
+                                        watchListCoinObject[0].profitChange = response["RAW"]["CHANGEPCT24HOUR"].double ?? 0
+                                    }
+                                    dispatchGroup.leave()
+                                } else{
+                                    dispatchGroup.leave()
+                                }
                             }
                         }
                     }

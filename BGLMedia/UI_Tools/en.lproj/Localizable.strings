@@ -173,6 +173,7 @@ help = "Helping & Feedback";
 aboutUs_section = "About";
 more_disclaimer = "Disclaimer";
 about_app = "About CryptoGeek";
+font = "Font";
 feedback_section = "Feedback";
 feedback_rateus = "Rate Us";
 about_function = "About Functions";
@@ -249,6 +250,9 @@ alertUnavaliable_alert = "Unavailable";
 alertavaliable_alert = "Available";
 alertCoinUnavaliable_alert = "Unavailable!";
 
+//Font Page
+flashNews_font = "News Flash Font";
+font_size = "Font Size";
 
 //Alert Edit Page
 exampleLabel_alert = "Market Price";
@@ -408,6 +412,8 @@ hud_passwordReset = "Password Reset";
 hud_noNetwork = "No Network";
 hud_timeOut = "Time Out";
 
+//Event Page
+navigationTitle_event = "Events";
 
 
 

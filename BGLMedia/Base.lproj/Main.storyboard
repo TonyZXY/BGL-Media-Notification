@@ -120,10 +120,10 @@
             </objects>
             <point key="canvasLocation" x="-592.79999999999995" y="948.76847290640399"/>
         </scene>
-        <!--Events View Controller-->
+        <!--All Event View Controller-->
         <scene sceneID="NcH-xU-bw2">
             <objects>
-                <viewController id="2UN-NJ-Wbs" customClass="EventsViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="2UN-NJ-Wbs" customClass="AllEventViewController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="6ue-G9-ucg">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="729"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

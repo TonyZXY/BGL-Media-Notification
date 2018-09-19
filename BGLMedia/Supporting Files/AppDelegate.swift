@@ -175,18 +175,21 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set("null", forKey: "UserEmail")
             UserDefaults.standard.set("null", forKey: "CertificateToken")
             UserDefaults.standard.set("null", forKey: "UserToken")
-            
             KeychainWrapper.standard.set("null", forKey: "Email")
         }
         
         if !uploadAssetsToServer{
-            let realm = try! Realm()
-            URLServices.fetchInstance.sendAssets(){success in
-                if success{
-                    try! realm.write {
-                        realm.delete(realm.objects(Transactions.self))
+            if loginStatus{
+                let realm = try! Realm()
+                if realm.objects(Transactions.self).count != 0{
+                    URLServices.fetchInstance.sendAssets(){success in
+                        if success{
+                            try! realm.write {
+                                realm.delete(realm.objects(Transactions.self))
+                            }
+                            UserDefaults.standard.set(true, forKey: "UploadAssetsToServer")
+                        }
                     }
-                    UserDefaults.standard.set(true, forKey: "UploadAssetsToServer")
                 }
             }
         }

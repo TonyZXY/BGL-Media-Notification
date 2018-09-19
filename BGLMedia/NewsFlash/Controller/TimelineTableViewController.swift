@@ -106,6 +106,8 @@ class TimelineTableViewController: UITableViewController {
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(deleteCache), name: NSNotification.Name(rawValue: "deleteCache"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(changeFontSize), name: NSNotification.Name(rawValue: "changeFontSize"), object: nil)
+        
     }
     
     @objc func deleteCache(){
@@ -133,8 +135,13 @@ class TimelineTableViewController: UITableViewController {
         tableView.reloadData()
     }
     
+    @objc func changeFontSize(){
+        self.tableView.reloadData()
+    }
+    
     deinit {
         NotificationCenter.default.removeObserver("changeLanguage")
+        NotificationCenter.default.removeObserver("changeFontSize")
         NotificationCenter.default.removeObserver("deleteCache")
     }
     
@@ -322,7 +329,7 @@ class TimelineTableViewController: UITableViewController {
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","unlike"], httpMethod: "POST", parameters: body,
                                                          completion: { (response, success) in
                                                             if success{
-                                                                print(response)
+//                                                                print(response)
                                                                 if response["success"].bool! {
                                                                     try! realm.write {
                                                                         object.like = response["data"]["likes"].int ?? 0
@@ -345,7 +352,7 @@ class TimelineTableViewController: UITableViewController {
                 URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","like"], httpMethod: "POST", parameters: body,
                                                          completion: { (response, success) in
                     if success{
-                        print(response)
+//                        print(response)
                         if response["success"].bool! {
                              try! realm.write {
                                 object.like = response["data"]["likes"].int ?? 0
@@ -485,7 +492,7 @@ class TimelineTableViewController: UITableViewController {
     func getNews(skip:Int,limit:Int,completion:@escaping (Bool)->Void){
         URLServices.fetchInstance.passServerData(urlParameters: ["api","getFlashWithLan?languageTag=EN&skip=" + String(skip) + "&limit=" + String(limit)], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             if success{
-                print(response)
+//                print(response)
                 self.resultNumber = response.count
                 self.JSONtoData(json: response){ success in
                     completion(true)

@@ -207,6 +207,15 @@ class DetailController: UIViewController{
                         dispatchGroup.leave()
                     }
                 }
+            }else if assets.exchangeName == "Huobi Australia"{
+                APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: assets.coinAbbName, tradingPairName: assets.tradingPairsName, exchangeName: assets.exchangeName) { (response, success) in
+                    if success{
+                        singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
+                        dispatchGroup.leave()
+                    } else{
+                        dispatchGroup.leave()
+                    }
+                }
             } else{
                 APIServices.fetchInstance.getExchangePriceData(from: assets.coinAbbName, to: assets.tradingPairsName, market: assets.exchangeName) { (success, response) in
                     if success{
@@ -280,15 +289,14 @@ class DetailController: UIViewController{
                             if periodData != []{
                                 let price = periodData.last!["close"].double! - periodData.first!["open"].double!
                                 let change = (price /  periodData.first!["open"].double!) * 100
-                                print("\(change)sdfsdfdfsdfs")
-                                print("\(price)sdfsdfdfsdfs")
-                                
                                 checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
                                 checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
                                 self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-                                completion(true)
                             }
                         }
+                        completion(true)
+                    }else{
+                        completion(false)
                     }
                 } else{
                     completion(false)

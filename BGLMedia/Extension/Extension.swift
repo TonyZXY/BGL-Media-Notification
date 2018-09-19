@@ -818,7 +818,23 @@ public extension UIViewController {
         childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
         childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
     }
+    
+//    func addViewControllerAsChildViewController(childViewControllers:UIViewController,view:UIView){
+//        addChildViewController(childViewControllers)
+//        view.addSubview(childViewControllers.view)
+//        childViewControllers.view.frame = view.bounds
+//        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+//        childViewControllers.didMove(toParentViewController: self)
+//        
+//        //Constraints
+//        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
+//        childViewControllers.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+//        childViewControllers.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+//        childViewControllers.view.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+//        childViewControllers.view.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
+//    }
 }
+
 
 class IndicatorView: UIView {
     override init(frame: CGRect) {
@@ -938,8 +954,6 @@ extension String {
         return self.matches(pattern: urlPattern)
     }
 }
-
-
 
 
 

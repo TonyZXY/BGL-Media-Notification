@@ -133,7 +133,53 @@ class RefreshDataService:NSObject{
                         completion(false)
                     }
                 }
-            } else{
+            }else if result.exchangeName == "Huobi Australia"{
+                APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: result.coinAbbName, tradingPairName: result.tradingPairsName, exchangeName: result.exchangeName) { (response, success) in
+                    if success{
+                        singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
+                        APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
+                            if success{
+                                for result in response{
+                                    currency = (result.1.double) ?? 0
+                                }
+                                let tran = Transactions()
+                                tran.coinAbbName = result.coinAbbName
+                                tran.transactionPrice = transactionPrice
+                                tran.defaultCurrencyPrice = singlePrice * currency
+                                tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
+                                tran.totalAmount = amount
+                                tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
+                                tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
+                                floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
+                                
+                                let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
+                                try! Realm().write {
+                                    if object.count != 0{
+                                        object[0].currentSinglePrice = singlePrice
+                                        object[0].currentTotalPrice = singlePrice * amount
+                                        object[0].currentNetValue = transactionPrice * (1/currency)
+                                        object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
+                                        object[0].transactionPrice = transactionPrice
+                                        object[0].defaultCurrencyPrice = singlePrice * currency
+                                        object[0].defaultTotalPrice = (singlePrice * currency) * amount
+                                        object[0].totalAmount = amount
+                                        object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
+                                        object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
+                                        object[0].floatingPrice = floatingPrice
+                                        object[0].unrealizedPrice = unrealizedPrice
+                                        object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
+                                    }
+                                }
+                                completion(true)
+                            } else{
+                                completion(false)
+                            }
+                        }
+                    } else{
+                        completion(false)
+                    }
+                }
+            }else{
                 APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.exchangeName) { (success, response) in
                     if success{
                         singlePrice = response["RAW"]["PRICE"].double ?? 0

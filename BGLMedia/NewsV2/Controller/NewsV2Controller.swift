@@ -233,6 +233,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         realm.beginWrite()
         if let collection = res.array{
             for result in collection{
+                print(result["publishedTime"].string ?? "")
+                print(Extension.method.convertStringToDate(date: result["publishedTime"].string ?? ""))
+                print("======")
                 let id = result["_id"].string ?? "0"
                 let title = result["title"].string ?? ""
                 let newsDescription = result["newsDescription"].string ?? ""
