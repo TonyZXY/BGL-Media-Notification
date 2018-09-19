@@ -122,6 +122,8 @@ class NewsViewController: UIViewController,UICollectionViewDelegate,UICollection
         let factor = view.frame.width/414
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
+        let navigationDoneButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchResult))
+        self.navigationItem.setRightBarButton(navigationDoneButton, animated: true)
         
         collectionviews.delegate = self
         collectionviews.dataSource = self
@@ -151,5 +153,12 @@ class NewsViewController: UIViewController,UICollectionViewDelegate,UICollection
         } else {
             view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews,"v1":menuBar]))
         }
+    }
+    
+    @objc func searchResult(){
+        let search = FlashSearchController()
+        search.hidesBottomBarWhenPushed = true
+        
+        navigationController?.pushViewController(search, animated: true)
     }
 }

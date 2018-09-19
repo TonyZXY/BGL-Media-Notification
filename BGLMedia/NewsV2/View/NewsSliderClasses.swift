@@ -137,7 +137,7 @@ extension NewsV2Controller : TableCellForSliderDelegate,TableCellForSliderDataSo
 
 class NewsSliderCollectionView: UICollectionView{
     
-    open static let layout:UICollectionViewLayout = {
+    public static let layout:UICollectionViewLayout = {
         var layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
@@ -145,7 +145,7 @@ class NewsSliderCollectionView: UICollectionView{
         return layout
     }()
     
-    open static let frame :CGRect = .zero
+    public static let frame :CGRect = .zero
     
     func setup(){
         self.isPagingEnabled = true
@@ -170,7 +170,7 @@ class NewsSliderCollectionView: UICollectionView{
 }
 
 class NewsSliderCollectionViewCell : UICollectionViewCell{
-    open static let registerID = "NewsSliderCell"
+    public static let registerID = "NewsSliderCell"
     
     /**
      factor Number is used to calculate height and constraint
@@ -292,7 +292,7 @@ class NewsSliderCollectionViewCell : UICollectionViewCell{
  */
 class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionViewDataSource,UIScrollViewDelegate, UICollectionViewDelegateFlowLayout{
     
-    open static let registerID = "TableCellForSlider"
+    public static let registerID = "TableCellForSlider"
     
     var customDelegate : TableCellForSliderDelegate?
     var customDataSource : TableCellForSliderDataSource?

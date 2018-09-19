@@ -324,7 +324,7 @@ class TimelineTableViewController: UITableViewController {
                                                             if success{
                                                                 print(response)
                                                                 if response["success"].bool! {
-                                                                    try! self.realm.write {
+                                                                    try! realm.write {
                                                                         object.like = response["data"]["likes"].int ?? 0
                                                                         object.checked = !object.checked
                                                                     }
@@ -347,7 +347,7 @@ class TimelineTableViewController: UITableViewController {
                     if success{
                         print(response)
                         if response["success"].bool! {
-                             try! self.realm.write {
+                             try! realm.write {
                                 object.like = response["data"]["likes"].int ?? 0
                                 object.checked = !object.checked
                             }
