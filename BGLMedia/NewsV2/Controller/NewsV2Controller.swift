@@ -154,6 +154,24 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        // dequeue first cell and make it the sliderCell(Modified)
+        if indexPath.row == 0{
+            let cell = tableView.dequeueReusableCell(withIdentifier: TableCellForSlider.registerID,for: indexPath) as! TableCellForSlider
+            cell.width = view.frame.width
+            cell.customDelegate = self
+            cell.customDataSource = self
+            cell.sliderView.register(NewsSliderCollectionViewCell.self, forCellWithReuseIdentifier: NewsSliderCollectionViewCell.registerID)
+            getGenuineData(skip: 0, limit: 10, completion: { success in
+                if success{
+                    print("genuine data got: " + self.genuineNewsObjects.count.description)
+                    cell.sliderView.reloadData()
+                }else{
+                    //print("get genuine data failed")
+                }
+            })
+            return cell
+        }
+        
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsTableViewCell
         if indexPath.row <= displayNumber{
             let width = self.view.frame.width
@@ -223,7 +241,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 let publishedTime = Extension.method.convertStringToDate(date: result["publishedTime"].string ?? "")
                 let author = result["author"].string ?? ""
                 let localeTag = result["localeTag"].string ?? ""
-                let lanugageTag = result["languageTag"].string ?? ""
+                let languageTag = result["languageTag"].string ?? ""
                 let source = result["source"].string ?? ""
                 let contentTagResult = result["contentTag"].array ?? [""]
                 let contentTag = List<String>()
@@ -233,9 +251,9 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
                 
                 if id != "0" {
                     if realm.object(ofType: NewsObject.self, forPrimaryKey: id) == nil {
-                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, lanugageTag,source,contentTag])
+                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag, languageTag,source,contentTag])
                     } else {
-                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,lanugageTag,source,contentTag], update: true)
+                        realm.create(NewsObject.self, value: [id, title, newsDescription, imageURL, url, publishedTime, author, localeTag,languageTag,source,contentTag], update: true)
                     }
                 }
             }
@@ -303,6 +321,10 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
         tableView.rowHeight = 120 * self.view.frame.width/414
         tableView.delegate = self
         tableView.dataSource = self
+        
+        //add identifier for first cell(Modified)
+        tableView.register(TableCellForSlider.self, forCellReuseIdentifier: TableCellForSlider.registerID)
+        
         return tableView
     }()
     
@@ -367,6 +389,7 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     ////            refreshControl.tintColor = UIColor.white
     //            return refreshControl
     //    }()
+    
 }
 
 
