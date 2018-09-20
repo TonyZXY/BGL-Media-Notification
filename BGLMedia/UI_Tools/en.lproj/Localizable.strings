@@ -242,11 +242,13 @@ addAlert_alert = "Add alert";
 pushSection_alert = "Push Notification";
 editSection_alert = "Edit Alerts";
 notallow_alert = "Unavailable to use alert function without notification allow in Setting. Go to Setting";
-notlogin_alert = "Please login to use the Alert function. Login";
+notlogin_alert = "Please login to enable Currency Alert. Login";
 alertStatus_alert = "Notification Setting";
-alertUnavaliable_alert = "Unavailable";
-alertavaliable_alert = "Available";
+alertUnavailable_alert = "Unavailable";
+alertAvailable_alert = "Available";
 alertCoinUnavaliable_alert = "Unavailable!";
+newsFlashSectionHeader_alert = "News Flash Notification Setting";
+currencySectionHeader_alert = "Currency Alert Setting";
 
 
 //Alert Edit Page

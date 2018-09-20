@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2499192D21534E7B00508FED /* AlertNotificationControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
@@ -47,7 +48,6 @@
 		2D52AEFB20E46E1A00018FC0 /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE3B20E46E1800018FC0 /* AboutUsViewController.swift */; };
 		2D52AEFE20E46E1A00018FC0 /* AlertObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4020E46E1800018FC0 /* AlertObject.swift */; };
 		2D52AEFF20E46E1A00018FC0 /* AlertCoinName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4120E46E1800018FC0 /* AlertCoinName.swift */; };
-		2D52AF0020E46E1A00018FC0 /* AlertNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */; };
 		2D52AF0A20E46E1A00018FC0 /* TimelineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */; };
 		2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */; };
 		2D52AF0C20E46E1A00018FC0 /* SearchNewsFlashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */; };
@@ -221,6 +221,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AlertNotificationControllerV2.swift; sourceTree = "<group>"; };
 		2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
@@ -778,6 +779,7 @@
 				2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */,
 				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
 				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
+				2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */,
 			);
 			path = Controlller;
 			sourceTree = "<group>";
@@ -1257,7 +1259,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D52AF0020E46E1A00018FC0 /* AlertNotificationController.swift in Sources */,
 				57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */,
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
@@ -1396,6 +1397,7 @@
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
 				57355C4720F718CC002E70E4 /* TransDateCell.swift in Sources */,
 				2D52AF1520E46E1A00018FC0 /* TimelinePoint.swift in Sources */,
+				2499192D21534E7B00508FED /* AlertNotificationControllerV2.swift in Sources */,
 				2D67307421225B4000EE49A5 /* AboutFunctionController.swift in Sources */,
 				2D52AF1420E46E1A00018FC0 /* Timeline.swift in Sources */,
 				57BAD9542104CAD500973B45 /* TCPickerViewDarkTheme.swift in Sources */,

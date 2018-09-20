@@ -233,10 +233,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                     }
                 })
 //            }
+        }else {
+            if !sendDeviceTokenStatus {
+                //send device token to unknown user table
+            }
         }
     }
     
-        
+    var sendDeviceTokenStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "SendDeviceToken")
+        }
+    }
     
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
