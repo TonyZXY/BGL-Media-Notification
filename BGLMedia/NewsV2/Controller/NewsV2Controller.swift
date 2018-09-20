@@ -142,14 +142,15 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        // return one more cell for slider
         if newsObject.count != 0{
             if newsObject.count > displayNumber {
-                return displayNumber
+                return displayNumber + 1
             } else {
-                return newsObject.count
+                return newsObject.count + 1
             }
         } else{
-            return 0
+            return 0 + 1
         }
     }
     
@@ -160,6 +161,8 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             cell.width = view.frame.width
             cell.customDelegate = self
             cell.customDataSource = self
+            // backgournd color to solve flashing issue
+            cell.backgroundColor = ThemeColor().darkGreyColor()
             cell.sliderView.register(NewsSliderCollectionViewCell.self, forCellWithReuseIdentifier: NewsSliderCollectionViewCell.registerID)
             getGenuineData(skip: 0, limit: 10, completion: { success in
                 if success{
@@ -171,13 +174,13 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
             })
             return cell
         }
-        
+        let rowForNews = indexPath.row - 1
         let cell = tableView.dequeueReusableCell(withIdentifier: "NewsCell") as! NewsTableViewCell
         if indexPath.row <= displayNumber{
             let width = self.view.frame.width
             cell.width = width
             if newsObject.count != 0{
-                let object = newsObject[indexPath.row]
+                let object = newsObject[rowForNews]
                 cell.news = object
             }
             return cell
@@ -187,7 +190,14 @@ class NewsV2Controller: UIViewController,UITableViewDataSource,UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let object = newsObject[indexPath.row]
+        // ignore first cell
+        if indexPath.row == 0 {
+            tableView.deselectRow(at: indexPath, animated: true)
+            return
+        }
+        // let treat row[1] as row[0]
+        let rowForNews = indexPath.row - 1
+        let object = newsObject[rowForNews]
         
         let urlString = object.url
         if let url = URL(string: urlString!) {
