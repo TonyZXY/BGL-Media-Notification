@@ -28,14 +28,14 @@ struct EventViewModel {
         let week = Calendar.current.component(.weekOfYear, from: event.eventStartTime)
         
         title = event.eventName
-        host = event.eventHost
+        host = "Host: \(event.eventHost)"
         address = "\(event.eventAddress) \(event.eventCity)"
         self.eventStartTime = event.eventStartTime
         yearOfEventStartTime = String(year)
         monthOfEventStartTime = "\(year)-\(month)"
         
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
-        timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate(date: event.eventStartTime)
+        timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
         dateFilter = dayOfEventStartTime
         
         components = DateComponents(weekOfYear: week, yearForWeekOfYear: year)
@@ -43,7 +43,7 @@ struct EventViewModel {
             let endDayOfTheWeek = Calendar.current.date(byAdding: .day, value: 6, to: firstDayOfTheWeek) {
             let strFirst = Extension.method.convertDateToStringPickerDate(date: firstDayOfTheWeek)
             let strEnd = Extension.method.convertDateToStringPickerDate(date: endDayOfTheWeek)
-            weekOfEventStartTime = "\(strFirst) to \(strEnd)"
+            weekOfEventStartTime = "\(strFirst) ~ \(strEnd)"
         } else {
             weekOfEventStartTime = "Unknown"
         }

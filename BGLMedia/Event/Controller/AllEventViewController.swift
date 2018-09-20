@@ -12,6 +12,12 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
     
     var eventViewModels = [EventViewModel]()
     var groupedEvents = [[EventViewModel]]()
+    let dayStr = "Day"
+    let weekStr = "Week"
+    let monthStr = "Month"
+    let yearStr = "Year"
+    let theBlockchainCentreStr = "The Blockchain Centre"
+    let allHostStr = "All Hosts"
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
@@ -56,35 +62,50 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
     
     //there should be a better way to solve reuable cell problem
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 100
+        return 120
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-
+        
         URLServices.fetchInstance.passServerData(urlParameters: ["api","eventAll"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             //print(response)
             self.eventViewModels = response.arrayValue.map({ (item) -> EventViewModel in
                 return EventViewModel(event: Event(item))
             })
             
-            let groupedE = Dictionary(grouping: self.eventViewModels, by: { (eventViewModel) -> String in
-                return eventViewModel.dateFilter
-            })
-            
-            groupedE.keys.sorted().forEach({ (key) in
-                if let values = groupedE[key] {
-                    self.groupedEvents.append(values)
-                }
-            })
-            
+//            let groupedE = Dictionary(grouping: self.eventViewModels, by: { (eventViewModel) -> String in
+//                return eventViewModel.dateFilter
+//            })
+//
+//            groupedE.keys.sorted().forEach({ (key) in
+//                if let values = groupedE[key] {
+//                    self.groupedEvents.append(values)
+//                }
+//            })
             DispatchQueue.main.async {
-                self.listTableView.reloadData()
+                self.updateGroupedEventsAndTableView(self.eventViewModels)
             }
         }
     }
-
+    
+    func updateGroupedEventsAndTableView(_ eventViewModels: [EventViewModel]) {
+        groupedEvents.removeAll()
+        
+        let groupedE = Dictionary(grouping: eventViewModels, by: { (eventViewModel) -> String in
+            return eventViewModel.dateFilter
+        })
+        
+        groupedE.keys.sorted().forEach({ (key) in
+            if let values = groupedE[key] {
+                self.groupedEvents.append(values)
+            }
+        })
+        
+        listTableView.reloadData()
+    }
+    
     func setUpView(){
         view.backgroundColor = ThemeColor().darkGreyColor()
         view.addSubview(listTableView)
@@ -93,14 +114,15 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
         listTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         listTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         
-        let hostFilterBarButtonItem = UIBarButtonItem(title: "Host", style: .done, target: self, action: #selector(hostFilter))
+        let hostFilterBarButtonItem = UIBarButtonItem(title: allHostStr, style: .done, target: self, action: #selector(hostFilter))
         self.navigationItem.leftBarButtonItem  = hostFilterBarButtonItem
         
-        let dateFilterBarButtonItem = UIBarButtonItem(title: "Date", style: .done, target: self, action: #selector(dateFilter))
+        //the default value of dateFilter in EventViewModel is day value so that the title should be dayStr
+        let dateFilterBarButtonItem = UIBarButtonItem(title: dayStr, style: .done, target: self, action: #selector(dateFilter))
         self.navigationItem.rightBarButtonItem  = dateFilterBarButtonItem
     }
     
-     lazy var listTableView:UITableView = {
+    lazy var listTableView:UITableView = {
         var tableView = UITableView()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(EventListTableViewCell.self, forCellReuseIdentifier: "EventList")
@@ -116,9 +138,8 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
         let pc = PopoverController()
         //popover setting
         pc.modalPresentationStyle = .popover
-        //pc.popoverPresentationController?.delegate = self
         pc.delegate = self
-        pc.buttons = [PopoverButton("The Blockchain Centre"), PopoverButton("All")]
+        pc.buttons = [PopoverButton(theBlockchainCentreStr), PopoverButton(allHostStr)]
         return pc
         }()
     
@@ -127,60 +148,92 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
         let pc = PopoverController()
         //popover setting
         pc.modalPresentationStyle = .popover
-        //pc.popoverPresentationController?.delegate = self
         pc.delegate = self
-        pc.buttons = [PopoverButton("Day"), PopoverButton("Week"), PopoverButton("Month"), PopoverButton("Year")]
+        pc.buttons = [PopoverButton(dayStr), PopoverButton(weekStr), PopoverButton(monthStr), PopoverButton(yearStr)]
         return pc
         }()
     
     @objc func dateFilter(_ sender: UIBarButtonItem){
-        //tell the popover where to point
+        //need to set up popover delegate here
         datePopoverController.popoverPresentationController?.delegate = self
+        //tell the popover where to point
         datePopoverController.popoverPresentationController?.barButtonItem = sender
+        datePopoverController.popoverBarButtonItem = sender
         self.present(datePopoverController, animated: true)
     }
     
     @objc func hostFilter(_ sender: UIBarButtonItem){
-        //tell the popover where to point
+        //need to set up popover delegate here
         hostPopoverController.popoverPresentationController?.delegate = self
+        //tell the popover where to point
         hostPopoverController.popoverPresentationController?.barButtonItem = sender
+        hostPopoverController.popoverBarButtonItem = sender
         self.present(hostPopoverController, animated: true)
+    }
+    
+    func updateDateFilterValue(_ filterValue: String) -> [EventViewModel] {
+        for (index, _) in eventViewModels.enumerated() {
+            switch filterValue {
+            case dayStr:
+                eventViewModels[index].dateFilter = eventViewModels[index].dayOfEventStartTime
+            case weekStr:
+                eventViewModels[index].dateFilter = eventViewModels[index].weekOfEventStartTime
+            case monthStr:
+                eventViewModels[index].dateFilter = eventViewModels[index].monthOfEventStartTime
+            case yearStr:
+                eventViewModels[index].dateFilter = eventViewModels[index].yearOfEventStartTime
+            default: break
+            }
+        }
+        return eventViewModels
     }
     
     //a function of PopoverControllerDelegate
     func popoverButtonAction(sender: UIButton) {
         var newEventViewModels = eventViewModels
-        if sender.currentTitle == "Day" {
-            for (index, _) in eventViewModels.enumerated() {
-                eventViewModels[index].dateFilter = eventViewModels[index].dayOfEventStartTime
+        if sender.currentTitle == theBlockchainCentreStr {
+            newEventViewModels = eventViewModels.filter { $0.host == theBlockchainCentreStr }
+        } else {
+            if let filter = sender.currentTitle {
+                newEventViewModels = updateDateFilterValue(filter)
             }
-        } else if sender.currentTitle == "Week" {
-            for (index, _) in eventViewModels.enumerated() {
-                eventViewModels[index].dateFilter = eventViewModels[index].weekOfEventStartTime
-            }
-        } else if sender.currentTitle == "Month" {
-            for (index, _) in eventViewModels.enumerated() {
-                eventViewModels[index].dateFilter = eventViewModels[index].monthOfEventStartTime
-            }
-        } else if sender.currentTitle == "Year" {
-            for (index, _) in eventViewModels.enumerated() {
-                eventViewModels[index].dateFilter = eventViewModels[index].yearOfEventStartTime
-            }
-        } else if sender.currentTitle == "The Blockchain Centre" {
-            newEventViewModels = eventViewModels.filter { $0.host == "The Blockchain Centre" }
         }
-        let groupedE = Dictionary(grouping: newEventViewModels, by: { (eventViewModel) -> String in
-            return eventViewModel.dateFilter
-        })
-        
-        groupedEvents.removeAll()
-        groupedE.keys.sorted().forEach({ (key) in
-            if let values = groupedE[key] {
-                self.groupedEvents.append(values)
-            }
-        })
-        
-        listTableView.reloadData()
+        updateGroupedEventsAndTableView(newEventViewModels)
+//        if sender.currentTitle == dayStr {
+//            for (index, _) in newEventViewModels.enumerated() {
+//                eventViewModels[index].dateFilter = eventViewModels[index].dayOfEventStartTime
+//            }
+//            newEventViewModels = eventViewModels
+//        } else if sender.currentTitle == weekStr {
+//            for (index, _) in eventViewModels.enumerated() {
+//                eventViewModels[index].dateFilter = eventViewModels[index].weekOfEventStartTime
+//            }
+//            newEventViewModels = eventViewModels
+//        } else if sender.currentTitle == monthStr {
+//            for (index, _) in eventViewModels.enumerated() {
+//                eventViewModels[index].dateFilter = eventViewModels[index].monthOfEventStartTime
+//            }
+//            newEventViewModels = eventViewModels
+//        } else if sender.currentTitle == yearStr {
+//            for (index, _) in eventViewModels.enumerated() {
+//                eventViewModels[index].dateFilter = eventViewModels[index].yearOfEventStartTime
+//            }
+//            newEventViewModels = eventViewModels
+//        } else if sender.currentTitle == theBlockchainCentreStr {
+//            newEventViewModels = eventViewModels.filter { $0.host == theBlockchainCentreStr }
+//        }
+//        let groupedE = Dictionary(grouping: newEventViewModels, by: { (eventViewModel) -> String in
+//            return eventViewModel.dateFilter
+//        })
+//
+//        groupedEvents.removeAll()
+//        groupedE.keys.sorted().forEach({ (key) in
+//            if let values = groupedE[key] {
+//                self.groupedEvents.append(values)
+//            }
+//        })
+//
+//        listTableView.reloadData()
     }
     
     //a function of UIPopoverPresentationControllerDelegate to make sure the iphone also shows the view as a popover
@@ -189,6 +242,8 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
     }
 }
 
+
+//Cell View
 class EventListTableViewCell:UITableViewCell{
     
     var eventViewModel: EventViewModel? {
@@ -207,9 +262,9 @@ class EventListTableViewCell:UITableViewCell{
         selectionStyle = .none
         backgroundColor = ThemeColor().darkGreyColor()
         addSubview(cellView)
-
-//        cellView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0).isActive = true
-//        cellView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
+        
+        //        cellView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0).isActive = true
+        //        cellView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
         cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
         cellView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
@@ -230,7 +285,7 @@ class EventListTableViewCell:UITableViewCell{
         } else {
             timeLabel.text = "Unkown"
         }
-
+        
     }
     
     var titleLabel: UILabel = {
@@ -238,19 +293,21 @@ class EventListTableViewCell:UITableViewCell{
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 2
+        label.font = UIFont.boldFont(CGFloat(fontSize + 3))
         label.text = "Title"
         return label
     }()
-
+    
     var hostLabel: UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 1
+        label.font = UIFont.boldFont(CGFloat(fontSize))
         label.text = "Host"
         return label
     }()
-
+    
     var addressLabel:UILabel = {
         var label = UILabel()
         label.lineBreakMode = .byWordWrapping
@@ -262,12 +319,15 @@ class EventListTableViewCell:UITableViewCell{
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-
+    
     var timeLabel: UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 1
+        label.backgroundColor = ThemeColor().greyColor()
+        label.font = UIFont.regularFont(15)
+        label.textColor = ThemeColor().textGreycolor()
         label.text = "Time"
         return label
     }()
@@ -286,5 +346,6 @@ class EventListTableViewCell:UITableViewCell{
         return stackView
     }()
 }
+
 
 
