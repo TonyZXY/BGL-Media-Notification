@@ -247,15 +247,9 @@ class EventListTableViewCell:UITableViewCell{
     
     func updateUI() {
         titleLabel.text = eventViewModel?.title
-        hostLabel.text = eventViewModel?.host
+        hostLabel.text = eventViewModel?.hostLabel
         addressLabel.text = eventViewModel?.address
-        if let time = eventViewModel?.timeOfEventStartTime,
-            let day = eventViewModel?.dayOfEventStartTime {
-            timeLabel.text = "\(day) \(time)"
-        } else {
-            timeLabel.text = "Unkown"
-        }
-        
+        timeLabel.text = eventViewModel?.timeLabel
     }
     
     var titleLabel: UILabel = {

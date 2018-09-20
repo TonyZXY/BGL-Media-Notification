@@ -12,7 +12,7 @@ import UIKit
 struct EventViewModel {
     let title: String
     let host: String
-    let hostLogo: UIImage?
+    let hostLabel: String
     let address: String
     let eventStartTime: Date
     let yearOfEventStartTime: String
@@ -20,6 +20,7 @@ struct EventViewModel {
     let weekOfEventStartTime: String
     let dayOfEventStartTime: String
     let timeOfEventStartTime: String
+    let timeLabel: String
     var dateFilter: String
     let description: String
     let hostPage: String
@@ -32,15 +33,14 @@ struct EventViewModel {
         let week = Calendar.current.component(.weekOfYear, from: event.eventStartTime)
         
         title = event.eventName
-        host = "Host: \(event.eventHost)"
-        hostLogo = UIImage(named: "Blockchain-Centre-logo")
+        host = event.eventHost
         address = "\(event.eventAddress) \(event.eventCity)"
         self.eventStartTime = event.eventStartTime
         yearOfEventStartTime = String(year)
         monthOfEventStartTime = "\(year)-\(month)"
-        
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
         timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
+        timeLabel = "\(dayOfEventStartTime) \(timeOfEventStartTime)"
         dateFilter = dayOfEventStartTime
         description = event.eventDescription
         hostPage = event.eventHostPage
@@ -55,6 +55,12 @@ struct EventViewModel {
             weekOfEventStartTime = "\(strFirst) ~ \(strEnd)"
         } else {
             weekOfEventStartTime = "Unknown"
+        }
+        
+        if host != "null" {
+            hostLabel = "Host: \(host)"
+        } else {
+            hostLabel = "Unknown"
         }
     }
 }
