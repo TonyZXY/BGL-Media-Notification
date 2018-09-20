@@ -65,25 +65,32 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
         return 120
     }
     
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let eventDetailVC = EventDetailViewController()
+        eventDetailVC.eventViewModel = groupedEvents[indexPath.section][indexPath.row]
+        eventDetailVC.hidesBottomBarWhenPushed = true
+        navigationController?.pushViewController(eventDetailVC, animated: true)
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
         
         URLServices.fetchInstance.passServerData(urlParameters: ["api","eventAll"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             //print(response)
-            self.eventViewModels = response.arrayValue.map({ (item) -> EventViewModel in
+            
+            let allEventViewModels = response.arrayValue.map({ (item) -> EventViewModel in
                 return EventViewModel(event: Event(item))
             })
             
-//            let groupedE = Dictionary(grouping: self.eventViewModels, by: { (eventViewModel) -> String in
-//                return eventViewModel.dateFilter
-//            })
-//
-//            groupedE.keys.sorted().forEach({ (key) in
-//                if let values = groupedE[key] {
-//                    self.groupedEvents.append(values)
-//                }
-//            })
+            //only get the events after today & remove title == "null"
+            allEventViewModels.forEach({ (eventViewModel) in
+                if eventViewModel.eventStartTime >= Date() && eventViewModel.title != "null" {
+                    self.eventViewModels.append(eventViewModel)
+                }
+            })
+            
+
             DispatchQueue.main.async {
                 self.updateGroupedEventsAndTableView(self.eventViewModels)
             }
@@ -199,41 +206,6 @@ class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewD
             }
         }
         updateGroupedEventsAndTableView(newEventViewModels)
-//        if sender.currentTitle == dayStr {
-//            for (index, _) in newEventViewModels.enumerated() {
-//                eventViewModels[index].dateFilter = eventViewModels[index].dayOfEventStartTime
-//            }
-//            newEventViewModels = eventViewModels
-//        } else if sender.currentTitle == weekStr {
-//            for (index, _) in eventViewModels.enumerated() {
-//                eventViewModels[index].dateFilter = eventViewModels[index].weekOfEventStartTime
-//            }
-//            newEventViewModels = eventViewModels
-//        } else if sender.currentTitle == monthStr {
-//            for (index, _) in eventViewModels.enumerated() {
-//                eventViewModels[index].dateFilter = eventViewModels[index].monthOfEventStartTime
-//            }
-//            newEventViewModels = eventViewModels
-//        } else if sender.currentTitle == yearStr {
-//            for (index, _) in eventViewModels.enumerated() {
-//                eventViewModels[index].dateFilter = eventViewModels[index].yearOfEventStartTime
-//            }
-//            newEventViewModels = eventViewModels
-//        } else if sender.currentTitle == theBlockchainCentreStr {
-//            newEventViewModels = eventViewModels.filter { $0.host == theBlockchainCentreStr }
-//        }
-//        let groupedE = Dictionary(grouping: newEventViewModels, by: { (eventViewModel) -> String in
-//            return eventViewModel.dateFilter
-//        })
-//
-//        groupedEvents.removeAll()
-//        groupedE.keys.sorted().forEach({ (key) in
-//            if let values = groupedE[key] {
-//                self.groupedEvents.append(values)
-//            }
-//        })
-//
-//        listTableView.reloadData()
     }
     
     //a function of UIPopoverPresentationControllerDelegate to make sure the iphone also shows the view as a popover
@@ -263,8 +235,6 @@ class EventListTableViewCell:UITableViewCell{
         backgroundColor = ThemeColor().darkGreyColor()
         addSubview(cellView)
         
-        //        cellView.centerXAnchor.constraint(equalTo: self.centerXAnchor, constant: 0).isActive = true
-        //        cellView.centerYAnchor.constraint(equalTo: self.centerYAnchor, constant: 0).isActive = true
         cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
         cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
         cellView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
@@ -337,12 +307,6 @@ class EventListTableViewCell:UITableViewCell{
         stackView.distribution = .fillProportionally
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
-        
-        //        var view = UIView()
-        //        view.backgroundColor = ThemeColor().greyColor()
-        //        view.layer.cornerRadius = 8
-        //        view.clipsToBounds = true
-        //        view.translatesAutoresizingMaskIntoConstraints = false
         return stackView
     }()
 }

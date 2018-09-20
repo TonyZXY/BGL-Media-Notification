@@ -209,6 +209,7 @@
 		B930B6E9214F3D5900685F64 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = B930B6E8214F3D5900685F64 /* Event.swift */; };
 		B930B6EC21507DA800685F64 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B930B6EB21507DA800685F64 /* EventViewModel.swift */; };
 		B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7A215208F6002AE4D5 /* PopoverController.swift */; };
+		B9530C7D2153500C002AE4D5 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */; };
 		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
 /* End PBXBuildFile section */
 
@@ -436,6 +437,7 @@
 		B930B6E8214F3D5900685F64 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		B930B6EB21507DA800685F64 /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
 		B9530C7A215208F6002AE4D5 /* PopoverController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverController.swift; sourceTree = "<group>"; };
+		B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController.swift; sourceTree = "<group>"; };
 		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1164,6 +1166,7 @@
 			isa = PBXGroup;
 			children = (
 				578452C1214628EC00053814 /* AllEventViewController.swift */,
+				B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */,
 				B9530C7A215208F6002AE4D5 /* PopoverController.swift */,
 			);
 			path = Controller;
@@ -1395,6 +1398,7 @@
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */,
 				2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */,
+				B9530C7D2153500C002AE4D5 /* EventDetailViewController.swift in Sources */,
 				57355C5020F718CC002E70E4 /* CryptoCompareEndpoint.swift in Sources */,
 				57BBAB6E210962C300984AA4 /* GlobalMarketValueRealm.swift in Sources */,
 				57355C0E20F7188B002E70E4 /* NewsDetailtableView.swift in Sources */,

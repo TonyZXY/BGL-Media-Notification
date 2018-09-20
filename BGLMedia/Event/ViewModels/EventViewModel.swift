@@ -7,10 +7,12 @@
 //
 
 import Foundation
+import UIKit
 
 struct EventViewModel {
     let title: String
     let host: String
+    let hostLogo: UIImage?
     let address: String
     let eventStartTime: Date
     let yearOfEventStartTime: String
@@ -19,8 +21,10 @@ struct EventViewModel {
     let dayOfEventStartTime: String
     let timeOfEventStartTime: String
     var dateFilter: String
-    
-    let components: DateComponents
+    let description: String
+    let hostPage: String
+    let imageUrlStr: String
+    let urlStr: String
     
     init(event: Event) {
         let year = Calendar.current.component(.year, from: event.eventStartTime)
@@ -29,6 +33,7 @@ struct EventViewModel {
         
         title = event.eventName
         host = "Host: \(event.eventHost)"
+        hostLogo = UIImage(named: "Blockchain-Centre-logo")
         address = "\(event.eventAddress) \(event.eventCity)"
         self.eventStartTime = event.eventStartTime
         yearOfEventStartTime = String(year)
@@ -37,8 +42,12 @@ struct EventViewModel {
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
         timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
         dateFilter = dayOfEventStartTime
+        description = event.eventDescription
+        hostPage = event.eventHostPage
+        imageUrlStr = event.eventImageURL
+        urlStr = event.eventURL
         
-        components = DateComponents(weekOfYear: week, yearForWeekOfYear: year)
+        let components = DateComponents(weekOfYear: week, yearForWeekOfYear: year)
         if let firstDayOfTheWeek = Calendar.current.date(from: components),
             let endDayOfTheWeek = Calendar.current.date(byAdding: .day, value: 6, to: firstDayOfTheWeek) {
             let strFirst = Extension.method.convertDateToStringPickerDate(date: firstDayOfTheWeek)
