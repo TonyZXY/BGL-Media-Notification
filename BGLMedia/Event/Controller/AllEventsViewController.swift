@@ -30,7 +30,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         label.textAlignment = .center
         label.layer.cornerRadius = 8
         label.clipsToBounds = true
-        label.layer.borderWidth = 3
+        label.layer.borderWidth = 1.2
         label.layer.borderColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         
         if let firstEventInSection = groupedEvents[section].first {
@@ -51,6 +51,8 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "EventList") as! EventListTableViewCell
+        let factor = view.frame.width/414
+        cell.factor = factor
         //let cell = EventListTableViewCell(style: UITableViewCellStyle.default, reuseIdentifier: "WalletCell")
         return cell
     }
@@ -224,9 +226,16 @@ class EventListTableViewCell:UITableViewCell{
         }
     }
     
+    var factor:CGFloat? {
+        didSet{
+            setUpView()
+            setUpSubView()
+        }
+    }
+    
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        setUpView()
+        
     }
     
     
@@ -235,10 +244,40 @@ class EventListTableViewCell:UITableViewCell{
         backgroundColor = ThemeColor().darkGreyColor()
         addSubview(cellView)
         
-        cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
-        cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
-        cellView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
-        cellView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+//        cellView.topAnchor.constraint(equalTo: self.topAnchor, constant: 10).isActive = true
+//        cellView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: -10).isActive = true
+//        cellView.leftAnchor.constraint(equalTo: self.leftAnchor, constant: 10).isActive = true
+//        cellView.rightAnchor.constraint(equalTo: self.rightAnchor, constant: -10).isActive = true
+        addConstraintsWithFormat(format: "H:|[v0]|", views: cellView)
+        addConstraintsWithFormat(format: "V:|[v0]|", views: cellView)
+    }
+    
+    func setUpSubView(){
+        cellView.addSubview(titleLabel)
+        cellView.addSubview(imgView)
+        cellView.addSubview(hostLabel)
+        cellView.addSubview(addressLabel)
+        cellView.addSubview(timeLabel)
+        
+//        cellView.addConstraintsWithFormat(format: "H:|-10-[v0]-10-|", views: titleLabel)
+//        cellView.addConstraintsWithFormat(format: "V:|-8-[v0(40)]", views: titleLabel)
+        cellView.addConstraintsWithFormat(format: "H:|-\(16*factor!)-[v0(\(55*factor!))]-\(15*factor!)-[v1]-\(14*factor!)-|", views: imgView, titleLabel)
+        cellView.addConstraintsWithFormat(format: "V:|-\(10*factor!)-[v0(\(45*factor!))]", views: titleLabel)
+        cellView.addConstraintsWithFormat(format: "V:|-\(16*factor!)-[v0(\(55*factor!))]-\(5*factor!)-[v1]-\(5*factor!)-|", views: imgView,hostLabel)
+        
+        cellView.addConstraintsWithFormat(format: "H:|-\(16*factor!)-[v0(\(80*factor!))]", views: hostLabel)
+        
+        addressLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 14*factor!).isActive = true
+        addressLabel.leadingAnchor.constraint(equalTo: hostLabel.trailingAnchor, constant: 10*factor!).isActive = true
+        addressLabel.trailingAnchor.constraint(equalTo: titleLabel.trailingAnchor, constant: -5*factor!).isActive = true
+        addressLabel.bottomAnchor.constraint(equalTo: addressLabel.topAnchor, constant: 18*factor!).isActive = true
+        
+        timeLabel.topAnchor.constraint(equalTo: addressLabel.bottomAnchor, constant: 2*factor!).isActive = true
+        timeLabel.leadingAnchor.constraint(equalTo: addressLabel.leadingAnchor, constant: 0).isActive = true
+        timeLabel.trailingAnchor.constraint(equalTo: addressLabel.trailingAnchor, constant: 0).isActive = true
+        timeLabel.bottomAnchor.constraint(equalTo: timeLabel.topAnchor, constant: 18*factor!).isActive = true
+        
+        
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -256,8 +295,9 @@ class EventListTableViewCell:UITableViewCell{
         var label = UILabel()
         //label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
-        label.numberOfLines = 2
-        label.font = UIFont.boldFont(CGFloat(fontSize + 3))
+        label.numberOfLines = 0
+//        label.font = UIFont.boldFont(CGFloat(fontSize + 3))
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize + 2))
         label.text = "Title"
         return label
     }()
@@ -266,8 +306,8 @@ class EventListTableViewCell:UITableViewCell{
         var label = UILabel()
         //label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
-        label.numberOfLines = 1
-        label.font = UIFont.boldFont(CGFloat(fontSize))
+        label.numberOfLines = 0
+        label.font = UIFont.regularFont(CGFloat(fontSize-3))
         label.text = "Host"
         return label
     }()
@@ -276,32 +316,46 @@ class EventListTableViewCell:UITableViewCell{
         var label = UILabel()
         label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 0
-        label.backgroundColor = ThemeColor().greyColor()
-        label.font = UIFont.regularFont(15)
+//        label.backgroundColor = ThemeColor().greyColor()
+        label.font = UIFont.regularFont(CGFloat(fontSize - 2))
         label.textColor = ThemeColor().textGreycolor()
         label.text = "Address"
-        //label.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     var timeLabel: UILabel = {
         var label = UILabel()
-        //label.translatesAutoresizingMaskIntoConstraints = false
+        label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 1
-        label.backgroundColor = ThemeColor().greyColor()
-        label.font = UIFont.regularFont(15)
+//        label.backgroundColor = ThemeColor().greyColor()
+        label.font = UIFont.regularFont(CGFloat(fontSize - 2))
         label.textColor = ThemeColor().textGreycolor()
         label.text = "Time"
         return label
     }()
     
+    var imgView: UIView = {
+        let view = UIView()
+        view.backgroundColor = .yellow
+        view.translatesAutoresizingMaskIntoConstraints = false
+        view.layer.cornerRadius = 8
+        return view
+    }()
+    
     lazy var cellView:UIView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, hostLabel, addressLabel, timeLabel])
-        stackView.distribution = .fillProportionally
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
+//        let stackView = UIStackView(arrangedSubviews: [titleLabel, hostLabel, addressLabel, timeLabel])
+//        stackView.distribution = .fillProportionally
+//        stackView.axis = .vertical
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        return stackView
+        
+        let view = UIView()
+        view.backgroundColor = ThemeColor().darkGreyColor()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        
+        return view
     }()
 }
 
