@@ -285,6 +285,7 @@ class EventListTableViewCell:UITableViewCell{
     }
     
     func updateUI() {
+        imgView.image = UIImage(named: "BlockchainCenter")
         titleLabel.text = eventViewModel?.title
         hostLabel.text = eventViewModel?.hostLabel
         addressLabel.text = eventViewModel?.address
@@ -336,9 +337,10 @@ class EventListTableViewCell:UITableViewCell{
         return label
     }()
     
-    var imgView: UIView = {
-        let view = UIView()
-        view.backgroundColor = .yellow
+    var imgView: UIImageView = {
+        let view = UIImageView()
+        view.contentMode = .scaleAspectFill
+        view.clipsToBounds = true
         view.translatesAutoresizingMaskIntoConstraints = false
         view.layer.cornerRadius = 8
         return view

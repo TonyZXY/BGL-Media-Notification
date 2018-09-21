@@ -17,6 +17,7 @@ class EventDetailViewController: UIViewController {
     private var eventImageView:UIImageView = {
         let uiImageView = UIImageView()
         uiImageView.contentMode = .scaleAspectFit
+        uiImageView.clipsToBounds = true
         return uiImageView
     }()
     
@@ -47,40 +48,63 @@ class EventDetailViewController: UIViewController {
         return label
     }()
     
+    lazy private var labelsStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, addressLabel, timeLabel])
+        stackView.distribution = .fillProportionally
+        stackView.axis = .vertical
+        return stackView
+    }()
+    
     private lazy var urlButton: UIButton = {
         let button = UIButton()
         button.setTitle(eventLinkButtonTitle, for: .normal)
+        button.setTitleColor(#colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1), for: .normal)
+        //button.backgroundColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
     }()
     
     private var hostPageButton: UIButton = {
         let button = UIButton()
+        button.setTitleColor(#colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1), for: .normal)
+        //button.backgroundColor = ThemeColor().darkBlackColor()
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
     }()
     
-    lazy private var LinksStack: UIStackView = {
+    lazy private var buttonsStack: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [hostPageButton, urlButton])
         stackView.distribution = .fillEqually
+        let padding: CGFloat = 8
+        stackView.spacing = padding
         stackView.axis = .horizontal
         return stackView
     }()
     
-    lazy private var imageAndLabelsAndButtonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [eventImageView, LinksStack, titleLabel, addressLabel, timeLabel])
+    lazy private var labelsAndButtonsStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [buttonsStack, labelsStack])
         stackView.distribution = .fillProportionally
         stackView.axis = .vertical
         return stackView
     }()
     
-    private var eventDescriptionTextView: UITextView = {
+    lazy private var imageAndLabelsAndButtonsStack: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [eventImageView, labelsAndButtonsStack])
+        stackView.distribution = .fillEqually
+        stackView.axis = .vertical
+//        stackView.translatesAutoresizingMaskIntoConstraints = false
+//        stackView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4).isActive = true
+        return stackView
+    }()
+    
+    lazy private var eventDescriptionTextView: UITextView = {
         let textView = UITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.backgroundColor = ThemeColor().themeColor()
         textView.textColor = ThemeColor().whiteColor()
         textView.font = UIFont.regularFont(CGFloat(fontSize))
+        //textView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6).isActive = true
         return textView
     }()
     
@@ -124,7 +148,9 @@ class EventDetailViewController: UIViewController {
             let endTime = eventViewModel?.endTimeLable {
             timeLabel.text = "Start: \(startTime)   End: \(endTime)"
         }
-        addressLabel.text = eventViewModel?.address
+        if let address = eventViewModel?.address {
+            addressLabel.text = "Address: " + address
+        }
         hostPageButton.setTitle(eventViewModel?.host, for: .normal)
         eventDescriptionTextView.text = eventViewModel?.description
     }
@@ -195,5 +221,14 @@ class EventDetailViewController: UIViewController {
                 }
             })
         }
+    }
+}
+
+
+class CustomView: UIView {
+    var height = 1.0
+    
+    override open var intrinsicContentSize: CGSize {
+        return CGSize(width: 1.0, height: height)
     }
 }
