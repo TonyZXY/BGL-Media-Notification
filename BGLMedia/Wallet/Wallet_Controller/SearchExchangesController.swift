@@ -43,6 +43,10 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
             }
         }
         allExchanges.insert("Global Average", at: 0)
+        if let index = allExchanges.firstIndex(of: "Huobi Australia") {
+            allExchanges.remove(at: index)
+            allExchanges.insert("Huobi Australia",at: 1)
+        }
         self.searchResult.reloadData()
     }
     

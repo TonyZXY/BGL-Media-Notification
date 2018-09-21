@@ -371,6 +371,10 @@ class GloabalController: UIViewController,ExchangeSelect{
         }
         allExchanges.sort{ $0.lowercased() < $1.lowercased() }
         allExchanges.insert("Global Average", at: 0)
+        if let index = allExchanges.firstIndex(of: "Huobi Australia") {
+            allExchanges.remove(at: index)
+            allExchanges.insert("Huobi Australia", at: 1)
+        }
         return allExchanges
     }
     
