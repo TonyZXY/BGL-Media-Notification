@@ -249,7 +249,7 @@ class EventListTableViewCell:UITableViewCell{
         titleLabel.text = eventViewModel?.title
         hostLabel.text = eventViewModel?.hostLabel
         addressLabel.text = eventViewModel?.address
-        timeLabel.text = eventViewModel?.timeLabel
+        timeLabel.text = eventViewModel?.startTimeLabel
     }
     
     var titleLabel: UILabel = {

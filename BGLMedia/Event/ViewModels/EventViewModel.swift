@@ -21,7 +21,8 @@ struct EventViewModel {
     let weekOfEventStartTime: String
     let dayOfEventStartTime: String
     let timeOfEventStartTime: String
-    let timeLabel: String
+    let startTimeLabel: String
+    let endTimeLable: String
     var dateFilter: String
     let description: String
     let hostPage: String
@@ -42,7 +43,10 @@ struct EventViewModel {
         monthOfEventStartTime = "\(year)-\(month)"
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
         timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
-        timeLabel = "\(dayOfEventStartTime) \(timeOfEventStartTime)"
+        startTimeLabel = "\(dayOfEventStartTime) \(timeOfEventStartTime)"
+        let dayOfEventEndTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
+        let timeOfEventEndTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
+        endTimeLable = "\(dayOfEventEndTime) \(timeOfEventEndTime)"
         dateFilter = dayOfEventStartTime
         description = event.eventDescription
         hostPage = event.eventHostPage

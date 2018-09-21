@@ -68,7 +68,7 @@ class EventDetailViewController: UIViewController {
     }()
     
     lazy private var imageAndLabelsAndButtonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [eventImageView, titleLabel, addressLabel, timeLabel, LinksStack])
+        let stackView = UIStackView(arrangedSubviews: [eventImageView, LinksStack, titleLabel, addressLabel, timeLabel])
         stackView.distribution = .fillProportionally
         stackView.axis = .vertical
         return stackView
@@ -120,7 +120,10 @@ class EventDetailViewController: UIViewController {
             eventImageView.setImage(urlString: imgUrlStr)
         }
         titleLabel.text = eventViewModel?.title
-        timeLabel.text = eventViewModel?.timeLabel
+        if let startTime = eventViewModel?.startTimeLabel,
+            let endTime = eventViewModel?.endTimeLable {
+            timeLabel.text = "Start: \(startTime)   End: \(endTime)"
+        }
         addressLabel.text = eventViewModel?.address
         hostPageButton.setTitle(eventViewModel?.host, for: .normal)
         eventDescriptionTextView.text = eventViewModel?.description
