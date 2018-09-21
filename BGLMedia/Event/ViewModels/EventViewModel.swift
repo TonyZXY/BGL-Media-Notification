@@ -60,7 +60,7 @@ struct EventViewModel {
         }
         
         if host != "null" {
-            hostLabel = "Host: \(host)"
+            hostLabel = host
         } else {
             hostLabel = "Unknown"
         }
