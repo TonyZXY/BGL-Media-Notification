@@ -7,20 +7,26 @@
 //
 
 import Foundation
+import UIKit
 
 struct EventViewModel {
     let title: String
     let host: String
+    let hostLabel: String
     let address: String
     let eventStartTime: Date
+    let eventEndTime: Date
     let yearOfEventStartTime: String
     let monthOfEventStartTime: String
     let weekOfEventStartTime: String
     let dayOfEventStartTime: String
     let timeOfEventStartTime: String
+    let timeLabel: String
     var dateFilter: String
-    
-    let components: DateComponents
+    let description: String
+    let hostPage: String
+    let imageUrlStr: String
+    let urlStr: String
     
     init(event: Event) {
         let year = Calendar.current.component(.year, from: event.eventStartTime)
@@ -31,21 +37,32 @@ struct EventViewModel {
         host = event.eventHost
         address = "\(event.eventAddress) \(event.eventCity)"
         self.eventStartTime = event.eventStartTime
+        self.eventEndTime = event.eventEndTime
         yearOfEventStartTime = String(year)
         monthOfEventStartTime = "\(year)-\(month)"
-        
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
-        timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate(date: event.eventStartTime)
+        timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
+        timeLabel = "\(dayOfEventStartTime) \(timeOfEventStartTime)"
         dateFilter = dayOfEventStartTime
+        description = event.eventDescription
+        hostPage = event.eventHostPage
+        imageUrlStr = event.eventImageURL
+        urlStr = event.eventURL
         
-        components = DateComponents(weekOfYear: week, yearForWeekOfYear: year)
+        let components = DateComponents(weekOfYear: week, yearForWeekOfYear: year)
         if let firstDayOfTheWeek = Calendar.current.date(from: components),
             let endDayOfTheWeek = Calendar.current.date(byAdding: .day, value: 6, to: firstDayOfTheWeek) {
             let strFirst = Extension.method.convertDateToStringPickerDate(date: firstDayOfTheWeek)
             let strEnd = Extension.method.convertDateToStringPickerDate(date: endDayOfTheWeek)
-            weekOfEventStartTime = "\(strFirst) to \(strEnd)"
+            weekOfEventStartTime = "\(strFirst) ~ \(strEnd)"
         } else {
             weekOfEventStartTime = "Unknown"
+        }
+        
+        if host != "null" {
+            hostLabel = "Host: \(host)"
+        } else {
+            hostLabel = "Unknown"
         }
     }
 }

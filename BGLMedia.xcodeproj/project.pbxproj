@@ -151,8 +151,7 @@
 		576751FE210556E8006DB67C /* JGProgressHUD.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; };
 		576751FF210556E8006DB67C /* JGProgressHUD.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 576751FD210556E8006DB67C /* JGProgressHUD.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		576752012105597C006DB67C /* LoginController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 576752002105597C006DB67C /* LoginController.swift */; };
-		578452C0214628DB00053814 /* PerDayEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452BF214628DB00053814 /* PerDayEventViewController.swift */; };
-		578452C2214628EC00053814 /* AllEventViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452C1214628EC00053814 /* AllEventViewController.swift */; };
+		578452C2214628EC00053814 /* AllEventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578452C1214628EC00053814 /* AllEventsViewController.swift */; };
 		578FE8CF20FEEEB20027F17E /* Montserrat-Medium.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8C720FEEEB00027F17E /* Montserrat-Medium.ttf */; };
 		578FE8D020FEEEB20027F17E /* Montserrat-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8C820FEEEB10027F17E /* Montserrat-Regular.ttf */; };
 		578FE8D120FEEEB20027F17E /* Montserrat-Light.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 578FE8C920FEEEB10027F17E /* Montserrat-Light.ttf */; };
@@ -197,7 +196,6 @@
 		57C2F412213E16B50065F0B9 /* RefreshDataService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57C2F411213E16B50065F0B9 /* RefreshDataService.swift */; };
 		57E67D0521408977005F290E /* NewsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E67D0421408977005F290E /* NewsViewController.swift */; };
 		57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E67D06214089F1005F290E /* NewsMenuBar.swift */; };
-		57E67D0A21408C8D005F290E /* EventsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57E67D0921408C8D005F290E /* EventsViewController.swift */; };
 		57EB4CEC2120517B0083B123 /* SwiftKeychainWrapper.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; };
 		57EB4CED2120517B0083B123 /* SwiftKeychainWrapper.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		57FC41F220FAD2D20052EE02 /* MoreController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41F120FAD2D20052EE02 /* MoreController.swift */; };
@@ -209,6 +207,7 @@
 		B930B6E9214F3D5900685F64 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = B930B6E8214F3D5900685F64 /* Event.swift */; };
 		B930B6EC21507DA800685F64 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B930B6EB21507DA800685F64 /* EventViewModel.swift */; };
 		B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7A215208F6002AE4D5 /* PopoverController.swift */; };
+		B9530C7D2153500C002AE4D5 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */; };
 		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
 /* End PBXBuildFile section */
 
@@ -375,8 +374,7 @@
 		576751FB2105556E006DB67C /* RegisterController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterController.swift; sourceTree = "<group>"; };
 		576751FD210556E8006DB67C /* JGProgressHUD.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = JGProgressHUD.framework; path = Carthage/Build/iOS/JGProgressHUD.framework; sourceTree = "<group>"; };
 		576752002105597C006DB67C /* LoginController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginController.swift; sourceTree = "<group>"; };
-		578452BF214628DB00053814 /* PerDayEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PerDayEventViewController.swift; sourceTree = "<group>"; };
-		578452C1214628EC00053814 /* AllEventViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventViewController.swift; sourceTree = "<group>"; };
+		578452C1214628EC00053814 /* AllEventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllEventsViewController.swift; sourceTree = "<group>"; };
 		578FE8C720FEEEB00027F17E /* Montserrat-Medium.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Medium.ttf"; sourceTree = "<group>"; };
 		578FE8C820FEEEB10027F17E /* Montserrat-Regular.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Regular.ttf"; sourceTree = "<group>"; };
 		578FE8C920FEEEB10027F17E /* Montserrat-Light.ttf */ = {isa = PBXFileReference; lastKnownFileType = file; path = "Montserrat-Light.ttf"; sourceTree = "<group>"; };
@@ -422,7 +420,6 @@
 		57C2F411213E16B50065F0B9 /* RefreshDataService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefreshDataService.swift; sourceTree = "<group>"; };
 		57E67D0421408977005F290E /* NewsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsViewController.swift; sourceTree = "<group>"; };
 		57E67D06214089F1005F290E /* NewsMenuBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NewsMenuBar.swift; sourceTree = "<group>"; };
-		57E67D0921408C8D005F290E /* EventsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventsViewController.swift; sourceTree = "<group>"; };
 		57EB4CE92120514E0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		57EB4CEB2120517B0083B123 /* SwiftKeychainWrapper.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftKeychainWrapper.framework; path = Carthage/Build/iOS/SwiftKeychainWrapper.framework; sourceTree = "<group>"; };
 		57FC41F120FAD2D20052EE02 /* MoreController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MoreController.swift; sourceTree = "<group>"; };
@@ -436,6 +433,7 @@
 		B930B6E8214F3D5900685F64 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		B930B6EB21507DA800685F64 /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
 		B9530C7A215208F6002AE4D5 /* PopoverController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverController.swift; sourceTree = "<group>"; };
+		B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController.swift; sourceTree = "<group>"; };
 		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -1161,10 +1159,9 @@
 		B9530C79215208BE002AE4D5 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				578452C1214628EC00053814 /* AllEventViewController.swift */,
+				578452C1214628EC00053814 /* AllEventsViewController.swift */,
+				B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */,
 				B9530C7A215208F6002AE4D5 /* PopoverController.swift */,
-				57E67D0921408C8D005F290E /* EventsViewController.swift */,
-				578452BF214628DB00053814 /* PerDayEventViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1391,11 +1388,11 @@
 				B930B6E9214F3D5900685F64 /* Event.swift in Sources */,
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */,
-				57355C0D20F7188B002E70E4 /* NewsV2Controller.swift in Sources */,
 				57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */,
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */,
 				2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */,
+				B9530C7D2153500C002AE4D5 /* EventDetailViewController.swift in Sources */,
 				57355C5020F718CC002E70E4 /* CryptoCompareEndpoint.swift in Sources */,
 				57BBAB6E210962C300984AA4 /* GlobalMarketValueRealm.swift in Sources */,
 				57355C0E20F7188B002E70E4 /* NewsDetailtableView.swift in Sources */,
@@ -1424,7 +1421,6 @@
 				2D52AEAE20E46E1A00018FC0 /* MainTabBarController.swift in Sources */,
 				57BBAB4A2107085F00984AA4 /* Availability.swift in Sources */,
 				57BBAB6A210962C300984AA4 /* GlobalFilterCollectionView.swift in Sources */,
-				578452C0214628DB00053814 /* PerDayEventViewController.swift in Sources */,
 				57355C8720F71931002E70E4 /* ThemeColor.swift in Sources */,
 				578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */,
 				57BBAB6B210962C300984AA4 /* WatchListCell.swift in Sources */,
@@ -1450,7 +1446,6 @@
 				57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */,
 				57663B5C21377D2B00E09754 /* UpdateAlertViewController.swift in Sources */,
 				57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */,
-				57E67D0A21408C8D005F290E /* EventsViewController.swift in Sources */,
 				2D52AF1820E46E1A00018FC0 /* FlashSearchTableViewCell.swift in Sources */,
 				57BAD9582104D58300973B45 /* testViewController.swift in Sources */,
 				57BBAB4D2107085F00984AA4 /* Utils.swift in Sources */,
@@ -1461,7 +1456,7 @@
 				2D52AEDC20E46E1A00018FC0 /* AppImage.swift in Sources */,
 				2D52AF2020E46E1A00018FC0 /* CandleStick.swift in Sources */,
 				57355C4420F718CC002E70E4 /* TransExpensesCell.swift in Sources */,
-				578452C2214628EC00053814 /* AllEventViewController.swift in Sources */,
+				578452C2214628EC00053814 /* AllEventsViewController.swift in Sources */,
 				57355C6A20F718CC002E70E4 /* AllTransactions.swift in Sources */,
 				57355C5B20F718CC002E70E4 /* SearchTradingPairController.swift in Sources */,
 				57BBAB64210962C300984AA4 /* WatchListsController.swift in Sources */,
@@ -1676,7 +1671,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -1707,7 +1702,7 @@
 					"$(PROJECT_DIR)/Carthage/Build/iOS",
 				);
 				INFOPLIST_FILE = BGLMedia/Info.plist;
-				IPHONEOS_DEPLOYMENT_TARGET = 10.2;
+				IPHONEOS_DEPLOYMENT_TARGET = 10.1;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
