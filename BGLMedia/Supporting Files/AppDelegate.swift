@@ -129,6 +129,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        print("granted:\(granted)")
         UIApplication.shared.registerForRemoteNotifications()
         
+        // modified
+        if !UserDefaults.standard.bool(forKey: "flashSwitch") && !loginStatus{
+            UIApplication.shared.unregisterForRemoteNotifications()
+        } 
+        
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         let uploadAssetsToServer = UserDefaults.standard.bool(forKey: "UploadAssetsToServer")
         
@@ -234,8 +239,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 })
 //            }
         }else {
+            // modified
             if !sendDeviceTokenStatus {
                 //send device token to unknown user table
+                let sendDeviceTokenParameter = ["deviceToken": deviceTokenString]
+                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","IOSNewsFlash"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: {(res, success) in
+                    if success {
+                        print("device token has been sent : " + deviceTokenString)
+                        UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                    }
+                })
             }
         }
     }
@@ -276,6 +289,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                            print(response)
                         }
                     }
+                }
+            }
+        }else{
+            if getDeviceToken{
+                // send  recievedNotification query
+                if self.deviceToken != "null"{
+                    URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","recievedIOSNotification"], httpMethod: "POST", parameters: ["deviceToken":self.deviceToken], completion: {(res, success) in
+                        if success{
+                            print("unloged user recieved information :")
+                            print(res)
+                        }
+                    })
                 }
             }
         }
