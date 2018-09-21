@@ -15,6 +15,7 @@ struct EventViewModel {
     let hostLabel: String
     let address: String
     let eventStartTime: Date
+    let eventEndTime: Date
     let yearOfEventStartTime: String
     let monthOfEventStartTime: String
     let weekOfEventStartTime: String
@@ -36,6 +37,7 @@ struct EventViewModel {
         host = event.eventHost
         address = "\(event.eventAddress) \(event.eventCity)"
         self.eventStartTime = event.eventStartTime
+        self.eventEndTime = event.eventEndTime
         yearOfEventStartTime = String(year)
         monthOfEventStartTime = "\(year)-\(month)"
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)

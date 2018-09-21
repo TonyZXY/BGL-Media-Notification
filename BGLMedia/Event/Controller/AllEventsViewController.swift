@@ -8,7 +8,7 @@
 
 import UIKit
 
-class AllEventViewController: UIViewController, UITableViewDelegate,UITableViewDataSource, UIPopoverPresentationControllerDelegate, PopoverControllerDelegate {
+class AllEventsViewController: UIViewController, UITableViewDelegate,UITableViewDataSource, UIPopoverPresentationControllerDelegate, PopoverControllerDelegate {
     
     var eventViewModels = [EventViewModel]()
     var groupedEvents = [[EventViewModel]]()
@@ -254,7 +254,7 @@ class EventListTableViewCell:UITableViewCell{
     
     var titleLabel: UILabel = {
         var label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+        //label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 2
         label.font = UIFont.boldFont(CGFloat(fontSize + 3))
@@ -264,7 +264,7 @@ class EventListTableViewCell:UITableViewCell{
     
     var hostLabel: UILabel = {
         var label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+        //label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 1
         label.font = UIFont.boldFont(CGFloat(fontSize))
@@ -280,13 +280,13 @@ class EventListTableViewCell:UITableViewCell{
         label.font = UIFont.regularFont(15)
         label.textColor = ThemeColor().textGreycolor()
         label.text = "Address"
-        label.translatesAutoresizingMaskIntoConstraints = false
+        //label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
     var timeLabel: UILabel = {
         var label = UILabel()
-        label.translatesAutoresizingMaskIntoConstraints = false
+        //label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 1
         label.backgroundColor = ThemeColor().greyColor()
