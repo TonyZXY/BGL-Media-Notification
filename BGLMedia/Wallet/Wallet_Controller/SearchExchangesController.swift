@@ -7,12 +7,13 @@
 //
 
 import UIKit
+import Foundation
 
 class SearchExchangesController:UIViewController,UITableViewDelegate,UITableViewDataSource,UISearchBarDelegate{
     let cryptoCompareClient = CryptoCompareClient()
     var tableViews = UITableView()
     var color = ThemeColor()
-    var allExchanges = [String]()
+    var allExchanges:[String] = [String]()
     var filterExchanges = [String]()
     var isSearching = false
 //    let getDataResult = GetDataResult()
@@ -43,7 +44,7 @@ class SearchExchangesController:UIViewController,UITableViewDelegate,UITableView
             }
         }
         allExchanges.insert("Global Average", at: 0)
-        if let index = allExchanges.firstIndex(of: "Huobi Australia") {
+        if let index = allExchanges.index(of: "Huobi Australia") {
             allExchanges.remove(at: index)
             allExchanges.insert("Huobi Australia",at: 1)
         }
