@@ -410,7 +410,7 @@ class URLServices:NSObject{
                 }
             }
         } else{
-            completion(false)
+            completion(true)
         }
     }
 }

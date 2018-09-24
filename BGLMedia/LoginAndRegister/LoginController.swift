@@ -463,8 +463,10 @@ class LoginController: UIViewController {
                             let confirmSynAction = UIAlertAction(title: NSLocalizedString(textValue(name: "realm_sync_login"), comment: ""), style: .destructive) { (_) in
                                 URLServices.fetchInstance.sendAssets(){success in
                                     if success{
-                                        try! realm.write {
-                                            realm.delete(realm.objects(Transactions.self))
+                                        if realm.objects(Transactions.self).count != 0{
+                                            try! realm.write {
+                                                realm.delete(realm.objects(Transactions.self))
+                                            }
                                         }
                                         hud.indicatorView = JGProgressHUDSuccessIndicatorView()
                                         hud.textLabel.text = textValue(name: "successSigningIn")
