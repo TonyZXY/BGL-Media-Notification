@@ -236,7 +236,7 @@ class NewsSliderCollectionViewCell : UICollectionViewCell{
         author.textColor = .white
         author.font = UIFont.ItalicFont(12*factorNumber!)
         author.translatesAutoresizingMaskIntoConstraints = false
-        //author.backgroundColor = .black
+        //author.backgroundColUICollectionViewFlowLayoutBreakForInvalidSizes or = .black
         return author
     }()
     
@@ -347,8 +347,8 @@ class TableCellForSlider: UITableViewCell,UICollectionViewDelegate,UICollectionV
      size of the slidercell
      */
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, sizeForItemAt indexPath: IndexPath) -> CGSize {
-        return CGSize(width: self.width!, height: self.heightOfSlider * self.factorNumber!)
-        //return CGSize(width: collectionView.frame.width, height: floor(collectionView.frame.height))
+        //return CGSize(width: self.width!, height: floor(self.heightOfSlider * self.factorNumber!))
+        return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
     
     /**
