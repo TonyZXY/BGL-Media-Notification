@@ -8,11 +8,57 @@
 //
 
 import UIKit
+import SwiftKeychainWrapper
 
 class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
+    
+    var getDeviceToken:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "getDeviceToken")
+        }
+    }
+    
+    var email:String{
+        get{
+            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
+    
+    
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
+    var deviceToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+        }
+    }
+    
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if tabBarController.selectedIndex == 2{
             viewControllers![2].tabBarItem.badgeValue = nil
+            
+            if loginStatus{
+                if getDeviceToken{
+                    if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
+                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
+                            if success{
+                                print(response)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
     

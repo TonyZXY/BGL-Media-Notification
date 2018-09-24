@@ -30,7 +30,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             } else if !NotificationStatus{
                 allowStatus = textValue(name: "alertUnavaliable_alert")
             } else{
-                allowStatus = textValue(name: "alertavaliable_alert")
+                allowStatus = textValue(name: "alertAvaliable_alert")
             }
             return [[allowStatus],[textValue(name: "flashNews_alert"),textValue(name: "price_alert")],[textValue(name: "edit_alert")]]
         }
