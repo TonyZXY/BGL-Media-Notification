@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2499192D21534E7B00508FED /* AlertNotificationControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */; };
+		240F6907215879E600A97003 /* AlertNotificationControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
@@ -1368,6 +1368,7 @@
 				57663B5C21377D2B00E09754 /* UpdateAlertViewController.swift in Sources */,
 				57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */,
 				2D52AF1820E46E1A00018FC0 /* FlashSearchTableViewCell.swift in Sources */,
+				240F6907215879E600A97003 /* AlertNotificationControllerV2.swift in Sources */,
 				57BAD9582104D58300973B45 /* testViewController.swift in Sources */,
 				57BBAB4D2107085F00984AA4 /* Utils.swift in Sources */,
 				57BBAB4B2107085F00984AA4 /* Header.swift in Sources */,
@@ -1397,7 +1398,6 @@
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
 				57355C4720F718CC002E70E4 /* TransDateCell.swift in Sources */,
 				2D52AF1520E46E1A00018FC0 /* TimelinePoint.swift in Sources */,
-				2499192D21534E7B00508FED /* AlertNotificationControllerV2.swift in Sources */,
 				2D67307421225B4000EE49A5 /* AboutFunctionController.swift in Sources */,
 				2D52AF1420E46E1A00018FC0 /* Timeline.swift in Sources */,
 				57BAD9542104CAD500973B45 /* TCPickerViewDarkTheme.swift in Sources */,

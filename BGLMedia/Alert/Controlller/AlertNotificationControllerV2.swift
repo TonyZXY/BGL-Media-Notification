@@ -139,62 +139,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let factor = view.frame.width/375
         if section == 1{
             if !loginStatus || !NotificationStatus{
-                let sectionView = UIView()
-                sectionView.backgroundColor = ThemeColor().darkGreyColor()
-                let sectionButton = UIButton()
-                sectionButton.titleLabel?.lineBreakMode = .byWordWrapping
-                sectionButton.titleLabel?.numberOfLines = 0
-                sectionButton.titleLabel?.contentMode = .left
                 if !loginStatus{
-                    let settingString = textValue(name: "notlogin_alert")
-                    
-                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
-                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
-                    var myRange = NSRange(location: 0, length: 0)
-                    if defaultLanguage == "EN"{
-                        myRange = NSRange(location: settingString.count-5, length: 5)
-                    } else if defaultLanguage == "CN"{
-                        myRange = NSRange(location: 16, length: 2)
-                    }
-                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
-                    sectionButton.setAttributedTitle(myString, for: .normal)
-                    
-                    
-                    sectionButton.addTarget(self, action: #selector(GoTologin), for: .touchUpInside)
+                    return notLoginAlertFooter()
                 } else{
-                    let settingString = textValue(name: "notallow_alert")
-                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
-                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
-                    var myRange = NSRange(location: 0, length: 0)
-                    if defaultLanguage == "EN"{
-                        myRange = NSRange(location: 72, length: 14)
-                    } else if defaultLanguage == "CN"{
-                        myRange = NSRange(location: 20, length: 2)
-                    }
-                    
-                    
-                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
-                    sectionButton.setAttributedTitle(myString, for: .normal)
-                    //                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13) ]
-                    //                    let myString = NSMutableAttributedString(string: "Go to Setting", attributes: myAttribute )
-                    //                    let myRange = NSRange(location: 1, length: 3) // range starting at location 17 with a lenth of 7: "Strings"
-                    //                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red, range: myRange)
-                    //
-                    //                    sectionButton.setAttributedTitle(myString, for: .normal)
-                    sectionButton.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+                    return notificationNotAllowedFooter()
                 }
-                sectionButton.translatesAutoresizingMaskIntoConstraints = false
-                sectionView.addSubview(sectionButton)
-                
-                
-                
-                NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
-                NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
-                NSLayoutConstraint(item: sectionButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-                return sectionView
             } else{
                 return UIView()
             }
@@ -203,6 +154,74 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         }
     }
     
+    private func notLoginAlertFooter()->UIView{
+        let factor = view.frame.width/375
+        
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().darkGreyColor()
+        let sectionButton = UIButton()
+        sectionButton.titleLabel?.lineBreakMode = .byWordWrapping
+        sectionButton.titleLabel?.numberOfLines = 0
+        sectionButton.titleLabel?.contentMode = .left
+        
+        let settingString = textValue(name: "notlogin_alert")
+        let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
+        let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
+        var myRange = NSRange(location: 0, length: 0)
+        
+        if defaultLanguage == "EN"{
+            myRange = NSRange(location: settingString.count-5, length: 5)
+        } else if defaultLanguage == "CN"{
+            myRange = NSRange(location: 16, length: 2)
+        }
+        
+        myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
+        sectionButton.setAttributedTitle(myString, for: .normal)
+        sectionButton.addTarget(self, action: #selector(GoTologin), for: .touchUpInside)
+        
+        // button constraint
+        sectionButton.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.addSubview(sectionButton)
+            
+        NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        return sectionView
+    }
+    
+    private func notificationNotAllowedFooter() -> UIView{
+        let factor = view.frame.width/375
+        
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().darkGreyColor()
+        let sectionButton = UIButton()
+        sectionButton.titleLabel?.lineBreakMode = .byWordWrapping
+        sectionButton.titleLabel?.numberOfLines = 0
+        sectionButton.titleLabel?.contentMode = .left
+        
+        let settingString = textValue(name: "notallow_alert")
+        let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
+        let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
+        var myRange = NSRange(location: 0, length: 0)
+        
+        if defaultLanguage == "EN"{
+            myRange = NSRange(location: 72, length: 14)
+        } else if defaultLanguage == "CN"{
+            myRange = NSRange(location: 20, length: 2)
+        }
+        
+        myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
+        sectionButton.setAttributedTitle(myString, for: .normal)
+        sectionButton.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+        
+        // set button constraint
+        sectionButton.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.addSubview(sectionButton)
+        NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        return sectionView
+    }
     
     @objc func deviceSetting(){
         
@@ -254,33 +273,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         cell.textLabel?.font = UIFont.regularFont(14*factor)
         cell.separatorInset = UIEdgeInsetsMake(0, 16*factor, 0, 0)
         cell.isUserInteractionEnabled = true
-//        if indexPath.section == 1 {
-//            let swithButton = UISwitch()
-//            swithButton.isOn = flashSwitchStatus
-//            cell.accessoryView = swithButton
-//            swithButton.tag = indexPath.row
-//            cell.selectionStyle = .none
-//            swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
-//            if !loginStatus{
-//                swithButton.tintColor = ThemeColor().textGreycolor()
-//                swithButton.thumbTintColor = ThemeColor().greyColor()
-//                swithButton.onTintColor = ThemeColor().textGreycolor()
-//                cell.textLabel?.textColor = ThemeColor().textGreycolor()
-//                cell.isUserInteractionEnabled = false
-//            }
-//            return cell
-//        } else if indexPath.section == 2{
-//            cell.accessoryType = .disclosureIndicator
-//            if !loginStatus{
-//                cell.textLabel?.textColor = ThemeColor().textGreycolor()
-//                cell.isUserInteractionEnabled = false
-//            }
-//            return cell
-//        } else{
-//            cell.selectionStyle = .none
-//            return cell
-//        }
-        
+
         if indexPath.section == 0 {
             if indexPath.row == 0 {
                 let swithButton = UISwitch()
@@ -455,12 +448,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         if sender.isOn{
             if sender.tag == 0{
                 UserDefaults.standard.set(true, forKey: "flashSwitch")
+                UIApplication.shared.registerForRemoteNotifications()
             } else if sender.tag == 1{
                 UserDefaults.standard.set(true, forKey: "priceSwitch")
             }
         } else{
             if sender.tag == 0{
                 UserDefaults.standard.set(false, forKey: "flashSwitch")
+                UIApplication.shared.unregisterForRemoteNotifications()
             } else if sender.tag == 1{
                 UserDefaults.standard.set(false, forKey: "priceSwitch")
             }
