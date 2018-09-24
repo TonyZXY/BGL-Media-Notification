@@ -85,7 +85,7 @@ class TimelineTableViewController: UITableViewController {
         if results.count != 0 {
             resultNew.removeAll()
             var indexx = 0
-            for i in 0...4 {
+            for i in 0...(results.count < 5 ? results.count-1 : 4){
                 if i == 0{
                     self.resultNew[0] = [NewsFlash]()
                     self.resultNew[0]?.append(self.results[0])
@@ -544,20 +544,22 @@ class TimelineTableViewController: UITableViewController {
                 self.displayNumber = 5
                 self.resultNew.removeAll()
                 var indexx = 0
-                for i in 0...4 {
-                    if i == 0{
-                        self.resultNew[0] = [NewsFlash]()
-                        self.resultNew[0]?.append(self.results[0])
-                    } else{
-                        let timeArray:[String] = Extension.method.convertDateToString(date: self.results[i-1].dateTime).description.components(separatedBy: " ")
-                        let timeArray2:[String] = Extension.method.convertDateToString(date: self.results[i].dateTime).description.components(separatedBy: " ")
-    
-                        if timeArray2[0] == timeArray[0]{
-                            self.resultNew[indexx]?.append(self.results[i])
+                if self.results.count != 0{
+                    for i in 0...(self.results.count < 5 ? self.results.count-1 : 4){
+                        if i == 0{
+                            self.resultNew[0] = [NewsFlash]()
+                            self.resultNew[0]?.append(self.results[0])
                         } else{
-                            indexx += 1
-                            self.resultNew[indexx] = [NewsFlash]()
-                            self.resultNew[indexx]?.append(self.results[i])
+                            let timeArray:[String] = Extension.method.convertDateToString(date: self.results[i-1].dateTime).description.components(separatedBy: " ")
+                            let timeArray2:[String] = Extension.method.convertDateToString(date: self.results[i].dateTime).description.components(separatedBy: " ")
+                            
+                            if timeArray2[0] == timeArray[0]{
+                                self.resultNew[indexx]?.append(self.results[i])
+                            } else{
+                                indexx += 1
+                                self.resultNew[indexx] = [NewsFlash]()
+                                self.resultNew[indexx]?.append(self.results[i])
+                            }
                         }
                     }
                 }

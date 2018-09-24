@@ -9,7 +9,12 @@
 
 import UIKit
 
-class MainTabBarController: UITabBarController {
+class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if tabBarController.selectedIndex == 2{
+            viewControllers![2].tabBarItem.badgeValue = nil
+        }
+    }
     
     let network = NetworkManager.sharedInstance
     let forceUpdateAlert = ForceUpdateAlertController()
@@ -29,6 +34,7 @@ class MainTabBarController: UITabBarController {
     @IBOutlet weak var mainTabBar: UITabBar!
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.delegate = self
         
         let versionNumber: String = Bundle.main.infoDictionary!["CFBundleShortVersionString"] as! String
         //            let buildVersion: Any = Bundle.main.infoDictionary!["CFBundleVersion"] ?? ""
@@ -227,6 +233,9 @@ class MainTabBarController: UITabBarController {
         viewControllers![1].tabBarItem.title = textValue(name: "market_tab")
         viewControllers![1].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![2].tabBarItem.title = textValue(name: "news_tab")
+        if UIApplication.shared.applicationIconBadgeNumber != 0{
+            viewControllers![2].tabBarItem.badgeValue = "\(UIApplication.shared.applicationIconBadgeNumber)"
+        }
         viewControllers![2].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![3].tabBarItem.title = textValue(name: "event_tab")
         viewControllers![3].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
