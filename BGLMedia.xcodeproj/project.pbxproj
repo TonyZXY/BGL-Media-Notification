@@ -209,6 +209,7 @@
 		B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7A215208F6002AE4D5 /* PopoverController.swift */; };
 		B9530C7D2153500C002AE4D5 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */; };
 		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
+		B95B7FFB21588BF4004E613D /* IntrinsicContentSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -435,6 +436,7 @@
 		B9530C7A215208F6002AE4D5 /* PopoverController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverController.swift; sourceTree = "<group>"; };
 		B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController.swift; sourceTree = "<group>"; };
 		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
+		B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntrinsicContentSize.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1162,6 +1164,7 @@
 				578452C1214628EC00053814 /* AllEventsViewController.swift */,
 				B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */,
 				B9530C7A215208F6002AE4D5 /* PopoverController.swift */,
+				B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1202,7 +1205,7 @@
 				2D6F5EFB20E324D4006264BB /* Resources */,
 				3D1332F120E9FA9300D3CAE6 /* ShellScript */,
 				5752745A20FEBB0200562060 /* Embed Frameworks */,
-				3DF3A5762101CCA0002A3B0A /* ShellScript */,
+				3DF3A5762101CCA0002A3B0A /* Run Script */,
 			);
 			buildRules = (
 			);
@@ -1310,13 +1313,14 @@
 			shellPath = /bin/sh;
 			shellScript = "/usr/local/bin/carthage copy-frameworks\n";
 		};
-		3DF3A5762101CCA0002A3B0A /* ShellScript */ = {
+		3DF3A5762101CCA0002A3B0A /* Run Script */ = {
 			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
+			buildActionMask = 12;
 			files = (
 			);
 			inputPaths = (
 			);
+			name = "Run Script";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1476,6 +1480,7 @@
 				5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */,
 				57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */,
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
+				B95B7FFB21588BF4004E613D /* IntrinsicContentSize.swift in Sources */,
 				57355C4720F718CC002E70E4 /* TransDateCell.swift in Sources */,
 				2D52AF1520E46E1A00018FC0 /* TimelinePoint.swift in Sources */,
 				2D67307421225B4000EE49A5 /* AboutFunctionController.swift in Sources */,

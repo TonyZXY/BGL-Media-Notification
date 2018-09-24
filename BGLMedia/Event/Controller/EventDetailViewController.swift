@@ -223,12 +223,3 @@ class EventDetailViewController: UIViewController {
         }
     }
 }
-
-
-class CustomView: UIView {
-    var height = 1.0
-    
-    override open var intrinsicContentSize: CGSize {
-        return CGSize(width: 1.0, height: height)
-    }
-}
