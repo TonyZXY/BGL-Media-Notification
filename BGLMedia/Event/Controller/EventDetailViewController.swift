@@ -13,92 +13,87 @@ import EventKitUI
 class EventDetailViewController: UIViewController {
     
     let eventLinkButtonTitle = "Event Link"
+    let hostPageButtonTitle = "Host Page"
     
-    private var eventImageView:UIImageView = {
-        let uiImageView = UIImageView()
+    private var eventImageView:SUIImageView = {
+        let uiImageView = SUIImageView()
         uiImageView.contentMode = .scaleAspectFit
         uiImageView.clipsToBounds = true
         return uiImageView
     }()
     
-    private var titleLabel: UILabel = {
-        var label = UILabel()
+    private var titleLabel: SUILabel = {
+        var label = SUILabel()
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 2
         label.font = UIFont.boldFont(CGFloat(fontSize + 3))
+        label.textAlignment = .center
         return label
     }()
     
-    private var timeLabel: UILabel = {
-        let label = UILabel()
+    private var timeLabel: SUILabel = {
+        let label = SUILabel()
         label.textColor = ThemeColor().whiteColor()
-        label.backgroundColor = ThemeColor().greyColor()
+        label.backgroundColor = ThemeColor().themeColor()
         label.font = UIFont.regularFont(15)
         label.textColor = ThemeColor().textGreycolor()
+        label.textAlignment = .center
         return label
     }()
     
-    private var addressLabel:UILabel = {
-        var label = UILabel()
+    private var addressLabel:SUILabel = {
+        var label = SUILabel()
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 0
-        label.backgroundColor = ThemeColor().greyColor()
+        label.backgroundColor = ThemeColor().themeColor()
         label.font = UIFont.regularFont(15)
         label.textColor = ThemeColor().textGreycolor()
+        label.textAlignment = .center
         return label
     }()
     
-    lazy private var labelsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, addressLabel, timeLabel])
-        stackView.distribution = .fillProportionally
-        stackView.axis = .vertical
-        return stackView
-    }()
-    
-    private lazy var urlButton: UIButton = {
-        let button = UIButton()
+    private lazy var urlButton: SUIButton = {
+        let button = SUIButton()
         button.setTitle(eventLinkButtonTitle, for: .normal)
+        let tintedImage = UIImage(named: "link")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(tintedImage, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.imageEdgeInsets = UIEdgeInsetsMake(10, 15, 10, 0)
+        button.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 15)
+        button.tintColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         button.setTitleColor(#colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1), for: .normal)
         //button.backgroundColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
     }()
     
-    private var hostPageButton: UIButton = {
-        let button = UIButton()
+    private lazy var hostPageButton: SUIButton = {
+        let button = SUIButton()
+        button.setTitle(hostPageButtonTitle, for: .normal)
+        let tintedImage = UIImage(named: "link")?.withRenderingMode(.alwaysTemplate)
+        button.setImage(tintedImage, for: .normal)
+        button.imageView?.contentMode = .scaleAspectFit
+        button.imageEdgeInsets = UIEdgeInsetsMake(10, 15, 10, 0)
+        button.titleEdgeInsets = UIEdgeInsetsMake(0, 0, 0, 15)
+        button.tintColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         button.setTitleColor(#colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1), for: .normal)
         //button.backgroundColor = ThemeColor().darkBlackColor()
         button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
         return button
     }()
     
-    lazy private var buttonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [hostPageButton, urlButton])
+    lazy private var buttonsStack: SUIStackView = {
+        let stackView = SUIStackView(arrangedSubviews: [hostPageButton, urlButton])
         stackView.distribution = .fillEqually
         let padding: CGFloat = 8
         stackView.spacing = padding
+        stackView.layoutMargins = UIEdgeInsets(top: padding, left: padding, bottom: padding, right: padding)
         stackView.axis = .horizontal
         return stackView
     }()
     
-    lazy private var labelsAndButtonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [buttonsStack, labelsStack])
-        stackView.distribution = .fillProportionally
-        stackView.axis = .vertical
-        return stackView
-    }()
-    
-    lazy private var imageAndLabelsAndButtonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [eventImageView, labelsAndButtonsStack])
-        stackView.distribution = .fillEqually
-        stackView.axis = .vertical
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        stackView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4).isActive = true
-        return stackView
-    }()
-    
-    lazy private var eventDescriptionTextView: UITextView = {
-        let textView = UITextView()
+    lazy private var eventDescriptionTextView: SUITextView = {
+        let textView = SUITextView()
         textView.translatesAutoresizingMaskIntoConstraints = false
         textView.isEditable = false
         textView.backgroundColor = ThemeColor().themeColor()
@@ -109,8 +104,16 @@ class EventDetailViewController: UIViewController {
     }()
     
     lazy var contentView:UIView = {
-        let stackView = UIStackView(arrangedSubviews: [imageAndLabelsAndButtonsStack, eventDescriptionTextView])
-        stackView.distribution = .fillEqually
+        //set the Proportions for each Stack Subviews
+        titleLabel.height = 2.0
+        eventImageView.height = 8.0
+        addressLabel.height = 1.0
+        timeLabel.height = 1.0
+        eventDescriptionTextView.height = 24.0
+        buttonsStack.height = 2.0
+        
+        let stackView = UIStackView(arrangedSubviews: [titleLabel, eventImageView, addressLabel, timeLabel, eventDescriptionTextView, buttonsStack])
+        stackView.distribution = .fillProportionally
         stackView.axis = .vertical
         stackView.translatesAutoresizingMaskIntoConstraints = false
         return stackView
@@ -135,7 +138,7 @@ class EventDetailViewController: UIViewController {
         contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
         contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
 
-        let addToCalendarBarButtonItem = UIBarButtonItem(title: "Add to Calendar", style: .done, target: self, action: #selector(addToCalendar))
+        let addToCalendarBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), style: .done, target: self, action: #selector(addToCalendar))
         self.navigationItem.rightBarButtonItem  = addToCalendarBarButtonItem
     }
     
@@ -151,7 +154,6 @@ class EventDetailViewController: UIViewController {
         if let address = eventViewModel?.address {
             addressLabel.text = "Address: " + address
         }
-        hostPageButton.setTitle(eventViewModel?.host, for: .normal)
         eventDescriptionTextView.text = eventViewModel?.description
     }
     

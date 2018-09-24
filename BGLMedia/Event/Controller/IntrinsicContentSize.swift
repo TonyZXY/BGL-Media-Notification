@@ -65,3 +65,11 @@ class SUICollectionView: UICollectionView {
         return CGSize(width: width, height: height)
     }
 }
+
+class SUIImageView: UIImageView {
+    var height = 1.0
+    var width = 1.0
+    override open var intrinsicContentSize: CGSize {
+        return CGSize(width: width, height: height)
+    }
+}
