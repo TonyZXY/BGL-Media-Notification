@@ -75,7 +75,7 @@ class EventDetailViewController: UIViewController, WKNavigationDelegate {
         //add progresbar to navigation bar
         navigationController?.navigationBar.addSubview(webProgressView)
         let navigationBarBounds = self.navigationController?.navigationBar.bounds
-        webProgressView.frame = CGRect(x: 0, y: navigationBarBounds!.size.height - 2, width: navigationBarBounds!.size.width, height: 2)
+        webProgressView.frame = CGRect(x: 0, y: navigationBarBounds!.size.height - 4, width: navigationBarBounds!.size.width, height: 2)
 
         //add a Bar Button
         let addToCalendarBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), style: .done, target: self, action: #selector(addToCalendar))
