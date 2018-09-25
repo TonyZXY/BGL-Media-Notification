@@ -242,7 +242,7 @@ notallow_alert = "需要在设置里打开允许才能使用推送功能. 设置
 notlogin_alert = "需要登陆后才允许使用推送功能. 登陆";
 alertStatus_alert = "推送通知设置";
 alertUnavaliable_alert = "禁用";
-alertavaliable_alert = "允许";
+alertAvaliable_alert = "允许";
 alertCoinUnavaliable_alert = "禁用!";
 and = "和";
 

@@ -247,7 +247,7 @@ notallow_alert = "Unavailable to use alert function without notification allow i
 notlogin_alert = "Please login to use the Alert function. Login";
 alertStatus_alert = "Notification Setting";
 alertUnavaliable_alert = "Unavailable";
-alertavaliable_alert = "Available";
+alertAvaliable_alert = "Available";
 alertCoinUnavaliable_alert = "Unavailable!";
 
 //Font Page
