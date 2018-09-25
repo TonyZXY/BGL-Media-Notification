@@ -210,6 +210,7 @@
 		B9530C7D2153500C002AE4D5 /* EventDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */; };
 		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
 		B95B7FFB21588BF4004E613D /* IntrinsicContentSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */; };
+		B9BA331E2159BE0100255E2D /* EventDetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -437,6 +438,7 @@
 		B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController.swift; sourceTree = "<group>"; };
 		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 		B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntrinsicContentSize.swift; sourceTree = "<group>"; };
+		B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController2.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1163,6 +1165,7 @@
 			children = (
 				578452C1214628EC00053814 /* AllEventsViewController.swift */,
 				B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */,
+				B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */,
 				B9530C7A215208F6002AE4D5 /* PopoverController.swift */,
 				B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */,
 			);
@@ -1464,6 +1467,7 @@
 				57355C6A20F718CC002E70E4 /* AllTransactions.swift in Sources */,
 				57355C5B20F718CC002E70E4 /* SearchTradingPairController.swift in Sources */,
 				57BBAB64210962C300984AA4 /* WatchListsController.swift in Sources */,
+				B9BA331E2159BE0100255E2D /* EventDetailViewController2.swift in Sources */,
 				2D52AEB220E46E1A00018FC0 /* AppDelegate.swift in Sources */,
 				57E67D0521408977005F290E /* NewsViewController.swift in Sources */,
 				2D52AE9F20E46E1A00018FC0 /* MarketSelectController.swift in Sources */,

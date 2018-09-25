@@ -10,6 +10,8 @@ import Foundation
 import UIKit
 
 //UIStackView Tricks: Proportional Custom UIViews with ‘Fill Proportionally’
+//see example in: https://spin.atomicobject.com/2017/02/07/uistackviev-proportional-custom-uiviews/
+
 class SUIView: UIView {
     var height = 1.0
     var width = 1.0

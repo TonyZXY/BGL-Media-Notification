@@ -363,6 +363,3 @@ class EventListTableViewCell:UITableViewCell{
         return view
     }()
 }
-
-
-
