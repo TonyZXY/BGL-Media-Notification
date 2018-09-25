@@ -129,10 +129,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        print("granted:\(granted)")
         UIApplication.shared.registerForRemoteNotifications()
         
-        // modified
-        if !UserDefaults.standard.bool(forKey: "flashSwitch") && !loginStatus{
-            UIApplication.shared.unregisterForRemoteNotifications()
-        } 
+//        // modified
+//        if !UserDefaults.standard.bool(forKey: "flashSwitch") && !loginStatus{
+//            UIApplication.shared.unregisterForRemoteNotifications()
+//        }
         
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         let uploadAssetsToServer = UserDefaults.standard.bool(forKey: "UploadAssetsToServer")
@@ -235,29 +235,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
                     if success{
                         UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                        print(response)
                     }
                 })
 //            }
-        }else {
+        }
+        else {
             // modified
-            if !sendDeviceTokenStatus {
+            //print(sendDeviceTokenStatus)
+            //if !sendDeviceTokenStatus {
                 //send device token to unknown user table
                 let sendDeviceTokenParameter = ["deviceToken": deviceTokenString]
+                //print(deviceTokenString)
                 URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","IOSNewsFlash"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: {(res, success) in
                     if success {
                         print("device token has been sent : " + deviceTokenString)
                         UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                        print(res)
                     }
                 })
-            }
+            //}
         }
     }
     
-    var sendDeviceTokenStatus:Bool{
-        get{
-            return UserDefaults.standard.bool(forKey: "SendDeviceToken")
-        }
-    }
+//    var sendDeviceTokenStatus:Bool{
+//        get{
+//            return UserDefaults.standard.bool(forKey: "SendDeviceToken")
+//        }
+//    }
     
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
@@ -276,34 +281,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 
     func applicationDidBecomeActive(_ application: UIApplication) {
 
-       UIApplication.shared.applicationIconBadgeNumber = 0
-//        let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
-//        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
-//        let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
-
-        if loginStatus{
-            if getDeviceToken{
-                if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
-                    URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
-                        if success{
-//                            print(response)
-                        }
-                    }
-                }
-            }
-        }else{
-            if getDeviceToken{
-                // send  recievedNotification query
-                if self.deviceToken != "null"{
-                    URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","recievedIOSNotification"], httpMethod: "POST", parameters: ["deviceToken":self.deviceToken], completion: {(res, success) in
-                        if success{
-                            print("unloged user recieved information :")
-                            print(res)
-                        }
-                    })
-                }
-            }
-        }
     }
 //
     func applicationWillEnterForeground(_ application: UIApplication) {

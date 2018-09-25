@@ -141,10 +141,10 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
         if section == 1{
             if !loginStatus || !NotificationStatus{
-                if !loginStatus{
-                    return notLoginAlertFooter()
-                } else{
+                if !NotificationStatus{
                     return notificationNotAllowedFooter()
+                } else{
+                    return notLoginAlertFooter()
                 }
             } else{
                 return UIView()
@@ -448,14 +448,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         if sender.isOn{
             if sender.tag == 0{
                 UserDefaults.standard.set(true, forKey: "flashSwitch")
-                UIApplication.shared.registerForRemoteNotifications()
+                //UIApplication.shared.registerForRemoteNotifications()
             } else if sender.tag == 1{
                 UserDefaults.standard.set(true, forKey: "priceSwitch")
             }
         } else{
             if sender.tag == 0{
                 UserDefaults.standard.set(false, forKey: "flashSwitch")
-                UIApplication.shared.unregisterForRemoteNotifications()
+//                UIApplication.shared.unregisterForRemoteNotifications()
             } else if sender.tag == 1{
                 UserDefaults.standard.set(false, forKey: "priceSwitch")
             }

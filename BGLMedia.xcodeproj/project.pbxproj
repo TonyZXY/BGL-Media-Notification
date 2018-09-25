@@ -7,7 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		240F6907215879E600A97003 /* AlertNotificationControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */; };
+		24AA41DA2159E8E7008ADB1B /* AlertNotificationControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
@@ -41,7 +41,6 @@
 		2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE1220E46E1700018FC0 /* ScientificMethod.swift */; };
 		2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE1320E46E1700018FC0 /* LanguagePackage.swift */; };
 		2D52AEE320E46E1A00018FC0 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE1720E46E1700018FC0 /* Main.storyboard */; };
-		2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE1E20E46E1800018FC0 /* Info.plist */; };
 		2D52AEE920E46E1A00018FC0 /* MarketsTotalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2420E46E1800018FC0 /* MarketsTotalView.swift */; };
 		2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2520E46E1800018FC0 /* MarketFilterCollectionView.swift */; };
 		2D52AEF020E46E1A00018FC0 /* MarketCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE2B20E46E1800018FC0 /* MarketCollectionViewCell.swift */; };
@@ -162,7 +161,6 @@
 		578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 578FE8DA20FF1FF40027F17E /* LaunchScreenViewController.swift */; };
 		57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17A211276ED00042CF6 /* SCLAlertView.swift */; };
 		57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA17B211276ED00042CF6 /* SCLExtensions.swift */; };
-		57AEA17F211276ED00042CF6 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 57AEA17C211276ED00042CF6 /* Info.plist */; };
 		57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA1822112C0A200042CF6 /* CustomAlertController.swift */; };
 		57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57AEA1842112D11F00042CF6 /* CustomPasswordAlertController.swift */; };
 		57BAD8692104540B00973B45 /* ExchangeSelect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57BAD8682104540B00973B45 /* ExchangeSelect.swift */; };
@@ -1197,7 +1195,6 @@
 				2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */,
 				2D52AF1620E46E1A00018FC0 /* TimelineTableViewCell.swift~FlashNews in Resources */,
 				571EA250214F433300922228 /* Candara.ttf in Resources */,
-				57AEA17F211276ED00042CF6 /* Info.plist in Resources */,
 				2D52AEE320E46E1A00018FC0 /* Main.storyboard in Resources */,
 				57355C5220F718CC002E70E4 /* README.md in Resources */,
 				2D52AF0D20E46E1A00018FC0 /* NewsFlashViewController.swift~HEAD in Resources */,
@@ -1211,7 +1208,6 @@
 				2D52AEA820E46E1A00018FC0 /* SellTableViewCell.xib in Resources */,
 				2D52AF1920E46E1A00018FC0 /* TimelineTableViewCell.xib in Resources */,
 				573C96A820EB5B8700B667AB /* Assets.xcassets in Resources */,
-				2D52AEE620E46E1A00018FC0 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1368,7 +1364,7 @@
 				57663B5C21377D2B00E09754 /* UpdateAlertViewController.swift in Sources */,
 				57BBAB6F210962C300984AA4 /* GlobalAverageObject.swift in Sources */,
 				2D52AF1820E46E1A00018FC0 /* FlashSearchTableViewCell.swift in Sources */,
-				240F6907215879E600A97003 /* AlertNotificationControllerV2.swift in Sources */,
+				24AA41DA2159E8E7008ADB1B /* AlertNotificationControllerV2.swift in Sources */,
 				57BAD9582104D58300973B45 /* testViewController.swift in Sources */,
 				57BBAB4D2107085F00984AA4 /* Utils.swift in Sources */,
 				57BBAB4B2107085F00984AA4 /* Header.swift in Sources */,
