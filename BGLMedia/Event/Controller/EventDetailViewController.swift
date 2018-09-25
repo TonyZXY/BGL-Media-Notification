@@ -67,10 +67,10 @@ class EventDetailViewController: UIViewController, WKNavigationDelegate {
     
     private func setUpView(){
         view.addSubview(eventWebView)
-        eventWebView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
-        eventWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
-        eventWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
-        eventWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        eventWebView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        eventWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        eventWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        eventWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
         //add progresbar to navigation bar
         navigationController?.navigationBar.addSubview(webProgressView)

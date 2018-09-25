@@ -172,6 +172,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
             UserDefaults.standard.set(false, forKey: "SendDeviceToken")
             UserDefaults.standard.set(false, forKey: "getDeviceToken")
             UserDefaults.standard.set(false, forKey: "changeAlertStatus")
+            UserDefaults.standard.set(false, forKey: "assetsLoad")
             UserDefaults.standard.set("null", forKey: "UserEmail")
             UserDefaults.standard.set("null", forKey: "CertificateToken")
             UserDefaults.standard.set("null", forKey: "UserToken")

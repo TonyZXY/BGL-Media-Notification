@@ -421,6 +421,16 @@ class Extension:NSObject{
     }
 
     
+    
+    
+    func reloadAssetsData(){
+        
+    }
+    
+    
+    
+    
+    
 
 }
 
@@ -883,6 +893,7 @@ func deleteMemory(){
     UserDefaults.standard.set("null", forKey: "CertificateToken")
     UserDefaults.standard.set("null", forKey: "UserToken")
     let realm = try! Realm()
+    
     try! realm.write {
         realm.delete(realm.objects(Transactions.self))
         realm.delete(realm.objects(EachTransactions.self))

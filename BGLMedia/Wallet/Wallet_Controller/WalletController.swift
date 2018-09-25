@@ -521,6 +521,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Refresh Method
     @objc func handleRefresh(_ tableView:UITableView) {
+        UserDefaults.standard.set(true, forKey: "assetsLoad")
         if loginStatus{
             URLServices.fetchInstance.getAssets(){success in
                 self.checkTransaction()
@@ -532,6 +533,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                     } else{
                         self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                     }
+                    UserDefaults.standard.set(false, forKey: "assetsLoad")
                 }
             }
         } else{
@@ -544,6 +546,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 } else{
                     self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                 }
+                UserDefaults.standard.set(false, forKey: "assetsLoad")
             }
         }
     }
