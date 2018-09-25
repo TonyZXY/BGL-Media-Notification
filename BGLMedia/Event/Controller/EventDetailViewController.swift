@@ -7,171 +7,79 @@
 //
 
 import UIKit
-import SafariServices
 import EventKitUI
+import WebKit
 
-class EventDetailViewController: UIViewController {
+class EventDetailViewController: UIViewController, WKNavigationDelegate {
     
-    let eventLinkButtonTitle = "Event Link"
-    
-    private var eventImageView:UIImageView = {
-        let uiImageView = UIImageView()
-        uiImageView.contentMode = .scaleAspectFit
-        uiImageView.clipsToBounds = true
-        return uiImageView
+    var eventViewModel: EventViewModel?
+    var webProgressView: UIProgressView = {
+        let progressView = UIProgressView(progressViewStyle: .default)
+        progressView.autoresizingMask = [.flexibleWidth, .flexibleTopMargin]
+        progressView.tintColor = .blue
+        progressView.isHidden = true
+        return progressView
     }()
     
-    private var titleLabel: UILabel = {
-        var label = UILabel()
-        label.textColor = ThemeColor().whiteColor()
-        label.numberOfLines = 2
-        label.font = UIFont.boldFont(CGFloat(fontSize + 3))
-        return label
-    }()
-    
-    private var timeLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = ThemeColor().whiteColor()
-        label.backgroundColor = ThemeColor().greyColor()
-        label.font = UIFont.regularFont(15)
-        label.textColor = ThemeColor().textGreycolor()
-        return label
-    }()
-    
-    private var addressLabel:UILabel = {
-        var label = UILabel()
-        label.textColor = ThemeColor().whiteColor()
-        label.numberOfLines = 0
-        label.backgroundColor = ThemeColor().greyColor()
-        label.font = UIFont.regularFont(15)
-        label.textColor = ThemeColor().textGreycolor()
-        return label
-    }()
-    
-    lazy private var labelsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [titleLabel, addressLabel, timeLabel])
-        stackView.distribution = .fillProportionally
-        stackView.axis = .vertical
-        return stackView
-    }()
-    
-    private lazy var urlButton: UIButton = {
-        let button = UIButton()
-        button.setTitle(eventLinkButtonTitle, for: .normal)
-        button.setTitleColor(#colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1), for: .normal)
-        //button.backgroundColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        return button
-    }()
-    
-    private var hostPageButton: UIButton = {
-        let button = UIButton()
-        button.setTitleColor(#colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1), for: .normal)
-        //button.backgroundColor = ThemeColor().darkBlackColor()
-        button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
-        return button
-    }()
-    
-    lazy private var buttonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [hostPageButton, urlButton])
-        stackView.distribution = .fillEqually
-        let padding: CGFloat = 8
-        stackView.spacing = padding
-        stackView.axis = .horizontal
-        return stackView
-    }()
-    
-    lazy private var labelsAndButtonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [buttonsStack, labelsStack])
-        stackView.distribution = .fillProportionally
-        stackView.axis = .vertical
-        return stackView
-    }()
-    
-    lazy private var imageAndLabelsAndButtonsStack: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [eventImageView, labelsAndButtonsStack])
-        stackView.distribution = .fillEqually
-        stackView.axis = .vertical
-//        stackView.translatesAutoresizingMaskIntoConstraints = false
-//        stackView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.4).isActive = true
-        return stackView
-    }()
-    
-    lazy private var eventDescriptionTextView: UITextView = {
-        let textView = UITextView()
-        textView.translatesAutoresizingMaskIntoConstraints = false
-        textView.isEditable = false
-        textView.backgroundColor = ThemeColor().themeColor()
-        textView.textColor = ThemeColor().whiteColor()
-        textView.font = UIFont.regularFont(CGFloat(fontSize))
-        //textView.heightAnchor.constraint(equalTo: view.heightAnchor, multiplier: 0.6).isActive = true
-        return textView
-    }()
-    
-    lazy var contentView:UIView = {
-        let stackView = UIStackView(arrangedSubviews: [imageAndLabelsAndButtonsStack, eventDescriptionTextView])
-        stackView.distribution = .fillEqually
-        stackView.axis = .vertical
-        stackView.translatesAutoresizingMaskIntoConstraints = false
-        return stackView
-    }()
-    
-    var eventViewModel: EventViewModel? {
-        didSet {
-            updateUI()
+    private lazy var eventWebView: WKWebView = {
+        let webView = WKWebView()
+        if let urlStr = eventViewModel?.urlStr,
+        let webUrl = URL(string: urlStr) {
+            webView.load(URLRequest(url: webUrl))
         }
+        webView.translatesAutoresizingMaskIntoConstraints = false
+        webView.navigationDelegate = self
+        return webView
+    }()
+
+    func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        webProgressView.isHidden = false
+    }
+    
+    func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        webProgressView.isHidden = true
+    }
+    
+    func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        webProgressView.isHidden = true
+        let alert = UIAlertController(title: "Fail!", message: "Sorry, it was fail to load the Event Web", preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+        eventWebView.addObserver(self, forKeyPath: #keyPath(WKWebView.estimatedProgress), options: .new, context: nil)
     }
     
-    func setUpView(){
-        view.backgroundColor = ThemeColor().darkGreyColor()
-        view.addSubview(contentView)
-        contentView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
-        contentView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
-        contentView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
-        contentView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
-
-        let addToCalendarBarButtonItem = UIBarButtonItem(title: "Add to Calendar", style: .done, target: self, action: #selector(addToCalendar))
-        self.navigationItem.rightBarButtonItem  = addToCalendarBarButtonItem
+    deinit {
+        webProgressView.isHidden = true
+        //remove all observers
+        eventWebView.removeObserver(self, forKeyPath: "estimatedProgress")
     }
     
-    func updateUI() {
-        if let imgUrlStr = eventViewModel?.imageUrlStr {
-            eventImageView.setImage(urlString: imgUrlStr)
+    override func observeValue(forKeyPath keyPath: String?, of object: Any?, change: [NSKeyValueChangeKey : Any]?, context: UnsafeMutableRawPointer?) {
+        if keyPath == "estimatedProgress" {
+            webProgressView.progress = Float(eventWebView.estimatedProgress)
         }
-        titleLabel.text = eventViewModel?.title
-        if let startTime = eventViewModel?.startTimeLabel,
-            let endTime = eventViewModel?.endTimeLable {
-            timeLabel.text = "Start: \(startTime)   End: \(endTime)"
-        }
-        if let address = eventViewModel?.address {
-            addressLabel.text = "Address: " + address
-        }
-        hostPageButton.setTitle(eventViewModel?.host, for: .normal)
-        eventDescriptionTextView.text = eventViewModel?.description
     }
     
-    @objc func buttonAction(sender: UIButton) {
-        var urlString = ""
-        if sender.currentTitle == eventLinkButtonTitle {
-            urlString = eventViewModel?.urlStr ?? ""
-        } else {
-            urlString = eventViewModel?.hostPage ?? ""
-        }
+    private func setUpView(){
+        view.addSubview(eventWebView)
+        eventWebView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
+        eventWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
+        eventWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
+        eventWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
         
-        if let url = URL(string: urlString) {
-            let vc = SFSafariViewController(url: url, entersReaderIfAvailable: false)
-            if #available(iOS 11.0, *) {
-                vc.dismissButtonStyle = .close
-            }
-            vc.hidesBottomBarWhenPushed = true
-            vc.accessibilityNavigationStyle = .separate
-            present(vc, animated: true)
-        }
+        //add progresbar to navigation bar
+        navigationController?.navigationBar.addSubview(webProgressView)
+        let navigationBarBounds = self.navigationController?.navigationBar.bounds
+        webProgressView.frame = CGRect(x: 0, y: navigationBarBounds!.size.height - 2, width: navigationBarBounds!.size.width, height: 2)
+
+        //add a Bar Button
+        let addToCalendarBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), style: .done, target: self, action: #selector(addToCalendar))
+        self.navigationItem.rightBarButtonItem  = addToCalendarBarButtonItem
     }
     
     @objc func addToCalendar() {
@@ -221,14 +129,5 @@ class EventDetailViewController: UIViewController {
                 }
             })
         }
-    }
-}
-
-
-class CustomView: UIView {
-    var height = 1.0
-    
-    override open var intrinsicContentSize: CGSize {
-        return CGSize(width: 1.0, height: height)
     }
 }

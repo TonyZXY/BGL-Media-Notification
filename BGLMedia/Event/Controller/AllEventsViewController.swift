@@ -17,6 +17,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     let monthStr = "Month"
     let yearStr = "Year"
     let theBlockchainCentreStr = "The Blockchain Centre"
+    let otherHosts = "Others"
     let allHostStr = "All Hosts"
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -148,7 +149,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         //popover setting
         pc.modalPresentationStyle = .popover
         pc.delegate = self
-        pc.buttons = [PopoverButton(theBlockchainCentreStr), PopoverButton(allHostStr)]
+        pc.buttons = [PopoverButton(theBlockchainCentreStr), PopoverButton(otherHosts), PopoverButton(allHostStr)]
         return pc
         }()
     
@@ -202,6 +203,8 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         var newEventViewModels = eventViewModels
         if sender.currentTitle == theBlockchainCentreStr {
             newEventViewModels = eventViewModels.filter { $0.host == theBlockchainCentreStr }
+        } else if sender.currentTitle == otherHosts {
+            newEventViewModels = eventViewModels.filter { $0.host != theBlockchainCentreStr }
         } else {
             if let filter = sender.currentTitle {
                 newEventViewModels = updateDateFilterValue(filter)
@@ -360,6 +363,3 @@ class EventListTableViewCell:UITableViewCell{
         return view
     }()
 }
-
-
-
