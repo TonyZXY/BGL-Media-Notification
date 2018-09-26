@@ -145,6 +145,14 @@ class Extension:NSObject{
         return newDate
     }
     
+    func convertTimeToStringPickerDate3(date: Date) -> String {
+        let dateFormatter = DateFormatter()
+        let dateFormat2 = "yyyy-MM"
+        dateFormatter.dateFormat = dateFormat2
+        let newDate: String = dateFormatter.string(from: date)
+        return newDate
+    }
+    
     func convertStringToTimePickerDate(date: String) -> Date {
         let dateFormat2 = "HH:mm:ss"
         let dateFormatter = DateFormatter()

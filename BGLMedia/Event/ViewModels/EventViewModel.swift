@@ -32,7 +32,6 @@ struct EventViewModel {
     
     init(event: Event) {
         let year = Calendar.current.component(.year, from: event.eventStartTime)
-        let month = Calendar.current.component(.month, from: event.eventStartTime)
         let week = Calendar.current.component(.weekOfYear, from: event.eventStartTime)
         
         title = event.eventName
@@ -46,7 +45,7 @@ struct EventViewModel {
         self.eventStartTime = event.eventStartTime
         self.eventEndTime = event.eventEndTime
         yearOfEventStartTime = String(year)
-        monthOfEventStartTime = "\(year)-\(month)"
+        monthOfEventStartTime = Extension.method.convertTimeToStringPickerDate3(date: event.eventStartTime)
         dayOfEventStartTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
         timeOfEventStartTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
         startTimeLabel = "\(dayOfEventStartTime) \(timeOfEventStartTime)"
