@@ -205,7 +205,7 @@ class ShareNewsFlashControllerV2: UIViewController {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textColor = ThemeColor().whiteColor()
-        label.font = UIFont.semiBoldFont(17*factor)
+        label.font = UIFont.semiBoldFont(15*factor)
         return label
     }()
     
@@ -218,7 +218,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     lazy var titleLabel: UILabel = {
         var label = UILabel()
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.font = UIFont.CandaraBold(23*view.frame.width/375)
+        label.font = UIFont.CandaraBold(18*view.frame.width/375)
         label.textColor = ThemeColor().whiteColor()
         label.numberOfLines = 0
         label.lineBreakMode = .byWordWrapping
@@ -227,7 +227,7 @@ class ShareNewsFlashControllerV2: UIViewController {
     
     lazy var flashNewsDescription:UILabel = {
        var label = UILabel()
-        label.font = UIFont.Candara(16*view.frame.width/375)
+        label.font = UIFont.Candara(14*view.frame.width/375)
         label.translatesAutoresizingMaskIntoConstraints = false
         label.lineBreakMode = .byWordWrapping
         label.textAlignment = .left

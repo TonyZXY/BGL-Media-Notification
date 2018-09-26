@@ -49,7 +49,6 @@
 		2D52AEFB20E46E1A00018FC0 /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE3B20E46E1800018FC0 /* AboutUsViewController.swift */; };
 		2D52AEFE20E46E1A00018FC0 /* AlertObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4020E46E1800018FC0 /* AlertObject.swift */; };
 		2D52AEFF20E46E1A00018FC0 /* AlertCoinName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4120E46E1800018FC0 /* AlertCoinName.swift */; };
-		2D52AF0020E46E1A00018FC0 /* AlertNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */; };
 		2D52AF0A20E46E1A00018FC0 /* TimelineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */; };
 		2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */; };
 		2D52AF0C20E46E1A00018FC0 /* SearchNewsFlashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */; };
@@ -92,6 +91,7 @@
 		5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */; };
 		5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
+		571800D2215B59AF0012FE75 /* AlertNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */; };
 		5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5719D5E32122B5D10048B579 /* ListViewCell.swift */; };
 		5719D5E62123B54C0048B579 /* AlertInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5719D5E52123B54C0048B579 /* AlertInterest.swift */; };
 		571EA24D214F432400922228 /* Candara-Bold-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 571EA24B214F410C00922228 /* Candara-Bold-Italic.ttf */; };
@@ -1337,7 +1337,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D52AF0020E46E1A00018FC0 /* AlertNotificationController.swift in Sources */,
 				57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */,
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
@@ -1387,6 +1386,7 @@
 				2D52AF1C20E46E1A00018FC0 /* HistoricalDataStruct.swift in Sources */,
 				57355C4820F718CC002E70E4 /* TransCoinTypeCell.swift in Sources */,
 				57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */,
+				571800D2215B59AF0012FE75 /* AlertNotificationController.swift in Sources */,
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,

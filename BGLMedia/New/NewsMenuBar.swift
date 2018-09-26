@@ -90,7 +90,7 @@ class NewsMenuCell: UICollectionViewCell{
     lazy var menuLabel:UILabel = {
         let factor = frame.width/375
         let menuLabel = UILabel()
-        menuLabel.font = UIFont.regularFont(23*factor)
+        menuLabel.font = UIFont.regularFont(28*factor)
         menuLabel.textColor = ThemeColor().textGreycolor()
         return menuLabel
     }()
