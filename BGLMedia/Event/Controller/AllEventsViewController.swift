@@ -12,13 +12,13 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     
     var eventViewModels = [EventViewModel]()
     var groupedEvents = [[EventViewModel]]()
-    let dayStr = "Day"
-    let weekStr = "Week"
-    let monthStr = "Month"
-    let yearStr = "Year"
-    let theBlockchainCentreStr = "The Blockchain Centre"
-    let otherHosts = "Other Hosts"
-    let allHostStr = "All Hosts"
+    var dayStr = "Day"
+    var weekStr = "Week"
+    var monthStr = "Month"
+    var yearStr = "Year"
+    var theBlockchainCentreStr = "The Blockchain Centre"
+    var otherHosts = "Other Hosts"
+    var allHostStr = "All Hosts"
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         return 30
@@ -134,6 +134,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         listTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         listTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         
+        //default value is all hosts
         let hostBarButtonItem = UIBarButtonItem(title: allHostStr, style: .done, target: self, action: #selector(popHost))
         self.navigationItem.leftBarButtonItem  = hostBarButtonItem
         

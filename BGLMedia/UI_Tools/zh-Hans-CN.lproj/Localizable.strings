@@ -164,6 +164,25 @@ alertHint_history = "是否删除这条交易历史记录";
 alertCancel_history = "取消";
 alertDelete_history = "删除";
 
+//Event
+day = "日";
+week = "星期";
+month = "月";
+year = "年";
+otherHosts = "其他主办方";
+allHostStr = "全部主办方";
+
+popAlertTitle = "把这个活动加到你的日历中？";
+alertNo = "否";
+alertYes = "是";
+alertSuccess = "成功!";
+alertSuccessMsg = "这个活动已经被加到你的日历中!";
+alertFail = "失败!";
+alertFailMsg = "对不起，添加失败!";
+alertFailMsg2 = "对不起，这个活动信息不全!";
+alertFailMsg3 = "对不起，加载活动网页失败!";
+eventAddress = "地址：";
+
 //Setting Page
 settingTitle = "更多设置选项";
 aboutUs_section = "关于";

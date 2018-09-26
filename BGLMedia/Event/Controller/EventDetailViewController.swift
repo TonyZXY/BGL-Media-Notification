@@ -42,7 +42,7 @@ class EventDetailViewController: UIViewController, WKNavigationDelegate {
     
     func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
         webProgressView.isHidden = true
-        let alert = UIAlertController(title: "Fail!", message: "Sorry, it was fail to load the Event Web", preferredStyle: .alert)
+        let alert = UIAlertController(title: textValue(name: "alertFail"), message: textValue(name: "alertFailMsg3"), preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true)
     }
@@ -78,28 +78,35 @@ class EventDetailViewController: UIViewController, WKNavigationDelegate {
         webProgressView.frame = CGRect(x: 0, y: navigationBarBounds!.size.height - 4, width: navigationBarBounds!.size.width, height: 2)
 
         //add a Bar Button
-        let addToCalendarBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), style: .done, target: self, action: #selector(addToCalendar))
+        let addToCalendarBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), style: .done, target: self, action: #selector(popAlert))
         self.navigationItem.rightBarButtonItem  = addToCalendarBarButtonItem
     }
     
-    @objc func addToCalendar() {
+    @objc func popAlert() {
+        let alert = UIAlertController(title: textValue(name: "popAlertTitle"), message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: textValue(name: "alertNo"), style: .default, handler: nil))
+        alert.addAction(UIAlertAction(title: textValue(name: "alertYes"), style: .default, handler: { act in self.addToCalendar() }))
+        self.present(alert, animated: true)
+    }
+    
+    private func addToCalendar() {
         if let title = eventViewModel?.title,
             let startTime = eventViewModel?.eventStartTime,
             let endTime = eventViewModel?.eventEndTime,
             let description = eventViewModel?.address {
-            addEventToCalendar(title: title, description: "Address: " + description, startDate: startTime, endDate: endTime) { (success, error) in
+            addEventToCalendar(title: title, description: textValue(name: "eventAddress") + description, startDate: startTime, endDate: endTime) { (success, error) in
                 if success {
-                    let alert = UIAlertController(title: "Success!", message: "This Event has been added to your Calendar!", preferredStyle: .alert)
+                    let alert = UIAlertController(title: textValue(name: "alertSuccess"), message: textValue(name: "alertSuccessMsg"), preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true)
                 } else {
-                    let alert = UIAlertController(title: "Fail!", message: "Sorry, it is fail to add this Event to your Calendar!", preferredStyle: .alert)
+                    let alert = UIAlertController(title: textValue(name: "alertFail"), message: textValue(name: "alertFailMsg"), preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true)
                 }
             }
         } else {
-            let alert = UIAlertController(title: "Fail!", message: "Sorry, fail to get the details of Event", preferredStyle: .alert)
+            let alert = UIAlertController(title: textValue(name: "alertFail"), message: textValue(name: "alertFailMsg2"), preferredStyle: .alert)
             alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
             self.present(alert, animated: true)
         }
