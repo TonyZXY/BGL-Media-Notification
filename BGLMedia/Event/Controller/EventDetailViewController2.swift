@@ -150,7 +150,7 @@ class EventDetailViewController2: UIViewController {
         }
         titleLabel.text = eventViewModel?.title
         if let startTime = eventViewModel?.startTimeLabel,
-            let endTime = eventViewModel?.endTimeLable {
+            let endTime = eventViewModel?.endTimeLabel {
             timeLabel.text = "Start: \(startTime)   End: \(endTime)"
         }
         if let address = eventViewModel?.address {

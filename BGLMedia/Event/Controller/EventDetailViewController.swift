@@ -72,7 +72,7 @@ class EventDetailViewController: UIViewController, WKNavigationDelegate {
         eventWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
         eventWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        //add progresbar to navigation bar
+        //add progressbar to the Navigation Bar
         navigationController?.navigationBar.addSubview(webProgressView)
         let navigationBarBounds = self.navigationController?.navigationBar.bounds
         webProgressView.frame = CGRect(x: 0, y: navigationBarBounds!.size.height - 4, width: navigationBarBounds!.size.width, height: 2)

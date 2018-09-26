@@ -12,22 +12,23 @@ import UIKit
 struct EventViewModel {
     let title: String
     let host: String
-    let hostLabel: String
     let address: String
     let eventStartTime: Date
     let eventEndTime: Date
+    let description: String
+    let hostPage: String
+    let imageUrlStr: String
+    let urlStr: String
     let yearOfEventStartTime: String
     let monthOfEventStartTime: String
     let weekOfEventStartTime: String
     let dayOfEventStartTime: String
     let timeOfEventStartTime: String
+    let hostLabel: String
     let startTimeLabel: String
-    let endTimeLable: String
-    var dateFilter: String
-    let description: String
-    let hostPage: String
-    let imageUrlStr: String
-    let urlStr: String
+    let endTimeLabel: String
+    var dateGroupType: String
+    var hostFilter: String?
     
     init(event: Event) {
         let year = Calendar.current.component(.year, from: event.eventStartTime)
@@ -46,8 +47,8 @@ struct EventViewModel {
         startTimeLabel = "\(dayOfEventStartTime) \(timeOfEventStartTime)"
         let dayOfEventEndTime = Extension.method.convertDateToStringPickerDate(date: event.eventStartTime)
         let timeOfEventEndTime = Extension.method.convertTimeToStringPickerDate2(date: event.eventStartTime)
-        endTimeLable = "\(dayOfEventEndTime) \(timeOfEventEndTime)"
-        dateFilter = dayOfEventStartTime
+        endTimeLabel = "\(dayOfEventEndTime) \(timeOfEventEndTime)"
+        dateGroupType = dayOfEventStartTime
         description = event.eventDescription
         hostPage = event.eventHostPage
         imageUrlStr = event.eventImageURL

@@ -17,7 +17,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     let monthStr = "Month"
     let yearStr = "Year"
     let theBlockchainCentreStr = "The Blockchain Centre"
-    let otherHosts = "Others"
+    let otherHosts = "Other Hosts"
     let allHostStr = "All Hosts"
     
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
@@ -35,7 +35,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         label.layer.borderColor = #colorLiteral(red: 0.7294117647, green: 0.7294117647, blue: 0.7294117647, alpha: 1)
         
         if let firstEventInSection = groupedEvents[section].first {
-            label.text = firstEventInSection.dateFilter
+            label.text = firstEventInSection.dateGroupType
         } else {
             label.text = "Unknown"
         }
@@ -92,19 +92,28 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
                     self.eventViewModels.append(eventViewModel)
                 }
             })
-            
 
             DispatchQueue.main.async {
-                self.updateGroupedEventsAndTableView(self.eventViewModels)
+                self.updateGroupedEventsAndTableView()
             }
         }
     }
     
-    func updateGroupedEventsAndTableView(_ eventViewModels: [EventViewModel]) {
+    func updateGroupedEventsAndTableView() {
         groupedEvents.removeAll()
         
-        let groupedE = Dictionary(grouping: eventViewModels, by: { (eventViewModel) -> String in
-            return eventViewModel.dateFilter
+        var newEventViewModels = eventViewModels
+        if let hostFilter = newEventViewModels.first?.hostFilter {
+            switch hostFilter {
+            case theBlockchainCentreStr:
+                newEventViewModels = eventViewModels.filter { $0.host == theBlockchainCentreStr }
+            case otherHosts:
+                newEventViewModels = eventViewModels.filter { $0.host != theBlockchainCentreStr }
+            default: break
+            }
+        }
+        let groupedE = Dictionary(grouping: newEventViewModels, by: { (eventViewModel) -> String in
+            return eventViewModel.dateGroupType
         })
         
         groupedE.keys.sorted().forEach({ (key) in
@@ -124,12 +133,12 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         listTableView.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
         listTableView.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
         
-        let hostFilterBarButtonItem = UIBarButtonItem(title: allHostStr, style: .done, target: self, action: #selector(hostFilter))
-        self.navigationItem.leftBarButtonItem  = hostFilterBarButtonItem
+        let hostBarButtonItem = UIBarButtonItem(title: allHostStr, style: .done, target: self, action: #selector(popHost))
+        self.navigationItem.leftBarButtonItem  = hostBarButtonItem
         
         //the default value of dateFilter in EventViewModel is day value so that the title should be dayStr
-        let dateFilterBarButtonItem = UIBarButtonItem(title: dayStr, style: .done, target: self, action: #selector(dateFilter))
-        self.navigationItem.rightBarButtonItem  = dateFilterBarButtonItem
+        let dateBarButtonItem = UIBarButtonItem(title: dayStr, style: .done, target: self, action: #selector(popDate))
+        self.navigationItem.rightBarButtonItem  = dateBarButtonItem
     }
     
     lazy var listTableView:UITableView = {
@@ -163,7 +172,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         return pc
         }()
     
-    @objc func dateFilter(_ sender: UIBarButtonItem){
+    @objc func popDate(_ sender: UIBarButtonItem){
         //need to set up popover delegate here
         datePopoverController.popoverPresentationController?.delegate = self
         //tell the popover where to point
@@ -172,7 +181,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         self.present(datePopoverController, animated: true)
     }
     
-    @objc func hostFilter(_ sender: UIBarButtonItem){
+    @objc func popHost(_ sender: UIBarButtonItem){
         //need to set up popover delegate here
         hostPopoverController.popoverPresentationController?.delegate = self
         //tell the popover where to point
@@ -181,36 +190,24 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         self.present(hostPopoverController, animated: true)
     }
     
-    func updateDateFilterValue(_ filterValue: String) -> [EventViewModel] {
-        for (index, _) in eventViewModels.enumerated() {
-            switch filterValue {
-            case dayStr:
-                eventViewModels[index].dateFilter = eventViewModels[index].dayOfEventStartTime
-            case weekStr:
-                eventViewModels[index].dateFilter = eventViewModels[index].weekOfEventStartTime
-            case monthStr:
-                eventViewModels[index].dateFilter = eventViewModels[index].monthOfEventStartTime
-            case yearStr:
-                eventViewModels[index].dateFilter = eventViewModels[index].yearOfEventStartTime
-            default: break
-            }
-        }
-        return eventViewModels
-    }
-    
     //a function of PopoverControllerDelegate
     func popoverButtonAction(sender: UIButton) {
-        var newEventViewModels = eventViewModels
-        if sender.currentTitle == theBlockchainCentreStr {
-            newEventViewModels = eventViewModels.filter { $0.host == theBlockchainCentreStr }
-        } else if sender.currentTitle == otherHosts {
-            newEventViewModels = eventViewModels.filter { $0.host != theBlockchainCentreStr }
-        } else {
-            if let filter = sender.currentTitle {
-                newEventViewModels = updateDateFilterValue(filter)
+        guard let value = sender.currentTitle else { return }
+        for (index, _) in eventViewModels.enumerated() {
+            switch value {
+            case dayStr:
+                eventViewModels[index].dateGroupType = eventViewModels[index].dayOfEventStartTime
+            case weekStr:
+                eventViewModels[index].dateGroupType = eventViewModels[index].weekOfEventStartTime
+            case monthStr:
+                eventViewModels[index].dateGroupType = eventViewModels[index].monthOfEventStartTime
+            case yearStr:
+                eventViewModels[index].dateGroupType = eventViewModels[index].yearOfEventStartTime
+            default:
+                eventViewModels[index].hostFilter = value
             }
         }
-        updateGroupedEventsAndTableView(newEventViewModels)
+        updateGroupedEventsAndTableView()
     }
     
     //a function of UIPopoverPresentationControllerDelegate to make sure the iphone also shows the view as a popover
