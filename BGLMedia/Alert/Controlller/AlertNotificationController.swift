@@ -26,11 +26,11 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         get{
             var allowStatus:String = ""
             if !loginStatus{
-                allowStatus = textValue(name: "alertUnavaliable_alert")
+                allowStatus = textValue(name: "alertUnavailable_alert")
             } else if !NotificationStatus{
-                allowStatus = textValue(name: "alertUnavaliable_alert")
+                allowStatus = textValue(name: "alertUnavailable_alert")
             } else{
-                allowStatus = textValue(name: "alertavaliable_alert")
+                allowStatus = textValue(name: "alertAvailable_alert")
             }
             return [[allowStatus],[textValue(name: "flashNews_alert"),textValue(name: "price_alert")],[textValue(name: "edit_alert")]]
         }

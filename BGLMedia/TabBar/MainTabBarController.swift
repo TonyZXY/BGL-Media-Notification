@@ -270,13 +270,11 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate{
 //        print(UIScreen.main.bounds)
         
         // put the badge number on to the flash_tab
-        print(UIApplication.shared.applicationIconBadgeNumber)
-//        if UIApplication.shared.applicationIconBadgeNumber > 0{
-//            viewControllers![2].tabBarItem.badgeValue = String(UIApplication.shared.applicationIconBadgeNumber)
-//        }else{
-//            viewControllers![2].tabBarItem.badgeValue = nil
-//        }
-        viewControllers![2].tabBarItem.badgeValue = "10"
+        if UIApplication.shared.applicationIconBadgeNumber > 0{
+            viewControllers![2].tabBarItem.badgeValue = String(UIApplication.shared.applicationIconBadgeNumber)
+        }else{
+            viewControllers![2].tabBarItem.badgeValue = nil
+        }
         networkLabel.frame = networkLabelFrame
         
     }
