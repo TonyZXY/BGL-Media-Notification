@@ -80,7 +80,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNewAssetsData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
         
-        
 //        for result in assetss{
 //            print(result.everyTransactions)
 //        }
@@ -521,7 +520,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Refresh Method
     @objc func handleRefresh(_ tableView:UITableView) {
-        UserDefaults.standard.set(true, forKey: "assetsLoad")
         if loginStatus{
             URLServices.fetchInstance.getAssets(){success in
                 self.checkTransaction()
@@ -533,7 +531,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                     } else{
                         self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                     }
-                    UserDefaults.standard.set(false, forKey: "assetsLoad")
+                    if UserDefaults.standard.bool(forKey: "assetsLoad"){
+                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "successLogin"), object: nil)
+                        UserDefaults.standard.set(false,forKey: "assetsLoad")
+                    }
                 }
             }
         } else{
@@ -546,7 +547,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 } else{
                     self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                 }
-                UserDefaults.standard.set(false, forKey: "assetsLoad")
+                if UserDefaults.standard.bool(forKey: "assetsLoad"){
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "successLogin"), object: nil)
+                    UserDefaults.standard.set(false,forKey: "assetsLoad")
+                }
             }
         }
     }
