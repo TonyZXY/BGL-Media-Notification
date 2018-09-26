@@ -13,6 +13,7 @@ import SwiftKeychainWrapper
 import RealmSwift
 
 class LoginController: UIViewController {
+     let hud = JGProgressHUD(style: .light)
     let resendVerifyEmailAlert = CustomAlertController()
     let resetPasswordAlert = CustomPasswordAlertController()
     
@@ -229,7 +230,12 @@ class LoginController: UIViewController {
         view.backgroundColor = ThemeColor().themeColor()
         setUp()
         loginButton.isEnabled = false
+        NotificationCenter.default.addObserver(self, selector: #selector(successLogin), name:NSNotification.Name(rawValue: "successLogin"), object: nil)
         // Do any additional setup after loading the view.
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name:NSNotification.Name(rawValue: "successLogin"), object: nil)
     }
     
     @objc func checkEmail(_ textField: UITextField){
@@ -346,7 +352,7 @@ class LoginController: UIViewController {
         if usedPlace == 1 {
             UserDefaults.standard.set(true, forKey: "launchedBefore")
         }
-        let hud = JGProgressHUD(style: .light)
+       
         hud.textLabel.text = textValue(name: "signingIn")
         hud.backgroundColor = ThemeColor().progressColor()
         hud.show(in: self.view)
@@ -396,40 +402,14 @@ class LoginController: UIViewController {
                     
                     
                     
+                
                     
                     
-                    
-                    
-                    
-
-//                    URLServices.fetchInstance.sendAssets(){success in
-//                        if success{
-//                            hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-//                            hud.textLabel.text = textValue(name: "successSigningIn")
-//
-//                            DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-//                                hud.dismiss()
-//                                if self.usedPlace == 1{
-//                                    let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
-//                                    // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
-//                                    vc.modalTransitionStyle = .flipHorizontal
-//                                    //        vc.modalTransitionStyle = .crossDissolve // another form of animations
-//                                    self.present(vc, animated: true, completion: nil)
-//                                } else {
-//                                    self.dismiss(animated: true, completion: nil)
-//                                }
-//                            }
-//                        } else{
-//
-//                        }
-//                    }
-                    
-                    
-                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                    hud.textLabel.text = textValue(name: "successSigningIn")
+                    self.hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                    self.hud.textLabel.text = textValue(name: "successSigningIn")
                     
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        hud.dismiss()
+                        self.hud.dismiss()
                         if self.usedPlace == 1{
                             let vc:UIViewController = UIStoryboard(name: "Main", bundle: nil).instantiateViewController(withIdentifier: "HomePage") as UIViewController
                             // .instantiatViewControllerWithIdentifier() returns AnyObject! this must be downcast to utilize it
@@ -453,13 +433,8 @@ class LoginController: UIViewController {
                                     realm.delete(realm.objects(EachCurrency.self))
                                     }
                                 }
-                                hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                                hud.textLabel.text = textValue(name: "successSigningIn")
-                                DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                    hud.dismiss()
-                                    self.dismiss(animated: true, completion: nil)
-                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-                                }
+                                UserDefaults.standard.set(true, forKey: "assetsLoad")
+                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
                             }
                             confirmAlertCtrl.addAction(confirmDeleteAction)
                             let confirmSynAction = UIAlertAction(title: NSLocalizedString(textValue(name: "realm_sync_login"), comment: ""), style: .destructive) { (_) in
@@ -470,13 +445,8 @@ class LoginController: UIViewController {
                                                 realm.delete(realm.objects(Transactions.self))
                                             }
                                         }
-                                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
-                                        hud.textLabel.text = textValue(name: "successSigningIn")
-                                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                                            hud.dismiss()
-                                            self.dismiss(animated: true, completion: nil)
-                                            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-                                        }
+                                        UserDefaults.standard.set(true, forKey: "assetsLoad")
+                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
                                     } else{
                                         hud.indicatorView = JGProgressHUDErrorIndicatorView()
                                         hud.textLabel.text = textValue(name: "errorShow")
@@ -502,18 +472,18 @@ class LoginController: UIViewController {
                         self.addChildViewController(self.resendVerifyEmailAlert)
                         self.view.addSubview(self.resendVerifyEmailAlert.view)
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            hud.dismiss()
+                            self.hud.dismiss()
                         }
                     } else{
                         var loginfailure = response["message"].string ?? textValue(name: "errorLoginIn")
                         if loginfailure == "Email or Password Error"{
                             loginfailure = textValue(name: "errorHandle_login")
                         }
-                        hud.indicatorView = JGProgressHUDErrorIndicatorView()
-                        hud.textLabel.text = textValue(name: "errorShow")
-                        hud.detailTextLabel.text = loginfailure
+                        self.hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                        self.hud.textLabel.text = textValue(name: "errorShow")
+                        self.hud.detailTextLabel.text = loginfailure
                         DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                            hud.dismiss()
+                            self.hud.dismiss()
                             self.passwordTextField.layer.borderWidth = 1.8
                             self.passwordTextField.layer.borderColor = ThemeColor().redColor().cgColor
                             
@@ -532,24 +502,33 @@ class LoginController: UIViewController {
                 
             } else {
                 let manager = NetworkReachabilityManager()
-                hud.indicatorView = JGProgressHUDErrorIndicatorView()
+                self.hud.indicatorView = JGProgressHUDErrorIndicatorView()
                 if !(manager?.isReachable)! {
-                    hud.textLabel.text = textValue(name: "errorShow")
-                    hud.detailTextLabel.text = textValue(name: "noNetwork") // To change?
+                    self.hud.textLabel.text = textValue(name: "errorShow")
+                    self.hud.detailTextLabel.text = textValue(name: "noNetwork") // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        hud.dismiss()
+                        self.hud.dismiss()
                     }
                     
                 } else {
-                    hud.textLabel.text = "Error"
-                    hud.detailTextLabel.text = textValue(name: "timeout") // To change?
+                    self.hud.textLabel.text = "Error"
+                    self.hud.detailTextLabel.text = textValue(name: "timeout") // To change?
                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
-                        hud.dismiss()
+                        self.hud.dismiss()
                     }
                     
                 }
             }
         })
+    }
+    
+    @objc func successLogin(){
+        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+        hud.textLabel.text = textValue(name: "successSigningIn")
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
+            self.hud.dismiss()
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     
