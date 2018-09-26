@@ -67,15 +67,15 @@ class EventDetailViewController: UIViewController, WKNavigationDelegate {
     
     private func setUpView(){
         view.addSubview(eventWebView)
-        eventWebView.topAnchor.constraint(equalTo: view.topAnchor, constant: 10).isActive = true
-        eventWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -10).isActive = true
-        eventWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 10).isActive = true
-        eventWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10).isActive = true
+        eventWebView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
+        eventWebView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
+        eventWebView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
+        eventWebView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
         
-        //add progresbar to navigation bar
+        //add progressbar to the Navigation Bar
         navigationController?.navigationBar.addSubview(webProgressView)
         let navigationBarBounds = self.navigationController?.navigationBar.bounds
-        webProgressView.frame = CGRect(x: 0, y: navigationBarBounds!.size.height - 2, width: navigationBarBounds!.size.width, height: 2)
+        webProgressView.frame = CGRect(x: 0, y: navigationBarBounds!.size.height - 4, width: navigationBarBounds!.size.width, height: 2)
 
         //add a Bar Button
         let addToCalendarBarButtonItem = UIBarButtonItem(image: UIImage(named: "calendar"), style: .done, target: self, action: #selector(addToCalendar))
