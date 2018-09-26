@@ -246,8 +246,8 @@ editSection_alert = "Edit Alerts";
 notallow_alert = "Unavailable to use alert function without notification allow in Setting. Go to Setting";
 notlogin_alert = "Please login to enable Currency Alert. Login";
 alertStatus_alert = "Notification Setting";
-alertUnavaliable_alert = "Unavailable";
-alertAvaliable_alert = "Available";
+alertUnavaliable_alert = "Unavaliable";
+alertAvaliable_alert = "Avaliable";
 alertCoinUnavaliable_alert = "Unavailable!";
 
 //Font Page

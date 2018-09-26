@@ -91,6 +91,7 @@
 		5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19D20EEF7DB00D2C33A /* SharePopUpViewController.swift */; };
 		5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5464D19F20EF31C300D2C33A /* ShareImagePreViewController.swift */; };
 		54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 54AA279520E9B28E0026701A /* NetworkManager.swift */; };
+		571800D2215B59AF0012FE75 /* AlertNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */; };
 		5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5719D5E32122B5D10048B579 /* ListViewCell.swift */; };
 		5719D5E62123B54C0048B579 /* AlertInterest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5719D5E52123B54C0048B579 /* AlertInterest.swift */; };
 		571EA24D214F432400922228 /* Candara-Bold-Italic.ttf in Resources */ = {isa = PBXBuildFile; fileRef = 571EA24B214F410C00922228 /* Candara-Bold-Italic.ttf */; };
@@ -799,7 +800,6 @@
 				2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */,
 				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
 				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
-				2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */,
 			);
 			path = Controlller;
 			sourceTree = "<group>";
@@ -1364,7 +1364,6 @@
 				57BBAB67210962C300984AA4 /* MarketsView.swift in Sources */,
 				2D52AE9D20E46E1A00018FC0 /* GerneralController.swift in Sources */,
 				57355C6B20F718CC002E70E4 /* Exchange.swift in Sources */,
-				241214BE215B07F400B9069B /* AlertNotificationController.swift in Sources */,
 				54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */,
 				57663B572134E2DA00E09754 /* HintAlertController.swift in Sources */,
 				2D52AF2520E46E1A00018FC0 /* DateTimeConverter.swift in Sources */,
@@ -1387,6 +1386,7 @@
 				2D52AF1C20E46E1A00018FC0 /* HistoricalDataStruct.swift in Sources */,
 				57355C4820F718CC002E70E4 /* TransCoinTypeCell.swift in Sources */,
 				57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */,
+				571800D2215B59AF0012FE75 /* AlertNotificationController.swift in Sources */,
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,

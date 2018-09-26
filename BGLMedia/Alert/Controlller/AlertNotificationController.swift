@@ -26,9 +26,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         get{
             var allowStatus:String = ""
             if !loginStatus{
-                allowStatus = textValue(name: "alertUnavailable_alert")
+                allowStatus = textValue(name: "alertUnavaliable_alert")
             } else if !NotificationStatus{
-                allowStatus = textValue(name: "alertUnavailable_alert")
+                allowStatus = textValue(name: "alertUnavaliable_alert")
             } else{
                 allowStatus = textValue(name: "alertAvaliable_alert")
             }

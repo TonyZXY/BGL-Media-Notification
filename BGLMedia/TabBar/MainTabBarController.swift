@@ -44,23 +44,23 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
         }
     }
     
-    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
-        if tabBarController.selectedIndex == 2{
-            viewControllers![2].tabBarItem.badgeValue = nil
-            UIApplication.shared.applicationIconBadgeNumber = 0
-            if loginStatus{
-                if getDeviceToken{
-                    if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
-                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
-                            if success{
-                                print(response)
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+//    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+//        if tabBarController.selectedIndex == 2{
+//            viewControllers![2].tabBarItem.badgeValue = nil
+//            UIApplication.shared.applicationIconBadgeNumber = 0
+//            if loginStatus{
+//                if getDeviceToken{
+//                    if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
+//                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
+//                            if success{
+//                                print(response)
+//                            }
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//    }
     
     let network = NetworkManager.sharedInstance
     let forceUpdateAlert = ForceUpdateAlertController()
@@ -78,38 +78,6 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
     }()
     
     @IBOutlet weak var mainTabBar: UITabBar!
-    
-    var getDeviceToken:Bool{
-        get{
-            return UserDefaults.standard.bool(forKey: "getDeviceToken")
-        }
-    }
-    
-    var email:String{
-        get{
-            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
-            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
-        }
-    }
-    
-    var certificateToken:String{
-        get{
-            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
-        }
-    }
-    
-    
-    var loginStatus:Bool{
-        get{
-            return UserDefaults.standard.bool(forKey: "isLoggedIn")
-        }
-    }
-    
-    var deviceToken:String{
-        get{
-            return UserDefaults.standard.string(forKey: "UserToken") ?? "null"
-        }
-    }
     
     
     override func viewDidLoad() {
@@ -258,6 +226,11 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
         //            print("online===============set up tabs")
         self.setUpTab()
         NotificationCenter.default.addObserver(self, selector: #selector(self.setUpTab), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(updateInternalBadge), name: NSNotification.Name(rawValue: "refreshInternalBadge"), object: nil)
+        
+        
+        
+        
         //        }
         
         
@@ -285,8 +258,16 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshInternalNotification"), object: nil)
     }
     
+    @objc func updateInternalBadge(){
+        if UIApplication.shared.applicationIconBadgeNumber > 0{
+            viewControllers![2].tabBarItem.badgeValue = "\(UIApplication.shared.applicationIconBadgeNumber)"
+        }else{
+            viewControllers![2].tabBarItem.badgeValue = nil
+        }
+    }
     
     @objc func forceUpdate(){
         let appID = "1406241883"
@@ -313,9 +294,7 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
         viewControllers![1].tabBarItem.title = textValue(name: "market_tab")
         viewControllers![1].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![2].tabBarItem.title = textValue(name: "news_tab")
-        if UIApplication.shared.applicationIconBadgeNumber != 0{
-            viewControllers![2].tabBarItem.badgeValue = "\(UIApplication.shared.applicationIconBadgeNumber)"
-        }
+        updateInternalBadge()
         viewControllers![2].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
         viewControllers![3].tabBarItem.title = textValue(name: "event_tab")
         viewControllers![3].tabBarItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(10)], for: .normal)
@@ -327,11 +306,6 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
 //        print(UIScreen.main.bounds)
         
         // put the badge number on to the flash_tab
-        if UIApplication.shared.applicationIconBadgeNumber > 0{
-            viewControllers![2].tabBarItem.badgeValue = String(UIApplication.shared.applicationIconBadgeNumber)
-        }else{
-            viewControllers![2].tabBarItem.badgeValue = nil
-        }
         networkLabel.frame = networkLabelFrame
         
     }

@@ -304,8 +304,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //
     func applicationWillEnterForeground(_ application: UIApplication) {
         NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshNotificationStatus"), object: nil)
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshInternalBadge"), object: nil)
     }
-    
 }
 
 //extension UINavigationItem{
