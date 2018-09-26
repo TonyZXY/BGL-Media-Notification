@@ -86,9 +86,9 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
                 return EventViewModel(event: Event(item))
             })
             
-            //only get the events after today & remove title == "null"
+            //only get the events after today
             allEventViewModels.forEach({ (eventViewModel) in
-                if eventViewModel.eventStartTime >= Date() && eventViewModel.title != "null" {
+                if eventViewModel.eventStartTime >= Date() {
                     self.eventViewModels.append(eventViewModel)
                 }
             })
@@ -118,7 +118,8 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         
         groupedE.keys.sorted().forEach({ (key) in
             if let values = groupedE[key] {
-                self.groupedEvents.append(values)
+                let sortedV = values.sorted { $0.eventStartTime < $1.eventStartTime }
+                self.groupedEvents.append(sortedV)
             }
         })
         

@@ -37,7 +37,12 @@ struct EventViewModel {
         
         title = event.eventName
         host = event.eventHost
-        address = "\(event.eventAddress) \(event.eventCity)"
+        address = {
+            if event.eventAddress != "null" {
+                return "\(event.eventAddress) \(event.eventCity)"
+            }
+            return "N/A"
+        }()
         self.eventStartTime = event.eventStartTime
         self.eventEndTime = event.eventEndTime
         yearOfEventStartTime = String(year)
