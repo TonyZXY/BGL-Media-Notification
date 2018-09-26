@@ -47,7 +47,7 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
     func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
         if tabBarController.selectedIndex == 2{
             viewControllers![2].tabBarItem.badgeValue = nil
-            
+            UIApplication.shared.applicationIconBadgeNumber = 0
             if loginStatus{
                 if getDeviceToken{
                     if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
