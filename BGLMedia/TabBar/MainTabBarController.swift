@@ -309,18 +309,19 @@ class MainTabBarController: UITabBarController, UITabBarControllerDelegate{
                     }
                 }
             }
-            //        else{
-            //            if getDeviceToken{
-            //                // send  recievedNotification query
-            //                if self.deviceToken != "null"{
-            //                    URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedIOSNotification"], httpMethod: "POST", parameters: ["deviceToken": deviceToken]){(response,success) in
-            //                        if success{
-            //                            print(response)
-            //                        }
-            //                    }
-            //                }
-            //            }
-            //        }
+            else{
+                if getDeviceToken{
+                    // send  recievedNotification query
+                    if self.deviceToken != "null"{
+                        print(deviceToken)
+                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedIOSNotification"], httpMethod: "POST", parameters: ["deviceToken": deviceToken]){(response,success) in
+                            if success{
+                                print(response)
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 }
