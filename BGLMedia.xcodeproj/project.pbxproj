@@ -49,7 +49,6 @@
 		2D52AEFB20E46E1A00018FC0 /* AboutUsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE3B20E46E1800018FC0 /* AboutUsViewController.swift */; };
 		2D52AEFE20E46E1A00018FC0 /* AlertObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4020E46E1800018FC0 /* AlertObject.swift */; };
 		2D52AEFF20E46E1A00018FC0 /* AlertCoinName.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4120E46E1800018FC0 /* AlertCoinName.swift */; };
-		2D52AF0020E46E1A00018FC0 /* AlertNotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */; };
 		2D52AF0A20E46E1A00018FC0 /* TimelineTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5320E46E1900018FC0 /* TimelineTableViewController.swift */; };
 		2D52AF0B20E46E1A00018FC0 /* NewsFlashViewController.swift~FlashNews in Resources */ = {isa = PBXBuildFile; fileRef = 2D52AE5420E46E1900018FC0 /* NewsFlashViewController.swift~FlashNews */; };
 		2D52AF0C20E46E1A00018FC0 /* SearchNewsFlashController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52AE5520E46E1900018FC0 /* SearchNewsFlashController.swift */; };
@@ -800,6 +799,7 @@
 				2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */,
 				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
 				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
+				2499192C21534E7B00508FED /* AlertNotificationControllerV2.swift */,
 			);
 			path = Controlller;
 			sourceTree = "<group>";
@@ -1337,7 +1337,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2D52AF0020E46E1A00018FC0 /* AlertNotificationController.swift in Sources */,
 				57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */,
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
@@ -1365,6 +1364,7 @@
 				57BBAB67210962C300984AA4 /* MarketsView.swift in Sources */,
 				2D52AE9D20E46E1A00018FC0 /* GerneralController.swift in Sources */,
 				57355C6B20F718CC002E70E4 /* Exchange.swift in Sources */,
+				241214BE215B07F400B9069B /* AlertNotificationController.swift in Sources */,
 				54AA279620E9B28E0026701A /* NetworkManager.swift in Sources */,
 				57663B572134E2DA00E09754 /* HintAlertController.swift in Sources */,
 				2D52AF2520E46E1A00018FC0 /* DateTimeConverter.swift in Sources */,

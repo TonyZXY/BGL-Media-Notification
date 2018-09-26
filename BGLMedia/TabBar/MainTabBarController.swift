@@ -78,6 +78,40 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
     }()
     
     @IBOutlet weak var mainTabBar: UITabBar!
+    
+    var getDeviceToken:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "getDeviceToken")
+        }
+    }
+    
+    var email:String{
+        get{
+            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
+    
+    
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
+    var deviceToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+        }
+    }
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         self.delegate = self
@@ -292,6 +326,12 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
 //        print(tabBar.frame.minY)
 //        print(UIScreen.main.bounds)
         
+        // put the badge number on to the flash_tab
+        if UIApplication.shared.applicationIconBadgeNumber > 0{
+            viewControllers![2].tabBarItem.badgeValue = String(UIApplication.shared.applicationIconBadgeNumber)
+        }else{
+            viewControllers![2].tabBarItem.badgeValue = nil
+        }
         networkLabel.frame = networkLabelFrame
         
     }
@@ -303,4 +343,40 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
         // Dispose of any resources that can be recreated.
     }
     
+    
+    func tabBarController(_ tabBarController: UITabBarController, didSelect viewController: UIViewController) {
+        if tabBarController.selectedIndex == 2 {
+            // ask server ti clear badge number
+            viewController.tabBarItem.badgeValue = nil
+            UIApplication.shared.applicationIconBadgeNumber = 0
+            //        let email = UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
+            //        let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+            //        let deviceToken = UserDefaults.standard.string(forKey: "UserToken") ?? "null"
+            
+            if loginStatus{
+                if getDeviceToken{
+                    if self.email != "null" && self.certificateToken != "null" &&  self.deviceToken != "null"{
+                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedNotification"], httpMethod: "POST", parameters: ["email":email,"token":certificateToken,"deviceToken":deviceToken]) { (response, success) in
+                            if success{
+                                //                            print(response)
+                            }
+                        }
+                    }
+                }
+            }
+            else{
+                if getDeviceToken{
+                    // send  recievedNotification query
+                    if self.deviceToken != "null"{
+                        print(deviceToken)
+                        URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","receivedIOSNotification"], httpMethod: "POST", parameters: ["deviceToken": deviceToken]){(response,success) in
+                            if success{
+                                print(response)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

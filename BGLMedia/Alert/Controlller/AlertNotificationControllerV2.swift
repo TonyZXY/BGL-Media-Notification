@@ -20,7 +20,7 @@ class switchObject{
 
 class AlertNotificationController: UIViewController,UITableViewDelegate,UITableViewDataSource{
     var switchStatus = switchObject()
-//    var changeSwitchStatus = false
+    //    var changeSwitchStatus = false
     var oldAlert = [String:Bool]()
     var cellItems:[[String]]{
         get{
@@ -30,19 +30,20 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             } else if !NotificationStatus{
                 allowStatus = textValue(name: "alertUnavailable_alert")
             } else{
-                allowStatus = textValue(name: "alertAvaliable_alert")
+                allowStatus = textValue(name: "alertAvailable_alert")
             }
-            return [[allowStatus],[textValue(name: "flashNews_alert"),textValue(name: "price_alert")],[textValue(name: "edit_alert")]]
+            return [[textValue(name: "flashNews_alert")],[allowStatus,textValue(name: "price_alert"),textValue(name: "edit_alert")]]
+            
         }
     }
     
-    var switchStatusItem:[[String]] = [["setting"],["Flash","Currency"],["Edit"]]
+    var switchStatusItem:[[String]] = [["Flash"],["setting","Currency","Edit"]]
     
-    var SwitchOption:[Bool]{
-        get{
-            return [UserDefaults.standard.bool(forKey: "flashSwitch"),UserDefaults.standard.bool(forKey: "priceSwitch")]
-        }
-    }
+//    var SwitchOption:[Bool]{
+//        get{
+//            return [UserDefaults.standard.bool(forKey: "flashSwitch"),UserDefaults.standard.bool(forKey: "priceSwitch")]
+//        }
+//    }
     
     var flashSwitchStatus:Bool{
         get{
@@ -56,11 +57,11 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         }
     }
     
-    var buildInterestStatus:Bool{
-        get{
-            return UserDefaults.standard.bool(forKey: "buildInterest")
-        }
-    }
+//    var buildInterestStatus:Bool{
+//        get{
+//            return UserDefaults.standard.bool(forKey: "buildInterest")
+//        }
+//    }
     
     var loginStatus:Bool{
         get{
@@ -85,7 +86,8 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     var sectionItem:[String]{
         get{
-            return [textValue(name: "alertStatus_alert"),textValue(name: "pushSection_alert"),textValue(name: "editSection_alert")]
+//            return [textValue(name: "alertStatus_alert"),textValue(name: "pushSection_alert"),textValue(name: "editSection_alert")]
+            return [textValue(name: "newsFlashSectionHeader_alert"),textValue(name: "currencySectionHeader_alert")]
         }
     }
     
@@ -96,11 +98,12 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        if SwitchOption[1] == false{
-            return 2
-        } else{
-            return 3
-        }
+//        if SwitchOption[1] == false{
+//            return 2
+//        } else{
+//            return 3
+//        }
+        return 2
     }
     
     
@@ -123,7 +126,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        if section == 0{
+        if section == 1{
             if !loginStatus || !NotificationStatus{
                 return 60
             } else{
@@ -136,62 +139,13 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     }
     
     func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
-        let factor = view.frame.width/375
-        if section == 0{
+        if section == 1{
             if !loginStatus || !NotificationStatus{
-                let sectionView = UIView()
-                sectionView.backgroundColor = ThemeColor().darkGreyColor()
-                let sectionButton = UIButton()
-                sectionButton.titleLabel?.lineBreakMode = .byWordWrapping
-                sectionButton.titleLabel?.numberOfLines = 0
-                sectionButton.titleLabel?.contentMode = .left
-                if !loginStatus{
-                    let settingString = textValue(name: "notlogin_alert")
-                    
-                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
-                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
-                    var myRange = NSRange(location: 0, length: 0)
-                    if defaultLanguage == "EN"{
-                        myRange = NSRange(location: settingString.count-5, length: 5)
-                    } else if defaultLanguage == "CN"{
-                        myRange = NSRange(location: 16, length: 2)
-                    }
-                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
-                    sectionButton.setAttributedTitle(myString, for: .normal)
-                    
-                    
-                    sectionButton.addTarget(self, action: #selector(GoTologin), for: .touchUpInside)
+                if !NotificationStatus{
+                    return notificationNotAllowedFooter()
                 } else{
-                    let settingString = textValue(name: "notallow_alert")
-                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
-                    let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
-                    var myRange = NSRange(location: 0, length: 0)
-                    if defaultLanguage == "EN"{
-                        myRange = NSRange(location: 72, length: 14)
-                    } else if defaultLanguage == "CN"{
-                        myRange = NSRange(location: 20, length: 2)
-                    }
-                    
-                    
-                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
-                    sectionButton.setAttributedTitle(myString, for: .normal)
-                    //                    let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13) ]
-                    //                    let myString = NSMutableAttributedString(string: "Go to Setting", attributes: myAttribute )
-                    //                    let myRange = NSRange(location: 1, length: 3) // range starting at location 17 with a lenth of 7: "Strings"
-                    //                    myString.addAttribute(NSAttributedStringKey.foregroundColor, value: UIColor.red, range: myRange)
-                    //
-                    //                    sectionButton.setAttributedTitle(myString, for: .normal)
-                    sectionButton.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+                    return notLoginAlertFooter()
                 }
-                sectionButton.translatesAutoresizingMaskIntoConstraints = false
-                sectionView.addSubview(sectionButton)
-                
-                
-                
-                NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
-                NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
-                NSLayoutConstraint(item: sectionButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
-                return sectionView
             } else{
                 return UIView()
             }
@@ -200,6 +154,74 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         }
     }
     
+    private func notLoginAlertFooter()->UIView{
+        let factor = view.frame.width/375
+        
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().darkGreyColor()
+        let sectionButton = UIButton()
+        sectionButton.titleLabel?.lineBreakMode = .byWordWrapping
+        sectionButton.titleLabel?.numberOfLines = 0
+        sectionButton.titleLabel?.contentMode = .left
+        
+        let settingString = textValue(name: "notlogin_alert")
+        let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
+        let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute)
+        var myRange = NSRange(location: 0, length: 0)
+        
+        if defaultLanguage == "EN"{
+            myRange = NSRange(location: settingString.count-5, length: 5)
+        } else if defaultLanguage == "CN"{
+            myRange = NSRange(location: 16, length: 2)
+        }
+        
+        myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
+        sectionButton.setAttributedTitle(myString, for: .normal)
+        sectionButton.addTarget(self, action: #selector(GoTologin), for: .touchUpInside)
+        
+        // button constraint
+        sectionButton.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.addSubview(sectionButton)
+            
+        NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        return sectionView
+    }
+    
+    private func notificationNotAllowedFooter() -> UIView{
+        let factor = view.frame.width/375
+        
+        let sectionView = UIView()
+        sectionView.backgroundColor = ThemeColor().darkGreyColor()
+        let sectionButton = UIButton()
+        sectionButton.titleLabel?.lineBreakMode = .byWordWrapping
+        sectionButton.titleLabel?.numberOfLines = 0
+        sectionButton.titleLabel?.contentMode = .left
+        
+        let settingString = textValue(name: "notallow_alert")
+        let myAttribute = [NSAttributedStringKey.font: UIFont.regularFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().textGreycolor()]
+        let myString = NSMutableAttributedString(string: settingString, attributes: myAttribute )
+        var myRange = NSRange(location: 0, length: 0)
+        
+        if defaultLanguage == "EN"{
+            myRange = NSRange(location: 72, length: 14)
+        } else if defaultLanguage == "CN"{
+            myRange = NSRange(location: 20, length: 2)
+        }
+        
+        myString.addAttribute(NSAttributedStringKey.foregroundColor, value: ThemeColor().blueColor(), range: myRange)
+        sectionButton.setAttributedTitle(myString, for: .normal)
+        sectionButton.addTarget(self, action: #selector(deviceSetting), for: .touchUpInside)
+        
+        // set button constraint
+        sectionButton.translatesAutoresizingMaskIntoConstraints = false
+        sectionView.addSubview(sectionButton)
+        NSLayoutConstraint(item: sectionButton, attribute: .right, relatedBy: .equal, toItem: sectionView, attribute: .right, multiplier: 1, constant: -10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .left, relatedBy: .equal, toItem: sectionView, attribute: .left, multiplier: 1, constant: 10*factor).isActive = true
+        NSLayoutConstraint(item: sectionButton, attribute: .centerY, relatedBy: .equal, toItem: sectionView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
+        return sectionView
+    }
     
     @objc func deviceSetting(){
         
@@ -251,34 +273,52 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         cell.textLabel?.font = UIFont.regularFont(14*factor)
         cell.separatorInset = UIEdgeInsetsMake(0, 16*factor, 0, 0)
         cell.isUserInteractionEnabled = true
+
+        if indexPath.section == 0 {
+            if indexPath.row == 0 {
+                let swithButton = UISwitch()
+                swithButton.isOn = flashSwitchStatus
+                cell.accessoryView = swithButton
+                // 0 for flashSwitch
+                swithButton.tag = 0
+                cell.selectionStyle = .none
+                swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
+                return cell
+            }
+        }
         if indexPath.section == 1 {
-            let swithButton = UISwitch()
-            swithButton.isOn = SwitchOption[indexPath.row]
-            cell.accessoryView = swithButton
-            swithButton.tag = indexPath.row
-            cell.selectionStyle = .none
-            swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
-            if !loginStatus{
-                swithButton.tintColor = ThemeColor().textGreycolor()
-                swithButton.thumbTintColor = ThemeColor().greyColor()
-                swithButton.onTintColor = ThemeColor().textGreycolor()
-                cell.textLabel?.textColor = ThemeColor().textGreycolor()
+            if indexPath.row == 0 {
                 cell.isUserInteractionEnabled = false
+                return cell
             }
-            return cell
-        } else if indexPath.section == 2{
-            cell.accessoryType = .disclosureIndicator
-            if !loginStatus{
-                cell.textLabel?.textColor = ThemeColor().textGreycolor()
-                cell.isUserInteractionEnabled = false
+            if indexPath.row == 1 {
+                let swithButton = UISwitch()
+                swithButton.isOn = priceSwitchStatus
+                cell.accessoryView = swithButton
+                // 1 for price switch
+                swithButton.tag = 1
+                cell.selectionStyle = .none
+                swithButton.addTarget(self, action: #selector(switchIsInAction(sender:)), for: .valueChanged)
+                if !loginStatus{
+                    swithButton.tintColor = ThemeColor().textGreycolor()
+                    swithButton.thumbTintColor = ThemeColor().greyColor()
+                    swithButton.onTintColor = ThemeColor().textGreycolor()
+                    cell.textLabel?.textColor = ThemeColor().textGreycolor()
+                    cell.isUserInteractionEnabled = false
+                }
+                return cell
             }
-            return cell
-        } else{
-            cell.selectionStyle = .none
-            return cell
+            if indexPath.row == 2 {
+                cell.accessoryType = .disclosureIndicator
+                if !loginStatus{
+                    cell.textLabel?.textColor = ThemeColor().textGreycolor()
+                    cell.isUserInteractionEnabled = false
+                }
+                return cell
+            }
         }
         
-        
+        return cell
         
         //        if indexPath.section == 0{
         //            let cell = tableView.dequeueReusableCell(withIdentifier: "editCurrency", for: indexPath)
@@ -319,7 +359,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let factor = view.frame.width/375
-        if indexPath.section == 2 && indexPath.row == 0{
+        if indexPath.section == 1 && indexPath.row == 2{
             let alert = AlertController()
             alert.status = "setting"
             alert.factor = factor
@@ -408,12 +448,14 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
         if sender.isOn{
             if sender.tag == 0{
                 UserDefaults.standard.set(true, forKey: "flashSwitch")
+                //UIApplication.shared.registerForRemoteNotifications()
             } else if sender.tag == 1{
                 UserDefaults.standard.set(true, forKey: "priceSwitch")
             }
         } else{
             if sender.tag == 0{
                 UserDefaults.standard.set(false, forKey: "flashSwitch")
+//                UIApplication.shared.unregisterForRemoteNotifications()
             } else if sender.tag == 1{
                 UserDefaults.standard.set(false, forKey: "priceSwitch")
             }
@@ -510,9 +552,9 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             let hud = JGProgressHUD(style: .light)
             hud.show(in: (self.parent?.view)!)
             
-//            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+            //            let email = UserDefaults.standard.string(forKey: "UserEmail")!
             
-//            let eamil = KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+            //            let eamil = KeychainWrapper.standard.string(forKey: "Email") ?? "null"
             
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
             let parameter = ["email":email,"token":certificateToken]
@@ -574,7 +616,7 @@ class AlertNotificationController: UIViewController,UITableViewDelegate,UITableV
             let flashNotification = UserDefaults.standard.bool(forKey: "flashSwitch")
             let priceAlert = UserDefaults.standard.bool(forKey: "priceSwitch")
             let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
-//            let email = UserDefaults.standard.string(forKey: "UserEmail")!
+            //            let email = UserDefaults.standard.string(forKey: "UserEmail")!
             let parameter:[String:Any] = ["email":email,"token":certificateToken,"flash":flashNotification,"interest":priceAlert]
             URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","changeNotification"], httpMethod: "POST", parameters: parameter) { (response, success) in
             }

@@ -244,7 +244,7 @@ addAlert_alert = "Add alert";
 pushSection_alert = "Push Notification";
 editSection_alert = "Edit Alerts";
 notallow_alert = "Unavailable to use alert function without notification allow in Setting. Go to Setting";
-notlogin_alert = "Please login to use the Alert function. Login";
+notlogin_alert = "Please login to enable Currency Alert. Login";
 alertStatus_alert = "Notification Setting";
 alertUnavaliable_alert = "Unavailable";
 alertAvaliable_alert = "Available";
@@ -253,6 +253,7 @@ alertCoinUnavaliable_alert = "Unavailable!";
 //Font Page
 flashNews_font = "News Flash Font";
 font_size = "Font Size";
+
 
 //Alert Edit Page
 exampleLabel_alert = "Market Price";

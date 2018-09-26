@@ -129,6 +129,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //        print("granted:\(granted)")
         UIApplication.shared.registerForRemoteNotifications()
         
+//        // modified
+//        if !UserDefaults.standard.bool(forKey: "flashSwitch") && !loginStatus{
+//            UIApplication.shared.unregisterForRemoteNotifications()
+//        }
+        
         let launchedBefore = UserDefaults.standard.bool(forKey: "launchedBefore")
         let uploadAssetsToServer = UserDefaults.standard.bool(forKey: "UploadAssetsToServer")
         
@@ -234,13 +239,34 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
                 URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","addIOSDevice"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: { (response, success) in
                     if success{
                         UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                        print(response)
                     }
                 })
 //            }
         }
+        else {
+            // modified
+            //print(sendDeviceTokenStatus)
+            //if !sendDeviceTokenStatus {
+                //send device token to unknown user table
+                let sendDeviceTokenParameter = ["deviceToken": deviceTokenString]
+                //print(deviceTokenString)
+                URLServices.fetchInstance.passServerData(urlParameters: ["deviceManage","IOSNewsFlash"], httpMethod: "POST", parameters: sendDeviceTokenParameter, completion: {(res, success) in
+                    if success {
+                        print("device token has been sent : " + deviceTokenString)
+                        UserDefaults.standard.set(true, forKey: "SendDeviceToken")
+                        print(res)
+                    }
+                })
+            //}
+        }
     }
     
-        
+//    var sendDeviceTokenStatus:Bool{
+//        get{
+//            return UserDefaults.standard.bool(forKey: "SendDeviceToken")
+//        }
+//    }
     
     
     func application(_ application: UIApplication, didFailToRegisterForRemoteNotificationsWithError error: Error) {
