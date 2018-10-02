@@ -62,6 +62,7 @@ extension HistoricalDataStruct {
                 dataUnit.low = subArray.compactMap { $0?.low }.min()!
                 
                 if Params.interval == 7{
+                    //Error data fix, get the second highest data for global average
                     let errorData = subArray.filter{ $0?.high ?? 0 > ($0?.low) ?? 0 * 10}
                     if errorData.count != 0 && subArray.count != 0{
                         subArray.sort(){ Int($0?.high ?? 0) > Int($1?.high ?? 0)}
