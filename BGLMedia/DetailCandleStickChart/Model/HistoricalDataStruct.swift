@@ -57,11 +57,19 @@ extension HistoricalDataStruct {
         for index in stride(from: datas.count - 1, to: 0, by: -Params.interval) {
             if var dataUnit = datas[index] {
                 let start = index - Params.interval + 1 > 0 ? index - Params.interval + 1 : 0
-                
-                let subArray = datas[start...index]
+                var subArray = datas[start...index]
                 dataUnit.high = subArray.compactMap { $0?.high }.max()!
                 dataUnit.low = subArray.compactMap { $0?.low }.min()!
                 
+                if Params.interval == 7{
+                    let errorData = subArray.filter{ $0?.high ?? 0 > ($0?.low) ?? 0 * 10}
+                    if errorData.count != 0 && subArray.count != 0{
+                        subArray.sort(){ Int($0?.high ?? 0) > Int($1?.high ?? 0)}
+                        subArray.sort(){ Int($0?.high ?? 0) > Int($1?.high ?? 0)}
+                        subArray.removeFirst()
+                        dataUnit.high = subArray.first??.high ?? 0
+                    }
+                }
                 if let open = latestOpen {
                     dataUnit.close = open
                 }
@@ -132,7 +140,7 @@ extension HistoricalDataStruct {
     
     var dates: [String]? {
         let converter = DateTimeConverter()
-        var dates:[String] = selectedData.compactMap {
+        let dates:[String] = selectedData.compactMap {
             if let data = $0 {
                 return converter.convert(timestamp: Double(data.time ?? data.id!))
             }
