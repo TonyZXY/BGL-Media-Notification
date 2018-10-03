@@ -545,25 +545,50 @@ class GloabalController: UIViewController,ExchangeSelect{
         print(realmMarket)
         
         if realmCoinAbbName != "" && realmTradingPairsName != "" && realmMarket != ""{
-            APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
-                if success{
-                    if response["Response"].string ?? "" == "Success"{
-                        if let periodData = response["Data"].array{
-                            //                            print(response["Data"].array)
-                            if periodData != []{
-                                let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                                let change = (price /  periodData.first!["open"].double!) * 100
-                                checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
-                                checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
-                                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+            if realmMarket == "Huobi Australia"{
+                APIServices.fetchInstance.getHuobiAuRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket){ (success, response) in
+                    if success{
+                        print("huobi success")
+                        print(response)
+                        if response["status"].string ?? "" == "ok"{
+                            if let periodData = response["data"].array{
+                                if periodData != []{
+                                    let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                                    let change = (price /  periodData.first!["open"].double!) * 100
+                                    checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                                    checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
+                                    self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                                }
                             }
+                            completion(true)
+                        }else{
+                            completion(false)
                         }
-                        completion(true)
+                    }else{
+                        completion(false)
+                    }
+                }
+            }else{
+                APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
+                    if success{
+                        if response["Response"].string ?? "" == "Success"{
+                            if let periodData = response["Data"].array{
+                                //                            print(response["Data"].array)
+                                if periodData != []{
+                                    let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                                    let change = (price /  periodData.first!["open"].double!) * 100
+                                    checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                                    checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
+                                    self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                                }
+                            }
+                            completion(true)
+                        } else{
+                            completion(false)
+                        }
                     } else{
                         completion(false)
                     }
-                } else{
-                    completion(false)
                 }
             }
         } else{

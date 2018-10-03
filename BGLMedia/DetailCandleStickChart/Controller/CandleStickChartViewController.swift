@@ -256,6 +256,10 @@ class CandleStickChartViewController: UIViewController, UICollectionViewDelegate
             fetcher.fetcher(coinSymbol: coinSymbol.coinSymbol) { [unowned self] in
                 self.historicalDataStruct = self.fetcher.historicalDataStruct
             }
+        } else if coinSymbol.coinExchangeName == "Huobi Australia"{
+            fetcher.fetcherHuobi(coinSymbol: coinSymbol.coinSymbol, currency: coinSymbol.coinTradingPairsName, exchangeName: coinSymbol.coinExchangeName){ [unowned self] in
+                self.historicalDataStruct = self.fetcher.historicalDataStruct
+            }
         } else{
             fetcher.fetcher(coinSymbol: coinSymbol.coinSymbol, currency: coinSymbol.coinTradingPairsName, exchangeName:coinSymbol.coinExchangeName){ [unowned self] in
                 self.historicalDataStruct = self.fetcher.historicalDataStruct
