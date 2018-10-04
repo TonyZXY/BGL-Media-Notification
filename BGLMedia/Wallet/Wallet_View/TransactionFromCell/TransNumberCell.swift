@@ -11,11 +11,18 @@ import UIKit
 class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     
     var isGameMode = false
-    var balance: Double = 1000000
+    var gameUser: GameUser?
+    var balance: Double = 0
     var price: Double?
     let sliderStep: Float = 10
     var coinName = "" {
         didSet {
+            balance = 0
+            gameUser?.coinsBalance.forEach({ (coin) in
+                if coin.name == coinName {
+                    balance = coin.amount
+                }
+            })
             balanceLabel.text = "\(coinName) \(textValue(name: "balance")): \(Extension.method.scientificMethod(number: balance))"
         }
     }

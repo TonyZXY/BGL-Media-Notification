@@ -8,7 +8,7 @@
 
 import Foundation
 
-struct User {
+struct GameUser {
     let name: String
     var coinsBalance: [CoinBalance]
     

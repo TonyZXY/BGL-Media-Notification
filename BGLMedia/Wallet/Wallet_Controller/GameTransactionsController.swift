@@ -20,6 +20,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         cell.priceType.text = nil
     }
     
+    var gameUser = GameUser(name: "Geek")
     var newTransaction = EachTransactions()
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
     var color = ThemeColor()
@@ -121,6 +122,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             cell.number.tag = indexPath.row
             cell.number.delegate = self
             cell.isGameMode = true
+            cell.gameUser = gameUser
             return cell
         } else if indexPath.row == 5{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! TransDateCell
@@ -217,7 +219,8 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
     
     //Click add Transaction button, it will transfer the current trading price to specific price type, for example: USD -> AUD
     @objc func addTransaction(){
-        //TODO
+        //TODO..........................
+        print("Add Transaction.........")
     }
     
     //Click buy button it will turn to the "Buy" Type
