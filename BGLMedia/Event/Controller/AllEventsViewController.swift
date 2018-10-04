@@ -16,7 +16,8 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     var weekStr = ""
     var monthStr = ""
     var yearStr = ""
-    var theBlockchainCentreStr = "The Blockchain Centre"
+    let theBlockchainCentreStr = "The Blockchain Centre"
+    let sydneyBlockchainCentreStr = "Sydney Blockchain Centre"
     var otherHosts = ""
     var allHostStr = ""
     lazy var hostBarButtonItem = UIBarButtonItem(title: "", style: .done, target: self, action: #selector(popHost))
@@ -63,7 +64,6 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         weekStr = textValue(name: "week")
         monthStr = textValue(name: "month")
         yearStr = textValue(name: "year")
-        theBlockchainCentreStr = "The Blockchain Centre"
         otherHosts = textValue(name: "otherHosts")
         allHostStr = textValue(name: "allHostStr")
         
@@ -109,8 +109,10 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
             switch hostFilter {
             case theBlockchainCentreStr:
                 newEventViewModels = eventViewModels.filter { $0.host == theBlockchainCentreStr }
+            case sydneyBlockchainCentreStr:
+                newEventViewModels = eventViewModels.filter { $0.host == sydneyBlockchainCentreStr }
             case otherHosts:
-                newEventViewModels = eventViewModels.filter { $0.host != theBlockchainCentreStr }
+                newEventViewModels = eventViewModels.filter { $0.host != theBlockchainCentreStr && $0.host != sydneyBlockchainCentreStr  }
             default: break
             }
         }
@@ -151,7 +153,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         hostPopoverController.delegate = self
         //tell the popover where to point
         hostPopoverController.popoverPresentationController?.barButtonItem = sender
-        hostPopoverController.buttons = [PopoverButton(theBlockchainCentreStr), PopoverButton(otherHosts), PopoverButton(allHostStr)]
+        hostPopoverController.buttons = [PopoverButton(theBlockchainCentreStr), PopoverButton(sydneyBlockchainCentreStr), PopoverButton(otherHosts), PopoverButton(allHostStr)]
         hostPopoverController.popoverBarButtonItem = sender
         self.present(hostPopoverController, animated: true)
     }
