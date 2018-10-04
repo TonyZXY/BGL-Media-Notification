@@ -10,6 +10,12 @@
 		240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C0920F7188B002E70E4 /* NewsV2Controller.swift */; };
 		240094C5214F5346007898BF /* NewsSliderClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
+		241082EC2164867900A12DF1 /* RankMenuView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* RankMenuView.swift */; };
+		241082EE2164870C00A12DF1 /* RankTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082ED2164870C00A12DF1 /* RankTableViewController.swift */; };
+		241082F02164875F00A12DF1 /* RankTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EF2164875F00A12DF1 /* RankTableViewCell.swift */; };
+		241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082F1216487A000A12DF1 /* ToRankPageButton.swift */; };
+		24121507215C700300B9069B /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24121506215C700300B9069B /* Ranking.swift */; };
+		24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08F9521631B1D0066BA33 /* RankModel.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
@@ -232,6 +238,12 @@
 /* Begin PBXFileReference section */
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
 		240F697E2148D5710072E158 /* GenuineNewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenuineNewsObject.swift; sourceTree = "<group>"; };
+		241082EB2164867900A12DF1 /* RankMenuView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RankMenuView.swift; path = BGLMedia/TradingGame/Ranking/View/RankMenuView.swift; sourceTree = SOURCE_ROOT; };
+		241082ED2164870C00A12DF1 /* RankTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewController.swift; sourceTree = "<group>"; };
+		241082EF2164875F00A12DF1 /* RankTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewCell.swift; sourceTree = "<group>"; };
+		241082F1216487A000A12DF1 /* ToRankPageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToRankPageButton.swift; sourceTree = "<group>"; };
+		24121506215C700300B9069B /* Ranking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
+		24A08F9521631B1D0066BA33 /* RankModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
 		2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
@@ -462,6 +474,51 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		24121503215C700300B9069B /* TradingGame */ = {
+			isa = PBXGroup;
+			children = (
+				24121504215C700300B9069B /* Ranking */,
+			);
+			path = TradingGame;
+			sourceTree = "<group>";
+		};
+		24121504215C700300B9069B /* Ranking */ = {
+			isa = PBXGroup;
+			children = (
+				24121506215C700300B9069B /* Ranking.swift */,
+				24121505215C700300B9069B /* Controller */,
+				24121509215C714400B9069B /* View */,
+				24121508215C714400B9069B /* Model */,
+			);
+			path = Ranking;
+			sourceTree = "<group>";
+		};
+		24121505215C700300B9069B /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				241082ED2164870C00A12DF1 /* RankTableViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		24121508215C714400B9069B /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				24A08F9521631B1D0066BA33 /* RankModel.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		24121509215C714400B9069B /* View */ = {
+			isa = PBXGroup;
+			children = (
+				241082EB2164867900A12DF1 /* RankMenuView.swift */,
+				241082EF2164875F00A12DF1 /* RankTableViewCell.swift */,
+				241082F1216487A000A12DF1 /* ToRankPageButton.swift */,
+			);
+			path = View;
+			sourceTree = "<group>";
+		};
 		2D3AF493211BBEA900F5AA51 /* Help */ = {
 			isa = PBXGroup;
 			children = (
@@ -720,6 +777,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				24121503215C700300B9069B /* TradingGame */,
 				57E67D0821408C71005F290E /* Event */,
 				57E67D032140893B005F290E /* NewV3 */,
 				57663B582137794A00E09754 /* TabBar */,
@@ -1338,6 +1396,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */,
+				241082F02164875F00A12DF1 /* RankTableViewCell.swift in Sources */,
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
 				57355C0C20F7188B002E70E4 /* NewsObject.swift in Sources */,
@@ -1374,6 +1433,7 @@
 				57355C5D20F718CC002E70E4 /* SearchCoinController.swift in Sources */,
 				57BAD9532104CAD500973B45 /* TCPickerViewLightTheme.swift in Sources */,
 				2D52AF2320E46E1A00018FC0 /* ContainerView.swift in Sources */,
+				24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */,
 				57355C6420F718CC002E70E4 /* CryptoCompareCoinListResult.swift in Sources */,
 				57355C6720F718CC002E70E4 /* WalletDetail.swift in Sources */,
 				2D52AEA520E46E1A00018FC0 /* HistoryTableViewCell.swift in Sources */,
@@ -1396,6 +1456,7 @@
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */,
 				57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */,
+				241082EC2164867900A12DF1 /* RankMenuView.swift in Sources */,
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */,
 				2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */,
@@ -1500,9 +1561,12 @@
 				2D52AF2220E46E1A00018FC0 /* XAxisLabelView.swift in Sources */,
 				57BAD9D1210503A100973B45 /* ShareNewsFlashControllerV2.swift in Sources */,
 				2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */,
+				241082EE2164870C00A12DF1 /* RankTableViewController.swift in Sources */,
 				57355C6220F718CC002E70E4 /* SaveStructToRealmObjects.swift in Sources */,
 				2D52AEA720E46E1A00018FC0 /* HistoryLine.swift in Sources */,
+				241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */,
 				57BBAB6D210962C300984AA4 /* WatchListRealm.swift in Sources */,
+				24121507215C700300B9069B /* Ranking.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

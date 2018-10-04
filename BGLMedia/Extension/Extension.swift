@@ -812,6 +812,36 @@ extension UIView {
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
     }
     
+    func matchAllAnchors(top:NSLayoutYAxisAnchor?=nil,bottom:NSLayoutYAxisAnchor?=nil,leading:NSLayoutXAxisAnchor?=nil,trailing:NSLayoutXAxisAnchor?=nil,right:NSLayoutXAxisAnchor?=nil,left:NSLayoutXAxisAnchor?=nil,height:CGFloat?=nil,width:CGFloat?=nil){
+        self.translatesAutoresizingMaskIntoConstraints = false
+        // yaxis height will be overwrirted by bottom and top
+        if height != nil{
+            self.heightAnchor.constraint(equalToConstant: height!).isActive = true
+        }
+        if top != nil{
+            self.topAnchor.constraint(equalTo: top!).isActive = true
+        }
+        if bottom != nil{
+            self.bottomAnchor.constraint(equalTo: bottom!).isActive = true
+        }
+        // xaxis
+        if width != nil{
+            self.widthAnchor.constraint(equalToConstant: width!).isActive = true
+        }
+        if right != nil{
+            self.rightAnchor.constraint(equalTo: right!).isActive = true
+        }
+        if left != nil{
+            self.leftAnchor.constraint(equalTo: left!).isActive = true
+        }
+        if trailing != nil{
+            self.trailingAnchor.constraint(equalTo: trailing!).isActive = true
+        }
+        if leading != nil{
+            self.leadingAnchor.constraint(equalTo: leading!).isActive = true
+        }
+    }
+    
     func safeArea() ->UILayoutGuide{
         if #available(iOS 11.0, *) {
             return self.safeAreaLayoutGuide

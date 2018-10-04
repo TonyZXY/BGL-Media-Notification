@@ -428,3 +428,6 @@ hud_timeOut = "请求超时";
 //Event Page
 navigationTitle_event = "活动";
 
+//Ranking Page
+rankMenuTitle_Weekly = "周榜";
+rankMenuTitle_Total = "全部";

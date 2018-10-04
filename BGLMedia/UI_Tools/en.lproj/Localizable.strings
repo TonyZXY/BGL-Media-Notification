@@ -435,6 +435,6 @@ hud_timeOut = "Time Out";
 //Event Page
 navigationTitle_event = "Events";
 
-
-
-
+//Ranking Page
+rankMenuTitle_Weekly = "Weekly";
+rankMenuTitle_Total = "Total";
