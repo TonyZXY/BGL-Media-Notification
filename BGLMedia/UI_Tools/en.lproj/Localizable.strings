@@ -43,6 +43,7 @@ updateTransaction = "Update Transaction";
 loading = "Loading...";
 picker_done = "Done";
 picker_cancel = "Cancel";
+balance = "Balance";
 
 //Transaciton Page Table View
 navigationbar_transa = "Add Transaction";

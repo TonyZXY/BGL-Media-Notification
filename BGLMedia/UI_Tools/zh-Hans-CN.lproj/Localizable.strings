@@ -45,6 +45,7 @@ updateTransaction = "更新交易";
 loading = "加载中...";
 picker_done = "完成";
 picker_cancel = "取消";
+balance = "结余";
 
 //Transaciton Page Table View
 navigationbar_transa = "添加交易";

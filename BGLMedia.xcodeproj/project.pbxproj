@@ -211,6 +211,8 @@
 		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
 		B95B7FFB21588BF4004E613D /* IntrinsicContentSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */; };
 		B9BA331E2159BE0100255E2D /* EventDetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */; };
+		B9F4F3392161E0EE0038AE6B /* GameTransactionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */; };
+		B9F4F33D216590460038AE6B /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F33C216590460038AE6B /* GameModels.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -439,6 +441,8 @@
 		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 		B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntrinsicContentSize.swift; sourceTree = "<group>"; };
 		B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController2.swift; sourceTree = "<group>"; };
+		B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTransactionsController.swift; sourceTree = "<group>"; };
+		B9F4F33C216590460038AE6B /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -547,6 +551,7 @@
 		2D52AE0C20E46E1700018FC0 /* UI_Tools */ = {
 			isa = PBXGroup;
 			children = (
+				B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */,
 				2D52AE0D20E46E1700018FC0 /* AppImage.swift */,
 				2D52AE0E20E46E1700018FC0 /* CoinImageSetter.swift */,
 				2D52AE0F20E46E1700018FC0 /* Localizable.strings */,
@@ -916,6 +921,7 @@
 			isa = PBXGroup;
 			children = (
 				57355C2E20F718CC002E70E4 /* TransactionsController.swift */,
+				B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */,
 				57355C2F20F718CC002E70E4 /* SearchExchangesController.swift */,
 				57355C3120F718CC002E70E4 /* SearchTradingPairController.swift */,
 				57355C3220F718CC002E70E4 /* WalletController.swift */,
@@ -928,6 +934,7 @@
 		57355C3420F718CC002E70E4 /* Wallet_Models */ = {
 			isa = PBXGroup;
 			children = (
+				B9F4F33C216590460038AE6B /* GameModels.swift */,
 				57355C3520F718CC002E70E4 /* CoinList.swift */,
 				57355C3620F718CC002E70E4 /* MarketTradingPairs.swift */,
 				57355C3720F718CC002E70E4 /* CryptoCompareCoinsRealm.swift */,
@@ -1167,7 +1174,6 @@
 				B9530C7C2153500C002AE4D5 /* EventDetailViewController.swift */,
 				B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */,
 				B9530C7A215208F6002AE4D5 /* PopoverController.swift */,
-				B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1346,6 +1352,7 @@
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,
 				B959EF5B2146172500930DD6 /* FontController.swift in Sources */,
 				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
+				B9F4F3392161E0EE0038AE6B /* GameTransactionsController.swift in Sources */,
 				2D52AF1D20E46E1A00018FC0 /* Params.swift in Sources */,
 				57355C5920F718CC002E70E4 /* SearchExchangesController.swift in Sources */,
 				2D52AE9C20E46E1A00018FC0 /* TransactionsHistoryController.swift in Sources */,
@@ -1361,6 +1368,7 @@
 				57FC41FD20FB08560052EE02 /* LanguageController.swift in Sources */,
 				57355C4A20F718CC002E70E4 /* TransPriceCell.swift in Sources */,
 				2D52AEDF20E46E1A00018FC0 /* ChangeRiseFallColor.swift in Sources */,
+				B9F4F33D216590460038AE6B /* GameModels.swift in Sources */,
 				57BBAB67210962C300984AA4 /* MarketsView.swift in Sources */,
 				2D52AE9D20E46E1A00018FC0 /* GerneralController.swift in Sources */,
 				57355C6B20F718CC002E70E4 /* Exchange.swift in Sources */,
