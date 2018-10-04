@@ -15,6 +15,12 @@ struct User {
     init(name: String) {
         self.name = name
         coinsBalance = [CoinBalance]()
+        initialSetup()
+    }
+    
+    private mutating func initialSetup() {
+        let aud = CoinBalance(name: "AUD", amount: 1000000)
+        coinsBalance.append(aud)
     }
 }
 
