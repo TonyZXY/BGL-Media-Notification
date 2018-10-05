@@ -22,13 +22,18 @@ class NewsViewController: UIViewController,UICollectionViewDelegate,UICollection
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
     
     @objc func changeLanguage(){
-//        titleLabel.text = navigationBarItem
-//        navigationItem.titleView = titleLabel
-//        menuBar.collectionView.reloadData()
-//        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
+        titleLabel.text = navigationBarItem
+        navigationItem.titleView = titleLabel
+        menuBar.collectionView.reloadData()
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
     }
     
     @objc func changeCurrency(){
@@ -38,10 +43,6 @@ class NewsViewController: UIViewController,UICollectionViewDelegate,UICollection
         //        })
     }
     
-    deinit {
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
-//        //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
-    }
     
     func scrollToMenuIndex(menuIndex: Int){
         let indexPath = NSIndexPath(item: menuIndex, section: 0)

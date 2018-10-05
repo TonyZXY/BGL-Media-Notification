@@ -31,6 +31,17 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         tableView.dataSource = self
         tableView.separatorStyle = .none
         tableView.backgroundColor = ThemeColor().darkGreyColor()
+        
+        //for refresh
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        tableView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(tableView)
+        })
+        
         return tableView
     }()
     
@@ -38,7 +49,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         super.viewDidLoad()
         setUpView()
         setupPopButtonsName()
-        getDataFromServer()
+        self.listTableView.switchRefreshHeader(to: .refreshing)
         
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
     }
@@ -80,24 +91,36 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         popoverButtonAction(sender: dateButton)
     }
     
-    private func getDataFromServer() {
+    private func getDataFromServer(completion: ((Bool) -> Void)?) {
         URLServices.fetchInstance.passServerData(urlParameters: ["api","eventAll"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             //print(response)
             
-            let allEventViewModels = response.arrayValue.map({ (item) -> EventViewModel in
-                return EventViewModel(event: Event(item))
-            })
-            
-            //only get the events after today
-            allEventViewModels.forEach({ (eventViewModel) in
-                if eventViewModel.eventStartTime >= Date() {
-                    self.eventViewModels.append(eventViewModel)
+            if success {
+                let allEventViewModels = response.arrayValue.map({ (item) -> EventViewModel in
+                    return EventViewModel(event: Event(item))
+                })
+                
+                //only get the events after today
+                allEventViewModels.forEach({ (eventViewModel) in
+                    if eventViewModel.eventStartTime >= Date() {
+                        if !self.eventViewModels.contains(where: { (exist) -> Bool in exist.id == eventViewModel.id }) {
+                            self.eventViewModels.append(eventViewModel)
+                        }
+                    }
+                })
+                
+                //set the models base on the buttons values
+                if let hostBarButtonValue = self.hostBarButtonItem.title,
+                    let dateBarButtonValue = self.dateBarButtonItem.title {
+                    self.changeEventViewModelDateGroupTypeAndHostFilter(hostBarButtonValue)
+                    self.changeEventViewModelDateGroupTypeAndHostFilter(dateBarButtonValue)
                 }
-            })
-            
-            DispatchQueue.main.async {
-                self.updateGroupedEventsAndTableView()
+                
+                DispatchQueue.main.async {
+                    self.updateGroupedEventsAndTableView()
+                }
             }
+            completion?(success)
         }
     }
     
@@ -128,6 +151,16 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
         })
         
         listTableView.reloadData()
+    }
+    
+    @objc func handleRefresh(_ tableView: UITableView) {
+        getDataFromServer { sccuess in
+            if sccuess{
+                tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            } else{
+                tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
+            }
+        }
     }
     
     @objc func changeLanguage(){
@@ -161,8 +194,12 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     //a function of PopoverControllerDelegate
     func popoverButtonAction(sender: UIButton) {
         guard let value = sender.currentTitle else { return }
+        changeEventViewModelDateGroupTypeAndHostFilter(value)
+    }
+    
+    func changeEventViewModelDateGroupTypeAndHostFilter(_ setting: String) {
         for (index, _) in eventViewModels.enumerated() {
-            switch value {
+            switch setting {
             case dayStr:
                 eventViewModels[index].dateGroupType = eventViewModels[index].dayOfEventStartTime
             case weekStr:
@@ -172,7 +209,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
             case yearStr:
                 eventViewModels[index].dateGroupType = eventViewModels[index].yearOfEventStartTime
             default:
-                eventViewModels[index].hostFilter = value
+                eventViewModels[index].hostFilter = setting
             }
         }
         updateGroupedEventsAndTableView()
@@ -309,7 +346,9 @@ class EventListTableViewCell:UITableViewCell{
     }
     
     func updateUI() {
-        imgView.image = UIImage(named: "BlockchainCenter")
+        if let host = eventViewModel?.host {
+            imgView.image = UIImage(named: host)
+        }
         titleLabel.text = eventViewModel?.title
         hostLabel.text = eventViewModel?.hostLabel
         addressLabel.text = eventViewModel?.address

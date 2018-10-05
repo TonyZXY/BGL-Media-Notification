@@ -11,6 +11,7 @@ import SwiftyJSON
 
 struct Event {
     let eventID: String
+    let id: String
     let eventAddress: String
     let eventCity: String
     let eventDescription: String
@@ -28,6 +29,7 @@ struct Event {
     
     init(_ json: JSON) {
         eventID = json["eventID"].stringValue
+        id = json["_id"].stringValue
         eventAddress = json["eventAddress"].stringValue
         eventCity = json["eventCity"].stringValue
         eventDescription = json["eventDescription"].stringValue

@@ -10,6 +10,7 @@ import Foundation
 import UIKit
 
 struct EventViewModel {
+    let id: String
     let title: String
     let host: String
     let address: String
@@ -34,6 +35,7 @@ struct EventViewModel {
         let year = Calendar.current.component(.year, from: event.eventStartTime)
         let week = Calendar.current.component(.weekOfYear, from: event.eventStartTime)
         
+        id = event.id
         title = event.eventName
         host = event.eventHost
         address = {
