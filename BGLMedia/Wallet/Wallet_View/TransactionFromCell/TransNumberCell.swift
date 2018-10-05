@@ -209,9 +209,11 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             var value = textField.text {
             //1.2345678901234568e+16 if the number too big like this, it will cause problem
             let decimalLimit = 7
+            var coinAmount = 0.0
             
             //apply decimal limit
             if let amount = Double(value) {
+                coinAmount = amount
                 let split = String(amount).components(separatedBy: ".")
                 let integer = split.first ?? ""
                 let decimal = (split.count == 2) ? (split.last ?? "") : ""
@@ -223,10 +225,14 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             slider.value = Float((Double(value) ?? 0.0) * coinPrice * 100 / balance)
             percentageTextField.text = "\(slider.value)"
             
-            //calculate the amount for user
-            if slider.value == 100 {
+            if coinAmount > (balance / coinPrice) {
                 calculateCoinAmount()
             }
+            
+//            //calculate the amount for user
+//            if slider.value == 100 {
+//                calculateCoinAmount()
+//            }
         }
     }
     
