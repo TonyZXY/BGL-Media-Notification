@@ -93,24 +93,23 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     @objc func presentGame(_ sender: UIBarButtonItem) {
-        goToGameView()
-//        if !UserDefaults.standard.bool(forKey: "isLoggedIn"){
-//            let login = LoginController(usedPlace: 0)
-//            self.present(login, animated: true, completion: nil)
-//        } else {
-//            checkNickname()
-//        }
+        if !UserDefaults.standard.bool(forKey: "isLoggedIn"){
+            let login = LoginController(usedPlace: 0)
+            self.present(login, animated: true, completion: nil)
+        } else {
+            checkNickname()
+        }
     }
     
     func checkNickname() {
         let parameter = ["token": certificateToken, "email": email]
         URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            print(response)
+            //print(response)
             if success {
                 if response["data"]["nick_name"].stringValue == "" {
                     self.popNicknameAlert(true)
                 } else {
-                    self.goToGameView()
+                    self.goToGameView(response)
                 }
             } else {
                 self.popNetworkFailureAlert()
@@ -147,8 +146,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     @objc func registerNickname(_ nickname: String) {
         let parameter = ["token": certificateToken, "email": email, "nickname": nickname]
         URLServices.fetchInstance.passServerData(urlParameters: ["game","register"], httpMethod: "POST", parameters: parameter) { (response, success) in
+            //print(response)
             if response["code"].stringValue == "200" {
-                self.goToGameView()
+                self.goToGameView(response)
             } else if response["code"].stringValue == "789" {
                 self.popNicknameAlert(false)
             } else {
@@ -157,8 +157,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         }
     }
     
-    func goToGameView() {
-        let gameBalance = GameTransactionsController()
+    func goToGameView(_ json: JSON) {
+        let gameBalance = GameBalanceController()
+        gameBalance.gameUser = GameUser(json)
         gameBalance.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(gameBalance, animated: true)
     }

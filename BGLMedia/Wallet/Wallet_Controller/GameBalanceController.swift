@@ -49,6 +49,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
+    var gameUser: GameUser?
+    
     //The First Time load the Page
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -63,50 +65,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNewAssetsData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
-    }
-    
-    func checkNickname() {
-        let parameter = ["token": certificateToken, "email": email]
-        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            //print(response)
-            if success {
-                if response["data"]["nick_name"].stringValue == "" {
-                    self.popNicknameAlert()
-                } else {
-                    // go to game
-                }
-            } else {
-                //TODO.................
-                print("Network fail............")
-            }
-        }
-    }
-    
-    func popNicknameAlert() {
-        let alert = UIAlertController(title: textValue(name: "nickname"), message: nil, preferredStyle: .alert)
-        alert.addTextField { (textField) in  }
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] act in
-            if let nickname =  alert?.textFields?.first?.text {
-                self.registerNickname(nickname)
-            } else {
-                self.popNicknameAlert()
-            }
-            
-        }))
-        self.present(alert, animated: true)
-    }
-    
-    @objc func registerNickname(_ nickname: String) {
-        let parameter = ["token": certificateToken, "email": email, "nickname": nickname]
-        URLServices.fetchInstance.passServerData(urlParameters: ["game","register"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            if response["code"].stringValue == "200" {
-                
-            } else if response["code"].stringValue == "789" {
-                print(response["message"].stringValue)
-            } else {
-                
-            }
-        }
+        
+        print(gameUser!)
     }
     
     deinit {
