@@ -426,6 +426,32 @@ class APIServices:NSObject{
         }
     }
     
+    func getHuobiAuRiseFallPeriod(period:String,from:String,to:String,market:String,completion:@escaping (Bool,JSON)->Void){
+        let urlParam:[String:[String]] = ["Minute":["1min","30"],"Hour":["60min","4"],"Day":["1day","1"],"Week":["1day","7"]]
+        if period == "Minute" || period == "Hour" || period == "Day" || period == "Week"{
+        let urlString:String? = HuobiAu + "market/history/kline?" + "period=" + ((urlParam[period]) ?? ["histominute?","30"])[0] + "&size=" + ((urlParam[period]) ?? ["histominute?","30"])[1] + "&symbol=" + from.lowercased() + to.lowercased()
+            guard let urlStrings = urlString,
+                let url = URL(string: urlStrings)else{return completion(false,JSON())}
+            var urlRequest = URLRequest(url: url)
+            urlRequest.httpMethod = "GET"
+            
+            urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
+            Alamofire.request(urlRequest).responseJSON { (response) in
+                switch response.result {
+                case .success(let value):
+                    let response = JSON(value)
+                    completion(true,response)
+                case .failure(let error):
+                    print(error)
+                    completion(false,JSON())
+                }
+            }
+        } else{
+            completion(false,JSON())
+        }
+//        https://api.huobi.com.au/market/history/kline?period=1day&size=200&symbol=btcaud
+    }
+    
     func getLatestVersion(completion:@escaping (JSON,Bool)->Void){
         let url = URL(string: itunes + "com.blockchainglobal.bglmedia")
         var urlRequest = URLRequest(url: url!)
