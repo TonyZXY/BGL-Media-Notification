@@ -8,14 +8,32 @@
 
 import Foundation
 import UIKit
-
+import SwiftyJSON
 
 class RankTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+    
+    var allRank = [RankObjectViewModel](){
+        didSet{
+            // sort the data and reload
+            allRank.sort(by: ({$0.ranknumber < $1.ranknumber}))
+            rankTableView.reloadData()
+        }
+    }
+    
+    
+    var userRank : RankObjectViewModel?{
+        didSet{
+            userNickameLabel.text = userRank?.nickname ?? ""
+            userStatLabel.text = userRank?.statString ?? ""
+            userRankNumberLabel.text = userRank?.ranknumberString ?? ""
+        }
+    }
     
     lazy var rankTableView : UITableView = {
         var tv = UITableView()
         tv.bounces = false
-        
+        tv.backgroundColor = ThemeColor().themeColor()
+        tv.separatorStyle = .none
         tv.register(RankTableViewTopCell.self, forCellReuseIdentifier: RankTableViewTopCell.registerID)
         tv.register(RankTableViewBottomCell.self, forCellReuseIdentifier: RankTableViewBottomCell.registerID)
         tv.dataSource = self
@@ -23,31 +41,34 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         return tv
     }()
     
-    var selfRankView : UIView = {
+    var userRankView : UIView = {
         var view = UIView()
-        view.backgroundColor = .white
+        view.backgroundColor = ThemeColor().walletCellcolor()
         return view
     }()
     
-    var selfRankNumberLabel : UILabel = {
+    var userRankNumberLabel : UILabel = {
         var label = UILabel()
         label.numberOfLines =  1
+        label.textColor = .white
         label.font = UIFont.semiBoldFont(CGFloat(fontSize))
         label.text = "-100."
         return label
     }()
     
-    var selfPlayerNameLabel : UILabel = {
+    var userNickameLabel : UILabel = {
         var label = UILabel()
         label.numberOfLines =  1
+        label.textColor = .white
         label.font = UIFont.semiBoldFont(CGFloat(fontSize))
         label.text = "Player Default!!!!!"
         return label
     }()
     
-    var selfPlayerStatLabel : UILabel = {
+    var userStatLabel : UILabel = {
         var label = UILabel()
         label.numberOfLines =  1
+        label.textColor = .white
         label.font = UIFont.semiBoldFont(CGFloat(fontSize))
         label.text = "-10000"
         return label
@@ -63,40 +84,45 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func setupView(){
         view.addSubview(rankTableView)
-        view.addSubview(selfRankView)
+        view.addSubview(userRankView)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: rankTableView)
-        view.addConstraintsWithFormat(format: "H:|[v0]|", views: selfRankView)
-        view.addConstraintsWithFormat(format: "V:|[v0]-0-[v1(\(bottomCellHeight))]|", views: rankTableView,selfRankView)
+        view.addConstraintsWithFormat(format: "H:|[v0]|", views: userRankView)
+        view.addConstraintsWithFormat(format: "V:|[v0]-0-[v1(\(bottomCellHeight))]|", views: rankTableView,userRankView)
         
-        selfRankView.addSubview(selfRankNumberLabel)
-        selfRankView.addSubview(selfPlayerNameLabel)
-        selfRankView.addSubview(selfPlayerStatLabel)
+        userRankView.addSubview(userRankNumberLabel)
+        userRankView.addSubview(userNickameLabel)
+        userRankView.addSubview(userStatLabel)
         
         let factor = view.frame.width/414
         
-        selfRankView.addConstraint(NSLayoutConstraint(item: selfRankNumberLabel, attribute: .centerY, relatedBy: .equal, toItem: selfRankView, attribute: .centerY, multiplier: 1, constant: 0))
-        selfRankView.addConstraint(NSLayoutConstraint(item: selfPlayerNameLabel, attribute: .centerY, relatedBy: .equal, toItem: selfRankView, attribute: .centerY, multiplier: 1, constant: 0))
-        selfRankView.addConstraint(NSLayoutConstraint(item: selfPlayerStatLabel, attribute: .centerY, relatedBy: .equal, toItem: selfRankView, attribute: .centerY, multiplier: 1, constant: 0))
+        userRankView.addConstraint(NSLayoutConstraint(item: userRankNumberLabel, attribute: .centerY, relatedBy: .equal, toItem: userRankView, attribute: .centerY, multiplier: 1, constant: 0))
+        userRankView.addConstraint(NSLayoutConstraint(item: userNickameLabel, attribute: .centerY, relatedBy: .equal, toItem: userRankView, attribute: .centerY, multiplier: 1, constant: 0))
+        userRankView.addConstraint(NSLayoutConstraint(item: userStatLabel, attribute: .centerY, relatedBy: .equal, toItem: userRankView, attribute: .centerY, multiplier: 1, constant: 0))
         
-        selfRankView.addConstraintsWithFormat(format: "H:|-(\(10 * factor))-[v0(\(10 * factor))]-(\(10 * factor))-[v1(\(250 * factor))]", views: selfRankNumberLabel,selfPlayerNameLabel)
-        selfRankView.addConstraintsWithFormat(format: "H:[v0(\(100 * factor))]-(\(10 * factor))-|", views: selfPlayerStatLabel)
+        userRankView.addConstraintsWithFormat(format: "H:|-(\(20 * factor))-[v0]-(\(10 * factor))-[v1]", views: userRankNumberLabel,userNickameLabel)
+        userRankView.addConstraintsWithFormat(format: "H:[v0]-(\(10 * factor))-|", views: userStatLabel)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 10
+        let displayNumber = allRank.count - 2
+        if  displayNumber <= 1{
+            return 1
+        }
+        return displayNumber
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewTopCell.registerID, for: indexPath) as! RankTableViewTopCell
-            cell.backgroundColor = .yellow
             // setupview is called after cell initiated to avoid add constraint with default frame (width 320 height 44)
             cell.setupView()
+            cell.viewModels = allRank
             return cell
         }else{
             //row > 0
             let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewBottomCell.registerID, for: indexPath) as! RankTableViewBottomCell
             cell.setupView()
+            cell.rankViewModel = allRank[indexPath.row+2]
             return cell
         }
     }

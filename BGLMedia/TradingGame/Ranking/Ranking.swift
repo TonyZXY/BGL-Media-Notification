@@ -19,7 +19,7 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
         return menu
     }()
     
-    let rankMenuHeight:CGFloat = 100
+    let rankMenuHeight:CGFloat = 70
     // rank table container
     lazy var rankTableContainer: UICollectionView = {
         var layout = UICollectionViewFlowLayout()
@@ -47,7 +47,24 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        RankDataReader().getAllRankData()
+        rankDataReader.getAllRankData(completion: {(success) in
+            if success {
+                // got data and update ui in main thread
+                DispatchQueue.main.async {
+                    self.weeklyRankTableController.userRank = self.rankDataReader.getUserWeeklyViewModel()
+                    self.totalRankTableController.userRank = self.rankDataReader.getUserTotalViewModel()
+                    self.weeklyRankTableController.allRank = self.rankDataReader.getWeeklyViewModels()
+                    self.totalRankTableController.allRank = self.rankDataReader.getTotalViewModels()
+//                    print(self.rankDataReader.rankInfoModel)
+//                    print(self.rankDataReader.weeklyRankModels.count)
+//                    print(self.rankDataReader.totalRankModels.count)
+//                    print(self.rankDataReader.userRankModel)
+                }
+            }else{
+                // data getting failed
+            }
+            
+        })
     }
 
     func setupView(){
@@ -65,7 +82,10 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
         // click to scroll to the view
         let i = NSIndexPath(item: indexPath.row, section: 0)
         rankTableContainer.scrollToItem(at: i as IndexPath, at: .left, animated: true)
-        
+    }
+    
+    func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        rankMenu.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / CGFloat(rankMenu.cellLabels.count)
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -88,55 +108,86 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
     
-    
+    /**
+        responsible for getting all rankdata into dataModel and also responsible to covert dataModel to viewModel
+     */
     class RankDataReader {
+        var rankInfoModel = RankDetailModel()
+        var weeklyRankModels = [RankObjectModel]()
+        var totalRankModels = [RankObjectModel]()
+        var userRankModel = RankObjectModel()
         
-        var weeklyRankModels = [RankModel]()
-        var totalRankModels = [RankModel]()
-        var userRankModel : RankModel?
         
-        
-        func getAllRankData(){
-//            var token = UserDefaults.standard.string(forKey: "CertificateToken")
-//            var email = UserDefaults.standard.string(forKey: "UserEmail")
+        func getAllRankData(completion: @escaping (Bool) -> (Void)){
+            //            var token = UserDefaults.standard.string(forKey: "CertificateToken")
+            //            var email = UserDefaults.standard.string(forKey: "UserEmail")
             let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEwMDAwMDAyLCJwYXNzd29yZCI6ImY5ZjAwZjM0OTI4OWM1MTFmODA1YTUwNWVhMjRmYjBjMDg5MzM3MmYzNDEzZGJiYjQyNzEwMzEzNTQ1ZWMyOGMiLCJpYXQiOjE1Mzg0NDMwNDF9.BXZCtkdec6aX77w0UpmKB9suj0OxYxtGwWc6z6a0MEQ"
             let email = "test123@test.com"
             let user_id = 1000005
             URLServices.fetchInstance.passServerData(urlParameters: ["game","getRanking"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id]){ (res,success) in
                 if success{
                     print("成功啦")
-                    // record data in realm
+                    self.clearAllData()
+                    // store data
                     var data = JSON(res)["data"]
-                    let title = data["title"].string ?? ""
-                    let rank_time = Extension.method.convertStringToDate(date: data["rank_time"].string ?? "")
-                    let rank_time_string = data["rank_time_string"].string ?? ""
-                    let week_number = data["week_number"].int ?? -1
-                    // both ranking data
+                    self.rankInfoModel = RankDetailModel(data)
+//                    print(data)
+                    // both ranking data are array
                     let weekly_rank = data["weekly_rank"].array ?? []
                     let total_rank = data["total_rank"].array ?? []
                     //user rank is a single object
-                    let user_rank = data["user_rank"] ?? []
+                    let user_rank = data["user_rank"]
+                    self.userRankModel = RankObjectModel(user_rank)
                     
                     for obj in weekly_rank{
-                        let _id = obj["_id"].string ?? ""
-                        let user_id = obj["user_id"].string ?? ""
-                        let user_nickname = obj["user_nickname"].string ?? ""
-                        let total = obj["total"].float ?? -1
-                        let week_percentage = obj["week_percentage"].float ?? -1
-                        let week_rank = obj["week_rank"].int ?? -1
-                        let total_rank = obj["total_rank"].int ?? -1
+                        let rank = RankObjectModel(obj)
+                        self.weeklyRankModels.append(rank)
                     }
                     
                     for obj in total_rank{
-                        let rank = RankModel(obj)
+                        let rank = RankObjectModel(obj)
+//                        print(rank.total)
+                        self.totalRankModels.append(rank)
                     }
                     
-                    
+                    completion(true)
                     
                 } else{
                     print("失败啦")
+                    completion(false)
                 }
             }
+        }
+        
+        func clearAllData(){
+            self.rankInfoModel = RankDetailModel()
+            self.weeklyRankModels.removeAll()
+            self.totalRankModels.removeAll()
+            self.userRankModel = RankObjectModel()
+        }
+        // function that returns the viewmodels we want to display
+        func convertToViewModels(rankModels: [RankObjectModel], displayMode: RankObjectViewModel.DisplayMode)->[RankObjectViewModel]{
+            var viewModels = [RankObjectViewModel]()
+            for rankModel in rankModels{
+                viewModels.append(RankObjectViewModel(rankModel, displayMode: displayMode))
+            }
+            return viewModels
+        }
+        
+        func getWeeklyViewModels()->[RankObjectViewModel]{
+            return self.convertToViewModels(rankModels: weeklyRankModels, displayMode: RankObjectViewModel.DisplayMode.weekly)
+        }
+        
+        func getTotalViewModels()->[RankObjectViewModel]{
+            return self.convertToViewModels(rankModels: totalRankModels, displayMode: RankObjectViewModel.DisplayMode.total)
+        }
+        
+        func getUserWeeklyViewModel()->RankObjectViewModel{
+            return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.weekly)
+        }
+        
+        func getUserTotalViewModel()->RankObjectViewModel{
+            return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.total)
         }
     }
 }

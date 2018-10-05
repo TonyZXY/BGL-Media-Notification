@@ -1012,7 +1012,18 @@ extension String {
     }
 }
 
-
+extension Double {
+    func toAbbreviateString(decimal: Int)->String{
+        var surffix = ["","k","m","b","t"]
+        var value = self
+        var i = 0
+        while i < surffix.count && value > 1000{
+            value /= 1000
+            i += 1
+        }
+        return "\(String(format: "%.\(decimal)f", value))\(surffix[i])"
+    }
+}
 
 
 

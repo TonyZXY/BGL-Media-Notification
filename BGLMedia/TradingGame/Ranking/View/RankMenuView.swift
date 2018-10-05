@@ -17,24 +17,55 @@ protocol RankMenuViewDelegate {
 }
 
 // Tab menu class
-class RankMenuView : UICollectionView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+class RankMenuView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     var customDelegate : RankMenuViewDelegate?
     
     var cellLabels : [String] = [""]
+    
+    lazy var menuView: UICollectionView = {
+        let layout = UICollectionViewFlowLayout()
+        layout.scrollDirection = .horizontal
+//        layout.minimumInteritemSpacing = 0
+//        layout.minimumLineSpacing = 0
+        let cv = UICollectionView(frame: .zero, collectionViewLayout:layout)
+        cv.backgroundColor = ThemeColor().themeColor()
+        cv.delegate = self
+        cv.dataSource = self
+        cv.register(RankMenuViewCell.self, forCellWithReuseIdentifier: RankMenuViewCell.registerID)
+        cv.isScrollEnabled = false
+        cv.bounces = false
+        cv.alwaysBounceHorizontal = false
+        cv.showsHorizontalScrollIndicator = false
+        return cv
+    }()
+    
+    var horizontalBarLeftAnchorConstraint:NSLayoutConstraint?
+    func setHorizontalBar(){
+        let horizontalBarView = UIView()
+        horizontalBarView.backgroundColor = ThemeColor().themeWidgetColor()
+        addSubview(horizontalBarView)
+        horizontalBarView.translatesAutoresizingMaskIntoConstraints = false
+        horizontalBarLeftAnchorConstraint = horizontalBarView.leftAnchor.constraint(equalTo: self.leftAnchor)
+        horizontalBarLeftAnchorConstraint?.isActive = true
+        horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
+        let multiplier : CGFloat = CGFloat(1 / Float(self.cellLabels.count))
+        horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: multiplier).isActive = true
+        horizontalBarView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+    }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return cellLabels.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = self.dequeueReusableCell(withReuseIdentifier: RankMenuViewCell.registerID, for: indexPath) as! RankMenuViewCell
+        let cell = menuView.dequeueReusableCell(withReuseIdentifier: RankMenuViewCell.registerID, for: indexPath) as! RankMenuViewCell
         cell.setContent(menuText: cellLabels[indexPath.row])
-        if indexPath.row == 0 {
-            cell.backgroundColor = .red
-        }else{
-            cell.backgroundColor = .blue
-        }
+//        if indexPath.row == 0 {
+//            cell.backgroundColor = .red
+//        }else{
+//            cell.backgroundColor = .blue
+//        }
         return cell
     }
     
@@ -47,28 +78,23 @@ class RankMenuView : UICollectionView,UICollectionViewDelegate,UICollectionViewD
     }
     
     func initSetup(){
-        self.delegate = self
-        self.dataSource = self
-        self.register(RankMenuViewCell.self, forCellWithReuseIdentifier: RankMenuViewCell.registerID)
-        self.isScrollEnabled = false
-        self.bounces = false
-        self.alwaysBounceHorizontal = false
-        self.showsHorizontalScrollIndicator = false
+        addSubview(menuView)
+        addConstraintsWithFormat(format: "H:|[v0]|", views: menuView)
+        addConstraintsWithFormat(format: "V:|[v0]|", views: menuView)
+        
+        let selectindexpath = NSIndexPath(item: 0, section: 0)
+        menuView.selectItem(at: selectindexpath as IndexPath, animated: false, scrollPosition:.left)
+        
+        setHorizontalBar()
     }
     
     /**
      create the collectionview with default .zero frame and flowlayout
      */
     convenience init(menuLabels:[String]){
-        let layout = UICollectionViewFlowLayout()
-        //            // to prevent cell to exceed the bound
-        //            layout.sectionInset = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
-        layout.scrollDirection = .horizontal
-        layout.minimumInteritemSpacing = 0
-        layout.minimumLineSpacing = 0
-        self.init(frame: .zero,collectionViewLayout: layout)
-        initSetup()
+        self.init()
         self.cellLabels = menuLabels
+        initSetup()
     }
 }
 
@@ -76,13 +102,26 @@ class RankMenuView : UICollectionView,UICollectionViewDelegate,UICollectionViewD
 
 class RankMenuViewCell: UICollectionViewCell{
     public static let registerID = "rankMenuCell"
-    
-    var menuLabel : UILabel = {
-        let lb = UILabel()
-        lb.text = "default"
-        lb.backgroundColor = .white
-        return lb
+    var color = ThemeColor()
+    lazy var menuLabel : UILabel = {
+        let factor = frame.width/375
+        let menuLabel = UILabel()
+        menuLabel.font = UIFont.regularFont(28*factor)
+        menuLabel.textColor = ThemeColor().textGreycolor()
+        return menuLabel
     }()
+    
+    override var isHighlighted: Bool {
+        didSet {
+            menuLabel.textColor = isHighlighted ? ThemeColor().themeWidgetColor() : ThemeColor().textGreycolor()
+        }
+    }
+    
+    override var isSelected: Bool {
+        didSet {
+            menuLabel.textColor = isSelected ? ThemeColor().themeWidgetColor() : ThemeColor().textGreycolor()
+        }
+    }
     
     /**
      responsible for setting any changeable content in cell
@@ -92,6 +131,7 @@ class RankMenuViewCell: UICollectionViewCell{
     }
     
     func setupView(){
+        backgroundColor = color.themeColor()
         addSubview(menuLabel)
         menuLabel.translatesAutoresizingMaskIntoConstraints = false
         addConstraint(NSLayoutConstraint(item: menuLabel, attribute: .centerX, relatedBy: .equal, toItem: self, attribute: .centerX, multiplier: 1, constant: 0))
