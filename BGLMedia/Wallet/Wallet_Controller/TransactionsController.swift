@@ -12,25 +12,7 @@ import JGProgressHUD
 import SwiftKeychainWrapper
 
 
-struct transactionList{
-    var status:String = "Buy"
-    var coinName:String = "Bitcoin"
-    var coinAddName:String = "BTC"
-    var exchangeName:String = "BTCMarket"
-    var tradingPairName:String = "ETH"
-    var singlePrice:Double = 150.123
-    var amount:Double = 40.0123
-    var currencyAUD:Double = 12323.123123
-    var currencyUSD:Double = 12000.231231
-    var currencyJPY:Double = 124142414
-    var currencyEUR:Double = 10000.123123
-    var currencyCNY:Double = 12123231
-    var date:String = "2018-08-21T19:19:40.058Z"
-    var note:String = "note 1"
-}
-
 class TransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout,TransactionFrom,UITextFieldDelegate{
-//   var datepickerView = UIDatePicker()
     
     func setLoadPrice() {
         let index = IndexPath(row: 3, section: 0)
@@ -43,14 +25,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     var color = ThemeColor()
     var transaction:String = "Buy"
     let cryptoCompareClient = CryptoCompareClient()
-   
-//    var transcationData = TransactionFormData()
     var updateTransaction = EachTransactions()
     var transactionStatus = "Add"
     var transactionNumber:Int = 0
     var transactions = EachTransactions()
-//    var inputStatus = false
-    
     
     var loginStatus:Bool{
         get{
@@ -60,7 +38,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     var email:String{
         get{
-            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
             return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
@@ -93,13 +70,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         let sectionView = UIView()
         if transaction == "Buy"{
             sectionView.backgroundColor = ThemeColor().blueColor()
-//            view.backgroundColor = ThemeColor().blueColor()
         }else if transaction == "Sell" {
             sectionView.backgroundColor = ThemeColor().redColor()
-//            view.backgroundColor = ThemeColor().redColor()
         } else{
             sectionView.backgroundColor = ThemeColor().blueColor()
-//            view.backgroundColor = ThemeColor().blueColor()
         }
         return sectionView
     }
@@ -158,11 +132,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             }
             cell.price.tag = indexPath.row
             cell.price.delegate = self
-//            cell.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
-//            cell.layer.shadowOffset = CGSize(width: 0, height: 3)
-//            cell.layer.shadowOpacity = 1
-//            cell.layer.shadowRadius = 0
-//            cell.layer.masksToBounds = false
             return cell
         } else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! TransNumberCell
@@ -182,22 +151,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         } else if indexPath.row == 5{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! TransDateCell
             cell.factor = factor
-//            let toolbar = UIToolbar()
-//            toolbar.sizeToFit()
-//
-//            let doneItem = UIBarButtonItem()
-//            doneItem.title = textValue(name: "back_button")
-//            doneItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-//            doneItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
-//
-//
-//
-////            let donebutton = UIBarButtonItem(barButtonSystemItem: , target: self, action: #selector(doneclick))
-//            let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-//            let cancelbutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.cancel, target: self, action: #selector(cancelclick))
-//            toolbar.setItems([cancelbutton,flexible,doneItem], animated: false)
-//            datePicker.datePickerMode = .date
-//            datePicker.maximumDate = Date()
             let formatter = DateFormatter()
             formatter.dateStyle = .medium
             formatter.timeStyle = .none
@@ -212,7 +165,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             cell.date.inputView = datePicker
             cell.date.text = formatter.string(from: datePicker.date) + " ▼"
             newTransaction.date = Extension.method.convertDateToStringPickerDate(date: datePicker.date)
-//            cell.date.frame = CGRect(x: 0, y: 0, width: cell.date.frame.width+30, height: 20)
+            //            cell.date.frame = CGRect(x: 0, y: 0, width: cell.date.frame.width+30, height: 20)
             if transaction == "Buy"{
                 cell.dateLabel.text = textValue(name: "buyDateForm")
             } else if transaction == "Sell"{
@@ -256,24 +209,11 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 cell.time.text = formatter.string(from: timePicker.date) + " ▼"
                 newTransaction.time = Extension.method.convertTimeToStringPickerDate(date: timePicker.date)
             }
-            
-            
-            
             cell.time.tag = indexPath.row
             textFieldDidEndEditing(cell.time)
             cell.time.delegate = self
             return cell
         }
-//        else if indexPath.row == 7{
-//            let cell = tableView.dequeueReusableCell(withIdentifier: cells[7], for: indexPath) as! TransExpensesCell
-//            cell.expensesLabel.text = textValue(name: "trasactionFeeForm")
-//            cell.expensesbutton.text = textValue(name: "transactionFeeButtonForm")
-//            cell.changeText(first: transcationData.tradingPairsFirst,second:transcationData.tradingPairsSecond)
-//            cell.expenses.text = String(newTransaction.expenses)
-//            cell.expenses.tag = indexPath.row
-//            cell.expenses.delegate = self
-//            return cell
-//        }
         else if indexPath.row == 7{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[7], for: indexPath) as! TransAdditionalCell
             cell.factor = factor
@@ -288,22 +228,22 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     }
     
     @objc func showPickerView(){
-//        let datePickerContainer = UIView()
-//        datePickerContainer.frame = CGRect(x: 0, y: view.frame.height-300, width: view.frame.width, height: 300)
-//        datePickerContainer.backgroundColor = UIColor.white
-//        datepickerView.frame = CGRect(x: 0, y: 30, width: view.frame.width, height: 250)
-//        datepickerView.maximumDate = Date()
-//        datepickerView.datePickerMode = UIDatePickerMode.date
-////        datepickerView.addTarget(self, action: "dateChangedInDate:", forControlEvents: .valueChanged)
-//        datePickerContainer.addSubview(datepickerView)
-//        var doneButton = UIButton()
-//        doneButton.setTitle("Done", for: .normal)
-//        doneButton.titleLabel?.font = UIFont.semiBoldFont(18)
-//        doneButton.setTitleColor(UIColor.blue, for: .normal)
-////        doneButton.addTarget(self, action: Selector("dismissPicker:"), forControlEvents: UIControlEvents.TouchUpInside)
-//        doneButton.frame = CGRect(x: view.frame.width-50, y: 5, width: 70.0, height: 30.0)
-//        datePickerContainer.addSubview(doneButton)
-//        self.view.addSubview(datePickerContainer)
+        //        let datePickerContainer = UIView()
+        //        datePickerContainer.frame = CGRect(x: 0, y: view.frame.height-300, width: view.frame.width, height: 300)
+        //        datePickerContainer.backgroundColor = UIColor.white
+        //        datepickerView.frame = CGRect(x: 0, y: 30, width: view.frame.width, height: 250)
+        //        datepickerView.maximumDate = Date()
+        //        datepickerView.datePickerMode = UIDatePickerMode.date
+        ////        datepickerView.addTarget(self, action: "dateChangedInDate:", forControlEvents: .valueChanged)
+        //        datePickerContainer.addSubview(datepickerView)
+        //        var doneButton = UIButton()
+        //        doneButton.setTitle("Done", for: .normal)
+        //        doneButton.titleLabel?.font = UIFont.semiBoldFont(18)
+        //        doneButton.setTitleColor(UIColor.blue, for: .normal)
+        ////        doneButton.addTarget(self, action: Selector("dismissPicker:"), forControlEvents: UIControlEvents.TouchUpInside)
+        //        doneButton.frame = CGRect(x: view.frame.width-50, y: 5, width: 70.0, height: 30.0)
+        //        datePickerContainer.addSubview(doneButton)
+        //        self.view.addSubview(datePickerContainer)
     }
     
     
@@ -333,9 +273,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         newTransaction.status = transaction
         
         if newTransaction.coinName != "" && newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != "" && String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
-            
             transactionButton.setTitle(textValue(name: "loading"), for: .normal)
-            
             APIServices.fetchInstance.getCryptoCurrencyApis(from: self.newTransaction.tradingPairsName, to: ["AUD","USD","JPY","EUR","CNY"]) { (success, response) in
                 if success{
                     let allCurrencys = List<EachCurrency>()
@@ -346,126 +284,10 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                         allCurrencys.append(currencys)
                     }
                     self.newTransaction.currency = allCurrencys
-                   
-
                     if self.transactionStatus == "Update"{
-                        if self.loginStatus{
-                             let newDate = self.newTransaction.date + " " + self.newTransaction.time
-                            let transactions:[String:Any] = [
-                                "transactionID":self.newTransaction.id,
-                                "status":self.newTransaction.status,
-                                "coinName":self.newTransaction.coinName,
-                                "coinAddName":self.newTransaction.coinAbbName,
-                                "exchangeName":self.newTransaction.exchangeName,
-                                "tradingPairName":self.newTransaction.tradingPairsName,
-                                "singlePrice":self.newTransaction.singlePrice,
-                                "amount":self.newTransaction.amount,
-                                "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
-                                "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
-                                "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
-                                "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
-                                "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
-                                "date":Extension.method.convertStringToDate2(date: newDate),
-                                "note":self.newTransaction.additional,
-                                ]
-                            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":transactions]
-                            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","updateTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
-                                if success{
-                                    if let transactionId = response["data"][0]["transaction_id"].int{
-                                        self.newTransaction.id = transactionId
-                                        self.UpdateTransactionToRealm(){succees in
-                                            if success{
-                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-//                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                                self.navigationController?.popViewController(animated: true)
-                                            } else{
-                                                self.navigationController?.popViewController(animated: true)
-                                            }
-                                        }
-                                    } else{
-                                         self.navigationController?.popViewController(animated: true)
-                                    }
-                                } else{
-                                    self.navigationController?.popViewController(animated: true)
-                                }
-                            })
-                        } else{
-                            self.UpdateTransactionToRealm(){succees in
-                                if success{
-                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-//                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                    self.navigationController?.popViewController(animated: true)
-                                } else{
-                                    self.navigationController?.popViewController(animated: true)
-                                }
-                            }
-                        }
+                        self.updateTranscations()
                     }else{
-                        let realm = try! Realm()
-                        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
-                        self.newTransaction.id = lastId + 1
-                        let newDate = self.newTransaction.date + " " + self.newTransaction.time
-//                        print(Extension.method.convertStringToDate2(date: newDate))
-                        if self.loginStatus{
-                            let transactions:[String:Any] = [
-                                "status":self.newTransaction.status,
-                                "coinName":self.newTransaction.coinName,
-                                "coinAddName":self.newTransaction.coinAbbName,
-                                "exchangeName":self.newTransaction.exchangeName,
-                                "tradingPairName":self.newTransaction.tradingPairsName,
-                                "singlePrice":self.newTransaction.singlePrice,
-                                "amount":self.newTransaction.amount,
-                                "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
-                                "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
-                                "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
-                                "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
-                                "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
-                                "date":Extension.method.convertStringToDate2(date: newDate),
-                                "note":self.newTransaction.additional,
-                                ]
-                            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":[transactions]]
-                            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: "POST", parameters: body, completion: { (response, success) in
-                                if success{
-                                    print(response)
-                                    if let transactionId = response["data"][0]["transaction_id"].int{
-                                        self.newTransaction.id = transactionId
-                                        self.AddTransactionToRealm(){success in
-                                            if success{
-                                                //                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                                if self.transactionStatus == "AddSpecific"{
-                                                    //                                                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-                                                } else{
-                                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-                                                }
-                                                self.navigationController?.popViewController(animated: true)
-                                            }else{
-                                                self.navigationController?.popViewController(animated: true)
-                                            }
-                                        }
-                                    } else{
-                                        self.navigationController?.popViewController(animated: true)
-                                    }
-                                } else{
-                                    self.navigationController?.popViewController(animated: true)
-                                }
-                            })
-                        } else{
-                            self.AddTransactionToRealm(){success in
-                                if success{
-//                                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
-                                    if self.transactionStatus == "AddSpecific"{
-//                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
-                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-                                    } else{
-                                        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-                                    }
-                                    self.navigationController?.popViewController(animated: true)
-                                }else{
-                                    self.navigationController?.popViewController(animated: true)
-                                }
-                            }
-                        }
+                        self.addTransacitons()
                     }
                 } else{
                     self.navigationController?.popViewController(animated: true)
@@ -484,24 +306,116 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
+    func updateTranscations(){
+        if self.loginStatus{
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","updateTransaction"], httpMethod: "POST", parameters: self.prepareForRealm(newTransaction: self.newTransaction, transactionStatus: self.transactionStatus), completion: { (response, success) in
+                if success{
+                    if let transactionId = response["data"][0]["transaction_id"].int{
+                        self.newTransaction.id = transactionId
+                        self.UpdateTransactionToRealm(){succees in
+                            self.UpdateNotification(success: succees)
+                        }
+                    } else{
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                } else{
+                    self.navigationController?.popViewController(animated: true)
+                }
+            })
+        } else{
+            self.UpdateTransactionToRealm(){succees in
+                self.UpdateNotification(success: succees)
+            }
+        }
+    }
+    
+    func addTransacitons(){
+        let realm = try! Realm()
+        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
+        self.newTransaction.id = lastId + 1
+        if self.loginStatus{
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: "POST", parameters: self.prepareForRealm(newTransaction: self.newTransaction, transactionStatus: self.transactionStatus), completion: { (response, success) in
+                if success{
+                    if let transactionId = response["data"][0]["transaction_id"].int{
+                        self.newTransaction.id = transactionId
+                        self.AddTransactionToRealm(){success in
+                            self.AddSpecificNotification(success: success)
+                        }
+                    } else{
+                        self.navigationController?.popViewController(animated: true)
+                    }
+                } else{
+                    self.navigationController?.popViewController(animated: true)
+                }
+            })
+        } else{
+            self.AddTransactionToRealm(){success in
+                self.AddSpecificNotification(success: success)
+            }
+        }
+    }
+    
+    func AddSpecificNotification(success:Bool){
+        if success{
+            if self.transactionStatus == "AddSpecific"{
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+            }else{
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
+            }
+            self.navigationController?.popViewController(animated: true)
+        }else{
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    func UpdateNotification(success:Bool){
+        if success{
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+            self.navigationController?.popViewController(animated: true)
+        } else{
+            self.navigationController?.popViewController(animated: true)
+        }
+    }
+    
+    func prepareForRealm(newTransaction:EachTransactions,transactionStatus:String)->[String:Any]{
+        let newDate = self.newTransaction.date + " " + self.newTransaction.time
+        var transactions:[String:Any] = [
+            "status":newTransaction.status,
+            "coinName":self.newTransaction.coinName,
+            "coinAddName":self.newTransaction.coinAbbName,
+            "exchangeName":self.newTransaction.exchangeName,
+            "tradingPairName":self.newTransaction.tradingPairsName,
+            "singlePrice":self.newTransaction.singlePrice,
+            "amount":self.newTransaction.amount,
+            "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
+            "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
+            "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
+            "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
+            "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
+            "date":Extension.method.convertStringToDate2(date: newDate),
+            "note":self.newTransaction.additional,
+            ]
+        if transactionStatus == "Update"{
+            transactions["transactionID"] = newTransaction.id
+            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":transactions]
+            return body
+        } else{
+            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":[transactions]]
+            return body
+        }
+    }
+    
+    
     func AddTransactionToRealm(completion:@escaping (Bool)->Void){
         let realm = try! Realm()
-//        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
-//        self.newTransaction.id = lastId + 1
         let tran = Transactions()
         tran.coinAbbName = self.newTransaction.coinAbbName
         tran.coinName = self.newTransaction.coinName
-//        tran.exchangeName = self.newTransaction.exchangeName
-//        tran.tradingPairsName = self.newTransaction.tradingPairsName
         tran.exchangeName = "Global Average"
         tran.tradingPairsName = priceType
         let object = realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
         try! realm.write {
             if object.count != 0{
-//                if self.newTransaction.exchangeName != "Global Average"{
-//                    object[0].exchangeName = self.newTransaction.exchangeName
-//                    object[0].tradingPairsName = self.newTransaction.tradingPairsName
-//                }
                 object[0].everyTransactions.append(self.newTransaction)
             } else{
                 tran.everyTransactions.append(self.newTransaction)
@@ -519,34 +433,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         }
         completion(true)
     }
-    
-    
-    
-    //Write transaction to realm
-//    func writeToRealm(){
-//        //Write to Transaction Model to realm
-//        realm.beginWrite()
-//        var currentTransactionId:Int = 0
-//        if transactionStatus == "Update"{
-//            currentTransactionId = newTransaction.id
-//        } else {
-//            let transaction = realm.objects(AllTransactions.self)
-//            if transaction.count != 0{
-//                currentTransactionId = (transaction.last?.id)! + 1
-//            } else {
-//                currentTransactionId = 1
-//            }
-//        }
-//        let realmData:[Any] = [currentTransactionId,newTransaction.status,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.exchangeName, newTransaction.tradingPairsName,newTransaction.singlePrice,newTransaction.totalPrice,newTransaction.amount,newTransaction.date,newTransaction.time,newTransaction.expenses,newTransaction.additional,0,0,0,0,newTransaction.currency]
-//        if realm.object(ofType: AllTransactions.self, forPrimaryKey: currentTransactionId) == nil {
-//            realm.create(AllTransactions.self, value: realmData)
-//        } else {
-//            realm.create(AllTransactions.self, value: realmData, update: true)
-//        }
-//        try! realm.commitWrite()
-//        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-//        self.navigationController?.popViewController(animated: true)
-//    }
     
     //Click buy button it will turn to the "Buy" Type
     @objc func buyPage(){
@@ -578,64 +464,57 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Load current selected coins trading price
     func loadPrice(){
-//        if transactionNumber == 1 {
-//            transactionNumber = 0
-//        } else {
-            var readData:Double = 0
-            if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
-                if newTransaction.exchangeName == "Global Average"{
-                    let index = IndexPath(row: 3, section: 0)
-                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                    cell.priceType.text = " "
-                    URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + newTransaction.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
-                        if success{
-                            if let result = response["quotes"].array{
-                                for results in result{
-                                    if results["currency"].string ?? "" == priceType{
-                                        let price = results["data"]["price"].double ?? 0
-//                                        let index = IndexPath(row: 3, section: 0)
-//                                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                                        cell.priceType.text = Extension.method.scientificMethod(number: price)
-                                    }
+        var readData:Double = 0
+        if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
+            if newTransaction.exchangeName == "Global Average"{
+                let index = IndexPath(row: 3, section: 0)
+                let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                cell.priceType.text = " "
+                URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + newTransaction.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
+                    if success{
+                        if let result = response["quotes"].array{
+                            for results in result{
+                                if results["currency"].string ?? "" == priceType{
+                                    let price = results["data"]["price"].double ?? 0
+                                    cell.priceType.text = Extension.method.scientificMethod(number: price)
                                 }
                             }
                         }
                     }
-                }else if newTransaction.exchangeName == "Huobi Australia"{
-                    APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: newTransaction.coinAbbName, tradingPairName: newTransaction.tradingPairsName, exchangeName: newTransaction.exchangeName) { (response, success) in
-                        if success{
-                                let index = IndexPath(row: 3, section: 0)
-                                let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                                let price = Double(response["tick"]["close"].string ?? "0") ?? 0
-                                cell.priceType.text = Extension.method.scientificMethod(number: price)
-                        }
-                    }
-                }else{
-                    cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangeName){
-                        result in
-                        switch result{
-                        case .success(let resultData):
-                            for(_, value) in resultData!{
-                                readData = value
-                            }
-                            let index = IndexPath(row: 3, section: 0)
-                            let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                            cell.priceType.text = Extension.method.scientificMethod(number: readData)
-                        case .failure(let error):
-                            print("the error \(error.localizedDescription)")
-                        }
+                }
+            }else if newTransaction.exchangeName == "Huobi Australia"{
+                APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: newTransaction.coinAbbName, tradingPairName: newTransaction.tradingPairsName, exchangeName: newTransaction.exchangeName) { (response, success) in
+                    if success{
+                        let index = IndexPath(row: 3, section: 0)
+                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                        let price = Double(response["tick"]["close"].string ?? "0") ?? 0
+                        cell.priceType.text = Extension.method.scientificMethod(number: price)
                     }
                 }
-            } else{
-                newTransaction.singlePrice = 0
+            }else{
+                cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangeName){
+                    result in
+                    switch result{
+                    case .success(let resultData):
+                        for(_, value) in resultData!{
+                            readData = value
+                        }
+                        let index = IndexPath(row: 3, section: 0)
+                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                        cell.priceType.text = Extension.method.scientificMethod(number: readData)
+                    case .failure(let error):
+                        print("the error \(error.localizedDescription)")
+                    }
+                }
             }
-//        }
+        } else{
+            newTransaction.singlePrice = 0
+        }
     }
     
     //If this page is open from transaction history page, it can display the data in the transaction form and allow them to update
     func updateTransactionDetail(){
         if transactionStatus == "Update"{
-//            transactionNumber = 1
             newTransaction.id = updateTransaction.id
             newTransaction.coinAbbName = updateTransaction.coinAbbName
             newTransaction.coinName = updateTransaction.coinName
@@ -647,8 +526,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             newTransaction.time = updateTransaction.time
             newTransaction.expenses = updateTransaction.expenses
             newTransaction.additional = updateTransaction.additional
-//            transcationData.tradingPairsFirst = [newTransaction.coinAbbName,"%" + newTransaction.coinAbbName]
-//            transcationData.tradingPairsSecond = [newTransaction.tradingPairsName, "%" + newTransaction.coinAbbName]
         }
     }
     
@@ -707,20 +584,20 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     //Delegate from search Page
     func getExchangeName() -> String {
         return newTransaction.exchangeName
-//        return transactions.exchangeName
+        //        return transactions.exchangeName
     }
     
     func getCoinName() -> String {
         return newTransaction.coinAbbName
-//        return transactions.coinAbbName
+        //        return transactions.coinAbbName
     }
     
     func setTradingPairsFirstType(firstCoinType: [String]) {
-//        transcationData.tradingPairsFirst = firstCoinType
+        //        transcationData.tradingPairsFirst = firstCoinType
     }
     
     func setTradingPairsSecondType(secondCoinType: [String]) {
-//        transcationData.tradingPairsSecond = secondCoinType
+        //        transcationData.tradingPairsSecond = secondCoinType
     }
     
     func setCoinName(name: String) {
@@ -764,18 +641,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 transactions.amount = Double(textField.text!)!
                 newTransaction.amount = Double(textField.text!)!
             }
-//            self.newTransaction.usdTotalPrice = newTransaction.usdSinglePrice * Double(self.newTransaction.amount)
-//            self.newTransaction.audTotalPrice = newTransaction.audSinglePrice * Double(self.newTransaction.amount)
         }
-        if textField.tag == 5{
-//            transactions.date = textField.text!
-//            print(textField.text!)
-//            newTransaction.date = textField.text!
-        }
-        if textField.tag == 6{
-//            transactions.time = textField.text!
-//            newTransaction.time = textField.text!
-        }
+        if textField.tag == 5{}
+        if textField.tag == 6{}
         if textField.tag == 7{
             transactions.expenses = textField.text!
             newTransaction.expenses = textField.text!
@@ -811,23 +679,14 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         tableViews.rowHeight = 80
         tableViews.delegate = self
         tableViews.dataSource = self
-//        tableViews.bounces = false
         tableViews.separatorColor = ThemeColor().darkBlackColor()
         tableViews.separatorInset = UIEdgeInsets.zero
-//        tableViews.separatorColor = UIColor.black
-//        tableViews.separatorInset = UIEdgeInsets.init(top: -30, left: 0, bottom: -10, right: 0)
         tableViews.translatesAutoresizingMaskIntoConstraints = false
-        //        tableViews.separatorStyle = .none
         return tableViews
     }()
     
     lazy var transactionButton:UIButton = {
         var button = UIButton(type: .system)
-//        if transactionStatus == "Add" {
-//            button.setTitle("添加交易", for: .normal)
-//        } else if transactionStatus == "Update" {
-//            button.setTitle("更新交易", for: .normal)
-//        }
         button.titleLabel?.font = UIFont.semiBoldFont(20*view.frame.width/375)
         button.translatesAutoresizingMaskIntoConstraints = false
         button.setTitleColor(UIColor.white, for: .normal)
@@ -880,9 +739,9 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     }()
     
     lazy var timePicker:UIDatePicker = {
-         var timePick = UIDatePicker()
-         timePick.datePickerMode = .time
-         return timePick
+        var timePick = UIDatePicker()
+        timePick.datePickerMode = .time
+        return timePick
     }()
     
     @objc func doneDateclick(){
@@ -955,21 +814,4 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         newTransaction.time = Extension.method.convertTimeToStringPickerDate(date: timePicker.date)
         view.endEditing(true)
     }
-    
-    
-    
-//    lazy var toolBar:UIToolbar = {
-//        let toolbar = UIToolbar()
-//        toolbar.sizeToFit()
-//        let doneItem = UIBarButtonItem(title: textValue(name: "back_button"), style: .done, target: self, action: #selector(doneclick))
-//        doneItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-//        doneItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
-//        let cancelItem = UIBarButtonItem(title: textValue(name: "back_button"), style: .done, target: self, action: #selector(cancelclick))
-//        cancelItem.setTitleTextAttributes([NSAttributedStringKey.font:UIFont.regularFont(12)], for: .normal)
-//        cancelItem.setTitleTextAttributes([NSAttributedStringKey.foregroundColor: ThemeColor().systemBarButtonColor()], for: .normal)
-//        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-//        toolbar.setItems([cancelItem,flexible,doneItem], animated: false)
-//        return toolbar
-//    }()
-    
 }

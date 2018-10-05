@@ -22,7 +22,6 @@ class GloabalController: UIViewController,ExchangeSelect{
         
     }
     
-
     var newTransaction = Transactions()
     var selectStatus = "Global"
     var menuitems = ["General","Transactions","Alerts"]
@@ -33,11 +32,8 @@ class GloabalController: UIViewController,ExchangeSelect{
     let mainView = MainView()
     let allLossView = AllLossView()
     let realm = try! Realm()
-//    var coinData = try! Realm().objects(MarketTradingPairs.self)
-//    var detail = MarketTradingPairs()
     let coinDetailController = CoinDetailController()
     let general = generalDetail()
-//    var marketSelectedData = MarketTradingPairs()
     var globalMarketData = GlobalMarket()
     var pageStatus = "Global"
     var coinAbbName = ""
@@ -84,14 +80,10 @@ class GloabalController: UIViewController,ExchangeSelect{
         setUpView()
         loadData()
         setPriceChange()
-        
-        
-        
-       
+
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadMarketData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
     
@@ -99,35 +91,15 @@ class GloabalController: UIViewController,ExchangeSelect{
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateSpecificMarket"), object: nil)
     }
     
     @objc func updateMarketData(){
-//        if loginStatus{
-//            URLServices.fetchInstance.caculateAssetsData(coinAbbName: coinDetail.coinName){success in
-//                if success{
-//
-//                }else{
-//
-//                }
-//
-//            }
-            
             self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
-//        }
-        
-       
     }
     
     @objc func reloadMarketData(){
-//        URLServices.fetchInstance.caculateAssetsData(coinAbbName: coinDetails.selectCoinAbbName){success in
-//            if success{
-//                self.refreshPage()
-//                //                    self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
-//            }
-//        }
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
     }
     
     
@@ -191,11 +163,9 @@ class GloabalController: UIViewController,ExchangeSelect{
         coinDetailController.transactionHistoryController.factor = factor
         coinDetailController.alertControllers.factor = factor
         coinDetailController.gerneralController.exchangeButton.setTitle(newTransaction.exchangeName, for: .normal)
-        //        coinDetailController.gerneralController.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
         coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)
         coinDetailController.gerneralController.tradingPairButton.addTarget(self, action: #selector(editTradingPairs), for: .touchUpInside)
         let generalPage = coinDetailController.gerneralController
-  
         addChildViewControllers(childViewControllers: coinDetailController, views: view)
         
         let header = DefaultRefreshHeader.header()
@@ -212,14 +182,10 @@ class GloabalController: UIViewController,ExchangeSelect{
         titleLabel.font = UIFont.boldFont(17*factor)
         titleLabel.textColor = UIColor.white
         navigationItem.titleView = titleLabel
-        
-        if pageStatus == "WatchList"{
-            
-        } else{
+        if pageStatus != "WatchList"{
             generalPage.exchangeButton.isEnabled = false
             generalPage.tradingPairButton.isEnabled = false
         }
-        
     }
     
     @objc func handleRefresh(_ scrollView:UIScrollView){
@@ -246,21 +212,15 @@ class GloabalController: UIViewController,ExchangeSelect{
                                 self.WatchListData[0].price = response["data"]["quotes"][priceType]["price"].double ?? 0
                                 self.WatchListData[0].profitChange = response["data"]["quotes"][priceType]["percent_change_24h"].double ?? 0
                             }
-                            dispatchGroup.leave()
-                        } else{
-                            dispatchGroup.leave()
-                        }
+                        } else{}
+                        dispatchGroup.leave()
                     }
                 } else{
                     dispatchGroup.leave()
                 }
             }else{
                 reloadData(){success in
-                    if success{
-                        dispatchGroup.leave()
-                    }else{
-                        dispatchGroup.leave()
-                    }
+                     dispatchGroup.leave()
                 }
             }
         }else{
@@ -271,10 +231,8 @@ class GloabalController: UIViewController,ExchangeSelect{
                             self.GlobalData[0].price = response["data"]["quotes"][priceType]["price"].double ?? 0
                             self.GlobalData[0].percent24h = response["data"]["quotes"][priceType]["percent_change_24h"].double ?? 0
                         }
-                        dispatchGroup.leave()
-                    } else{
-                         dispatchGroup.leave()
-                    }
+                    } else{}
+                    dispatchGroup.leave()
                 }
             } else{
                 dispatchGroup.leave()
@@ -283,11 +241,7 @@ class GloabalController: UIViewController,ExchangeSelect{
         
         dispatchGroup.enter()
         getRiseFallData(){success in
-            if success{
-                dispatchGroup.leave()
-            } else{
-                dispatchGroup.leave()
-            }
+            dispatchGroup.leave()
         }
         
         dispatchGroup.notify(queue:.main){
@@ -395,16 +349,6 @@ class GloabalController: UIViewController,ExchangeSelect{
         return allTradingPairs
     }
     
-//    @objc func edit(){
-//        let market = MarketSelectController()
-//        market.newTransaction.coinAbbName = general.coinAbbName
-//        market.newTransaction.coinName = general.coinName
-//        market.newTransaction.exchangName = general.exchangeName
-//        market.newTransaction.tradingPairsName = general.tradingPairs
-//        market.selectStatus = "WatchList"
-//        navigationController?.pushViewController(market, animated: true)
-//    }
-    
     @objc func loadData(){
         let generalPage = coinDetailController.gerneralController
         if pageStatus == "WatchList"{
@@ -412,19 +356,14 @@ class GloabalController: UIViewController,ExchangeSelect{
             general.coinName = WatchListData[0].coinName
             general.exchangeName = WatchListData[0].market
             general.tradingPairs = WatchListData[0].tradingPairsName
-            
             let candleChartDatas = candleChartData()
             candleChartDatas.coinSymbol = general.coinAbbName
             candleChartDatas.coinExchangeName = general.exchangeName
             candleChartDatas.coinTradingPairsName = general.tradingPairs
             generalPage.candleChartDatas = candleChartDatas
-            
             checkDataRiseFallColor(risefallnumber: WatchListData[0].price, label: generalPage.totalNumber, currency: WatchListData[0].tradingPairsName, type: "Default")
-            
-//            generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:WatchListData[0].price)
             generalPage.exchangeButton.setTitle(WatchListData[0].market, for: .normal)
             generalPage.tradingPairButton.setTitle(WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName, for: .normal)
-            
         } else{
             generalPage.totalNumber.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number:coinRealm[0].price)
             general.coinAbbName = GlobalData[0].coinAbbName
@@ -452,13 +391,6 @@ class GloabalController: UIViewController,ExchangeSelect{
         coinDetailController.alertControllers.coinName.coinName = general.coinName
     }
     
-    func loadMarketData(){
-        //        let generalPage = coinDetailController.gerneralController
-        //        generalPage.tradingPairs.text = WatchListData[0].coinAbbName + "/" + WatchListData[0].tradingPairsName
-        //        generalPage.market.text = WatchListData[0].market
-        
-    }
-    
     func addChildViewControllers(childViewControllers:UIViewController,views:UIView){
         addChildViewController(childViewControllers)
         views.addSubview(childViewControllers.view)
@@ -471,53 +403,8 @@ class GloabalController: UIViewController,ExchangeSelect{
         childViewControllers.view.topAnchor.constraint(equalTo: views.topAnchor).isActive = true
         childViewControllers.view.leftAnchor.constraint(equalTo: views.leftAnchor).isActive = true
         childViewControllers.view.widthAnchor.constraint(equalTo: views.widthAnchor).isActive = true
-//        childViewControllers.view.bottomAnchor.constraint(equalTo: views.bottomAnchor).isActive = true
-//        if #available(iOS 11.0, *) {
-//            childViewControllers.view.bottomAnchor.constraint(equalTo: views.safeAreaLayoutGuide.bottomAnchor).isActive = true
-//        } else {
-//            childViewControllers.view.bottomAnchor.constraint(equalTo: views.bottomAnchor).isActive = true
-//        }
         childViewControllers.view.heightAnchor.constraint(equalTo: views.heightAnchor).isActive = true
     }
-    
-    //Get coins global data and Global Average Price
-    //    func getCoinGloablDetail(){
-    //        let coinNameId = self.getCoinName(coinAbbName: coinDetail.coinName)
-    //        print(coinNameId)
-    //        if coinNameId != 0 {
-    //            GetDataResult().getMarketCapCoinDetail(coinId: coinNameId, priceTypes: priceType){(globalMarket,bool) in
-    //                if bool {
-    //                    DispatchQueue.main.async {
-    //                         self.globalMarketData = globalMarket!
-    //                         self.loadData()
-    //                         self.coinDetailController.gerneralController.spinner.stopAnimating()
-    //                    }
-    //                } else {
-    //                    self.coinDetailController.gerneralController.spinner.stopAnimating()
-    //                }
-    //            }
-    //        }
-    //    }
-    
-    //Get coin Id
-    //    func getCoinName(coinAbbName:String)->Int{
-    //        let data = GetDataResult().getMarketCapCoinList()
-    //        var coinId:Int = 0
-    //
-    //        for value in data {
-    //            if value.symbol == coinAbbName{
-    //                coinId = value.id!
-    //            }
-    //        }
-    //        if coinId == 0{
-    //            self.coinDetailController.gerneralController.spinner.stopAnimating()
-    //            let generalPage = coinDetailController.gerneralController
-    //            generalPage.marketCapResult.text = "--"
-    //            generalPage.volumeResult.text = "--"
-    //            generalPage.circulatingSupplyResult.text = "--"
-    //        }
-    //        return coinId
-    //    }
     
     @objc func setPriceChange() {
         getRiseFallData(){_ in}
@@ -542,53 +429,16 @@ class GloabalController: UIViewController,ExchangeSelect{
             }
         }
         
-        print(realmMarket)
-        
         if realmCoinAbbName != "" && realmTradingPairsName != "" && realmMarket != ""{
             if realmMarket == "Huobi Australia"{
-                APIServices.fetchInstance.getHuobiAuRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket){ (success, response) in
-                    if success{
-                        print("huobi success")
-                        print(response)
-                        if response["status"].string ?? "" == "ok"{
-                            if let periodData = response["data"].array{
-                                if periodData != []{
-                                    let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                                    let change = (price /  periodData.first!["open"].double!) * 100
-                                    checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
-                                    checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
-                                    self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-                                }
-                            }
-                            completion(true)
-                        }else{
-                            completion(false)
-                        }
-                    }else{
-                        completion(false)
-                    }
+                self.getHuobiRiseFallData(chartPeriod: chartPeriod, realmCoinAbbName: realmCoinAbbName, realmTradingPairsName: realmTradingPairsName, realmMarket: realmMarket){
+                    success in
+                    completion(true)
                 }
             }else{
-                APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
-                    if success{
-                        if response["Response"].string ?? "" == "Success"{
-                            if let periodData = response["Data"].array{
-                                //                            print(response["Data"].array)
-                                if periodData != []{
-                                    let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                                    let change = (price /  periodData.first!["open"].double!) * 100
-                                    checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
-                                    checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
-                                    self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-                                }
-                            }
-                            completion(true)
-                        } else{
-                            completion(false)
-                        }
-                    } else{
-                        completion(false)
-                    }
+                self.getCryptoCompareData(chartPeriod: chartPeriod, realmCoinAbbName: realmCoinAbbName, realmTradingPairsName: realmTradingPairsName, realmMarket: realmMarket){
+                    success in
+                    completion(true)
                 }
             }
         } else{
@@ -597,68 +447,52 @@ class GloabalController: UIViewController,ExchangeSelect{
     }
     
     
+    func getHuobiRiseFallData(chartPeriod: String, realmCoinAbbName: String, realmTradingPairsName: String, realmMarket: String,completion:@escaping (Bool)->Void){
+        APIServices.fetchInstance.getHuobiAuRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket){ (success, response) in
+            if success{
+                if response["status"].string ?? "" == "ok"{
+                    if let periodData = response["data"].array{
+                        if periodData != []{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price /  periodData.first!["open"].double!) * 100
+                            checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                            checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
+                            self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                        }
+                    }
+                    completion(true)
+                }else{
+                    completion(false)
+                }
+            }else{
+                completion(false)
+            }
+        }
+    }
     
-//    func getRiseFallData(period:String,from:String, to:String, market:String,complection:@escaping (Bool,Double,Double)->Void){
-//        if period == "Week"{
-//            APIServices.fetchInstance.getRiseFallWeek(from: "BTC", to: "USD", market: "Coinbase", limit: 5) { (success, response) in
-//                if success{
-//                    if response["Response"].string ?? "" == "Success"{
-//                        if let periodData = response["Data"].array{
-//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-//                            let change = (price /  periodData.first!["open"].double!) * 100
-//                            complection(true,price,change)
-//                        } else{
-//                            complection(false,0,0)
-//                        }
-//                    } else{
-//                        complection(false,0,0)
-//                    }
-//                } else{
-//                    complection(false,0,0)
-//                }
-//            }
-//        } else if period == "Day"{
-//            APIServices.fetchInstance.getRiseFallDay(from: "BTC", to: "USD", market: "Bitstamp", limit: 23) { (success, response) in
-//                if success{
-//                    if response["Response"].string ?? "" == "Success"{
-//                        if let periodData = response["Data"].array{
-//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-//                            let change = (price /  periodData.first!["open"].double!) * 100
-//                            complection(true,price,change)
-//                        }
-//                    }
-//                }
-//            }
-//        }else if period == "Hour"{
-//            APIServices.fetchInstance.getRiseFallHour(from: "BTC", to: "USD", market: "Bitstamp", limit: 3) { (success, response) in
-//                if success{
-//                    if response["Response"].string ?? "" == "Success"{
-//                        print(response)
-//                        if let periodData = response["Data"].array{
-//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-//                            let change = (price /  periodData.first!["open"].double!) * 100
-//                            complection(true,price,change)
-//                        }
-//                    }
-//                }
-//            }
-//        }else if period == "Minute"{
-//            APIServices.fetchInstance.getRiseFallMin(from: "BTC", to: "USD", market: "Bitstamp", limit: 29) { (success, response) in
-//                if success{
-//                    if response["Response"].string ?? "" == "Success"{
-//                        print(response)
-//                        if let periodData = response["Data"].array{
-//                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-//                            let change = (price /  periodData.first!["open"].double!) * 100
-//                            complection(true,price,change)
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//    }
-    
-    
+    func getCryptoCompareData(chartPeriod: String, realmCoinAbbName: String, realmTradingPairsName: String, realmMarket: String,completion:@escaping (Bool)->Void){
+        APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
+            if success{
+                if response["Response"].string ?? "" == "Success"{
+                    if let periodData = response["Data"].array{
+                        //                            print(response["Data"].array)
+                        if periodData != []{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price /  periodData.first!["open"].double!) * 100
+                            checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                            checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
+                            self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                        }
+                    }
+                    completion(true)
+                } else{
+                    completion(false)
+                }
+            } else{
+                completion(false)
+            }
+        }
+    }
 }
 
 
