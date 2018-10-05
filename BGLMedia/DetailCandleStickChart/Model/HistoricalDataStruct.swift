@@ -13,10 +13,13 @@ struct HistoricalDataStruct: Codable {
     
     
     
-    var Data = [candleStickUnit?]()
+    private var Data:[candleStickUnit?]?
+    private var data:[candleStickUnit?]?
+//    var data = [candleStickUnit?]()
     
     struct candleStickUnit: Codable {
-        let time: Int
+        var id:Int?
+        var time: Int?
         var close: Double
         var high: Double
         var low: Double
@@ -35,34 +38,77 @@ struct HistoricalDataStruct: Codable {
     init(data: [candleStickUnit?]) {
         self.Data = data
     }
+    
+    func candleStickData() -> [candleStickUnit?]? {
+        return Data ?? data
+    }
 }
 
 extension HistoricalDataStruct {
     var selectedData: [candleStickUnit?] {
-        var data = [HistoricalDataStruct.candleStickUnit]()
+        var mutableData = [HistoricalDataStruct.candleStickUnit]()
         var count = 0
         // Set close of previous equal to open of latest
         var latestOpen: Double?
-        for index in stride(from: self.Data.count - 1, to: 0, by: -Params.interval) {
-            if var dataUnit = self.Data[index] {
+        guard var datas = self.candleStickData() else{return []}
+        
+        
+        _ = candleStickUnit.self
+        for index in stride(from: datas.count - 1, to: 0, by: -Params.interval) {
+            if var dataUnit = datas[index] {
                 let start = index - Params.interval + 1 > 0 ? index - Params.interval + 1 : 0
-                
-                let subArray = self.Data[start...index]
+                var subArray = datas[start...index]
                 dataUnit.high = subArray.compactMap { $0?.high }.max()!
                 dataUnit.low = subArray.compactMap { $0?.low }.min()!
                 
+                if Params.interval == 7{
+                    //Error data fix, get the second highest data for global average
+                    let errorData = subArray.filter{ $0?.high ?? 0 > ($0?.low) ?? 0 * 10}
+                    if errorData.count != 0 && subArray.count != 0{
+                        subArray.sort(){ Int($0?.high ?? 0) > Int($1?.high ?? 0)}
+                        subArray.sort(){ Int($0?.high ?? 0) > Int($1?.high ?? 0)}
+                        subArray.removeFirst()
+                        dataUnit.high = subArray.first??.high ?? 0
+                    }
+                }
                 if let open = latestOpen {
                     dataUnit.close = open
                 }
                 latestOpen = dataUnit.open
-                data.append(dataUnit)
+                mutableData.append(dataUnit)
             }
             count += 1
             if count == Params.amountOfCandlesDisplayed * Params.multipleData {
                 break
             }
         }
-        return data.reversed()
+        
+       //Fill empty data to HuobiAU
+        let dataCount = mutableData.count
+        let displayCount = Params.amountOfCandlesDisplayed * Params.multipleData
+        if dataCount < displayCount{
+            let minPrice:Double = Double(mutableData.map{$0.low}.min() ?? 0)
+            var emptyArray = [Int]()
+            if let earlyTimestamp = Int?(mutableData.map{$0.id ?? 0}.min() ?? 0){
+                var lastTimestamp = earlyTimestamp
+                for _ in 1...(displayCount-dataCount){
+                    lastTimestamp = lastTimestamp - 604800
+                    emptyArray.append(lastTimestamp)
+                }
+            }
+            
+            if mutableData.count == 13{
+                for result in emptyArray{
+                    mutableData.append(candleStickUnit.init(id: result, time: nil, close: minPrice, high: minPrice, low: minPrice, open: minPrice))
+                }
+            }
+        }
+//        var ii = [Int]()
+//        for ss in mutableData.reversed(){
+//            ii.append(ss.time ?? ss.id ?? 0)
+//        }
+//        print(ii)
+        return mutableData.reversed()
     }
     
     var highest: Double? {
@@ -97,7 +143,7 @@ extension HistoricalDataStruct {
         let converter = DateTimeConverter()
         let dates:[String] = selectedData.compactMap {
             if let data = $0 {
-                return converter.convert(timestamp: Double(data.time))
+                return converter.convert(timestamp: Double(data.time ?? data.id!))
             }
             return nil
         }
