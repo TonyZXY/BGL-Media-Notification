@@ -9,7 +9,7 @@
 import Foundation
 
 struct GameUser {
-    let name: String
+    let name: String?
     var coinsBalance: [CoinBalance]
     
     init(name: String) {

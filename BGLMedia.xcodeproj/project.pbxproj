@@ -213,6 +213,7 @@
 		B9BA331E2159BE0100255E2D /* EventDetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */; };
 		B9F4F3392161E0EE0038AE6B /* GameTransactionsController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */; };
 		B9F4F33D216590460038AE6B /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F33C216590460038AE6B /* GameModels.swift */; };
+		B9F4F33F2165D5AB0038AE6B /* GameBalanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -443,6 +444,7 @@
 		B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController2.swift; sourceTree = "<group>"; };
 		B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTransactionsController.swift; sourceTree = "<group>"; };
 		B9F4F33C216590460038AE6B /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
+		B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBalanceController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -920,6 +922,7 @@
 		57355C2C20F718CC002E70E4 /* Wallet_Controller */ = {
 			isa = PBXGroup;
 			children = (
+				B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */,
 				57355C2E20F718CC002E70E4 /* TransactionsController.swift */,
 				B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */,
 				57355C2F20F718CC002E70E4 /* SearchExchangesController.swift */,
@@ -1445,6 +1448,7 @@
 				2D52AF1B20E46E1A00018FC0 /* CandleStickChartViewController.swift in Sources */,
 				2D52AF1120E46E1A00018FC0 /* NewsInFlashNewsRealm.swift in Sources */,
 				240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */,
+				B9F4F33F2165D5AB0038AE6B /* GameBalanceController.swift in Sources */,
 				57355C5420F718CC002E70E4 /* MarketCapEndpoint.swift in Sources */,
 				2D52AE9A20E46E1A00018FC0 /* AlertController.swift in Sources */,
 				5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */,

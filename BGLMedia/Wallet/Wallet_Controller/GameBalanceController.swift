@@ -1,9 +1,9 @@
-
-//  WalletController.swift
-//  news app for blockchain
 //
-//  Created by Bruce Feng on 3/5/18.
-//  Copyright © 2018 Sheng Li. All rights reserved.
+//  GameBalanceController.swift
+//  BGLMedia
+//
+//  Created by Fan Wu on 10/4/18.
+//  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
 import UIKit
@@ -11,21 +11,16 @@ import RealmSwift
 import SwiftKeychainWrapper
 import SwiftyJSON
 
-
-
-class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate{
+class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     var image = AppImage()
-//    let realm = try! Realm()
-    //    var all = try! Realm().objects(MarketTradingPairs.self)
+
     let cryptoCompareClient = CryptoCompareClient()
-    //    var walletResults = [MarketTradingPairs]()
     var coinDetail = SelectCoin()
     var totalProfit:Double = 0
     var totalAssets:Double = 0
     var changeLaugageStatus:Bool = false
     var changeCurrencyStatus:Bool = false
     var countField:String = ""
-    //    var walletResults = [MarketTradingPairs]()
     
     let realizedHint = HintAlertController()
     let unrealizedHint = HintAlertController()
@@ -44,7 +39,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     var email:String{
         get{
-            //            return UserDefaults.standard.string(forKey: "UserEmail") ?? "null"
             return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
         }
     }
@@ -58,88 +52,46 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     //The First Time load the Page
     override func viewDidLoad() {
         super.viewDidLoad()
-
         setUpBasicView()
         checkTransaction()
-//        if loginStatus{
-//            getAssets(){success in}
-//        }
-//        print(realm.objects(EachTransactions.self))
-//        print(realm.objects(Transactions.self))
-//        print(realm.objects(EachCurrency.self))
         DispatchQueue.main.async(execute: {
-            //                    self.newsTableView.beginHeaderRefreshing()
             self.walletList.switchRefreshHeader(to: .refreshing)
         })
-//        walletList.switchRefreshHeader(to: .refreshing)
 
-//        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(updateTransaction), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNewAssetsData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
-        
-//        for result in assetss{
-//            print(result.everyTransactions)
-//        }
-//        print(assetss)
-//        print(try! Realm().objects(EachTransactions.self))
-        
-        //for Game
-        let gameBarButtonItem = UIBarButtonItem(title: "Game", style: .done, target: self, action: #selector(presentGame))
-        self.navigationItem.rightBarButtonItem  = gameBarButtonItem
-    }
-    
-    @objc func presentGame(_ sender: UIBarButtonItem) {
-        goToGameView()
-//        if !UserDefaults.standard.bool(forKey: "isLoggedIn"){
-//            let login = LoginController(usedPlace: 0)
-//            self.present(login, animated: true, completion: nil)
-//        } else {
-//            checkNickname()
-//        }
     }
     
     func checkNickname() {
         let parameter = ["token": certificateToken, "email": email]
         URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            print(response)
+            //print(response)
             if success {
                 if response["data"]["nick_name"].stringValue == "" {
-                    self.popNicknameAlert(true)
+                    self.popNicknameAlert()
                 } else {
-                    self.goToGameView()
+                    // go to game
                 }
             } else {
-                self.popNetworkFailureAlert()
+                //TODO.................
+                print("Network fail............")
             }
         }
     }
     
-    func popNetworkFailureAlert() {
-        let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true)
-    }
-    
-    func popNicknameAlert(_ isFirst: Bool) {
-        var alert = UIAlertController()
-        if isFirst {
-            alert = UIAlertController(title: textValue(name: "nickname"), message: nil, preferredStyle: .alert)
-        } else {
-            alert = UIAlertController(title: textValue(name: "nicknameNotUnique"), message: nil, preferredStyle: .alert)
-        }
+    func popNicknameAlert() {
+        let alert = UIAlertController(title: textValue(name: "nickname"), message: nil, preferredStyle: .alert)
         alert.addTextField { (textField) in  }
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] act in
             if let nickname =  alert?.textFields?.first?.text {
-                if nickname == "" {
-                    self.popNicknameAlert(true)
-                } else {
-                    self.registerNickname(nickname)
-                }
+                self.registerNickname(nickname)
+            } else {
+                self.popNicknameAlert()
             }
+            
         }))
         self.present(alert, animated: true)
     }
@@ -148,25 +100,19 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let parameter = ["token": certificateToken, "email": email, "nickname": nickname]
         URLServices.fetchInstance.passServerData(urlParameters: ["game","register"], httpMethod: "POST", parameters: parameter) { (response, success) in
             if response["code"].stringValue == "200" {
-                self.goToGameView()
+                
             } else if response["code"].stringValue == "789" {
-                self.popNicknameAlert(false)
+                print(response["message"].stringValue)
             } else {
-                self.popNetworkFailureAlert()
+                
             }
         }
     }
     
-    func goToGameView() {
-        let gameBalance = GameTransactionsController()
-        gameBalance.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(gameBalance, animated: true)
-    }
-    
     deinit {
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
+        //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-//        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
+        //        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "updateTransaction"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
@@ -186,22 +132,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                 self.walletList.reloadData()
             }
         }
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-//        if changeLaugageStatus || changeCurrencyStatus{
-//            if changeLaugageStatus{
-//                walletList.switchRefreshHeader(to: .removed)
-//                walletList.configRefreshHeader(with:addRefreshHeaser(), container: self, action: {
-//                    self.handleRefresh(self.walletList)
-//                })
-//            }
-//            self.changeLaugageStatus = false
-//            self.changeCurrencyStatus = false
-//            DispatchQueue.main.async(execute: {
-//            self.walletList.switchRefreshHeader(to: .refreshing)
-//            })
-//        }
     }
     
     func checkTransaction(){
@@ -225,7 +155,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     @objc func changeCurrency(){
-//        changeCurrencyStatus = true
         DispatchQueue.main.async(execute: {
             self.walletList.switchRefreshHeader(to: .refreshing)
         })
@@ -239,14 +168,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     //Each Table View Cell Create
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let factor = view.frame.width/375
-//        let cell = tableView.dequeueReusableCell(withIdentifier: "WalletCell", for: indexPath) as! WalletsCell
         let cell = WalletsCell(style: UITableViewCellStyle.default, reuseIdentifier: "WalletCell")
         cell.factor = factor
         let assets = assetss[indexPath.row]
         cell.coinName.text = assets.coinName
         cell.coinAmount.text = Extension.method.scientificMethod(number: assets.totalAmount) + " " + assets.coinAbbName
-            
-//            String(assets.totalAmount) + assets.coinAbbName
+        
         checkDataRiseFallColor(risefallnumber: assets.defaultCurrencyPrice, label: cell.coinSinglePrice,currency:priceType, type: "Default")
         checkDataRiseFallColor(risefallnumber: assets.defaultTotalPrice, label: cell.coinTotalPrice,currency:priceType, type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
@@ -262,7 +189,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         if assets.unrealizedPrice != 0{
             cell.unrealisedPrice.text = String(Extension.method.scientificMethod(number: assets.unrealizedPrice))
             if String(assets.unrealizedPrice).prefix(1) != "-" {
-                 cell.unrealisedLabel.text = "Realized Profit:"
+                cell.unrealisedLabel.text = "Realized Profit:"
             } else{
                 cell.unrealisedLabel.text = "Realized Loss:"
             }
@@ -309,7 +236,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             for each in result.everyTransactions{
                 let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
                 if each.status == "Sell"{
-                   sellTotalPrice += (((currencyResult.first?.price)!) - singleAverageBuyPrice) * each.amount
+                    sellTotalPrice += (((currencyResult.first?.price)!) - singleAverageBuyPrice) * each.amount
                 }
             }
             
@@ -394,53 +321,53 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             }else if result.exchangeName == "Huobi Australia"{
                 APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: result.coinAbbName, tradingPairName: result.tradingPairsName, exchangeName: result.exchangeName) { (response, success) in
                     if success{
-                            singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
-                            APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
-                                if success{
-                                    for result in response{
-                                        currency = (result.1.double) ?? 0
-                                    }
-                                    let tran = Transactions()
-                                    tran.coinAbbName = result.coinAbbName
-                                    tran.transactionPrice = transactionPrice
-                                    tran.defaultCurrencyPrice = singlePrice * currency
-                                    tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
-                                    tran.totalAmount = amount
-                                    tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-                                    tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
-                                    
-                                    self.totalAssets += tran.defaultTotalPrice
-                                    self.totalProfit += tran.totalRiseFallNumber
-                                    
-                                    floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
-                                    
-                                    
-                                    
-                                    
-                                    let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
-                                    try! Realm().write {
-                                        if object.count != 0{
-                                            object[0].currentSinglePrice = singlePrice
-                                            object[0].currentTotalPrice = singlePrice * amount
-                                            object[0].currentNetValue = transactionPrice * (1/currency)
-                                            object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
-                                            object[0].transactionPrice = transactionPrice
-                                            object[0].defaultCurrencyPrice = singlePrice * currency
-                                            object[0].defaultTotalPrice = (singlePrice * currency) * amount
-                                            object[0].totalAmount = amount
-                                            object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-                                            object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
-                                            object[0].floatingPrice = floatingPrice
-                                            object[0].unrealizedPrice = unrealizedPrice
-                                            object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
-                                        }
-                                    }
-                                    dispatchGroup.leave()
-                                } else{
-                                    completion(false)
-                                    dispatchGroup.leave()
+                        singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
+                        APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
+                            if success{
+                                for result in response{
+                                    currency = (result.1.double) ?? 0
                                 }
+                                let tran = Transactions()
+                                tran.coinAbbName = result.coinAbbName
+                                tran.transactionPrice = transactionPrice
+                                tran.defaultCurrencyPrice = singlePrice * currency
+                                tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
+                                tran.totalAmount = amount
+                                tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
+                                tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
+                                
+                                self.totalAssets += tran.defaultTotalPrice
+                                self.totalProfit += tran.totalRiseFallNumber
+                                
+                                floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
+                                
+                                
+                                
+                                
+                                let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
+                                try! Realm().write {
+                                    if object.count != 0{
+                                        object[0].currentSinglePrice = singlePrice
+                                        object[0].currentTotalPrice = singlePrice * amount
+                                        object[0].currentNetValue = transactionPrice * (1/currency)
+                                        object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
+                                        object[0].transactionPrice = transactionPrice
+                                        object[0].defaultCurrencyPrice = singlePrice * currency
+                                        object[0].defaultTotalPrice = (singlePrice * currency) * amount
+                                        object[0].totalAmount = amount
+                                        object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
+                                        object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
+                                        object[0].floatingPrice = floatingPrice
+                                        object[0].unrealizedPrice = unrealizedPrice
+                                        object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
+                                    }
+                                }
+                                dispatchGroup.leave()
+                            } else{
+                                completion(false)
+                                dispatchGroup.leave()
                             }
+                        }
                     } else{
                         completion(false)
                         dispatchGroup.leave()
@@ -478,7 +405,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                                         object[0].currentSinglePrice = singlePrice
                                         object[0].currentTotalPrice = singlePrice * amount
                                         object[0].currentNetValue = transactionPrice * (1/currency)
-                                        object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))                  
+                                        object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
                                         object[0].transactionPrice = transactionPrice
                                         object[0].defaultCurrencyPrice = singlePrice * currency
                                         object[0].defaultTotalPrice = (singlePrice * currency) * amount
@@ -510,14 +437,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     
     @objc func updateTransaction(){
-//        checkTransaction()
-//        loadData(){success in
-//            if success{
-//                self.caculateTotal()
-//                self.walletList.reloadData()
-//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-//            }
-//        }
         
         if loginStatus{
             URLServices.fetchInstance.getAssets(){success in
@@ -527,7 +446,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                         self.caculateTotal()
                         self.walletList.reloadData()
                         self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-//                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
+                        //                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
                     } else{
                         self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                     }
@@ -540,7 +459,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
                     self.caculateTotal()
                     self.walletList.reloadData()
                     self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-//                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
                 } else{
                     self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                 }
@@ -560,7 +478,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     
     func caculateTotal(){
-
+        
         var totalNumbers:Double = 0
         var totalChanges:Double = 0
         var totalUnrealized:Double = 0
@@ -570,7 +488,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
             totalChanges += result.floatingPrice
             totalUnrealized += result.floatingPrice
             totalRealized += result.unrealizedPrice
-//            totalChanges += result.totalRiseFallNumber
         }
         
         
@@ -586,11 +503,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         let transaction = TransactionsController()
         transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
-        
-        //        let vc = CustomAlertController()
-        //        vc.view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
-        //        self.addChildViewController(vc)
-        //        view.addSubview(vc.view)
     }
     
     
@@ -662,7 +574,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     
-
+    
     
     
     //Select specific coins and change to detail page
@@ -675,14 +587,6 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         detailPage.coinDetailController.alertControllers.status = "detailPage"
         navigationController?.pushViewController(detailPage, animated: true)
     }
-    
-    //TableView Refresh Spinnner
-    //    lazy var refresher: UIRefreshControl = {
-    //        let refreshControl = UIRefreshControl()
-    //        refreshControl.addTarget(self, action: #selector(self.handleRefresh(_:)), for: .valueChanged)
-    //        refreshControl.tintColor = UIColor.white
-    //        return refreshControl
-    //    }()
     
     func setUpBasicView(){
         view.backgroundColor = ThemeColor().navigationBarColor()
@@ -769,15 +673,12 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         existTransactionView.addSubview(walletList)
         totalProfitView.addSubview(totalLabel)
         totalProfitView.addSubview(totalNumber)
-//        totalProfitView.addSubview(totalChange)
         realizedView.addSubview(addTransactionButton)
         existTransactionView.addSubview(realizedView)
         realizedView.addSubview(unrealizedLabel)
         realizedView.addSubview(realizedLabel)
         realizedView.addSubview(unrealizedResult)
         realizedView.addSubview(realizedResult)
-//        realizedView.addSubview(realizedButton)
-//        realizedView.addSubview(unrealizedButton)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
@@ -790,13 +691,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         
         NSLayoutConstraint(item: totalLabel, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: totalNumber, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: totalChange, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: totalProfitView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
         
         totalNumber.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
         totalNumber.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
-//        totalChange.trailingAnchor.constraint(lessThanOrEqualTo: view.trailingAnchor, constant: -10).isActive = true
-//        totalChange.leadingAnchor.constraint(greaterThanOrEqualTo: view.leadingAnchor, constant: 10).isActive = true
         
         totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|-10-[v1]-\(10*factor)-[v2]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
         totalProfitView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v2]-\(10*factor)-|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v1":totalLabel,"v2":totalNumber,"v3":totalChange]))
@@ -826,24 +723,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         realizedResult.rightAnchor.constraint(equalTo: realizedView.rightAnchor, constant: 0).isActive = true
         realizedResult.topAnchor.constraint(equalTo: realizedView.centerYAnchor, constant: 0).isActive = true
         
-//        realizedButton.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
-//        realizedButton.topAnchor.constraint(equalTo: realizedView.topAnchor, constant: 0).isActive = true
-//        realizedButton.bottomAnchor.constraint(equalTo: realizedView.bottomAnchor, constant: 0).isActive = true
-//        realizedButton.rightAnchor.constraint(equalTo: realizedView.rightAnchor, constant: 0).isActive = true
-//
-//        unrealizedButton.widthAnchor.constraint(equalToConstant: view.frame.width/2).isActive = true
-//        unrealizedButton.topAnchor.constraint(equalTo: realizedView.topAnchor, constant: 0).isActive = true
-//        unrealizedButton.bottomAnchor.constraint(equalTo: realizedView.bottomAnchor, constant: 0).isActive = true
-//        unrealizedButton.leftAnchor.constraint(equalTo: realizedView.leftAnchor, constant: 0).isActive = true
-        
         
         //Add Transaction Button Constraints
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v4]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":realizedView,"v4":buttonView]))
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v0]-0-[v4(\(30*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":realizedView,"v4":buttonView]))
-//        NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
-//        NSLayoutConstraint(item: addTransactionButton, attribute: NSLayoutAttribute.centerY, relatedBy: NSLayoutRelation.equal, toItem: buttonView, attribute: NSLayoutAttribute.centerY, multiplier: 1, constant: 0).isActive = true
-//        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
-//        buttonView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v5(\(50*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v5":addTransactionButton]))
         
         //Wallet List Constraints
         existTransactionView.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v6]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v7":buttonView,"v6":walletList]))
@@ -880,24 +763,9 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         unrealizedHint.removeFromParentViewController()
         unrealizedHint.view.removeFromSuperview()
     }
-
-//    var realizedButton:UIButton = {
-//       var button = UIButton()
-//        button.addTarget(self, action: #selector(realizedHint), for: .touchUpInside)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//       return button
-//    }()
-//
-//    var unrealizedButton:UIButton = {
-//        var button = UIButton()
-//        button.addTarget(self, action: #selector(unrealizedHint), for: .touchUpInside)
-//        button.translatesAutoresizingMaskIntoConstraints = false
-//        return button
-//    }()
-    
     
     var realizedView:UIView = {
-       var view = UIView()
+        var view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
         view.backgroundColor = ThemeColor().greyColor()
         return view
@@ -1037,7 +905,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     var totalChange:UILabel = {
         var label = UILabel()
-//        label.text = "--"
+        //        label.text = "--"
         label.font = label.font.withSize(20)
         label.textAlignment = .center
         label.translatesAutoresizingMaskIntoConstraints = false
@@ -1083,54 +951,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
         tableView.configRefreshHeader(with:header, container: self, action: {
             self.handleRefresh(tableView)
         })
-//        tableView.rowHeight = 70*factor
+        //        tableView.rowHeight = 70*factor
         tableView.estimatedRowHeight = 70*factor
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
     }()
-    
-//    func getAssetsData(){
-//        URLServices
-//    }
-    
-//    func scrollViewDidScroll(_ scrollView: UIScrollView) {
-//        if scrollView.contentOffset.y >= 0 {
-//            var offset = scrollView.contentOffset
-//            offset.y = 0
-//            scrollView.contentOffset = CGPoint.zero
-//        }
-//    }
-    
 }
-
-//extension UITableView{
-//    override func scrollViewDidScroll(scrollView: UIScrollView)
-//    {
-//        if scrollView.contentOffset.y <= 0 {
-//            var offset = scrollView.contentOffset
-//            offset.y = 0
-//            scrollView.contentOffset = offset
-//        }
-//
-//    }
-//}
-
-//
-//
-//class newAlert:SCLAlertView{
-//
-//}
-
-
-//class CustomAlertView:UIAlertView{
-//    override func dismiss(withClickedButtonIndex buttonIndex: Int, animated: Bool) {
-//        print("sdfsd")
-//    }
-//}
-//
-//class ss:UIAlertAction{
-//    override dismiss
-//}
-
-
