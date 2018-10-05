@@ -66,7 +66,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNewAssetsData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
         
-        print(gameUser!)
+        print(11111)
+        print(gameUser?.name ?? ".......")
     }
     
     deinit {

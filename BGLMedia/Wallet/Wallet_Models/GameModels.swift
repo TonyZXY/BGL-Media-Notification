@@ -10,7 +10,7 @@ import Foundation
 import SwiftyJSON
 
 struct GameUser {
-    let name: String?
+    let name: String
     var coinsBalance: [CoinBalance]
     
     init(name: String) {
@@ -19,7 +19,10 @@ struct GameUser {
     }
     
     init(_ json: JSON) {
+        print(json)
         self.name = json["nick_name"].stringValue
+        print(222222)
+        print(name)
         coinsBalance = [CoinBalance]()
         initialSetup(json)
     }
