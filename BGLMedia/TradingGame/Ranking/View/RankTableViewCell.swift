@@ -10,7 +10,11 @@ import Foundation
 import UIKit
 
 class RankTableViewTopCell: UITableViewCell{
+
     public static let registerID = "rankTableViewTopCell"
+    // needed to perform on click action
+    var tableController : RankTableViewController?
+    
     // should a size 3 array
     var viewModels = [RankObjectViewModel](){
         didSet{
@@ -35,8 +39,11 @@ class RankTableViewTopCell: UITableViewCell{
     
     let baseView : UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 3
-        //view.backgroundColor = ThemeColor().walletCellcolor()
+        view.layer.cornerRadius = 5
+        view.backgroundColor = ThemeColor().walletCellcolor()
+//        view.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        view.layer.shadowOpacity = 1
+//        view.layer.shadowOffset = CGSize(width: 0, height: 5)
         return view
     }()
     
@@ -49,7 +56,7 @@ class RankTableViewTopCell: UITableViewCell{
 
     func setupView(){
         backgroundColor = ThemeColor().themeColor()
-        let factor = self.frame.width/414
+        let factor = UIScreen.main.bounds.width/414
         addSubview(baseView)
         addConstraintsWithFormat(format: "H:|-\(3*factor)-[v0]-\(3*factor)-|", views: baseView)
         addConstraintsWithFormat(format: "V:|-\(2*factor)-[v0]-\(2*factor)-|", views: baseView)
@@ -86,6 +93,31 @@ class RankTableViewTopCell: UITableViewCell{
         silverContainer.addConstraintsWithFormat(format: "V:|-\(20*factor)-[v0]-0-[v1]-0-[v2]", views: silverContainer.medalImageView,silverContainer.nicknameLabel,silverContainer.statLabel)
         goldContainer.addConstraintsWithFormat(format: "V:|-\(10*factor)-[v0]-0-[v1]-0-[v2]", views: goldContainer.medalImageView,goldContainer.nicknameLabel,goldContainer.statLabel)
         bronzeContainer.addConstraintsWithFormat(format: "V:|-\(30*factor)-[v0]-0-[v1]-0-[v2]", views: bronzeContainer.medalImageView,bronzeContainer.nicknameLabel,bronzeContainer.statLabel)
+        
+        //setup click action
+        containerTapSetting()
+    }
+    
+    private func containerTapSetting(){
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(self.goldAction))
+        let gesture2 = UITapGestureRecognizer(target: self, action:  #selector(self.silverAction))
+        let gesture3 = UITapGestureRecognizer(target: self, action:  #selector(self.bronzeAction))
+        let gestures = [gesture,gesture2,gesture3]
+        var i = 0
+        for g in gestures{
+            topRankContainers[i].addGestureRecognizer(g)
+            i += 1
+        }
+    }
+    
+    @objc func goldAction(sender : UITapGestureRecognizer) {
+        tableController?.presentPopWindow(viewModel: viewModels[0])
+    }
+    @objc func silverAction(sender : UITapGestureRecognizer) {
+        tableController?.presentPopWindow(viewModel: viewModels[1])
+    }
+    @objc func bronzeAction(sender : UITapGestureRecognizer) {
+        tableController?.presentPopWindow(viewModel: viewModels[2])
     }
     
     class TopRankContainer : UIView{
@@ -97,7 +129,7 @@ class RankTableViewTopCell: UITableViewCell{
             //            label.textColor = ThemeColor().whiteColor()
             label.numberOfLines =  1
             label.textColor = .white
-            label.font = UIFont.semiBoldFont(CGFloat(fontSize))
+            label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
             label.text = ""
             return label
         }()
@@ -107,7 +139,7 @@ class RankTableViewTopCell: UITableViewCell{
             //            label.textColor = ThemeColor().whiteColor()
             label.numberOfLines =  1
             label.textColor = .white
-            label.font = UIFont.semiBoldFont(CGFloat(fontSize))
+            label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
             label.text = ""
             return label
         }()
@@ -165,8 +197,11 @@ class RankTableViewBottomCell : UITableViewCell{
     
     let baseView : UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 3
+        view.layer.cornerRadius = 5
         view.backgroundColor = ThemeColor().walletCellcolor()
+//        view.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+//        view.layer.shadowOpacity = 1
+//        view.layer.shadowOffset = CGSize(width: 0, height: 5)
         return view
     }()
     
@@ -174,7 +209,7 @@ class RankTableViewBottomCell : UITableViewCell{
         var label = UILabel()
         label.numberOfLines =  1
         label.textColor = .white
-        label.font = UIFont.semiBoldFont(CGFloat(fontSize))
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.text = ""
         return label
     }()
@@ -183,7 +218,7 @@ class RankTableViewBottomCell : UITableViewCell{
         var label = UILabel()
         label.numberOfLines =  1
         label.textColor = .white
-        label.font = UIFont.semiBoldFont(CGFloat(fontSize))
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.text = ""
         return label
     }()
@@ -192,7 +227,7 @@ class RankTableViewBottomCell : UITableViewCell{
         var label = UILabel()
         label.numberOfLines =  1
         label.textColor = .white
-        label.font = UIFont.semiBoldFont(CGFloat(fontSize))
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.text = ""
         return label
     }()
@@ -200,7 +235,8 @@ class RankTableViewBottomCell : UITableViewCell{
     func setupView(){
         backgroundColor = ThemeColor().themeColor()
         
-        let factorNumber = self.frame.width/414
+        let factorNumber = UIScreen.main.bounds.width/414
+        
         addSubview(baseView)
         addConstraintsWithFormat(format: "H:|-\(3*factorNumber)-[v0]-\(3*factorNumber)-|", views: baseView)
         addConstraintsWithFormat(format: "V:|-\(2*factorNumber)-[v0]-\(2*factorNumber)-|", views: baseView)
@@ -218,5 +254,122 @@ class RankTableViewBottomCell : UITableViewCell{
         
         baseView.addConstraintsWithFormat(format: "H:|-(\(20 * factor))-[v0]-(\(10 * factor))-[v1]", views: rankNumberLabel,nicknameLabel)
         baseView.addConstraintsWithFormat(format: "H:[v0]-(\(10 * factor))-|", views: statLabel)
+    }
+}
+
+
+class RankPopWindowContentView : UIStackView{
+    
+//    var stackView : UIStackView = {
+//        var stack = UIStackView()
+//        return stack
+//    }()
+    var weeklyView : UIView = {
+        var view = UIView()
+        return view
+    }()
+    
+    var totalView : UIView = {
+        var view = UIView()
+        return view
+    }()
+    
+    // fixed label
+    var weeklyLabel : UILabel = {
+        var label = UILabel()
+        label.numberOfLines =  1
+        label.textColor = .white
+        label.text = textValue(name: "rankPopWindow_Weekly")
+        label.font = UIFont.semiBoldFont(15)
+        return label
+    }()
+    
+    var totalLabel : UILabel = {
+        var label = UILabel()
+        label.numberOfLines =  1
+        label.text = textValue(name: "rankPopWindow_Total")
+        label.textColor = .white
+        label.font = UIFont.semiBoldFont(15)
+        return label
+    }()
+    
+    // data label
+    var weeklyRank : UILabel = {
+        var label = UILabel()
+        label.numberOfLines =  1
+        label.textColor = .white
+        label.font = UIFont.semiBoldFont(15)
+        return label
+    }()
+    var weeklyStat : UILabel = {
+        var label = UILabel()
+        label.numberOfLines =  1
+        label.textColor = .white
+        label.font = UIFont.semiBoldFont(15)
+        return label
+    }()
+
+    var totalRank : UILabel = {
+        var label = UILabel()
+        label.numberOfLines =  1
+        label.textColor = .white
+        label.font = UIFont.semiBoldFont(15)
+        return label
+    }()
+    var totalStat : UILabel = {
+        var label = UILabel()
+        label.numberOfLines =  1
+        label.textColor = .white
+        label.font = UIFont.semiBoldFont(15)
+        return label
+    }()
+    
+    private func setupContent(rankViewModel : RankObjectViewModel?){
+        self.weeklyRank.text = "Rank: \(rankViewModel?.pop_weeklyRank ?? "")"
+        self.weeklyStat.text = rankViewModel?.pop_weeklyStat ?? ""
+        self.totalRank.text = "Rank: \(rankViewModel?.pop_totalRank ?? "")"
+        self.totalStat.text = rankViewModel?.pop_totalStat ?? ""
+    }
+    
+    func setupView(){
+        let factor = UIScreen.main.bounds.width/414
+        addSubview(weeklyView)
+        addSubview(totalView)
+        addConstraintsWithFormat(format: "H:|[v0]|", views: weeklyView)
+        addConstraintsWithFormat(format: "H:|[v0]|", views: totalView)
+        
+        weeklyView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
+        totalView.heightAnchor.constraint(equalTo: self.heightAnchor, multiplier: 0.5).isActive = true
+        weeklyView.topAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        totalView.topAnchor.constraint(equalTo: weeklyView.bottomAnchor).isActive = true
+        
+        weeklyView.addSubview(weeklyLabel)
+        weeklyView.addSubview(weeklyRank)
+        weeklyView.addSubview(weeklyStat)
+
+        weeklyView.addConstraintsWithFormat(format: "H:|-(\(20 * factor))-[v0]", views: weeklyLabel)
+        weeklyView.addConstraintsWithFormat(format: "H:[v0]-(\(20 * factor))-|", views: weeklyRank)
+        weeklyView.addConstraintsWithFormat(format: "H:[v0]-(\(20 * factor))-|", views: weeklyStat)
+        addConstraint(NSLayoutConstraint(item: weeklyLabel, attribute: .centerY, relatedBy: .equal, toItem: weeklyView, attribute: .centerY, multiplier: 1, constant: 0))
+        weeklyView.addConstraintsWithFormat(format: "V:|-(\(10 * factor))-[v0]-(\(10 * factor))-[v1]", views: weeklyRank,weeklyStat)
+
+        totalView.addSubview(totalLabel)
+        totalView.addSubview(totalRank)
+        totalView.addSubview(totalStat)
+
+        totalView.addConstraintsWithFormat(format: "H:|-(\(20 * factor))-[v0]", views: totalLabel)
+        totalView.addConstraintsWithFormat(format: "H:[v0]-(\(20 * factor))-|", views: totalRank)
+        totalView.addConstraintsWithFormat(format: "H:[v0]-(\(20 * factor))-|", views: totalStat)
+        addConstraint(NSLayoutConstraint(item: totalLabel, attribute: .centerY, relatedBy: .equal, toItem: totalView, attribute: .centerY, multiplier: 1, constant: 0))
+        totalView.addConstraintsWithFormat(format: "V:|-(\(10 * factor))-[v0]-(\(10 * factor))-[v1]", views: totalRank,totalStat)
+        
+    }
+    
+    convenience init(rankViewModel : RankObjectViewModel?){
+        self.init()
+        self.axis = .vertical
+        self.spacing = 0
+        setupView()
+        setupContent(rankViewModel: rankViewModel)
     }
 }

@@ -88,6 +88,11 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
         rankMenu.horizontalBarLeftAnchorConstraint?.constant = scrollView.contentOffset.x / CGFloat(rankMenu.cellLabels.count)
     }
     
+    func  scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
+        let index = targetContentOffset.pointee.x / view.frame.width
+        let indexpath = NSIndexPath(item: Int(index), section: 0)
+        rankMenu.menuView.selectItem(at: indexpath as IndexPath, animated: true, scrollPosition:[])
+    }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return rankMenu.cellLabels.count
     }

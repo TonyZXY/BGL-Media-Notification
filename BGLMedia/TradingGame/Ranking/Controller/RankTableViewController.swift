@@ -34,6 +34,7 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         tv.bounces = false
         tv.backgroundColor = ThemeColor().themeColor()
         tv.separatorStyle = .none
+
         tv.register(RankTableViewTopCell.self, forCellReuseIdentifier: RankTableViewTopCell.registerID)
         tv.register(RankTableViewBottomCell.self, forCellReuseIdentifier: RankTableViewBottomCell.registerID)
         tv.dataSource = self
@@ -44,6 +45,10 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     var userRankView : UIView = {
         var view = UIView()
         view.backgroundColor = ThemeColor().walletCellcolor()
+        view.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        view.layer.shadowOpacity = 1
+        view.layer.shadowOffset = CGSize(width: 0, height: -5)
+        view.layer.masksToBounds = false
         return view
     }()
     
@@ -51,8 +56,8 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         var label = UILabel()
         label.numberOfLines =  1
         label.textColor = .white
-        label.font = UIFont.semiBoldFont(CGFloat(fontSize))
-        label.text = "-100."
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
+        label.text = ""
         return label
     }()
     
@@ -60,8 +65,8 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         var label = UILabel()
         label.numberOfLines =  1
         label.textColor = .white
-        label.font = UIFont.semiBoldFont(CGFloat(fontSize))
-        label.text = "Player Default!!!!!"
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
+        label.text = ""
         return label
     }()
     
@@ -69,8 +74,8 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         var label = UILabel()
         label.numberOfLines =  1
         label.textColor = .white
-        label.font = UIFont.semiBoldFont(CGFloat(fontSize))
-        label.text = "-10000"
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
+        label.text = ""
         return label
     }()
     
@@ -114,6 +119,9 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
             let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewTopCell.registerID, for: indexPath) as! RankTableViewTopCell
+            cell.selectionStyle = .none
+            //  this is setted for onclick event
+            cell.tableController = self
             // setupview is called after cell initiated to avoid add constraint with default frame (width 320 height 44)
             cell.setupView()
             cell.viewModels = allRank
@@ -133,5 +141,20 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }else{
             return bottomCellHeight
         }
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        tableView.deselectRow(at: indexPath, animated: false)
+        if indexPath.row == 0 {
+            return
+        }
+        let cell = tableView.cellForRow(at: indexPath) as! RankTableViewBottomCell
+        let viewModel = cell.rankViewModel
+        presentPopWindow(viewModel: viewModel)
+    }
+    
+    func presentPopWindow(viewModel: RankObjectViewModel?){
+        let popWindowConttroller = PopWindowController(windowSize: CGSize(width: 260, height: 200), title: viewModel?.pop_title, contentView: RankPopWindowContentView(rankViewModel: viewModel))
+        self.present(popWindowConttroller, animated: true, completion: nil)
     }
 }

@@ -33,7 +33,7 @@ class RankMenuView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,
         cv.delegate = self
         cv.dataSource = self
         cv.register(RankMenuViewCell.self, forCellWithReuseIdentifier: RankMenuViewCell.registerID)
-        cv.isScrollEnabled = false
+//        cv.isScrollEnabled = false
         cv.bounces = false
         cv.alwaysBounceHorizontal = false
         cv.showsHorizontalScrollIndicator = false

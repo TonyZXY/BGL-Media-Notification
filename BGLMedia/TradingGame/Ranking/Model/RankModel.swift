@@ -49,12 +49,19 @@ struct RankObjectModel{
 }
 
 struct RankObjectViewModel {
+    // for dipslaying cell content
     var nickname : String = ""
+    // sort with rank so keep int value
     var ranknumber : Int = -1
     var ranknumberString : String = ""
-    var stat : Double = -1
     var statString : String = ""
-    var mode : DisplayMode?
+    
+    // for displaying onclick pop window content
+    var pop_title : String = ""
+    var pop_weeklyStat : String = ""
+    var pop_totalStat : String = ""
+    var pop_weeklyRank : String = ""
+    var pop_totalRank : String = ""
     
     enum DisplayMode {
         case weekly
@@ -67,19 +74,20 @@ struct RankObjectViewModel {
             nickname = rankModel.user_nickname ?? ""
             ranknumber = rankModel.week_rank
             ranknumberString = "\(rankModel.week_rank)."
-            stat = rankModel.week_percentage
             statString = "\(String(format : "%.2f", rankModel.week_percentage))%"
-            mode = displayMode
         }
         if displayMode == DisplayMode.total {
             nickname = rankModel.user_nickname ?? ""
             ranknumber = rankModel.total_rank
-            stat = rankModel.total
             ranknumberString = "\(rankModel.total_rank)."
-            stat = rankModel.total
             statString = rankModel.total.toAbbreviateString(decimal: 2)
-            mode = displayMode
         }
+        
+        pop_title = nickname
+        pop_weeklyRank = "\(rankModel.week_rank)"
+        pop_totalRank = "\(rankModel.total_rank)"
+        pop_weeklyStat = "\(String(format : "%.2f", rankModel.week_percentage))%"
+        pop_totalStat = "\(rankModel.total)"
     }
 
 }

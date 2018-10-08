@@ -430,4 +430,6 @@ navigationTitle_event = "活动";
 
 //Ranking Page
 rankMenuTitle_Weekly = "周榜";
-rankMenuTitle_Total = "全部";
+rankMenuTitle_Total = "总榜";
+rankPopWindow_Weekly = "周榜";
+rankPopWindow_Total = "总榜";

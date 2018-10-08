@@ -14,7 +14,8 @@
 		241082EE2164870C00A12DF1 /* RankTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082ED2164870C00A12DF1 /* RankTableViewController.swift */; };
 		241082F02164875F00A12DF1 /* RankTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EF2164875F00A12DF1 /* RankTableViewCell.swift */; };
 		241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082F1216487A000A12DF1 /* ToRankPageButton.swift */; };
-		24121507215C700300B9069B /* Ranking.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24121506215C700300B9069B /* Ranking.swift */; };
+		24121507215C700300B9069B /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24121506215C700300B9069B /* RankingViewController.swift */; };
+		245E9A812167427A004577E0 /* PopWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245E9A802167427A004577E0 /* PopWindowController.swift */; };
 		24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08F9521631B1D0066BA33 /* RankModel.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
@@ -242,7 +243,8 @@
 		241082ED2164870C00A12DF1 /* RankTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewController.swift; sourceTree = "<group>"; };
 		241082EF2164875F00A12DF1 /* RankTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewCell.swift; sourceTree = "<group>"; };
 		241082F1216487A000A12DF1 /* ToRankPageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToRankPageButton.swift; sourceTree = "<group>"; };
-		24121506215C700300B9069B /* Ranking.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Ranking.swift; sourceTree = "<group>"; };
+		24121506215C700300B9069B /* RankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingViewController.swift; sourceTree = "<group>"; };
+		245E9A802167427A004577E0 /* PopWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopWindowController.swift; sourceTree = "<group>"; };
 		24A08F9521631B1D0066BA33 /* RankModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
 		2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
@@ -485,7 +487,6 @@
 		24121504215C700300B9069B /* Ranking */ = {
 			isa = PBXGroup;
 			children = (
-				24121506215C700300B9069B /* Ranking.swift */,
 				24121505215C700300B9069B /* Controller */,
 				24121509215C714400B9069B /* View */,
 				24121508215C714400B9069B /* Model */,
@@ -496,7 +497,9 @@
 		24121505215C700300B9069B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
+				24121506215C700300B9069B /* RankingViewController.swift */,
 				241082ED2164870C00A12DF1 /* RankTableViewController.swift */,
+				245E9A802167427A004577E0 /* PopWindowController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -1475,6 +1478,7 @@
 				2D52AF2420E46E1A00018FC0 /* FetchHistoricalData.swift in Sources */,
 				2D52AF4120E46E1A00018FC0 /* OnBoardingPageViewController.swift in Sources */,
 				5719D5E62123B54C0048B579 /* AlertInterest.swift in Sources */,
+				245E9A812167427A004577E0 /* PopWindowController.swift in Sources */,
 				57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */,
 				2D52AEA320E46E1A00018FC0 /* DetailMenuBar.swift in Sources */,
 				2D52AEA920E46E1A00018FC0 /* HistoryPoint.swift in Sources */,
@@ -1566,7 +1570,7 @@
 				2D52AEA720E46E1A00018FC0 /* HistoryLine.swift in Sources */,
 				241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */,
 				57BBAB6D210962C300984AA4 /* WatchListRealm.swift in Sources */,
-				24121507215C700300B9069B /* Ranking.swift in Sources */,
+				24121507215C700300B9069B /* RankingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
