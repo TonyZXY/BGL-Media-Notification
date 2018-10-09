@@ -621,6 +621,16 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     
     func setUpInitialView(){
+        Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
+        // modified
+        let buttonHeight:CGFloat = 24
+        let buttonWidth:CGFloat = 24
+        let button = ToRankPageButton(width: buttonWidth, height: buttonHeight,parentController: self)
+        let navigationRankButton = UIBarButtonItem(customView: button)
+        navigationRankButton.customView?.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
+        navigationRankButton.customView?.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
+        self.navigationItem.setRightBarButton(navigationRankButton, animated: true)
+        
         let factor = view.frame.width/375
         existTransactionView.removeFromSuperview()
         view.addSubview(invisibleView)

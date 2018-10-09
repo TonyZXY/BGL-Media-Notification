@@ -79,7 +79,7 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         return label
     }()
     
-    let topCellHeight:CGFloat = 150
+    let topCellHeight:CGFloat = 170
     let bottomCellHeight:CGFloat = 100
     
     override func viewDidLoad() {
@@ -88,17 +88,16 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func setupView(){
+        let factor = UIScreen.main.bounds.width/414
         view.addSubview(rankTableView)
         view.addSubview(userRankView)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: rankTableView)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: userRankView)
-        view.addConstraintsWithFormat(format: "V:|[v0]-0-[v1(\(bottomCellHeight))]|", views: rankTableView,userRankView)
+        view.addConstraintsWithFormat(format: "V:|[v0]-0-[v1(\(bottomCellHeight * factor))]|", views: rankTableView,userRankView)
         
         userRankView.addSubview(userRankNumberLabel)
         userRankView.addSubview(userNickameLabel)
         userRankView.addSubview(userStatLabel)
-        
-        let factor = view.frame.width/414
         
         userRankView.addConstraint(NSLayoutConstraint(item: userRankNumberLabel, attribute: .centerY, relatedBy: .equal, toItem: userRankView, attribute: .centerY, multiplier: 1, constant: 0))
         userRankView.addConstraint(NSLayoutConstraint(item: userNickameLabel, attribute: .centerY, relatedBy: .equal, toItem: userRankView, attribute: .centerY, multiplier: 1, constant: 0))
@@ -129,6 +128,7 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }else{
             //row > 0
             let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewBottomCell.registerID, for: indexPath) as! RankTableViewBottomCell
+            cell.selectionStyle = .none
             cell.setupView()
             cell.rankViewModel = allRank[indexPath.row+2]
             return cell
@@ -136,10 +136,11 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let factor = UIScreen.main.bounds.width/414
         if indexPath.row == 0{
-            return topCellHeight
+            return topCellHeight * factor
         }else{
-            return bottomCellHeight
+            return bottomCellHeight * factor
         }
     }
     
