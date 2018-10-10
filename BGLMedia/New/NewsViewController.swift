@@ -55,10 +55,10 @@ class NewsViewController: UIViewController,UICollectionViewDelegate,UICollection
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
         if indexPath.row == 0{
-            addChildViewController(childViewControllers: newsFlashController,cell:cell)
+            addChildViewController(childViewController: newsFlashController,cell:cell)
             return cell
         } else if indexPath.row == 1{
-            addChildViewController(childViewControllers: newsController,cell:cell)
+            addChildViewController(childViewController: newsController,cell:cell)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)

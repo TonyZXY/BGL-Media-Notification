@@ -74,14 +74,14 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
         if indexPath.row == 0{
-            addChildViewController(childViewControllers: global,cell:cell)
+            addChildViewController(childViewController: global,cell:cell)
             return cell
         } else if indexPath.row == 1{
-            addChildViewController(childViewControllers: watchList,cell:cell)
+            addChildViewController(childViewController: watchList,cell:cell)
             return cell
         } else if indexPath.row == 2{
             alert.factor = view.frame.width/375
-            addChildViewController(childViewControllers: alert,cell:cell)
+            addChildViewController(childViewController: alert,cell:cell)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)

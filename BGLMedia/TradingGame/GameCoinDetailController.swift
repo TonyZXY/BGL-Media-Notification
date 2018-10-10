@@ -1,20 +1,23 @@
 //
-//  CoinDetailController.swift
-//  news app for blockchain
+//  GameCoinDetailController.swift
+//  BGLMedia
 //
-//  Created by Bruce Feng on 23/5/18.
-//  Copyright © 2018 Sheng Li. All rights reserved.
+//  Created by Jia YI Bai on 9/10/18.
+//  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
+import Foundation
 import UIKit
-
-class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+/**
+    mostly copied form CoinDetailController
+ */
+class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     var observer:NSObjectProtocol?
     var observer1:NSObject?
     var alertGetStatus:Bool = false
-//    var alertSendStatus:Bool = false
+    //    var alertSendStatus:Bool = false
     var firstTime:Bool = false
-    let gerneralController = GerneralController()
+    let gerneralController = GameGerneralController()
     let transactionHistoryController = TransactionsHistoryController()
     let alertControllers = AlertController()
     
@@ -37,39 +40,16 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
             } else{
                 safeAreaView.backgroundColor = ThemeColor().themeColor()
             }
-            
-            
-            
-            
-//            DispatchQueue.main.async {
-//                self.collectionviews.reloadData()
-//            }
-//            collectionviews.reloadData()
         }
-//        let index = IndexPath(row: 2, section: 0)
-//        let cell:UICollectionViewCell = collectionviews.cellForItem(at: index)!
-////        collectionviews.selectItem(at: selectedIntervalIndexPath, animated: true, scrollPosition: [])
-//        if alertControllers.loginStatus{
-//            cell.backgroundColor = ThemeColor().blueColor()
-//        }else{
-//            cell.backgroundColor = ThemeColor().themeColor()
-//        }
     }
     
-//    override func viewDidDisappear(_ animated: Bool) {
-//
-////        if alertSendStatus{
-////            self.alert.sendNotification()
-////        }
-//    }
-    
     func setUpView(){
+        print("Hjahskdhjasdj")
         collectionviews.delegate = self
         collectionviews.dataSource = self
-//        view.backgroundColor = ThemeColor().blueColor()
+        //        view.backgroundColor = ThemeColor().blueColor()
         let factor = view.frame.width/375
-        //Menu Bar
-        menuBar.factor = factor
+        
         self.transactionHistoryController.factor = factor
         self.alertControllers.factor = factor
         view.addSubview(menuBar)
@@ -81,18 +61,9 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         view.addSubview(collectionviews)
         collectionviews.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "containterController")
         collectionviews.translatesAutoresizingMaskIntoConstraints = false
-        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews,"v1":menuBar]))
+        view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":collectionviews,"v1":menuBar]))
         collectionviews.backgroundColor = ThemeColor().themeColor()
-//        view.addSubview(safeAreaView)
-//
-//        if #available(iOS 11.0, *) {
-//            safeAreaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-//            safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-//            safeAreaView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-//        } else {
-//
-//        }
         
     }
     
@@ -103,14 +74,21 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     func  scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexpath = NSIndexPath(item: Int(index), section: 0)
-        menuBar.collectionView.selectItem(at: indexpath as IndexPath, animated: true, scrollPosition:[])
+        menuBar.menuViewCollection.selectItem(at: indexpath as IndexPath, animated: true, scrollPosition:[])
     }
     
-    lazy var menuBar: DetailMenuBar = {
-        let mb = DetailMenuBar()
-        mb.detailController = self
+    lazy var menuBar: MenuBarView = {
+        let labels = [textValue(name: "general_detail"),
+                      textValue(name: "transaction_detail"),
+                      textValue(name: "alerts_detail")]
+        let mb = MenuBarView(menuLabels: labels)
+        mb.customDelegate = self
         return mb
     }()
+    func menuBarView(collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let i = NSIndexPath(item: indexPath.row, section: 0)
+        collectionviews.scrollToItem(at: i as IndexPath, at: .left, animated: true)
+    }
     
     var collectionviews: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
@@ -142,22 +120,7 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
             addChildViewController(childViewController: transactionHistoryController,cell:cell)
             return cell
         } else if indexPath.row == 2{
-            addChildViewAlertController(childViewControllers: alertControllers,cell:cell)
-//            cell.addSubview(safeAreaView)
-//            if #available(iOS 11.0, *) {
-//                safeAreaView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0).isActive = true
-//                safeAreaView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-//                safeAreaView.widthAnchor.constraint(equalToConstant: view.frame.width).isActive = true
-//            } else {
-//
-//            }
-            
-//            cell.backgroundColor = ThemeColor().blueColor()
-//            if loginStatus{
-//                cell.backgroundColor = ThemeColor().blueColor()
-//            }else{
-//                cell.backgroundColor = ThemeColor().themeColor()
-//            }
+            addChildViewController(childViewController: alertControllers,cell:cell)
             return cell
         } else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "containterController", for: indexPath)
@@ -200,13 +163,13 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
     func collectionView(_ collectionView: UICollectionView, didEndDisplaying cell: UICollectionViewCell, forItemAt indexPath: IndexPath) {
         if indexPath.row == 2{
             alertGetStatus = false
-//            alertSendStatus = false
-//            alertControllers.sendNotification()
-
+            //            alertSendStatus = false
+            //            alertControllers.sendNotification()
+            
         }
         
         if indexPath.row == 2{
-//            safeAreaView.removeFromSuperview()
+            //            safeAreaView.removeFromSuperview()
         }
     }
     
@@ -214,50 +177,7 @@ class CoinDetailController: UIViewController,UICollectionViewDelegate,UICollecti
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
-    func addChildViewAlertController(childViewControllers:UIViewController,cell:UICollectionViewCell){
-        addChildViewController(childViewControllers)
-        cell.contentView.addSubview(childViewControllers.view)
-        childViewControllers.view.frame = view.bounds
-        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        childViewControllers.didMove(toParentViewController: self)
-        
-        //Constraints
-        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
-        childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        childViewControllers.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
-        childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
-        if #available(iOS 11.0, *) {
-            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.safeAreaLayoutGuide.bottomAnchor).isActive = true
-            
-        } else {
-            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-        }
-        //        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
-    }
-    
-    
-    func addChildViewAlertControllers(childViewControllers:UIViewController,cell:UICollectionViewCell){
-        addChildViewController(childViewControllers)
-        cell.contentView.addSubview(childViewControllers.view)
-        childViewControllers.view.frame = view.bounds
-        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        childViewControllers.didMove(toParentViewController: self)
-        
-        //Constraints
-        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
-        childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        childViewControllers.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
-        childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
-        childViewControllers.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-//        if #available(iOS 11.0, *) {
-//            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.safeAreaLayoutGuide.bottomAnchor).isActive = true
-//
-//        } else {
-//            childViewControllers.view.bottomAnchor.constraint(equalTo: cell.bottomAnchor).isActive = true
-//        }
-        //        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
-    }
+
     
     var safeAreaView:UIView = {
         var view = UIView()

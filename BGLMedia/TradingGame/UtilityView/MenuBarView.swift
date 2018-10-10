@@ -9,21 +9,24 @@
 import Foundation
 import UIKit
 
-protocol RankMenuViewDelegate {
+protocol MenuBarViewDelegate {
     /**
      customize what to do when menu is selected
      */
-    func rankMenuView(collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
+    func menuBarView(collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath)
 }
 
-// Tab menu class
-class RankMenuView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+/**
+    to use the class
+    instatiate it with [String] parameter and assign delegate to controller
+ */
+class MenuBarView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
-    var customDelegate : RankMenuViewDelegate?
+    var customDelegate : MenuBarViewDelegate?
     
     var cellLabels : [String] = [""]
     
-    lazy var menuView: UICollectionView = {
+    lazy var menuViewCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
 //        layout.minimumInteritemSpacing = 0
@@ -59,7 +62,7 @@ class RankMenuView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = menuView.dequeueReusableCell(withReuseIdentifier: RankMenuViewCell.registerID, for: indexPath) as! RankMenuViewCell
+        let cell = menuViewCollection.dequeueReusableCell(withReuseIdentifier: RankMenuViewCell.registerID, for: indexPath) as! RankMenuViewCell
         cell.setContent(menuText: cellLabels[indexPath.row])
 //        if indexPath.row == 0 {
 //            cell.backgroundColor = .red
@@ -74,16 +77,16 @@ class RankMenuView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        customDelegate?.rankMenuView(collectionView: collectionView, didSelectItemAt: indexPath)
+        customDelegate?.menuBarView(collectionView: collectionView, didSelectItemAt: indexPath)
     }
     
     func initSetup(){
-        addSubview(menuView)
-        addConstraintsWithFormat(format: "H:|[v0]|", views: menuView)
-        addConstraintsWithFormat(format: "V:|[v0]|", views: menuView)
+        addSubview(menuViewCollection)
+        addConstraintsWithFormat(format: "H:|[v0]|", views: menuViewCollection)
+        addConstraintsWithFormat(format: "V:|[v0]|", views: menuViewCollection)
         
         let selectindexpath = NSIndexPath(item: 0, section: 0)
-        menuView.selectItem(at: selectindexpath as IndexPath, animated: false, scrollPosition:.left)
+        menuViewCollection.selectItem(at: selectindexpath as IndexPath, animated: false, scrollPosition:.left)
         
         setHorizontalBar()
     }

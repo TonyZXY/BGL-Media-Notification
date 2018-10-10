@@ -860,35 +860,37 @@ extension UIView {
 }
 
 public extension UIViewController {
-    func addChildViewController(childViewControllers:UIViewController,cell:UICollectionViewCell){
-        addChildViewController(childViewControllers)
-        cell.contentView.addSubview(childViewControllers.view)
-        childViewControllers.view.frame = view.bounds
-        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-        childViewControllers.didMove(toParentViewController: self)
+    func addChildViewController(childViewController:UIViewController,cell:UICollectionViewCell){
+        addChildViewController(childViewController)
+        cell.contentView.addSubview(childViewController.view)
+        childViewController.view.frame = view.bounds
+        childViewController.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        childViewController.didMove(toParentViewController: self)
 
         //Constraints
-        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
-        childViewControllers.view.topAnchor.constraint(equalTo: cell.topAnchor).isActive = true
-        childViewControllers.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
-        childViewControllers.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
-        childViewControllers.view.heightAnchor.constraint(equalTo: cell.heightAnchor).isActive = true
+        childViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        childViewController.view.topAnchor.constraint(equalTo: cell.safeArea().topAnchor).isActive = true
+        childViewController.view.leftAnchor.constraint(equalTo: cell.leftAnchor).isActive = true
+        childViewController.view.widthAnchor.constraint(equalTo: cell.widthAnchor).isActive = true
+        childViewController.view.bottomAnchor.constraint(equalTo: cell.safeArea().bottomAnchor).isActive = true
     }
     
-//    func addViewControllerAsChildViewController(childViewControllers:UIViewController,view:UIView){
-//        addChildViewController(childViewControllers)
-//        view.addSubview(childViewControllers.view)
-//        childViewControllers.view.frame = view.bounds
-//        childViewControllers.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
-//        childViewControllers.didMove(toParentViewController: self)
-//        
-//        //Constraints
-//        childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
-//        childViewControllers.view.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        childViewControllers.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
-//        childViewControllers.view.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
-//        childViewControllers.view.heightAnchor.constraint(equalTo: view.heightAnchor).isActive = true
-//    }
+    //Add child controller
+    func addChildViewController(childViewController:UIViewController,view:UIView){
+        addChildViewController(childViewController)
+        view.addSubview(childViewController.view)
+        childViewController.view.frame = view.bounds
+        childViewController.view.autoresizingMask = [.flexibleWidth,.flexibleHeight]
+        childViewController.didMove(toParentViewController: self)
+        
+        //Constraints
+        childViewController.view.translatesAutoresizingMaskIntoConstraints = false
+        childViewController.view.topAnchor.constraint(equalTo: view.safeArea().topAnchor).isActive = true
+        
+        childViewController.view.leftAnchor.constraint(equalTo: view.leftAnchor).isActive = true
+        childViewController.view.widthAnchor.constraint(equalTo: view.widthAnchor).isActive = true
+        childViewController.view.bottomAnchor.constraint(equalTo: view.safeArea().bottomAnchor).isActive = true
+    }
 }
 
 

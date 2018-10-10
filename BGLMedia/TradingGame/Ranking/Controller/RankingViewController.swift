@@ -10,11 +10,11 @@ import Foundation
 import UIKit
 import SwiftyJSON
 
-class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
+class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
     
     // rank menu part
-    lazy var rankMenu : RankMenuView = {
-        var menu = RankMenuView(menuLabels: [textValue(name: "rankMenuTitle_Weekly"),textValue(name: "rankMenuTitle_Total")])
+    lazy var rankMenu : MenuBarView = {
+        var menu = MenuBarView(menuLabels: [textValue(name: "rankMenuTitle_Weekly"),textValue(name: "rankMenuTitle_Total")])
         menu.customDelegate = self
         return menu
     }()
@@ -78,7 +78,7 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
         rankTableContainer.matchAllAnchors(top:rankMenu.bottomAnchor,bottom: view.safeArea().bottomAnchor,leading: view.safeArea().leadingAnchor,trailing:view.safeArea().trailingAnchor)
     }
     
-    func rankMenuView(collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+    func menuBarView(collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         // click to scroll to the view
         let i = NSIndexPath(item: indexPath.row, section: 0)
         rankTableContainer.scrollToItem(at: i as IndexPath, at: .left, animated: true)
@@ -91,7 +91,7 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
     func  scrollViewWillEndDragging(_ scrollView: UIScrollView, withVelocity velocity: CGPoint, targetContentOffset: UnsafeMutablePointer<CGPoint>) {
         let index = targetContentOffset.pointee.x / view.frame.width
         let indexpath = NSIndexPath(item: Int(index), section: 0)
-        rankMenu.menuView.selectItem(at: indexpath as IndexPath, animated: true, scrollPosition:[])
+        rankMenu.menuViewCollection.selectItem(at: indexpath as IndexPath, animated: true, scrollPosition:[])
     }
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return rankMenu.cellLabels.count
@@ -101,10 +101,10 @@ class RankViewController : UIViewController,RankMenuViewDelegate,UICollectionVie
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: rankContainerCellID, for: indexPath)
         if indexPath.row == 0{
 //            cell.backgroundColor = .white
-            addChildViewController(childViewControllers: weeklyRankTableController, cell: cell)
+            addChildViewController(childViewController: weeklyRankTableController, cell: cell)
         }else{
 //            cell.backgroundColor = .brown
-            addChildViewController(childViewControllers: totalRankTableController, cell: cell)
+            addChildViewController(childViewController: totalRankTableController, cell: cell)
         }
         return cell
     }

@@ -591,7 +591,7 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     
     //Select specific coins and change to detail page
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailPage = DetailController()
+        let detailPage = GameCoinPageController()
         detailPage.hidesBottomBarWhenPushed = true
         let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
         coinDetail = cell.selectCoin
