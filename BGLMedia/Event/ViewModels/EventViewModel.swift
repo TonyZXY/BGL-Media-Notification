@@ -19,7 +19,7 @@ struct EventViewModel {
     let hostPage: String
     let imageUrlStr: String
     let urlStr: String
-    let logoURL: String
+    var logoURL: String
     let yearOfEventStartTime: String
     let monthOfEventStartTime: String
     let weekOfEventStartTime: String

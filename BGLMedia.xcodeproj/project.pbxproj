@@ -211,6 +211,7 @@
 		B959EF5B2146172500930DD6 /* FontController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B959EF5A2146172500930DD6 /* FontController.swift */; };
 		B95B7FFB21588BF4004E613D /* IntrinsicContentSize.swift in Sources */ = {isa = PBXBuildFile; fileRef = B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */; };
 		B9BA331E2159BE0100255E2D /* EventDetailViewController2.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */; };
+		B9F4F341216DB2340038AE6B /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F340216DB2340038AE6B /* Logo.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -439,6 +440,7 @@
 		B959EF5A2146172500930DD6 /* FontController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FontController.swift; sourceTree = "<group>"; };
 		B95B7FFA21588BF4004E613D /* IntrinsicContentSize.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = IntrinsicContentSize.swift; sourceTree = "<group>"; };
 		B9BA331D2159BE0100255E2D /* EventDetailViewController2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventDetailViewController2.swift; sourceTree = "<group>"; };
+		B9F4F340216DB2340038AE6B /* Logo.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -1148,6 +1150,7 @@
 			isa = PBXGroup;
 			children = (
 				B930B6E8214F3D5900685F64 /* Event.swift */,
+				B9F4F340216DB2340038AE6B /* Logo.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -1490,6 +1493,7 @@
 				2D67307421225B4000EE49A5 /* AboutFunctionController.swift in Sources */,
 				2D52AF1420E46E1A00018FC0 /* Timeline.swift in Sources */,
 				57BAD9542104CAD500973B45 /* TCPickerViewDarkTheme.swift in Sources */,
+				B9F4F341216DB2340038AE6B /* Logo.swift in Sources */,
 				2D52AF0C20E46E1A00018FC0 /* SearchNewsFlashController.swift in Sources */,
 				2D52AF1A20E46E1A00018FC0 /* DefaultViewController.swift in Sources */,
 				57BBAB69210962C300984AA4 /* TotalMarketCell.swift in Sources */,
