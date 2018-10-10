@@ -309,7 +309,15 @@ class EventListTableViewCell:UITableViewCell{
     }
     
     func updateUI() {
-        imgView.image = UIImage(named: "BlockchainCenter")
+        if let logoUrlStr = eventViewModel?.logoURL {
+            if logoUrlStr != "" {
+                imgView.setImage(urlString: logoUrlStr)
+            } else {
+                imgView.image = UIImage(named: "notfound")
+            }
+        } else {
+            imgView.image = UIImage(named: "notfound")
+        }
         titleLabel.text = eventViewModel?.title
         hostLabel.text = eventViewModel?.hostLabel
         addressLabel.text = eventViewModel?.address

@@ -19,6 +19,7 @@ struct EventViewModel {
     let hostPage: String
     let imageUrlStr: String
     let urlStr: String
+    let logoURL: String
     let yearOfEventStartTime: String
     let monthOfEventStartTime: String
     let weekOfEventStartTime: String
@@ -57,6 +58,7 @@ struct EventViewModel {
         hostPage = event.eventHostPage
         imageUrlStr = event.eventImageURL
         urlStr = event.eventURL
+        logoURL = event.logoURL
         
         let components = DateComponents(weekOfYear: week, yearForWeekOfYear: year)
         if let firstDayOfTheWeek = Calendar.current.date(from: components),

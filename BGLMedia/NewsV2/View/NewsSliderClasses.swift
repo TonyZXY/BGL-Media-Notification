@@ -22,7 +22,7 @@ extension NewsV2Controller : TableCellForSliderDelegate,TableCellForSliderDataSo
         if(indexPath.row == 0){
             // 200 is eaqual to the total height of the cell
             // make sure total view height in tablecell not >200
-            return 200 * view.frame.width/414
+            return 207 * view.frame.width/414
         }
         return 120 * view.frame.width/414
     }

@@ -24,6 +24,7 @@ struct Event {
     let eventName: String
     let eventStartTime: Date
     let eventURL: String
+    let logoURL: String
     
     
     init(_ json: JSON) {
@@ -41,5 +42,6 @@ struct Event {
         eventName = json["eventName"].stringValue
         eventStartTime = Extension.method.convertStringToDate(date: json["eventStartTime"].stringValue)
         eventURL = json["eventURL"].stringValue
+        logoURL = json["logoURL"].stringValue
     }
 }
