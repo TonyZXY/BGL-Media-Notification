@@ -923,8 +923,8 @@
 			isa = PBXGroup;
 			children = (
 				B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */,
-				57355C2E20F718CC002E70E4 /* TransactionsController.swift */,
 				B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */,
+				57355C2E20F718CC002E70E4 /* TransactionsController.swift */,
 				57355C2F20F718CC002E70E4 /* SearchExchangesController.swift */,
 				57355C3120F718CC002E70E4 /* SearchTradingPairController.swift */,
 				57355C3220F718CC002E70E4 /* WalletController.swift */,

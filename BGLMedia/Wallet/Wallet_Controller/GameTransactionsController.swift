@@ -10,6 +10,7 @@ import UIKit
 import RealmSwift
 import JGProgressHUD
 import SwiftKeychainWrapper
+import SwiftyJSON
 
 class GameTransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout, TransactionFrom, UITextFieldDelegate {
     
@@ -20,14 +21,32 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         cell.priceType.text = nil
     }
     
-    var gameUser = GameUser(name: "Geek")
+    var gameBalanceController: GameBalanceController?
     var newTransaction = EachTransactions()
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
     var color = ThemeColor()
     var transaction:String = "Buy"
     
     var transactionStatus = "Add"
-    var transactions = EachTransactions()
+    //var transactions = EachTransactions()
+    
+    var loginStatus:Bool{
+        get{
+            return UserDefaults.standard.bool(forKey: "isLoggedIn")
+        }
+    }
+    
+    var email:String{
+        get{
+            return KeychainWrapper.standard.string(forKey: "Email") ?? "null"
+        }
+    }
+    
+    var certificateToken:String{
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? "null"
+        }
+    }
     
     //First load the page
     override func viewDidLoad() {
@@ -112,6 +131,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         } else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! TransNumberCell
             cell.factor = factor
+            cell.gameUser = gameBalanceController?.gameUser
             if transaction == "Buy"{
                 cell.numberLabel.text = textValue(name: "amountBoughtForm")
                 cell.coinName = "AUD"
@@ -122,7 +142,6 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             cell.number.tag = indexPath.row
             cell.number.delegate = self
             cell.isGameMode = true
-            cell.gameUser = gameUser
             return cell
         } else if indexPath.row == 5{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! TransDateCell
@@ -219,8 +238,47 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
     
     //Click add Transaction button, it will transfer the current trading price to specific price type, for example: USD -> AUD
     @objc func addTransaction(){
-        //TODO..........................
-        print("Add Transaction.........")
+        guard let userID = gameBalanceController?.gameUser?.id else { return }
+        transactionButton.isUserInteractionEnabled = false
+        newTransaction.status = transaction
+
+        let newDate = self.newTransaction.date + " " + self.newTransaction.time
+        let trans:[String:Any] = [
+            "status":newTransaction.status,
+            "coinName":newTransaction.coinName,
+            "coinAddName":newTransaction.coinAbbName,
+            "exchangeName":newTransaction.exchangeName,
+            "tradingPairName":newTransaction.tradingPairsName,
+            "singlePrice":newTransaction.singlePrice,
+            "amount":self.newTransaction.amount,
+            "date":Extension.method.convertStringToDate2(date: newDate),
+            "note":self.newTransaction.additional,
+            ]
+        let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID, "transaction": trans]
+        print(parameter)
+        
+        if String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
+            URLServices.fetchInstance.passServerData(urlParameters: ["game","addTransaction"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                //print(response)
+                if success {
+                    self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                    self.gameBalanceController?.walletList.reloadData()
+                } else {
+                    //net work problem............
+                }
+                self.navigationController?.popViewController(animated: true)
+            }
+        } else{
+            let hud = JGProgressHUD(style: .light)
+            hud.indicatorView = JGProgressHUDErrorIndicatorView()
+            hud.tintColor = ThemeColor().darkBlackColor()
+            hud.textLabel.text = textValue(name: "error_transaction")
+            hud.show(in: self.view)
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
+                hud.dismiss()
+            }
+            transactionButton.isUserInteractionEnabled = true
+        }
     }
     
     //Click buy button it will turn to the "Buy" Type
@@ -261,6 +319,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                     let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
                     let price = Double(response["tick"]["close"].string ?? "0") ?? 0
                     cell.price.text = "\(price)"
+                    self.newTransaction.singlePrice = price
                     
                     let index2 = IndexPath(row: 4, section: 0)
                     let cell2 = self.transactionTableView.cellForRow(at: index2) as! TransNumberCell
@@ -339,22 +398,22 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
     }
     
     func setCoinName(name: String) {
-        transactions.coinName = name
+        //transactions.coinName = name
         newTransaction.coinName = name
     }
     
     func setCoinAbbName(abbName: String) {
-        transactions.coinAbbName = abbName
+        //transactions.coinAbbName = abbName
         newTransaction.coinAbbName = abbName
     }
     
     func setExchangesName(exchangeName: String) {
-        transactions.exchangeName = exchangeName
+        //transactions.exchangeName = exchangeName
         newTransaction.exchangeName = exchangeName
     }
     
     func setTradingPairsName(tradingPairsName: String) {
-        transactions.tradingPairsName = tradingPairsName
+        //transactions.tradingPairsName = tradingPairsName
         newTransaction.tradingPairsName = tradingPairsName
     }
     
@@ -366,7 +425,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                 newTransaction.singlePrice = 0
             }
             if Extension.method.checkInputVaild(value: textField.text!){
-                transactions.singlePrice = Double(textField.text!)!
+                //transactions.singlePrice = Double(textField.text!)!
                 newTransaction.singlePrice = Double(textField.text!)!
             }
         }
@@ -376,7 +435,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                 newTransaction.amount = 0
             }
             if Extension.method.checkInputVaild(value: textField.text!){
-                transactions.amount = Double(textField.text!)!
+                //transactions.amount = Double(textField.text!)!
                 newTransaction.amount = Double(textField.text!)!
             }
         }
@@ -385,11 +444,11 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         if textField.tag == 6{
         }
         if textField.tag == 7{
-            transactions.expenses = textField.text!
+            //transactions.expenses = textField.text!
             newTransaction.expenses = textField.text!
         }
         if textField.tag == 8{
-            transactions.additional = textField.text!
+            //transactions.additional = textField.text!
             newTransaction.additional = textField.text!
         }
     }

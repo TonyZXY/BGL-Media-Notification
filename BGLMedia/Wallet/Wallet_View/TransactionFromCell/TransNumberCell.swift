@@ -18,7 +18,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     var coinName = "" {
         didSet {
             balance = 0
-            gameUser?.coinsBalance.forEach({ (coin) in
+            gameUser?.coins.forEach({ (coin) in
                 if coin.name == coinName {
                     balance = coin.amount
                 }

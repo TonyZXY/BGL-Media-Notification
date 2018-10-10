@@ -29,7 +29,6 @@ class Transactions:Object{
     @objc dynamic var floatingPrice:Double = 0
     @objc dynamic var floatingPercent:Double = 0
     @objc dynamic var unrealizedPrice:Double = 0
-
     
     override class func primaryKey() -> String {
         return "coinAbbName"

@@ -48,7 +48,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         }
     }
     
-    
     //First load the page
     override func viewDidLoad() {
         super.viewDidLoad()
