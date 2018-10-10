@@ -73,15 +73,9 @@ class DetailController: UIViewController{
         refreshPage()
         setPriceChange()
         
-//        self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .refreshing)
-        
-//        refreshTimer = Timer.scheduledTimer(timeInterval: 60, target: self, selector: #selector(refreshData), userInfo: nil, repeats: true)
-        
-        
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
          NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadMarketData), name: NSNotification.Name(rawValue: "deleteTransaction"), object: nil)
-//        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadDetail"), object: nil)
     }
     
     
@@ -93,11 +87,7 @@ class DetailController: UIViewController{
     }
     
     @objc func updateMarketData(){
-//        refreshPage()
-//        self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
         if loginStatus{
-//            URLServices.fetchInstance.getSpecificAssets(coinAbbName: coinDetails.selectCoinAbbName){success in
-//                if success{
                     RefreshDataService.refresh.caculateAssetsData(coinAbbName: self.coinDetails.selectCoinAbbName){success in
                         if success{
                             self.refreshPage()
@@ -105,8 +95,6 @@ class DetailController: UIViewController{
                         }
                     }
                     self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
-//                }
-//            }
         }else{
             RefreshDataService.refresh.caculateAssetsData(coinAbbName: coinDetails.selectCoinAbbName){success in
                 if success{
@@ -122,7 +110,6 @@ class DetailController: UIViewController{
             RefreshDataService.refresh.caculateAssetsData(coinAbbName: coinDetails.selectCoinAbbName){success in
                 if success{
                     self.refreshPage()
-//                    self.coinDetailController.transactionHistoryController.historyTableView.switchRefreshHeader(to: .refreshing)
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
                 }
             }
@@ -152,15 +139,6 @@ class DetailController: UIViewController{
             general.coinName = value.coinName
             general.exchangeName = value.exchangeName
             general.tradingPairs = value.tradingPairsName
-//            marketSelectedData.coinAbbName = value.coinAbbName
-//            marketSelectedData.coinName = value.coinName
-//            marketSelectedData.exchangeName = value.exchangeName
-//            marketSelectedData.tradingPairsName = value.tradingPairsName
-//            marketSelectedData.transactionPrice = value.transactionPrice
-//            marketSelectedData.coinAmount = value.totalAmount
-            
-            
-//            coinDetailController.transactionHistoryController.generalData = general
             coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
             coinDetailController.alertControllers.coinName.status = true
             coinDetailController.alertControllers.coinAbbName = general.coinAbbName
@@ -177,7 +155,6 @@ class DetailController: UIViewController{
             if success{
                 self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.success, 0.5))
                 self.refreshPage()
-//                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
             } else{
                 self.coinDetailController.gerneralController.scrollView.switchRefreshHeader(to: .normal(.failure, 0.5))
             }
@@ -189,7 +166,6 @@ class DetailController: UIViewController{
         let dispatchGroup = DispatchGroup()
         var currency:Double = 0
         var singlePrice:Double = 0
-        
         
         if let assets = assetsData.first {
             dispatchGroup.enter()
@@ -283,28 +259,65 @@ class DetailController: UIViewController{
         }
         
         if realmCoinAbbName != "" && realmTradingPairsName != "" && realmMarket != ""{
-            APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
-                if success{
-                    if response["Response"].string ?? "" == "Success"{
-                        if let periodData = response["Data"].array{
-                            if periodData != []{
-                                let price = periodData.last!["close"].double! - periodData.first!["open"].double!
-                                let change = (price /  periodData.first!["open"].double!) * 100
-                                checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
-                                checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
-                                self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
-                            }
-                        }
-                        completion(true)
-                    }else{
-                        completion(false)
-                    }
-                } else{
-                    completion(false)
+            if realmMarket == "Huobi Australia"{
+                self.getHuobiAuRiseFallData(chartPeriod: chartPeriod, realmCoinAbbName: realmCoinAbbName, realmTradingPairsName: realmTradingPairsName, realmMarket: realmMarket){
+                    success in
+                    completion(true)
+                }
+            }else{
+                self.getCryptoCompareData(chartPeriod: chartPeriod, realmCoinAbbName: realmCoinAbbName, realmTradingPairsName: realmTradingPairsName, realmMarket: realmMarket){
+                    success in
+                    completion(true)
                 }
             }
         } else{
             completion(false)
+        }
+    }
+    
+    func getHuobiAuRiseFallData(chartPeriod: String, realmCoinAbbName: String, realmTradingPairsName: String, realmMarket: String,completion:@escaping (Bool)->Void){
+        APIServices.fetchInstance.getHuobiAuRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket){ (success, response) in
+            if success{
+                if response["status"].string ?? "" == "ok"{
+                    if let periodData = response["data"].array{
+                        if periodData != []{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price /  periodData.first!["open"].double!) * 100
+                            checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                            checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
+                            self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                        }
+                    }
+                    completion(true)
+                }else{
+                    completion(false)
+                }
+            }else{
+                completion(false)
+            }
+        }
+    }
+    
+    func getCryptoCompareData(chartPeriod: String, realmCoinAbbName: String, realmTradingPairsName: String, realmMarket: String,completion:@escaping (Bool)->Void){
+        APIServices.fetchInstance.getRiseFallPeriod(period: chartPeriod, from: realmCoinAbbName, to: realmTradingPairsName, market: realmMarket) { (success, response) in
+            if success{
+                if response["Response"].string ?? "" == "Success"{
+                    if let periodData = response["Data"].array{
+                        if periodData != []{
+                            let price = periodData.last!["close"].double! - periodData.first!["open"].double!
+                            let change = (price / periodData.first!["open"].double!) * 100
+                            checkDataRiseFallColor(risefallnumber: price, label: self.coinDetailController.gerneralController.totalRiseFall,currency:realmTradingPairsName,type: "Number")
+                            checkDataRiseFallColor(risefallnumber: change, label: self.coinDetailController.gerneralController.totalRiseFallPercent,currency:realmTradingPairsName,type: "Percent")
+                            self.coinDetailController.gerneralController.totalRiseFallPercent.text = "(" + self.coinDetailController.gerneralController.totalRiseFallPercent.text! + ")"
+                        }
+                    }
+                    completion(true)
+                }else{
+                    completion(false)
+                }
+            } else{
+                completion(false)
+            }
         }
     }
     
@@ -319,11 +332,6 @@ class DetailController: UIViewController{
         //Constraints
         childViewControllers.view.translatesAutoresizingMaskIntoConstraints = false
         childViewControllers.view.topAnchor.constraint(equalTo: views.topAnchor).isActive = true
-//        if #available(iOS 11.0, *) {
-//            childViewControllers.view.safeAreaLayoutGuide.bottomAnchor.constraint(equalTo: views.safeAreaLayoutGuide.bottomAnchor).isActive = true
-//        } else {
-//           childViewControllers.view.bottomAnchor.constraint(equalTo: views.bottomAnchor).isActive = true
-//        }
         childViewControllers.view.leftAnchor.constraint(equalTo: views.leftAnchor).isActive = true
         childViewControllers.view.widthAnchor.constraint(equalTo: views.widthAnchor).isActive = true
         childViewControllers.view.heightAnchor.constraint(equalTo: views.heightAnchor).isActive = true
@@ -362,15 +370,7 @@ class DetailController: UIViewController{
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:[v1]-0-[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":coinDetailView,"v1":mainView]))
         addChildViewControllers(childViewControllers: coinDetailController, views: coinDetailView)
-//        if #available(iOS 11.0, *) {
-//            coinDetailView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor).isActive = true
-//        } else {
-//           coinDetailView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
-//        }
 
-        
-        
-        
         let generalPage = coinDetailController.gerneralController
         let header = DefaultRefreshHeader.header()
         header.textLabel.textColor = ThemeColor().whiteColor()

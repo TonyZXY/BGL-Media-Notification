@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Workspace
    version = "1.0">
-   <Group
-      location = "group:/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/TradingGame/GameCoinDetail"
-      name = "GameCoinDetail">
-   </Group>
    <FileRef
       location = "group:BGLMedia.xcodeproj">
    </FileRef>

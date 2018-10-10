@@ -35,6 +35,11 @@ hintRealizedDescription = "This is the realised gain/loss for the completed purc
 hintUnrealizedTitle = "Unrealised";
 hintUnrealizedDescription = "This is the unrealised gain/loss for the purchased price of the assets comparing with the current market price.";
 
+//Game
+networkFailure = "Sorry, There Was A Network Problem";
+nickname = "Please Enter A Nickname";
+nicknameNotUnique = "Sorry, The Nickname Is Already Exited, Please Enter Another Nickname";
+
 //Transaction Page
 buy = "Buy";
 sell = "Sell";
@@ -43,6 +48,7 @@ updateTransaction = "Update Transaction";
 loading = "Loading...";
 picker_done = "Done";
 picker_cancel = "Cancel";
+balance = "Balance";
 
 //Transaciton Page Table View
 navigationbar_transa = "Add Transaction";

@@ -19,6 +19,8 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
     var allCoinObject = [CoinList]()
     weak var delegate:TransactionFrom?
     var filterObject = [CoinList]()
+    var isGameMode = false
+    let gameList = ["Bitcoin", "Ethereum", "Bitcoin Cash" , "Litecoin" , "Ethereum Classic", "Power Ledger" , "aelf", "Cortex", "Data", "IOS token"]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +35,13 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
 //            let filterCoin = exactMarket?.filter{(name,_) in return name == coin.Name}
 //            if filterCoin?.count != 0{
 //            coin.coinName = coin.coinName.trimmingCharacters(in: NSCharacterSet.whitespaces)
+            if isGameMode {
+                if gameList.contains(coin.coinName) {
+                    allCoinObject.append(coin)
+                }
+            } else {
                 allCoinObject.append(coin)
+            }
 //            }
         }
     }
@@ -94,7 +102,11 @@ class SearchCoinController: UIViewController,UITableViewDelegate,UITableViewData
         let table:CoinTypeTableViewCell = searchResult.cellForRow(at: indexPath) as! CoinTypeTableViewCell
         delegate?.setCoinName(name: table.coinName.text!)
         delegate?.setCoinAbbName(abbName: table.coinNameAbb.text!)
-        delegate?.setExchangesName(exchangeName: "Global Average")
+        if isGameMode {
+            delegate?.setExchangesName(exchangeName: "Huobi Australia")
+        } else {
+            delegate?.setExchangesName(exchangeName: "Global Average")
+        }
         delegate?.setTradingPairsName(tradingPairsName: priceType)
         delegate?.setTradingPairsFirstType(firstCoinType: [])
         delegate?.setTradingPairsSecondType(secondCoinType: [])

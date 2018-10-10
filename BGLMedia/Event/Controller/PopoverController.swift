@@ -31,11 +31,11 @@ class PopoverController: UIViewController {
     
     //arrangeSubview will be added to Content View if it is setted
     var arrangeSubview: UIView?
-    //buttons will be added to Content View if it is setted
-    var buttons = [PopoverButton]()
     //get the bar button item from presented view controller so that we can set things on it in here
     var popoverBarButtonItem: UIBarButtonItem?
     var delegate: PopoverControllerDelegate?
+    //buttons will be added to Content View if it is setted
+    var buttons = [PopoverButton]()
     
     // MARK: Popover Contentview
     lazy var contentView: UIStackView = {
@@ -51,12 +51,12 @@ class PopoverController: UIViewController {
             button.addTarget(self, action: #selector(buttonAction), for: .touchUpInside)
             return button
         })
-        
+
         let stackView = UIStackView(arrangedSubviews: arrangedSubviews)
         if let arrSubview = arrangeSubview {
             stackView.addArrangedSubview(arrSubview)
         }
-        
+
         //STACK VIEW SETTING
         stackView.distribution = .fillEqually
         stackView.axis = .vertical

@@ -35,7 +35,10 @@ hintRealizedDescription = "此数据是完成交易买卖后的已实现收益/�
 hintUnrealizedTitle = "未实现收益/损失";
 hintUnrealizedDescription = "此数据是与当前市场价格相比，资产购入价格的未实现收益/损失。";
 
-
+//Game
+networkFailure = "对不起，网络出现了问题";
+nickname = "请输入一个昵称";
+nicknameNotUnique = "对不起，昵称已经存在，请输入另一个昵称";
 
 //Transaction Page
 buy = "买入";
@@ -45,6 +48,7 @@ updateTransaction = "更新交易";
 loading = "加载中...";
 picker_done = "完成";
 picker_cancel = "取消";
+balance = "结余";
 
 //Transaciton Page Table View
 navigationbar_transa = "添加交易";

@@ -1,34 +1,34 @@
 //
-//  TransactionsController.swift
-//  news app for blockchain
+//  GameTradingController.swift
+//  BGLMedia
 //
-//  Created by Bruce Feng on 23/4/18.
-//  Copyright © 2018 Sheng Li. All rights reserved.
+//  Created by Fan Wu on 10/1/18.
+//  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
 import UIKit
 import RealmSwift
 import JGProgressHUD
 import SwiftKeychainWrapper
+import SwiftyJSON
 
-
-class TransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout,TransactionFrom,UITextFieldDelegate{
+class GameTransactionsController: UIViewController, UITableViewDelegate, UITableViewDataSource, UICollectionViewDelegateFlowLayout, TransactionFrom, UITextFieldDelegate {
     
     func setLoadPrice() {
+        //will be called when coin is selected
         let index = IndexPath(row: 3, section: 0)
         let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
         cell.priceType.text = nil
     }
     
+    var gameBalanceController: GameBalanceController?
     var newTransaction = EachTransactions()
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
     var color = ThemeColor()
     var transaction:String = "Buy"
-    let cryptoCompareClient = CryptoCompareClient()
-    var updateTransaction = EachTransactions()
+    
     var transactionStatus = "Add"
-    var transactionNumber:Int = 0
-    var transactions = EachTransactions()
+    //var transactions = EachTransactions()
     
     var loginStatus:Bool{
         get{
@@ -52,8 +52,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        updateTransactionDetail()
-        
     }
     
     //Every time this page appear
@@ -94,7 +92,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             cell.factor = factor
             cell.coinLabel.text = textValue(name: "coinForm")
             cell.coin.text = newTransaction.coinName
-            if transactionStatus == "Update" || transactionStatus == "AddSpecific"{
+            if transactionStatus == "AddSpecific" {
                 cell.isUserInteractionEnabled = false
                 cell.accessoryType = .none
             }
@@ -126,26 +124,24 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             } else if transaction == "Sell"{
                 cell.priceLabel.text = textValue(name: "sellPriceForm") + " " + newTransaction.tradingPairsName
             }
-            if transactionStatus == "Update"{
-                cell.price.text = Extension.method.scientificMethod(number: newTransaction.singlePrice)
-            }
             cell.price.tag = indexPath.row
             cell.price.delegate = self
+            cell.isUserInteractionEnabled = false
             return cell
         } else if indexPath.row == 4{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! TransNumberCell
             cell.factor = factor
+            cell.gameUser = gameBalanceController?.gameUser
             if transaction == "Buy"{
                 cell.numberLabel.text = textValue(name: "amountBoughtForm")
+                cell.coinName = "AUD"
             } else if transaction == "Sell"{
                 cell.numberLabel.text = textValue(name: "amountSoldForm")
-            }
-            if transactionStatus == "Update"{
-                cell.number.text = String(newTransaction.amount)
+                cell.coinName = (newTransaction.coinName == "") ? "Coin" : newTransaction.coinName
             }
             cell.number.tag = indexPath.row
             cell.number.delegate = self
-            cell.number.clearsOnBeginEditing = true
+            cell.isGameMode = true
             return cell
         } else if indexPath.row == 5{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[5], for: indexPath) as! TransDateCell
@@ -162,22 +158,18 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             }
             cell.date.inputAccessoryView = toolBarDate
             cell.date.inputView = datePicker
-            cell.date.text = formatter.string(from: datePicker.date) + " ▼"
+            cell.date.text = formatter.string(from: datePicker.date)
             newTransaction.date = Extension.method.convertDateToStringPickerDate(date: datePicker.date)
-            //            cell.date.frame = CGRect(x: 0, y: 0, width: cell.date.frame.width+30, height: 20)
             if transaction == "Buy"{
                 cell.dateLabel.text = textValue(name: "buyDateForm")
             } else if transaction == "Sell"{
                 cell.dateLabel.text = textValue(name: "sellDateForm")
             }
-            if transactionStatus == "Update"{
-                let updateDate = Extension.method.convertStringToDatePickerDate(date: newTransaction.date)
-                cell.date.text = formatter.string(from: updateDate) + " ▼"
-            }
             cell.date.tag = indexPath.row
             textFieldDidEndEditing(cell.date)
             cell.date.delegate = self
             cell.pickerButton.addTarget(self, action: #selector(showPickerView), for: .touchUpInside)
+            cell.isUserInteractionEnabled = false
             return cell
         } else if indexPath.row == 6{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[6], for: indexPath) as! TransTimeCell
@@ -201,19 +193,15 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 cell.timeLabel.text = textValue(name: "sellTimeForm")
             }
             
-            if transactionStatus == "Update"{
-                let updateTime = Extension.method.convertStringToTimePickerDate(date: newTransaction.time)
-                cell.time.text = formatter.string(from: updateTime) + " ▼"
-            } else{
-                cell.time.text = formatter.string(from: timePicker.date) + " ▼"
-                newTransaction.time = Extension.method.convertTimeToStringPickerDate(date: timePicker.date)
-            }
+            cell.time.text = formatter.string(from: timePicker.date)
+            newTransaction.time = Extension.method.convertTimeToStringPickerDate(date: timePicker.date)
+            
             cell.time.tag = indexPath.row
             textFieldDidEndEditing(cell.time)
             cell.time.delegate = self
+            cell.isUserInteractionEnabled = false
             return cell
-        }
-        else if indexPath.row == 7{
+        } else if indexPath.row == 7{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[7], for: indexPath) as! TransAdditionalCell
             cell.factor = factor
             cell.additionalLabel.text = textValue(name: "additionalForm")
@@ -221,28 +209,20 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             cell.additional.tag = indexPath.row
             cell.additional.delegate = self
             return cell
-        }else {
+        } else {
             return UITableViewCell()
         }
     }
     
+    func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        let factor = view.frame.width/375
+        if indexPath.row == 4 {
+            return 150 * factor
+        }
+        return 80 * factor
+    }
+    
     @objc func showPickerView(){
-        //        let datePickerContainer = UIView()
-        //        datePickerContainer.frame = CGRect(x: 0, y: view.frame.height-300, width: view.frame.width, height: 300)
-        //        datePickerContainer.backgroundColor = UIColor.white
-        //        datepickerView.frame = CGRect(x: 0, y: 30, width: view.frame.width, height: 250)
-        //        datepickerView.maximumDate = Date()
-        //        datepickerView.datePickerMode = UIDatePickerMode.date
-        ////        datepickerView.addTarget(self, action: "dateChangedInDate:", forControlEvents: .valueChanged)
-        //        datePickerContainer.addSubview(datepickerView)
-        //        var doneButton = UIButton()
-        //        doneButton.setTitle("Done", for: .normal)
-        //        doneButton.titleLabel?.font = UIFont.semiBoldFont(18)
-        //        doneButton.setTitleColor(UIColor.blue, for: .normal)
-        ////        doneButton.addTarget(self, action: Selector("dismissPicker:"), forControlEvents: UIControlEvents.TouchUpInside)
-        //        doneButton.frame = CGRect(x: view.frame.width-50, y: 5, width: 70.0, height: 30.0)
-        //        datePickerContainer.addSubview(doneButton)
-        //        self.view.addSubview(datePickerContainer)
     }
     
     
@@ -251,46 +231,42 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             let searchdetail = SearchCoinController()
             searchdetail.hidesBottomBarWhenPushed = true
             searchdetail.delegate = self
-            navigationController?.pushViewController(searchdetail, animated: true)
-        } else if indexPath.row == 1{
-            let searchdetail = SearchExchangesController()
-            searchdetail.hidesBottomBarWhenPushed = true
-            searchdetail.delegate = self
-            navigationController?.pushViewController(searchdetail, animated: true)
-        } else if indexPath.row == 2{
-            let searchdetail = SearchTradingPairController()
-            searchdetail.hidesBottomBarWhenPushed = true
-            searchdetail.delegate = self
+            searchdetail.isGameMode = true
             navigationController?.pushViewController(searchdetail, animated: true)
         }
     }
     
     //Click add Transaction button, it will transfer the current trading price to specific price type, for example: USD -> AUD
     @objc func addTransaction(){
+        guard let userID = gameBalanceController?.gameUser?.id else { return }
         transactionButton.isUserInteractionEnabled = false
-        newTransaction.totalPrice = Double(newTransaction.amount) * newTransaction.singlePrice
         newTransaction.status = transaction
+
+        let newDate = self.newTransaction.date + " " + self.newTransaction.time
+        let trans:[String:Any] = [
+            "status":newTransaction.status,
+            "coinName":newTransaction.coinName,
+            "coinAddName":newTransaction.coinAbbName,
+            "exchangeName":newTransaction.exchangeName,
+            "tradingPairName":newTransaction.tradingPairsName,
+            "singlePrice":newTransaction.singlePrice,
+            "amount":self.newTransaction.amount,
+            "date":Extension.method.convertStringToDate2(date: newDate),
+            "note":self.newTransaction.additional,
+            ]
+        let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID, "transaction": trans]
+        print(parameter)
         
-        if newTransaction.coinName != "" && newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != "" && String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
-            transactionButton.setTitle(textValue(name: "loading"), for: .normal)
-            APIServices.fetchInstance.getCryptoCurrencyApis(from: self.newTransaction.tradingPairsName, to: ["AUD","USD","JPY","EUR","CNY"]) { (success, response) in
-                if success{
-                    let allCurrencys = List<EachCurrency>()
-                    for result in response{
-                        let currencys = EachCurrency()
-                        currencys.name = result.0
-                        currencys.price = ((result.1.double) ?? 0) * self.newTransaction.singlePrice
-                        allCurrencys.append(currencys)
-                    }
-                    self.newTransaction.currency = allCurrencys
-                    if self.transactionStatus == "Update"{
-                        self.updateTranscations()
-                    }else{
-                        self.addTransacitons()
-                    }
-                } else{
-                    self.navigationController?.popViewController(animated: true)
+        if String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
+            URLServices.fetchInstance.passServerData(urlParameters: ["game","addTransaction"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                //print(response)
+                if success {
+                    self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                    self.gameBalanceController?.walletList.reloadData()
+                } else {
+                    //net work problem............
                 }
+                self.navigationController?.popViewController(animated: true)
             }
         } else{
             let hud = JGProgressHUD(style: .light)
@@ -303,134 +279,6 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
             }
             transactionButton.isUserInteractionEnabled = true
         }
-    }
-    
-    func updateTranscations(){
-        if self.loginStatus{
-            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","updateTransaction"], httpMethod: "POST", parameters: self.prepareForRealm(newTransaction: self.newTransaction, transactionStatus: self.transactionStatus), completion: { (response, success) in
-                if success{
-                    if let transactionId = response["data"][0]["transaction_id"].int{
-                        self.newTransaction.id = transactionId
-                        self.UpdateTransactionToRealm(){succees in
-                            self.UpdateNotification(success: succees)
-                        }
-                    } else{
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                } else{
-                    self.navigationController?.popViewController(animated: true)
-                }
-            })
-        } else{
-            self.UpdateTransactionToRealm(){succees in
-                self.UpdateNotification(success: succees)
-            }
-        }
-    }
-    
-    func addTransacitons(){
-        let realm = try! Realm()
-        let lastId = (realm.objects(EachTransactions.self).sorted(byKeyPath: "id").last?.id) ?? 0
-        self.newTransaction.id = lastId + 1
-        if self.loginStatus{
-            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","addTransaction"], httpMethod: "POST", parameters: self.prepareForRealm(newTransaction: self.newTransaction, transactionStatus: self.transactionStatus), completion: { (response, success) in
-                if success{
-                    if let transactionId = response["data"][0]["transaction_id"].int{
-                        self.newTransaction.id = transactionId
-                        self.AddTransactionToRealm(){success in
-                            self.AddSpecificNotification(success: success)
-                        }
-                    } else{
-                        self.navigationController?.popViewController(animated: true)
-                    }
-                } else{
-                    self.navigationController?.popViewController(animated: true)
-                }
-            })
-        } else{
-            self.AddTransactionToRealm(){success in
-                self.AddSpecificNotification(success: success)
-            }
-        }
-    }
-    
-    func AddSpecificNotification(success:Bool){
-        if success{
-            if self.transactionStatus == "AddSpecific"{
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-            }else{
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
-            }
-            self.navigationController?.popViewController(animated: true)
-        }else{
-            self.navigationController?.popViewController(animated: true)
-        }
-    }
-    
-    func UpdateNotification(success:Bool){
-        if success{
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-            self.navigationController?.popViewController(animated: true)
-        } else{
-            self.navigationController?.popViewController(animated: true)
-        }
-    }
-    
-    func prepareForRealm(newTransaction:EachTransactions,transactionStatus:String)->[String:Any]{
-        let newDate = self.newTransaction.date + " " + self.newTransaction.time
-        var transactions:[String:Any] = [
-            "status":newTransaction.status,
-            "coinName":self.newTransaction.coinName,
-            "coinAddName":self.newTransaction.coinAbbName,
-            "exchangeName":self.newTransaction.exchangeName,
-            "tradingPairName":self.newTransaction.tradingPairsName,
-            "singlePrice":self.newTransaction.singlePrice,
-            "amount":self.newTransaction.amount,
-            "currencyAUD": (self.newTransaction.currency.filter{name in return name.name.contains("AUD")}.first?.price) ?? 0,
-            "currencyUSD": (self.newTransaction.currency.filter{name in return name.name.contains("USD")}.first?.price) ?? 0,
-            "currencyJPY": (self.newTransaction.currency.filter{name in return name.name.contains("JPY")}.first?.price) ?? 0,
-            "currencyEUR": (self.newTransaction.currency.filter{name in return name.name.contains("EUR")}.first?.price) ?? 0,
-            "currencyCNY": (self.newTransaction.currency.filter{name in return name.name.contains("CNY")}.first?.price) ?? 0,
-            "date":Extension.method.convertStringToDate2(date: newDate),
-            "note":self.newTransaction.additional,
-            ]
-        if transactionStatus == "Update"{
-            transactions["transactionID"] = newTransaction.id
-            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":transactions]
-            return body
-        } else{
-            let body:[String:Any] = ["email":self.email,"token":self.certificateToken,"transactions":[transactions]]
-            return body
-        }
-    }
-    
-    
-    func AddTransactionToRealm(completion:@escaping (Bool)->Void){
-        let realm = try! Realm()
-        let tran = Transactions()
-        tran.coinAbbName = self.newTransaction.coinAbbName
-        tran.coinName = self.newTransaction.coinName
-        tran.exchangeName = "Global Average"
-        tran.tradingPairsName = priceType
-        let object = realm.objects(Transactions.self).filter("coinAbbName == %@", self.newTransaction.coinAbbName)
-        try! realm.write {
-            if object.count != 0{
-                object[0].everyTransactions.append(self.newTransaction)
-            } else{
-                tran.everyTransactions.append(self.newTransaction)
-                
-                realm.add(tran)
-            }
-        }
-        completion(true)
-    }
-    
-    func UpdateTransactionToRealm(completion:@escaping (Bool)->Void){
-        let realm = try! Realm()
-        try! realm.write {
-            realm.add(newTransaction, update: true)
-        }
-        completion(true)
     }
     
     //Click buy button it will turn to the "Buy" Type
@@ -463,68 +311,22 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     
     //Load current selected coins trading price
     func loadPrice(){
-        var readData:Double = 0
         if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
-            if newTransaction.exchangeName == "Global Average"{
-                let index = IndexPath(row: 3, section: 0)
-                let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                cell.priceType.text = " "
-                URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + newTransaction.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
-                    if success{
-                        if let result = response["quotes"].array{
-                            for results in result{
-                                if results["currency"].string ?? "" == priceType{
-                                    let price = results["data"]["price"].double ?? 0
-                                    cell.priceType.text = Extension.method.scientificMethod(number: price)
-                                }
-                            }
-                        }
-                    }
-                }
-            }else if newTransaction.exchangeName == "Huobi Australia"{
-                APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: newTransaction.coinAbbName, tradingPairName: newTransaction.tradingPairsName, exchangeName: newTransaction.exchangeName) { (response, success) in
-                    if success{
-                        let index = IndexPath(row: 3, section: 0)
-                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                        let price = Double(response["tick"]["close"].string ?? "0") ?? 0
-                        cell.priceType.text = Extension.method.scientificMethod(number: price)
-                    }
-                }
-            }else{
-                cryptoCompareClient.getTradePrice(from: newTransaction.coinAbbName, to: newTransaction.tradingPairsName, exchange: newTransaction.exchangeName){
-                    result in
-                    switch result{
-                    case .success(let resultData):
-                        for(_, value) in resultData!{
-                            readData = value
-                        }
-                        let index = IndexPath(row: 3, section: 0)
-                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                        cell.priceType.text = Extension.method.scientificMethod(number: readData)
-                    case .failure(let error):
-                        print("the error \(error.localizedDescription)")
-                    }
+            
+            APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: newTransaction.coinAbbName, tradingPairName: newTransaction.tradingPairsName, exchangeName: newTransaction.exchangeName) { (response, success) in
+                if success{
+                    let index = IndexPath(row: 3, section: 0)
+                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                    let price = Double(response["tick"]["close"].string ?? "0") ?? 0
+                    cell.price.text = "\(price)"
+                    self.newTransaction.singlePrice = price
+                    
+                    let index2 = IndexPath(row: 4, section: 0)
+                    let cell2 = self.transactionTableView.cellForRow(at: index2) as! TransNumberCell
+                    cell2.price = price
+                    cell2.calculateCoinAmount()
                 }
             }
-        } else{
-            newTransaction.singlePrice = 0
-        }
-    }
-    
-    //If this page is open from transaction history page, it can display the data in the transaction form and allow them to update
-    func updateTransactionDetail(){
-        if transactionStatus == "Update"{
-            newTransaction.id = updateTransaction.id
-            newTransaction.coinAbbName = updateTransaction.coinAbbName
-            newTransaction.coinName = updateTransaction.coinName
-            newTransaction.exchangeName = updateTransaction.exchangeName
-            newTransaction.tradingPairsName = updateTransaction.tradingPairsName
-            newTransaction.singlePrice = updateTransaction.singlePrice
-            newTransaction.amount = updateTransaction.amount
-            newTransaction.date = updateTransaction.date
-            newTransaction.time = updateTransaction.time
-            newTransaction.expenses = updateTransaction.expenses
-            newTransaction.additional = updateTransaction.additional
         }
     }
     
@@ -546,7 +348,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
         addButtonView.addSubview(sell)
         
         transactionButton.addTarget(self, action: #selector(addTransaction), for: .touchUpInside)
-        transactionTableView.rowHeight = 80 * factor
+        //transactionTableView.rowHeight = 80 * factor
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButtonView,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0(\(80*factor))]", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":addButtonView,"v1":sell,"v2":transactionTableView,"v3":transactionButton]))
         NSLayoutConstraint(item: buy, attribute: .centerY, relatedBy: .equal, toItem: addButtonView, attribute: .centerY, multiplier: 1, constant: 0).isActive = true
@@ -583,39 +385,35 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     //Delegate from search Page
     func getExchangeName() -> String {
         return newTransaction.exchangeName
-        //        return transactions.exchangeName
     }
     
     func getCoinName() -> String {
         return newTransaction.coinAbbName
-        //        return transactions.coinAbbName
     }
     
     func setTradingPairsFirstType(firstCoinType: [String]) {
-        //        transcationData.tradingPairsFirst = firstCoinType
     }
     
     func setTradingPairsSecondType(secondCoinType: [String]) {
-        //        transcationData.tradingPairsSecond = secondCoinType
     }
     
     func setCoinName(name: String) {
-        transactions.coinName = name
+        //transactions.coinName = name
         newTransaction.coinName = name
     }
     
     func setCoinAbbName(abbName: String) {
-        transactions.coinAbbName = abbName
+        //transactions.coinAbbName = abbName
         newTransaction.coinAbbName = abbName
     }
     
     func setExchangesName(exchangeName: String) {
-        transactions.exchangeName = exchangeName
+        //transactions.exchangeName = exchangeName
         newTransaction.exchangeName = exchangeName
     }
     
     func setTradingPairsName(tradingPairsName: String) {
-        transactions.tradingPairsName = tradingPairsName
+        //transactions.tradingPairsName = tradingPairsName
         newTransaction.tradingPairsName = tradingPairsName
     }
     
@@ -627,7 +425,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 newTransaction.singlePrice = 0
             }
             if Extension.method.checkInputVaild(value: textField.text!){
-                transactions.singlePrice = Double(textField.text!)!
+                //transactions.singlePrice = Double(textField.text!)!
                 newTransaction.singlePrice = Double(textField.text!)!
             }
         }
@@ -637,18 +435,20 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
                 newTransaction.amount = 0
             }
             if Extension.method.checkInputVaild(value: textField.text!){
-                transactions.amount = Double(textField.text!)!
+                //transactions.amount = Double(textField.text!)!
                 newTransaction.amount = Double(textField.text!)!
             }
         }
-        if textField.tag == 5{}
-        if textField.tag == 6{}
+        if textField.tag == 5{
+        }
+        if textField.tag == 6{
+        }
         if textField.tag == 7{
-            transactions.expenses = textField.text!
+            //transactions.expenses = textField.text!
             newTransaction.expenses = textField.text!
         }
         if textField.tag == 8{
-            transactions.additional = textField.text!
+            //transactions.additional = textField.text!
             newTransaction.additional = textField.text!
         }
     }
@@ -656,11 +456,7 @@ class TransactionsController: UIViewController, UITableViewDelegate, UITableView
     func languageLabel(){
         buy.setTitle(textValue(name: "buy"), for: .normal)
         sell.setTitle(textValue(name: "sell"), for: .normal)
-        if transactionStatus == "Update" {
-            transactionButton.setTitle(textValue(name: "updateTransaction"), for: .normal)
-        } else {
-            transactionButton.setTitle(textValue(name: "addTransaction"), for: .normal)
-        }
+        transactionButton.setTitle(textValue(name: "addTransaction"), for: .normal)
     }
     
     lazy var transactionTableView:UITableView = {

@@ -40,11 +40,11 @@ class URLServices:NSObject{
     
     static let fetchInstance = URLServices()
     let realm = try! Realm()
-//    "https://bglnewsbkend.tk"
+    //    "https://bglnewsbkend.tk"
     func passServerData(urlParameters:[String],httpMethod:String,parameters:[String:Any],completion:@escaping (JSON, Bool)->Void){
-        //var BaseURl = "https://cryptogeekapp.com"
-        var BaseURl = "http://10.10.6.110:3020"
-//        "https://bglnewsbkend.tk"
+        //var BaseURl = "https://cryptogeekapp.com"   //production server
+        var BaseURl = "http://10.10.6.110:3020"       //test server
+        //        "https://bglnewsbkend.tk"
         for path in urlParameters{
             BaseURl = BaseURl + "/" + path
         }
@@ -54,12 +54,12 @@ class URLServices:NSObject{
         guard let url = URL(string: urlSetting) else { return completion(JSON(),false)}
         
         
-//        let url = URL(string: urlSetting)
-//        print(url)
+        //        let url = URL(string: urlSetting)
+        //        print(url)
         
-//         let url = URL(string: urlSetting)
+        //         let url = URL(string: urlSetting)
         var urlRequest = URLRequest(url: url)
-//        URLRequest(url: url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20)
+        //        URLRequest(url: url!, cachePolicy: .useProtocolCachePolicy, timeoutInterval: 20)
         urlRequest.httpMethod = httpMethod
         
         if httpMethod == "POST"{
@@ -71,16 +71,16 @@ class URLServices:NSObject{
         urlRequest.timeoutInterval = 10
         
         
-//        let manager = Alamofire.SessionManager.default
-//        manager.session.configuration.timeoutIntervalForRequest = 20
-//        manager.session.configuration.timeoutIntervalForResource = 20
+        //        let manager = Alamofire.SessionManager.default
+        //        manager.session.configuration.timeoutIntervalForRequest = 20
+        //        manager.session.configuration.timeoutIntervalForResource = 20
         
         
-//        let configuration = URLSessionConfiguration.default
-//        configuration.timeoutIntervalForRequest = 10
-//        configuration.timeoutIntervalForResource = 10
-//        let sessionManager = Alamofire.SessionManager(configuration: configuration)
-//        let sessionManager = Alamofire.Manager.sharedInstance
+        //        let configuration = URLSessionConfiguration.default
+        //        configuration.timeoutIntervalForRequest = 10
+        //        configuration.timeoutIntervalForResource = 10
+        //        let sessionManager = Alamofire.SessionManager(configuration: configuration)
+        //        let sessionManager = Alamofire.Manager.sharedInstance
         
         
         
@@ -88,8 +88,8 @@ class URLServices:NSObject{
             switch response.result {
             case .success(let value):
                 let res = JSON(value)
-//                print("get success")
-//                print(res)
+                //                print("get success")
+                //                print(res)
                 
                 completion(res,true)
             case .failure(let error):
@@ -177,7 +177,7 @@ class URLServices:NSObject{
     
     
     func storeNotificationDataToRealm(completion:@escaping (Bool)->Void){
-//        let email = UserDefaults.standard.string(forKey: "UserEmail")!
+        //        let email = UserDefaults.standard.string(forKey: "UserEmail")!
         let certificateToken = UserDefaults.standard.string(forKey: "CertificateToken")!
         let body:[String:Any] = ["email":email,"token":certificateToken]
         
@@ -228,7 +228,7 @@ class URLServices:NSObject{
     }
     
     
-
+    
     func getAssets(completion:@escaping (Bool)->Void){
         let body:[String:Any] = ["email":email,"token":certificateToken]
         let realm = try! Realm()
@@ -276,7 +276,7 @@ class URLServices:NSObject{
                         tran.coinName = newTransactions.coinName
                         tran.exchangeName = "Global Average"
                         tran.tradingPairsName = priceType
-           
+                        
                         realm.beginWrite()
                         if realm.object(ofType: Transactions.self, forPrimaryKey: newTransactions.coinAbbName) == nil {
                             tran.everyTransactions.append(newTransactions)
@@ -287,8 +287,8 @@ class URLServices:NSObject{
                             if object.count != 0{
                                 let newT = realm.create(EachTransactions.self, value: newTransactions, update: true)
                                 object[0].everyTransactions.append(newT)
-//                                realm.add(newTransactions, update: true)
-//                                object[0].everyTransactions.append(newTransactions)
+                                //                                realm.add(newTransactions, update: true)
+                                //                                object[0].everyTransactions.append(newTransactions)
                             }
                         }
                         try! realm.commitWrite()
@@ -312,7 +312,7 @@ class URLServices:NSObject{
                     if let dataResult = response["data"].array{
                         try! realm.write{
                             realm.delete(coinObject[0])
-//                            realm.delete(coinObject[0].everyTransactions)
+                            //                            realm.delete(coinObject[0].everyTransactions)
                         }
                         
                         for result in dataResult{

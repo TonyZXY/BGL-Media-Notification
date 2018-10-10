@@ -133,12 +133,14 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
         return mb
     }()
     
-    var collectionviews: UICollectionView = {
+    lazy var collectionviews: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
         layout.minimumLineSpacing = 0
         let collectionview = UICollectionView(frame: .zero, collectionViewLayout:layout)
         collectionview.isPagingEnabled = true
+        collectionview.delegate = self
+        collectionview.dataSource = self
         collectionview.showsHorizontalScrollIndicator = false
         return collectionview
     }()
@@ -154,13 +156,13 @@ class MarketsController: UIViewController, UICollectionViewDelegate,UICollection
     }()
     
     func setUpView(){
+        view.backgroundColor = ThemeColor().darkGreyColor()
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/414
         titleLabel.text = navigationBarItem
         navigationItem.titleView = titleLabel
         
-        collectionviews.delegate = self
-        collectionviews.dataSource = self
+        
         
         //Set Up Menu Bar
         view.addSubview(menuBar)
