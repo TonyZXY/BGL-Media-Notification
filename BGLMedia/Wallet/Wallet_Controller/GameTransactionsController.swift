@@ -132,6 +132,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[4], for: indexPath) as! TransNumberCell
             cell.factor = factor
             cell.gameUser = gameBalanceController?.gameUser
+            cell.newTransaction = newTransaction
             if transaction == "Buy"{
                 cell.numberLabel.text = textValue(name: "amountBoughtForm")
                 cell.coinName = "AUD"
@@ -255,7 +256,6 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             "note":self.newTransaction.additional,
             ]
         let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID, "transaction": trans]
-        print(parameter)
         
         if String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
             URLServices.fetchInstance.passServerData(urlParameters: ["game","addTransaction"], httpMethod: "POST", parameters: parameter) { (response, success) in

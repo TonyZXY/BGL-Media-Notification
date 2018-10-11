@@ -87,11 +87,33 @@ struct GameCoin {
     let abbrName: String
     let amount: Double
     var price: Double
+    var totalValueOfBuy: Double
+    var totalAmountOfBuy: Double
+    var totalValueOfSell: Double
+    var totalAmountOfSell: Double
     
     init(name: String, abbrName: String, amount: Double) {
         self.name = name
         self.abbrName = abbrName
         self.amount = amount
-        price = 1
+        price = 0
+        totalValueOfBuy = 0
+        totalAmountOfBuy = 0
+        totalValueOfSell = 0
+        totalAmountOfSell = 0
+    }
+}
+
+struct TransSum {
+    let abbrName: String
+    let status: String
+    let totalAmount: Double
+    let totalValue: Double
+    
+    init(_ json: JSON) {
+        abbrName = json["coin_add_name"].stringValue
+        status = json["status"].stringValue
+        totalAmount = json["total_amount"].doubleValue
+        totalValue = json["total_value"].doubleValue
     }
 }
