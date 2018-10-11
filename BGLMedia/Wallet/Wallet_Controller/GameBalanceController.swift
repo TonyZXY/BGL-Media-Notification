@@ -72,13 +72,31 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
-        //need to call the function first, timer will call the function 60 sec later
-        calculateValue()
-        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in
-            self.calculateValue()
+        
+        func updateCells() {
+            getCoinsPrice { (jsonArray, error) in
+                if let err = error {
+                    print(err)
+                } else {
+                    self.updateGameUserCoinsPrice(jsonArray)
+                    DispatchQueue.main.async {
+                        self.walletList.reloadData()
+                    }
+                }
+            }
         }
         
-        getAlltransaction()
+        getTransSum { (transSums, error) in
+            if let err = error {
+                //,...............
+                print(err)
+            } else {
+                self.updateGameUserTransSum(transSums)
+                updateCells()
+            }
+        }
+        
+        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in updateCells() }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -86,31 +104,80 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         timer.invalidate()
     }
     
-    func getAlltransaction() {
+    func getTransSum(completion: @escaping (_ transSums: [TransSum], _ error: String?) -> Void) {
         guard let userID = gameUser?.id else { return }
         let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID]
-        URLServices.fetchInstance.passServerData(urlParameters: ["game","getAllTransactions"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            //print(response["data"].arrayValue)
-            var value: Double = 0
-            var totalAmount: Double = 0
-            response["data"].arrayValue.forEach({ (item) in
-                if item["coin_add_name"].stringValue == "LTC" {
-                    print(item["single_price"].stringValue)
-                    print(item["amount"].stringValue)
-                    value = value + item["single_price"].doubleValue * item["amount"].doubleValue
-                    totalAmount = totalAmount + item["amount"].doubleValue
-                    print(value)
-                }
-            })
-//            print(1111111111)
-//            print("\(value / totalAmount)")
-            
+        URLServices.fetchInstance.passServerData(urlParameters: ["game","getUserAverageHistory"], httpMethod: "POST", parameters: parameter) { (response, success) in
             if success {
-
+                let transSums = response["data"].arrayValue.map({ (item) -> TransSum in
+                    return TransSum(item)
+                })
+                completion(transSums, nil)
+                
             } else {
+                completion([], "net work problem")
                 //net work problem............
             }
         }
+    }
+    
+    func updateGameUserTransSum(_ transSums: [TransSum]) {
+        guard let coins = gameUser?.coins else { return }
+        for (index, _) in coins.enumerated() {
+            transSums.forEach({ (transSum) in
+                if coins[index].abbrName == transSum.abbrName {
+                    if transSum.status == "Buy" {
+                        self.gameUser?.coins[index].totalAmountOfBuy = transSum.totalAmount
+                        self.gameUser?.coins[index].totalValueOfBuy = transSum.totalValue
+                    } else {
+                        self.gameUser?.coins[index].totalAmountOfSell = transSum.totalAmount
+                        self.gameUser?.coins[index].totalValueOfSell = transSum.totalValue
+                    }
+                }
+            })
+        }
+    }
+    
+    func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
+        guard let coins = gameUser?.coins else { return }
+        //AUD is default coin, if there are other coins, need to check the current price
+        if coins.count > 1 {
+            URLServices.fetchInstance.passServerData(urlParameters: ["game","getCoinData"], httpMethod: "GET", parameters: [:]) { (response, success) in
+                
+                if success {
+                    completion(response["data"].arrayValue, nil)
+                } else {
+                    completion([], "net work problem")
+                    //net work problem............
+                }
+            }
+        } else {
+            completion([], nil)
+        }
+    }
+    
+    func updateGameUserCoinsPrice(_ jsonArray: [JSON]) {
+        guard let coins = gameUser?.coins else { return }
+        for (index, _) in coins.enumerated() {
+            if coins[index].abbrName == "AUD" {
+                self.gameUser?.coins[index].price = 1
+            }
+            
+            if let coinDetail = jsonArray.first(where: { (item) -> Bool in
+                item["coin_name"].stringValue == coins[index].abbrName.lowercased()
+            }) {
+                self.gameUser?.coins[index].price = coinDetail["current_price"].doubleValue
+            }
+        }
+        updateTotalNumberTextField()
+    }
+    
+    func updateTotalNumberTextField() {
+        var totalValue = 0.0
+        gameUser?.coins.forEach({ (coin) in
+            totalValue = totalValue + coin.amount * coin.price
+        })
+        totalNumber.text = "$\(totalValue)"
     }
     
     @objc func reloadNewMarketData(){
@@ -167,25 +234,38 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         guard let assets = gameUser?.coins[indexPath.row] else { return cell }
         cell.coinName.text = assets.name
         cell.coinAmount.text = Extension.method.scientificMethod(number: assets.amount) + " " + assets.abbrName
+        
+        //because transaction fee, the actual coin amount will be different with the transaction amount
+        let coinValue = assets.price * assets.amount
+        let avgOfBuyPrice = assets.totalAmountOfBuy == 0 ? 0 : assets.totalValueOfBuy / assets.totalAmountOfBuy
+        //let avgOfSellPrice = assets.totalValueOfSell / assets.totalAmountOfSell
+        let leftTransactionAmount =  assets.totalAmountOfBuy - assets.totalAmountOfSell
+        let profitNumber = avgOfBuyPrice == 0 ? 0 : coinValue - avgOfBuyPrice * leftTransactionAmount
+        let profitPercentage = profitNumber * 100 / coinValue
+        let realisedProfitNumber = assets.totalValueOfSell - avgOfBuyPrice * assets.totalAmountOfSell
+        
         cell.coinSinglePrice.text = "$\(assets.price)"
-        cell.coinTotalPrice.text = "($\(assets.price * assets.amount))"
+        cell.coinTotalPrice.text = "($\(coinValue))"
         cell.coinTotalPrice.textColor = ThemeColor().textGreycolor()
-//        checkDataRiseFallColor(risefallnumber: assets.floatingPercent, label: cell.profitChange,currency:priceType, type: "Percent")
-        cell.profitChange.text = "(" + cell.profitChange.text! + ")"
-//        checkDataRiseFallColor(risefallnumber: assets.totalRiseFallNumber, label: cell.profitChangeNumber,currency:priceType, type: "Number")
+        
+        
+        
+        cell.profitChange.text = "(\(profitPercentage)%)"
+        cell.profitChangeNumber.text = "\(profitNumber)"
+        
 //        cell.selectCoin.selectCoinAbbName = assets.coinAbbName
 //        cell.selectCoin.selectCoinName = assets.coinName
 //        cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
-//        checkDataRiseFallColor(risefallnumber: assets.floatingPrice, label: cell.profitChangeNumber,currency:priceType, type: "Number")
+
         
-//        if assets.unrealizedPrice != 0{
-//            cell.unrealisedPrice.text = String(Extension.method.scientificMethod(number: assets.unrealizedPrice))
+        if realisedProfitNumber != 0{
+            cell.unrealisedPrice.text = String(Extension.method.scientificMethod(number: realisedProfitNumber))
 //            if String(assets.unrealizedPrice).prefix(1) != "-" {
 //                cell.unrealisedLabel.text = "Realized Profit:"
 //            } else{
 //                cell.unrealisedLabel.text = "Realized Loss:"
 //            }
-//        }
+        }
         
         return cell
     }
@@ -466,36 +546,6 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     @objc func refreshPage(){
         self.walletList.beginHeaderRefreshing()
-    }
-    
-    @objc func calculateValue() {
-        guard let coins = gameUser?.coins else { return }
-        //AUD is default coin, if there are other coins, need to check the current price
-        if coins.count > 1 {
-            URLServices.fetchInstance.passServerData(urlParameters: ["game","getCoinData"], httpMethod: "GET", parameters: [:]) { (response, success) in
-                if success {
-                    var totalValue = 0.0
-                    for (index, _) in coins.enumerated() {
-                        if coins[index].abbrName == "AUD" {
-                            totalValue = totalValue + coins[index].amount * coins[index].price
-                        }
-                        
-                        if let coinDetail = response["data"].arrayValue.first(where: { (item) -> Bool in
-                            item["coin_name"].stringValue == coins[index].abbrName.lowercased()
-                        }) {
-                            self.gameUser?.coins[index].price = coinDetail["current_price"].doubleValue
-                            totalValue = totalValue + coins[index].amount * coinDetail["current_price"].doubleValue
-                        }
-                    }
-                    self.totalNumber.text = "$\(totalValue)"
-                    DispatchQueue.main.async {
-                        self.walletList.reloadData()
-                    }
-                } else {
-                    //net work problem............
-                }
-            }
-        }
     }
     
 //    func caculateTotal(){

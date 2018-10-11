@@ -12,6 +12,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     
     var isGameMode = false
     var gameUser: GameUser?
+    var newTransaction: EachTransactions?
     var balance: Double = 0
     var price: Double?
     let sliderStep: Float = 10
@@ -172,6 +173,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             var amount = balance * Double(slider.value) / 100 / coinPrice
             amount = (amount * limit).rounded(.down) / limit
             number.text = "\(amount)"
+            newTransaction?.amount = amount
         }
     }
     
