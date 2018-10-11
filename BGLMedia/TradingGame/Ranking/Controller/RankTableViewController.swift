@@ -155,7 +155,7 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func presentPopWindow(viewModel: RankObjectViewModel?){
-        let popWindowConttroller = PopWindowController(windowSize: CGSize(width: 260, height: 200), title: viewModel?.pop_title, contentView: RankPopWindowContentView(rankViewModel: viewModel))
+        let popWindowConttroller = PopWindowController(windowSize: CGSize(width: 260, height: 200), title: viewModel?.pop_title, contentView: RankPopWindowContent(rankViewModel: viewModel))
         self.present(popWindowConttroller, animated: true, completion: nil)
     }
 }

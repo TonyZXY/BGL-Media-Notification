@@ -44,7 +44,6 @@ class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectio
     }
     
     func setUpView(){
-        print("Hjahskdhjasdj")
         collectionviews.delegate = self
         collectionviews.dataSource = self
         //        view.backgroundColor = ThemeColor().blueColor()

@@ -13,14 +13,17 @@ import UIKit
     utility pop window can customize content inside with constructor
  */
 class PopWindowController : UIViewController{
+    let factor = UIScreen.main.bounds.width/375
+    
+    var headerTitle : String = "Title"
     
     // default value
     var windowSize = CGSize(width: 300, height: 200)
     
     var rootView : UIView = {
         var view = UIView()
-        view.backgroundColor = ThemeColor().themeColor()
-        view.layer.cornerRadius = 8
+        view.backgroundColor = ThemeColor().whiteColor()
+        view.layer.cornerRadius = 15
         view.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
         view.layer.shadowOpacity = 1
         view.layer.shadowOffset = CGSize(width: 0, height: 5)
@@ -34,24 +37,40 @@ class PopWindowController : UIViewController{
         return  stackView
     }()
     
-    var headerView: UIView = {
-        var view = UIView()
-        view.backgroundColor = ThemeColor().walletCellcolor()
-        return view
+    private let title_linebreak : UIView = {
+        let linebreak = UIView()
+        linebreak.backgroundColor = ThemeColor().themeWidgetColor()
+        linebreak.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        return linebreak
     }()
     
-    var contentView : UIView = {
-        var view = UIView()
-        return view
+    private lazy var dismissButton : DismissButton = {
+        let button = DismissButton(width: 30*factor, height: 30*factor, dismissController: self)
+        button.backgroundColor = ThemeColor().themeWidgetColor()
+        button.layer.cornerRadius = 3
+        button.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        button.layer.shadowOpacity = 1
+        button.layer.shadowOffset = CGSize(width: 0, height: 5)
+        return button
     }()
-
     
-    var titleLabel : UILabel = {
+    lazy var titleLabel : UILabel = {
         var label = UILabel()
         label.numberOfLines =  1
-        label.textColor = .white
+        label.textColor = .black
         label.font = UIFont.semiBoldFont(15)
         return label
+    }()
+    
+    lazy var headerView: UIView = {
+        var view = UIView()
+        self.setUpDefaultHeader(headerview: view)
+        return view
+    }()
+    
+    lazy var contentView : UIView = {
+        var view = UIView()
+        return view
     }()
     
     override func viewDidLoad() {
@@ -60,9 +79,7 @@ class PopWindowController : UIViewController{
     }
     
     func setUpView(){
-        let factor = view.frame.width/414
-        
-        let dissmissButton = DismissButton(width: 30*factor, height: 30*factor, dismissController: self)
+        view.backgroundColor = UIColor.black.withAlphaComponent(0.6)
         
         view.addSubview(rootView)
         rootView.translatesAutoresizingMaskIntoConstraints = false
@@ -84,25 +101,33 @@ class PopWindowController : UIViewController{
         stackView.addConstraintsWithFormat(format: "H:|[v0]|", views: contentView)
         stackView.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor))]-0-[v1]|", views: headerView, contentView)
         
-        headerView.addSubview(titleLabel)
-        titleLabel.translatesAutoresizingMaskIntoConstraints = false
-        headerView.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .centerX, relatedBy: .equal, toItem: headerView, attribute: .centerX, multiplier: 1, constant: 0))
-        headerView.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .centerY, relatedBy: .equal, toItem: headerView, attribute: .centerY, multiplier: 1, constant: 0))
-
-
-        headerView.addSubview(dissmissButton)
-        headerView.addConstraint(NSLayoutConstraint(item: dissmissButton, attribute: .centerY, relatedBy: .equal, toItem: headerView, attribute: .centerY, multiplier: 1, constant: 0))
-        headerView.addConstraintsWithFormat(format: "H:[v0]-(\(5*factor))-|", views: dissmissButton)
-        
     }
     
-    convenience init(windowSize:CGSize?=nil, title: String?=nil,contentView : UIView?=nil){
+    private func setUpDefaultHeader(headerview : UIView){
+        headerview.addSubview(titleLabel)
+        headerview.addSubview(dismissButton)
+        headerview.addSubview(title_linebreak)
+        
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        dismissButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        headerview.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .centerX, relatedBy: .equal, toItem: headerview, attribute: .centerX, multiplier: 1, constant: 0))
+        headerview.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .centerY, relatedBy: .equal, toItem: headerview, attribute: .centerY, multiplier: 1, constant: 0))
+        
+        headerview.addConstraint(NSLayoutConstraint(item: dismissButton, attribute: .centerY, relatedBy: .equal, toItem: headerview, attribute: .centerY, multiplier: 1, constant: 0))
+        headerview.addConstraintsWithFormat(format: "H:[v0]-(\(15*factor))-|", views: dismissButton)
+        headerview.addConstraintsWithFormat(format: "H:|[v0]|", views: title_linebreak)
+        headerview.addConstraintsWithFormat(format: "V:[v0]|", views: title_linebreak)
+    }
+    
+    convenience init(windowSize:CGSize?=nil,title: String?=nil,headerView : UIView?=nil, contentView : UIView?=nil){
         self.init()
         self.modalTransitionStyle = .crossDissolve
         self.modalPresentationStyle = .overCurrentContext
-        
-        self.contentView = contentView ?? self.contentView
+        // set tilte before headerview so defaultHeader can dispaly it
+        self.headerView = headerView ?? self.headerView
         self.titleLabel.text = title ?? "Title"
+        self.contentView = contentView ?? self.contentView
         self.windowSize = windowSize ?? self.windowSize
     }
 }
@@ -112,14 +137,14 @@ class DismissButton : UIButton{
     
     let defaultWidth:CGFloat = 50
     let defaultHeight:CGFloat = 50
-    
+    let defaultImageName : String = "close_button"
     var dismissViewController : UIViewController?
     
-    func initSetup (width: CGFloat,height:CGFloat,dismissController:UIViewController){
+    private func initSetup (width: CGFloat,height:CGFloat,imageName: String,dismissController:UIViewController){
         self.frame = CGRect(x: 0, y: 0, width: width, height: height)
         self.imageView?.contentMode = .scaleAspectFit
         self.layer.cornerRadius = 0.5 * self.bounds.size.width
-        self.setImage(UIImage(named: "back_button")?.reSizeImage(reSize: CGSize(width: width, height: height)), for: .normal)
+        self.setImage(UIImage(named: imageName)?.reSizeImage(reSize: CGSize(width: width, height: height)), for: .normal)
         self.clipsToBounds = true
         
         self.dismissViewController = dismissController
@@ -130,8 +155,8 @@ class DismissButton : UIButton{
         self.dismissViewController?.dismiss(animated: true, completion: nil)
     }
     
-    convenience init(width:CGFloat?,height:CGFloat?,dismissController:UIViewController) {
+    convenience init(width:CGFloat?=nil,height:CGFloat?=nil,imageName : String?=nil,dismissController:UIViewController) {
         self.init(type: .custom)
-        initSetup(width: width ?? defaultWidth, height: height ?? defaultHeight,dismissController: dismissController)
+        initSetup(width: width ?? defaultWidth, height: height ?? defaultHeight,imageName : imageName ?? defaultImageName,dismissController: dismissController)
     }
 }
