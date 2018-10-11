@@ -8,6 +8,7 @@
 
 import Foundation
 import SwiftyJSON
+import RealmSwift
 
 struct GameUser {
     let id : String
@@ -115,5 +116,28 @@ struct TransSum {
         status = json["status"].stringValue
         totalAmount = json["total_amount"].doubleValue
         totalValue = json["total_value"].doubleValue
+    }
+}
+
+
+class GameTransaction:Object{
+    @objc dynamic var transaction_id :String = "0"
+    @objc dynamic var user_id :String = "0"
+    @objc dynamic var status :String = ""
+    @objc dynamic var coin_name : String = ""
+    @objc dynamic var coin_abb_name : String = ""
+    @objc dynamic var exchange_name : String = ""
+    @objc dynamic var trading_pair_name : String = ""
+    @objc dynamic var single_price : Double = 0
+    @objc dynamic var amount : Double = 0
+    
+    
+    enum TransactionStatus : String{
+        case SELL = "sell"
+        case BUY = "buy"
+    }
+    
+    override class func primaryKey() -> String {
+        return "transaction_id"
     }
 }

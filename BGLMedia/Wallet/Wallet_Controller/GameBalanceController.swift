@@ -253,8 +253,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         cell.profitChange.text = "(\(profitPercentage)%)"
         cell.profitChangeNumber.text = "\(profitNumber)"
         
-//        cell.selectCoin.selectCoinAbbName = assets.coinAbbName
-//        cell.selectCoin.selectCoinName = assets.coinName
+        cell.selectCoin.selectCoinAbbName = assets.abbrName
+        cell.selectCoin.selectCoinName = assets.name
 //        cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
 
         

@@ -23,6 +23,7 @@
 		245E9A812167427A004577E0 /* PopWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245E9A802167427A004577E0 /* PopWindowController.swift */; };
 		24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08F9521631B1D0066BA33 /* RankModel.swift */; };
 		24C3805A216EE6E000F7E4B8 /* RankPopWindowContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C38059216EE6E000F7E4B8 /* RankPopWindowContent.swift */; };
+		24C3805C216EF99B00F7E4B8 /* CoinDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C3805B216EF99B00F7E4B8 /* CoinDetail.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
@@ -261,6 +262,7 @@
 		245E9A802167427A004577E0 /* PopWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopWindowController.swift; sourceTree = "<group>"; };
 		24A08F9521631B1D0066BA33 /* RankModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
 		24C38059216EE6E000F7E4B8 /* RankPopWindowContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankPopWindowContent.swift; sourceTree = "<group>"; };
+		24C3805B216EF99B00F7E4B8 /* CoinDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoinDetail.swift; sourceTree = "<group>"; };
 		2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 			isa = PBXGroup;
 			children = (
 				2451CFB9216C5CEA007AC6A5 /* StopAndLoss.swift */,
+				24C3805B216EF99B00F7E4B8 /* CoinDetail.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1636,6 +1639,7 @@
 				2D52AF1A20E46E1A00018FC0 /* DefaultViewController.swift in Sources */,
 				57BBAB69210962C300984AA4 /* TotalMarketCell.swift in Sources */,
 				2D52AF1220E46E1A00018FC0 /* TimelineTableViewCell.swift in Sources */,
+				24C3805C216EF99B00F7E4B8 /* CoinDetail.swift in Sources */,
 				2451CFB8216C4A8F007AC6A5 /* GameCoinPageController.swift in Sources */,
 				B930B6EC21507DA800685F64 /* EventViewModel.swift in Sources */,
 				57355C4E20F718CC002E70E4 /* APIErrors.swift in Sources */,

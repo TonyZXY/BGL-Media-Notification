@@ -129,6 +129,8 @@ class GameCoinPageController: UIViewController{
         let generalPage = coinDetailController.gerneralController
         let filterName = "coinAbbName = '" + coinDetails.selectCoinAbbName + "' "
         let selectItem = realm.objects(Transactions.self).filter(filterName)
+        print(filterName)
+        print(selectItem.count)
         for value in selectItem{
             let candleChartDatas = candleChartData()
             candleChartDatas.coinSymbol = value.coinAbbName
