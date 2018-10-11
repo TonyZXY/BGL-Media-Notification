@@ -51,9 +51,6 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         super.viewDidLoad()
         setUpBasicView()
         checkTransaction()
-        DispatchQueue.main.async(execute: {
-            self.walletList.switchRefreshHeader(to: .refreshing)
-        })
 
         NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeCurrency), name: NSNotification.Name(rawValue: "changeCurrency"), object: nil)
@@ -73,30 +70,12 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        func updateCells() {
-            getCoinsPrice { (jsonArray, error) in
-                if let err = error {
-                    print(err)
-                } else {
-                    self.updateGameUserCoinsPrice(jsonArray)
-                    DispatchQueue.main.async {
-                        self.walletList.reloadData()
-                    }
-                }
-            }
-        }
+        DispatchQueue.main.async(execute: {
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
         
-        getTransSum { (transSums, error) in
-            if let err = error {
-                //,...............
-                print(err)
-            } else {
-                self.updateGameUserTransSum(transSums)
-                updateCells()
-            }
-        }
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in updateCells() }
+        //will refresh the coins' price every 60 sec
+        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in self.updateCells() }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -104,7 +83,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         timer.invalidate()
     }
     
-    func getTransSum(completion: @escaping (_ transSums: [TransSum], _ error: String?) -> Void) {
+    private func getTransSum(completion: @escaping (_ transSums: [TransSum], _ error: String?) -> Void) {
         guard let userID = gameUser?.id else { return }
         let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID]
         URLServices.fetchInstance.passServerData(urlParameters: ["game","getUserAverageHistory"], httpMethod: "POST", parameters: parameter) { (response, success) in
@@ -115,13 +94,12 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                 completion(transSums, nil)
                 
             } else {
-                completion([], "net work problem")
-                //net work problem............
+                completion([], textValue(name: "networkFailure"))
             }
         }
     }
     
-    func updateGameUserTransSum(_ transSums: [TransSum]) {
+    private func updateGameUserTransSum(_ transSums: [TransSum]) {
         guard let coins = gameUser?.coins else { return }
         for (index, _) in coins.enumerated() {
             transSums.forEach({ (transSum) in
@@ -138,7 +116,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
-    func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
+    private func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
         guard let coins = gameUser?.coins else { return }
         //AUD is default coin, if there are other coins, need to check the current price
         if coins.count > 1 {
@@ -147,8 +125,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                 if success {
                     completion(response["data"].arrayValue, nil)
                 } else {
-                    completion([], "net work problem")
-                    //net work problem............
+                    completion([], textValue(name: "networkFailure"))
                 }
             }
         } else {
@@ -156,7 +133,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
-    func updateGameUserCoinsPrice(_ jsonArray: [JSON]) {
+    private func updateGameUserCoinsPrice(_ jsonArray: [JSON]) {
         guard let coins = gameUser?.coins else { return }
         for (index, _) in coins.enumerated() {
             if coins[index].abbrName == "AUD" {
@@ -169,30 +146,45 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                 self.gameUser?.coins[index].price = coinDetail["current_price"].doubleValue
             }
         }
-        updateTotalNumberTextField()
+        updateSummaryTextField()
     }
     
-    func updateTotalNumberTextField() {
+    private func updateCells() {
+        getCoinsPrice { (jsonArray, error) in
+            if let err = error {
+                let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            } else {
+                self.updateGameUserCoinsPrice(jsonArray)
+                DispatchQueue.main.async {
+                    self.walletList.reloadData()
+                }
+            }
+        }
+    }
+    
+    private func updateSummaryTextField() {
         var totalValue = 0.0
+        var unrealisedNumber = 0.0
+        var realisedNumber = 0.0
         gameUser?.coins.forEach({ (coin) in
             totalValue = totalValue + coin.amount * coin.price
+            unrealisedNumber = unrealisedNumber + coin.profitNumber
+            realisedNumber = realisedNumber + coin.realisedProfitNumber
         })
-        totalNumber.text = "$\(totalValue)"
+        
+        checkDataRiseFallColor(risefallnumber: totalValue, label: totalNumber,currency:"AUD", type: "Default")
+        checkDataRiseFallColor(risefallnumber: unrealisedNumber, label: unrealizedResult,currency:"AUD", type: "Number")
+        checkDataRiseFallColor(risefallnumber: realisedNumber, label: realizedResult,currency:"AUD", type: "Number")
     }
     
     @objc func reloadNewMarketData(){
         walletList.reloadData()
-//        caculateTotal()
     }
     
     @objc func refreshNewAssetsData(){
         self.checkTransaction()
-//        loadData(){success in
-//            if success{
-//                self.caculateTotal()
-//                self.walletList.reloadData()
-//            }
-//        }
     }
     
     func checkTransaction(){
@@ -234,311 +226,29 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         guard let assets = gameUser?.coins[indexPath.row] else { return cell }
         cell.coinName.text = assets.name
         cell.coinAmount.text = Extension.method.scientificMethod(number: assets.amount) + " " + assets.abbrName
-        
-        //because transaction fee, the actual coin amount will be different with the transaction amount
-        let coinValue = assets.price * assets.amount
-        let avgOfBuyPrice = assets.totalAmountOfBuy == 0 ? 0 : assets.totalValueOfBuy / assets.totalAmountOfBuy
-        //let avgOfSellPrice = assets.totalValueOfSell / assets.totalAmountOfSell
-        let leftTransactionAmount =  assets.totalAmountOfBuy - assets.totalAmountOfSell
-        let profitNumber = avgOfBuyPrice == 0 ? 0 : coinValue - avgOfBuyPrice * leftTransactionAmount
-        let profitPercentage = profitNumber * 100 / coinValue
-        let realisedProfitNumber = assets.totalValueOfSell - avgOfBuyPrice * assets.totalAmountOfSell
-        
-        cell.coinSinglePrice.text = "$\(assets.price)"
-        cell.coinTotalPrice.text = "($\(coinValue))"
+        cell.coinSinglePrice.text = "A$\(assets.price)"
+        checkDataRiseFallColor(risefallnumber: assets.totalValue, label: cell.coinTotalPrice,currency:"AUD", type: "Default")
+        cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"
         cell.coinTotalPrice.textColor = ThemeColor().textGreycolor()
         
-        
-        
-        cell.profitChange.text = "(\(profitPercentage)%)"
-        cell.profitChangeNumber.text = "\(profitNumber)"
-        
-        cell.selectCoin.selectCoinAbbName = assets.abbrName
-        cell.selectCoin.selectCoinName = assets.name
-//        cell.coinImage.coinImageSetter(coinName: assets.coinAbbName, width: 30, height: 30, fontSize: 5)
-
-        
-        if realisedProfitNumber != 0{
-            cell.unrealisedPrice.text = String(Extension.method.scientificMethod(number: realisedProfitNumber))
-//            if String(assets.unrealizedPrice).prefix(1) != "-" {
-//                cell.unrealisedLabel.text = "Realized Profit:"
-//            } else{
-//                cell.unrealisedLabel.text = "Realized Loss:"
-//            }
+        checkDataRiseFallColor(risefallnumber: assets.profitPercentage, label: cell.profitChange,currency:"AUD", type: "Percent")
+        cell.profitChange.text = "(" + cell.profitChange.text! + ")"
+        checkDataRiseFallColor(risefallnumber: assets.profitNumber, label: cell.profitChangeNumber,currency:"AUD", type: "Number")
+        cell.coinImage.coinImageSetter(coinName: assets.abbrName, width: 30, height: 30, fontSize: 5)
+//        cell.selectCoin.selectCoinAbbName = assets.coinAbbName
+//        cell.selectCoin.selectCoinName = assets.coinName
+        if assets.realisedProfitNumber != 0{
+            cell.unrealisedPrice.text = String(Extension.method.scientificMethod(number: assets.realisedProfitNumber))
+            if String(assets.realisedProfitNumber).prefix(1) != "-" {
+                cell.unrealisedLabel.text = "Realized Profit:"
+            } else{
+                cell.unrealisedLabel.text = "Realized Loss:"
+            }
         }
         
         return cell
     }
-    
-//    func loadData(completion:@escaping (Bool)->Void){
-//        let dispatchGroup = DispatchGroup()
-//        self.totalAssets = 0
-//        self.totalProfit = 0
-//        for result in assetss{
-//            var amount:Double = 0
-//            var transactionPrice:Double = 0
-//            var singlePrice:Double = 0
-//            var currency:Double = 0
-//
-//
-//            var singleAverageBuyPrice:Double = 0
-//            var buyTotalPrice:Double = 0
-//            var buyAmount:Double = 0
-//            var sellTotalPrice:Double = 0
-//            var totalAmount:Double = 0
-//            var floatingPrice:Double = 0
-//            var unrealizedPrice:Double = 0
-//
-//
-//            for each in result.everyTransactions{
-//                let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
-//                if each.status == "Buy"{
-//                    buyAmount += each.amount
-//                    totalAmount += each.amount
-//                    buyTotalPrice += ((each.amount) * (currencyResult.first?.price ?? 0))
-//                }
-//                else if each.status == "Sell"{
-//                    totalAmount -= each.amount
-//                }
-//            }
-//
-//            singleAverageBuyPrice = buyTotalPrice / buyAmount
-//
-//
-//            for each in result.everyTransactions{
-//                let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
-//                if each.status == "Sell"{
-//                    sellTotalPrice += (((currencyResult.first?.price)!) - singleAverageBuyPrice) * each.amount
-//                }
-//            }
-//
-//            unrealizedPrice = sellTotalPrice
-//
-//            for each in result.everyTransactions{
-//                let currencyResult = each.currency.filter{name in return name.name.contains(priceType)}
-//                if each.status == "Buy"{
-//                    amount += each.amount
-//                    transactionPrice += ((each.amount) * (currencyResult.first?.price ?? 0))
-//                } else if each.status == "Sell"{
-//                    amount -= each.amount
-//                    transactionPrice -= ((each.amount) * (currencyResult.first?.price ?? 0))
-//                }
-//            }
-//
-//
-//            dispatchGroup.enter()
-//            if result.exchangeName == "Global Average"{
-//                URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + result.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
-//                    if success{
-//                        if let responseResult = response["quotes"].array{
-//                            for results in responseResult{
-//                                if results["currency"].string ?? "" == priceType{
-//                                    singlePrice = results["data"]["price"].double ?? 0
-//                                    APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
-//                                        if success{
-//                                            for result in response{
-//                                                currency = (result.1.double) ?? 0
-//                                            }
-//                                            let tran = Transactions()
-//                                            tran.coinAbbName = result.coinAbbName
-//                                            tran.transactionPrice = transactionPrice
-//                                            tran.defaultCurrencyPrice = singlePrice * currency
-//                                            tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
-//                                            tran.totalAmount = amount
-//                                            tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-//                                            tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
-//
-//                                            self.totalAssets += tran.defaultTotalPrice
-//                                            self.totalProfit += tran.totalRiseFallNumber
-//
-//
-//
-//                                            floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
-//
-//
-//                                            let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
-//
-//                                            try! Realm().write {
-//                                                if object.count != 0{
-//                                                    object[0].currentSinglePrice = singlePrice
-//                                                    object[0].currentTotalPrice = singlePrice * amount
-//                                                    object[0].currentNetValue = transactionPrice * (1/currency)
-//                                                    object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
-//                                                    object[0].transactionPrice = transactionPrice
-//                                                    object[0].defaultCurrencyPrice = singlePrice * currency
-//                                                    object[0].defaultTotalPrice = (singlePrice * currency) * amount
-//                                                    object[0].totalAmount = amount
-//                                                    object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-//                                                    object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
-//                                                    object[0].floatingPrice = floatingPrice
-//                                                    object[0].unrealizedPrice = unrealizedPrice
-//                                                    object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
-//                                                }
-//                                            }
-//                                            dispatchGroup.leave()
-//                                        } else{
-//                                            dispatchGroup.leave()
-//                                        }
-//                                    }
-//                                }
-//                            }
-//                        } else{
-//                            dispatchGroup.leave()
-//                        }
-//                    } else{
-//                        completion(false)
-//                        dispatchGroup.leave()
-//                    }
-//                }
-//            }else if result.exchangeName == "Huobi Australia"{
-//                APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: result.coinAbbName, tradingPairName: result.tradingPairsName, exchangeName: result.exchangeName) { (response, success) in
-//                    if success{
-//                        singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
-//                        APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
-//                            if success{
-//                                for result in response{
-//                                    currency = (result.1.double) ?? 0
-//                                }
-//                                let tran = Transactions()
-//                                tran.coinAbbName = result.coinAbbName
-//                                tran.transactionPrice = transactionPrice
-//                                tran.defaultCurrencyPrice = singlePrice * currency
-//                                tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
-//                                tran.totalAmount = amount
-//                                tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-//                                tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
-//
-//                                self.totalAssets += tran.defaultTotalPrice
-//                                self.totalProfit += tran.totalRiseFallNumber
-//
-//                                floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
-//
-//
-//
-//
-//                                let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
-//                                try! Realm().write {
-//                                    if object.count != 0{
-//                                        object[0].currentSinglePrice = singlePrice
-//                                        object[0].currentTotalPrice = singlePrice * amount
-//                                        object[0].currentNetValue = transactionPrice * (1/currency)
-//                                        object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
-//                                        object[0].transactionPrice = transactionPrice
-//                                        object[0].defaultCurrencyPrice = singlePrice * currency
-//                                        object[0].defaultTotalPrice = (singlePrice * currency) * amount
-//                                        object[0].totalAmount = amount
-//                                        object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-//                                        object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
-//                                        object[0].floatingPrice = floatingPrice
-//                                        object[0].unrealizedPrice = unrealizedPrice
-//                                        object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
-//                                    }
-//                                }
-//                                dispatchGroup.leave()
-//                            } else{
-//                                completion(false)
-//                                dispatchGroup.leave()
-//                            }
-//                        }
-//                    } else{
-//                        completion(false)
-//                        dispatchGroup.leave()
-//                    }
-//                }
-//            } else{
-//                APIServices.fetchInstance.getExchangePriceData(from: result.coinAbbName, to: result.tradingPairsName, market: result.exchangeName) { (success, response) in
-//                    if success{
-//                        singlePrice = response["RAW"]["PRICE"].double ?? 0
-//                        APIServices.fetchInstance.getCryptoCurrencyApis(from: result.tradingPairsName, to: [priceType]) { (success, response) in
-//                            if success{
-//                                for result in response{
-//                                    currency = (result.1.double) ?? 0
-//                                }
-//                                let tran = Transactions()
-//                                tran.coinAbbName = result.coinAbbName
-//                                tran.transactionPrice = transactionPrice
-//                                tran.defaultCurrencyPrice = singlePrice * currency
-//                                tran.defaultTotalPrice = tran.defaultCurrencyPrice * amount
-//                                tran.totalAmount = amount
-//                                tran.totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-//                                tran.totalRiseFallPercent = (tran.totalRiseFallNumber / tran.transactionPrice) * 100
-//
-//                                self.totalAssets += tran.defaultTotalPrice
-//                                self.totalProfit += tran.totalRiseFallNumber
-//
-//                                floatingPrice =  ((singlePrice * currency) -  singleAverageBuyPrice) * totalAmount
-//
-//
-//
-//
-//                                let object = try! Realm().objects(Transactions.self).filter("coinAbbName == %@",result.coinAbbName)
-//                                try! Realm().write {
-//                                    if object.count != 0{
-//                                        object[0].currentSinglePrice = singlePrice
-//                                        object[0].currentTotalPrice = singlePrice * amount
-//                                        object[0].currentNetValue = transactionPrice * (1/currency)
-//                                        object[0].currentRiseFall = (singlePrice * amount) - (transactionPrice * (1/currency))
-//                                        object[0].transactionPrice = transactionPrice
-//                                        object[0].defaultCurrencyPrice = singlePrice * currency
-//                                        object[0].defaultTotalPrice = (singlePrice * currency) * amount
-//                                        object[0].totalAmount = amount
-//                                        object[0].totalRiseFallNumber = tran.defaultTotalPrice - tran.transactionPrice
-//                                        object[0].totalRiseFallPercent =  tran.totalRiseFallPercent
-//                                        object[0].floatingPrice = floatingPrice
-//                                        object[0].unrealizedPrice = unrealizedPrice
-//                                        object[0].floatingPercent = (floatingPrice / (singleAverageBuyPrice * totalAmount)) * 100
-//                                    }
-//                                }
-//                                dispatchGroup.leave()
-//                            } else{
-//                                completion(false)
-//                                dispatchGroup.leave()
-//                            }
-//                        }
-//                    } else{
-//                        completion(false)
-//                        dispatchGroup.leave()
-//                    }
-//                }
-//            }
-//        }
-//        dispatchGroup.notify(queue:.main){
-//            completion(true)
-//        }
-//    }
-    
-    
-//    @objc func updateTransaction(){
-//
-//        if loginStatus{
-//            URLServices.fetchInstance.getAssets(){success in
-//                self.checkTransaction()
-//                self.loadData(){success in
-//                    if success{
-//                        self.caculateTotal()
-//                        self.walletList.reloadData()
-//                        self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-//                        //                         NotificationCenter.default.post(name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
-//                    } else{
-//                        self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
-//                    }
-//                }
-//            }
-//        } else{
-//            self.checkTransaction()
-//            loadData(){success in
-//                if success{
-//                    self.caculateTotal()
-//                    self.walletList.reloadData()
-//                    self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-//                } else{
-//                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
-//                }
-//            }
-//        }
-//
-//    }
-    
+
     @objc func refreshData(){
         checkTransaction()
         self.walletList.beginHeaderRefreshing()
@@ -548,27 +258,6 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         self.walletList.beginHeaderRefreshing()
     }
     
-//    func caculateTotal(){
-//
-//        var totalNumbers:Double = 0
-//        var totalChanges:Double = 0
-//        var totalUnrealized:Double = 0
-//        var totalRealized:Double = 0
-//        for result in assetss{
-//            totalNumbers += result.defaultTotalPrice
-//            totalChanges += result.floatingPrice
-//            totalUnrealized += result.floatingPrice
-//            totalRealized += result.unrealizedPrice
-//        }
-//
-//
-//        checkDataRiseFallColor(risefallnumber: totalUnrealized, label: unrealizedResult,currency:priceType, type: "Number")
-//        checkDataRiseFallColor(risefallnumber: totalRealized, label: realizedResult,currency:priceType, type: "Number")
-//
-//        checkDataRiseFallColor(risefallnumber: totalNumbers, label: totalNumber,currency:priceType, type: "Default")
-//        checkDataRiseFallColor(risefallnumber: totalChanges, label: totalChange,currency:priceType, type: "Number")
-//    }
-    
     //Click Add Transaction Button Method
     @objc func changetotransaction(){
         let transaction = GameTransactionsController()
@@ -577,26 +266,17 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         self.navigationController?.pushViewController(transaction, animated: true)
     }
     
-    
     //Refresh Method
     @objc func handleRefresh(_ tableView:UITableView) {
-        walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
-//        URLServices.fetchInstance.getAssets(){success in
-//            self.checkTransaction()
-//            self.loadData(){success in
-//                if success{
-//                    self.caculateTotal()
-//                    self.walletList.reloadData()
-//                    self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
-//                } else{
-//                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
-//                }
-//                if UserDefaults.standard.bool(forKey: "assetsLoad"){
-//                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: "successLogin"), object: nil)
-//                    UserDefaults.standard.set(false,forKey: "assetsLoad")
-//                }
-//            }
-//        }
+        getTransSum { (transSums, error) in
+            if let _ = error {
+                self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+            } else {
+                self.updateGameUserTransSum(transSums)
+                self.updateCells()
+                self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+            }
+        }
     }
     
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
