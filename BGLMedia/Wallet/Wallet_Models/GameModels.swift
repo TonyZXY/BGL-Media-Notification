@@ -88,6 +88,8 @@ struct GameCoin {
     let abbrName: String
     let amount: Double
     var price: Double
+    var exchangeName : String = "Huobi Australia"
+    var tradingPairName : String = "AUD"
     var totalValueOfBuy: Double
     var totalAmountOfBuy: Double
     var totalValueOfSell: Double
@@ -99,7 +101,7 @@ struct GameCoin {
     var profitNumber: Double { return avgOfBuyPrice == 0 ? 0 : totalValue - avgOfBuyPrice * leftTransactionAmount }
     var profitPercentage: Double { return profitNumber * 100 / totalValue }
     var realisedProfitNumber: Double { return totalValueOfSell - avgOfBuyPrice * totalAmountOfSell }
-    
+    var netValue : Double {return avgOfBuyPrice * leftTransactionAmount}
     init(name: String, abbrName: String, amount: Double) {
         self.name = name
         self.abbrName = abbrName
@@ -127,24 +129,24 @@ struct TransSum {
 }
 
 
-class GameTransaction:Object{
-    @objc dynamic var transaction_id :String = "0"
-    @objc dynamic var user_id :String = "0"
-    @objc dynamic var status :String = ""
-    @objc dynamic var coin_name : String = ""
-    @objc dynamic var coin_abb_name : String = ""
-    @objc dynamic var exchange_name : String = ""
-    @objc dynamic var trading_pair_name : String = ""
-    @objc dynamic var single_price : Double = 0
-    @objc dynamic var amount : Double = 0
-    
-    
-    enum TransactionStatus : String{
-        case SELL = "sell"
-        case BUY = "buy"
-    }
-    
-    override class func primaryKey() -> String {
-        return "transaction_id"
-    }
-}
+//class GameTransaction:Object{
+//    @objc dynamic var transaction_id :String = "0"
+//    @objc dynamic var user_id :String = "0"
+//    @objc dynamic var status :String = ""
+//    @objc dynamic var coin_name : String = ""
+//    @objc dynamic var coin_abb_name : String = ""
+//    @objc dynamic var exchange_name : String = ""
+//    @objc dynamic var trading_pair_name : String = ""
+//    @objc dynamic var single_price : Double = 0
+//    @objc dynamic var amount : Double = 0
+//
+//
+//    enum TransactionStatus : String{
+//        case SELL = "sell"
+//        case BUY = "buy"
+//    }
+//
+//    override class func primaryKey() -> String {
+//        return "transaction_id"
+//    }
+//}

@@ -313,9 +313,9 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailPage = GameCoinPageController()
         detailPage.hidesBottomBarWhenPushed = true
-        let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
-        coinDetail = cell.selectCoin
-        detailPage.coinDetails = coinDetail
+//        let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
+//        coinDetail = cell.selectCoin
+        detailPage.coinDetail = gameUser?.coins[indexPath.row]
         detailPage.coinDetailController.alertControllers.status = "detailPage"
         navigationController?.pushViewController(detailPage, animated: true)
     }
