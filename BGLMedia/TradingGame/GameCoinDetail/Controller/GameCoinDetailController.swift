@@ -20,8 +20,16 @@ class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectio
     let gerneralController = GameGerneralController()
     let transactionHistoryController = GameTransactionsHistoryViewController()
     let alertControllers = AlertController()
-    var gameBalanceController: GameBalanceController?
-    var coinDetail : GameCoin?
+    var gameBalanceController: GameBalanceController? {
+        didSet {
+            transactionHistoryController.gameBalanceController = gameBalanceController
+        }
+    }
+    var coinDetail : GameCoin? {
+        didSet {
+            transactionHistoryController.coinDetail = coinDetail
+        }
+    }
     
     var loginStatus:Bool{
         get{
@@ -32,8 +40,6 @@ class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectio
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()
-        transactionHistoryController.gameBalanceController = gameBalanceController
-        transactionHistoryController.coinDetail = coinDetail
     }
     
     override func viewWillAppear(_ animated: Bool) {

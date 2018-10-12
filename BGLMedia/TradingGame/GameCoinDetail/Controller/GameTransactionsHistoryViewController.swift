@@ -57,11 +57,12 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
     var indexSelected:Int = 0
     var generalData = generalDetail()
     var worthData = [String:Double]()
-    var gameBalanceController: GameBalanceController?
+    var gameBalanceController: GameBalanceController? 
     var coinDetail : GameCoin?
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         //        let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
         //        results = realm.objects(AllTransactions.self).filter(filterName)
         if transactionHistory.count > 0{

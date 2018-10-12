@@ -26,7 +26,6 @@ class GameCoinPageController: UIViewController{
     let cryptoCompareClient = CryptoCompareClient()
 //    var coinDetail = CoinDetailData()
     var observer:NSObjectProtocol?
-    var coinDetail : GameCoin?
     // views
     let mainView = MainView()
     let allLossView = AllLossView()
@@ -43,7 +42,16 @@ class GameCoinPageController: UIViewController{
     var globalMarketData = GlobalMarket.init()
     var refreshTimer: Timer!
     
-    var gameBalanceController: GameBalanceController?
+    var gameBalanceController: GameBalanceController? {
+        didSet {
+            coinDetailController.gameBalanceController = gameBalanceController
+        }
+    }
+    var coinDetail : GameCoin? {
+        didSet {
+            coinDetailController.coinDetail = coinDetail
+        }
+    }
     
     var GlobalData:Results<GlobalAverageObject>{
         get{
@@ -88,8 +96,6 @@ class GameCoinPageController: UIViewController{
         setUpView()
         refreshPage()
         setPriceChange()
-        coinDetailController.gameBalanceController = gameBalanceController
-        coinDetailController.coinDetail = coinDetail
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)
