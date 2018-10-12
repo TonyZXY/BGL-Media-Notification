@@ -38,11 +38,11 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
         }
     }
     
-    var transactionHistory:Results<EachTransactions>{
-        get{
-            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "time",ascending:false).sorted(byKeyPath: "date",ascending:false)
-        }
-    }
+//    var transactionHistory:Results<EachTransactions>{
+//        get{
+//            return realm.objects(EachTransactions.self).filter("coinAbbName = %@", generalData.coinAbbName).sorted(byKeyPath: "time",ascending:false).sorted(byKeyPath: "date",ascending:false)
+//        }
+//    }
     
     var assetsData:Results<Transactions>{
         get{
@@ -59,18 +59,63 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
     var worthData = [String:Double]()
     var gameBalanceController: GameBalanceController? 
     var coinDetail : GameCoin?
+    var transactions = [EachTransactions]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //        let filterName = "coinAbbName = '" + generalData.coinAbbName + "' "
-        //        results = realm.objects(AllTransactions.self).filter(filterName)
-        if transactionHistory.count > 0{
+        if transactions.count > 0{
             historyTableView.switchRefreshHeader(to: .refreshing)
         }
         
-        //        NotificationCenter.default.addObserver(self, selector: #selector(refreshData), name: NSNotification.Name(rawValue: "reloadTransaction"), object: nil)
+
         setUpView()
+
+        updateTransactions()
+    }
+    
+    private func getAllTransactions(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
+        guard let userID = gameBalanceController?.gameUser?.id else { return }
+        let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID]
+        URLServices.fetchInstance.passServerData(urlParameters: ["game","getAllTransactions"], httpMethod: "POST", parameters: parameter) { (response, success) in
+            if success {
+                completion(response["data"].arrayValue, nil)
+            } else {
+                completion([], textValue(name: "networkFailure"))
+            }
+        }
+    }
+    
+    private func updateTransactions() {
+        transactions.removeAll()
+        getAllTransactions { (jsonArray, error)  in
+            if let err = error {
+                let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self.present(alert, animated: true)
+            } else {
+                jsonArray.forEach({ (json) in
+                    if self.coinDetail?.abbrName == json["coin_add_name"].stringValue {
+                        print(json)
+                        self.transactions.append(self.fillTransactionDataWith(json))
+                    }
+                })
+            }
+        }
+    }
+    
+    private func fillTransactionDataWith(_ json: JSON) -> EachTransactions {
+        let transaction = EachTransactions()
+        transaction.additional = json["note"].stringValue
+        transaction.amount = json["amount"].doubleValue
+        transaction.coinAbbName = json["coin_add_name"].stringValue
+        transaction.coinName = json["coin_name"].stringValue
+        transaction.date = json["date"].stringValue
+        transaction.exchangeName = json["exchange_name"].stringValue
+        transaction.tradingPairsName = json["trading_pair_name"].stringValue
+        transaction.status = json["status"].stringValue
+        transaction.singlePrice = json["single_price"].doubleValue
+        return transaction
     }
     
     @objc func refreshData(){
@@ -82,11 +127,11 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return transactionHistory.count
+        return transactions.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let object = transactionHistory[indexPath.row]
+        let object = transactions[indexPath.row]
         //Create buy transaction cell
         if object.status == "Buy"{
             let cell = tableView.dequeueReusableCell(withIdentifier: "BuyHistory", for: indexPath) as! HistoryTableViewCell
@@ -215,13 +260,13 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
         }
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let transactionForm = TransactionsController()
-        //        let cell = self.historyTableView.cellForRow(at: indexPath) as! HistoryTableViewCell
-        transactionForm.updateTransaction = transactionHistory[indexPath.row]
-        transactionForm.transactionStatus = "Update"
-        navigationController?.pushViewController(transactionForm, animated: true)
-    }
+//    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//        let transactionForm = TransactionsController()
+//        //        let cell = self.historyTableView.cellForRow(at: indexPath) as! HistoryTableViewCell
+//        transactionForm.updateTransaction = transactionHistory[indexPath.row]
+//        transactionForm.transactionStatus = "Update"
+//        navigationController?.pushViewController(transactionForm, animated: true)
+//    }
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.backgroundColor = UIColor.clear
@@ -404,9 +449,9 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
     }
     
     func getWorthData(completion:@escaping (Bool)->Void){
-        if transactionHistory.count > 0{
+        if transactions.count > 0{
             let dispatchGroup = DispatchGroup()
-            for result in transactionHistory{
+            for result in transactions{
                 dispatchGroup.enter()
                 if result.exchangeName == "Global Average"{
                     URLServices.fetchInstance.passServerData(urlParameters: ["coin","getCoin?coin=" + result.coinAbbName], httpMethod: "GET", parameters: [String : Any]()) { (response, success) in
