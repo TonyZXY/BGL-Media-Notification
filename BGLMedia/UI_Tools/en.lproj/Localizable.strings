@@ -39,6 +39,7 @@ hintUnrealizedDescription = "This is the unrealised gain/loss for the purchased 
 networkFailure = "Sorry, There Was A Network Problem";
 nickname = "Please Enter A Nickname";
 nicknameNotUnique = "Sorry, The Nickname Is Already Exited, Please Enter Another Nickname";
+transactionFee = "Transaction Fee";
 
 //Transaction Page
 buy = "Buy";
