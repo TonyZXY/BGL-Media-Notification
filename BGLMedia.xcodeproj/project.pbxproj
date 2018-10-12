@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C0920F7188B002E70E4 /* NewsV2Controller.swift */; };
 		240094C5214F5346007898BF /* NewsSliderClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */; };
+		240DC2402170530100702B31 /* GameCoinPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23E2170530100702B31 /* GameCoinPageController.swift */; };
+		240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23F2170530100702B31 /* GameCoinDetailController.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
 		241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* MenuBarView.swift */; };
 		241082EE2164870C00A12DF1 /* RankTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082ED2164870C00A12DF1 /* RankTableViewController.swift */; };
@@ -17,8 +19,6 @@
 		24121507215C700300B9069B /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24121506215C700300B9069B /* RankingViewController.swift */; };
 		24476084216D889D00A769E6 /* GameGeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476083216D889D00A769E6 /* GameGeneralController.swift */; };
 		24476086216D9CDF00A769E6 /* StopLossSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476085216D9CDF00A769E6 /* StopLossSetView.swift */; };
-		2451CFB6216C4922007AC6A5 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451CFAF216C3FA2007AC6A5 /* GameCoinDetailController.swift */; };
-		2451CFB8216C4A8F007AC6A5 /* GameCoinPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451CFB7216C4A8F007AC6A5 /* GameCoinPageController.swift */; };
 		2451CFBA216C5CEB007AC6A5 /* StopAndLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451CFB9216C5CEA007AC6A5 /* StopAndLoss.swift */; };
 		245E9A812167427A004577E0 /* PopWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245E9A802167427A004577E0 /* PopWindowController.swift */; };
 		24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08F9521631B1D0066BA33 /* RankModel.swift */; };
@@ -246,6 +246,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		240DC23E2170530100702B31 /* GameCoinPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinPageController.swift; sourceTree = "<group>"; };
+		240DC23F2170530100702B31 /* GameCoinDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinDetailController.swift; sourceTree = "<group>"; };
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
 		240F697E2148D5710072E158 /* GenuineNewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenuineNewsObject.swift; sourceTree = "<group>"; };
 		241082EB2164867900A12DF1 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = BGLMedia/TradingGame/UtilityView/MenuBarView.swift; sourceTree = SOURCE_ROOT; };
@@ -255,8 +257,6 @@
 		24121506215C700300B9069B /* RankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingViewController.swift; sourceTree = "<group>"; };
 		24476083216D889D00A769E6 /* GameGeneralController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameGeneralController.swift; path = BGLMedia/TradingGame/GameCoinDetail/Controller/GameGeneralController.swift; sourceTree = SOURCE_ROOT; };
 		24476085216D9CDF00A769E6 /* StopLossSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLossSetView.swift; sourceTree = "<group>"; };
-		2451CFAF216C3FA2007AC6A5 /* GameCoinDetailController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameCoinDetailController.swift; path = BGLMedia/TradingGame/GameCoinDetailController.swift; sourceTree = SOURCE_ROOT; };
-		2451CFB7216C4A8F007AC6A5 /* GameCoinPageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameCoinPageController.swift; path = ../GameCoinPageController.swift; sourceTree = "<group>"; };
 		2451CFB9216C5CEA007AC6A5 /* StopAndLoss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopAndLoss.swift; sourceTree = "<group>"; };
 		245E9A802167427A004577E0 /* PopWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopWindowController.swift; sourceTree = "<group>"; };
 		24A08F9521631B1D0066BA33 /* RankModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
@@ -559,14 +559,14 @@
 				2451CFBC216C5CF5007AC6A5 /* View */,
 			);
 			name = GameCoinDetail;
-			path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/TradingGame/GameCoinDetail";
-			sourceTree = "<absolute>";
+			path = BGLMedia/TradingGame/GameCoinDetail;
+			sourceTree = SOURCE_ROOT;
 		};
 		2451CFBB216C5CF5007AC6A5 /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				2451CFAF216C3FA2007AC6A5 /* GameCoinDetailController.swift */,
-				2451CFB7216C4A8F007AC6A5 /* GameCoinPageController.swift */,
+				240DC23F2170530100702B31 /* GameCoinDetailController.swift */,
+				240DC23E2170530100702B31 /* GameCoinPageController.swift */,
 				24476083216D889D00A769E6 /* GameGeneralController.swift */,
 			);
 			path = Controller;
@@ -1501,8 +1501,9 @@
 				57663B572134E2DA00E09754 /* HintAlertController.swift in Sources */,
 				24476084216D889D00A769E6 /* GameGeneralController.swift in Sources */,
 				2D52AF2520E46E1A00018FC0 /* DateTimeConverter.swift in Sources */,
-				2451CFB6216C4922007AC6A5 /* GameCoinDetailController.swift in Sources */,
+				240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */,
 				576752012105597C006DB67C /* LoginController.swift in Sources */,
+				240DC2402170530100702B31 /* GameCoinPageController.swift in Sources */,
 				57FC41FB20FB00320052EE02 /* CurrencyController.swift in Sources */,
 				2D52AEDD20E46E1A00018FC0 /* CoinImageSetter.swift in Sources */,
 				57355C4D20F718CC002E70E4 /* CoinTypeTableViewCell.swift in Sources */,
@@ -1636,7 +1637,6 @@
 				2D52AF1A20E46E1A00018FC0 /* DefaultViewController.swift in Sources */,
 				57BBAB69210962C300984AA4 /* TotalMarketCell.swift in Sources */,
 				2D52AF1220E46E1A00018FC0 /* TimelineTableViewCell.swift in Sources */,
-				2451CFB8216C4A8F007AC6A5 /* GameCoinPageController.swift in Sources */,
 				B930B6EC21507DA800685F64 /* EventViewModel.swift in Sources */,
 				57355C4E20F718CC002E70E4 /* APIErrors.swift in Sources */,
 				57BBAB66210962C300984AA4 /* MarketsController.swift in Sources */,
