@@ -14,8 +14,8 @@ class StopLossSetView : UIStackView{
     
     lazy var priceUpperLabel :UILabel = {
         var label = UILabel()
-        label.text = "Price Upper"
-        label.font = UIFont.regularFont(13*factor)
+        label.font = UIFont.semiBoldFont(15*factor)
+        label.text = textValue(name: "amountSoldForm")
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
@@ -23,20 +23,50 @@ class StopLossSetView : UIStackView{
     
     lazy var priceLowerLabel:UILabel = {
         var label = UILabel()
-        label.text = "Price Lower"
-        label.font = UIFont.regularFont(13*factor)
+        label.font = UIFont.semiBoldFont(15*factor)
+        label.text = textValue(name: "amountSoldForm")
         label.textColor = ThemeColor().textGreycolor()
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    lazy var priceLowerTextField : UITextField = {
-        var textfield = UITextField()
+    lazy var priceLowerTextField : LeftPaddedTextField = {
+        let textfield = LeftPaddedTextField()
+        textfield.keyboardType = UIKeyboardType.decimalPad
+        textfield.textColor = ThemeColor().whiteColor()
+        textfield.tintColor = ThemeColor().whiteColor()
+        textfield.frame = CGRect(x:0, y: 0, width: 200*factor, height: 30*factor)
+        textfield.translatesAutoresizingMaskIntoConstraints = false
+        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        textfield.backgroundColor = ThemeColor().greyColor()
+        textfield.layer.cornerRadius = 8*factor
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+        textfield.inputAccessoryView = toolbar
+        //        textfield.addTarget(self, action: #selector(numberTextFieldDidChange), for: .editingChanged)
         return textfield
     }()
     
-    lazy var priceUpperTextField : UITextField = {
-        var textfield = UITextField()
+    lazy var priceUpperTextField : LeftPaddedTextField = {
+        let textfield = LeftPaddedTextField()
+        textfield.keyboardType = UIKeyboardType.decimalPad
+        textfield.textColor = ThemeColor().whiteColor()
+        textfield.tintColor = ThemeColor().whiteColor()
+        textfield.frame = CGRect(x:0, y: 0, width: 200*factor, height: 30*factor)
+        textfield.translatesAutoresizingMaskIntoConstraints = false
+        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        textfield.backgroundColor = ThemeColor().greyColor()
+        textfield.layer.cornerRadius = 8*factor
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+        textfield.inputAccessoryView = toolbar
+        //        textfield.addTarget(self, action: #selector(numberTextFieldDidChange), for: .editingChanged)
         return textfield
     }()
     
