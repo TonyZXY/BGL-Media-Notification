@@ -43,6 +43,8 @@ class GameCoinPageController: UIViewController{
     var globalMarketData = GlobalMarket.init()
     var refreshTimer: Timer!
     
+    var gameBalanceController: GameBalanceController?
+    
     var GlobalData:Results<GlobalAverageObject>{
         get{
             let abbrName = coinDetail?.abbrName ?? ""
@@ -86,6 +88,8 @@ class GameCoinPageController: UIViewController{
         setUpView()
         refreshPage()
         setPriceChange()
+        coinDetailController.gameBalanceController = gameBalanceController
+        coinDetailController.coinDetail = coinDetail
         
         NotificationCenter.default.addObserver(self, selector: #selector(setPriceChange), name: NSNotification.Name(rawValue: "setPriceChange"), object: nil)
 //        NotificationCenter.default.addObserver(self, selector: #selector(updateMarketData), name: NSNotification.Name(rawValue: "refreshDetailPage"), object: nil)

@@ -227,6 +227,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         cell.coinName.text = assets.name
         if assets.name == "AUD" {
             cell.coinAmount.text = Extension.method.scientificMethod(number: assets.amount) + " " + assets.abbrName
+            cell.isUserInteractionEnabled = false
         } else {
             cell.coinAmount.text = "\(assets.amount) " + assets.abbrName
         }
@@ -320,6 +321,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
 //        let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
 //        coinDetail = cell.selectCoin
         detailPage.coinDetail = gameUser?.coins[indexPath.row]
+        detailPage.gameBalanceController = self
         detailPage.coinDetailController.alertControllers.status = "detailPage"
         navigationController?.pushViewController(detailPage, animated: true)
     }
