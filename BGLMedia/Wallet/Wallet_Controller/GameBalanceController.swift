@@ -74,8 +74,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
             self.walletList.switchRefreshHeader(to: .refreshing)
         })
         
-        //will refresh the coins' price every 60 sec
-        timer = Timer.scheduledTimer(withTimeInterval: 60, repeats: true) { timer in self.updateCells() }
+        //will refresh the coins' price every 10 sec
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in self.updateCells() }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -116,7 +116,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
-    private func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
+    func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
         guard let coins = gameUser?.coins else { return }
         //AUD is default coin, if there are other coins, need to check the current price
         if coins.count > 1 {
@@ -225,7 +225,11 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         cell.factor = factor
         guard let assets = gameUser?.coins[indexPath.row] else { return cell }
         cell.coinName.text = assets.name
-        cell.coinAmount.text = Extension.method.scientificMethod(number: assets.amount) + " " + assets.abbrName
+        if assets.name == "AUD" {
+            cell.coinAmount.text = Extension.method.scientificMethod(number: assets.amount) + " " + assets.abbrName
+        } else {
+            cell.coinAmount.text = "\(assets.amount) " + assets.abbrName
+        }
         cell.coinSinglePrice.text = "A$\(assets.price)"
         checkDataRiseFallColor(risefallnumber: assets.totalValue, label: cell.coinTotalPrice,currency:"AUD", type: "Default")
         cell.coinTotalPrice.text = "(" + cell.coinTotalPrice.text! + ")"

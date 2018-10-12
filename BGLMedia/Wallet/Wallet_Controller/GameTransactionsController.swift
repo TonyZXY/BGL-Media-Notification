@@ -26,9 +26,8 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
     var cells = ["CoinTypeCell","CoinMarketCell","TradePairsCell","PriceCell","NumberCell","DateCell","TimeCell","AdditionalCell"]
     var color = ThemeColor()
     var transaction:String = "Buy"
-    
     var transactionStatus = "Add"
-    //var transactions = EachTransactions()
+    var timer = Timer()
     
     var loginStatus:Bool{
         get{
@@ -60,8 +59,14 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             self.loadPrice()
             self.transactionTableView.reloadData()
         }
+        //will refresh the coins' price every 10 sec
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in self.loadPrice() }
     }
     
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        timer.invalidate()
+    }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let sectionView = UIView()
@@ -256,17 +261,19 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             "note":self.newTransaction.additional,
             ]
         let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID, "transaction": trans]
-        
+        print(parameter)
         if String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
             URLServices.fetchInstance.passServerData(urlParameters: ["game","addTransaction"], httpMethod: "POST", parameters: parameter) { (response, success) in
-                //print(response)
                 if success {
                     self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
                     self.gameBalanceController?.walletList.reloadData()
+                    self.navigationController?.popViewController(animated: true)
                 } else {
-                    //net work problem............
+                    let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                    self.transactionButton.isUserInteractionEnabled = true
                 }
-                self.navigationController?.popViewController(animated: true)
             }
         } else{
             let hud = JGProgressHUD(style: .light)
@@ -312,21 +319,29 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
     //Load current selected coins trading price
     func loadPrice(){
         if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
-            
-            APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: newTransaction.coinAbbName, tradingPairName: newTransaction.tradingPairsName, exchangeName: newTransaction.exchangeName) { (response, success) in
-                if success{
-                    let index = IndexPath(row: 3, section: 0)
-                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-                    let price = Double(response["tick"]["close"].string ?? "0") ?? 0
-                    cell.price.text = "\(price)"
-                    self.newTransaction.singlePrice = price
+            gameBalanceController?.getCoinsPrice(completion: { (jsonArray, error) in
+                if let err = error {
+                    let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
+                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                    self.present(alert, animated: true)
+                } else {
                     
-                    let index2 = IndexPath(row: 4, section: 0)
-                    let cell2 = self.transactionTableView.cellForRow(at: index2) as! TransNumberCell
-                    cell2.price = price
-                    cell2.calculateCoinAmount()
+                    if let coinDetail = jsonArray.first(where: { (item) -> Bool in
+                        item["coin_name"].stringValue == self.newTransaction.coinAbbName.lowercased()
+                    }) {
+                        self.newTransaction.singlePrice = coinDetail["current_price"].doubleValue
+                        
+                        let index = IndexPath(row: 3, section: 0)
+                        let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
+                        cell.price.text = "\(self.newTransaction.singlePrice)"
+                        
+                        let index2 = IndexPath(row: 4, section: 0)
+                        let cell2 = self.transactionTableView.cellForRow(at: index2) as! TransNumberCell
+                        cell2.price = self.newTransaction.singlePrice
+                        cell2.calculateCoinAmount()
+                    }
                 }
-            }
+            })
         }
     }
     

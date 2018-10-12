@@ -39,6 +39,7 @@ hintUnrealizedDescription = "此数据是与当前市场价格相比，资产购
 networkFailure = "对不起，网络出现了问题";
 nickname = "请输入一个昵称";
 nicknameNotUnique = "对不起，昵称已经存在，请输入另一个昵称";
+transactionFee = "交易费";
 
 //Transaction Page
 buy = "买入";

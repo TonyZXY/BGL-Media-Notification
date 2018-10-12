@@ -24,7 +24,9 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
                     balance = coin.amount
                 }
             })
-            balanceLabel.text = "\(coinName) \(textValue(name: "balance")): \(Extension.method.scientificMethod(number: balance))"
+            let showingBalance = (coinName == "AUD") ? Extension.method.scientificMethod(number: balance) : "\(balance)"
+            balanceLabel.text = "\(coinName) \(textValue(name: "balance")): \(showingBalance)"
+            calculateCoinAmount()
         }
     }
     
@@ -116,6 +118,21 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
         label.textColor = ThemeColor().textGreycolor()
         return label
     }()
+    
+    private let transactionFeeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = ThemeColor().textGreycolor()
+        label.text = textValue(name: "transactionFee") + ": 1%"
+        label.textAlignment = .right
+        return label
+    }()
+    
+    private lazy var balanceAndTansactionFeeStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [balanceLabel, transactionFeeLabel])
+        stackView.distribution = .fillEqually
+        stackView.axis = .horizontal
+        return stackView
+    }()
 
     private lazy var sliderStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [slider, paddingView, percentageTextField, percentageLabel])
@@ -141,7 +158,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
         
         if isGameMode {
             let contentStackView: UIStackView = {
-                let stackView = UIStackView(arrangedSubviews: [numberLabel, number, sliderStackView, balanceLabel])
+                let stackView = UIStackView(arrangedSubviews: [numberLabel, number, sliderStackView, balanceAndTansactionFeeStackView])
                 stackView.translatesAutoresizingMaskIntoConstraints = false
                 stackView.distribution = .fillEqually
                 stackView.axis = .vertical
@@ -169,9 +186,16 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     
     func calculateCoinAmount() {
         if let coinPrice = price {
-            let limit = 10000000.0
-            var amount = balance * Double(slider.value) / 100 / coinPrice
-            amount = (amount * limit).rounded(.down) / limit
+            var amount = 0.0
+            if coinName == "AUD" {
+                //for buying
+                let limit = 100000000.0  //determine decimal pplaces
+                amount = balance * Double(slider.value) / 100 / coinPrice
+                amount = (amount * limit).rounded(.down) / limit
+            } else {
+                //for selling
+                    amount = balance * Double(slider.value) / 100
+            }
             number.text = "\(amount)"
             newTransaction?.amount = amount
         }
@@ -210,12 +234,10 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
         if let coinPrice = price,
             var value = textField.text {
             //1.2345678901234568e+16 if the number too big like this, it will cause problem
-            let decimalLimit = 7
-            var coinAmount = 0.0
+            let decimalLimit = 8
             
             //apply decimal limit
             if let amount = Double(value) {
-                coinAmount = amount
                 let split = String(amount).components(separatedBy: ".")
                 let integer = split.first ?? ""
                 let decimal = (split.count == 2) ? (split.last ?? "") : ""
@@ -224,17 +246,24 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
                     textField.text = value
                 }
             }
-            slider.value = Float((Double(value) ?? 0.0) * coinPrice * 100 / balance)
-            percentageTextField.text = "\(slider.value)"
             
-            if coinAmount > (balance / coinPrice) {
-                calculateCoinAmount()
+            if coinName == "AUD" {
+                //for buying
+                slider.value = Float((Double(value) ?? 0) * coinPrice * 100 / balance)
+                percentageTextField.text = "\(slider.value)"
+                
+                if (Double(value) ?? 0) > (balance / coinPrice) {
+                    calculateCoinAmount()
+                }
+            } else {
+                //for selling
+                slider.value = Float((Double(value) ?? 0) * 100 / balance)
+                percentageTextField.text = "\(slider.value)"
+                
+                if (Double(value) ?? 0) > balance {
+                    calculateCoinAmount()
+                }
             }
-            
-//            //calculate the amount for user
-//            if slider.value == 100 {
-//                calculateCoinAmount()
-//            }
         }
     }
     
