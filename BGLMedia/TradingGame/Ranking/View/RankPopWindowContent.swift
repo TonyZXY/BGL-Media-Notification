@@ -8,9 +8,10 @@
 
 import Foundation
 import UIKit
-
-class RankPopWindowContent : UIStackView{
-    
+/**
+    display by PopWindowController
+ */
+class RankPopWindowContent : UIView{
     //    var stackView : UIStackView = {
     //        var stack = UIStackView()
     //        return stack
@@ -102,6 +103,7 @@ class RankPopWindowContent : UIStackView{
         weeklyView.addConstraintsWithFormat(format: "H:[v0]-(\(20 * factor))-|", views: weeklyRank)
         weeklyView.addConstraintsWithFormat(format: "H:[v0]-(\(20 * factor))-|", views: weeklyStat)
         addConstraint(NSLayoutConstraint(item: weeklyLabel, attribute: .centerY, relatedBy: .equal, toItem: weeklyView, attribute: .centerY, multiplier: 1, constant: 0))
+        
         weeklyView.addConstraintsWithFormat(format: "V:|-(\(10 * factor))-[v0]-(\(10 * factor))-[v1]", views: weeklyRank,weeklyStat)
         
         totalView.addSubview(totalLabel)
@@ -118,8 +120,6 @@ class RankPopWindowContent : UIStackView{
     
     convenience init(rankViewModel : RankObjectViewModel?){
         self.init()
-        self.axis = .vertical
-        self.spacing = 0
         setupView()
         setupContent(rankViewModel: rankViewModel)
     }

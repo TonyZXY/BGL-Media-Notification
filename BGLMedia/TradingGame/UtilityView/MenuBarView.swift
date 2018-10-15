@@ -23,19 +23,27 @@ protocol MenuBarViewDelegate {
 class MenuBarView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     var customDelegate : MenuBarViewDelegate?
+    let factor = UIScreen.main.bounds.width/375
     
     var cellLabels : [String] = [""]
+    var textFont :UIFont?{
+        didSet{
+            menuViewCollection.reloadData()
+            let selectindexpath = NSIndexPath(item: 0, section: 0)
+            menuViewCollection.selectItem(at: selectindexpath as IndexPath, animated: false, scrollPosition:.left)
+        }
+    }
     
     lazy var menuViewCollection: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal
-//        layout.minimumInteritemSpacing = 0
-//        layout.minimumLineSpacing = 0
+        layout.minimumInteritemSpacing = 0
+        layout.minimumLineSpacing = 0
         let cv = UICollectionView(frame: .zero, collectionViewLayout:layout)
         cv.backgroundColor = ThemeColor().themeColor()
         cv.delegate = self
         cv.dataSource = self
-        cv.register(RankMenuViewCell.self, forCellWithReuseIdentifier: RankMenuViewCell.registerID)
+        cv.register(MenuViewCell.self, forCellWithReuseIdentifier: MenuViewCell.registerID)
 //        cv.isScrollEnabled = false
         cv.bounces = false
         cv.alwaysBounceHorizontal = false
@@ -54,7 +62,7 @@ class MenuBarView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,U
         horizontalBarView.bottomAnchor.constraint(equalTo: self.bottomAnchor).isActive = true
         let multiplier : CGFloat = CGFloat(1 / Float(self.cellLabels.count))
         horizontalBarView.widthAnchor.constraint(equalTo: self.widthAnchor, multiplier: multiplier).isActive = true
-        horizontalBarView.heightAnchor.constraint(equalToConstant: 2).isActive = true
+        horizontalBarView.heightAnchor.constraint(equalToConstant: 3*factor).isActive = true
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
@@ -62,8 +70,9 @@ class MenuBarView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,U
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let cell = menuViewCollection.dequeueReusableCell(withReuseIdentifier: RankMenuViewCell.registerID, for: indexPath) as! RankMenuViewCell
+        let cell = menuViewCollection.dequeueReusableCell(withReuseIdentifier: MenuViewCell.registerID, for: indexPath) as! MenuViewCell
         cell.setContent(menuText: cellLabels[indexPath.row])
+        cell.menuLabel.font = textFont ?? cell.menuLabel.font
 //        if indexPath.row == 0 {
 //            cell.backgroundColor = .red
 //        }else{
@@ -103,13 +112,14 @@ class MenuBarView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,U
 
 
 
-class RankMenuViewCell: UICollectionViewCell{
+class MenuViewCell: UICollectionViewCell{
+    let factor = UIScreen.main.bounds.width/375
+    
     public static let registerID = "rankMenuCell"
     var color = ThemeColor()
     lazy var menuLabel : UILabel = {
-        let factor = frame.width/375
         let menuLabel = UILabel()
-        menuLabel.font = UIFont.regularFont(28*factor)
+        menuLabel.font = UIFont.regularFont(20*factor)
         menuLabel.textColor = ThemeColor().textGreycolor()
         return menuLabel
     }()

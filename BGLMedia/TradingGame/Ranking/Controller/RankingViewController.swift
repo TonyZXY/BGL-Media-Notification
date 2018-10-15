@@ -11,7 +11,7 @@ import UIKit
 import SwiftyJSON
 
 class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
-    
+    let factor = UIScreen.main.bounds.width/375
     // rank menu part
     lazy var rankMenu : MenuBarView = {
         var menu = MenuBarView(menuLabels: [textValue(name: "rankMenuTitle_Weekly"),textValue(name: "rankMenuTitle_Total")])
@@ -70,11 +70,10 @@ class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionView
     func setupView(){
         rankMenu.customDelegate = self
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
-        
-        let factor = view.frame.width/414
+    
         view.addSubview(rankMenu)
         view.addSubview(rankTableContainer)
-        rankMenu.matchAllAnchors(top:view.safeArea().topAnchor,leading:view.safeArea().leadingAnchor,trailing:view.safeArea().trailingAnchor,height:CGFloat(rankMenuHeight*factor))
+        rankMenu.matchAllAnchors(top:view.safeArea().topAnchor,leading:view.safeArea().leadingAnchor,trailing:view.safeArea().trailingAnchor,heightConstant:CGFloat(rankMenuHeight*factor))
         rankTableContainer.matchAllAnchors(top:rankMenu.bottomAnchor,bottom: view.safeArea().bottomAnchor,leading: view.safeArea().leadingAnchor,trailing:view.safeArea().trailingAnchor)
     }
     

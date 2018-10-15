@@ -12,6 +12,9 @@ import UIKit
     mostly copied form CoinDetailController
  */
 class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+    
+    let factor = UIScreen.main.bounds.width/375
+    
     var observer:NSObjectProtocol?
     var observer1:NSObject?
     var alertGetStatus:Bool = false
@@ -91,6 +94,7 @@ class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectio
                       textValue(name: "transaction_detail"),
                       textValue(name: "alerts_detail")]
         let mb = MenuBarView(menuLabels: labels)
+        mb.textFont = UIFont.regularFont(16*factor)
         mb.customDelegate = self
         return mb
     }()

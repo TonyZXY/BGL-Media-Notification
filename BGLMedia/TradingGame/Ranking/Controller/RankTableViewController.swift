@@ -11,6 +11,7 @@ import UIKit
 import SwiftyJSON
 
 class RankTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+    let factor = UIScreen.main.bounds.width/414
     
     var allRank = [RankObjectViewModel](){
         didSet{
@@ -88,7 +89,6 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func setupView(){
-        let factor = UIScreen.main.bounds.width/414
         view.addSubview(rankTableView)
         view.addSubview(userRankView)
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: rankTableView)
@@ -155,7 +155,22 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     func presentPopWindow(viewModel: RankObjectViewModel?){
-        let popWindowConttroller = PopWindowController(windowSize: CGSize(width: 260, height: 200), title: viewModel?.pop_title, contentView: RankPopWindowContent(rankViewModel: viewModel))
+        let header = PopWindowHeader(title: viewModel?.pop_title)
+    
+        let content = RankPopWindowContent(rankViewModel: viewModel)
+        let view : UIView = {
+            let view = UIView()
+            view.heightAnchor.constraint(equalToConstant: 200*factor).isActive = true
+            view.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
+            view.addSubview(header)
+            view.addSubview(content)
+            view.addConstraintsWithFormat(format: "H:|[v0]|", views: header)
+            view.addConstraintsWithFormat(format: "H:|[v0]|", views: content)
+            view.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor))]-0-[v1]|", views: header,content)
+            return view
+        }()
+        let popWindowConttroller = PopWindowController(contentView: view)
+        header.dismissButton.dismissController = popWindowConttroller
         self.present(popWindowConttroller, animated: true, completion: nil)
     }
 }

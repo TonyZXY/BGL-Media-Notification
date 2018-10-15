@@ -812,11 +812,14 @@ extension UIView {
         addConstraints(NSLayoutConstraint.constraints(withVisualFormat: format, options: NSLayoutFormatOptions(), metrics: nil, views: viewsDictionary))
     }
     
-    func matchAllAnchors(top:NSLayoutYAxisAnchor?=nil,bottom:NSLayoutYAxisAnchor?=nil,leading:NSLayoutXAxisAnchor?=nil,trailing:NSLayoutXAxisAnchor?=nil,right:NSLayoutXAxisAnchor?=nil,left:NSLayoutXAxisAnchor?=nil,height:CGFloat?=nil,width:CGFloat?=nil){
+    func matchAllAnchors(top:NSLayoutYAxisAnchor?=nil,bottom:NSLayoutYAxisAnchor?=nil,leading:NSLayoutXAxisAnchor?=nil,trailing:NSLayoutXAxisAnchor?=nil,right:NSLayoutXAxisAnchor?=nil,left:NSLayoutXAxisAnchor?=nil,height:NSLayoutDimension?=nil,width:NSLayoutDimension?=nil,heightConstant:CGFloat?=nil,widthConstant:CGFloat?=nil){
         self.translatesAutoresizingMaskIntoConstraints = false
         // yaxis height will be overwrirted by bottom and top
+        if heightConstant != nil{
+            self.heightAnchor.constraint(equalToConstant: heightConstant!).isActive = true
+        }
         if height != nil{
-            self.heightAnchor.constraint(equalToConstant: height!).isActive = true
+            self.heightAnchor.constraint(equalTo: height!).isActive = true
         }
         if top != nil{
             self.topAnchor.constraint(equalTo: top!).isActive = true
@@ -825,8 +828,11 @@ extension UIView {
             self.bottomAnchor.constraint(equalTo: bottom!).isActive = true
         }
         // xaxis
+        if widthConstant != nil{
+            self.widthAnchor.constraint(equalToConstant: widthConstant!).isActive = true
+        }
         if width != nil{
-            self.widthAnchor.constraint(equalToConstant: width!).isActive = true
+            self.widthAnchor.constraint(equalTo: width!).isActive = true
         }
         if right != nil{
             self.rightAnchor.constraint(equalTo: right!).isActive = true
