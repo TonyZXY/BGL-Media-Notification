@@ -325,7 +325,6 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
                     self.present(alert, animated: true)
                 } else {
-                    
                     if let coinDetail = jsonArray.first(where: { (item) -> Bool in
                         item["coin_name"].stringValue == self.newTransaction.coinAbbName.lowercased()
                     }) {
