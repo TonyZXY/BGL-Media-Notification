@@ -438,3 +438,14 @@ rankMenuTitle_Weekly = "周榜";
 rankMenuTitle_Total = "总榜";
 rankPopWindow_Weekly = "周榜";
 rankPopWindow_Total = "总榜";
+
+//StopLoss
+stopLoss_title = "止损/止盈 设置";
+stopLoss_buttonTitle = "止损/止盈";
+stopLoss_soldWhenGreater = "自动售出 >";
+stopLoss_soldWhenLesser = "自动售出 <";
+stopLoss_expectedProfit = "";
+
+//textfield
+textfield_err_invalidFormat = "格式错误";
+textfield_err_emptyInput = "请输入";

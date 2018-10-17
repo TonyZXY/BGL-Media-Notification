@@ -88,9 +88,6 @@ class GameCoinPageController: UIViewController{
         }
     }
     
-    // modified
-    let stoplossReader = StopAndLossApiReader()
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setUpView()

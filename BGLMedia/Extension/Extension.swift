@@ -449,6 +449,17 @@ extension Double {
     func truncate(places: Int) -> Double {
         return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
     }
+    
+    func limitDecimal(decimalLimit : Int)->Double{
+        let split = String(self).components(separatedBy: ".")
+        let integer = split.first ?? ""
+        let decimal = (split.count == 2) ? (split.last ?? "") : ""
+        if decimal.count > decimalLimit {
+            let value = "\(integer).\(decimal.prefix(decimalLimit))"
+            return Double(value) ?? self
+        }
+        return self
+    }
 }
 
 extension UIViewController{
@@ -1018,6 +1029,12 @@ extension String {
         let urlPattern = "^(http|https|ftp)\\://([a-zA-Z0-9\\.\\-]+(\\:[a-zA-Z0-9\\.&amp;%\\$\\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\\-]+\\.)*[a-zA-Z0-9\\-]+\\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\\:[0-9]+)*(/($|[a-zA-Z0-9\\.\\,\\?\\'\\\\\\+&amp;%\\$#\\=~_\\-]+))*$"
         return self.matches(pattern: urlPattern)
     }
+    
+    func isValidNumber()->Bool{
+        let regex = "([0-9]*[.])?[0-9]+"
+        let pred = NSPredicate(format:"SELF MATCHES %@", regex)
+        return pred.evaluate(with: self)
+    }
 }
 
 extension Double {
@@ -1033,11 +1050,50 @@ extension Double {
     }
 }
 
+extension UIStackView{
+    /**
+        create a stack view which fill its content by ratio(dependent on firstView)
+        - Parameters:
+            - firstView : first view for rest of the subviews to set ratio with
+            -restSubviews : rest of subviews and their ratio number
+            -axis : axis decide which way views are filled (vertical=> height, horizontal =>width)
+        - Returns:
+            a stack view
+     */
+    class func stackView(firstView:UIView,restSubviews:[(UIView,CGFloat)],axis:UILayoutConstraintAxis)->UIStackView{
+        
+        var arrangedSubviews = [firstView]
+        
+        for tuple in restSubviews{
+            arrangedSubviews.append(tuple.0)
+        }
+        
+        print(arrangedSubviews.count)
+        let stack = UIStackView(arrangedSubviews:arrangedSubviews)
+        stack.distribution = .fill
+        stack.axis = axis
+        stack.spacing = 0
+        
+        if axis == .vertical{
+            for tuple in restSubviews{
+                tuple.0.heightAnchor.constraint(equalTo: firstView.heightAnchor, multiplier: tuple.1).isActive = true
+            }
+        }else if axis == .horizontal {
+            for tuple in restSubviews{
+                tuple.0.widthAnchor.constraint(equalTo: firstView.widthAnchor, multiplier: tuple.1).isActive = true
+            }
+        }
+        return stack
+    }
+}
 
+extension UILabel{
 
-
-
-
-
-
-
+    convenience init(text: String?=nil,font:UIFont?=nil,textColor : UIColor?=nil){
+        self.init()
+        self.text = text
+        self.font = font
+        self.textColor = textColor
+        self.translatesAutoresizingMaskIntoConstraints = false
+    }
+}

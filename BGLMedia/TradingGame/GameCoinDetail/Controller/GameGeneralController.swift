@@ -11,6 +11,7 @@ import UIKit
 import RealmSwift
 
 class GameGerneralController: UIViewController {
+
     var observer:NSObjectProtocol?
     var generalData = generalDetail()
     let realm = try! Realm()
@@ -61,7 +62,7 @@ class GameGerneralController: UIViewController {
         scrollView.addSubview(ImageView)
         scrollView.addSubview(LastView)
         scrollView.addSubview(stopLossLabel)
-        scrollView.addSubview(stopLossSetView)
+        scrollView.addSubview(stopLossButton)
         
         secondView.addSubview(spinner)
         secondView.addSubview(totalNumber)
@@ -70,10 +71,7 @@ class GameGerneralController: UIViewController {
         secondView.addSubview(totalRiseFallPercent)
         
         firstView.addSubview(exchangeButton)
-        firstView.addSubview(tradingPairButton)
-        
-        stopLossSetView.backgroundColor = .red
-        
+        firstView.addSubview(tradingPairButton)        
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: mainViews)
         view.addConstraintsWithFormat(format: "V:|[v0]|", views: mainViews)
@@ -87,7 +85,7 @@ class GameGerneralController: UIViewController {
         scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: secondView)
         scrollView.addConstraintsWithFormat(format: "H:[v0(\(view.frame.size.width-30*factor!))]", views: ImageView)
         scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: LastView)
-        scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: stopLossSetView)
+        scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: stopLossButton)
         
         // vertical constraints for scroll view
         scrollView.addConstraintsWithFormat(format: "V:|-\(5*factor!)-[v0(\(50*factor!))]", views: firstView)
@@ -97,7 +95,7 @@ class GameGerneralController: UIViewController {
         scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1]", views: ImageView,globalMarketLabel)
         scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1(\(120*factor!))]", views: globalMarketLabel,LastView)
         scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1]", views: LastView,stopLossLabel)
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-\(5*factor!)-[v1(\(300*factor!))]|", views: stopLossLabel,stopLossSetView)
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-\(5*factor!)-[v1(\(50*factor!))]-\(15*factor!)-|", views: stopLossLabel,stopLossButton)
         
         // inside firstview (trading pair and exchange)
         NSLayoutConstraint(item: firstView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
@@ -143,7 +141,7 @@ class GameGerneralController: UIViewController {
         
         // Stop Loss
         NSLayoutConstraint(item: stopLossLabel, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: stopLossSetView, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: stopLossButton, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
 
         // set up contents for each views
         vc.willMove(toParentViewController: self)
@@ -412,12 +410,48 @@ class GameGerneralController: UIViewController {
         var label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
         label.font = UIFont.semiBoldFont(15*factor!)
-        label.text = textValue(name: "titleGraphs_details")
+        label.text = textValue(name: "stopLoss_title")
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
-    lazy var stopLossSetView = StopLossSetView()
+    lazy var stopLossSetView : StopLossSettingView = {
+        var view =  StopLossSettingView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
+    lazy var stopLossButton : UIButton = {
+        let button = UIButton()
+        button.setTitle(textValue(name: "stopLoss_buttonTitle"), for: .normal)
+        button.titleLabel?.font = UIFont(name: "Montserrat-Bold", size: 18 * factor!)
+        button.setTitleColor(.white, for: .normal)
+        button.addTarget(self, action: #selector(openStopLossSettingView), for: .touchUpInside)
+        button.backgroundColor = ThemeColor().themeWidgetColor()
+        button.layer.cornerRadius = 8.5
+        return button
+    }()
+    
+    @objc func openStopLossSettingView(sender:UIButton){
+        let header = PopWindowHeader(title: textValue(name: "stopLoss_title"))
+        
+        let content = stopLossSetView
+        let view : UIView = {
+            let view = UIView()
+            view.heightAnchor.constraint(equalToConstant: 500 * factor!).isActive = true
+            view.widthAnchor.constraint(equalToConstant: 340 * factor!).isActive = true
+            view.addSubview(header)
+            view.addSubview(content)
+            view.addConstraintsWithFormat(format: "H:|[v0]|", views: header)
+            view.addConstraintsWithFormat(format: "H:|[v0]|", views: content)
+            view.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor!))]-0-[v1]|", views: header,content)
+            return view
+        }()
+        let popWindowConttroller = PopWindowController(contentView: view)
+        popWindowConttroller.rootView.clipsToBounds = true
+        header.dismissButton.dismissController = popWindowConttroller
+        self.present(popWindowConttroller, animated: true, completion: nil)
+    }
     
     func setUpStackView(view:[UIView],spacing:CGFloat,axis:UILayoutConstraintAxis)-> UIStackView{
         let stackView = UIStackView(arrangedSubviews: view)

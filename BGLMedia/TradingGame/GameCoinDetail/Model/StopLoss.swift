@@ -53,7 +53,7 @@ import SwiftyJSON
  }
  */
 
-class StopAndLossObject: Object {
+class StopLossObject: Object {
     @objc dynamic var set_id : String = "0"
     @objc dynamic var user_id: String = "0"
     @objc dynamic var coinName: String = ""
@@ -72,7 +72,7 @@ class StopAndLossObject: Object {
     }
 }
 
-class  StopAndLossApiReader{
+class  StopLossApiService{
     //            var token = UserDefaults.standard.string(forKey: "CertificateToken")
     //            var email = UserDefaults.standard.string(forKey: "UserEmail")
     let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEwMDAwMDAwLCJwYXNzd29yZCI6ImM4NzdhYzFlOGM5YTM5NDU0ZmNlMDk0NGFjMTk5NmQxZmY4ZmQ2NzdmNTFmYTg4NWZkNzJlYjEyYWQwZDk1N2IiLCJpYXQiOjE1Mzg0NDA5Nzd9.r6tWVPgo7vSqEu4M4jbVs4-vNiAL8Zralg7J3yS0ZdY"
@@ -81,17 +81,18 @@ class  StopAndLossApiReader{
     
     /**
         sent stopLoss setting to server
-        - coinAbbr : coin abbriviation name in lower case e.g. btc
-        - priceGreater : coin is automatically sold when greater than this value
-        - priceLower : coin is automatically sold when lower than this value
-        - amount : the amount of coin for automatic sell
-        - completion : completion handler
-            - success code(true)
-                - 200 "successfully add stop loss pair"
-            - error code(false)
-                - 450  "User cannot set pair due to limitation"
-                - 500 "bad request",
-                - 510 "Database Error"
+        - Parameters:
+            - coinAbbr : coin abbriviation name in lower case e.g. btc
+            - priceGreater : coin is automatically sold when greater than this value
+            - priceLower : coin is automatically sold when lower than this value
+            - amount : the amount of coin for automatic sell
+            - completion : completion handler
+                - success code(true)
+                    - 200 "successfully add stop loss pair"
+                - error code(false)
+                    - 450  "User cannot set pair due to limitation"
+                    - 500 "bad request",
+                    - 510 "Database Error"
      */
     func setStopLoss(coinAbbr: String, priceGreater : Double, priceLower : Double, amount: Double, completion: @escaping (Bool,String?) -> (Void)){
         let set : [String : Any] = ["coinName":coinAbbr,"priceGreater" : priceGreater, "priceLower": priceLower, "amount": amount]
@@ -113,14 +114,15 @@ class  StopAndLossApiReader{
     
     /**
         get all stoploss setting for the user
-        - completion : completion handler
-            - success code(true)
-                - 200 "successfully get stop loss pair"
-            - error code(false)
-                - 400 “stop loss failed due to insufficient amount”
-                - 500 "bad request",
-                - 510 "Database Error"
-                - 999 ""
+        - Parameters:
+            - completion : completion handler
+                - success code(true)
+                    - 200 "successfully get stop loss pair"
+                - error code(false)
+                    - 400 “stop loss failed due to insufficient amount”
+                    - 500 "bad request",
+                    - 510 "Database Error"
+                    - 999 ""
      */
     func getStopLossList(completion: @escaping (Bool,String?) -> (Void)){
         URLServices.fetchInstance.passServerData(urlParameters: ["game","getStopLossList"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id]){ (res,success) in
@@ -156,7 +158,7 @@ class  StopAndLossApiReader{
         let realm = try! Realm()
         realm.beginWrite()
         //removing out dated data
-        let removeResults = realm.objects(StopAndLossObject.self)
+        let removeResults = realm.objects(StopLossObject.self)
         realm.delete(removeResults)
         
         if let collection = data.array {
@@ -174,10 +176,10 @@ class  StopAndLossApiReader{
                 // if set_id is valid
                 if(set_id != "0"){
                     // if object not stored
-                    if(realm.object(ofType: StopAndLossObject.self, forPrimaryKey: set_id) == nil){
-                        realm.create(StopAndLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code])
+                    if(realm.object(ofType: StopLossObject.self, forPrimaryKey: set_id) == nil){
+                        realm.create(StopLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code])
                     } else {
-                        realm.create(StopAndLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code], update: true)
+                        realm.create(StopLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code], update: true)
                     }
                 }
             }
@@ -188,17 +190,18 @@ class  StopAndLossApiReader{
     
     /**
         edit the stoploss setting for selected pair
-        - set_id : id of the selected stoploss pair
-        - coinAbbr : coin abbriviation name in lower case e.g. btc
-        - priceGreater : coin is automatically sold when greater than this value
-        - priceLower : coin is automatically sold when lower than this value
-        - amount : the amount of coin for automatic sell
-        - completion : completion handler
-            - success code(true)
-                - 200 "successfully update stop loss set"
-            - error code(false)
-                - 500 "bad request",
-                - 510 "Database Error"
+        - Parameters:
+            - set_id : id of the selected stoploss pair
+            - coinAbbr : coin abbriviation name in lower case e.g. btc
+            - priceGreater : coin is automatically sold when greater than this value
+            - priceLower : coin is automatically sold when lower than this value
+            - amount : the amount of coin for automatic sell
+            - completion : completion handler
+                - success code(true)
+                    - 200 "successfully update stop loss set"
+                - error code(false)
+                    - 500 "bad request",
+                    - 510 "Database Error"
      */
     func editStopLoss(set_id: String, coinAbbr: String, priceGreater : Double, priceLower : Double, amount: Double, completion: @escaping (Bool,String?) -> (Void)){
         //            var token = UserDefaults.standard.string(forKey: "CertificateToken")

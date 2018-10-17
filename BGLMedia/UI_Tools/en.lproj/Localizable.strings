@@ -448,3 +448,13 @@ rankMenuTitle_Total = "Total";
 rankPopWindow_Weekly = "Weekly";
 rankPopWindow_Total = "Total";
 
+//StopLoss/takeProfit
+stopLoss_title = "Stop Loss/Take Profit Setting";
+stopLoss_buttonTitle = "Stop Loss/Take Profit";
+stopLoss_soldWhenGreater = "Sold When >";
+stopLoss_soldWhenLesser = "Sold When <";
+stopLoss_expectedProfit = "";
+
+//textfield
+textfield_err_invalidFormat = "Invalid format";
+textfield_err_emptyInput = "Empty Input";

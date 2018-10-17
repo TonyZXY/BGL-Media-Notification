@@ -18,8 +18,8 @@
 		241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082F1216487A000A12DF1 /* ToRankPageButton.swift */; };
 		24121507215C700300B9069B /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24121506215C700300B9069B /* RankingViewController.swift */; };
 		24476084216D889D00A769E6 /* GameGeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476083216D889D00A769E6 /* GameGeneralController.swift */; };
-		24476086216D9CDF00A769E6 /* StopLossSetView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476085216D9CDF00A769E6 /* StopLossSetView.swift */; };
-		2451CFBA216C5CEB007AC6A5 /* StopAndLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451CFB9216C5CEA007AC6A5 /* StopAndLoss.swift */; };
+		24476086216D9CDF00A769E6 /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476085216D9CDF00A769E6 /* StopLossSettingView.swift */; };
+		2451CFBA216C5CEB007AC6A5 /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */; };
 		245E9A812167427A004577E0 /* PopWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245E9A802167427A004577E0 /* PopWindowController.swift */; };
 		24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08F9521631B1D0066BA33 /* RankModel.swift */; };
 		24C3805A216EE6E000F7E4B8 /* RankPopWindowContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C38059216EE6E000F7E4B8 /* RankPopWindowContent.swift */; };
@@ -257,8 +257,8 @@
 		241082F1216487A000A12DF1 /* ToRankPageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToRankPageButton.swift; sourceTree = "<group>"; };
 		24121506215C700300B9069B /* RankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingViewController.swift; sourceTree = "<group>"; };
 		24476083216D889D00A769E6 /* GameGeneralController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameGeneralController.swift; path = BGLMedia/TradingGame/GameCoinDetail/Controller/GameGeneralController.swift; sourceTree = SOURCE_ROOT; };
-		24476085216D9CDF00A769E6 /* StopLossSetView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLossSetView.swift; sourceTree = "<group>"; };
-		2451CFB9216C5CEA007AC6A5 /* StopAndLoss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopAndLoss.swift; sourceTree = "<group>"; };
+		24476085216D9CDF00A769E6 /* StopLossSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLossSettingView.swift; sourceTree = "<group>"; wrapsLines = 0; };
+		2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLoss.swift; sourceTree = "<group>"; };
 		245E9A802167427A004577E0 /* PopWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopWindowController.swift; sourceTree = "<group>"; };
 		24A08F9521631B1D0066BA33 /* RankModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
 		24C38059216EE6E000F7E4B8 /* RankPopWindowContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankPopWindowContent.swift; sourceTree = "<group>"; };
@@ -578,7 +578,7 @@
 		2451CFBC216C5CF5007AC6A5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				24476085216D9CDF00A769E6 /* StopLossSetView.swift */,
+				24476085216D9CDF00A769E6 /* StopLossSettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -586,7 +586,7 @@
 		2451CFBD216C5CF5007AC6A5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2451CFB9216C5CEA007AC6A5 /* StopAndLoss.swift */,
+				2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -1528,7 +1528,7 @@
 				57355C4820F718CC002E70E4 /* TransCoinTypeCell.swift in Sources */,
 				57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */,
 				571800D2215B59AF0012FE75 /* AlertNotificationController.swift in Sources */,
-				2451CFBA216C5CEB007AC6A5 /* StopAndLoss.swift in Sources */,
+				2451CFBA216C5CEB007AC6A5 /* StopLoss.swift in Sources */,
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,
@@ -1571,7 +1571,7 @@
 				57355C5320F718CC002E70E4 /* CryptoCompareClient.swift in Sources */,
 				2D52AEAB20E46E1A00018FC0 /* priceNotificationCell.swift in Sources */,
 				2D52AEAE20E46E1A00018FC0 /* MainTabBarController.swift in Sources */,
-				24476086216D9CDF00A769E6 /* StopLossSetView.swift in Sources */,
+				24476086216D9CDF00A769E6 /* StopLossSettingView.swift in Sources */,
 				57BBAB4A2107085F00984AA4 /* Availability.swift in Sources */,
 				57BBAB6A210962C300984AA4 /* GlobalFilterCollectionView.swift in Sources */,
 				57355C8720F71931002E70E4 /* ThemeColor.swift in Sources */,

@@ -53,7 +53,8 @@ class PopWindowController : UIViewController{
     
     /**
         pop out a window in the middle of the screen and size depends on content size
-        - contentView : content in side window, window size will depends on content Size
+        - Parameters:
+            - contentView : content in side window, xwindow size will depends on content size
      */
     convenience init(contentView : UIView?=nil){
         self.init()
