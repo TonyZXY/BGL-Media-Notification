@@ -36,6 +36,7 @@ hintUnrealizedTitle = "Unrealised";
 hintUnrealizedDescription = "This is the unrealised gain/loss for the purchased price of the assets comparing with the current market price.";
 
 //Game
+gameBalance = "Game Portfolio Balance";
 networkFailure = "Sorry, There Was A Network Problem";
 nickname = "Please Enter A Nickname";
 nicknameNotUnique = "Sorry, The Nickname Is Already Exited, Please Enter Another Nickname";

@@ -11,14 +11,6 @@ import Foundation
 import UIKit
 import RealmSwift
 
-//class generalDetail{
-//    var coinName:String = ""
-//    var coinAbbName:String = ""
-//    var totalNumber:Double = 0
-//    var exchangeName:String = ""
-//    var tradingPairs:String = ""
-//}
-
 /**
     mostly copied form DetailController
  */
@@ -391,7 +383,6 @@ class GameCoinPageController: UIViewController{
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
         let factor = view.frame.width/375
         coinDetailController.gerneralController.factor = factor
-        coinDetailController.transactionHistoryController.generalData = general
         allLossView.factor = factor
         mainView.factor = factor
 //        coinDetailController.gerneralController.exchangeButton.addTarget(self, action: #selector(editMarket), for: .touchUpInside)

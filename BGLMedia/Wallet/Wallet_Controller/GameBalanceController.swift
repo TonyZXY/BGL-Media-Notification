@@ -404,7 +404,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         self.navigationItem.setRightBarButton(navigationRankButton, animated: true)
         
         let factor = view.frame.width/375
-        totalLabel.text = textValue(name:"mainBalance")
+        totalLabel.text = textValue(name:"gameBalance")
         unrealizedLabel.setTitle(textValue(name: "hintUnrealizedTitle"), for: .normal)
         realizedLabel.setTitle(textValue(name: "hintRealizedTitle"), for: .normal)
         totalLabel.font = UIFont.regularFont(20*factor)
