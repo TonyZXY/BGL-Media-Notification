@@ -32,7 +32,7 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     lazy var rankTableView : UITableView = {
         var tv = UITableView()
-        tv.bounces = false
+//        tv.bounces = false
         tv.backgroundColor = ThemeColor().themeColor()
         tv.separatorStyle = .none
 
@@ -172,5 +172,76 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         let popWindowConttroller = PopWindowController(contentView: view)
         header.dismissButton.dismissController = popWindowConttroller
         self.present(popWindowConttroller, animated: true, completion: nil)
+    }
+}
+
+
+class WeeklyRankTableViewController : RankTableViewController{
+    
+    func handleRefresh(_ tableView: UITableView){
+        let api = RankDataReader()
+        api.getAllRankData(completion: { success in
+            if success {
+                self.allRank = api.getWeeklyViewModels()
+                self.userRank = api.getUserWeeklyViewModel()
+                tableView.reloadData()
+                tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }else{
+                tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
+            }
+        })
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName : nibNameOrNil, bundle: nibBundleOrNil)
+        // add refresh header
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        self.rankTableView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(self.rankTableView)
+        })
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class TotalRankTableViewController : RankTableViewController{
+    
+    func handleRefresh(_ tableView: UITableView){
+        let api = RankDataReader()
+        api.getAllRankData(completion: { success in
+            if success {
+                self.allRank = api.getTotalViewModels()
+                self.userRank = api.getUserTotalViewModel()
+                tableView.reloadData()
+                tableView.switchRefreshHeader(to: .normal(.success, 0.5))
+            }else{
+                tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
+            }
+        })
+    }
+    
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName : nibNameOrNil, bundle: nibBundleOrNil)
+        // add refresh header
+        let header = DefaultRefreshHeader.header()
+        header.textLabel.textColor = ThemeColor().whiteColor()
+        header.textLabel.font = UIFont.regularFont(12)
+        header.tintColor = ThemeColor().whiteColor()
+        header.imageRenderingWithTintColor = true
+        self.rankTableView.configRefreshHeader(with:header, container: self, action: {
+            self.handleRefresh(self.rankTableView)
+        })
+        
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
 }

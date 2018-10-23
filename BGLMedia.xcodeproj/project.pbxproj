@@ -12,6 +12,7 @@
 		240DC2402170530100702B31 /* GameCoinPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23E2170530100702B31 /* GameCoinPageController.swift */; };
 		240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23F2170530100702B31 /* GameCoinDetailController.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
+		241051C2217EBFFF0064B676 /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241051C1217EBFFF0064B676 /* RankApiReader.swift */; };
 		241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* MenuBarView.swift */; };
 		241082EE2164870C00A12DF1 /* RankTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082ED2164870C00A12DF1 /* RankTableViewController.swift */; };
 		241082F02164875F00A12DF1 /* RankTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EF2164875F00A12DF1 /* RankTableViewCell.swift */; };
@@ -252,6 +253,7 @@
 		240DC23F2170530100702B31 /* GameCoinDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinDetailController.swift; sourceTree = "<group>"; };
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
 		240F697E2148D5710072E158 /* GenuineNewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenuineNewsObject.swift; sourceTree = "<group>"; };
+		241051C1217EBFFF0064B676 /* RankApiReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RankApiReader.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/TradingGame/Ranking/ApiReader/RankApiReader.swift"; sourceTree = "<absolute>"; };
 		241082EB2164867900A12DF1 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = BGLMedia/TradingGame/UtilityView/MenuBarView.swift; sourceTree = SOURCE_ROOT; };
 		241082ED2164870C00A12DF1 /* RankTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewController.swift; sourceTree = "<group>"; };
 		241082EF2164875F00A12DF1 /* RankTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewCell.swift; sourceTree = "<group>"; };
@@ -498,6 +500,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		241051BE217EBFC70064B676 /* ApiReader */ = {
+			isa = PBXGroup;
+			children = (
+				241051C1217EBFFF0064B676 /* RankApiReader.swift */,
+			);
+			path = ApiReader;
+			sourceTree = "<group>";
+		};
 		24121503215C700300B9069B /* TradingGame */ = {
 			isa = PBXGroup;
 			children = (
@@ -514,6 +524,7 @@
 				24121505215C700300B9069B /* Controller */,
 				24121509215C714400B9069B /* View */,
 				24121508215C714400B9069B /* Model */,
+				241051BE217EBFC70064B676 /* ApiReader */,
 			);
 			path = Ranking;
 			sourceTree = "<group>";
@@ -866,8 +877,8 @@
 				57FC41F020FAD2930052EE02 /* More */,
 				57355C6C20F718F8002E70E4 /* MarketV2 */,
 				57355C1420F718CC002E70E4 /* Wallet */,
-				57355C0F20F7189D002E70E4 /* ApiServices */,
 				573C96AC20F2D5CC00B667AB /* NewsV2 */,
+				57355C0F20F7189D002E70E4 /* ApiServices */,
 				573C96A920EF054A00B667AB /* Extension */,
 				54AA279420E9B27A0026701A /* NetworkManager */,
 				2D52AE9520E46E1900018FC0 /* OnBoardingPage */,
@@ -1608,6 +1619,7 @@
 				57BAD9582104D58300973B45 /* testViewController.swift in Sources */,
 				57BBAB4D2107085F00984AA4 /* Utils.swift in Sources */,
 				57BBAB4B2107085F00984AA4 /* Header.swift in Sources */,
+				241051C2217EBFFF0064B676 /* RankApiReader.swift in Sources */,
 				2D52AEA020E46E1A00018FC0 /* GlobalMarket.swift in Sources */,
 				57355C6820F718CC002E70E4 /* CryptoCompareCoin.swift in Sources */,
 				57355C5E20F718CC002E70E4 /* CoinList.swift in Sources */,

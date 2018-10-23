@@ -8,7 +8,6 @@
 
 import Foundation
 import UIKit
-import SwiftyJSON
 
 class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
     let factor = UIScreen.main.bounds.width/375
@@ -39,8 +38,8 @@ class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionView
     
     let rankContainerCellID = "RankTableContainerCell"
     
-    var weeklyRankTableController = RankTableViewController()
-    var totalRankTableController = RankTableViewController()
+    var weeklyRankTableController = WeeklyRankTableViewController()
+    var totalRankTableController = TotalRankTableViewController()
     
     var rankDataReader = RankDataReader()
     
@@ -112,88 +111,4 @@ class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionView
         return CGSize(width: collectionView.frame.width, height: collectionView.frame.height)
     }
     
-    /**
-        responsible for getting all rankdata into dataModel and also responsible to covert dataModel to viewModel
-     */
-    class RankDataReader {
-        var rankInfoModel = RankDetailModel()
-        var weeklyRankModels = [RankObjectModel]()
-        var totalRankModels = [RankObjectModel]()
-        var userRankModel = RankObjectModel()
-        
-        
-        func getAllRankData(completion: @escaping (Bool) -> (Void)){
-            let token = UserDefaults.standard.string(forKey: "CertificateToken") ?? ""
-            let email = UserDefaults.standard.string(forKey: "UserEmail") ?? ""
-            let user_id = UserDefaults.standard.integer(forKey: "user_id")
-            print(token)
-            print(email)
-            print(user_id)
-            URLServices.fetchInstance.passServerData(urlParameters: ["game","getRanking"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id]){ (res,success) in
-                if success{
-                    print("成功啦")
-                    self.clearAllData()
-                    // store data
-                    var data = JSON(res)["data"]
-                    self.rankInfoModel = RankDetailModel(data)
-//                    print(data)
-                    // both ranking data are array
-                    let weekly_rank = data["weekly_rank"].array ?? []
-                    let total_rank = data["total_rank"].array ?? []
-                    //user rank is a single object
-                    let user_rank = data["user_rank"]
-                    print(user_rank)
-                    self.userRankModel = RankObjectModel(user_rank)
-                    
-                    for obj in weekly_rank{
-                        let rank = RankObjectModel(obj)
-                        self.weeklyRankModels.append(rank)
-                    }
-                    
-                    for obj in total_rank{
-                        let rank = RankObjectModel(obj)
-//                        print(rank.total)
-                        self.totalRankModels.append(rank)
-                    }
-                    
-                    completion(true)
-                    
-                } else{
-                    print("失败啦")
-                    completion(false)
-                }
-            }
-        }
-        
-        func clearAllData(){
-            self.rankInfoModel = RankDetailModel()
-            self.weeklyRankModels.removeAll()
-            self.totalRankModels.removeAll()
-            self.userRankModel = RankObjectModel()
-        }
-        // function that returns the viewmodels we want to display
-        func convertToViewModels(rankModels: [RankObjectModel], displayMode: RankObjectViewModel.DisplayMode)->[RankObjectViewModel]{
-            var viewModels = [RankObjectViewModel]()
-            for rankModel in rankModels{
-                viewModels.append(RankObjectViewModel(rankModel, displayMode: displayMode))
-            }
-            return viewModels
-        }
-        
-        func getWeeklyViewModels()->[RankObjectViewModel]{
-            return self.convertToViewModels(rankModels: weeklyRankModels, displayMode: RankObjectViewModel.DisplayMode.weekly)
-        }
-        
-        func getTotalViewModels()->[RankObjectViewModel]{
-            return self.convertToViewModels(rankModels: totalRankModels, displayMode: RankObjectViewModel.DisplayMode.total)
-        }
-        
-        func getUserWeeklyViewModel()->RankObjectViewModel{
-            return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.weekly)
-        }
-        
-        func getUserTotalViewModel()->RankObjectViewModel{
-            return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.total)
-        }
-    }
 }

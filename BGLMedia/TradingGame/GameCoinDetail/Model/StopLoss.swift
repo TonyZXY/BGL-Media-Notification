@@ -76,9 +76,22 @@ class  StopLossApiService{
 //    let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEwMDAwMDAwLCJwYXNzd29yZCI6ImM4NzdhYzFlOGM5YTM5NDU0ZmNlMDk0NGFjMTk5NmQxZmY4ZmQ2NzdmNTFmYTg4NWZkNzJlYjEyYWQwZDk1N2IiLCJpYXQiOjE1Mzg0NDA5Nzd9.r6tWVPgo7vSqEu4M4jbVs4-vNiAL8Zralg7J3yS0ZdY"
 //    let email = "xyzheng109@gmail.com"
 //    let user_id = 10000000
-    var token = UserDefaults.standard.string(forKey: "CertificateToken") ?? ""
-    var email = UserDefaults.standard.string(forKey: "UserEmail") ?? ""
-    var user_id = UserDefaults.standard.integer(forKey: "user_id")
+    var token :String {
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? ""
+        }
+    }
+    var email :String {
+        get{
+            return UserDefaults.standard.string(forKey: "UserEmail") ?? ""
+        }
+    }
+    var user_id : Int{
+        get{
+            return UserDefaults.standard.integer(forKey: "user_id")
+        }
+    }
+    
     /**
         sent stopLoss setting to server
         - Parameters:
@@ -143,6 +156,7 @@ class  StopLossApiService{
                 
                 // store data into realm
                 print("成功获取StopLoss")
+                print(json)
                 self.storeDataToRealm(data: data, completion: {success in
                     if success {
                         // not expecting false from store to realm

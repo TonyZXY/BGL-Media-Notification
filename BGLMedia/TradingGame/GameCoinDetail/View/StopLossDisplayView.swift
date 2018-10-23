@@ -9,24 +9,6 @@
 import Foundation
 
 import UIKit
-//class StopLossObject: Object {
-//    @objc dynamic var set_id : String = "0"
-//    @objc dynamic var user_id: String = "0"
-//    @objc dynamic var coinAbbrName: String = ""
-//    @objc dynamic var price_greater : Double = 0
-//    @objc dynamic var price_lower : Double = 0
-//    @objc dynamic var amount : Double = 0
-//
-//    /** if actived = false, means this stop loss is successfully proceed, and complete_date is the time that this stop loss complete. */
-//    @objc dynamic var actived : Bool = true
-//    @objc dynamic var complete_date: Date = Date()
-//    /** if code = 400, means this stop loss failed due to insufficient amount.  empty string means server return nil */
-//    @objc dynamic var code : String?
-//
-//    override class func primaryKey() -> String {
-//        return "set_id"
-//    }
-//}
 class StopLossDisplayView : UIView{
     let factor = UIScreen.main.bounds.width/375
     
@@ -103,7 +85,8 @@ class StopLossDisplayView : UIView{
         }()
         
         let statusStack : UIStackView = {
-            let stack = UIStackView(arrangedSubviews: [statusFixed,statusLabel,completeDateLabel])
+//            let stack = UIStackView(arrangedSubviews: [statusFixed,statusLabel,completeDateLabel])
+            let stack = UIStackView(arrangedSubviews: [statusFixed,statusLabel])
             stack.axis = .vertical
             stack.alignment = .center
             stack.distribution = .fillEqually
@@ -125,7 +108,7 @@ class StopLossDisplayView : UIView{
 //        statusFixed.addSubview(completeDateLabel)
         
         let stack : UIStackView = {
-            let stack = UIStackView.stackView(firstView: priceStack, restSubviews: [(amountStack,1),(statusStack,1.3)], axis: .horizontal)
+            let stack = UIStackView.stackView(firstView: priceStack, restSubviews: [(amountStack,1),(statusStack,0.7)], axis: .horizontal)
             stack.alignment = .center
             return stack
         }()
