@@ -19,3 +19,11 @@ protocol TransactionFrom:class{
     func getCoinName()->String
     func setLoadPrice()
 }
+
+
+protocol GameTransactionForm: class {
+    func setCoinName(name:String)
+    func setCoinAbbName(abbName:String)
+    func getCoinName()->String
+    func setCoinPrice()
+}
