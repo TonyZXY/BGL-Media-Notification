@@ -25,6 +25,8 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
     var alerts:[GameAlertResult] = [GameAlertResult]()
     var status = ""
     var coinName = coinAlert()
+    var coinAbbName = "null"
+
     
     
     

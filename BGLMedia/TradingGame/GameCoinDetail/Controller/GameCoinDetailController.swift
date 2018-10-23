@@ -22,7 +22,7 @@ class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectio
     var firstTime:Bool = false
     let gerneralController = GameGerneralController()
     let transactionHistoryController = GameTransactionsHistoryViewController()
-    let alertControllers = AlertController()
+    let alertControllers = GameAlertController()
     var gameBalanceController: GameBalanceController? {
         didSet {
             transactionHistoryController.gameBalanceController = gameBalanceController

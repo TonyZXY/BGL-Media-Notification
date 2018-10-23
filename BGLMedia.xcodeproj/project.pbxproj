@@ -14,17 +14,20 @@
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
 		241051C2217EBFFF0064B676 /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241051C1217EBFFF0064B676 /* RankApiReader.swift */; };
 		241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* MenuBarView.swift */; };
-		241082EE2164870C00A12DF1 /* RankTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082ED2164870C00A12DF1 /* RankTableViewController.swift */; };
-		241082F02164875F00A12DF1 /* RankTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EF2164875F00A12DF1 /* RankTableViewCell.swift */; };
-		241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082F1216487A000A12DF1 /* ToRankPageButton.swift */; };
-		24121507215C700300B9069B /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24121506215C700300B9069B /* RankingViewController.swift */; };
-		2423F3D6217BF8CC003FE742 /* StopLossDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2423F3D5217BF8CC003FE742 /* StopLossDisplayView.swift */; };
+		2442BE64217ED5F6000100BE /* GameAlertManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE61217ED5F6000100BE /* GameAlertManageController.swift */; };
+		2442BE65217ED5F6000100BE /* GameAlertTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE62217ED5F6000100BE /* GameAlertTableCell.swift */; };
+		2442BE66217ED5F6000100BE /* GameAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE63217ED5F6000100BE /* GameAlertController.swift */; };
+		2442BE69217ED841000100BE /* StopLossDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE67217ED841000100BE /* StopLossDisplayView.swift */; };
+		2442BE6A217ED841000100BE /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE68217ED841000100BE /* StopLossSettingView.swift */; };
+		2442BE6C217ED84D000100BE /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6B217ED84D000100BE /* StopLoss.swift */; };
+		2442BE70217ED88E000100BE /* RankTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6D217ED88E000100BE /* RankTableViewCell.swift */; };
+		2442BE71217ED88E000100BE /* RankPopWindowContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6E217ED88E000100BE /* RankPopWindowContent.swift */; };
+		2442BE72217ED88E000100BE /* ToRankPageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6F217ED88E000100BE /* ToRankPageButton.swift */; };
+		2442BE75217ED89E000100BE /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE73217ED89E000100BE /* RankingViewController.swift */; };
+		2442BE76217ED89E000100BE /* RankTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE74217ED89E000100BE /* RankTableViewController.swift */; };
+		2442BE78217ED8A7000100BE /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE77217ED8A7000100BE /* RankModel.swift */; };
 		24476084216D889D00A769E6 /* GameGeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476083216D889D00A769E6 /* GameGeneralController.swift */; };
-		24476086216D9CDF00A769E6 /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476085216D9CDF00A769E6 /* StopLossSettingView.swift */; };
-		2451CFBA216C5CEB007AC6A5 /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */; };
 		245E9A812167427A004577E0 /* PopWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245E9A802167427A004577E0 /* PopWindowController.swift */; };
-		24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A08F9521631B1D0066BA33 /* RankModel.swift */; };
-		24C3805A216EE6E000F7E4B8 /* RankPopWindowContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24C38059216EE6E000F7E4B8 /* RankPopWindowContent.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
@@ -255,17 +258,20 @@
 		240F697E2148D5710072E158 /* GenuineNewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenuineNewsObject.swift; sourceTree = "<group>"; };
 		241051C1217EBFFF0064B676 /* RankApiReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RankApiReader.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/TradingGame/Ranking/ApiReader/RankApiReader.swift"; sourceTree = "<absolute>"; };
 		241082EB2164867900A12DF1 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = BGLMedia/TradingGame/UtilityView/MenuBarView.swift; sourceTree = SOURCE_ROOT; };
-		241082ED2164870C00A12DF1 /* RankTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewController.swift; sourceTree = "<group>"; };
-		241082EF2164875F00A12DF1 /* RankTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewCell.swift; sourceTree = "<group>"; };
-		241082F1216487A000A12DF1 /* ToRankPageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToRankPageButton.swift; sourceTree = "<group>"; };
-		24121506215C700300B9069B /* RankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingViewController.swift; sourceTree = "<group>"; };
-		2423F3D5217BF8CC003FE742 /* StopLossDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLossDisplayView.swift; sourceTree = "<group>"; };
+		2442BE61217ED5F6000100BE /* GameAlertManageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameAlertManageController.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/Alert/Controlller/GameAlertManageController.swift"; sourceTree = "<absolute>"; };
+		2442BE62217ED5F6000100BE /* GameAlertTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameAlertTableCell.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/Alert/Controlller/GameAlertTableCell.swift"; sourceTree = "<absolute>"; };
+		2442BE63217ED5F6000100BE /* GameAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameAlertController.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/Alert/Controlller/GameAlertController.swift"; sourceTree = "<absolute>"; };
+		2442BE67217ED841000100BE /* StopLossDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossDisplayView.swift; sourceTree = "<group>"; };
+		2442BE68217ED841000100BE /* StopLossSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossSettingView.swift; sourceTree = "<group>"; };
+		2442BE6B217ED84D000100BE /* StopLoss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLoss.swift; sourceTree = "<group>"; };
+		2442BE6D217ED88E000100BE /* RankTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankTableViewCell.swift; sourceTree = "<group>"; };
+		2442BE6E217ED88E000100BE /* RankPopWindowContent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankPopWindowContent.swift; sourceTree = "<group>"; };
+		2442BE6F217ED88E000100BE /* ToRankPageButton.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ToRankPageButton.swift; sourceTree = "<group>"; };
+		2442BE73217ED89E000100BE /* RankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingViewController.swift; sourceTree = "<group>"; };
+		2442BE74217ED89E000100BE /* RankTableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankTableViewController.swift; sourceTree = "<group>"; };
+		2442BE77217ED8A7000100BE /* RankModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
 		24476083216D889D00A769E6 /* GameGeneralController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameGeneralController.swift; path = BGLMedia/TradingGame/GameCoinDetail/Controller/GameGeneralController.swift; sourceTree = SOURCE_ROOT; };
-		24476085216D9CDF00A769E6 /* StopLossSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLossSettingView.swift; sourceTree = "<group>"; wrapsLines = 0; };
-		2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLoss.swift; sourceTree = "<group>"; };
 		245E9A802167427A004577E0 /* PopWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopWindowController.swift; sourceTree = "<group>"; };
-		24A08F9521631B1D0066BA33 /* RankModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
-		24C38059216EE6E000F7E4B8 /* RankPopWindowContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankPopWindowContent.swift; sourceTree = "<group>"; };
 		2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
@@ -532,8 +538,8 @@
 		24121505215C700300B9069B /* Controller */ = {
 			isa = PBXGroup;
 			children = (
-				24121506215C700300B9069B /* RankingViewController.swift */,
-				241082ED2164870C00A12DF1 /* RankTableViewController.swift */,
+				2442BE73217ED89E000100BE /* RankingViewController.swift */,
+				2442BE74217ED89E000100BE /* RankTableViewController.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -541,7 +547,7 @@
 		24121508215C714400B9069B /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				24A08F9521631B1D0066BA33 /* RankModel.swift */,
+				2442BE77217ED8A7000100BE /* RankModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -549,9 +555,9 @@
 		24121509215C714400B9069B /* View */ = {
 			isa = PBXGroup;
 			children = (
-				241082EF2164875F00A12DF1 /* RankTableViewCell.swift */,
-				241082F1216487A000A12DF1 /* ToRankPageButton.swift */,
-				24C38059216EE6E000F7E4B8 /* RankPopWindowContent.swift */,
+				2442BE6E217ED88E000100BE /* RankPopWindowContent.swift */,
+				2442BE6D217ED88E000100BE /* RankTableViewCell.swift */,
+				2442BE6F217ED88E000100BE /* ToRankPageButton.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -591,8 +597,8 @@
 		2451CFBC216C5CF5007AC6A5 /* View */ = {
 			isa = PBXGroup;
 			children = (
-				24476085216D9CDF00A769E6 /* StopLossSettingView.swift */,
-				2423F3D5217BF8CC003FE742 /* StopLossDisplayView.swift */,
+				2442BE67217ED841000100BE /* StopLossDisplayView.swift */,
+				2442BE68217ED841000100BE /* StopLossSettingView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -600,7 +606,7 @@
 		2451CFBD216C5CF5007AC6A5 /* Model */ = {
 			isa = PBXGroup;
 			children = (
-				2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */,
+				2442BE6B217ED84D000100BE /* StopLoss.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -865,10 +871,10 @@
 			isa = PBXGroup;
 			children = (
 				24121503215C700300B9069B /* TradingGame */,
+				5772046821186B420049BBE8 /* MPAchart */,
 				57E67D0821408C71005F290E /* Event */,
 				57E67D032140893B005F290E /* NewV3 */,
 				57663B582137794A00E09754 /* TabBar */,
-				5772046821186B420049BBE8 /* MPAchart */,
 				57AEA179211276ED00042CF6 /* SCLAlertView */,
 				57BBAB3E2107085F00984AA4 /* PullToRefresh */,
 				57BAD94B2104CAD500973B45 /* Classes */,
@@ -942,6 +948,9 @@
 		571F682F210170F500342198 /* Controlller */ = {
 			isa = PBXGroup;
 			children = (
+				2442BE63217ED5F6000100BE /* GameAlertController.swift */,
+				2442BE61217ED5F6000100BE /* GameAlertManageController.swift */,
+				2442BE62217ED5F6000100BE /* GameAlertTableCell.swift */,
 				2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */,
 				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
 				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
@@ -1485,7 +1494,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */,
-				241082F02164875F00A12DF1 /* RankTableViewCell.swift in Sources */,
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
 				57355C0C20F7188B002E70E4 /* NewsObject.swift in Sources */,
@@ -1494,6 +1502,7 @@
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,
 				B959EF5B2146172500930DD6 /* FontController.swift in Sources */,
 				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
+				2442BE70217ED88E000100BE /* RankTableViewCell.swift in Sources */,
 				B9F4F3392161E0EE0038AE6B /* GameTransactionsController.swift in Sources */,
 				2D52AF1D20E46E1A00018FC0 /* Params.swift in Sources */,
 				57355C5920F718CC002E70E4 /* SearchExchangesController.swift in Sources */,
@@ -1528,7 +1537,7 @@
 				57355C5D20F718CC002E70E4 /* SearchCoinController.swift in Sources */,
 				57BAD9532104CAD500973B45 /* TCPickerViewLightTheme.swift in Sources */,
 				2D52AF2320E46E1A00018FC0 /* ContainerView.swift in Sources */,
-				24A08F9621631B1D0066BA33 /* RankModel.swift in Sources */,
+				2442BE76217ED89E000100BE /* RankTableViewController.swift in Sources */,
 				57355C6420F718CC002E70E4 /* CryptoCompareCoinListResult.swift in Sources */,
 				57355C6720F718CC002E70E4 /* WalletDetail.swift in Sources */,
 				2D52AEA520E46E1A00018FC0 /* HistoryTableViewCell.swift in Sources */,
@@ -1542,19 +1551,18 @@
 				57355C4820F718CC002E70E4 /* TransCoinTypeCell.swift in Sources */,
 				57AEA17E211276ED00042CF6 /* SCLExtensions.swift in Sources */,
 				571800D2215B59AF0012FE75 /* AlertNotificationController.swift in Sources */,
-				2451CFBA216C5CEB007AC6A5 /* StopLoss.swift in Sources */,
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
-				2423F3D6217BF8CC003FE742 /* StopLossDisplayView.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,
 				57663B5A2137796D00E09754 /* ForceUpdateAlertController.swift in Sources */,
+				2442BE65217ED5F6000100BE /* GameAlertTableCell.swift in Sources */,
 				57355C5120F718CC002E70E4 /* MarketCapClient.swift in Sources */,
 				B930B6E9214F3D5900685F64 /* Event.swift in Sources */,
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */,
 				57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */,
+				2442BE66217ED5F6000100BE /* GameAlertController.swift in Sources */,
 				241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */,
-				24C3805A216EE6E000F7E4B8 /* RankPopWindowContent.swift in Sources */,
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */,
 				2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */,
@@ -1586,11 +1594,11 @@
 				57355C5320F718CC002E70E4 /* CryptoCompareClient.swift in Sources */,
 				2D52AEAB20E46E1A00018FC0 /* priceNotificationCell.swift in Sources */,
 				2D52AEAE20E46E1A00018FC0 /* MainTabBarController.swift in Sources */,
-				24476086216D9CDF00A769E6 /* StopLossSettingView.swift in Sources */,
 				57BBAB4A2107085F00984AA4 /* Availability.swift in Sources */,
 				57BBAB6A210962C300984AA4 /* GlobalFilterCollectionView.swift in Sources */,
 				57355C8720F71931002E70E4 /* ThemeColor.swift in Sources */,
 				578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */,
+				2442BE71217ED88E000100BE /* RankPopWindowContent.swift in Sources */,
 				57BBAB6B210962C300984AA4 /* WatchListCell.swift in Sources */,
 				57650895210D9AFE007368CC /* Transactions.swift in Sources */,
 				57BAD86B21045ACF00973B45 /* exchangeController.swift in Sources */,
@@ -1628,6 +1636,7 @@
 				57355C4420F718CC002E70E4 /* TransExpensesCell.swift in Sources */,
 				578452C2214628EC00053814 /* AllEventsViewController.swift in Sources */,
 				57355C6A20F718CC002E70E4 /* AllTransactions.swift in Sources */,
+				2442BE75217ED89E000100BE /* RankingViewController.swift in Sources */,
 				57355C5B20F718CC002E70E4 /* SearchTradingPairController.swift in Sources */,
 				57BBAB64210962C300984AA4 /* WatchListsController.swift in Sources */,
 				B9BA331E2159BE0100255E2D /* EventDetailViewController2.swift in Sources */,
@@ -1643,9 +1652,11 @@
 				57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */,
 				57BAD9522104CAD500973B45 /* TCPickerView.swift in Sources */,
 				2D52AF1E20E46E1A00018FC0 /* CandleStickChart.swift in Sources */,
+				2442BE69217ED841000100BE /* StopLossDisplayView.swift in Sources */,
 				57650899210FE463007368CC /* RegisterCell.swift in Sources */,
 				5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */,
 				57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */,
+				2442BE72217ED88E000100BE /* ToRankPageButton.swift in Sources */,
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
 				B95B7FFB21588BF4004E613D /* IntrinsicContentSize.swift in Sources */,
 				57355C4720F718CC002E70E4 /* TransDateCell.swift in Sources */,
@@ -1655,20 +1666,21 @@
 				57BAD9542104CAD500973B45 /* TCPickerViewDarkTheme.swift in Sources */,
 				2D52AF0C20E46E1A00018FC0 /* SearchNewsFlashController.swift in Sources */,
 				2D52AF1A20E46E1A00018FC0 /* DefaultViewController.swift in Sources */,
+				2442BE78217ED8A7000100BE /* RankModel.swift in Sources */,
 				57BBAB69210962C300984AA4 /* TotalMarketCell.swift in Sources */,
 				2D52AF1220E46E1A00018FC0 /* TimelineTableViewCell.swift in Sources */,
+				2442BE6A217ED841000100BE /* StopLossSettingView.swift in Sources */,
 				B930B6EC21507DA800685F64 /* EventViewModel.swift in Sources */,
 				57355C4E20F718CC002E70E4 /* APIErrors.swift in Sources */,
+				2442BE64217ED5F6000100BE /* GameAlertManageController.swift in Sources */,
+				2442BE6C217ED84D000100BE /* StopLoss.swift in Sources */,
 				57BBAB66210962C300984AA4 /* MarketsController.swift in Sources */,
 				2D52AF2220E46E1A00018FC0 /* XAxisLabelView.swift in Sources */,
 				57BAD9D1210503A100973B45 /* ShareNewsFlashControllerV2.swift in Sources */,
 				2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */,
-				241082EE2164870C00A12DF1 /* RankTableViewController.swift in Sources */,
 				57355C6220F718CC002E70E4 /* SaveStructToRealmObjects.swift in Sources */,
 				2D52AEA720E46E1A00018FC0 /* HistoryLine.swift in Sources */,
-				241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */,
 				57BBAB6D210962C300984AA4 /* WatchListRealm.swift in Sources */,
-				24121507215C700300B9069B /* RankingViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

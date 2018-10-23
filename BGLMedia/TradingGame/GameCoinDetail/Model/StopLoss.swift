@@ -156,7 +156,7 @@ class  StopLossApiService{
                 
                 // store data into realm
                 print("成功获取StopLoss")
-                print(json)
+                
                 self.storeDataToRealm(data: data, completion: {success in
                     if success {
                         // not expecting false from store to realm
