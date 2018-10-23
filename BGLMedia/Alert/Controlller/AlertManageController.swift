@@ -24,7 +24,6 @@ struct interset{
     var isGreater:String = "1"
 }
 
-
 //    "interest":["_id":"","coinFrom":"BTC","coinTo":"AUD","market":"BTCmarkets","price":123,"status":true,"id":"123","isGreater":1]
 
 
@@ -94,6 +93,12 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
     var token:String{
         get{
             return UserDefaults.standard.string(forKey: "CertificateToken")!
+        }
+    }
+
+    var userID: String{
+        get{
+            return UserDefaults.standard.string(forKey: "user_id") ?? "null"
         }
     }
     
@@ -456,41 +461,10 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                         self.alertButton.isUserInteractionEnabled = true
                     }
                 }
+
+
             }
             
-            
-            //            realm.beginWrite()
-            //            var currentTransactionId:Int = 0
-            //            let transaction = realm.objects(alertObject.self)
-            //            if transaction.count != 0{
-            //                currentTransactionId = (transaction.last?.id)! + 1
-            //            } else {
-            //                currentTransactionId = 1
-            //            }
-            
-            
-            
-            //
-            //
-            //
-            //
-            //
-            //            let realmData:[Any] = [currentTransactionId,newTransaction.coinName,newTransaction.coinAbbName,newTransaction.tradingPairsName,newTransaction.exchangName,price,true,true,Date()]
-            //            if realm.object(ofType: alertObject.self, forPrimaryKey: currentTransactionId) == nil {
-            //                realm.create(alertObject.self, value: realmData)
-            //            } else {
-            //                realm.create(alertObject.self, value: realmData, update: true)
-            //            }
-            //
-            //            if realm.object(ofType: alertCoinNames.self, forPrimaryKey: newTransaction.coinAbbName) == nil {
-            //                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName])
-            //            } else {
-            //                realm.create(alertCoinNames.self, value: [newTransaction.coinAbbName,newTransaction.coinName], update: true)
-            //            }
-            
-            //            try! realm.commitWrite()
-            //            NotificationCenter.default.post(name: NSNotification.Name(rawValue: "addAlert"), object: nil)
-            //            navigationController?.popViewController(animated: true)
         } else {
             let hud = JGProgressHUD(style: .light)
             hud.indicatorView = JGProgressHUDErrorIndicatorView()
@@ -502,6 +476,25 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
             alertButton.isUserInteractionEnabled = true
         }
     }
+
+
+   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
     
     func loadPrice(){
         if intersetObject.coinName != "" && intersetObject.exchangName != "" && intersetObject.tradingPairs != ""{
@@ -544,35 +537,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
                     }
                 }
                 
-                
-                
-//                cryptoCompareClient.getTradePrice(from: intersetObject.coinAbbName, to: intersetObject.tradingPairs, exchange: intersetObject.exchangName){
-//                    result in
-//                    switch result{
-//                    case .success(let resultData):
-//                        for(_, value) in resultData!{
-//                            readData = value
-//                        }
-//                        self.sectionPrice = readData
-//
-//
-//
-//                        //                    let cell:TransPriceCell = self.transactionTableView.cellForRow(at: index) as! TransPriceCell
-//                        //                    cell.priceType.text = Extension.method.scientificMethod(number: readData)
-//
-//
-//
-//                        let indexPathForSection = NSIndexSet(index: 0)
-//                        self.alertTableView.reloadSections(indexPathForSection as IndexSet, with: .automatic)
-//
-//
-//
-//                        //                    self.alertTableView.reloadData()
-//                        self.newTransaction.defaultCurrencyPrice = Double(String(readData))!
-//                    case .failure(let error):
-//                        print("the error \(error.localizedDescription)")
-//                    }
-//                }
             }
         } else{
             newTransaction.defaultCurrencyPrice = 0
@@ -611,24 +575,6 @@ class AlertManageController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
-    //    func getAlertFromServer(parameter: String, completion:@escaping (JSON, Bool)->Void){
-    //
-    //
-    //
-    //
-    //
-    //        let url = URL(string: "http://10.10.6.18:3030/userLogin/interestOfUser/" + parameter)
-    //        var urlRequest = URLRequest(url: url!)
-    //        urlRequest.httpMethod = "GET"
-    //        urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
-    //
-    //        Alamofire.request(urlRequest).response { (response) in
-    //            if let data = response.data{
-    //                var res = JSON(data)
-    //                completion(res,true)
-    //            }
-    //        }
-    //    }
     
 }
 
