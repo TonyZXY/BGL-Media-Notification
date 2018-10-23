@@ -141,20 +141,10 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     func goToGameView(_ json: JSON) {
-<<<<<<< HEAD
         let gameBalance = GameBalanceController()
         gameBalance.gameUser = GameUser(json)
         UserDefaults.standard.set(gameBalance.gameUser?.id, forKey: "user_id")
         gameBalance.hidesBottomBarWhenPushed = true
-=======
-        let gameBalance = AlertController();
-        gameBalance.factor = view.frame.width/375
-        let gameBalance2 = GameBalanceController();
-        gameBalance2.gameUser = GameUser(json)
-        let userID = gameBalance2.gameUser?.id
-        UserDefaults.standard.set(userID, forKey: "user_id")
-//        gameBalance.hidesBottomBarWhenPushed = true
->>>>>>> GameTransaction
         navigationController?.pushViewController(gameBalance, animated: true)
     }
     
