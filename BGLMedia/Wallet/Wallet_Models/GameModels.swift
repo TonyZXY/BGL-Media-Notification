@@ -87,11 +87,40 @@ struct GameCoin {
     let abbrName: String
     let amount: Double
     var price: Double
+    var totalValueOfBuy: Double
+    var totalAmountOfBuy: Double
+    var totalValueOfSell: Double
+    var totalAmountOfSell: Double
+    var totalValue: Double { return amount * price }
+    var avgOfBuyPrice: Double { return totalAmountOfBuy == 0 ? 0 : totalValueOfBuy / totalAmountOfBuy }
+    //because transaction fee, the actual coin amount will be different with the transaction amount
+    var leftTransactionAmount: Double { return totalAmountOfBuy - totalAmountOfSell }
+    var profitNumber: Double { return avgOfBuyPrice == 0 ? 0 : totalValue - avgOfBuyPrice * leftTransactionAmount }
+    var profitPercentage: Double { return profitNumber * 100 / totalValue }
+    var realisedProfitNumber: Double { return totalValueOfSell - avgOfBuyPrice * totalAmountOfSell }
     
     init(name: String, abbrName: String, amount: Double) {
         self.name = name
         self.abbrName = abbrName
         self.amount = amount
-        price = 1
+        price = 0
+        totalValueOfBuy = 0
+        totalAmountOfBuy = 0
+        totalValueOfSell = 0
+        totalAmountOfSell = 0
+    }
+}
+
+struct TransSum {
+    let abbrName: String
+    let status: String
+    let totalAmount: Double
+    let totalValue: Double
+    
+    init(_ json: JSON) {
+        abbrName = json["coin_add_name"].stringValue
+        status = json["status"].stringValue
+        totalAmount = json["total_amount"].doubleValue
+        totalValue = json["total_value"].doubleValue
     }
 }
