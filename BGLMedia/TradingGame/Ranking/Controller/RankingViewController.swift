@@ -123,11 +123,12 @@ class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionView
         
         
         func getAllRankData(completion: @escaping (Bool) -> (Void)){
-            //            var token = UserDefaults.standard.string(forKey: "CertificateToken")
-            //            var email = UserDefaults.standard.string(forKey: "UserEmail")
-            let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEwMDAwMDAyLCJwYXNzd29yZCI6ImY5ZjAwZjM0OTI4OWM1MTFmODA1YTUwNWVhMjRmYjBjMDg5MzM3MmYzNDEzZGJiYjQyNzEwMzEzNTQ1ZWMyOGMiLCJpYXQiOjE1Mzg0NDMwNDF9.BXZCtkdec6aX77w0UpmKB9suj0OxYxtGwWc6z6a0MEQ"
-            let email = "test123@test.com"
-            let user_id = 1000005
+            let token = UserDefaults.standard.string(forKey: "CertificateToken") ?? ""
+            let email = UserDefaults.standard.string(forKey: "UserEmail") ?? ""
+            let user_id = UserDefaults.standard.integer(forKey: "user_id")
+            print(token)
+            print(email)
+            print(user_id)
             URLServices.fetchInstance.passServerData(urlParameters: ["game","getRanking"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id]){ (res,success) in
                 if success{
                     print("成功啦")
@@ -141,6 +142,7 @@ class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionView
                     let total_rank = data["total_rank"].array ?? []
                     //user rank is a single object
                     let user_rank = data["user_rank"]
+                    print(user_rank)
                     self.userRankModel = RankObjectModel(user_rank)
                     
                     for obj in weekly_rank{

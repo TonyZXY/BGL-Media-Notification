@@ -17,6 +17,12 @@ class GameGerneralController: UIViewController {
     let realm = try! Realm()
     let vc = CandleStickChartViewController()
     
+    var coinDetail: GameCoin?{
+        didSet{
+            stopLossSetView.coinDetail = coinDetail
+        }
+    }
+    
     var candleChartDatas:candleChartData?{
         didSet{
             setUpView()
@@ -31,10 +37,23 @@ class GameGerneralController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        refreshStopLossData()
         setUpView()
+
     }
     
-    func addChildViewControllers(childViewControllers:UIViewController,views:UIView){
+    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
+        super.init(nibName: nibNameOrNil, bundle: nibBundleOrNil)
+        // refresh stoploss data in realm before set view to avoid api completion after setupView issue
+        
+
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    private func addChildViewControllers(childViewControllers:UIViewController,views:UIView){
         addChildViewController(childViewControllers)
         views.addSubview(childViewControllers.view)
         childViewControllers.view.frame = views.bounds
@@ -49,7 +68,40 @@ class GameGerneralController: UIViewController {
         childViewControllers.view.heightAnchor.constraint(equalTo: views.heightAnchor).isActive = true
     }
     
+    func refreshStopLossData(){
+        let api = StopLossApiService()
+        api.getStopLossList(completion: { (success, err) in
+            if success{
+                // currently just replace content of container
+                self.reloadStopLossContainer()
+                // currently only one pair allowed
+            }else{
+                
+            }
+        })
+    }
+    // we only have 1 cell at the
+    private func reloadStopLossContainer(){
+        for view in stopLossContainer.subviews{
+            view.removeFromSuperview()
+        }
+        
+        if stopLossObjects.count > 0{
+            self.stopLossDisplay.stopLossObject = stopLossObjects[0]
+            self.stopLossSetView.stopLossObject = stopLossObjects[0]
+            stopLossContainer.addSubview(stopLossDisplay)
+            stopLossContainer.addConstraintsWithFormat(format: "H:|[v0]|", views: stopLossDisplay)
+            stopLossContainer.addConstraintsWithFormat(format: "V:|[v0]|", views: stopLossDisplay)
+        }else{
+            // default using button
+            stopLossContainer.addSubview(stopLossButton)
+            stopLossContainer.addConstraintsWithFormat(format: "H:|[v0]|", views: stopLossButton)
+            stopLossContainer.addConstraintsWithFormat(format: "V:|[v0]|", views: stopLossButton)
+        }
+    }
     func setUpView(){
+        
+        reloadStopLossContainer()
         
         view.backgroundColor = ThemeColor().themeColor()
         view.addSubview(mainViews)
@@ -62,7 +114,7 @@ class GameGerneralController: UIViewController {
         scrollView.addSubview(ImageView)
         scrollView.addSubview(LastView)
         scrollView.addSubview(stopLossLabel)
-        scrollView.addSubview(stopLossButton)
+        scrollView.addSubview(stopLossContainer)
         
         secondView.addSubview(spinner)
         secondView.addSubview(totalNumber)
@@ -85,7 +137,7 @@ class GameGerneralController: UIViewController {
         scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: secondView)
         scrollView.addConstraintsWithFormat(format: "H:[v0(\(view.frame.size.width-30*factor!))]", views: ImageView)
         scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: LastView)
-        scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: stopLossButton)
+        scrollView.addConstraintsWithFormat(format: "H:|-\(15*factor!)-[v0]-\(15*factor!)-|", views: stopLossContainer)
         
         // vertical constraints for scroll view
         scrollView.addConstraintsWithFormat(format: "V:|-\(5*factor!)-[v0(\(50*factor!))]", views: firstView)
@@ -95,7 +147,7 @@ class GameGerneralController: UIViewController {
         scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1]", views: ImageView,globalMarketLabel)
         scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1(\(120*factor!))]", views: globalMarketLabel,LastView)
         scrollView.addConstraintsWithFormat(format: "V:[v0]-\(10*factor!)-[v1]", views: LastView,stopLossLabel)
-        scrollView.addConstraintsWithFormat(format: "V:[v0]-\(5*factor!)-[v1(\(50*factor!))]-\(15*factor!)-|", views: stopLossLabel,stopLossButton)
+        scrollView.addConstraintsWithFormat(format: "V:[v0]-\(5*factor!)-[v1(\(100*factor!))]-\(15*factor!)-|", views: stopLossLabel,stopLossContainer)
         
         // inside firstview (trading pair and exchange)
         NSLayoutConstraint(item: firstView, attribute: NSLayoutAttribute.centerX, relatedBy: NSLayoutRelation.equal, toItem: mainViews, attribute: NSLayoutAttribute.centerX, multiplier: 1, constant: 0).isActive = true
@@ -141,7 +193,7 @@ class GameGerneralController: UIViewController {
         
         // Stop Loss
         NSLayoutConstraint(item: stopLossLabel, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
-        NSLayoutConstraint(item: stopLossButton, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
+        NSLayoutConstraint(item: stopLossContainer, attribute: .centerX, relatedBy: .equal, toItem: mainViews, attribute: .centerX, multiplier: 1, constant: 0).isActive = true
 
         // set up contents for each views
         vc.willMove(toParentViewController: self)
@@ -406,6 +458,15 @@ class GameGerneralController: UIViewController {
     
     
     // stop and loss section
+    lazy var stopLossContainer : UIView = {
+        var view = UIView()
+        view.backgroundColor = ThemeColor().greyColor()
+        view.layer.cornerRadius = 8 * factor!
+        view.clipsToBounds = true
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
+    
     lazy var stopLossLabel:UILabel = {
         var label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
@@ -428,11 +489,24 @@ class GameGerneralController: UIViewController {
         button.setTitleColor(.white, for: .normal)
         button.addTarget(self, action: #selector(openStopLossSettingView), for: .touchUpInside)
         button.backgroundColor = ThemeColor().themeWidgetColor()
-        button.layer.cornerRadius = 8.5
+//        button.layer.cornerRadius = 8 * factor!
         return button
     }()
     
-    @objc func openStopLossSettingView(sender:UIButton){
+    lazy var stopLossDisplay : StopLossDisplayView = {
+        let view = StopLossDisplayView()
+        let gesture = UITapGestureRecognizer(target: self, action:  #selector(openStopLossEditingView))
+        view.addGestureRecognizer(gesture)
+        return view
+    }()
+    
+    var stopLossObjects: Results<StopLossObject>{
+        get{
+            return try! Realm().objects(StopLossObject.self).filter("coinAbbrName = %@ AND actived == true", coinDetail?.abbrName.lowercased() ?? "")
+        }
+    }
+    
+    var stopLossPopController : PopWindowController{
         let header = PopWindowHeader(title: textValue(name: "stopLoss_title"))
         
         let content = stopLossSetView
@@ -447,10 +521,27 @@ class GameGerneralController: UIViewController {
             view.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor!))]-0-[v1]|", views: header,content)
             return view
         }()
-        let popWindowConttroller = PopWindowController(contentView: view)
-        popWindowConttroller.rootView.clipsToBounds = true
-        header.dismissButton.dismissController = popWindowConttroller
-        self.present(popWindowConttroller, animated: true, completion: nil)
+        let popWindowController = PopWindowController(contentView: view)
+        popWindowController.rootView.clipsToBounds = true
+        // let stop loss view know these controller so it can dismiss popWindow and refresh data in game general
+        stopLossSetView.popWindowController = popWindowController
+        stopLossSetView.gameGeneralController = self
+        header.dismissButton.dismissController = popWindowController
+        
+        return popWindowController
+    }
+    
+    @objc func openStopLossSettingView(sender:UIButton){
+
+        stopLossSetView.mode = StopLossSettingView.Mode.SET
+        self.present(stopLossPopController, animated: true, completion: nil)
+    }
+    
+    // same as above but change the content mode of stopLossSetView to edit
+    @objc func openStopLossEditingView(sender:UIButton){
+        refreshStopLossData()
+        stopLossSetView.mode = StopLossSettingView.Mode.EDIT
+        self.present(stopLossPopController, animated: true, completion: nil)
     }
     
     func setUpStackView(view:[UIView],spacing:CGFloat,axis:UILayoutConstraintAxis)-> UIStackView{

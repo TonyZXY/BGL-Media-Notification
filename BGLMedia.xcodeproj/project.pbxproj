@@ -17,6 +17,7 @@
 		241082F02164875F00A12DF1 /* RankTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EF2164875F00A12DF1 /* RankTableViewCell.swift */; };
 		241082F2216487A000A12DF1 /* ToRankPageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082F1216487A000A12DF1 /* ToRankPageButton.swift */; };
 		24121507215C700300B9069B /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24121506215C700300B9069B /* RankingViewController.swift */; };
+		2423F3D6217BF8CC003FE742 /* StopLossDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2423F3D5217BF8CC003FE742 /* StopLossDisplayView.swift */; };
 		24476084216D889D00A769E6 /* GameGeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476083216D889D00A769E6 /* GameGeneralController.swift */; };
 		24476086216D9CDF00A769E6 /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476085216D9CDF00A769E6 /* StopLossSettingView.swift */; };
 		2451CFBA216C5CEB007AC6A5 /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */; };
@@ -256,6 +257,7 @@
 		241082EF2164875F00A12DF1 /* RankTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewCell.swift; sourceTree = "<group>"; };
 		241082F1216487A000A12DF1 /* ToRankPageButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ToRankPageButton.swift; sourceTree = "<group>"; };
 		24121506215C700300B9069B /* RankingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankingViewController.swift; sourceTree = "<group>"; };
+		2423F3D5217BF8CC003FE742 /* StopLossDisplayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLossDisplayView.swift; sourceTree = "<group>"; };
 		24476083216D889D00A769E6 /* GameGeneralController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameGeneralController.swift; path = BGLMedia/TradingGame/GameCoinDetail/Controller/GameGeneralController.swift; sourceTree = SOURCE_ROOT; };
 		24476085216D9CDF00A769E6 /* StopLossSettingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLossSettingView.swift; sourceTree = "<group>"; wrapsLines = 0; };
 		2451CFB9216C5CEA007AC6A5 /* StopLoss.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StopLoss.swift; sourceTree = "<group>"; };
@@ -579,6 +581,7 @@
 			isa = PBXGroup;
 			children = (
 				24476085216D9CDF00A769E6 /* StopLossSettingView.swift */,
+				2423F3D5217BF8CC003FE742 /* StopLossDisplayView.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1530,6 +1533,7 @@
 				571800D2215B59AF0012FE75 /* AlertNotificationController.swift in Sources */,
 				2451CFBA216C5CEB007AC6A5 /* StopLoss.swift in Sources */,
 				57355C4C20F718CC002E70E4 /* WalletsCell.swift in Sources */,
+				2423F3D6217BF8CC003FE742 /* StopLossDisplayView.swift in Sources */,
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,
 				57663B5A2137796D00E09754 /* ForceUpdateAlertController.swift in Sources */,

@@ -56,7 +56,7 @@ import SwiftyJSON
 class StopLossObject: Object {
     @objc dynamic var set_id : String = "0"
     @objc dynamic var user_id: String = "0"
-    @objc dynamic var coinName: String = ""
+    @objc dynamic var coinAbbrName: String = ""
     @objc dynamic var price_greater : Double = 0
     @objc dynamic var price_lower : Double = 0
     @objc dynamic var amount : Double = 0
@@ -65,7 +65,7 @@ class StopLossObject: Object {
     @objc dynamic var actived : Bool = true
     @objc dynamic var complete_date: Date = Date()
     /** if code = 400, means this stop loss failed due to insufficient amount.  empty string means server return nil */
-    @objc dynamic var code : String = ""
+    @objc dynamic var code : String?
     
     override class func primaryKey() -> String {
         return "set_id"
@@ -73,12 +73,12 @@ class StopLossObject: Object {
 }
 
 class  StopLossApiService{
-    //            var token = UserDefaults.standard.string(forKey: "CertificateToken")
-    //            var email = UserDefaults.standard.string(forKey: "UserEmail")
-    let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEwMDAwMDAwLCJwYXNzd29yZCI6ImM4NzdhYzFlOGM5YTM5NDU0ZmNlMDk0NGFjMTk5NmQxZmY4ZmQ2NzdmNTFmYTg4NWZkNzJlYjEyYWQwZDk1N2IiLCJpYXQiOjE1Mzg0NDA5Nzd9.r6tWVPgo7vSqEu4M4jbVs4-vNiAL8Zralg7J3yS0ZdY"
-    let email = "xyzheng109@gmail.com"
-    let user_id = 10000000
-    
+//    let token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOjEwMDAwMDAwLCJwYXNzd29yZCI6ImM4NzdhYzFlOGM5YTM5NDU0ZmNlMDk0NGFjMTk5NmQxZmY4ZmQ2NzdmNTFmYTg4NWZkNzJlYjEyYWQwZDk1N2IiLCJpYXQiOjE1Mzg0NDA5Nzd9.r6tWVPgo7vSqEu4M4jbVs4-vNiAL8Zralg7J3yS0ZdY"
+//    let email = "xyzheng109@gmail.com"
+//    let user_id = 10000000
+    var token = UserDefaults.standard.string(forKey: "CertificateToken") ?? ""
+    var email = UserDefaults.standard.string(forKey: "UserEmail") ?? ""
+    var user_id = UserDefaults.standard.integer(forKey: "user_id")
     /**
         sent stopLoss setting to server
         - Parameters:
@@ -94,19 +94,28 @@ class  StopLossApiService{
                     - 500 "bad request",
                     - 510 "Database Error"
      */
-    func setStopLoss(coinAbbr: String, priceGreater : Double, priceLower : Double, amount: Double, completion: @escaping (Bool,String?) -> (Void)){
-        let set : [String : Any] = ["coinName":coinAbbr,"priceGreater" : priceGreater, "priceLower": priceLower, "amount": amount]
+    func setStopLoss(coinAbbr: String, priceGreater : Double, priceLower : Double, amount: Double, completion: @escaping (Bool,String) -> (Void)){
+        let abbrName = coinAbbr.lowercased()
+        let set : [String : Any] = ["coinName":abbrName,"priceGreater" : priceGreater, "priceLower": priceLower, "amount": amount]
         URLServices.fetchInstance.passServerData(urlParameters: ["game","setStopLoss"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id, "set": set]){ (res,success) in
             if success{
-                print("成功设置StopLoss")
-                let json = JSON(res)
-                let code = json["code"].string
-                completion(true,code)
                 
+                let json = JSON(res)
+                print(json)
+                let code = json["code"].stringValue
+
+                if code == "450" {
+                    // due to limitation
+                    print("失败设置StopLoss")
+                    completion(false,code)
+                }else{
+                    print("成功设置StopLoss")
+                    completion(true,code)
+                }
             } else{
                 print("失败设置StopLoss")
                 let json = JSON(res)
-                let code = json["code"].string
+                let code = json["code"].stringValue
                 completion(false,code)
             }
         }
@@ -119,36 +128,31 @@ class  StopLossApiService{
                 - success code(true)
                     - 200 "successfully get stop loss pair"
                 - error code(false)
-                    - 400 “stop loss failed due to insufficient amount”
                     - 500 "bad request",
                     - 510 "Database Error"
                     - 999 ""
      */
-    func getStopLossList(completion: @escaping (Bool,String?) -> (Void)){
+    func getStopLossList(completion: @escaping (Bool,String) -> (Void)){
         URLServices.fetchInstance.passServerData(urlParameters: ["game","getStopLossList"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id]){ (res,success) in
             if success{
-                print("成功获取StopLoss")
+                
                 // store data
                 let json = JSON(res)
-                let code = json["code"].string
+                let code = json["code"].stringValue
                 let data = res["data"]
                 
-                let insufficientCode = data["code"].string
-                if insufficientCode == "400" {
-                    completion(false,insufficientCode)
-                }else{
-                    // store data into realm
-                    self.storeDataToRealm(data: data, completion: {success in
-                        if success {
-                            // not expecting false from store to realm
-                            completion(true,code)
-                        }
-                    })
-                }
+                // store data into realm
+                print("成功获取StopLoss")
+                self.storeDataToRealm(data: data, completion: {success in
+                    if success {
+                        // not expecting false from store to realm
+                        completion(true,code)
+                    }
+                })
             } else{
                 print("失败获取StopLoss")
                 let json = JSON(res)
-                let code = json["code"].string
+                let code = json["code"].stringValue
                 completion(false,code)
             }
         }
@@ -163,24 +167,21 @@ class  StopLossApiService{
         
         if let collection = data.array {
             for result in collection{
-                let set_id = result["set_id"].string ?? "0"
-                let user_id = result["user_id"].string ?? ""
-                let coin_name = result["coin_name"].string ?? ""
+                let set_id = result["set_id"].stringValue
+                let user_id = result["user_id"].stringValue
+                let coin_name = result["coin_name"].string?.lowercased() ?? ""
                 let price_greater = result["price_greater"].double ?? 0
                 let price_lower = result["price_lower"].double ?? 0
                 let amount = result["amount"].double ?? 0
                 let actived = result["actived"].bool ?? true
                 let complete_date = Extension.method.convertStringToDate(date: result["complete_date"].string ?? "")
-                let code = result["code"].string ?? ""
+                let code = result["code"].stringValue
                 
-                // if set_id is valid
-                if(set_id != "0"){
-                    // if object not stored
-                    if(realm.object(ofType: StopLossObject.self, forPrimaryKey: set_id) == nil){
-                        realm.create(StopLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code])
-                    } else {
-                        realm.create(StopLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code], update: true)
-                    }
+                // if object not stored
+                if(realm.object(ofType: StopLossObject.self, forPrimaryKey: set_id) == nil){
+                    realm.create(StopLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code])
+                } else {
+                    realm.create(StopLossObject.self, value: [set_id, user_id, coin_name, price_greater, price_lower, amount, actived, complete_date, code], update: true)
                 }
             }
             try! realm.commitWrite()
@@ -203,23 +204,23 @@ class  StopLossApiService{
                     - 500 "bad request",
                     - 510 "Database Error"
      */
-    func editStopLoss(set_id: String, coinAbbr: String, priceGreater : Double, priceLower : Double, amount: Double, completion: @escaping (Bool,String?) -> (Void)){
+    func editStopLoss(set_id: String, coinAbbr: String, priceGreater : Double, priceLower : Double, amount: Double, completion: @escaping (Bool,String) -> (Void)){
         //            var token = UserDefaults.standard.string(forKey: "CertificateToken")
         //            var email = UserDefaults.standard.string(forKey: "UserEmail")
-        
-        let set : [String : Any] = ["set_id": set_id, "coinName":coinAbbr,"priceGreater" : priceGreater, "priceLower": priceLower, "amount": amount]
+        let abbrName = coinAbbr.lowercased()
+        let set : [String : Any] = ["set_id": set_id, "coinName":abbrName,"priceGreater" : priceGreater, "priceLower": priceLower, "amount": amount]
         URLServices.fetchInstance.passServerData(urlParameters: ["game","editStopLoss"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id, "set": set]){ (res,success) in
             if success{
-                print("成功设置StopLoss")
-                // store data
+                print("成功修改StopLoss")
                 let json = JSON(res)
-                let code = json["code"].string
+                print(json)
+                let code = json["code"].stringValue
                 completion(true,code)
                 
             } else{
-                print("失败设置StopLoss")
+                print("失败修改StopLoss")
                 let json = JSON(res)
-                let code = json["code"].string
+                let code = json["code"].stringValue
                 completion(false,code)
             }
         }

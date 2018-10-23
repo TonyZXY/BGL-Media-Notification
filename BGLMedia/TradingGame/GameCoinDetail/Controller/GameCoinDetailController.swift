@@ -32,7 +32,7 @@ class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectio
         didSet {
             transactionHistoryController.coinDetail = coinDetail
             // well just let the stoploss know about the coin 
-            gerneralController.stopLossSetView.coinDetail = coinDetail
+            gerneralController.coinDetail = coinDetail
         }
     }
     

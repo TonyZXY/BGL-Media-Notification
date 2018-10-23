@@ -43,7 +43,7 @@ class URLServices:NSObject{
     //    "https://bglnewsbkend.tk"
     func passServerData(urlParameters:[String],httpMethod:String,parameters:[String:Any],completion:@escaping (JSON, Bool)->Void){
         //var BaseURl = "https://cryptogeekapp.com"   //production server
-        var BaseURl = "http://10.10.6.75:3020"       //test server
+        var BaseURl = "http://192.168.18.80:3020"       //test server
         //        "https://bglnewsbkend.tk"
         for path in urlParameters{
             BaseURl = BaseURl + "/" + path

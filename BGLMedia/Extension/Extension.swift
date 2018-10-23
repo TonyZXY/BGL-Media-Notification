@@ -450,16 +450,26 @@ extension Double {
         return Double(floor(pow(10.0, Double(places)) * self)/pow(10.0, Double(places)))
     }
     
-    func limitDecimal(decimalLimit : Int)->Double{
-        let split = String(self).components(separatedBy: ".")
-        let integer = split.first ?? ""
-        let decimal = (split.count == 2) ? (split.last ?? "") : ""
-        if decimal.count > decimalLimit {
-            let value = "\(integer).\(decimal.prefix(decimalLimit))"
-            return Double(value) ?? self
+    func floorTo(decimalLimit : Int)->Double{
+        var power :Double = 10
+        var i = 1
+        while i<decimalLimit{
+            power *= 10
+            i += 1
         }
-        return self
+        return Double(floor(self * power)/power)
     }
+    
+    func ceilTo(decimalLimit : Int)->Double{
+        var power :Double = 10
+        var i = 1
+        while i<decimalLimit{
+            power *= 10
+            i += 1
+        }
+        return Double(ceil(self * power)/power)
+    }
+    
 }
 
 extension UIViewController{
@@ -1010,7 +1020,7 @@ extension UIImageView {
 // copied from https://stackoverflow.com/questions/28079123/how-to-check-validity-of-url-in-swift
 extension String {
     
-    private func matches(pattern: String) -> Bool {
+    private func matchesTo(pattern: String) -> Bool {
         let regex = try! NSRegularExpression(
             pattern: pattern,
             options: [.caseInsensitive])
@@ -1027,11 +1037,16 @@ extension String {
         }
         
         let urlPattern = "^(http|https|ftp)\\://([a-zA-Z0-9\\.\\-]+(\\:[a-zA-Z0-9\\.&amp;%\\$\\-]+)*@)*((25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9])\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[1-9]|0)\\.(25[0-5]|2[0-4][0-9]|[0-1]{1}[0-9]{2}|[1-9]{1}[0-9]{1}|[0-9])|localhost|([a-zA-Z0-9\\-]+\\.)*[a-zA-Z0-9\\-]+\\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(\\:[0-9]+)*(/($|[a-zA-Z0-9\\.\\,\\?\\'\\\\\\+&amp;%\\$#\\=~_\\-]+))*$"
-        return self.matches(pattern: urlPattern)
+        return self.matchesTo(pattern: urlPattern)
     }
     
     func isValidNumber()->Bool{
         let regex = "([0-9]*[.])?[0-9]+"
+        let pred = NSPredicate(format:"SELF MATCHES %@", regex)
+        return pred.evaluate(with: self)
+    }
+    
+    func matches(regex : String)-> Bool{
         let pred = NSPredicate(format:"SELF MATCHES %@", regex)
         return pred.evaluate(with: self)
     }

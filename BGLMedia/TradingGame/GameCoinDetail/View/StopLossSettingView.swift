@@ -8,147 +8,94 @@
 
 import Foundation
 import UIKit
+import JGProgressHUD
 
 class StopLossSettingView : UIView{
     let factor = UIScreen.main.bounds.width/375
     
-    var coinDetail:GameCoin?{
+    var popWindowController : PopWindowController?
+    var gameGeneralController: GameGerneralController?
+    
+    enum Mode{
+        case SET,EDIT
+    }
+    // default using Set mode
+    var mode : Mode = Mode.SET{
         didSet{
-            coinNameLabel.text = String(format: "%@", coinDetail?.name ?? "--")
-            coinAmountLabel.text = "\(coinDetail?.amount ?? 0)"
-            coinSinglePriceLabel.text = String(format: "%.8f", coinDetail?.price ?? "--")
-            coinBoughtAvgLabel.text = String(format: "%@ : %.8f", "Bought average",coinDetail?.avgOfBuyPrice ?? "--")
-//            expectProfitLabel.text = String(format: "+%@", coinDetail?.name ?? "--")
-//            expectLossLabel.text = String(format: "-%@", coinDetail?.name ?? "--")
+            if mode == Mode.SET{
+                // remove all target
+                setSLButton.removeTarget(nil, action: nil, for: .touchUpInside)
+                setSLButton.setTitle(textValue(name: "stopLoss_setButton"), for: .normal)
+                setSLButton.addTarget(self, action: #selector(sendStopLossSetting), for: .touchUpInside)
+            }else if mode == Mode.EDIT{
+                setSLButton.removeTarget(nil, action: nil, for: .touchUpInside)
+                setSLButton.setTitle(textValue(name: "stopLoss_editButton"), for: .normal)
+                setSLButton.addTarget(self, action: #selector(sendStopLossEditing), for: .touchUpInside)
+            }
         }
     }
+    
+    var coinDetail:GameCoin?{
+        didSet{
+            coinNameLabel.text = coinDetail?.name ?? "--"
+            coinAmountLabel.text = "\(coinDetail?.amount ?? 0)"
+            coinSinglePriceLabel.text = "\(coinDetail?.price.floorTo(decimalLimit: 8) ?? 0)"
+            coinBoughtAvgLabel.text = "Bought average : \(coinDetail?.avgOfBuyPrice.floorTo(decimalLimit: 8) ?? 0)"
+//            expectProfitLabel.text = String(format: "+%@", coinDetail?.name ?? "--")
+//            expectLossLabel.text = String(format: "-%@", coinDetail?.name ?? "--")
+            calculateExpectLoss()
+            calculateExpectProfit()
+        }
+    }
+    
+    var stopLossObject : StopLossObject?{
+        didSet{
+            priceLowerTextField.text = "\(stopLossObject?.price_lower ?? 0)"
+            priceUpperTextField.text = "\(stopLossObject?.price_greater ?? 0)"
+            amountTextField.text = "\(stopLossObject?.amount ?? 0)"
+            calculateExpectProfit()
+            calculateExpectLoss()
+        }
+    }
+    
     // Stop loss info section
     private lazy var coinNameFixed:UILabel = UILabel(text: "Coin Name :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
     private lazy var coinAmountFixed:UILabel = UILabel(text: "Amount :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
     private lazy var expectLossFixed:UILabel = UILabel(text: "Expected Loss :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
     private lazy var expectProfitFixed:UILabel = UILabel(text: "Expected Profit :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
     
-    private lazy var coinBoughtAvgLabel:UILabel = UILabel(text: String(format: "%@ : %@", "Bought average", "--"), font: UIFont.semiBoldFont(12*factor), textColor: ThemeColor().textGreycolor())
-    private lazy var coinSinglePriceLabel:UILabel = UILabel(text: "--", font: UIFont.regularFont(25*factor), textColor: ThemeColor().darkBlackColor())
-    private lazy var coinNameLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
-    private lazy var coinAmountLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
-    private lazy var expectLossLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
-    private lazy var expectProfitLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
+    lazy var coinBoughtAvgLabel:UILabel = UILabel(text: String(format: "%@ : %@", "Bought average", "--"), font: UIFont.semiBoldFont(12*factor), textColor: ThemeColor().textGreycolor())
+    lazy var coinSinglePriceLabel:UILabel = UILabel(text: "--", font: UIFont.regularFont(25*factor), textColor: ThemeColor().darkBlackColor())
+    lazy var coinNameLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
+    lazy var coinAmountLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
+    lazy var expectLossLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().redColor())
+    lazy var expectProfitLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().greenColor())
+    
     // stop loss section
-    lazy var priceLowerLabel:UILabel = {
-        var label = UILabel()
-        label.font = UIFont.semiBoldFont(15*factor)
-        label.text = textValue(name: "stopLoss_soldWhenGreater")
-        label.textColor = ThemeColor().textGreycolor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    lazy var priceLowerTextField : LeftPaddedTextField = {
-        let textfield = LeftPaddedTextField()
-        textfield.keyboardType = UIKeyboardType.decimalPad
-        textfield.textColor = ThemeColor().whiteColor()
-        textfield.tintColor = ThemeColor().whiteColor()
-        textfield.frame = CGRect(x:0, y: 0, width: 200*factor, height: 30*factor)
-        textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
-        textfield.backgroundColor = ThemeColor().greyColor()
-        textfield.layer.cornerRadius = 8*factor
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        toolbar.setItems([flexible,flexible,donebutton], animated: false)
-        textfield.inputAccessoryView = toolbar
+    lazy var priceLowerTextField : StopLossTextField = {
+        let textfield = StopLossTextField()
+        textfield.titleLabel.text = textValue(name: "stopLoss_soldWhenLesser")
         textfield.addTarget(self, action: #selector(priceLowerEditingChanged), for: .editingChanged)
+        textfield.addTarget(self, action: #selector(priceLowerEditingDidEnd), for: .editingDidEnd)
         return textfield
     }()
     
-    lazy var priceLowerErrLabel : UILabel = {
-        var label = UILabel()
-        label.font = UIFont.semiBoldFont(15*factor)
-        label.text = ""
-        label.textColor = ThemeColor().redColor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
     
-    // take profit section
-    lazy var priceUpperLabel :UILabel = {
-        var label = UILabel()
-        label.font = UIFont.semiBoldFont(15*factor)
-        label.text = textValue(name: "stopLoss_soldWhenLesser")
-        label.textColor = ThemeColor().textGreycolor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    lazy var priceUpperTextField : LeftPaddedTextField = {
-        let textfield = LeftPaddedTextField()
-        textfield.keyboardType = UIKeyboardType.decimalPad
-        textfield.textColor = ThemeColor().whiteColor()
-        textfield.tintColor = ThemeColor().whiteColor()
-        textfield.frame = CGRect(x:0, y: 0, width: 200*factor, height: 30*factor)
-        textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
-        textfield.backgroundColor = ThemeColor().greyColor()
-        textfield.layer.cornerRadius = 8*factor
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        toolbar.setItems([flexible,flexible,donebutton], animated: false)
-        textfield.inputAccessoryView = toolbar
+    lazy var priceUpperTextField : StopLossTextField = {
+        let textfield = StopLossTextField()
+        textfield.titleLabel.text = textValue(name: "stopLoss_soldWhenGreater")
         textfield.addTarget(self, action: #selector(priceUpperEditingChanged), for: .editingChanged)
+        textfield.addTarget(self, action: #selector(priceUpperEditingDidEnd), for: .editingDidEnd)
         return textfield
-    }()
-    
-    lazy var priceUpperErrLabel : UILabel = {
-        var label = UILabel()
-        label.font = UIFont.semiBoldFont(15*factor)
-        label.text = ""
-        label.textColor = ThemeColor().redColor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
     }()
     
     // amount section
-    lazy var amountLabel:UILabel = {
-        let label = UILabel()
-        label.font = UIFont.semiBoldFont(15*factor)
-        label.text = textValue(name: "amountSoldForm")
-        label.textColor = ThemeColor().textGreycolor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
-    }()
-    
-    lazy var amountTextField: LeftPaddedTextField = {
-        let textfield = LeftPaddedTextField()
-        textfield.keyboardType = UIKeyboardType.decimalPad
-        textfield.textColor = ThemeColor().whiteColor()
-        textfield.tintColor = ThemeColor().whiteColor()
-        textfield.frame = CGRect(x:0, y: 0, width: 200*factor, height: 30*factor)
-        textfield.translatesAutoresizingMaskIntoConstraints = false
-        textfield.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
-        textfield.backgroundColor = ThemeColor().greyColor()
-        textfield.layer.cornerRadius = 8*factor
-        let toolbar = UIToolbar()
-        toolbar.sizeToFit()
-        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
-        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
-        toolbar.setItems([flexible,flexible,donebutton], animated: false)
-        textfield.inputAccessoryView = toolbar
+    lazy var amountTextField: StopLossTextField = {
+        let textfield = StopLossTextField()
+        textfield.titleLabel.text = textValue(name: "amountSoldForm")
         textfield.addTarget(self, action: #selector(amountEditingChanged), for: .editingChanged)
+        textfield.addTarget(self, action: #selector(amountEditingDidEnd), for: .editingDidEnd)
         return textfield
-    }()
-    
-    lazy var amountErrLabel : UILabel = {
-        var label = UILabel()
-        label.font = UIFont.semiBoldFont(15*factor)
-        label.text = ""
-        label.textColor = ThemeColor().redColor()
-        label.translatesAutoresizingMaskIntoConstraints = false
-        return label
     }()
     //-------------------Slider Stack---------------
     lazy var slider: SUISlider = {
@@ -165,7 +112,7 @@ class StopLossSettingView : UIView{
         textField.textColor = ThemeColor().whiteColor()
         textField.textAlignment = .center
         textField.backgroundColor = ThemeColor().greyColor()
-//        textField.addTarget(self, action: #selector(percentageTextFieldDidChange), for: .editingChanged)
+        textField.addTarget(self, action: #selector(percentEditingChanged), for: .editingChanged)
         return textField
     }()
     
@@ -202,99 +149,200 @@ class StopLossSettingView : UIView{
     // button to set stopLoss
     private lazy var setSLButton : SUIButton = {
         let button = SUIButton()
-        button.setTitle(textValue(name: "signUp"),for: .disabled)
-        button.setTitle(textValue(name: "signUp"),for: .normal)
+        button.setTitle(textValue(name: "stopLoss_setButton"),for: .normal)
         button.titleLabel?.font = UIFont(name: "Montserrat-Bold", size: 18 * factor)
         button.setTitleColor(.white, for: .normal)
-        button.addTarget(self, action: #selector(sentStopLossSetting), for: .touchUpInside)
-        button.backgroundColor = UIColor.init(red:168/255.0, green:234/255.0, blue:214/255.0, alpha:1)
+        button.addTarget(self, action: #selector(sendStopLossSetting), for: .touchUpInside)
+        button.backgroundColor = ThemeColor().themeWidgetColor()
 //        button.layer.cornerRadius = 8.5
         return button
     }()
     
     // actions!!!!!
-    @objc func doneclick(){
-        self.endEditing(true)
-    }
     
     @objc func priceLowerEditingChanged(_ textField: UITextField){
-        // check value Format
-        if let value = textField.text {
-            if textField.text?.isValidNumber() == true{
-                priceLowerErrLabel.text = ""
+        if var value = textField.text {
+            //apply decimal limit
+            if var amount = Double(value) {
+                let decimalLimit = 8
+                let split = String(amount).components(separatedBy: ".")
+                let integer = split.first ?? ""
+                let decimal = (split.count == 2) ? (split.last ?? "") : ""
+                if decimal.count > decimalLimit {
+                    value = "\(integer).\(decimal.prefix(decimalLimit))"
+                    amount = amount.floorTo(decimalLimit: decimalLimit)
+                }
+            }
+            // set contents
+            textField.text = value
+            calculateExpectLoss()
+        }
+    }
+    
+    @objc func priceLowerEditingDidEnd(_ textField: UITextField){
+        if validatePriceLow() {
+            calculateExpectLoss()
+        }
+    }
+    
+    private func validatePriceLow()->Bool{
+        let textField = priceLowerTextField
+        let errLabel = priceLowerTextField.errorLabel
+        
+        if var value = textField.text {
+            
+            let decimalLimit = 8
+            if var amount = Double(value){
+                // apply upper bound limit
+                if amount > coinDetail!.price{
+                    amount = coinDetail!.price.floorTo(decimalLimit: decimalLimit)
+                    value = String(format: "%.8f", amount)
+                }
+                if amount < 0{
+                    amount = 0
+                    value = "0"
+                }
+                textField.text = value
+                errLabel.text = ""
                 textField.layer.borderWidth = 0
                 textField.layer.borderColor = UIColor.clear.cgColor
+                return true
             }else{
-                priceLowerErrLabel.text = textValue(name: "textfield_err_invalidFormat")
+                errLabel.text = textValue(name: "textfield_err_invalidFormat")
                 textField.layer.borderWidth = 1.8
                 textField.layer.borderColor = ThemeColor().redColor().cgColor
+                return false
             }
-            
-            //apply decimal limit
-            if let amount = Double(value) {
-                
-                textField.text = "\(amount.limitDecimal(decimalLimit: 8))"
-            }
-            
         }
+        return false
     }
 
     @objc func priceUpperEditingChanged(_ textField: UITextField){
-        // check value Format
-        if let value = textField.text {
-            if value.isValidNumber() == true{
-                priceUpperErrLabel.text = ""
-                textField.layer.borderWidth = 0
-                textField.layer.borderColor = UIColor.clear.cgColor
-            }else{
-                priceUpperErrLabel.text = textValue(name: "textfield_err_invalidFormat")
-                textField.layer.borderWidth = 1.8
-                textField.layer.borderColor = ThemeColor().redColor().cgColor
-            }
-            
+        if var value = textField.text {
             //apply decimal limit
-            if let amount = Double(value) {
-                textField.text = "\(amount.limitDecimal(decimalLimit: 8))"
+            if var amount = Double(value) {
+                let decimalLimit = 8
+                let split = String(amount).components(separatedBy: ".")
+                let integer = split.first ?? ""
+                let decimal = (split.count == 2) ? (split.last ?? "") : ""
+                if decimal.count > decimalLimit {
+                    value = "\(integer).\(decimal.prefix(decimalLimit))"
+                    amount = amount.floorTo(decimalLimit: decimalLimit)
+                }
             }
-            
+            // set contents
+            textField.text = value
+            calculateExpectProfit()
         }
     }
-    @objc func amountEditingChanged(_ textField: UITextField){
-        if let value = textField.text {
-            // check format
-            if value.isValidNumber() == true{
-                priceUpperErrLabel.text = ""
+    
+    
+    @objc func priceUpperEditingDidEnd(_ textField: UITextField){
+        if validatePriceUp() {
+            calculateExpectProfit()
+        }
+    }
+    
+    private func validatePriceUp()->Bool{
+        let textField = priceUpperTextField
+        let errLabel = priceUpperTextField.errorLabel
+        
+        if var value = textField.text {
+            
+            let decimalLimit = 8
+            if var amount = Double(value){
+                // apply upper bound limit
+                if amount < coinDetail!.price{
+                    amount = coinDetail!.price.ceilTo(decimalLimit: decimalLimit)
+                    value = String(format: "%.8f", amount)
+                }
+                if amount < 0{
+                    amount = 0
+                    value = "0"
+                }
+                textField.text = value
+                errLabel.text = ""
                 textField.layer.borderWidth = 0
                 textField.layer.borderColor = UIColor.clear.cgColor
+                return true
             }else{
-                amountErrLabel.text = textValue(name: "textfield_err_invalidFormat")
+                errLabel.text = textValue(name: "textfield_err_invalidFormat")
                 textField.layer.borderWidth = 1.8
                 textField.layer.borderColor = ThemeColor().redColor().cgColor
+                return false
             }
+        }
+        return false
+    }
+    @objc func amountEditingChanged(_ textField: UITextField){
+        
+        // check format
+//        if validateTextField(textField: textField, errLabel: amountTextField.errorLabel){}
+        
+        if var value = textField.text {
+            
+            let decimalLimit = 8
             
             //apply decimal limit
-            if let amount = Double(value) {
-                textField.text = "\(amount.limitDecimal(decimalLimit: 8))"
+            if var amount = Double(value) {
+                let split = String(amount).components(separatedBy: ".")
+                let integer = split.first ?? ""
+                let decimal = (split.count == 2) ? (split.last ?? "") : ""
+                if decimal.count > decimalLimit {
+                    value = "\(integer).\(decimal.prefix(decimalLimit))"
+                    amount = amount.floorTo(decimalLimit: decimalLimit)
+                }
             }
             
-//            if coinName == "AUD" {
-//                //for buying
-//                slider.value = Float((Double(value) ?? 0) * coinPrice * 100 / balance)
-//                percentageTextField.text = "\(slider.value)"
-//
-//                if (Double(value) ?? 0) > (balance / coinPrice) {
-//                    calculateCoinAmount()
-//                }
-//            } else {
-//                //for selling
-//                slider.value = Float((Double(value) ?? 0) * 100 / balance)
-//                percentageTextField.text = "\(slider.value)"
-//
-//                if (Double(value) ?? 0) > balance {
-//                    calculateCoinAmount()
-//                }
-//            }
+            // set contents
+            textField.text = value
+            calculateExpectProfit()
+            calculateExpectLoss()
+
+            slider.value = Float((Double(value) ?? 0) * 100 / coinDetail!.amount)
+            percentageTextField.text = "\(slider.value)"
         }
+    }
+    @objc func amountEditingDidEnd(_ textField: UITextField){
+        if validateAmount(){
+            calculateExpectProfit()
+            calculateExpectLoss()
+            if let value = textField.text{
+                slider.value = Float((Double(value) ?? 0) * 100 / coinDetail!.amount)
+                percentageTextField.text = "\(slider.value)"
+            }
+        }
+    }
+    
+    private func validateAmount()->Bool{
+        let textField = amountTextField
+        let errLabel = amountTextField.errorLabel
+        
+        if var value = textField.text {
+            
+            if var amount = Double(value){
+                // apply limit
+                if amount > coinDetail!.amount{
+                    amount = coinDetail!.amount
+                    value = String(amount)
+                }
+                if amount < 0{
+                    amount = 0
+                    value = "0"
+                }
+                textField.text = value
+                errLabel.text = ""
+                textField.layer.borderWidth = 0
+                textField.layer.borderColor = UIColor.clear.cgColor
+                return true
+            }else{
+                errLabel.text = textValue(name: "textfield_err_invalidFormat")
+                textField.layer.borderWidth = 1.8
+                textField.layer.borderColor = ThemeColor().redColor().cgColor
+                return false
+            }
+        }
+        return false
     }
     
     @objc func sliderValueChanged(_ slider: UISlider){
@@ -309,10 +357,210 @@ class StopLossSettingView : UIView{
         
         let amountValue = Double(slider.value/100) * (coinDetail?.amount ?? 0)
         amountTextField.text = "\(amountValue)"
+        calculateExpectProfit()
+        calculateExpectLoss()
+        // change the border of amountTextField to normal
+        amountTextField.errorLabel.text = ""
+        amountTextField.layer.borderWidth = 0
+        amountTextField.layer.borderColor = UIColor.clear.cgColor
     }
     
-    @objc func sentStopLossSetting(){
+    @objc func percentEditingChanged(_ textField: UITextField){
         
+        // check format
+//        if validateTextField(textField: textField, errLabel: amountTextField.errorLabel){}
+        
+        if var value = textField.text {
+
+            if var percentage = Double(value) {
+                // limitation
+                if percentage > 100 {
+                    value = "100"
+                    percentage = 100
+                }else{
+                    // limit decimal
+                    let decimalLimit = 3
+                    let split = String(percentage).components(separatedBy: ".")
+                    let integer = split.first ?? ""
+                    let decimal = (split.count == 2) ? (split.last ?? "") : ""
+                    if decimal.count > decimalLimit {
+                        value = "\(integer).\(decimal.prefix(decimalLimit))"
+                        percentage = percentage.floorTo(decimalLimit: decimalLimit)
+                    }
+                }
+                
+                
+                // set up field
+                textField.text = value
+                slider.value = Float(percentage)
+                let amountValue = percentage/100 * (coinDetail?.amount ?? 0)
+                amountTextField.text = "\(amountValue)"
+                calculateExpectProfit()
+                calculateExpectLoss()
+                
+                // change the border of amountTextField to normal
+                amountTextField.errorLabel.text = ""
+                amountTextField.layer.borderWidth = 0
+                amountTextField.layer.borderColor = UIColor.clear.cgColor
+                
+            }
+        }
+    }
+    
+    private func calculateExpectProfit(){
+        if let text = priceUpperTextField.text, let amountText = amountTextField.text{
+            if let value = Double(text), let amount = Double(amountText){
+                let diff = value - coinDetail!.price
+                let cost = diff * amount
+                expectProfitLabel.text = String(format: "A$%.2f", cost)
+            }else{
+                expectProfitLabel.text = "--"
+            }
+        }
+    }
+    
+    private func calculateExpectLoss(){
+        if let text = priceLowerTextField.text, let amountText = amountTextField.text{
+            if let value = Double(text), let amount = Double(amountText){
+                let diff = value - coinDetail!.price
+                let cost = diff * amount
+                expectLossLabel.text = String(format: "A$%.2f", cost)
+            }else{
+                expectLossLabel.text = "--"
+            }
+        }
+    }
+    
+    
+    
+    @objc func sendStopLossSetting(){
+        let upValid = validatePriceUp()
+        let amountValid = validateAmount()
+        let lowValid = validatePriceLow()
+        
+        if upValid && lowValid && amountValid{
+            
+            let hud = JGProgressHUD(style: .light)
+            hud.textLabel.text = textValue(name: "Setting Up")
+            hud.backgroundColor = ThemeColor().progressColor()
+            hud.show(in: self)
+            
+            let coinAbbr = coinDetail!.abbrName.lowercased()
+            let priceGreater = Double(priceUpperTextField.text!)!
+            let priceLower = Double(priceLowerTextField.text!)!
+            let amount = Double(amountTextField.text!)!
+            
+            let api = StopLossApiService()
+//            print("userID : \(api.user_id)")
+//            print("token : \(api.token)")
+//            print("email : \(api.email)")
+//            print("coin : \(coinAbbr)")
+//            print("price> : \(priceGreater)")
+//            print("price< : \(priceLower)")
+//            print("amount : \(amount)")
+            api.setStopLoss(coinAbbr: coinAbbr, priceGreater: priceGreater, priceLower: priceLower, amount: amount, completion: {(success, err) in
+                if success {
+                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                    hud.textLabel.text = textValue(name: "success_success")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                        self.popWindowController?.dismiss(animated: true, completion: nil)
+                        self.gameGeneralController?.refreshStopLossData()
+                    }
+                }else{
+                    if err == "450" {
+                        // due to limitation
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = textValue(name: "stopLoss_err_limitation")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }else if err == "500" {
+                        // unknown request
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_error")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }else if err == "510" {
+                        //database error
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_error")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }else {
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_error")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }
+                }
+            })
+        }
+    }
+    
+    @objc func sendStopLossEditing(){
+        let upValid = validatePriceUp()
+        let amountValid = validateAmount()
+        let lowValid = validatePriceLow()
+        
+        if upValid && lowValid && amountValid{
+            
+            let hud = JGProgressHUD(style: .light)
+            hud.textLabel.text = textValue(name: "Setting Up")
+            hud.backgroundColor = ThemeColor().progressColor()
+            hud.show(in: self)
+            
+            let set_id = stopLossObject!.set_id
+            let coinAbbr = coinDetail!.abbrName.lowercased()
+            let priceGreater = Double(priceUpperTextField.text!)!
+            let priceLower = Double(priceLowerTextField.text!)!
+            let amount = Double(amountTextField.text!)!
+            
+            let api = StopLossApiService()
+            //            print("userID : \(api.user_id)")
+            //            print("token : \(api.token)")
+            //            print("email : \(api.email)")
+            //            print("coin : \(coinAbbr)")
+            //            print("price> : \(priceGreater)")
+            //            print("price< : \(priceLower)")
+            //            print("amount : \(amount)")
+            api.editStopLoss(set_id: set_id, coinAbbr: coinAbbr, priceGreater: priceGreater, priceLower: priceLower, amount: amount, completion: {(success, err) in
+                if success {
+                    hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                    hud.textLabel.text = textValue(name: "success_success")
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                        hud.dismiss()
+                        self.popWindowController?.dismiss(animated: true, completion: nil)
+                        self.gameGeneralController?.refreshStopLossData()
+                    }
+                }else{
+                    if err == "500" {
+                        // unknown request
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_error")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }else if err == "510" {
+                        //database error
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_error")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }else {
+                        hud.indicatorView = JGProgressHUDSuccessIndicatorView()
+                        hud.textLabel.text = textValue(name: "error_error")
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+                            hud.dismiss()
+                        }
+                    }
+                }
+            })
+        }
     }
     
     private func setupInfoView()->UIView{
@@ -359,75 +607,40 @@ class StopLossSettingView : UIView{
     
     private func setupStopLossView()->UIView{
         let container = UIView()
-        container.addSubview(priceLowerLabel)
         container.addSubview(priceLowerTextField)
-        container.addSubview(priceLowerErrLabel)
     
-        container.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0]", views: priceLowerLabel)
         container.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0]-\(15*factor)-|", views: priceLowerTextField)
-        container.addConstraint(NSLayoutConstraint(item: priceLowerLabel, attribute: .bottom, relatedBy: .equal, toItem: container, attribute: .centerY, multiplier: 1, constant: -3 * factor))
         container.addConstraint(NSLayoutConstraint(item: priceLowerTextField, attribute: .top, relatedBy: .equal, toItem: container, attribute: .centerY, multiplier: 1, constant: 3 * factor))
-        
-        container.addConstraintsWithFormat(format: "H:[v0]-\(15*factor)-|", views: priceLowerErrLabel)
-        container.addConstraint(NSLayoutConstraint(item: priceLowerErrLabel, attribute: .bottom, relatedBy: .equal, toItem: priceLowerTextField, attribute: .top, multiplier: 1, constant: -3 * factor))
-        
+    
         priceLowerTextField.heightAnchor.constraint(equalToConstant: 30*factor).isActive = true
         return container
     }
     
     private func setupTakeProfitView()->UIView{
         let container = UIView()
-        container.addSubview(priceUpperLabel)
         container.addSubview(priceUpperTextField)
-        container.addSubview(priceUpperErrLabel)
-
-        container.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0]", views: priceUpperLabel)
+        
         container.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0]-\(15*factor)-|", views: priceUpperTextField)
-        container.addConstraint(NSLayoutConstraint(item: priceUpperLabel, attribute: .bottom, relatedBy: .equal, toItem: container, attribute: .centerY, multiplier: 1, constant: -3 * factor))
         container.addConstraint(NSLayoutConstraint(item: priceUpperTextField, attribute: .top, relatedBy: .equal, toItem: container, attribute: .centerY, multiplier: 1, constant: 3 * factor))
-
-        container.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-|", views: priceUpperErrLabel)
-        container.addConstraint(NSLayoutConstraint(item: priceUpperErrLabel, attribute: .bottom, relatedBy: .equal, toItem: priceUpperTextField, attribute: .top, multiplier: 1, constant: -3 * factor))
+        
         priceUpperTextField.heightAnchor.constraint(equalToConstant: 30*factor).isActive = true
         return container
-//        priceUpperTextField.addSubview(priceUpperErrLabel)
-//        priceUpperTextField.addConstraint(NSLayoutConstraint(item: priceUpperErrLabel, attribute: .bottom, relatedBy: .equal, toItem: priceUpperTextField, attribute: .top, multiplier: 1, constant: -3 * factor))
-//        priceUpperTextField.addConstraint(NSLayoutConstraint(item: priceUpperErrLabel, attribute: .right, relatedBy: .equal, toItem: priceUpperTextField, attribute: .right, multiplier: 1, constant: -3 * factor))
-//
-//        let stack = UIStackView(arrangedSubviews: [priceUpperLabel,priceUpperTextField])
-//        stack.axis = .vertical
-//        stack.distribution = .fillEqually
-//        stack.spacing = 8 * factor
-//        return stack
     }
     
     private func setupAmountView()->UIView{
         let container = UIView()
-        container.addSubview(amountLabel)
-        container.addSubview(amountErrLabel)
         container.addSubview(amountTextField)
         container.addSubview(sliderStackView)
 
-        container.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0]", views: amountLabel)
         container.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0]-\(15*factor)-|", views: amountTextField)
         container.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0]-\(15*factor)-|", views: sliderStackView)
 
-        container.addConstraint(NSLayoutConstraint(item: amountTextField, attribute: .centerY, relatedBy: .equal, toItem: container, attribute: .centerY, multiplier: 1, constant: 0))
-        container.addConstraint(NSLayoutConstraint(item: amountLabel, attribute: .bottom, relatedBy: .equal, toItem: amountTextField, attribute: .top, multiplier: 1, constant: -3*factor))
+        container.addConstraint(NSLayoutConstraint(item: amountTextField, attribute: .centerY, relatedBy: .equal, toItem: container, attribute: .centerY, multiplier: 1, constant: -5*factor))
         container.addConstraint(NSLayoutConstraint(item: sliderStackView, attribute: .top, relatedBy: .equal, toItem: amountTextField, attribute: .bottom, multiplier: 1, constant: 3*factor))
 
-        container.addConstraintsWithFormat(format: "H:[v0]-\(15*factor)-|", views: amountErrLabel)
-        container.addConstraint(NSLayoutConstraint(item: amountErrLabel, attribute: .bottom, relatedBy: .equal, toItem: amountTextField, attribute: .top, multiplier: 1, constant: -3 * factor))
-        
         amountTextField.heightAnchor.constraint(equalToConstant: 30*factor).isActive = true
         sliderStackView.heightAnchor.constraint(equalToConstant: 30*factor).isActive = true
-        
-//        let stack = UIStackView.stackView(firstView: amountLabel, restSubviews: [(amountTextField,1.2),(sliderStackView,1.5)], axis: .vertical)
-//        stack.spacing = 3 * factor
-//        return stack
-//        container.addSubview(stack)
-//        container.addConstraintsWithFormat(format: "H:|[v0]|", views: stack)
-//        container.addConstraintsWithFormat(format: "V:|[v0]|", views: stack)
+
         return container
     }
     
@@ -444,14 +657,84 @@ class StopLossSettingView : UIView{
         addConstraintsWithFormat(format: "V:|[v0]|", views: stack)
     }
     
-    override init(frame : CGRect) {
-        super.init(frame: frame)
+//    convenience init(popWindowController : PopWindowController) {
+//        self.init()
+//        self.popWindowController = popWindowController
+//        setupView()
+//    }
+    
+    override init(frame: CGRect) {
+        super.init(frame:frame)
         setupView()
     }
     
-    required init(coder: NSCoder) {
+    required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+}
+
+
+class StopLossTextField : LeftPaddedTextField{
+    let factor = UIScreen.main.bounds.width/375
     
+    lazy var titleLabel :UILabel = {
+        var label = UILabel()
+        label.font = UIFont.semiBoldFont(15*factor)
+        label.text = ""
+        label.textColor = ThemeColor().textGreycolor()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var errorLabel : UILabel = {
+        var label = UILabel()
+        label.font = UIFont.semiBoldFont(15*factor)
+        label.text = ""
+        label.textColor = ThemeColor().redColor()
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    @objc func doneclick(){
+        self.endEditing(true)
+    }
+    
+    private func initSetup(){
+        self.keyboardType = UIKeyboardType.decimalPad
+        self.textColor = ThemeColor().whiteColor()
+        self.tintColor = ThemeColor().whiteColor()
+        self.frame = CGRect(x:0, y: 0, width: 200*factor, height: 30*factor)
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.attributedPlaceholder = NSAttributedString(string:textValue(name: "amountPlaceholder"), attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
+        self.backgroundColor = ThemeColor().greyColor()
+        self.layer.cornerRadius = 8*factor
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+        self.inputAccessoryView = toolbar
+    }
+ 
+    
+    private func setupView(){
+        self.addSubview(titleLabel)
+        self.addSubview(errorLabel)
+        
+        self.addConstraint(NSLayoutConstraint(item: errorLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -3 * factor))
+        self.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .bottom, relatedBy: .equal, toItem: self, attribute: .top, multiplier: 1, constant: -3 * factor))
+        self.addConstraint(NSLayoutConstraint(item: errorLabel, attribute: .right, relatedBy: .equal, toItem: self, attribute: .right, multiplier: 1, constant: -3 * factor))
+        self.addConstraint(NSLayoutConstraint(item: titleLabel, attribute: .left, relatedBy: .equal, toItem: self, attribute: .left, multiplier: 1, constant: -3 * factor))
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame:frame)
+        initSetup()
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
 }
 

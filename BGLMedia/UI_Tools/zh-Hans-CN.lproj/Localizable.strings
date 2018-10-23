@@ -445,8 +445,21 @@ stopLoss_title = "止损/止盈 设置";
 stopLoss_buttonTitle = "止损/止盈";
 stopLoss_soldWhenGreater = "自动售出 >";
 stopLoss_soldWhenLesser = "自动售出 <";
-stopLoss_expectedProfit = "";
+stopLoss_setButton = "设置";
+stopLoss_editButton = "修改";
+
+stopLoss_err_limitation = "到达设置上限";
+
+stopLoss_status_active = "激活";
+stopLoss_status_fail = "失败";
+stopLoss_status_completed = "完成";
 
 //textfield
 textfield_err_invalidFormat = "格式错误";
 textfield_err_emptyInput = "请输入";
+
+//word
+amount = "数量";
+stop_loss = "止损";
+take_profit = "止盈";
+status = "状态";
