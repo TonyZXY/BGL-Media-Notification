@@ -2,6 +2,9 @@
 <Workspace
    version = "1.0">
    <FileRef
+      location = "group:/Users/zhangzeyao/Documents/BlockChain Project/BGLMedia/BGLMedia/TradingGame/Ranking/ApiReader/RankApiReader.swift">
+   </FileRef>
+   <FileRef
       location = "group:BGLMedia.xcodeproj">
    </FileRef>
 </Workspace>

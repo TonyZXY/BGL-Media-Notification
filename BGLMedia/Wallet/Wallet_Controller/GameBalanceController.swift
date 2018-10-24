@@ -119,9 +119,10 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
         guard let coins = gameUser?.coins else { return }
         //AUD is default coin, if there are other coins, need to check the current price
-        if coins.count > 1 {
+        if coins.count > 0 {
             URLServices.fetchInstance.passServerData(urlParameters: ["game","getCoinData"], httpMethod: "GET", parameters: [:]) { (response, success) in
                 
+                print(response)
                 if success {
                     completion(response["data"].arrayValue, nil)
                 } else {
@@ -129,6 +130,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                 }
             }
         } else {
+            print(coins.count)
             completion([], nil)
         }
     }

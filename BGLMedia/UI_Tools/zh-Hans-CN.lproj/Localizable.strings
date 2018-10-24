@@ -463,3 +463,6 @@ amount = "数量";
 stop_loss = "止损";
 take_profit = "止盈";
 status = "状态";
+
+
+Huobi_Au = "火币澳洲";

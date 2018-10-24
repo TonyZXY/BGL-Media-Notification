@@ -141,11 +141,14 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     }
     
     func loadPrice(){
+        
+        print(alertObject)
         if alertObject.coinName != "" {
             APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: alertObject.coinAbbName, tradingPairName: "AUD", exchangeName: "Huobi Australia") { (response, success) in
                 if success{
                     print("sdf")
                     let singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
+                    print(singlePrice)
                     self.sectionPrice = singlePrice
                     let indexPathForSection = NSIndexSet(index: 0)
                     self.gameAlertTable.reloadSections(indexPathForSection as IndexSet, with: .automatic)
@@ -376,7 +379,7 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
                 URLServices.fetchInstance.passServerData(urlParameters: ["game","editAlert"], httpMethod: "POST", parameters: parameter2){ (response, success) in
                     if success{
                        realm.beginWrite()
-                        let realmData: [Any] = [self.alertObject.id, self.alertObject.coinAbbName,self.alertObject.coinAbbName, self.alertObject.inputPrice, self.alertObject.compareStatus, self.alertObject.switchStatus]
+                        let realmData: [Any] = [self.alertObject.id, self.alertObject.coinName,self.alertObject.coinAbbName, self.alertObject.inputPrice, self.alertObject.compareStatus, self.alertObject.switchStatus,Date()]
                         if realm.object(ofType: GameAlertObject.self, forPrimaryKey: self.alertObject.id) == nil{
                             realm.create(GameAlertObject.self, value: realmData)
                         } else {

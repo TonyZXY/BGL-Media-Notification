@@ -245,6 +245,7 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
         let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
         coinImage.frame = CGRect(x: 0, y: 0, width: 30*factor!, height: 30*factor!)
         coinImage.clipsToBounds = true
+        print(alerts)
         coinImage.coinImageSetter(coinName: alerts[section].name[0].coinAbbName, width: 30*factor!, height: 30*factor!, fontSize: 5*factor!)
         coinImage.contentMode = UIViewContentMode.scaleAspectFit
         coinImage.translatesAutoresizingMaskIntoConstraints = false

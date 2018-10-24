@@ -108,7 +108,7 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
     lazy var alertTableView:UITableView = {
         var tableView = UITableView()
         tableView.backgroundColor = ThemeColor().themeColor()
-        tableView.register(AlertTableViewCell.self, forCellReuseIdentifier: "editAlertCell")
+        tableView.register(GameAlertTableCell.self, forCellReuseIdentifier: "editAlertCell")
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.delegate = self
         tableView.dataSource = self
@@ -216,7 +216,7 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
     
     
     deinit {
-        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "addGameAlert"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         token?.invalidate()
@@ -227,7 +227,7 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         alerts = allAlert
         //        view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshGameNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addAlert"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addGameAlert"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         for result in allGameAlerts{
             oldAlerts[result.id] = result.switchStatus
@@ -464,6 +464,8 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
             alert.coinName.status = true
             alert.coinName.coinAbbName = coinName.coinAbbName
             alert.coinName.coinName = coinName.coinName
+            alert.alertObject.coinAbbName = coinName.coinAbbName
+            alert.alertObject.coinName = coinName.coinName
         }
         
         navigationController?.pushViewController(alert, animated: true)
@@ -599,11 +601,14 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
             for result in json["data"].array!{
                 realm.beginWrite()
                 let id = result["_id"].int ?? 0
-                let coinName = result["from"].string ?? "null"
-                let coinAbbName = result["from"].string ?? "null"
+                let coinName = result["coin_name"].string ?? "null"
+                let coinAbbName = result["coin_name"].string ?? "null"
                 let comparePice = result["price"].double ?? 0
                 let compareStatus = result["isgreater"].int ?? 0
                 let switchStatus = result["status"].bool ?? true
+                
+                print(result)
+                
                 
                 let realmData:[Any] = [id,coinName,coinAbbName,comparePice,compareStatus,switchStatus,Date()]
                 if realm.object(ofType: GameAlertObject.self, forPrimaryKey: id) == nil {
@@ -613,9 +618,9 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
                 }
                 
                 if realm.object(ofType: alertCoinNames.self, forPrimaryKey: coinAbbName) == nil {
-                    realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!])
+                    realm.create(alertCoinNames.self, value: [result["coin_name"].string!,result["coin_name"].string!])
                 } else {
-                    realm.create(alertCoinNames.self, value: [result["from"].string!,result["from"].string!], update: true)
+                    realm.create(alertCoinNames.self, value: [result["coin_name"].string!,result["coin_name"].string!], update: true)
                 }
                 try! realm.commitWrite()
                 oldAlerts[id] = switchStatus
@@ -623,7 +628,7 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
             completion(true)
         } else{
             try! realm.write {
-                realm.delete(realm.objects(alertObject.self))
+                realm.delete(realm.objects(GameAlertObject.self))
             }
             completion(false)
         }

@@ -12,11 +12,7 @@
 		240DC2402170530100702B31 /* GameCoinPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23E2170530100702B31 /* GameCoinPageController.swift */; };
 		240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23F2170530100702B31 /* GameCoinDetailController.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
-		241051C2217EBFFF0064B676 /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241051C1217EBFFF0064B676 /* RankApiReader.swift */; };
 		241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* MenuBarView.swift */; };
-		2442BE64217ED5F6000100BE /* GameAlertManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE61217ED5F6000100BE /* GameAlertManageController.swift */; };
-		2442BE65217ED5F6000100BE /* GameAlertTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE62217ED5F6000100BE /* GameAlertTableCell.swift */; };
-		2442BE66217ED5F6000100BE /* GameAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE63217ED5F6000100BE /* GameAlertController.swift */; };
 		2442BE69217ED841000100BE /* StopLossDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE67217ED841000100BE /* StopLossDisplayView.swift */; };
 		2442BE6A217ED841000100BE /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE68217ED841000100BE /* StopLossSettingView.swift */; };
 		2442BE6C217ED84D000100BE /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6B217ED84D000100BE /* StopLoss.swift */; };
@@ -99,6 +95,10 @@
 		2D67306C211C2A0100EE49A5 /* ReportProblemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D67306B211C2A0100EE49A5 /* ReportProblemViewController.swift */; };
 		2D67306E211C2A1E00EE49A5 /* FAQViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D67306D211C2A1E00EE49A5 /* FAQViewController.swift */; };
 		2D67307421225B4000EE49A5 /* AboutFunctionController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D67307321225B4000EE49A5 /* AboutFunctionController.swift */; };
+		2D953AD0217EDD1400A1A7C5 /* GameAlertTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACD217EDD1400A1A7C5 /* GameAlertTableCell.swift */; };
+		2D953AD1217EDD1400A1A7C5 /* GameAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACE217EDD1400A1A7C5 /* GameAlertController.swift */; };
+		2D953AD2217EDD1400A1A7C5 /* GameAlertManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACF217EDD1400A1A7C5 /* GameAlertManageController.swift */; };
+		2D953AD4217EDD5F00A1A7C5 /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */; };
 		3D1332EA20E9FA5700D3CAE6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */; };
 		3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */; };
 		3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */; };
@@ -256,11 +256,7 @@
 		240DC23F2170530100702B31 /* GameCoinDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinDetailController.swift; sourceTree = "<group>"; };
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
 		240F697E2148D5710072E158 /* GenuineNewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenuineNewsObject.swift; sourceTree = "<group>"; };
-		241051C1217EBFFF0064B676 /* RankApiReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RankApiReader.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/TradingGame/Ranking/ApiReader/RankApiReader.swift"; sourceTree = "<absolute>"; };
 		241082EB2164867900A12DF1 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = BGLMedia/TradingGame/UtilityView/MenuBarView.swift; sourceTree = SOURCE_ROOT; };
-		2442BE61217ED5F6000100BE /* GameAlertManageController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameAlertManageController.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/Alert/Controlller/GameAlertManageController.swift"; sourceTree = "<absolute>"; };
-		2442BE62217ED5F6000100BE /* GameAlertTableCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameAlertTableCell.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/Alert/Controlller/GameAlertTableCell.swift"; sourceTree = "<absolute>"; };
-		2442BE63217ED5F6000100BE /* GameAlertController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameAlertController.swift; path = "/Users/fatzero/Desktop/Blockchain/BGL-Media-Notification/BGLMedia/Alert/Controlller/GameAlertController.swift"; sourceTree = "<absolute>"; };
 		2442BE67217ED841000100BE /* StopLossDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossDisplayView.swift; sourceTree = "<group>"; };
 		2442BE68217ED841000100BE /* StopLossSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossSettingView.swift; sourceTree = "<group>"; };
 		2442BE6B217ED84D000100BE /* StopLoss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLoss.swift; sourceTree = "<group>"; };
@@ -348,6 +344,10 @@
 		2D67306D211C2A1E00EE49A5 /* FAQViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FAQViewController.swift; sourceTree = "<group>"; };
 		2D67307321225B4000EE49A5 /* AboutFunctionController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutFunctionController.swift; sourceTree = "<group>"; };
 		2D6F5EFD20E324D4006264BB /* BGLMedia.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = BGLMedia.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		2D953ACD217EDD1400A1A7C5 /* GameAlertTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertTableCell.swift; path = BGLMedia/Alert/Controlller/GameAlertTableCell.swift; sourceTree = SOURCE_ROOT; };
+		2D953ACE217EDD1400A1A7C5 /* GameAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertController.swift; path = BGLMedia/Alert/Controlller/GameAlertController.swift; sourceTree = SOURCE_ROOT; };
+		2D953ACF217EDD1400A1A7C5 /* GameAlertManageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertManageController.swift; path = BGLMedia/Alert/Controlller/GameAlertManageController.swift; sourceTree = SOURCE_ROOT; };
+		2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RankApiReader.swift; path = "/Users/zhangzeyao/Documents/BlockChain Project/BGLMedia/BGLMedia/TradingGame/Ranking/ApiReader/RankApiReader.swift"; sourceTree = "<absolute>"; };
 		3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubePlayer.framework; path = Carthage/Build/iOS/YouTubePlayer.framework; sourceTree = "<group>"; };
 		3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
@@ -509,7 +509,7 @@
 		241051BE217EBFC70064B676 /* ApiReader */ = {
 			isa = PBXGroup;
 			children = (
-				241051C1217EBFFF0064B676 /* RankApiReader.swift */,
+				2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */,
 			);
 			path = ApiReader;
 			sourceTree = "<group>";
@@ -948,9 +948,9 @@
 		571F682F210170F500342198 /* Controlller */ = {
 			isa = PBXGroup;
 			children = (
-				2442BE63217ED5F6000100BE /* GameAlertController.swift */,
-				2442BE61217ED5F6000100BE /* GameAlertManageController.swift */,
-				2442BE62217ED5F6000100BE /* GameAlertTableCell.swift */,
+				2D953ACE217EDD1400A1A7C5 /* GameAlertController.swift */,
+				2D953ACF217EDD1400A1A7C5 /* GameAlertManageController.swift */,
+				2D953ACD217EDD1400A1A7C5 /* GameAlertTableCell.swift */,
 				2D52AE4220E46E1800018FC0 /* AlertNotificationController.swift */,
 				2D52ADBE20E46E1600018FC0 /* AlertManageController.swift */,
 				2D52ADBA20E46E1600018FC0 /* AlertController.swift */,
@@ -1502,8 +1502,11 @@
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,
 				B959EF5B2146172500930DD6 /* FontController.swift in Sources */,
 				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
+				2D953AD4217EDD5F00A1A7C5 /* RankApiReader.swift in Sources */,
+				2D953AD0217EDD1400A1A7C5 /* GameAlertTableCell.swift in Sources */,
 				2442BE70217ED88E000100BE /* RankTableViewCell.swift in Sources */,
 				B9F4F3392161E0EE0038AE6B /* GameTransactionsController.swift in Sources */,
+				2D953AD1217EDD1400A1A7C5 /* GameAlertController.swift in Sources */,
 				2D52AF1D20E46E1A00018FC0 /* Params.swift in Sources */,
 				57355C5920F718CC002E70E4 /* SearchExchangesController.swift in Sources */,
 				2D52AE9C20E46E1A00018FC0 /* TransactionsHistoryController.swift in Sources */,
@@ -1555,13 +1558,11 @@
 				57355C6120F718CC002E70E4 /* TransactionFormData.swift in Sources */,
 				57AEA1852112D11F00042CF6 /* CustomPasswordAlertController.swift in Sources */,
 				57663B5A2137796D00E09754 /* ForceUpdateAlertController.swift in Sources */,
-				2442BE65217ED5F6000100BE /* GameAlertTableCell.swift in Sources */,
 				57355C5120F718CC002E70E4 /* MarketCapClient.swift in Sources */,
 				B930B6E9214F3D5900685F64 /* Event.swift in Sources */,
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */,
 				57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */,
-				2442BE66217ED5F6000100BE /* GameAlertController.swift in Sources */,
 				241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */,
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */,
@@ -1572,6 +1573,7 @@
 				57355C0E20F7188B002E70E4 /* NewsDetailtableView.swift in Sources */,
 				2D52AE9E20E46E1A00018FC0 /* AlertManageController.swift in Sources */,
 				2D67306E211C2A1E00EE49A5 /* FAQViewController.swift in Sources */,
+				2D953AD2217EDD1400A1A7C5 /* GameAlertManageController.swift in Sources */,
 				2D52AE9B20E46E1A00018FC0 /* CoinDetailController.swift in Sources */,
 				2D52AEA220E46E1A00018FC0 /* AllLossView.swift in Sources */,
 				57355C4F20F718CC002E70E4 /* APIClient.swift in Sources */,
@@ -1627,7 +1629,6 @@
 				57BAD9582104D58300973B45 /* testViewController.swift in Sources */,
 				57BBAB4D2107085F00984AA4 /* Utils.swift in Sources */,
 				57BBAB4B2107085F00984AA4 /* Header.swift in Sources */,
-				241051C2217EBFFF0064B676 /* RankApiReader.swift in Sources */,
 				2D52AEA020E46E1A00018FC0 /* GlobalMarket.swift in Sources */,
 				57355C6820F718CC002E70E4 /* CryptoCompareCoin.swift in Sources */,
 				57355C5E20F718CC002E70E4 /* CoinList.swift in Sources */,
@@ -1672,7 +1673,6 @@
 				2442BE6A217ED841000100BE /* StopLossSettingView.swift in Sources */,
 				B930B6EC21507DA800685F64 /* EventViewModel.swift in Sources */,
 				57355C4E20F718CC002E70E4 /* APIErrors.swift in Sources */,
-				2442BE64217ED5F6000100BE /* GameAlertManageController.swift in Sources */,
 				2442BE6C217ED84D000100BE /* StopLoss.swift in Sources */,
 				57BBAB66210962C300984AA4 /* MarketsController.swift in Sources */,
 				2D52AF2220E46E1A00018FC0 /* XAxisLabelView.swift in Sources */,

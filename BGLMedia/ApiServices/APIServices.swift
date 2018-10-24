@@ -510,6 +510,7 @@ class APIServices:NSObject{
             urlRequest.setValue("application/json", forHTTPHeaderField: "Content-Type")
             urlRequest.timeoutInterval = 10
             Alamofire.request(urlRequest).validate().responseJSON { (response) in
+                print(response)
                 switch response.result {
                 case .success(let value):
                     let res = JSON(value)

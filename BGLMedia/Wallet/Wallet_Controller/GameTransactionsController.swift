@@ -320,6 +320,8 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
     func loadPrice(){
         if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
             gameBalanceController?.getCoinsPrice(completion: { (jsonArray, error) in
+                
+                print(jsonArray)
                 if let err = error {
                     let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
