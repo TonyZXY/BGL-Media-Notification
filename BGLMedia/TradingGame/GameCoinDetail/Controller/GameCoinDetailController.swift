@@ -91,11 +91,11 @@ class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectio
         menuBar.menuViewCollection.selectItem(at: indexpath as IndexPath, animated: true, scrollPosition:[])
     }
     
-    lazy var menuBar: MenuBarView = {
+    lazy var menuBar: MenuBarViewOld = {
         let labels = [textValue(name: "general_detail"),
                       textValue(name: "transaction_detail"),
                       textValue(name: "alerts_detail")]
-        let mb = MenuBarView(menuLabels: labels)
+        let mb = MenuBarViewOld(menuLabels: labels)
         mb.textFont = UIFont.regularFont(16*factor)
         mb.customDelegate = self
         return mb

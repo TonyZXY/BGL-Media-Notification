@@ -466,3 +466,8 @@ status = "状态";
 
 
 Huobi_Au = "火币澳洲";
+
+// Asset Menu
+asset_menu_wallet = "钱包";
+asset_menu_game = "游戏";
+asset_title = "资产";

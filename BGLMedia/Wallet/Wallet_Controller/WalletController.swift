@@ -70,16 +70,16 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
 //        print(assetss)
 //        print(try! Realm().objects(EachTransactions.self))
         
-        //for Game
-        let gameBarButtonItem = UIBarButtonItem(title: "Game", style: .done, target: self, action: #selector(presentGame))
-        self.navigationItem.rightBarButtonItem  = gameBarButtonItem
+//        //for Game
+//        let gameBarButtonItem = UIBarButtonItem(title: "Game", style: .done, target: self, action: #selector(presentGame))
+//        self.navigationItem.rightBarButtonItem  = gameBarButtonItem
     }
     
-    @objc func presentGame(_ sender: UIBarButtonItem) {
-        let gameBalance = GameBalanceController()
-        gameBalance.hidesBottomBarWhenPushed = true
-        navigationController?.pushViewController(gameBalance, animated: true)
-    }
+//    @objc func presentGame(_ sender: UIBarButtonItem) {
+//        let gameBalance = GameBalanceController()
+//        gameBalance.hidesBottomBarWhenPushed = true
+//        navigationController?.pushViewController(gameBalance, animated: true)
+//    }
     
 //    func checkNickname() {
 //        let parameter = ["token": certificateToken, "email": email]

@@ -12,8 +12,8 @@ import UIKit
 class RankViewController : UIViewController,MenuBarViewDelegate,UICollectionViewDataSource,UICollectionViewDelegate,UICollectionViewDelegateFlowLayout{
     let factor = UIScreen.main.bounds.width/375
     // rank menu part
-    lazy var rankMenu : MenuBarView = {
-        var menu = MenuBarView(menuLabels: [textValue(name: "rankMenuTitle_Weekly"),textValue(name: "rankMenuTitle_Total")])
+    lazy var rankMenu : MenuBarViewOld = {
+        var menu = MenuBarViewOld(menuLabels: [textValue(name: "rankMenuTitle_Weekly"),textValue(name: "rankMenuTitle_Total")])
         menu.customDelegate = self
         return menu
     }()

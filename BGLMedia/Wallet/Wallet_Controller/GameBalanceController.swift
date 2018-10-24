@@ -12,6 +12,7 @@ import SwiftKeychainWrapper
 import SwiftyJSON
 
 class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
+    let factor = UIScreen.main.bounds.width/375
     var image = AppImage()
 
     let cryptoCompareClient = CryptoCompareClient()
@@ -472,16 +473,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     //Set Up View Layout
     func setupView(){
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
-        // modified
-        let buttonHeight:CGFloat = 24
-        let buttonWidth:CGFloat = 24
-        let button = ToRankPageButton(width: buttonWidth, height: buttonHeight,parentController: self)
-        let navigationRankButton = UIBarButtonItem(customView: button)
-        navigationRankButton.customView?.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        navigationRankButton.customView?.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        self.navigationItem.setRightBarButton(navigationRankButton, animated: true)
         
-        let factor = view.frame.width/375
         totalLabel.text = textValue(name:"gameBalance")
         unrealizedLabel.setTitle(textValue(name: "hintUnrealizedTitle"), for: .normal)
         realizedLabel.setTitle(textValue(name: "hintRealizedTitle"), for: .normal)
@@ -504,6 +496,11 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         realizedView.addSubview(realizedLabel)
         realizedView.addSubview(unrealizedResult)
         realizedView.addSubview(realizedResult)
+        
+        // modified
+        totalProfitView.addSubview(toRankButton)
+        totalProfitView.addConstraintsWithFormat(format: "H:[v0]-\(15*factor)-|", views: toRankButton)
+        totalProfitView.addConstraintsWithFormat(format: "V:[v0]-\(15*factor)-|", views: toRankButton)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
@@ -781,5 +778,13 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
+    }()
+    
+    lazy var toRankButton: ToRankPageButton = {
+        let buttonHeight:CGFloat = 24 * factor
+        let buttonWidth:CGFloat = 24 * factor
+        let button = ToRankPageButton(width: buttonWidth, height: buttonHeight,parentController: self)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 }

@@ -476,3 +476,8 @@ status = "Status";
 
 
 Huobi_Au = "Huobi Australia";
+
+// Asset Menu
+asset_menu_wallet = "Wallet";
+asset_menu_game = "Trading Game";
+asset_title = "Asset";
