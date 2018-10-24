@@ -76,77 +76,74 @@ class WalletController: UIViewController,UITableViewDelegate,UITableViewDataSour
     }
     
     @objc func presentGame(_ sender: UIBarButtonItem) {
-        if !UserDefaults.standard.bool(forKey: "isLoggedIn"){
-            let login = LoginController(usedPlace: 0)
-            self.present(login, animated: true, completion: nil)
-        } else {
-            checkNickname()
-        }
-    }
-    
-    func checkNickname() {
-        let parameter = ["token": certificateToken, "email": email]
-        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            //print(response)
-            if success {
-                if response["data"]["nick_name"].stringValue == "" {
-                    self.popNicknameAlert(true)
-                } else {
-                    self.goToGameView(response)
-                }
-            } else {
-                self.popNetworkFailureAlert()
-            }
-        }
-    }
-    
-    func popNetworkFailureAlert() {
-        let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-        self.present(alert, animated: true)
-    }
-    
-    func popNicknameAlert(_ isFirst: Bool) {
-        var alert = UIAlertController()
-        if isFirst {
-            alert = UIAlertController(title: textValue(name: "nickname"), message: nil, preferredStyle: .alert)
-        } else {
-            alert = UIAlertController(title: textValue(name: "nicknameNotUnique"), message: nil, preferredStyle: .alert)
-        }
-        alert.addTextField { (textField) in  }
-        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] act in
-            if let nickname =  alert?.textFields?.first?.text {
-                if nickname == "" {
-                    self.popNicknameAlert(true)
-                } else {
-                    self.registerNickname(nickname)
-                }
-            }
-        }))
-        self.present(alert, animated: true)
-    }
-    
-    @objc func registerNickname(_ nickname: String) {
-        let parameter = ["token": certificateToken, "email": email, "nickname": nickname]
-        URLServices.fetchInstance.passServerData(urlParameters: ["game","register"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            //print(response)
-            if response["code"].stringValue == "200" {
-                self.goToGameView(response)
-            } else if response["code"].stringValue == "789" {
-                self.popNicknameAlert(false)
-            } else {
-                self.popNetworkFailureAlert()
-            }
-        }
-    }
-    
-    func goToGameView(_ json: JSON) {
         let gameBalance = GameBalanceController()
-        gameBalance.gameUser = GameUser(json)
-        UserDefaults.standard.set(gameBalance.gameUser?.id, forKey: "user_id")
         gameBalance.hidesBottomBarWhenPushed = true
         navigationController?.pushViewController(gameBalance, animated: true)
     }
+    
+//    func checkNickname() {
+//        let parameter = ["token": certificateToken, "email": email]
+//        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
+//            //print(response)
+//            if success {
+//                if response["data"]["nick_name"].stringValue == "" {
+//                    self.popNicknameAlert(true)
+//                } else {
+//                    self.goToGameView(response)
+//                }
+//            } else {
+//                self.popNetworkFailureAlert()
+//            }
+//        }
+//    }
+//
+//    func popNetworkFailureAlert() {
+//        let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//        self.present(alert, animated: true)
+//    }
+//
+//    func popNicknameAlert(_ isFirst: Bool) {
+//        var alert = UIAlertController()
+//        if isFirst {
+//            alert = UIAlertController(title: textValue(name: "nickname"), message: nil, preferredStyle: .alert)
+//        } else {
+//            alert = UIAlertController(title: textValue(name: "nicknameNotUnique"), message: nil, preferredStyle: .alert)
+//        }
+//        alert.addTextField { (textField) in  }
+//        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] act in
+//            if let nickname =  alert?.textFields?.first?.text {
+//                if nickname == "" {
+//                    self.popNicknameAlert(true)
+//                } else {
+//                    self.registerNickname(nickname)
+//                }
+//            }
+//        }))
+//        self.present(alert, animated: true)
+//    }
+//
+//    @objc func registerNickname(_ nickname: String) {
+//        let parameter = ["token": certificateToken, "email": email, "nickname": nickname]
+//        URLServices.fetchInstance.passServerData(urlParameters: ["game","register"], httpMethod: "POST", parameters: parameter) { (response, success) in
+//            //print(response)
+//            if response["code"].stringValue == "200" {
+//                self.goToGameView(response)
+//            } else if response["code"].stringValue == "789" {
+//                self.popNicknameAlert(false)
+//            } else {
+//                self.popNetworkFailureAlert()
+//            }
+//        }
+//    }
+//
+//    func goToGameView(_ json: JSON) {
+//        let gameBalance = GameBalanceController()
+//        gameBalance.gameUser = GameUser(json)
+//        UserDefaults.standard.set(gameBalance.gameUser?.id, forKey: "user_id")
+//        gameBalance.hidesBottomBarWhenPushed = true
+//        navigationController?.pushViewController(gameBalance, animated: true)
+//    }
     
     deinit {
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadWallet"), object: nil)

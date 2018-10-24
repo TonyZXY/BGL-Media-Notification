@@ -98,7 +98,6 @@
 		2D953AD0217EDD1400A1A7C5 /* GameAlertTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACD217EDD1400A1A7C5 /* GameAlertTableCell.swift */; };
 		2D953AD1217EDD1400A1A7C5 /* GameAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACE217EDD1400A1A7C5 /* GameAlertController.swift */; };
 		2D953AD2217EDD1400A1A7C5 /* GameAlertManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACF217EDD1400A1A7C5 /* GameAlertManageController.swift */; };
-		2D953AD4217EDD5F00A1A7C5 /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */; };
 		3D1332EA20E9FA5700D3CAE6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */; };
 		3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */; };
 		3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */; };
@@ -233,6 +232,7 @@
 		B9F4F33D216590460038AE6B /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F33C216590460038AE6B /* GameModels.swift */; };
 		B9F4F33F2165D5AB0038AE6B /* GameBalanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */; };
 		B9F4F34521705B050038AE6B /* GameTransactionsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F34421705B050038AE6B /* GameTransactionsHistoryViewController.swift */; };
+		B9F4F3592180225E0038AE6B /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F3582180225E0038AE6B /* RankApiReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -347,7 +347,6 @@
 		2D953ACD217EDD1400A1A7C5 /* GameAlertTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertTableCell.swift; path = BGLMedia/Alert/Controlller/GameAlertTableCell.swift; sourceTree = SOURCE_ROOT; };
 		2D953ACE217EDD1400A1A7C5 /* GameAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertController.swift; path = BGLMedia/Alert/Controlller/GameAlertController.swift; sourceTree = SOURCE_ROOT; };
 		2D953ACF217EDD1400A1A7C5 /* GameAlertManageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertManageController.swift; path = BGLMedia/Alert/Controlller/GameAlertManageController.swift; sourceTree = SOURCE_ROOT; };
-		2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RankApiReader.swift; path = "/Users/zhangzeyao/Documents/BlockChain Project/BGLMedia/BGLMedia/TradingGame/Ranking/ApiReader/RankApiReader.swift"; sourceTree = "<absolute>"; };
 		3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubePlayer.framework; path = Carthage/Build/iOS/YouTubePlayer.framework; sourceTree = "<group>"; };
 		3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
@@ -483,6 +482,7 @@
 		B9F4F33C216590460038AE6B /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
 		B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBalanceController.swift; sourceTree = "<group>"; };
 		B9F4F34421705B050038AE6B /* GameTransactionsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTransactionsHistoryViewController.swift; sourceTree = "<group>"; };
+		B9F4F3582180225E0038AE6B /* RankApiReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankApiReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,7 +509,7 @@
 		241051BE217EBFC70064B676 /* ApiReader */ = {
 			isa = PBXGroup;
 			children = (
-				2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */,
+				B9F4F3582180225E0038AE6B /* RankApiReader.swift */,
 			);
 			path = ApiReader;
 			sourceTree = "<group>";
@@ -1502,7 +1502,7 @@
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,
 				B959EF5B2146172500930DD6 /* FontController.swift in Sources */,
 				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
-				2D953AD4217EDD5F00A1A7C5 /* RankApiReader.swift in Sources */,
+				B9F4F3592180225E0038AE6B /* RankApiReader.swift in Sources */,
 				2D953AD0217EDD1400A1A7C5 /* GameAlertTableCell.swift in Sources */,
 				2442BE70217ED88E000100BE /* RankTableViewCell.swift in Sources */,
 				B9F4F3392161E0EE0038AE6B /* GameTransactionsController.swift in Sources */,
