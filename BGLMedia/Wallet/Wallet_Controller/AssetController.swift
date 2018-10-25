@@ -9,13 +9,18 @@
 import Foundation
 import UIKit
 
-class AssetController: UIViewController{
+class AssetController: UIViewController {
     let factor = UIScreen.main.bounds.width/375
     
     lazy var menuPageView : MenuPageView = {
         var menu = MenuPageView()
         let page1 = MenuPage(title: textValue(name: "asset_menu_wallet"), pageView: walletContainer)
         let page2 = MenuPage(title: textValue(name: "asset_menu_game"), pageView: gameBalanceContainer)
+        menu.currentIndexDidChange = { index in
+            if index == 1 {
+                self.gameBalanceController.checkLoginStatus()
+            }
+        }
         menu.menuPages = [page1,page2]
         menu.horizontalMenuBarColor = ThemeColor().themeWidgetColor()
         menu.menuBarHeight = 50 * factor

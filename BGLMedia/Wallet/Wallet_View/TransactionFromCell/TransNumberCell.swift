@@ -122,7 +122,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     private let transactionFeeLabel: UILabel = {
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
-        label.text = textValue(name: "transactionFee") + ": 1%"
+        label.text = textValue(name: "transactionFee") + ": 0.2%"
         label.textAlignment = .right
         return label
     }()

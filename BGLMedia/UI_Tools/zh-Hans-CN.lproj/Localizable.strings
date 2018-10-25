@@ -179,6 +179,7 @@ otherHosts = "其他主办方";
 allHostStr = "全部主办方";
 
 popAlertTitle = "把这个活动加到你的日历中？";
+alertCancel = "取消";
 alertNo = "否";
 alertYes = "是";
 alertSuccess = "成功!";

@@ -184,6 +184,7 @@ otherHosts = "Other Hosts";
 allHostStr = "All Hosts";
 
 popAlertTitle = "Add This Event To Your Calendar?";
+alertCancel = "Cancel";
 alertNo = "No";
 alertYes = "Yes";
 alertSuccess = "Success!";

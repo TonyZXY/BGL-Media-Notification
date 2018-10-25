@@ -71,14 +71,19 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if gameUser == nil {
-            checkLoginStatus()
+        if gameUser != nil {
+            setupTimer()
         }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         timer.invalidate()
+    }
+    
+    private func setupTimer() {
+        //will refresh the coins' price every 10 sec
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in self.updateCells() }
     }
     
     func checkLoginStatus() {
@@ -91,17 +96,18 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     private func checkNickname() {
-        let parameter = ["token": certificateToken, "email": email]
-        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
-            //print(response)
-            if success {
-                if response["data"]["nick_name"].stringValue == "" {
-                    self.popNicknameAlert(true)
+        if gameUser == nil {
+            let parameter = ["token": certificateToken, "email": email]
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                if success {
+                    if response["data"]["nick_name"].stringValue == "" {
+                        self.popNicknameAlert(true)
+                    } else {
+                        self.setupGameUser(response)
+                    }
                 } else {
-                    self.setupGameUser(response)
+                    self.popNetworkFailureAlert()
                 }
-            } else {
-                self.popNetworkFailureAlert()
             }
         }
     }
@@ -133,8 +139,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
             self.walletList.switchRefreshHeader(to: .refreshing)
         })
         
-        //will refresh the coins' price every 10 sec
-        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in self.updateCells() }
+        setupTimer()
         
         UserDefaults.standard.set(gameUser?.id, forKey: "user_id")
     }
@@ -147,6 +152,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
             alert = UIAlertController(title: textValue(name: "nicknameNotUnique"), message: nil, preferredStyle: .alert)
         }
         alert.addTextField { (textField) in  }
+        alert.addAction(UIAlertAction(title: textValue(name: "alertCancel"), style: .cancel, handler: nil))
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] act in
             if let nickname =  alert?.textFields?.first?.text {
                 if nickname == "" {
@@ -258,7 +264,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func checkTransaction(){
         if gameUser?.coins.count == 0{
-            setUpInitialView()
+            setUpInitialView()  //won't be call, keep it just in case one day needed
         } else {
             setupView()
         }
@@ -325,8 +331,12 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
 
     @objc func refreshData(){
         checkTransaction()
-        if gameUser != nil {
-            self.walletList.beginHeaderRefreshing()
+        if !UserDefaults.standard.bool(forKey: "isLoggedIn") {
+            gameUser = nil
+            reloadNewMarketData()
+            updateSummaryTextField()
+        } else {
+            checkNickname()
         }
     }
     
@@ -358,6 +368,9 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                     self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
                 }
             }
+        } else {
+            self.walletList.switchRefreshHeader(to: .normal(.none, 0.5))
+            checkLoginStatus()
         }
     }
     
