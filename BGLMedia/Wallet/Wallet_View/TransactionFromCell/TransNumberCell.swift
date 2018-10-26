@@ -196,6 +196,11 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
                 //for selling
                     amount = balance * Double(slider.value) / 100
             }
+            if slider.value == 100 {
+                amount = balance
+            }else{
+                amount = amount.floorTo(decimalLimit: 8)
+            }
             number.text = "\(amount)"
             newTransaction?.amount = amount
         }

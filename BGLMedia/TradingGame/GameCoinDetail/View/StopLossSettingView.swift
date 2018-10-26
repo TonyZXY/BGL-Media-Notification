@@ -345,6 +345,16 @@ class StopLossSettingView : UIView{
         return false
     }
     
+    private func calculateAmount(){
+        let percentage = Double(slider.value)
+        let amountValue = percentage/100 * (coinDetail?.amount ?? 0)
+        if percentage == 100{
+            amountTextField.text = "\(coinDetail?.amount ?? 0)"
+        }else{
+            amountTextField.text = "\(amountValue.floorTo(decimalLimit: 8))"
+        }
+    }
+    
     @objc func sliderValueChanged(_ slider: UISlider){
         let sliderStep :Float = 10
         if sliderStep > 0 {
@@ -355,12 +365,7 @@ class StopLossSettingView : UIView{
         // change percentage field value
         percentageTextField.text = "\(slider.value)"
         
-        let amountValue = Double(slider.value/100) * (coinDetail?.amount ?? 0)
-        if slider.value == 100 {
-            amountTextField.text = "\(coinDetail?.amount ?? 0)"
-        }else{
-            amountTextField.text = "\(amountValue.floorTo(decimalLimit: 8))"
-        }
+        calculateAmount()
 
         calculateExpectProfit()
         calculateExpectLoss()
@@ -398,12 +403,9 @@ class StopLossSettingView : UIView{
                 // set up field
                 textField.text = value
                 slider.value = Float(percentage)
-                let amountValue = percentage/100 * (coinDetail?.amount ?? 0)
-                if percentage == 100{
-                    amountTextField.text = "\(coinDetail?.amount ?? 0))"
-                }else{
-                    amountTextField.text = "\(amountValue.floorTo(decimalLimit: 8))"
-                }
+                
+                calculateAmount()
+                
                 calculateExpectProfit()
                 calculateExpectLoss()
                 

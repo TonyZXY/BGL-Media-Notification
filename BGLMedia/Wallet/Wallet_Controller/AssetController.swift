@@ -27,6 +27,7 @@ class AssetController: UIViewController {
         menu.selectedMenuColor = ThemeColor().themeWidgetColor()
         menu.notSelectedMenuColor = ThemeColor().textGreycolor()
         menu.menuBarBackgroundColor = ThemeColor().themeColor()
+        menu.setPagesBounce(false)
         return menu
     }()
     
