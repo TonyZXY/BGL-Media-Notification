@@ -9,7 +9,7 @@
 import Foundation
 import UIKit
 /**
-    mostly copied form CoinDetailController
+    mostly copied form CoinDetailController, 3 tab bar controller
  */
 class GameCoinDetailController: UIViewController,MenuBarViewDelegate,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     

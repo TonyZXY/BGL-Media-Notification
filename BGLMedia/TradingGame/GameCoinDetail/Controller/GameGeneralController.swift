@@ -13,7 +13,7 @@ import RealmSwift
 class GameGerneralController: UIViewController {
 
     var observer:NSObjectProtocol?
-    var generalData = generalDetail()
+//    var generalData = generalDetail()
     let realm = try! Realm()
     let vc = CandleStickChartViewController()
     

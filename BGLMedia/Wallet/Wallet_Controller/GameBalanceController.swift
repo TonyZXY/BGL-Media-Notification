@@ -185,7 +185,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         guard let coins = gameUser?.coins else { return }
         for (index, _) in coins.enumerated() {
             transSums.forEach({ (transSum) in
-                if coins[index].abbrName == transSum.abbrName {
+                if coins[index].abbrName.lowercased() == transSum.abbrName.lowercased() {
                     if transSum.status == "Buy" {
                         self.gameUser?.coins[index].totalAmountOfBuy = transSum.totalAmount
                         self.gameUser?.coins[index].totalValueOfBuy = transSum.totalValue
@@ -226,10 +226,10 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     private func updateCells() {
         getCoinsPrice { (jsonArray, error) in
-            if let err = error {
-                let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
+            if let _ = error {
+//                let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                self.present(alert, animated: true)
             } else {
                 self.updateGameUserCoinsPrice(jsonArray)
                 DispatchQueue.main.async {
@@ -364,6 +364,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                     self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                 } else {
                     self.updateGameUserTransSum(transSums)
+                    self.updateCoinAmount()
                     self.updateCells()
                     self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
                 }
@@ -374,6 +375,28 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         }
     }
     
+    private func updateCoinAmount(){
+        if gameUser != nil{
+            let param : [String:Any] = ["token":certificateToken,"email":email,"user_id":gameUser!.id]
+            URLServices.fetchInstance.passServerData(urlParameters: ["game","getAccount"], httpMethod: "POST", parameters: param){ (response, success) in
+                if success {
+                    let data = response["data"]
+                    if let coins = self.gameUser?.coins{
+                        var newList : [GameCoin] = []
+                        for coin in coins{
+                            var newCoin = coin
+                            let newAmount = Double(data[coin.abbrName.lowercased()].stringValue) ?? 0
+                            if newAmount > 0 {
+                                newCoin.amount = newAmount
+                                newList.append(newCoin)
+                            }
+                        }
+                        self.gameUser!.coins = newList
+                    }
+                }
+            }
+        }
+    }
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 //        if editingStyle == UITableViewCellEditingStyle.delete{
 //            let item = assetss[indexPath.row]

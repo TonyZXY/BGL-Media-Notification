@@ -23,17 +23,17 @@ struct GameUser {
     }
     
     mutating func updateCoinsBalance(_ json: JSON) {
-        let audAmount = json["aud"].doubleValue
-        let btcAmount = json["btc"].doubleValue
-        let ethAmount = json["eth"].doubleValue
-        let bchAmount = json["bch"].doubleValue
-        let ltcAmount = json["ltc"].doubleValue
-        let etcAmount = json["etc"].doubleValue
-        let powrAmount = json["powr"].doubleValue
-        let elfAmount = json["elf"].doubleValue
-        let ctxcAmount = json["ctxc"].doubleValue
-        let dtaAmount = json["dta"].doubleValue
-        let iostAmount = json["iost"].doubleValue
+        let audAmount = Double(json["aud"].stringValue) ?? 0
+        let btcAmount = Double(json["btc"].stringValue) ?? 0
+        let ethAmount = Double(json["eth"].stringValue) ?? 0
+        let bchAmount = Double(json["bch"].stringValue) ?? 0
+        let ltcAmount = Double(json["ltc"].stringValue) ?? 0
+        let etcAmount = Double(json["etc"].stringValue) ?? 0
+        let powrAmount = Double(json["powr"].stringValue) ?? 0
+        let elfAmount = Double(json["elf"].stringValue) ?? 0
+        let ctxcAmount = Double(json["ctxc"].stringValue) ?? 0
+        let dtaAmount = Double(json["dta"].stringValue) ?? 0
+        let iostAmount = Double(json["iost"].stringValue) ?? 0
         
         coins.removeAll()
         if audAmount > 0 {
@@ -81,12 +81,13 @@ struct GameUser {
             coins.append(coin)
         }
     }
+
 }
 
 struct GameCoin {
     let name: String
     let abbrName: String
-    let amount: Double
+    var amount: Double
     var price: Double
     var exchangeName : String = "Huobi Australia"
     var tradingPairName : String = "AUD"

@@ -30,7 +30,7 @@ class GameCoinPageController: UIViewController{
     }()
     
     let realm = try! Realm()
-    let general = generalDetail()
+//    let general = generalDetail()
     var globalMarketData = GlobalMarket.init()
     var refreshTimer: Timer!
     
@@ -54,25 +54,28 @@ class GameCoinPageController: UIViewController{
         }
     }
 
-//    var assetsData:Results<Transactions>{
-//        get{
-//            let filterName = "coinAbbName = '" + (coinDetails?.abbrName ?? "") + "' "
-//            let objects = realm.objects(Transactions.self).filter(filterName)
-//            return objects
-//        }
-//    }
+    var token :String {
+        get{
+            return UserDefaults.standard.string(forKey: "CertificateToken") ?? ""
+        }
+    }
+    var email :String {
+        get{
+            return UserDefaults.standard.string(forKey: "UserEmail") ?? ""
+        }
+    }
+    var user_id : Int{
+        get{
+            return UserDefaults.standard.integer(forKey: "user_id")
+        }
+    }
+    
     
     var chartPeriod:String{
         get{
             return UserDefaults.standard.string(forKey: "chartPeriod") ?? "Minute"
         }
     }
-    
-//    var assetss: Results<Transactions>{
-//        get{
-//            return try! Realm().objects(Transactions.self).filter("coinAbbName = %@", coinDetails?.abbrName ?? "")
-//        }
-//    }
     
     var loginStatus:Bool{
         get{
@@ -150,14 +153,13 @@ class GameCoinPageController: UIViewController{
             
             generalPage.exchangeButton.setTitle(detail.exchangeName, for: .normal)
             generalPage.tradingPairButton.setTitle(detail.abbrName + "/" +  detail.tradingPairName, for: .normal)
-            general.coinAbbName = detail.abbrName
-            general.coinName = detail.name
-            general.exchangeName = detail.exchangeName
-            general.tradingPairs = detail.tradingPairName
-            coinDetailController.alertControllers.coinName.coinAbbName = general.coinAbbName
+            
+            generalPage.coinDetail = detail
+            
+            coinDetailController.alertControllers.coinName.coinAbbName = detail.abbrName
             coinDetailController.alertControllers.coinName.status = true
-            coinDetailController.alertControllers.coinAbbName = general.coinAbbName
-            coinDetailController.alertControllers.coinName.coinName = general.coinName
+            coinDetailController.alertControllers.coinAbbName = detail.abbrName
+            coinDetailController.alertControllers.coinName.coinName = detail.name
             generalPage.marketCapResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].marketCap )
             generalPage.volumeResult.text = currecyLogo[priceType]! + Extension.method.scientificMethod(number: GlobalData[0].volume24 )
             generalPage.circulatingSupplyResult.text = Extension.method.scientificMethod(number: GlobalData[0].circulatingSupply )
@@ -193,14 +195,24 @@ class GameCoinPageController: UIViewController{
                 let dataArray = response["data"].array
                 
                 for data in dataArray ?? []{
-                    if data["coin_name"].stringValue == self.coinDetail?.abbrName.lowercased(){
-                        self.coinDetail?.price = data["current_price"].doubleValue
+                    if data["coin_name"].stringValue.lowercased() == self.coinDetail?.abbrName.lowercased(){
+                        self.coinDetail?.price = Double(data["current_price"].stringValue) ?? 0
                         print(self.coinDetail?.price ?? -11111)
                     }
                 }
             }
         }
         
+        let param : [String:Any] = ["token":token,"email":email,"user_id":user_id]
+        URLServices.fetchInstance.passServerData(urlParameters: ["game","getAccount"], httpMethod: "POST", parameters: param){ (response, success) in
+            if success {
+                let data = response["data"]
+                let coinAmount = Double(data[self.coinDetail!.abbrName.lowercased()].stringValue) ?? 0
+                self.coinDetail?.amount = coinAmount
+                
+            }
+        }
+            
 //        if let assets = assetsData.first {
 //            dispatchGroup.enter()
         
@@ -426,6 +438,7 @@ class GameCoinPageController: UIViewController{
     
     @objc func handleRefresh(_ scrollView:UIScrollView){
         refreshData()
+        coinDetailController.gerneralController.refreshStopLossData()
     }
     
 //    @objc func editMarket(){

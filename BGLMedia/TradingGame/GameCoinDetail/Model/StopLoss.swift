@@ -183,10 +183,10 @@ class  StopLossApiService{
             for result in collection{
                 let set_id = result["set_id"].stringValue
                 let user_id = result["user_id"].stringValue
-                let coin_name = result["coin_name"].string?.lowercased() ?? ""
-                let price_greater = result["price_greater"].double ?? 0
-                let price_lower = result["price_lower"].double ?? 0
-                let amount = result["amount"].double ?? 0
+                let coin_name = result["coin_name"].stringValue.lowercased()
+                let price_greater = Double(result["price_greater"].stringValue) ?? 0
+                let price_lower = Double(result["price_lower"].stringValue) ?? 0
+                let amount = Double(result["amount"].stringValue) ?? 0
                 let actived = result["actived"].bool ?? true
                 let complete_date = Extension.method.convertStringToDate(date: result["complete_date"].string ?? "")
                 let code = result["code"].stringValue
