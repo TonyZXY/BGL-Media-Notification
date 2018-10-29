@@ -41,7 +41,7 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     var newTransaction = Transactions()
     var sectionPrice:Double = 0
     var inputPrice:String = ""
-    var alertObject = GameAlertObject()
+    var gameAlertObject = GameAlertObject()
     var status: String = "AddAlert"
     var coinName = coinAlert()
     
@@ -142,9 +142,9 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     
     func loadPrice(){
         
-        print(alertObject)
-        if alertObject.coinName != "" {
-            APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: alertObject.coinAbbName, tradingPairName: "AUD", exchangeName: "Huobi Australia") { (response, success) in
+        print(gameAlertObject)
+        if gameAlertObject.coinName != "" {
+            APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: gameAlertObject.coinAbbName, tradingPairName: "AUD", exchangeName: "Huobi Australia") { (response, success) in
                 if success{
                     print("sdf")
                     let singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
@@ -180,7 +180,7 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
             cell.textLabel?.font = UIFont.regularFont(15*factor)
             cell.backgroundColor = ThemeColor().greyColor()
             let exchangeSection = textValue(name: "exchange_alert") + textValue(name: "Huobi_Au")
-            let tradingPairs =  textValue(name: "tradingPair_alert") + alertObject.coinAbbName+"/AUD"
+            let tradingPairs =  textValue(name: "tradingPair_alert") + gameAlertObject.coinAbbName+"/AUD"
             cell.textLabel?.text = indexPath.row == 0 ?  exchangeSection : tradingPairs
             return cell
             
@@ -224,16 +224,16 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
             button.tag = section
             
             if coinName.status{
-                alertObject.coinAbbName = coinName.coinAbbName
-                alertObject.coinName = coinName.coinName
+                gameAlertObject.coinAbbName = coinName.coinAbbName
+                gameAlertObject.coinName = coinName.coinName
                 button.isHidden = true
             }
             if status == "Update"{
                 button.isHidden = true
             }
             
-            coinImage.coinImageSetter(coinName: alertObject.coinAbbName, width: 30 * factor, height: 30 * factor, fontSize: 5 * factor)
-            coinLabel.text = textValue(name: "coinName_alert") + alertObject.coinName
+            coinImage.coinImageSetter(coinName: gameAlertObject.coinAbbName, width: 30 * factor, height: 30 * factor, fontSize: 5 * factor)
+            coinLabel.text = textValue(name: "coinName_alert") + gameAlertObject.coinName
             coinLabel.font = UIFont.regularFont(14 * factor)
             
             let sectionView = UIView()
@@ -331,11 +331,11 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     @objc func deleteGameAlert(){
         
         let realm = try! Realm()
-        let body:[String:Any] = ["email":email,"token":token,"alert":alertObject.id]
+        let body:[String:Any] = ["email":email,"token":token,"alert":gameAlertObject.id]
         URLServices.fetchInstance.passServerData(urlParameters: ["game","deleteAlert"], httpMethod: "POST", parameters: body) { (response, success) in
             if success{
-                let filterId = "id = " + String(self.alertObject.id)
-                let filterName = "coinAbbName = '" + self.alertObject.coinAbbName + "' "
+                let filterId = "id = " + String(self.gameAlertObject.id)
+                let filterName = "coinAbbName = '" + self.gameAlertObject.coinAbbName + "' "
                 
                 let coinsAlert = realm.objects(GameAlertObject.self).filter(filterName)
                 
@@ -358,29 +358,29 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     
     @objc func addNewGameAlert(){
         let realm = try! Realm()
-        alertObject.inputPrice = Double(inputPrice) ?? 0
+        gameAlertObject.inputPrice = Double(inputPrice) ?? 0
         
-        if String(alertObject.inputPrice) != "0.0" && alertObject.coinName != ""{
+        if String(gameAlertObject.inputPrice) != "0.0" && gameAlertObject.coinName != ""{
             alertButton.isUserInteractionEnabled = false
             
             var compareStatus = 0
-            if sectionPrice < alertObject.inputPrice{
+            if sectionPrice < gameAlertObject.inputPrice{
                 compareStatus = 1
             } else {
                 compareStatus = 2
             }
             
-            alertObject.compareStatus = compareStatus
+            gameAlertObject.compareStatus = compareStatus
             
             if status == "Update"{
-                let inner:[String:Any] = ["alert_id":alertObject.id,"coinName": alertObject.coinAbbName, "price": alertObject.inputPrice,"status": true, "isGreater": alertObject.compareStatus]
+                let inner:[String:Any] = ["alert_id":gameAlertObject.id,"coinName": gameAlertObject.coinAbbName, "price": gameAlertObject.inputPrice,"status": true, "isGreater": gameAlertObject.compareStatus]
                 let parameter2 = ["token": token, "email": email, "user_id": UserDefaults.standard.string(forKey: "user_id")!, "alert":inner] as [String: Any]
                 
                 URLServices.fetchInstance.passServerData(urlParameters: ["game","editAlert"], httpMethod: "POST", parameters: parameter2){ (response, success) in
                     if success{
                        realm.beginWrite()
-                        let realmData: [Any] = [self.alertObject.id, self.alertObject.coinName,self.alertObject.coinAbbName, self.alertObject.inputPrice, self.alertObject.compareStatus, self.alertObject.switchStatus,Date()]
-                        if realm.object(ofType: GameAlertObject.self, forPrimaryKey: self.alertObject.id) == nil{
+                        let realmData: [Any] = [self.gameAlertObject.id, self.gameAlertObject.coinName,self.gameAlertObject.coinAbbName, self.gameAlertObject.inputPrice, self.gameAlertObject.compareStatus, self.gameAlertObject.switchStatus,Date()]
+                        if realm.object(ofType: GameAlertObject.self, forPrimaryKey: self.gameAlertObject.id) == nil{
                             realm.create(GameAlertObject.self, value: realmData)
                         } else {
                             realm.create(GameAlertObject.self, value: realmData, update: true)
@@ -391,7 +391,7 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
                     self.navigationController?.popViewController(animated: true)
                 }
             } else {
-                let inner:[String:Any] = ["coinName": alertObject.coinAbbName, "price": alertObject.inputPrice, "isGreater": alertObject.compareStatus]
+                let inner:[String:Any] = ["coinName": gameAlertObject.coinAbbName, "price": gameAlertObject.inputPrice, "isGreater": gameAlertObject.compareStatus]
                 let parameter2 = ["token": token, "email": email, "user_id": UserDefaults.standard.string(forKey: "user_id")!, "alert":inner] as [String: Any]
                 
                 URLServices.fetchInstance.passServerData(urlParameters: ["game","addAlert"], httpMethod: "POST", parameters: parameter2){ (response, success) in
@@ -460,27 +460,27 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     }
     
     func setCoinName(name: String) {
-        alertObject.coinName = name
+        gameAlertObject.coinName = name
     }
     
     func setCoinAbbName(abbName: String) {
-        alertObject.coinAbbName = abbName
+        gameAlertObject.coinAbbName = abbName
     }
     
     func getCoinName() -> String {
-        return alertObject.coinAbbName
+        return gameAlertObject.coinAbbName
     }
     
     
     func textFieldDidEndEditing(_ textField: UITextField) {
         if textField.text == "" || textField.text == nil{
             textField.text = ""
-            alertObject.inputPrice = 0
+            gameAlertObject.inputPrice = 0
         } else{
             if Extension.method.checkInputVaild(value: textField.text!){
                 inputPrice = textField.text!
             } else{
-                alertObject.inputPrice = 0
+                gameAlertObject.inputPrice = 0
             }
         }
     }

@@ -45,16 +45,18 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
                 coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName + "' ")
             }
             
-            for value in coinNameResults{
-                var gameAlertResult = GameAlertResult()
-                let specificCoins = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
-                gameAlertResult.isExpanded = false
-                gameAlertResult.coinAbbName = value.coinAbbName
-                gameAlertResult.coinName = value.coinName
-                for result in specificCoins {
-                    gameAlertResult.name.append(result)
+            if results.count > 0{
+                for value in coinNameResults{
+                    var gameAlertResult = GameAlertResult()
+                    let specificCoins = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
+                    gameAlertResult.isExpanded = false
+                    gameAlertResult.coinAbbName = value.coinAbbName
+                    gameAlertResult.coinName = value.coinName
+                    for result in specificCoins {
+                        gameAlertResult.name.append(result)
+                    }
+                    allResult.append(gameAlertResult)
                 }
-                allResult.append(gameAlertResult)
             }
             
             return allResult
@@ -360,10 +362,10 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let alertEdit = GameAlertManageController()
-        alertEdit.alertObject.coinAbbName = alerts[indexPath.section].name[indexPath.row].coinAbbName
-        alertEdit.alertObject.coinName = alerts[indexPath.section].name[indexPath.row].coinName
-        alertEdit.alertObject.inputPrice = alerts[indexPath.section].name[indexPath.row].inputPrice
-        alertEdit.alertObject.id =   alerts[indexPath.section].name[indexPath.row].id
+        alertEdit.gameAlertObject.coinAbbName = alerts[indexPath.section].name[indexPath.row].coinAbbName
+        alertEdit.gameAlertObject.coinName = alerts[indexPath.section].name[indexPath.row].coinName
+        alertEdit.gameAlertObject.inputPrice = alerts[indexPath.section].name[indexPath.row].inputPrice
+        alertEdit.gameAlertObject.id =   alerts[indexPath.section].name[indexPath.row].id
         alertEdit.status = "Update"
         navigationController?.pushViewController(alertEdit, animated: true)
     }
@@ -464,8 +466,8 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
             alert.coinName.status = true
             alert.coinName.coinAbbName = coinName.coinAbbName
             alert.coinName.coinName = coinName.coinName
-            alert.alertObject.coinAbbName = coinName.coinAbbName
-            alert.alertObject.coinName = coinName.coinName
+            alert.gameAlertObject.coinAbbName = coinName.coinAbbName
+            alert.gameAlertObject.coinName = coinName.coinName
         }
         
         navigationController?.pushViewController(alert, animated: true)
@@ -485,13 +487,15 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         var alertStatus = [[String:Any]]()
         
         for result in allGameAlerts{
-            let alert:[String:Any] = ["id":result.id,"coinName":result.coinAbbName,"price":result.inputPrice,"status":result.switchStatus,"isGreater":result.compareStatus]
+            let alert:[String:Any] = ["alert_id":result.id,"coinName":result.coinAbbName,"price":result.inputPrice,"status":result.switchStatus,"isGreater":result.compareStatus]
             alertStatus.append(alert)
         }
         
         if alertStatus.count != 0{
             let body:[String:Any] = ["email":email,"token":certificateToken,"user_id": userID,"alerts":alertStatus]
             URLServices.fetchInstance.passServerData(urlParameters: ["game","changeAlertNotifications"], httpMethod: "POST", parameters: body) { (response, success) in
+                
+                print(response)
                 if success{}
             }
         }
@@ -600,16 +604,13 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         if json["success"].bool!{
             for result in json["data"].array!{
                 realm.beginWrite()
-                let id = result["_id"].int ?? 0
+                let id = result["alert_id"].int ?? 0
                 let coinName = result["coin_name"].string ?? "null"
                 let coinAbbName = result["coin_name"].string ?? "null"
                 let comparePice = result["price"].double ?? 0
                 let compareStatus = result["isgreater"].int ?? 0
                 let switchStatus = result["status"].bool ?? true
-                
-                print(result)
-                
-                
+
                 let realmData:[Any] = [id,coinName,coinAbbName,comparePice,compareStatus,switchStatus,Date()]
                 if realm.object(ofType: GameAlertObject.self, forPrimaryKey: id) == nil {
                     realm.create(GameAlertObject.self, value: realmData)

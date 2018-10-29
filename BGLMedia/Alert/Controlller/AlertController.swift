@@ -62,18 +62,21 @@ class AlertController: UIViewController,UITableViewDelegate,UITableViewDataSourc
                 coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName + "' ")
             }
             
-            for value in coinNameResults{
-                var alertResults = alertResult()
-                let speCoin = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
-                alertResults.isExpanded = false
-                alertResults.coinAbbName = value.coinAbbName
-                alertResults.coinName = value.coinName
-                for result in speCoin{
-                    alertResults.avaliable = result.available
-                    alertResults.name.append(result)
+            if results.count > 0{
+                for value in coinNameResults{
+                    var alertResults = alertResult()
+                    let speCoin = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
+                    alertResults.isExpanded = false
+                    alertResults.coinAbbName = value.coinAbbName
+                    alertResults.coinName = value.coinName
+                    for result in speCoin{
+                        alertResults.avaliable = result.available
+                        alertResults.name.append(result)
+                    }
+                    allResult.append(alertResults)
                 }
-                allResult.append(alertResults)
             }
+            
             return allResult
         }
     }
