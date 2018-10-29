@@ -12,6 +12,7 @@ import SwiftKeychainWrapper
 import SwiftyJSON
 
 class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
+    let factor = UIScreen.main.bounds.width/375
     var image = AppImage()
 
     let cryptoCompareClient = CryptoCompareClient()
@@ -70,17 +71,98 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        DispatchQueue.main.async(execute: {
-            self.walletList.switchRefreshHeader(to: .refreshing)
-        })
-        
-        //will refresh the coins' price every 10 sec
-        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in self.updateCells() }
+        if gameUser != nil {
+            setupTimer()
+        }
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         timer.invalidate()
+    }
+    
+    private func setupTimer() {
+        //will refresh the coins' price every 10 sec
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in self.updateCells() }
+    }
+    
+    func checkLoginStatus() {
+        if !UserDefaults.standard.bool(forKey: "isLoggedIn"){
+            let login = LoginController(usedPlace: 0)
+            self.present(login, animated: true, completion: nil)
+        } else {
+            checkNickname()
+        }
+    }
+    
+    private func checkNickname() {
+        if gameUser == nil {
+            let parameter = ["token": certificateToken, "email": email]
+            URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
+                if success {
+                    if response["data"]["nick_name"].stringValue == "" {
+                        self.popNicknameAlert(true)
+                    } else {
+                        self.setupGameUser(response)
+                    }
+                } else {
+                    self.popNetworkFailureAlert()
+                }
+            }
+        }
+    }
+    
+    private func popNetworkFailureAlert() {
+        let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true)
+    }
+    
+    @objc private func registerNickname(_ nickname: String) {
+        let parameter = ["token": certificateToken, "email": email, "nickname": nickname]
+        URLServices.fetchInstance.passServerData(urlParameters: ["game","register"], httpMethod: "POST", parameters: parameter) { (response, success) in
+            //print(response)
+            if response["code"].stringValue == "200" {
+                self.setupGameUser(response)
+            } else if response["code"].stringValue == "789" {
+                self.popNicknameAlert(false)
+            } else {
+                self.popNetworkFailureAlert()
+            }
+        }
+    }
+    
+    private func setupGameUser(_ json: JSON) {
+        gameUser = GameUser(json)
+        
+        DispatchQueue.main.async(execute: {
+            self.walletList.switchRefreshHeader(to: .refreshing)
+        })
+        
+        setupTimer()
+        
+        UserDefaults.standard.set(gameUser?.id, forKey: "user_id")
+    }
+    
+    private func popNicknameAlert(_ isFirst: Bool) {
+        var alert = UIAlertController()
+        if isFirst {
+            alert = UIAlertController(title: textValue(name: "nickname"), message: nil, preferredStyle: .alert)
+        } else {
+            alert = UIAlertController(title: textValue(name: "nicknameNotUnique"), message: nil, preferredStyle: .alert)
+        }
+        alert.addTextField { (textField) in  }
+        alert.addAction(UIAlertAction(title: textValue(name: "alertCancel"), style: .cancel, handler: nil))
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { [weak alert] act in
+            if let nickname =  alert?.textFields?.first?.text {
+                if nickname == "" {
+                    self.popNicknameAlert(true)
+                } else {
+                    self.registerNickname(nickname)
+                }
+            }
+        }))
+        self.present(alert, animated: true)
     }
     
     private func getTransSum(completion: @escaping (_ transSums: [TransSum], _ error: String?) -> Void) {
@@ -103,7 +185,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         guard let coins = gameUser?.coins else { return }
         for (index, _) in coins.enumerated() {
             transSums.forEach({ (transSum) in
-                if coins[index].abbrName == transSum.abbrName {
+                if coins[index].abbrName.lowercased() == transSum.abbrName.lowercased() {
                     if transSum.status == "Buy" {
                         self.gameUser?.coins[index].totalAmountOfBuy = transSum.totalAmount
                         self.gameUser?.coins[index].totalValueOfBuy = transSum.totalValue
@@ -117,21 +199,12 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     }
     
     func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
-        guard let coins = gameUser?.coins else { return }
-        //AUD is default coin, if there are other coins, need to check the current price
-        if coins.count > 0 {
-            URLServices.fetchInstance.passServerData(urlParameters: ["game","getCoinData"], httpMethod: "GET", parameters: [:]) { (response, success) in
-                
-                print(response)
-                if success {
-                    completion(response["data"].arrayValue, nil)
-                } else {
-                    completion([], textValue(name: "networkFailure"))
-                }
+        URLServices.fetchInstance.passServerData(urlParameters: ["game","getCoinData"], httpMethod: "GET", parameters: [:]) { (response, success) in
+            if success {
+                completion(response["data"].arrayValue, nil)
+            } else {
+                completion([], textValue(name: "networkFailure"))
             }
-        } else {
-            print(coins.count)
-            completion([], nil)
         }
     }
     
@@ -153,10 +226,10 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     private func updateCells() {
         getCoinsPrice { (jsonArray, error) in
-            if let err = error {
-                let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self.present(alert, animated: true)
+            if let _ = error {
+//                let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
+//                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                self.present(alert, animated: true)
             } else {
                 self.updateGameUserCoinsPrice(jsonArray)
                 DispatchQueue.main.async {
@@ -191,7 +264,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     func checkTransaction(){
         if gameUser?.coins.count == 0{
-            setUpInitialView()
+            setUpInitialView()  //won't be call, keep it just in case one day needed
         } else {
             setupView()
         }
@@ -258,7 +331,13 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
 
     @objc func refreshData(){
         checkTransaction()
-        self.walletList.beginHeaderRefreshing()
+        if !UserDefaults.standard.bool(forKey: "isLoggedIn") {
+            gameUser = nil
+            reloadNewMarketData()
+            updateSummaryTextField()
+        } else {
+            checkNickname()
+        }
     }
     
     @objc func refreshPage(){
@@ -267,25 +346,57 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     //Click Add Transaction Button Method
     @objc func changetotransaction(){
-        let transaction = GameTransactionsController()
-        transaction.gameBalanceController = self
-        transaction.hidesBottomBarWhenPushed = true
-        self.navigationController?.pushViewController(transaction, animated: true)
+        if gameUser == nil {
+            checkLoginStatus()
+        } else {
+            let transaction = GameTransactionsController()
+            transaction.gameBalanceController = self
+            transaction.hidesBottomBarWhenPushed = true
+            self.navigationController?.pushViewController(transaction, animated: true)
+        }
     }
     
     //Refresh Method
     @objc func handleRefresh(_ tableView:UITableView) {
-        getTransSum { (transSums, error) in
-            if let _ = error {
-                self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
-            } else {
-                self.updateGameUserTransSum(transSums)
-                self.updateCells()
-                self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+        if gameUser != nil {
+            getTransSum { (transSums, error) in
+                if let _ = error {
+                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+                } else {
+                    self.updateGameUserTransSum(transSums)
+                    self.updateCoinAmount()
+                    self.updateCells()
+                    self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+                }
             }
+        } else {
+            self.walletList.switchRefreshHeader(to: .normal(.none, 0.5))
+            checkLoginStatus()
         }
     }
     
+    private func updateCoinAmount(){
+        if gameUser != nil{
+            let param : [String:Any] = ["token":certificateToken,"email":email,"user_id":gameUser!.id]
+            URLServices.fetchInstance.passServerData(urlParameters: ["game","getAccount"], httpMethod: "POST", parameters: param){ (response, success) in
+                if success {
+                    let data = response["data"]
+                    if let coins = self.gameUser?.coins{
+                        var newList : [GameCoin] = []
+                        for coin in coins{
+                            var newCoin = coin
+                            let newAmount = Double(data[coin.abbrName.lowercased()].stringValue) ?? 0
+                            if newAmount > 0 {
+                                newCoin.amount = newAmount
+                                newList.append(newCoin)
+                            }
+                        }
+                        self.gameUser!.coins = newList
+                    }
+                }
+            }
+        }
+    }
 //    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
 //        if editingStyle == UITableViewCellEditingStyle.delete{
 //            let item = assetss[indexPath.row]
@@ -318,14 +429,16 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     //Select specific coins and change to detail page
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailPage = GameCoinPageController()
-        detailPage.hidesBottomBarWhenPushed = true
-//        let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
-//        coinDetail = cell.selectCoin
-        detailPage.coinDetail = gameUser?.coins[indexPath.row]
-        detailPage.gameBalanceController = self
-        detailPage.coinDetailController.alertControllers.status = "detailPage"
-        navigationController?.pushViewController(detailPage, animated: true)
+        if gameUser != nil {
+            let detailPage = GameCoinPageController()
+            detailPage.hidesBottomBarWhenPushed = true
+            //        let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
+            //        coinDetail = cell.selectCoin
+            detailPage.coinDetail = gameUser?.coins[indexPath.row]
+            detailPage.gameBalanceController = self
+            detailPage.coinDetailController.alertControllers.status = "detailPage"
+            navigationController?.pushViewController(detailPage, animated: true)
+        }
     }
     
     func setUpBasicView(){
@@ -396,16 +509,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     //Set Up View Layout
     func setupView(){
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
-        // modified
-        let buttonHeight:CGFloat = 24
-        let buttonWidth:CGFloat = 24
-        let button = ToRankPageButton(width: buttonWidth, height: buttonHeight,parentController: self)
-        let navigationRankButton = UIBarButtonItem(customView: button)
-        navigationRankButton.customView?.heightAnchor.constraint(equalToConstant: buttonHeight).isActive = true
-        navigationRankButton.customView?.widthAnchor.constraint(equalToConstant: buttonWidth).isActive = true
-        self.navigationItem.setRightBarButton(navigationRankButton, animated: true)
         
-        let factor = view.frame.width/375
         totalLabel.text = textValue(name:"gameBalance")
         unrealizedLabel.setTitle(textValue(name: "hintUnrealizedTitle"), for: .normal)
         realizedLabel.setTitle(textValue(name: "hintRealizedTitle"), for: .normal)
@@ -428,6 +532,11 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         realizedView.addSubview(realizedLabel)
         realizedView.addSubview(unrealizedResult)
         realizedView.addSubview(realizedResult)
+        
+        // modified
+        totalProfitView.addSubview(toRankButton)
+        totalProfitView.addConstraintsWithFormat(format: "H:[v0]-\(15*factor)-|", views: toRankButton)
+        totalProfitView.addConstraintsWithFormat(format: "V:[v0]-\(15*factor)-|", views: toRankButton)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
@@ -705,5 +814,13 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         tableView.delegate = self
         tableView.dataSource = self
         return tableView
+    }()
+    
+    lazy var toRankButton: ToRankPageButton = {
+        let buttonHeight:CGFloat = 24 * factor
+        let buttonWidth:CGFloat = 24 * factor
+        let button = ToRankPageButton(width: buttonWidth, height: buttonHeight,parentController: self)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 }

@@ -184,6 +184,7 @@ otherHosts = "Other Hosts";
 allHostStr = "All Hosts";
 
 popAlertTitle = "Add This Event To Your Calendar?";
+alertCancel = "Cancel";
 alertNo = "No";
 alertYes = "Yes";
 alertSuccess = "Success!";
@@ -452,8 +453,8 @@ rankPopWindow_Total = "Total";
 //StopLoss/takeProfit
 stopLoss_title = "Stop Loss/Take Profit Setting";
 stopLoss_buttonTitle = "Stop Loss/Take Profit";
-stopLoss_soldWhenGreater = "Sold When >";
-stopLoss_soldWhenLesser = "Sold When <";
+stopLoss_soldWhenGreater = "Take Profit Price";
+stopLoss_soldWhenLesser = "Stop Loss Price";
 stopLoss_setButton = "Set";
 stopLoss_editButton = "Edit";
 
@@ -473,6 +474,14 @@ amount = "Amount";
 stop_loss = "Stop Loss";
 take_profit = "Take Profit";
 status = "Status";
+coin_name = "Coin Name";
+expected_profit = "Expected Profit";
+expected_loss = "Expected Loss";
 
 
 Huobi_Au = "Huobi Australia";
+
+// Asset Menu
+asset_menu_wallet = "Wallet";
+asset_menu_game = "Trading Game";
+asset_title = "Asset";

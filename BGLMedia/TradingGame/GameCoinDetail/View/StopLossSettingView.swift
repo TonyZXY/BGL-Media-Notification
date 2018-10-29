@@ -59,10 +59,10 @@ class StopLossSettingView : UIView{
     }
     
     // Stop loss info section
-    private lazy var coinNameFixed:UILabel = UILabel(text: "Coin Name :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
-    private lazy var coinAmountFixed:UILabel = UILabel(text: "Amount :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
-    private lazy var expectLossFixed:UILabel = UILabel(text: "Expected Loss :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
-    private lazy var expectProfitFixed:UILabel = UILabel(text: "Expected Profit :", font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
+    private lazy var coinNameFixed:UILabel = UILabel(text: textValue(name: "coin_name"), font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
+    private lazy var coinAmountFixed:UILabel = UILabel(text: textValue(name: "amount"), font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
+    private lazy var expectLossFixed:UILabel = UILabel(text: textValue(name: "expected_loss"), font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
+    private lazy var expectProfitFixed:UILabel = UILabel(text: textValue(name: "expected_profit"), font: UIFont.semiBoldFont(14*factor), textColor: ThemeColor().textGreycolor())
     
     lazy var coinBoughtAvgLabel:UILabel = UILabel(text: String(format: "%@ : %@", "Bought average", "--"), font: UIFont.semiBoldFont(12*factor), textColor: ThemeColor().textGreycolor())
     lazy var coinSinglePriceLabel:UILabel = UILabel(text: "--", font: UIFont.regularFont(25*factor), textColor: ThemeColor().darkBlackColor())
@@ -345,6 +345,16 @@ class StopLossSettingView : UIView{
         return false
     }
     
+    private func calculateAmount(){
+        let percentage = Double(slider.value)
+        let amountValue = percentage/100 * (coinDetail?.amount ?? 0)
+        if percentage == 100{
+            amountTextField.text = "\(coinDetail?.amount ?? 0)"
+        }else{
+            amountTextField.text = "\(amountValue.floorTo(decimalLimit: 8))"
+        }
+    }
+    
     @objc func sliderValueChanged(_ slider: UISlider){
         let sliderStep :Float = 10
         if sliderStep > 0 {
@@ -355,8 +365,8 @@ class StopLossSettingView : UIView{
         // change percentage field value
         percentageTextField.text = "\(slider.value)"
         
-        let amountValue = Double(slider.value/100) * (coinDetail?.amount ?? 0)
-        amountTextField.text = "\(amountValue)"
+        calculateAmount()
+
         calculateExpectProfit()
         calculateExpectLoss()
         // change the border of amountTextField to normal
@@ -393,8 +403,9 @@ class StopLossSettingView : UIView{
                 // set up field
                 textField.text = value
                 slider.value = Float(percentage)
-                let amountValue = percentage/100 * (coinDetail?.amount ?? 0)
-                amountTextField.text = "\(amountValue)"
+                
+                calculateAmount()
+                
                 calculateExpectProfit()
                 calculateExpectLoss()
                 

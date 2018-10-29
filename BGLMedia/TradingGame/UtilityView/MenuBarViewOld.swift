@@ -20,7 +20,7 @@ protocol MenuBarViewDelegate {
     to use the class
     instatiate it with [String] parameter and assign delegate to controller
  */
-class MenuBarView : UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
+class MenuBarViewOld : UIView,UICollectionViewDelegate,UICollectionViewDataSource,UICollectionViewDelegateFlowLayout{
     
     var customDelegate : MenuBarViewDelegate?
     let factor = UIScreen.main.bounds.width/375

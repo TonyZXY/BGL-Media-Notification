@@ -122,7 +122,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     private let transactionFeeLabel: UILabel = {
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
-        label.text = textValue(name: "transactionFee") + ": 1%"
+        label.text = textValue(name: "transactionFee") + ": 0.2%"
         label.textAlignment = .right
         return label
     }()
@@ -195,6 +195,11 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             } else {
                 //for selling
                     amount = balance * Double(slider.value) / 100
+            }
+            if slider.value == 100 {
+                amount = balance
+            }else{
+                amount = amount.floorTo(decimalLimit: 8)
             }
             number.text = "\(amount)"
             newTransaction?.amount = amount

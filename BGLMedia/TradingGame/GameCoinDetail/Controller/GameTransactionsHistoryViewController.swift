@@ -70,7 +70,7 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
                 completion(false)
             } else {
                 jsonArray.forEach({ (json) in
-                    if self.coinDetail?.abbrName == json["coin_add_name"].stringValue {
+                    if self.coinDetail?.abbrName.lowercased() == json["coin_add_name"].stringValue.lowercased() {
                         self.transactions.append(self.fillTransactionDataWith(json))
                     }
                 })
@@ -107,9 +107,10 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
         let object = transactions[indexPath.row]
         //Create buy transaction cell
-        if object.status == "Buy"{
+        if object.status.lowercased() == "Buy".lowercased(){
             let cell = tableView.dequeueReusableCell(withIdentifier: "BuyHistory", for: indexPath) as! HistoryTableViewCell
             cell.historyView.layer.borderWidth = 1
             cell.historyView.layer.cornerRadius = 8
@@ -154,7 +155,7 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
             let dateFormatter = DateFormatter()
             dateFormatter.dateFormat = "MMM d, yyyy, h:ma"
             return cell
-        } else if object.status == "Sell"{
+        } else if object.status.lowercased() == "Sell".lowercased(){
             //Create sell transaction cell
             let cell = tableView.dequeueReusableCell(withIdentifier: "SellHistory", for: indexPath) as! HistoryTableViewCell
             cell.historyView.layer.cornerRadius = 8

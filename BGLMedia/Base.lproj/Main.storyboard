@@ -26,10 +26,10 @@
             </objects>
             <point key="canvasLocation" x="132" y="-90"/>
         </scene>
-        <!--Wallet Controller-->
+        <!--Asset Controller-->
         <scene sceneID="g3K-Nq-zyc">
             <objects>
-                <viewController id="A4p-NS-O0W" customClass="WalletController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController id="A4p-NS-O0W" customClass="AssetController" customModule="BGLMedia" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="dTU-nN-lcr">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="641"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

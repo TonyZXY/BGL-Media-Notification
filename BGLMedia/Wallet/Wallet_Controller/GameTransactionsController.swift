@@ -261,7 +261,6 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             "note":self.newTransaction.additional,
             ]
         let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID, "transaction": trans]
-        print(parameter)
         if String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
             URLServices.fetchInstance.passServerData(urlParameters: ["game","addTransaction"], httpMethod: "POST", parameters: parameter) { (response, success) in
                 if success {
@@ -321,7 +320,6 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
             gameBalanceController?.getCoinsPrice(completion: { (jsonArray, error) in
                 
-                print(jsonArray)
                 if let err = error {
                     let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))

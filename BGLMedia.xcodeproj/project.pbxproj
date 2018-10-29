@@ -12,7 +12,7 @@
 		240DC2402170530100702B31 /* GameCoinPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23E2170530100702B31 /* GameCoinPageController.swift */; };
 		240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23F2170530100702B31 /* GameCoinDetailController.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
-		241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* MenuBarView.swift */; };
+		241082EC2164867900A12DF1 /* MenuBarViewOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* MenuBarViewOld.swift */; };
 		2442BE69217ED841000100BE /* StopLossDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE67217ED841000100BE /* StopLossDisplayView.swift */; };
 		2442BE6A217ED841000100BE /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE68217ED841000100BE /* StopLossSettingView.swift */; };
 		2442BE6C217ED84D000100BE /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6B217ED84D000100BE /* StopLoss.swift */; };
@@ -24,6 +24,14 @@
 		2442BE78217ED8A7000100BE /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE77217ED8A7000100BE /* RankModel.swift */; };
 		24476084216D889D00A769E6 /* GameGeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476083216D889D00A769E6 /* GameGeneralController.swift */; };
 		245E9A812167427A004577E0 /* PopWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245E9A802167427A004577E0 /* PopWindowController.swift */; };
+		24DB1878218047150064349F /* AssetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB1877218047150064349F /* AssetController.swift */; };
+		24DB1895218048170064349F /* MenuPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB188D218048170064349F /* MenuPage.swift */; };
+		24DB1896218048170064349F /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB188E218048170064349F /* MenuBarView.swift */; };
+		24DB1897218048170064349F /* MenuCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB188F218048170064349F /* MenuCellView.swift */; };
+		24DB1898218048170064349F /* PageCellView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB1890218048170064349F /* PageCellView.swift */; };
+		24DB1899218048170064349F /* MenuPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB1891218048170064349F /* MenuPageView.swift */; };
+		24DB189A218048170064349F /* BasicCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB1893218048170064349F /* BasicCollectionViewCell.swift */; };
+		24DB189B218048170064349F /* BasicView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB1894218048170064349F /* BasicView.swift */; };
 		2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */; };
 		2D52AE9820E46E1A00018FC0 /* GloabalController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB820E46E1600018FC0 /* GloabalController.swift */; };
 		2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D52ADB920E46E1600018FC0 /* DetailController.swift */; };
@@ -98,7 +106,6 @@
 		2D953AD0217EDD1400A1A7C5 /* GameAlertTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACD217EDD1400A1A7C5 /* GameAlertTableCell.swift */; };
 		2D953AD1217EDD1400A1A7C5 /* GameAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACE217EDD1400A1A7C5 /* GameAlertController.swift */; };
 		2D953AD2217EDD1400A1A7C5 /* GameAlertManageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953ACF217EDD1400A1A7C5 /* GameAlertManageController.swift */; };
-		2D953AD4217EDD5F00A1A7C5 /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */; };
 		3D1332EA20E9FA5700D3CAE6 /* SwiftyJSON.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */; };
 		3D1332EB20E9FA5700D3CAE6 /* YouTubePlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */; };
 		3D1332EC20E9FA5700D3CAE6 /* RealmSwift.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */; };
@@ -233,6 +240,7 @@
 		B9F4F33D216590460038AE6B /* GameModels.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F33C216590460038AE6B /* GameModels.swift */; };
 		B9F4F33F2165D5AB0038AE6B /* GameBalanceController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */; };
 		B9F4F34521705B050038AE6B /* GameTransactionsHistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F34421705B050038AE6B /* GameTransactionsHistoryViewController.swift */; };
+		B9F4F3592180225E0038AE6B /* RankApiReader.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9F4F3582180225E0038AE6B /* RankApiReader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -256,7 +264,7 @@
 		240DC23F2170530100702B31 /* GameCoinDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinDetailController.swift; sourceTree = "<group>"; };
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
 		240F697E2148D5710072E158 /* GenuineNewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenuineNewsObject.swift; sourceTree = "<group>"; };
-		241082EB2164867900A12DF1 /* MenuBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBarView.swift; path = BGLMedia/TradingGame/UtilityView/MenuBarView.swift; sourceTree = SOURCE_ROOT; };
+		241082EB2164867900A12DF1 /* MenuBarViewOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBarViewOld.swift; path = BGLMedia/TradingGame/UtilityView/MenuBarViewOld.swift; sourceTree = SOURCE_ROOT; };
 		2442BE67217ED841000100BE /* StopLossDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossDisplayView.swift; sourceTree = "<group>"; };
 		2442BE68217ED841000100BE /* StopLossSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossSettingView.swift; sourceTree = "<group>"; };
 		2442BE6B217ED84D000100BE /* StopLoss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLoss.swift; sourceTree = "<group>"; };
@@ -268,6 +276,14 @@
 		2442BE77217ED8A7000100BE /* RankModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankModel.swift; sourceTree = "<group>"; };
 		24476083216D889D00A769E6 /* GameGeneralController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = GameGeneralController.swift; path = BGLMedia/TradingGame/GameCoinDetail/Controller/GameGeneralController.swift; sourceTree = SOURCE_ROOT; };
 		245E9A802167427A004577E0 /* PopWindowController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopWindowController.swift; sourceTree = "<group>"; };
+		24DB1877218047150064349F /* AssetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetController.swift; sourceTree = "<group>"; };
+		24DB188D218048170064349F /* MenuPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuPage.swift; sourceTree = "<group>"; };
+		24DB188E218048170064349F /* MenuBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
+		24DB188F218048170064349F /* MenuCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuCellView.swift; sourceTree = "<group>"; };
+		24DB1890218048170064349F /* PageCellView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PageCellView.swift; sourceTree = "<group>"; };
+		24DB1891218048170064349F /* MenuPageView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuPageView.swift; sourceTree = "<group>"; };
+		24DB1893218048170064349F /* BasicCollectionViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicCollectionViewCell.swift; sourceTree = "<group>"; };
+		24DB1894218048170064349F /* BasicView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = BasicView.swift; sourceTree = "<group>"; };
 		2D3AF496211C02BD00F5AA51 /* AboutAppViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AboutAppViewController.swift; sourceTree = "<group>"; };
 		2D52ADB520E46E1600018FC0 /* BGLMedia.entitlements */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.entitlements; path = BGLMedia.entitlements; sourceTree = "<group>"; };
 		2D52ADB820E46E1600018FC0 /* GloabalController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GloabalController.swift; sourceTree = "<group>"; };
@@ -347,7 +363,6 @@
 		2D953ACD217EDD1400A1A7C5 /* GameAlertTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertTableCell.swift; path = BGLMedia/Alert/Controlller/GameAlertTableCell.swift; sourceTree = SOURCE_ROOT; };
 		2D953ACE217EDD1400A1A7C5 /* GameAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertController.swift; path = BGLMedia/Alert/Controlller/GameAlertController.swift; sourceTree = SOURCE_ROOT; };
 		2D953ACF217EDD1400A1A7C5 /* GameAlertManageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = GameAlertManageController.swift; path = BGLMedia/Alert/Controlller/GameAlertManageController.swift; sourceTree = SOURCE_ROOT; };
-		2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = RankApiReader.swift; path = "/Users/zhangzeyao/Documents/BlockChain Project/BGLMedia/BGLMedia/TradingGame/Ranking/ApiReader/RankApiReader.swift"; sourceTree = "<absolute>"; };
 		3D1332E320E9FA5600D3CAE6 /* SwiftyJSON.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SwiftyJSON.framework; path = Carthage/Build/iOS/SwiftyJSON.framework; sourceTree = "<group>"; };
 		3D1332E420E9FA5600D3CAE6 /* YouTubePlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = YouTubePlayer.framework; path = Carthage/Build/iOS/YouTubePlayer.framework; sourceTree = "<group>"; };
 		3D1332E520E9FA5600D3CAE6 /* RealmSwift.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RealmSwift.framework; path = Carthage/Build/iOS/RealmSwift.framework; sourceTree = "<group>"; };
@@ -483,6 +498,7 @@
 		B9F4F33C216590460038AE6B /* GameModels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameModels.swift; sourceTree = "<group>"; };
 		B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameBalanceController.swift; sourceTree = "<group>"; };
 		B9F4F34421705B050038AE6B /* GameTransactionsHistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GameTransactionsHistoryViewController.swift; sourceTree = "<group>"; };
+		B9F4F3582180225E0038AE6B /* RankApiReader.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankApiReader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -509,7 +525,7 @@
 		241051BE217EBFC70064B676 /* ApiReader */ = {
 			isa = PBXGroup;
 			children = (
-				2D953AD3217EDD5F00A1A7C5 /* RankApiReader.swift */,
+				B9F4F3582180225E0038AE6B /* RankApiReader.swift */,
 			);
 			path = ApiReader;
 			sourceTree = "<group>";
@@ -565,8 +581,9 @@
 		2451CFAE216C3E88007AC6A5 /* UtilityView */ = {
 			isa = PBXGroup;
 			children = (
+				24DB188B218048170064349F /* MenuPage-master */,
 				245E9A802167427A004577E0 /* PopWindowController.swift */,
-				241082EB2164867900A12DF1 /* MenuBarView.swift */,
+				241082EB2164867900A12DF1 /* MenuBarViewOld.swift */,
 			);
 			name = UtilityView;
 			path = BGLMedia/TradingGame/UtilityView;
@@ -609,6 +626,36 @@
 				2442BE6B217ED84D000100BE /* StopLoss.swift */,
 			);
 			path = Model;
+			sourceTree = "<group>";
+		};
+		24DB188B218048170064349F /* MenuPage-master */ = {
+			isa = PBXGroup;
+			children = (
+				24DB188C218048170064349F /* MenuPage */,
+				24DB1892218048170064349F /* SupportFiles */,
+			);
+			path = "MenuPage-master";
+			sourceTree = "<group>";
+		};
+		24DB188C218048170064349F /* MenuPage */ = {
+			isa = PBXGroup;
+			children = (
+				24DB188D218048170064349F /* MenuPage.swift */,
+				24DB188E218048170064349F /* MenuBarView.swift */,
+				24DB188F218048170064349F /* MenuCellView.swift */,
+				24DB1890218048170064349F /* PageCellView.swift */,
+				24DB1891218048170064349F /* MenuPageView.swift */,
+			);
+			path = MenuPage;
+			sourceTree = "<group>";
+		};
+		24DB1892218048170064349F /* SupportFiles */ = {
+			isa = PBXGroup;
+			children = (
+				24DB1893218048170064349F /* BasicCollectionViewCell.swift */,
+				24DB1894218048170064349F /* BasicView.swift */,
+			);
+			path = SupportFiles;
 			sourceTree = "<group>";
 		};
 		2D3AF493211BBEA900F5AA51 /* Help */ = {
@@ -1077,6 +1124,7 @@
 				57355C3220F718CC002E70E4 /* WalletController.swift */,
 				57355C3320F718CC002E70E4 /* SearchCoinController.swift */,
 				57663B562134E2DA00E09754 /* HintAlertController.swift */,
+				24DB1877218047150064349F /* AssetController.swift */,
 			);
 			path = Wallet_Controller;
 			sourceTree = "<group>";
@@ -1502,9 +1550,10 @@
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,
 				B959EF5B2146172500930DD6 /* FontController.swift in Sources */,
 				57BBAB5221083DF800984AA4 /* NewsTableViewCell.swift in Sources */,
-				2D953AD4217EDD5F00A1A7C5 /* RankApiReader.swift in Sources */,
+				B9F4F3592180225E0038AE6B /* RankApiReader.swift in Sources */,
 				2D953AD0217EDD1400A1A7C5 /* GameAlertTableCell.swift in Sources */,
 				2442BE70217ED88E000100BE /* RankTableViewCell.swift in Sources */,
+				24DB1899218048170064349F /* MenuPageView.swift in Sources */,
 				B9F4F3392161E0EE0038AE6B /* GameTransactionsController.swift in Sources */,
 				2D953AD1217EDD1400A1A7C5 /* GameAlertController.swift in Sources */,
 				2D52AF1D20E46E1A00018FC0 /* Params.swift in Sources */,
@@ -1563,7 +1612,7 @@
 				5719D5E42122B5D10048B579 /* ListViewCell.swift in Sources */,
 				B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */,
 				57E67D07214089F1005F290E /* NewsMenuBar.swift in Sources */,
-				241082EC2164867900A12DF1 /* MenuBarView.swift in Sources */,
+				241082EC2164867900A12DF1 /* MenuBarViewOld.swift in Sources */,
 				2D52AEE020E46E1A00018FC0 /* ScientificMethod.swift in Sources */,
 				240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */,
 				2D52AEAF20E46E1A00018FC0 /* news_app_for_blockchain.xcdatamodeld in Sources */,
@@ -1586,6 +1635,7 @@
 				245E9A812167427A004577E0 /* PopWindowController.swift in Sources */,
 				57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */,
 				2D52AEA320E46E1A00018FC0 /* DetailMenuBar.swift in Sources */,
+				24DB1897218048170064349F /* MenuCellView.swift in Sources */,
 				2D52AEA920E46E1A00018FC0 /* HistoryPoint.swift in Sources */,
 				57355C1220F7189D002E70E4 /* APIServices.swift in Sources */,
 				2D52AEA420E46E1A00018FC0 /* alertTableViewCell.swift in Sources */,
@@ -1600,15 +1650,20 @@
 				57BBAB6A210962C300984AA4 /* GlobalFilterCollectionView.swift in Sources */,
 				57355C8720F71931002E70E4 /* ThemeColor.swift in Sources */,
 				578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */,
+				24DB1895218048170064349F /* MenuPage.swift in Sources */,
+				24DB1896218048170064349F /* MenuBarView.swift in Sources */,
 				2442BE71217ED88E000100BE /* RankPopWindowContent.swift in Sources */,
 				57BBAB6B210962C300984AA4 /* WatchListCell.swift in Sources */,
 				57650895210D9AFE007368CC /* Transactions.swift in Sources */,
 				57BAD86B21045ACF00973B45 /* exchangeController.swift in Sources */,
+				24DB1878218047150064349F /* AssetController.swift in Sources */,
 				2D52AEFF20E46E1A00018FC0 /* AlertCoinName.swift in Sources */,
 				2D52AF1B20E46E1A00018FC0 /* CandleStickChartViewController.swift in Sources */,
 				2D52AF1120E46E1A00018FC0 /* NewsInFlashNewsRealm.swift in Sources */,
+				24DB189B218048170064349F /* BasicView.swift in Sources */,
 				240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */,
 				B9F4F33F2165D5AB0038AE6B /* GameBalanceController.swift in Sources */,
+				24DB1898218048170064349F /* PageCellView.swift in Sources */,
 				57355C5420F718CC002E70E4 /* MarketCapEndpoint.swift in Sources */,
 				2D52AE9A20E46E1A00018FC0 /* AlertController.swift in Sources */,
 				5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */,
@@ -1677,6 +1732,7 @@
 				57BBAB66210962C300984AA4 /* MarketsController.swift in Sources */,
 				2D52AF2220E46E1A00018FC0 /* XAxisLabelView.swift in Sources */,
 				57BAD9D1210503A100973B45 /* ShareNewsFlashControllerV2.swift in Sources */,
+				24DB189A218048170064349F /* BasicCollectionViewCell.swift in Sources */,
 				2D52AEEA20E46E1A00018FC0 /* MarketFilterCollectionView.swift in Sources */,
 				57355C6220F718CC002E70E4 /* SaveStructToRealmObjects.swift in Sources */,
 				2D52AEA720E46E1A00018FC0 /* HistoryLine.swift in Sources */,
