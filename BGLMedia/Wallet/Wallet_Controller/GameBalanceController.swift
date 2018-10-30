@@ -186,7 +186,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         for (index, _) in coins.enumerated() {
             transSums.forEach({ (transSum) in
                 if coins[index].abbrName.lowercased() == transSum.abbrName.lowercased() {
-                    if transSum.status == "Buy" {
+                    if transSum.status.lowercased() == "buy" {
                         self.gameUser?.coins[index].totalAmountOfBuy = transSum.totalAmount
                         self.gameUser?.coins[index].totalValueOfBuy = transSum.totalValue
                     } else {
