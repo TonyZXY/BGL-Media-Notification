@@ -250,7 +250,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
 
         let newDate = self.newTransaction.date + " " + self.newTransaction.time
         let trans:[String:Any] = [
-            "status":newTransaction.status,
+            "status":newTransaction.status.lowercased(),
             "coinName":newTransaction.coinName,
             "coinAddName":newTransaction.coinAbbName,
             "exchangeName":newTransaction.exchangeName,
@@ -267,6 +267,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                     self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
                     self.gameBalanceController?.walletList.reloadData()
                     self.navigationController?.popViewController(animated: true)
+                    self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
                 } else {
                     let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
