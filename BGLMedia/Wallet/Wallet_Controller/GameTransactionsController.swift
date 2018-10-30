@@ -108,6 +108,9 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             cell.backgroundColor = color.themeColor()
             cell.marketLabel.text = textValue(name: "exchangeForm")
             cell.market.text = newTransaction.exchangeName
+            cell.isUserInteractionEnabled = false
+            cell.selectionStyle = .none
+            cell.accessoryType = .none
             return cell
         } else if indexPath.row == 2{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[2], for: indexPath) as! TransTradePairsCell
@@ -120,6 +123,9 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                     cell.trade.text = newTransaction.coinAbbName + "/" + newTransaction.tradingPairsName
                 }
             }
+            cell.isUserInteractionEnabled = false
+            cell.selectionStyle = .none
+            cell.accessoryType = .none
             return cell
         }else if indexPath.row == 3{
             let cell = tableView.dequeueReusableCell(withIdentifier: cells[3], for: indexPath) as! TransPriceCell

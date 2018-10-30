@@ -31,7 +31,7 @@ class GameAlertTableCell: UITableViewCell {
             let compareLabels = "1 " + (object?.coinAbbName)! + " " + compare + " " +  Extension.method.scientificMethod(number: (object?.inputPrice)!) + " AUD"
             let exchangeName = "Huobi Australia"
             
-            let coinDetail = exchangeName + " - " + (object?.coinAbbName)! + "/AUD"
+            let coinDetail = exchangeName + " - " + (object?.coinAbbName.uppercased())! + "/AUD"
             let dateToString = DateFormatter()
             dateToString.dateFormat = "EEEE, dd MMMM yyyy HH:mm"
             dateToString.locale = Locale(identifier: "en_AU")

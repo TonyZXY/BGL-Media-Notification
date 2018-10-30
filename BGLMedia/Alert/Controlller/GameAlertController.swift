@@ -41,11 +41,13 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
             var allResult = [GameAlertResult]()
             let results = try!Realm().objects(GameAlertObject.self)
             var coinNameResults = try!Realm().objects(alertCoinNames.self)
+            print(coinNameResults)
+            print(coinName)
             if coinName.status{
-                coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName + "' ")
+                coinNameResults = coinNameResults.filter("coinAbbName = '" + coinName.coinAbbName.lowercased() + "' ")
             }
             
-            if results.count > 0{
+            if results.count > 0 {
                 for value in coinNameResults{
                     var gameAlertResult = GameAlertResult()
                     let specificCoins = results.filter("coinAbbName = '" + value.coinAbbName + "' ")
@@ -227,6 +229,7 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
     override func viewDidLoad() {
         super.viewDidLoad()
         alerts = allAlert
+        print(alerts)
         //        view.backgroundColor = ThemeColor().blueColor()
         NotificationCenter.default.addObserver(self, selector: #selector(refreshGameNotificationStatus), name:NSNotification.Name(rawValue: "refreshNotificationStatus"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(addAlerts), name: NSNotification.Name(rawValue: "addGameAlert"), object: nil)
@@ -271,7 +274,7 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         let coinImage = UIImageView(image: UIImage(named: "navigation_arrow.png"))
         coinImage.frame = CGRect(x: 0, y: 0, width: 30*factor!, height: 30*factor!)
         coinImage.clipsToBounds = true
-        coinImage.coinImageSetter(coinName: alerts[section].name[0].coinAbbName, width: 30*factor!, height: 30*factor!, fontSize: 5*factor!)
+        coinImage.coinImageSetter(coinName: alerts[section].name[0].coinAbbName.uppercased(), width: 30*factor!, height: 30*factor!, fontSize: 5*factor!)
         coinImage.contentMode = UIViewContentMode.scaleAspectFit
         coinImage.translatesAutoresizingMaskIntoConstraints = false
         
@@ -279,7 +282,11 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         coinLabel.translatesAutoresizingMaskIntoConstraints = false
         coinLabel.textColor = ThemeColor().whiteColor()
         coinLabel.font = UIFont.regularFont(17*factor!)
-        coinLabel.text = alerts[section].coinName
+        if coinName.status{
+            coinLabel.text = coinName.coinName
+        } else{
+            coinLabel.text = alerts[section].coinName.uppercased()
+        }
         
         let avaliableLabel = UILabel()
         avaliableLabel.textColor = ThemeColor().redColor()
@@ -367,6 +374,7 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         alertEdit.gameAlertObject.inputPrice = alerts[indexPath.section].name[indexPath.row].inputPrice
         alertEdit.gameAlertObject.id =   alerts[indexPath.section].name[indexPath.row].id
         alertEdit.status = "Update"
+        alertEdit.coinName = coinName
         navigationController?.pushViewController(alertEdit, animated: true)
     }
     
@@ -534,11 +542,14 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         hud.show(in: (self.parent?.view)!)
         URLServices.fetchInstance.passServerData(urlParameters:["game","getAlertList"],httpMethod:"POST",parameters:body){(response, pass) in
             if pass{
+                print(response)
                 let responseSuccess = response["success"].bool ?? false
                 if responseSuccess{
                     self.writeRealm(json:response){(pass) in
                         if pass{
                             DispatchQueue.main.async {
+                                
+                                
                                 self.alerts = self.allAlert
                                 self.alertTableView.reloadData()
                                 DispatchQueue.main.asyncAfter(deadline: .now()) {
@@ -603,11 +614,13 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
         let realm = try! Realm()
         if json["success"].bool!{
             for result in json["data"].array!{
+                print("111")
+                print(result)
                 realm.beginWrite()
                 let id = result["alert_id"].int ?? 0
                 let coinName = result["coin_name"].string ?? "null"
                 let coinAbbName = result["coin_name"].string ?? "null"
-                let comparePice = result["price"].double ?? 0
+                let comparePice = Double(result["price"].string ?? "null") ?? 0
                 let compareStatus = result["isgreater"].int ?? 0
                 let switchStatus = result["status"].bool ?? true
 
@@ -619,9 +632,9 @@ class GameAlertController: UIViewController,UITableViewDelegate,UITableViewDataS
                 }
                 
                 if realm.object(ofType: alertCoinNames.self, forPrimaryKey: coinAbbName) == nil {
-                    realm.create(alertCoinNames.self, value: [result["coin_name"].string!,result["coin_name"].string!])
+                    realm.create(alertCoinNames.self, value: [result["coin_name"].string!.lowercased(),result["coin_name"].string!.lowercased()])
                 } else {
-                    realm.create(alertCoinNames.self, value: [result["coin_name"].string!,result["coin_name"].string!], update: true)
+                    realm.create(alertCoinNames.self, value: [result["coin_name"].string!.lowercased(),result["coin_name"].string!.lowercased()], update: true)
                 }
                 try! realm.commitWrite()
                 oldAlerts[id] = switchStatus

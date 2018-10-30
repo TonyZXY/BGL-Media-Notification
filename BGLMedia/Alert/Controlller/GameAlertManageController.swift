@@ -101,8 +101,14 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        loadPrice()
         setUpView()
 
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        let cell = gameAlertTable.cellForRow(at: IndexPath(row: 0, section: 1)) as! priceNotificationCell
+        cell.priceTextField.becomeFirstResponder()
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -142,11 +148,10 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     
     func loadPrice(){
         
-        print(gameAlertObject)
         if gameAlertObject.coinName != "" {
             APIServices.fetchInstance.getHuobiAuCoinPrice(coinAbbName: gameAlertObject.coinAbbName, tradingPairName: "AUD", exchangeName: "Huobi Australia") { (response, success) in
+                print(response)
                 if success{
-                    print("sdf")
                     let singlePrice = Double(response["tick"]["close"].string ?? "0") ?? 0
                     print(singlePrice)
                     self.sectionPrice = singlePrice
@@ -182,6 +187,9 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
             let exchangeSection = textValue(name: "exchange_alert") + textValue(name: "Huobi_Au")
             let tradingPairs =  textValue(name: "tradingPair_alert") + gameAlertObject.coinAbbName+"/AUD"
             cell.textLabel?.text = indexPath.row == 0 ?  exchangeSection : tradingPairs
+            cell.isUserInteractionEnabled = false
+            cell.selectionStyle = .none
+            cell.accessoryType = .none
             return cell
             
         } else {
@@ -190,6 +198,7 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
             cell.backgroundColor = ThemeColor().greyColor()
             cell.priceTextField.tag = indexPath.row
             cell.priceTextField.delegate = self
+            cell.priceTextField.text = "\(gameAlertObject.inputPrice)"
             cell.priceTypeLabel.text = "AUD"
             return cell
         }
@@ -228,11 +237,12 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
                 gameAlertObject.coinName = coinName.coinName
                 button.isHidden = true
             }
+            print(coinName)
             if status == "Update"{
                 button.isHidden = true
             }
             
-            coinImage.coinImageSetter(coinName: gameAlertObject.coinAbbName, width: 30 * factor, height: 30 * factor, fontSize: 5 * factor)
+            coinImage.coinImageSetter(coinName: gameAlertObject.coinAbbName.uppercased(), width: 30 * factor, height: 30 * factor, fontSize: 5 * factor)
             coinLabel.text = textValue(name: "coinName_alert") + gameAlertObject.coinName
             coinLabel.font = UIFont.regularFont(14 * factor)
             
@@ -331,8 +341,10 @@ class GameAlertManageController: UIViewController,UITableViewDelegate,UITableVie
     @objc func deleteGameAlert(){
         
         let realm = try! Realm()
-        let body:[String:Any] = ["email":email,"token":token,"alert":gameAlertObject.id]
+        let alertID:[String:Any] = ["alert_id": gameAlertObject.id]
+        let body:[String:Any] = ["email":email,"token":token,"alert":alertID]
         URLServices.fetchInstance.passServerData(urlParameters: ["game","deleteAlert"], httpMethod: "POST", parameters: body) { (response, success) in
+            print(response)
             if success{
                 let filterId = "id = " + String(self.gameAlertObject.id)
                 let filterName = "coinAbbName = '" + self.gameAlertObject.coinAbbName + "' "
