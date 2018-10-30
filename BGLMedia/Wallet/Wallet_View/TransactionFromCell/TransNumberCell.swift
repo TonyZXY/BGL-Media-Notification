@@ -14,7 +14,13 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     var gameUser: GameUser?
     var newTransaction: EachTransactions?
     var balance: Double = 0
-    var price: Double?
+    var price: Double? {
+        didSet {
+            if oldValue != price {
+                calculateCoinAmount()
+            }
+        }
+    }
     let sliderStep: Float = 10
     var coinName = "" {
         didSet {

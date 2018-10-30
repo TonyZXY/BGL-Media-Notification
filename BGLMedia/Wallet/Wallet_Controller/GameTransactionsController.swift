@@ -320,10 +320,10 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
             gameBalanceController?.getCoinsPrice(completion: { (jsonArray, error) in
                 
-                if let err = error {
-                    let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
+                if let _ = error {
+//                    let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
+//                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                    self.present(alert, animated: true)
                 } else {
                     if let coinDetail = jsonArray.first(where: { (item) -> Bool in
                         item["coin_name"].stringValue == self.newTransaction.coinAbbName.lowercased()
@@ -337,7 +337,6 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                         let index2 = IndexPath(row: 4, section: 0)
                         let cell2 = self.transactionTableView.cellForRow(at: index2) as! TransNumberCell
                         cell2.price = self.newTransaction.singlePrice
-                        cell2.calculateCoinAmount()
                     }
                 }
             })
