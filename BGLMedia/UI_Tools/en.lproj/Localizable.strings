@@ -485,3 +485,6 @@ Huobi_Au = "Huobi Australia";
 asset_menu_wallet = "Wallet";
 asset_menu_game = "Trading Game";
 asset_title = "Asset";
+
+
+ gameTrans_err_notEnoughAmount = "Not Enough Amount";

@@ -252,7 +252,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         let trans:[String:Any] = [
             "status":newTransaction.status.lowercased(),
             "coinName":newTransaction.coinName,
-            "coinAddName":newTransaction.coinAbbName,
+            "coinAddName":newTransaction.coinAbbName.lowercased(),
             "exchangeName":newTransaction.exchangeName,
             "tradingPairName":newTransaction.tradingPairsName,
             "singlePrice":newTransaction.singlePrice,
@@ -264,10 +264,19 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         if String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
             URLServices.fetchInstance.passServerData(urlParameters: ["game","addTransaction"], httpMethod: "POST", parameters: parameter) { (response, success) in
                 if success {
-                    self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
-                    self.gameBalanceController?.walletList.reloadData()
-                    self.navigationController?.popViewController(animated: true)
-                    self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
+                    if response["success"].bool == false{
+                        if response["code"].stringValue == "440" {
+                            let alert = UIAlertController(title: textValue(name: "gameTrans_err_notEnoughAmount"), message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            self.present(alert, animated: true)
+                            self.transactionButton.isUserInteractionEnabled = true
+                        }
+                    }else{
+                        self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                        self.gameBalanceController?.walletList.reloadData()
+                        self.navigationController?.popViewController(animated: true)
+                        self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
+                    }
                 } else {
                     let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
