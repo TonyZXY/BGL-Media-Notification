@@ -474,3 +474,6 @@ Huobi_Au = "火币澳洲";
 asset_menu_wallet = "钱包";
 asset_menu_game = "游戏";
 asset_title = "资产";
+
+
+  gameTrans_err_notEnoughAmount = "数额不足";

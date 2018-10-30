@@ -14,7 +14,13 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     var gameUser: GameUser?
     var newTransaction: EachTransactions?
     var balance: Double = 0
-    var price: Double?
+    var price: Double? {
+        didSet {
+            if oldValue != price {
+                calculateCoinAmount()
+            }
+        }
+    }
     let sliderStep: Float = 10
     var coinName = "" {
         didSet {
@@ -195,12 +201,13 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             } else {
                 //for selling
                     amount = balance * Double(slider.value) / 100
+                if slider.value == 100 {
+                    amount = balance
+                }else{
+                    amount = amount.floorTo(decimalLimit: 8)
+                }
             }
-            if slider.value == 100 {
-                amount = balance
-            }else{
-                amount = amount.floorTo(decimalLimit: 8)
-            }
+
             number.text = "\(amount)"
             newTransaction?.amount = amount
         }

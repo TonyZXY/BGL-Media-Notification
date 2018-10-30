@@ -256,9 +256,9 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
 
         let newDate = self.newTransaction.date + " " + self.newTransaction.time
         let trans:[String:Any] = [
-            "status":newTransaction.status,
+            "status":newTransaction.status.lowercased(),
             "coinName":newTransaction.coinName,
-            "coinAddName":newTransaction.coinAbbName,
+            "coinAddName":newTransaction.coinAbbName.lowercased(),
             "exchangeName":newTransaction.exchangeName,
             "tradingPairName":newTransaction.tradingPairsName,
             "singlePrice":newTransaction.singlePrice,
@@ -270,9 +270,19 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         if String(newTransaction.amount) != "0.0" && String(newTransaction.singlePrice) != "0.0"{
             URLServices.fetchInstance.passServerData(urlParameters: ["game","addTransaction"], httpMethod: "POST", parameters: parameter) { (response, success) in
                 if success {
-                    self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
-                    self.gameBalanceController?.walletList.reloadData()
-                    self.navigationController?.popViewController(animated: true)
+                    if response["success"].bool == false{
+                        if response["code"].stringValue == "440" {
+                            let alert = UIAlertController(title: textValue(name: "gameTrans_err_notEnoughAmount"), message: nil, preferredStyle: .alert)
+                            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                            self.present(alert, animated: true)
+                            self.transactionButton.isUserInteractionEnabled = true
+                        }
+                    }else{
+                        self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                        self.gameBalanceController?.walletList.reloadData()
+                        self.navigationController?.popViewController(animated: true)
+                        self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
+                    }
                 } else {
                     let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
                     alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
@@ -326,10 +336,10 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         if newTransaction.coinName != "" && newTransaction.exchangeName != "" && newTransaction.tradingPairsName != ""{
             gameBalanceController?.getCoinsPrice(completion: { (jsonArray, error) in
                 
-                if let err = error {
-                    let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
-                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                    self.present(alert, animated: true)
+                if let _ = error {
+//                    let alert = UIAlertController(title: err, message: nil, preferredStyle: .alert)
+//                    alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+//                    self.present(alert, animated: true)
                 } else {
                     if let coinDetail = jsonArray.first(where: { (item) -> Bool in
                         item["coin_name"].stringValue == self.newTransaction.coinAbbName.lowercased()
@@ -343,7 +353,6 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                         let index2 = IndexPath(row: 4, section: 0)
                         let cell2 = self.transactionTableView.cellForRow(at: index2) as! TransNumberCell
                         cell2.price = self.newTransaction.singlePrice
-                        cell2.calculateCoinAmount()
                     }
                 }
             })
