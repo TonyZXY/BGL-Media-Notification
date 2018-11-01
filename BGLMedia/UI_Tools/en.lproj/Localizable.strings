@@ -27,7 +27,7 @@ mainHint = "Your portfolio starts here!";
 hintLabel = "Add your first historical transaction via the + button, to track your crypto portfolio";
 
 //Assets Page
-mainBalance = "Main Portfolio Balance";
+mainBalance = "Crypto Portfolio Balance";
 totalNumber = "Number";
 totalPercent = "Percent";
 hintRealizedTitle = "Realised";
@@ -59,8 +59,8 @@ exchangeForm = "Exchange";
 tradingPairForm = "Trading Pair";
 buyPriceForm = "Buy Price(per coin)";
 sellPriceForm = "Sell Price(per coin)";
-amountBoughtForm = "Amount Bought";
-amountSoldForm = "Amount Sold";
+amountBoughtForm = "Amount to buy";
+amountSoldForm = "Amount to sell";
 buyDateForm = "Date";
 sellDateForm = "Date";
 buyTimeForm = "Time";
@@ -482,7 +482,7 @@ expected_loss = "Expected Loss";
 Huobi_Au = "Huobi Australia";
 
 // Asset Menu
-asset_menu_wallet = "Wallet";
+asset_menu_wallet = "Cryptocurrency";
 asset_menu_game = "Trading Game";
 asset_title = "Asset";
 
