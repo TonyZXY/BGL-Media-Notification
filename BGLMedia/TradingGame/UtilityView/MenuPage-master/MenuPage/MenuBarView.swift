@@ -12,8 +12,18 @@ import UIKit
 class MenuBarView: BasicView, UICollectionViewDataSource, UICollectionViewDelegate, UICollectionViewDelegateFlowLayout {
     
     private let reuseIdentifier = "MenuCell"
-    private let heightOfHorizontalBar: CGFloat = 4
-    private let padding: CGFloat = 4
+    
+    var heightOfHorizontalBar: CGFloat = 4{
+        didSet{
+            updateMenuBarCollectionViewHeightAndHorizontalBarHeight()
+        }
+    }
+    
+    var padding: CGFloat = 4{
+        didSet{
+            updateMenuBarCollectionViewHeightAndHorizontalBarHeight()
+        }
+    }
     
     internal var menuPageView: MenuPageView?
     //default colors
@@ -126,7 +136,7 @@ class MenuBarView: BasicView, UICollectionViewDataSource, UICollectionViewDelega
         } else  if height <= heightOfHorizontalBar {
             horizontalBarViewHeightAnchorConstrain?.constant = height
             menuBarCollectionViewHeightAnchorConstraint?.constant = 0
-        } else if height <= height - heightOfHorizontalBar - padding {
+        } else if height < height - heightOfHorizontalBar - padding {
             horizontalBarViewHeightAnchorConstrain?.constant = heightOfHorizontalBar
             menuBarCollectionViewHeightAnchorConstraint?.constant = 0
         } else {

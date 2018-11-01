@@ -47,8 +47,17 @@ class ThemeColor:UIColor{
         return color
     }
     
-    func grayLightColor()-> UIColor {
+    func grayLightColor(multiplier : Float?=nil)-> UIColor {
         _ = #colorLiteral(red: 0.8992777034, green: 0.8992777034, blue: 0.8992777034, alpha: 1)
+        if var m = multiplier{
+            if m > 1{
+                m = 1
+            }else if m < 0{
+                m = 0
+            }
+            let color = UIColor.init(red:229/255.0, green:229/255.0, blue:229/255.0, alpha:1)
+            return color
+        }
         let color = UIColor.init(red:229/255.0, green:229/255.0, blue:229/255.0, alpha:1)
         return color
     }
