@@ -477,7 +477,7 @@ status = "Status";
 coin_name = "Coin Name";
 expected_profit = "Expected Profit";
 expected_loss = "Expected Loss";
-
+setting_up = "Setting Up";
 
 Huobi_Au = "Huobi Australia";
 
@@ -487,4 +487,5 @@ asset_menu_game = "Trading Game";
 asset_title = "Asset";
 
 
- gameTrans_err_notEnoughAmount = "Not Enough Amount";
+gameTrans_err_notEnoughAmount = "Not Enough Amount";
+gameTrans_alert_stopLossReset = "Your Stop Loss/Take Profit setting has being reset";

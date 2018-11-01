@@ -467,6 +467,7 @@ status = "状态";
 coin_name = "币种";
 expected_profit = "预计盈利";
 expected_loss = "预计损失";
+setting_up = "正在设置";
 
 Huobi_Au = "火币澳洲";
 
@@ -477,3 +478,4 @@ asset_title = "资产";
 
 
   gameTrans_err_notEnoughAmount = "数额不足";
+ gameTrans_alert_stopLossReset = "您的 止损/止盈 设置 已重置";

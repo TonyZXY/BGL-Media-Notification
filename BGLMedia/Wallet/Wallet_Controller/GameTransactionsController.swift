@@ -253,7 +253,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
         guard let userID = gameBalanceController?.gameUser?.id else { return }
         transactionButton.isUserInteractionEnabled = false
         newTransaction.status = transaction
-
+        
         let newDate = self.newTransaction.date + " " + self.newTransaction.time
         let trans:[String:Any] = [
             "status":newTransaction.status.lowercased(),
@@ -278,10 +278,25 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                             self.transactionButton.isUserInteractionEnabled = true
                         }
                     }else{
-                        self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
-                        self.gameBalanceController?.walletList.reloadData()
-                        self.navigationController?.popViewController(animated: true)
-                        self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
+                        if let sets = response["data"]["sets"].array{
+                            if sets.count > 0{
+                                // alert user that following
+                                let alert = UIAlertController(title: textValue(name: "gameTrans_alert_stopLossReset"), message: nil, preferredStyle: .alert)
+                                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
+                                    self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                                    self.gameBalanceController?.walletList.reloadData()
+                                    self.navigationController?.popViewController(animated: true)
+                                    self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
+                                }))
+                                self.present(alert, animated: true)
+                                self.transactionButton.isUserInteractionEnabled = true
+                            }else{
+                                self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                                self.gameBalanceController?.walletList.reloadData()
+                                self.navigationController?.popViewController(animated: true)
+                                self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
+                            }
+                        }
                     }
                 } else {
                     let alert = UIAlertController(title: textValue(name: "networkFailure"), message: nil, preferredStyle: .alert)
@@ -302,6 +317,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             transactionButton.isUserInteractionEnabled = true
         }
     }
+
     
     //Click buy button it will turn to the "Buy" Type
     @objc func buyPage(){

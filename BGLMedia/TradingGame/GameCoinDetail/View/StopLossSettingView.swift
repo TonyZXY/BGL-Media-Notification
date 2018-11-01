@@ -27,6 +27,8 @@ class StopLossSettingView : UIView{
                 setSLButton.removeTarget(nil, action: nil, for: .touchUpInside)
                 setSLButton.setTitle(textValue(name: "stopLoss_setButton"), for: .normal)
                 setSLButton.addTarget(self, action: #selector(sendStopLossSetting), for: .touchUpInside)
+                
+                
             }else if mode == Mode.EDIT{
                 setSLButton.removeTarget(nil, action: nil, for: .touchUpInside)
                 setSLButton.setTitle(textValue(name: "stopLoss_editButton"), for: .normal)
@@ -50,11 +52,17 @@ class StopLossSettingView : UIView{
     
     var stopLossObject : StopLossObject?{
         didSet{
-            priceLowerTextField.text = "\(stopLossObject?.price_lower ?? 0)"
-            priceUpperTextField.text = "\(stopLossObject?.price_greater ?? 0)"
-            amountTextField.text = "\(stopLossObject?.amount ?? 0)"
-            calculateExpectProfit()
-            calculateExpectLoss()
+            if let obj = stopLossObject{
+                priceLowerTextField.text = "\(obj.price_lower)"
+                priceUpperTextField.text = "\(obj.price_greater)"
+                amountTextField.text = "\(obj.amount)"
+                calculateExpectProfit()
+                calculateExpectLoss()
+            }else{
+                priceLowerTextField.text = ""
+                priceUpperTextField.text = ""
+                amountTextField.text = ""
+            }
         }
     }
     
@@ -452,7 +460,7 @@ class StopLossSettingView : UIView{
         if upValid && lowValid && amountValid{
             
             let hud = JGProgressHUD(style: .light)
-            hud.textLabel.text = textValue(name: "Setting Up")
+            hud.textLabel.text = textValue(name: "setting_up")
             hud.backgroundColor = ThemeColor().progressColor()
             hud.show(in: self)
             

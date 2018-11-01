@@ -85,13 +85,13 @@ class ThemeColor:UIColor{
     
     func redColor() -> UIColor {
         _ = #colorLiteral(red: 0.8980392157, green: 0.1098039216, blue: 0.137254902, alpha: 1)
-        let color = UIColor.init(red:229.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:1)
+        let color = UIColor.init(red:255.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:1)
         return color
     }
     
     func redColorTran() -> UIColor {
         _ = #colorLiteral(red: 0.8980392157, green: 0.1098039216, blue: 0.137254902, alpha: 1)
-        let color = UIColor.init(red:229.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:0.2)
+        let color = UIColor.init(red:255.0/255.0, green:28.0/255.0, blue:35.0/255.0, alpha:0.2)
         return color
     }
     

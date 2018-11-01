@@ -21,11 +21,18 @@ class StopLossDisplayView : UIView{
             if stopLossObject!.actived {
                 self.status = .Actived
             }else{
-                self.status = .Completed
+                // well, only actived will be shown now since some logic applied
+                if stopLossObject?.code == "400"{
+                    self.status = .Failed
+                }
+                if stopLossObject?.code == "500"{
+                    self.status = .Cancelled
+                }else{
+                    // this will not show at the moment since logic is changed
+                    self.status = .Completed
+                }
             }
-            if stopLossObject?.code == "400"{
-                self.status = .Failed
-            }
+
         }
     }
     
@@ -41,7 +48,7 @@ class StopLossDisplayView : UIView{
     private lazy var completeDateLabel:UILabel = UILabel(text: "--", font: UIFont.semiBoldFont(12*factor), textColor: .white)
     
     enum Status{
-        case Actived, Failed, Completed
+        case Actived, Failed, Completed, Cancelled
     }
     
     var status : Status?{
@@ -58,6 +65,9 @@ class StopLossDisplayView : UIView{
                 statusLabel.text = textValue(name: "stopLoss_status_completed")
                 statusLabel.textColor = ThemeColor().greenColor()
                 completeDateLabel.text = Extension.method.convertDateToString(date: stopLossObject?.complete_date ?? Date())
+            }else if status == Status.Cancelled{
+                statusLabel.text = textValue(name: "stopLoss_status_fail")
+                statusLabel.textColor = ThemeColor().redColor()
             }else{
                 //default
                 statusLabel.text = "--"

@@ -72,23 +72,22 @@ class GameGerneralController: UIViewController {
         let api = StopLossApiService()
         api.getStopLossList(completion: { (success, err) in
             if success{
-                // currently just replace content of container
+                // currently just reload our only view, if more pair allowed better use table view
                 self.reloadStopLossContainer()
-                // currently only one pair allowed
             }else{
                 
             }
         })
     }
-    // we only have 1 cell at the
+    // we only have 1 pair atm
     private func reloadStopLossContainer(){
         for view in stopLossContainer.subviews{
             view.removeFromSuperview()
         }
-        
+        // decide whether diplay a set button or display stopLoss info
         if stopLossObjects.count > 0{
             self.stopLossDisplay.stopLossObject = stopLossObjects[0]
-            self.stopLossSetView.stopLossObject = stopLossObjects[0]
+//            self.stopLossSetView.stopLossObject = stopLossObjects[0]
             stopLossContainer.addSubview(stopLossDisplay)
             stopLossContainer.addConstraintsWithFormat(format: "H:|[v0]|", views: stopLossDisplay)
             stopLossContainer.addConstraintsWithFormat(format: "V:|[v0]|", views: stopLossDisplay)
@@ -532,14 +531,18 @@ class GameGerneralController: UIViewController {
     }
     
     @objc func openStopLossSettingView(sender:UIButton){
-
+        // emoty stoplosssetview
+        stopLossSetView.stopLossObject = nil
         stopLossSetView.mode = StopLossSettingView.Mode.SET
         self.present(stopLossPopController, animated: true, completion: nil)
     }
     
     // same as above but change the content mode of stopLossSetView to edit
     @objc func openStopLossEditingView(sender:UIButton){
+        //REFRESH THE DATA so, we have the newest stop loss object
         refreshStopLossData()
+        // tell the setview which stop loss object to modify
+        stopLossSetView.stopLossObject = stopLossObjects[0]
         stopLossSetView.mode = StopLossSettingView.Mode.EDIT
         self.present(stopLossPopController, animated: true, completion: nil)
     }
