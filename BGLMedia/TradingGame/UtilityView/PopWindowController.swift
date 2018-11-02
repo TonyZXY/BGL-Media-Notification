@@ -56,9 +56,9 @@ class PopWindowController : UIViewController{
         - Parameters:
             - contentView : content in side window, xwindow size will depends on content size
      */
-    convenience init(contentView : UIView?=nil){
+    convenience init(contentView : UIView?=nil,transitionStyle : UIModalTransitionStyle?=nil){
         self.init()
-        self.modalTransitionStyle = .crossDissolve
+        self.modalTransitionStyle = transitionStyle ?? .crossDissolve
         self.modalPresentationStyle = .overCurrentContext
         self.contentView = contentView ?? self.contentView
         setUpView()
@@ -86,8 +86,10 @@ class PopWindowHeader : UIView{
     
     lazy var dismissButton : DismissButton = {
         // dismissController need to be setted outSide now
-        let button = DismissButton(width: 30*factor, height: 30*factor)
+        let button = DismissButton(dismissController: nil)
         button.backgroundColor = ThemeColor().themeWidgetColor()
+        button.setImage(UIImage(named: "close_button")?.resizeImage(CGSize(width: 24*factor, height: 24*factor)), for: .normal)
+        button.clipsToBounds = true
         button.layer.cornerRadius = 3
         button.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
         button.layer.shadowOpacity = 1
@@ -127,17 +129,9 @@ class PopWindowHeader : UIView{
 
 class DismissButton : UIButton{
     
-    let defaultWidth:CGFloat = 50
-    let defaultHeight:CGFloat = 50
-    let defaultImageName : String = "close_button"
     var dismissController : UIViewController?
     
-    private func initSetupWithImage (width: CGFloat,height:CGFloat,imageName: String,dismissController:UIViewController?){
-        self.frame = CGRect(x: 0, y: 0, width: width, height: height)
-        self.imageView?.contentMode = .scaleAspectFit
-        self.layer.cornerRadius = 0.5 * self.bounds.size.width
-        self.setImage(UIImage(named: imageName)?.reSizeImage(reSize: CGSize(width: width, height: height)), for: .normal)
-        self.clipsToBounds = true
+    private func initSetup (dismissController:UIViewController?){
         
         self.dismissController = dismissController
         self.addTarget(self, action: #selector(dismissView), for: .touchUpInside)
@@ -148,8 +142,9 @@ class DismissButton : UIButton{
         self.dismissController?.dismiss(animated: true, completion: nil)
     }
     
-    convenience init(width:CGFloat?=nil,height:CGFloat?=nil,imageName : String?=nil,dismissController:UIViewController?=nil) {
+    convenience init(dismissController:UIViewController?) {
         self.init(type: .custom)
-        initSetupWithImage(width: width ?? defaultWidth, height: height ?? defaultHeight,imageName : imageName ?? defaultImageName,dismissController: dismissController)
+        initSetup(dismissController: dismissController)
     }
+    
 }

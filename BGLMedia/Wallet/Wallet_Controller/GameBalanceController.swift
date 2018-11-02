@@ -535,8 +535,12 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         
         // modified
         totalProfitView.addSubview(toRankButton)
-        totalProfitView.addConstraintsWithFormat(format: "H:[v0]-\(15*factor)-|", views: toRankButton)
+        totalProfitView.addConstraintsWithFormat(format: "H:[v0]-\(50*factor)-|", views: toRankButton)
         totalProfitView.addConstraintsWithFormat(format: "V:[v0]-\(15*factor)-|", views: toRankButton)
+        
+        totalProfitView.addSubview(huobiMessageButton)
+        totalProfitView.addConstraintsWithFormat(format: "H:|-\(50*factor)-[v0]", views: huobiMessageButton)
+        totalProfitView.addConstraintsWithFormat(format: "V:[v0]-\(15*factor)-|", views: huobiMessageButton)
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
@@ -826,4 +830,179 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         button.isUserInteractionEnabled = false
         return button
     }()
+    
+    lazy var huobiMessageButton: HuoBiMessageButton = {
+        let buttonHeight:CGFloat = 24 * factor
+        let buttonWidth:CGFloat = 24 * factor
+        let button = HuoBiMessageButton(width: buttonWidth, height: buttonHeight,parentController: self)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+}
+
+class HuoBiMessageView: UIView{
+    let factor = UIScreen.main.bounds.width/375
+    
+    let huobiUrl = "https://www.google.com"
+    
+    var parentController : UIViewController?
+    
+    lazy var logoImage : RoundImageView = {
+//        let innerRingWidth = 5 * factor
+        let image = RoundImageView()
+        image.contentMode = .scaleAspectFit
+        image.layer.borderWidth = 5 * factor
+        image.layer.borderColor = UIColor.white.cgColor
+        image.clipsToBounds = true
+//        image.backgroundColor = ThemeColor().themeWidgetColor()
+        
+//        var logo : RoundImageView = {
+//            let logo = RoundImageView()
+//            logo.contentMode = .scaleAspectFit
+//            logo.layer.borderWidth = innerRingWidth
+//            logo.layer.borderColor = ThemeColor().themeWidgetColor().cgColor
+//            logo.image = UIImage(named: "huobi_logo")
+//            logo.backgroundColor = .white
+//            logo.translatesAutoresizingMaskIntoConstraints = false
+//            return logo
+//        }()
+        
+        image.backgroundColor = .white
+        image.image = UIImage(named: "huobi_logo")
+//        image.addSubview(logo)
+//        image.addConstraintsWithFormat(format: "H:|-\(innerRingWidth)-[v0]-\(innerRingWidth)-|", views: logo)
+//        image.addConstraintsWithFormat(format: "V:|-\(innerRingWidth)-[v0]-\(innerRingWidth)-|", views: logo)
+        
+        image.translatesAutoresizingMaskIntoConstraints = false
+        return image
+    }()
+
+    lazy var messageLabel : UILabel = {
+        let label = UILabel()
+        label.textAlignment = .center
+        label.text = textValue(name: "huobi_message_registerForTen")
+        label.numberOfLines = 3
+        label.font = UIFont.boldFont(15 * factor)
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
+    lazy var doneButton : DismissButton = {
+        let button = DismissButton(dismissController: nil)
+        button.layer.cornerRadius = 5 * factor
+        button.clipsToBounds = true
+        button.setTitle(textValue(name: "done_resend"), for: .normal)
+        button.backgroundColor = ThemeColor().redColor()
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    lazy var registerButton : UIButton = {
+        let button = UIButton()
+        
+        button.layer.cornerRadius = 5 * factor
+        button.clipsToBounds = true
+        button.setTitle(textValue(name: "resigter"), for: .normal)
+        button.backgroundColor = ThemeColor().greenColor()
+        button.addTarget(self, action: #selector(openHuobiRegisterPage), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+    
+    @objc func openHuobiRegisterPage(){
+        if let url = URL(string: huobiUrl) {
+            let vc = safariStatusController(url: url, entersReaderIfAvailable: true)
+            vc.setNeedsStatusBarAppearanceUpdate()
+            if #available(iOS 11.0, *) {
+                vc.dismissButtonStyle = .close
+            } else {
+                
+            }
+            vc.hidesBottomBarWhenPushed = true
+            vc.accessibilityNavigationStyle = .separate
+            // assign the conttroller want to transtion from
+            parentController?.present(vc, animated: true, completion: nil)
+        }
+        doneButton.dismissView()
+    }
+    
+    private func setupView(){
+        
+        addSubview(logoImage)
+        logoImage.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        logoImage.centerYAnchor.constraint(equalTo: self.topAnchor).isActive = true
+        logoImage.heightAnchor.constraint(equalToConstant: 90*factor).isActive = true
+        logoImage.widthAnchor.constraint(equalToConstant: 90*factor).isActive = true
+        
+        // every constraint depends on this label
+        addSubview(messageLabel)
+        messageLabel.heightAnchor.constraint(equalToConstant: 80*factor).isActive = true
+        messageLabel.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
+        
+        addSubview(registerButton)
+        registerButton.topAnchor.constraint(equalTo: messageLabel.bottomAnchor,constant: 10*factor).isActive = true
+        registerButton.heightAnchor.constraint(equalToConstant: 50*factor).isActive = true
+        registerButton.widthAnchor.constraint(equalToConstant: 200*factor).isActive = true
+        registerButton.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor).isActive = true
+        
+        addSubview(doneButton)
+        doneButton.topAnchor.constraint(equalTo: registerButton.bottomAnchor,constant: 10*factor).isActive = true
+        doneButton.heightAnchor.constraint(equalToConstant: 50*factor).isActive = true
+        doneButton.widthAnchor.constraint(equalToConstant: 200*factor).isActive = true
+        doneButton.centerXAnchor.constraint(equalTo: messageLabel.centerXAnchor).isActive = true
+        
+        // let this view expand depend on content
+        self.translatesAutoresizingMaskIntoConstraints = false
+        self.topAnchor.constraint(equalTo: messageLabel.topAnchor,constant:-50 * factor).isActive = true
+        self.bottomAnchor.constraint(equalTo: doneButton.bottomAnchor,constant:10 * factor).isActive = true
+        self.rightAnchor.constraint(equalTo: messageLabel.rightAnchor,constant:10 * factor).isActive = true
+        self.leftAnchor.constraint(equalTo: messageLabel.leftAnchor,constant:-10 * factor).isActive = true
+        
+
+    }
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        setupView()
+    }
+    
+    required init?(coder aDecoder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class HuoBiMessageButton : UIButton{
+    let factor = UIScreen.main.bounds.width/375
+    
+    let defaultWidth:CGFloat = 50
+    let defaultHeight:CGFloat = 50
+    
+    var parentViewController : UIViewController?
+    
+    func initSetup (width: CGFloat,height:CGFloat,parentController:UIViewController){
+        self.frame = CGRect(x: 0, y: 0, width: width, height: height)
+        self.imageView?.contentMode = .scaleAspectFit
+        self.layer.cornerRadius = 0.5 * self.bounds.size.width
+        self.setImage(UIImage(named: "huobi_logo")?.reSizeImage(reSize: CGSize(width: width, height: height)), for: .normal)
+        self.clipsToBounds = true
+        
+        self.parentViewController = parentController
+        self.addTarget(self, action: #selector(popMessageWindow), for: .touchUpInside)
+    }
+    
+    @objc func popMessageWindow(){
+        let view = HuoBiMessageView()
+        //let top level controller to pop out safari
+        view.parentController = parentViewController
+        
+        let popWindowController = PopWindowController(contentView: view)
+        view.doneButton.dismissController = popWindowController
+        self.parentViewController?.present(popWindowController, animated: true,completion: nil)
+        
+    }
+    
+    convenience init(width:CGFloat?,height:CGFloat?,parentController:UIViewController) {
+        self.init(type: .custom)
+        initSetup(width: width ?? defaultWidth, height: height ?? defaultHeight,parentController: parentController)
+    }
 }

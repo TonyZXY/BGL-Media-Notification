@@ -479,3 +479,5 @@ asset_title = "资产";
 
   gameTrans_err_notEnoughAmount = "数额不足";
  gameTrans_alert_stopLossReset = "您的 止损/止盈 设置 已重置";
+
+huobi_message_registerForTen = "注册货币澳洲，为你的数字资产增加$10!";

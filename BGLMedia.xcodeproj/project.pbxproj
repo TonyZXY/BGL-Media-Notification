@@ -13,6 +13,7 @@
 		240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23F2170530100702B31 /* GameCoinDetailController.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
 		241082EC2164867900A12DF1 /* MenuBarViewOld.swift in Sources */ = {isa = PBXBuildFile; fileRef = 241082EB2164867900A12DF1 /* MenuBarViewOld.swift */; };
+		244281FB218BCAB300BCDACF /* UtilityClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 244281FA218BCAB300BCDACF /* UtilityClass.swift */; };
 		2442BE69217ED841000100BE /* StopLossDisplayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE67217ED841000100BE /* StopLossDisplayView.swift */; };
 		2442BE6A217ED841000100BE /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE68217ED841000100BE /* StopLossSettingView.swift */; };
 		2442BE6C217ED84D000100BE /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6B217ED84D000100BE /* StopLoss.swift */; };
@@ -265,6 +266,7 @@
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
 		240F697E2148D5710072E158 /* GenuineNewsObject.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GenuineNewsObject.swift; sourceTree = "<group>"; };
 		241082EB2164867900A12DF1 /* MenuBarViewOld.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = MenuBarViewOld.swift; path = BGLMedia/TradingGame/UtilityView/MenuBarViewOld.swift; sourceTree = SOURCE_ROOT; };
+		244281FA218BCAB300BCDACF /* UtilityClass.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UtilityClass.swift; sourceTree = "<group>"; };
 		2442BE67217ED841000100BE /* StopLossDisplayView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossDisplayView.swift; sourceTree = "<group>"; };
 		2442BE68217ED841000100BE /* StopLossSettingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLossSettingView.swift; sourceTree = "<group>"; };
 		2442BE6B217ED84D000100BE /* StopLoss.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StopLoss.swift; sourceTree = "<group>"; };
@@ -584,6 +586,7 @@
 				24DB188B218048170064349F /* MenuPage-master */,
 				245E9A802167427A004577E0 /* PopWindowController.swift */,
 				241082EB2164867900A12DF1 /* MenuBarViewOld.swift */,
+				244281FA218BCAB300BCDACF /* UtilityClass.swift */,
 			);
 			name = UtilityView;
 			path = BGLMedia/TradingGame/UtilityView;
@@ -1545,6 +1548,7 @@
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
 				57355C0C20F7188B002E70E4 /* NewsObject.swift in Sources */,
+				244281FB218BCAB300BCDACF /* UtilityClass.swift in Sources */,
 				2D52AEE920E46E1A00018FC0 /* MarketsTotalView.swift in Sources */,
 				2D67306C211C2A0100EE49A5 /* ReportProblemViewController.swift in Sources */,
 				2D52AF1320E46E1A00018FC0 /* DataCell.swift in Sources */,

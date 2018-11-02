@@ -489,3 +489,6 @@ asset_title = "Asset";
 
 gameTrans_err_notEnoughAmount = "Not Enough Amount";
 gameTrans_alert_stopLossReset = "Your Stop Loss/Take Profit setting has being reset";
+
+
+huobi_message_registerForTen = "Register Huobi Australia to take $10 bonus for your real Crypto trading";
