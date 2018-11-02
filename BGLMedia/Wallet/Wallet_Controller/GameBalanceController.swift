@@ -843,7 +843,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
 class HuoBiMessageView: UIView{
     let factor = UIScreen.main.bounds.width/375
     
-    let huobiUrl = "https://www.google.com"
+    let huobiUrl = "https://www.huobi.com.au/invite-success?invite_code=yd423"
     
     var parentController : UIViewController?
     
