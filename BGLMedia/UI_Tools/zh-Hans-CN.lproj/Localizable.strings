@@ -468,7 +468,7 @@ coin_name = "币种";
 expected_profit = "预计盈利";
 expected_loss = "预计损失";
 setting_up = "正在设置";
-
+register = "注册";
 Huobi_Au = "火币澳洲";
 
 // Asset Menu

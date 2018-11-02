@@ -902,7 +902,7 @@ class HuoBiMessageView: UIView{
         
         button.layer.cornerRadius = 5 * factor
         button.clipsToBounds = true
-        button.setTitle(textValue(name: "resigter"), for: .normal)
+        button.setTitle(textValue(name: textValue(name: "register")), for: .normal)
         button.backgroundColor = ThemeColor().greenColor()
         button.addTarget(self, action: #selector(openHuobiRegisterPage), for: .touchUpInside)
         button.translatesAutoresizingMaskIntoConstraints = false
