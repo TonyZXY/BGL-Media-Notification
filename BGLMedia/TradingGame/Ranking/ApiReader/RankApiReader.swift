@@ -43,26 +43,27 @@ class RankDataReader {
                 self.clearAllData()
                 // store data
                 var data = JSON(res)["data"]
-                self.rankInfoModel = RankDetailModel(data)
-                //                    print(data)
-                // both ranking data are array
-                let weekly_rank = data["weekly_rank"].array ?? []
-                let total_rank = data["total_rank"].array ?? []
-                //user rank is a single object
-                let user_rank = data["user_rank"]
-                
-                self.userRankModel = RankObjectModel(user_rank)
-                
-                for obj in weekly_rank{
-                    let rank = RankObjectModel(obj)
-                    self.weeklyRankModels.append(rank)
-                }
-                
-                for obj in total_rank{
-                    let rank = RankObjectModel(obj)
-                    //                        print(rank.total)
-                    self.totalRankModels.append(rank)
-                }
+                print(data)
+//                self.rankInfoModel = RankDetailModel(data)
+//                //                    print(data)
+//                // both ranking data are array
+//                let weekly_rank = data["weekly_rank"].array ?? []
+//                let total_rank = data["total_rank"].array ?? []
+//                //user rank is a single object
+//                let user_rank = data["user_rank"]
+//
+//                self.userRankModel = RankObjectModel(user_rank)
+//
+//                for obj in weekly_rank{
+//                    let rank = RankObjectModel(obj)
+//                    self.weeklyRankModels.append(rank)
+//                }
+//
+//                for obj in total_rank{
+//                    let rank = RankObjectModel(obj)
+//                    //                        print(rank.total)
+//                    self.totalRankModels.append(rank)
+//                }
                 
                 completion(true)
                 

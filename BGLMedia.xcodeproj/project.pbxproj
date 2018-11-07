@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C0920F7188B002E70E4 /* NewsV2Controller.swift */; };
 		240094C5214F5346007898BF /* NewsSliderClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */; };
+		2405FE89218A9C1F000C9813 /* RankViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2405FE88218A9C1F000C9813 /* RankViewControllerV2.swift */; };
+		2405FE8B218AA60F000C9813 /* RankTableCellV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2405FE8A218AA60F000C9813 /* RankTableCellV2.swift */; };
+		2405FE8D218AA62B000C9813 /* RankTableViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2405FE8C218AA62B000C9813 /* RankTableViewControllerV2.swift */; };
 		240DC2402170530100702B31 /* GameCoinPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23E2170530100702B31 /* GameCoinPageController.swift */; };
 		240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23F2170530100702B31 /* GameCoinDetailController.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
@@ -262,6 +265,9 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2405FE88218A9C1F000C9813 /* RankViewControllerV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankViewControllerV2.swift; sourceTree = "<group>"; };
+		2405FE8A218AA60F000C9813 /* RankTableCellV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableCellV2.swift; sourceTree = "<group>"; };
+		2405FE8C218AA62B000C9813 /* RankTableViewControllerV2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RankTableViewControllerV2.swift; sourceTree = "<group>"; };
 		240DC23E2170530100702B31 /* GameCoinPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinPageController.swift; sourceTree = "<group>"; };
 		240DC23F2170530100702B31 /* GameCoinDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinDetailController.swift; sourceTree = "<group>"; };
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
@@ -560,6 +566,8 @@
 			children = (
 				2442BE73217ED89E000100BE /* RankingViewController.swift */,
 				2442BE74217ED89E000100BE /* RankTableViewController.swift */,
+				2405FE88218A9C1F000C9813 /* RankViewControllerV2.swift */,
+				2405FE8C218AA62B000C9813 /* RankTableViewControllerV2.swift */,
 			);
 			path = Controller;
 			sourceTree = "<group>";
@@ -578,6 +586,7 @@
 				2442BE6E217ED88E000100BE /* RankPopWindowContent.swift */,
 				2442BE6D217ED88E000100BE /* RankTableViewCell.swift */,
 				2442BE6F217ED88E000100BE /* ToRankPageButton.swift */,
+				2405FE8A218AA60F000C9813 /* RankTableCellV2.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -1640,6 +1649,7 @@
 				2D52AF4120E46E1A00018FC0 /* OnBoardingPageViewController.swift in Sources */,
 				5719D5E62123B54C0048B579 /* AlertInterest.swift in Sources */,
 				245E9A812167427A004577E0 /* PopWindowController.swift in Sources */,
+				2405FE8B218AA60F000C9813 /* RankTableCellV2.swift in Sources */,
 				57FC41F520FADC8A0052EE02 /* BGLCommunityController.swift in Sources */,
 				2D52AEA320E46E1A00018FC0 /* DetailMenuBar.swift in Sources */,
 				24DB1897218048170064349F /* MenuCellView.swift in Sources */,
@@ -1664,6 +1674,7 @@
 				57650895210D9AFE007368CC /* Transactions.swift in Sources */,
 				57BAD86B21045ACF00973B45 /* exchangeController.swift in Sources */,
 				24DB1878218047150064349F /* AssetController.swift in Sources */,
+				2405FE89218A9C1F000C9813 /* RankViewControllerV2.swift in Sources */,
 				2D52AEFF20E46E1A00018FC0 /* AlertCoinName.swift in Sources */,
 				2D52AF1B20E46E1A00018FC0 /* CandleStickChartViewController.swift in Sources */,
 				2D52AF1120E46E1A00018FC0 /* NewsInFlashNewsRealm.swift in Sources */,
@@ -1674,6 +1685,7 @@
 				57355C5420F718CC002E70E4 /* MarketCapEndpoint.swift in Sources */,
 				2D52AE9A20E46E1A00018FC0 /* AlertController.swift in Sources */,
 				5464D19E20EEF7DB00D2C33A /* SharePopUpViewController.swift in Sources */,
+				2405FE8D218AA62B000C9813 /* RankTableViewControllerV2.swift in Sources */,
 				57BBAB542108E1F600984AA4 /* NewsFlashController.swift in Sources */,
 				57355C6020F718CC002E70E4 /* CryptoCompareCoinsRealm.swift in Sources */,
 				57355C4620F718CC002E70E4 /* TransCoinMarketCell.swift in Sources */,

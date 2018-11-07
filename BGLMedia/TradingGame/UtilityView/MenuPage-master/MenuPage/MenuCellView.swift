@@ -38,7 +38,13 @@ class MenuCellView: BasicCollectionViewCell {
     }
     
     private func updateItem() {
-        if let imageView = item as? UIImageView {
+        if let customCell = item as? CustomMenuCell{
+            if isSelected{
+                customCell.selected()
+            }else{
+                customCell.notselected()
+            }
+        }else if let imageView = item as? UIImageView {
             imageView.image = imageView.image?.withRenderingMode(.alwaysTemplate)
             imageView.contentMode = .scaleAspectFit
             imageView.tintColor = isSelected ? selectedColor : notSelectedColor
@@ -60,4 +66,10 @@ class MenuCellView: BasicCollectionViewCell {
             backgroundColor = isSelected ? selectedColor : notSelectedColor
         }
     }
+}
+
+
+protocol CustomMenuCell {
+    func selected()
+    func notselected()
 }

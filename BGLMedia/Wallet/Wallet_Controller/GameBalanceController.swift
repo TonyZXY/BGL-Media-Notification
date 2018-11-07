@@ -914,7 +914,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         button.translatesAutoresizingMaskIntoConstraints = false
         
         
-        button.isUserInteractionEnabled = false
+//        button.isUserInteractionEnabled = false
         return button
     }()
     
