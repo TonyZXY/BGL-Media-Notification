@@ -203,14 +203,23 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, willPresent notification: UNNotification, withCompletionHandler completionHandler: @escaping (UNNotificationPresentationOptions) -> Void) {
+        let category = notification.request.content.categoryIdentifier
+        print(category)
+        if category != ""{
+            if category == "APP_GAME_STOPLOSS"{
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshGameData"), object: nil)
+            }
+        }
         completionHandler([.alert, .sound])
     }
     
     func userNotificationCenter(_ center: UNUserNotificationCenter, didReceive response: UNNotificationResponse, withCompletionHandler completionHandler: @escaping () -> Void) {
-        
-        if let notification = response.notification.request.content.userInfo as? [String: AnyObject] {
-            let message = parseRemoteNotification(notification: notification)
-            print(message as Any)
+        print(response)
+        let category = response.notification.request.content.categoryIdentifier
+        if category != ""{
+            if category == "APP_GAME_STOPLOSS"{
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue:"refreshGameData"), object: nil)
+            }
         }
         completionHandler()
     }
@@ -218,6 +227,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     private func parseRemoteNotification(notification: [String: AnyObject])->String? {
         if let aps = notification["aps"] as? [String: AnyObject]{
             let alert = aps["alert"] as? String
+            print(alert)
             return alert
         }
         
@@ -277,9 +287,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     func application(_ application: UIApplication, didReceiveRemoteNotification userInfo: [AnyHashable : Any]) {
         UserDefaults.standard.set(false, forKey: "NotificationSetting")
         print("success to open notification")
-//        print("\(userInfo)")
-//        let aps = userInfo["aps"] as! [String: Any]
-//        print("\(aps)")
+        print("\(userInfo)")
+        let aps = userInfo["aps"] as! [String: Any]
+        print("\(aps)")
     }
     
 
