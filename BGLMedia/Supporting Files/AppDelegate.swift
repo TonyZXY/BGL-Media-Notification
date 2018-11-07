@@ -227,7 +227,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
     private func parseRemoteNotification(notification: [String: AnyObject])->String? {
         if let aps = notification["aps"] as? [String: AnyObject]{
             let alert = aps["alert"] as? String
-            print(alert)
             return alert
         }
         

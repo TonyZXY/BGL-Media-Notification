@@ -106,7 +106,7 @@ struct GameCoin {
         if abbrName == "AUD" { return 0 }
         return totalValue - totalValueOfBuy
     }
-    var profitPercentage: Double { return totalAmountOfBuy == 0 ? 0 : profitNumber * 100 / totalAmountOfBuy }
+    var profitPercentage: Double { return totalValueOfBuy == 0 ? 0 : profitNumber * 100 / totalValueOfBuy }
     var realisedProfitNumber: Double
     var netValue : Double {return avgOfBuyPrice * leftTransactionAmount}
     var transactions = [GameCoinTransaction]()
@@ -143,8 +143,11 @@ struct GameCoin {
                 totalValueOfBuy += transaction.tradePrice * transaction.tradeAmount / (1 - transactionFee)
             } else {
                 realisedProfitNumber = realisedProfitNumber + transaction.tradePrice * transaction.tradeAmount * (1 - transactionFee) - avgOfBuyPrice * transaction.tradeAmount
+                totalValueOfBuy = totalValueOfBuy - avgOfBuyPrice * transaction.tradeAmount
                 totalAmountOfBuy -= transaction.tradeAmount
-                totalValueOfBuy = (totalAmountOfBuy == 0) ? 0 : totalValueOfBuy - avgOfBuyPrice * transaction.tradeAmount
+                if totalAmountOfBuy == 0 {
+                    totalValueOfBuy = 0 //solve double problem
+                }
             }
         }
     }
