@@ -40,6 +40,22 @@ class GameGerneralController: UIViewController {
         refreshStopLossData()
         setUpView()
 
+        NotificationCenter.default.addObserver(self, selector: #selector(beginRefresh), name: NSNotification.Name(rawValue: "appDidBecomeActive"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "appDidBecomeActive"), object: nil)
+    }
+
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        beginRefresh()
+    }
+    
+    @objc private func beginRefresh(){
+        DispatchQueue.main.async(execute: {
+            self.scrollView.beginHeaderRefreshing()
+        })
     }
     
     override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {

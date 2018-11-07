@@ -283,7 +283,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                                 // alert user that following
                                 let alert = UIAlertController(title: textValue(name: "gameTrans_alert_stopLossReset"), message: nil, preferredStyle: .alert)
                                 alert.addAction(UIAlertAction(title: "OK", style: .default, handler: { action in
-                                    self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                                    self.gameBalanceController?.gameUser?.setupCoins(response["data"]["account"])
                                     self.gameBalanceController?.walletList.reloadData()
                                     self.navigationController?.popViewController(animated: true)
                                     self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)
@@ -291,7 +291,7 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
                                 self.present(alert, animated: true)
                                 self.transactionButton.isUserInteractionEnabled = true
                             }else{
-                                self.gameBalanceController?.gameUser?.updateCoinsBalance(response["data"]["account"])
+                                self.gameBalanceController?.gameUser?.setupCoins(response["data"]["account"])
                                 self.gameBalanceController?.walletList.reloadData()
                                 self.navigationController?.popViewController(animated: true)
                                 self.gameBalanceController?.walletList.switchRefreshHeader(to: .refreshing)

@@ -309,7 +309,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                    }
 //                }
 //            }
-//        } 
+//        }
     }
 //
     func applicationWillEnterForeground(_ application: UIApplication) {

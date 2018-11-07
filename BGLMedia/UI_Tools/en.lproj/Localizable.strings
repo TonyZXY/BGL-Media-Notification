@@ -41,6 +41,7 @@ networkFailure = "Sorry, There Was A Network Problem";
 nickname = "Please Enter A Nickname";
 nicknameNotUnique = "Sorry, The Nickname Is Already Exited, Please Enter Another Nickname";
 transactionFee = "Transaction Fee";
+allTransactionsHistory = "All Transactions History";
 
 //Transaction Page
 buy = "Buy";
