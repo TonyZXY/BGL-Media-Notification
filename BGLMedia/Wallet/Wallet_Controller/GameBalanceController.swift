@@ -58,6 +58,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNewAssetsData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(beginRefresh), name: NSNotification.Name(rawValue: "appDidBecomeActive"), object: nil)
     }
     
     deinit {
@@ -66,6 +68,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "appDidBecomeActive"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -73,7 +76,14 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         
         if gameUser != nil {
             setupTimer()
+            beginRefresh()
         }
+    }
+    
+    @objc private func beginRefresh(){
+        DispatchQueue.main.async(execute: {
+            self.walletList.beginHeaderRefreshing()
+        })
     }
     
     override func viewWillDisappear(_ animated: Bool) {

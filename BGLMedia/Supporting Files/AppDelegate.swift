@@ -299,7 +299,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate, UNUserNotificationCenterD
 //                    }
 //                }
 //            }
-//        } 
+//        }
+        NotificationCenter.default.post(name: NSNotification.Name(rawValue: "appDidBecomeActive"),object: nil)
     }
 //
     func applicationWillEnterForeground(_ application: UIApplication) {
