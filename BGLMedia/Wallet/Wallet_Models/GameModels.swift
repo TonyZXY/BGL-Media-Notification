@@ -19,10 +19,10 @@ struct GameUser {
         id = json["data"]["user_id"].stringValue
         name = json["data"]["nick_name"].stringValue
         coins = [GameCoin]()
-        updateCoinsBalance(json["data"])
+        setupCoins(json["data"])
     }
     
-    mutating func updateCoinsBalance(_ json: JSON) {
+    mutating func setupCoins(_ json: JSON) {
         let audAmount = Double(json["aud"].stringValue) ?? 0
         let btcAmount = Double(json["btc"].stringValue) ?? 0
         let ethAmount = Double(json["eth"].stringValue) ?? 0
@@ -36,52 +36,56 @@ struct GameUser {
         let iostAmount = Double(json["iost"].stringValue) ?? 0
         
         coins.removeAll()
-        if audAmount > 0 {
-            let coin = GameCoin(name: "AUD", abbrName: "AUD", amount: audAmount)
-            coins.append(coin)
-        }
-        if btcAmount > 0 {
-            let coin = GameCoin(name: "Bitcoin", abbrName: "BTC", amount: btcAmount)
-            coins.append(coin)
-        }
-        if ethAmount > 0 {
-            let coin = GameCoin(name: "Ethereum", abbrName: "ETH", amount: ethAmount)
-            coins.append(coin)
-        }
-        if bchAmount > 0 {
-            let coin = GameCoin(name: "Bitcoin Cash", abbrName: "BCH", amount: bchAmount)
-            coins.append(coin)
-        }
-        if ltcAmount > 0 {
-            let coin = GameCoin(name: "Litecoin", abbrName: "LTC", amount: ltcAmount)
-            coins.append(coin)
-        }
-        if etcAmount > 0 {
-            let coin = GameCoin(name: "Ethereum Classic", abbrName: "ETC", amount: etcAmount)
-            coins.append(coin)
-        }
-        if powrAmount > 0 {
-            let coin = GameCoin(name: "Power Ledger", abbrName: "POWR", amount: powrAmount)
-            coins.append(coin)
-        }
-        if elfAmount > 0 {
-            let coin = GameCoin(name: "aelf", abbrName: "ELF", amount: elfAmount)
-            coins.append(coin)
-        }
-        if ctxcAmount > 0 {
-            let coin = GameCoin(name: "Cortex", abbrName: "CTXC", amount: ctxcAmount)
-            coins.append(coin)
-        }
-        if dtaAmount > 0 {
-            let coin = GameCoin(name: "Data", abbrName: "DTA", amount: dtaAmount)
-            coins.append(coin)
-        }
-        if iostAmount > 0 {
-            let coin = GameCoin(name: "IOS token", abbrName: "IOST", amount: iostAmount)
-            coins.append(coin)
+        coins.append(GameCoin(name: "AUD", abbrName: "AUD", amount: audAmount))
+        coins.append(GameCoin(name: "Bitcoin", abbrName: "BTC", amount: btcAmount))
+        coins.append(GameCoin(name: "Ethereum", abbrName: "ETH", amount: ethAmount))
+        coins.append(GameCoin(name: "Bitcoin Cash", abbrName: "BCH", amount: bchAmount))
+        coins.append(GameCoin(name: "Litecoin", abbrName: "LTC", amount: ltcAmount))
+        coins.append(GameCoin(name: "Ethereum Classic", abbrName: "ETC", amount: etcAmount))
+        coins.append(GameCoin(name: "Power Ledger", abbrName: "POWR", amount: powrAmount))
+        coins.append(GameCoin(name: "aelf", abbrName: "ELF", amount: elfAmount))
+        coins.append(GameCoin(name: "Cortex", abbrName: "CTXC", amount: ctxcAmount))
+        coins.append(GameCoin(name: "Data", abbrName: "DTA", amount: dtaAmount))
+        coins.append(GameCoin(name: "IOS token", abbrName: "IOST", amount: iostAmount))
+    }
+    
+    mutating func updateCoinsAmount(_ json: JSON) {
+        for (index, _) in coins.enumerated() {
+            if coins[index].abbrName == "AUD" {
+                coins[index].amount = Double(json["aud"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "BTC" {
+                coins[index].amount = Double(json["btc"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "ETH" {
+                coins[index].amount = Double(json["eth"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "BCH" {
+                coins[index].amount = Double(json["bch"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "LTC" {
+                coins[index].amount = Double(json["ltc"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "ETC" {
+                coins[index].amount = Double(json["etc"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "POWR" {
+                coins[index].amount = Double(json["powr"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "ELF" {
+                coins[index].amount = Double(json["elf"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "CTXC" {
+                coins[index].amount = Double(json["ctxc"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "DTA" {
+                coins[index].amount = Double(json["dta"].stringValue) ?? 0
+            }
+            if coins[index].abbrName == "IOST" {
+                coins[index].amount = Double(json["iost"].stringValue) ?? 0
+            }
         }
     }
-
 }
 
 struct GameCoin {
@@ -97,12 +101,16 @@ struct GameCoin {
     var totalAmountOfSell: Double
     var totalValue: Double { return amount * price }
     var avgOfBuyPrice: Double { return totalAmountOfBuy == 0 ? 0 : totalValueOfBuy / totalAmountOfBuy }
-    //because transaction fee, the actual coin amount will be different with the transaction amount
     var leftTransactionAmount: Double { return totalAmountOfBuy - totalAmountOfSell }
-    var profitNumber: Double { return avgOfBuyPrice == 0 ? 0 : totalValue - avgOfBuyPrice * leftTransactionAmount }
+    var profitNumber: Double {
+        if abbrName == "AUD" { return 0 }
+        return totalValue - totalValueOfBuy
+    }
     var profitPercentage: Double { return profitNumber * 100 / totalValue }
-    var realisedProfitNumber: Double { return totalValueOfSell - avgOfBuyPrice * totalAmountOfSell }
+    var realisedProfitNumber: Double
     var netValue : Double {return avgOfBuyPrice * leftTransactionAmount}
+    var transactions = [GameCoinTransaction]()
+    
     init(name: String, abbrName: String, amount: Double) {
         self.name = name
         self.abbrName = abbrName
@@ -112,8 +120,54 @@ struct GameCoin {
         totalAmountOfBuy = 0
         totalValueOfSell = 0
         totalAmountOfSell = 0
+        realisedProfitNumber = 0
+    }
+    
+    mutating func updateTransactions(_ jsonArray: [JSON]) {
+        transactions.removeAll()
+        jsonArray.forEach { (json) in
+            let transaction = GameCoinTransaction(json)
+            transactions.append(transaction)
+        }
+        transactions.sort { $0.date < $1.date }
+        calculateProfits()
+    }
+    
+    private mutating func calculateProfits() {
+        totalValueOfBuy = 0
+        totalAmountOfBuy = 0
+        realisedProfitNumber = 0
+        transactions.forEach { (transaction) in
+            if transaction.status.lowercased() == "buy" {
+                totalAmountOfBuy += transaction.tradeAmount
+                totalValueOfBuy += transaction.tradePrice * transaction.tradeAmount / (1 - transactionFee)
+            } else {
+                realisedProfitNumber = realisedProfitNumber + transaction.tradePrice * transaction.tradeAmount * (1 - transactionFee) - avgOfBuyPrice * transaction.tradeAmount
+                totalAmountOfBuy -= transaction.tradeAmount
+                totalValueOfBuy = (totalAmountOfBuy == 0) ? 0 : totalValueOfBuy - avgOfBuyPrice * transaction.tradeAmount
+            }
+        }
     }
 }
+
+struct GameCoinTransaction {
+    let id: String
+    let status: String
+    let tradePrice: Double
+    let tradeAmount: Double
+    let date: Date
+    let note: String
+    
+    init(_ json: JSON) {
+        id = json["transaction_id"].stringValue
+        status = json["status"].stringValue
+        tradePrice = Double(json["single_price"].stringValue) ?? 0
+        tradeAmount = Double(json["amount"].stringValue) ?? 0
+        date = Extension.method.convertStringToDate(date: json["date"].stringValue)
+        note = json["note"].stringValue
+    }
+}
+
 
 struct TransSum {
     let abbrName: String

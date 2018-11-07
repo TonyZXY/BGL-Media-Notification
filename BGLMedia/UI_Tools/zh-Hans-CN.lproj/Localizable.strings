@@ -41,6 +41,7 @@ networkFailure = "对不起，网络出现了问题";
 nickname = "请输入一个昵称";
 nicknameNotUnique = "对不起，昵称已经存在，请输入另一个昵称";
 transactionFee = "交易费";
+allTransactionsHistory = "所有交易历史";
 
 //Transaction Page
 buy = "买入";

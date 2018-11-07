@@ -1,8 +1,8 @@
 //
-//  GameTransactionsHistoryViewController.swift
+//  AllGameTransactionsHistoryController.swift
 //  BGLMedia
 //
-//  Created by Fan Wu on 10/12/18.
+//  Created by Fan Wu on 11/7/18.
 //  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
@@ -11,12 +11,9 @@ import SwiftyJSON
 import Alamofire
 import SwiftKeychainWrapper
 
-class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSource,UITableViewDelegate{
+class AllGameTransactionsHistoryController: UIViewController,UITableViewDataSource,UITableViewDelegate {
     
-    var factor:CGFloat?{
-        didSet{
-        }
-    }
+    lazy var factor = view.frame.width/375
     
     var loginStatus:Bool{
         get{
@@ -39,8 +36,7 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
     
     var indexSelected:Int = 0
     var worthData = [String:Double]()
-    var gameBalanceController: GameBalanceController? 
-    var coinDetail : GameCoin?
+    var gameBalanceController: GameBalanceController?
     var transactions = [EachTransactions]()
     
     override func viewDidLoad() {
@@ -72,9 +68,7 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
                 completion(false)
             } else {
                 jsonArray.forEach({ (json) in
-                    if self.coinDetail?.abbrName.lowercased() == json["coin_add_name"].stringValue.lowercased() {
-                        self.transactions.append(self.fillTransactionDataWith(json))
-                    }
+                    self.transactions.append(self.fillTransactionDataWith(json))
                 })
                 self.transactions.sort {
                     Extension.method.convertStringToDate(date: $0.date) > Extension.method.convertStringToDate(date: $1.date) }
@@ -99,7 +93,12 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
         } else {
             transaction.totalPrice = transaction.singlePrice * transaction.amount * (1 - transactionFee)
         }
-        transaction.worth = (coinDetail?.price ?? 0) * transaction.amount
+        
+        gameBalanceController?.gameUser?.coins.forEach({ (coin) in
+            if coin.abbrName.lowercased() == transaction.coinAbbName.lowercased() {
+                transaction.worth = coin.price * transaction.amount
+            }
+        })
         transaction.delta = (transaction.worth - transaction.totalPrice) * 100 / transaction.totalPrice
         return transaction
     }
@@ -146,7 +145,7 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
             cell.buyMarket.text = textValue(name: "tradingMarket_history") + ": " + object.exchangeName
             
             
-
+            
             
             cell.SinglePriceResult.text = Extension.method.scientificMethod(number:object.singlePrice) + " " + object.tradingPairsName
             cell.costResult.text = Extension.method.scientificMethod(number: object.totalPrice) + " " + object.tradingPairsName
@@ -154,7 +153,7 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
             cell.tradingPairsResult.text = object.coinAbbName + "/" + object.tradingPairsName
             cell.amountResult.text = Extension.method.scientificMethod(number:object.amount)
             cell.buyDeleteButton.isHidden = true
-
+            
             cell.worthResult.text = Extension.method.scientificMethod(number:object.worth) + " " + object.tradingPairsName
             checkDataRiseFallColor(risefallnumber: object.delta, label: cell.deltaResult,currency:object.tradingPairsName, type: "Percent")
             
@@ -209,14 +208,9 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
     }
     
     @objc func addTransaction(sender: UIButton){
-        guard let coinD = coinDetail else { return }
         let transaction = GameTransactionsController()
         transaction.gameBalanceController = gameBalanceController
-        transaction.newTransaction.coinAbbName = coinD.abbrName
-        transaction.newTransaction.coinName = coinD.name
-        transaction.newTransaction.exchangeName = coinD.exchangeName
-        transaction.newTransaction.tradingPairsName = coinD.tradingPairName
-        transaction.transactionStatus = "AddSpecific"
+        transaction.hidesBottomBarWhenPushed = true
         self.navigationController?.pushViewController(transaction, animated: true)
     }
     
@@ -227,7 +221,7 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
         view.addSubview(addHistoryButton)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: averageView)
-        view.addConstraintsWithFormat(format: "V:|[v0(\(10*factor!))]", views: averageView)
+        view.addConstraintsWithFormat(format: "V:|[v0(\(10*factor))]", views: averageView)
         
         view.addConstraintsWithFormat(format: "H:|[v0]|", views: historyTableView,averageView)
         view.addConstraintsWithFormat(format: "V:[v1]-0-[v0]", views: historyTableView,averageView)
@@ -241,6 +235,12 @@ class GameTransactionsHistoryViewController: UIViewController,UITableViewDataSou
         } else {
             addHistoryButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -20).isActive = true
         }
+        
+        let titleLabel = UILabel()
+        titleLabel.font = UIFont.boldFont(17*factor)
+        titleLabel.text = textValue(name: "allTransactionsHistory")
+        titleLabel.textColor = UIColor.white
+        navigationItem.titleView = titleLabel
     }
     
     lazy var historyTableView:UITableView = {

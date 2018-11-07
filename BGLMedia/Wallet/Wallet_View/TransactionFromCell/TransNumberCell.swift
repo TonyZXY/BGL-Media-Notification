@@ -128,7 +128,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     private let transactionFeeLabel: UILabel = {
         let label = UILabel()
         label.textColor = ThemeColor().textGreycolor()
-        label.text = textValue(name: "transactionFee") + ": 0.2%"
+        label.text = textValue(name: "transactionFee") + ": \(transactionFee * 100)%"
         label.textAlignment = .right
         return label
     }()
@@ -196,7 +196,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             if coinName == "AUD" {
                 //for buying
                 let limit = 100000000.0  //determine decimal pplaces
-                amount = balance * Double(slider.value) / 100 / coinPrice
+                amount = balance * (1 - transactionFee) * Double(slider.value) / 100 / coinPrice
                 amount = (amount * limit).rounded(.down) / limit
             } else {
                 //for selling
@@ -261,10 +261,10 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             
             if coinName == "AUD" {
                 //for buying
-                slider.value = Float((Double(value) ?? 0) * coinPrice * 100 / balance)
+                slider.value = Float((Double(value) ?? 0) * coinPrice * 100 / (balance * (1 - transactionFee)))
                 percentageTextField.text = "\(slider.value)"
                 
-                if (Double(value) ?? 0) > (balance / coinPrice) {
+                if (Double(value) ?? 0) > (balance * (1 - transactionFee) / coinPrice) {
                     calculateCoinAmount()
                 }
             } else {

@@ -230,6 +230,7 @@
 		57FC41FD20FB08560052EE02 /* LanguageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC41FC20FB08560052EE02 /* LanguageController.swift */; };
 		57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57FC420420FDC7260052EE02 /* FlashSearchController.swift */; };
 		57FC420920FEB8230052EE02 /* RevealingSplashView.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 57FC420820FEB8230052EE02 /* RevealingSplashView.framework */; settings = {ATTRIBUTES = (Required, ); }; };
+		B91BBF2521928B2500D41EC9 /* AllGameTransactionsHistoryController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B91BBF2421928B2500D41EC9 /* AllGameTransactionsHistoryController.swift */; };
 		B930B6E9214F3D5900685F64 /* Event.swift in Sources */ = {isa = PBXBuildFile; fileRef = B930B6E8214F3D5900685F64 /* Event.swift */; };
 		B930B6EC21507DA800685F64 /* EventViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = B930B6EB21507DA800685F64 /* EventViewModel.swift */; };
 		B9530C7B215208F6002AE4D5 /* PopoverController.swift in Sources */ = {isa = PBXBuildFile; fileRef = B9530C7A215208F6002AE4D5 /* PopoverController.swift */; };
@@ -489,6 +490,7 @@
 		57FC420320FBA0310052EE02 /* zh-Hans-CN */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = "zh-Hans-CN"; path = "../zh-Hans-CN.lproj/Main.strings"; sourceTree = "<group>"; };
 		57FC420420FDC7260052EE02 /* FlashSearchController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FlashSearchController.swift; sourceTree = "<group>"; };
 		57FC420820FEB8230052EE02 /* RevealingSplashView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = RevealingSplashView.framework; path = Carthage/Build/iOS/RevealingSplashView.framework; sourceTree = "<group>"; };
+		B91BBF2421928B2500D41EC9 /* AllGameTransactionsHistoryController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AllGameTransactionsHistoryController.swift; sourceTree = "<group>"; };
 		B930B6E8214F3D5900685F64 /* Event.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Event.swift; sourceTree = "<group>"; };
 		B930B6EB21507DA800685F64 /* EventViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventViewModel.swift; sourceTree = "<group>"; };
 		B9530C7A215208F6002AE4D5 /* PopoverController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PopoverController.swift; sourceTree = "<group>"; };
@@ -1122,6 +1124,7 @@
 				B9F4F33E2165D5AB0038AE6B /* GameBalanceController.swift */,
 				B9F4F3382161E0EE0038AE6B /* GameTransactionsController.swift */,
 				57355C2E20F718CC002E70E4 /* TransactionsController.swift */,
+				B91BBF2421928B2500D41EC9 /* AllGameTransactionsHistoryController.swift */,
 				57355C2F20F718CC002E70E4 /* SearchExchangesController.swift */,
 				57355C3120F718CC002E70E4 /* SearchTradingPairController.swift */,
 				57355C3220F718CC002E70E4 /* WalletController.swift */,
@@ -1717,6 +1720,7 @@
 				5464D1A020EF31C300D2C33A /* ShareImagePreViewController.swift in Sources */,
 				57AEA17D211276ED00042CF6 /* SCLAlertView.swift in Sources */,
 				2442BE72217ED88E000100BE /* ToRankPageButton.swift in Sources */,
+				B91BBF2521928B2500D41EC9 /* AllGameTransactionsHistoryController.swift in Sources */,
 				2D52AF4020E46E1A00018FC0 /* OnBoardingUIPageViewController.swift in Sources */,
 				B95B7FFB21588BF4004E613D /* IntrinsicContentSize.swift in Sources */,
 				57355C4720F718CC002E70E4 /* TransDateCell.swift in Sources */,
