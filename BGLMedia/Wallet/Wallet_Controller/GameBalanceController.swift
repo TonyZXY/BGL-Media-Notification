@@ -11,6 +11,8 @@ import RealmSwift
 import SwiftKeychainWrapper
 import SwiftyJSON
 
+let transactionFee = 0.002
+
 class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDataSource,UITextFieldDelegate {
     let factor = UIScreen.main.bounds.width/375
     var image = AppImage()
@@ -27,6 +29,16 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     let unrealizedHint = HintAlertController()
     
     var gameUser: GameUser?
+    var showingCoins: [GameCoin] {
+        var coins = [GameCoin]()
+        gameUser?.coins.forEach({ (coin) in
+            if coin.amount != 0 || coin.abbrName == "AUD" {
+                coins.append(coin)
+            }
+        })
+        return coins
+    }
+    
     var timer = Timer()
     
     var loginStatus:Bool{
@@ -175,38 +187,75 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         self.present(alert, animated: true)
     }
     
-    private func getTransSum(completion: @escaping (_ transSums: [TransSum], _ error: String?) -> Void) {
+    
+    
+    private func getAllTransactions(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
         guard let userID = gameUser?.id else { return }
         let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID]
-        URLServices.fetchInstance.passServerData(urlParameters: ["game","getUserAverageHistory"], httpMethod: "POST", parameters: parameter) { (response, success) in
+        URLServices.fetchInstance.passServerData(urlParameters: ["game","getAllTransactions"], httpMethod: "POST", parameters: parameter) { (response, success) in
             if success {
-                let transSums = response["data"].arrayValue.map({ (item) -> TransSum in
-                    return TransSum(item)
-                })
-                completion(transSums, nil)
-                
+                completion(response["data"].arrayValue, nil)
             } else {
                 completion([], textValue(name: "networkFailure"))
             }
         }
     }
     
-    private func updateGameUserTransSum(_ transSums: [TransSum]) {
-        guard let coins = gameUser?.coins else { return }
-        for (index, _) in coins.enumerated() {
-            transSums.forEach({ (transSum) in
-                if coins[index].abbrName.lowercased() == transSum.abbrName.lowercased() {
-                    if transSum.status.lowercased() == "buy" {
-                        self.gameUser?.coins[index].totalAmountOfBuy = transSum.totalAmount
-                        self.gameUser?.coins[index].totalValueOfBuy = transSum.totalValue
-                    } else {
-                        self.gameUser?.coins[index].totalAmountOfSell = transSum.totalAmount
-                        self.gameUser?.coins[index].totalValueOfSell = transSum.totalValue
+    private func updateTransactions(completion: @escaping (_ success: Bool) -> Void) {
+        getAllTransactions { (jsonArray, error)  in
+            if let _ = error {
+                completion(false)
+            } else {
+                if let coins = self.gameUser?.coins {
+                    for (index, _) in coins.enumerated() {
+                        var newJA = [JSON]()
+                        jsonArray.forEach({ (json) in
+                            if coins[index].abbrName.lowercased() == json["coin_add_name"].stringValue.lowercased() {
+                                newJA.append(json)
+                            }
+                        })
+                        self.gameUser?.coins[index].updateTransactions(newJA)
                     }
                 }
-            })
+                completion(true)
+            }
         }
     }
+    
+    
+    
+//    private func getTransSum(completion: @escaping (_ transSums: [TransSum], _ error: String?) -> Void) {
+//        guard let userID = gameUser?.id else { return }
+//        let parameter:[String:Any] = ["token": certificateToken, "email": email, "user_id": userID]
+//        URLServices.fetchInstance.passServerData(urlParameters: ["game","getUserAverageHistory"], httpMethod: "POST", parameters: parameter) { (response, success) in
+//            if success {
+//                let transSums = response["data"].arrayValue.map({ (item) -> TransSum in
+//                    return TransSum(item)
+//                })
+//                completion(transSums, nil)
+//
+//            } else {
+//                completion([], textValue(name: "networkFailure"))
+//            }
+//        }
+//    }
+//
+//    private func updateGameUserTransSum(_ transSums: [TransSum]) {
+//        guard let coins = gameUser?.coins else { return }
+//        for (index, _) in coins.enumerated() {
+//            transSums.forEach({ (transSum) in
+//                if coins[index].abbrName.lowercased() == transSum.abbrName.lowercased() {
+//                    if transSum.status.lowercased() == "buy" {
+//                        self.gameUser?.coins[index].totalAmountOfBuy = transSum.totalAmount
+//                        self.gameUser?.coins[index].totalValueOfBuy = transSum.totalValue
+//                    } else {
+//                        self.gameUser?.coins[index].totalAmountOfSell = transSum.totalAmount
+//                        self.gameUser?.coins[index].totalValueOfSell = transSum.totalValue
+//                    }
+//                }
+//            })
+//        }
+//    }
     
     func getCoinsPrice(completion: @escaping (_ jsonArray: [JSON], _ error: String?) -> Void) {
         URLServices.fetchInstance.passServerData(urlParameters: ["game","getCoinData"], httpMethod: "GET", parameters: [:]) { (response, success) in
@@ -300,7 +349,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     //TableView Cell Number
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return gameUser?.coins.count ?? 0
+        return showingCoins.count
     }
     
     //Each Table View Cell Create
@@ -308,11 +357,10 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         let factor = view.frame.width/375
         let cell = WalletsCell(style: UITableViewCellStyle.default, reuseIdentifier: "WalletCell")
         cell.factor = factor
-        guard let assets = gameUser?.coins[indexPath.row] else { return cell }
+        let assets = showingCoins[indexPath.row]
         cell.coinName.text = assets.name
         if assets.name == "AUD" {
             cell.coinAmount.text = Extension.method.scientificMethod(number: assets.amount) + " " + assets.abbrName
-            cell.isUserInteractionEnabled = false
         } else {
             cell.coinAmount.text = "\(assets.amount) " + assets.abbrName
         }
@@ -369,20 +417,34 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     //Refresh Method
     @objc func handleRefresh(_ tableView:UITableView) {
         if gameUser != nil {
-            getTransSum { (transSums, error) in
-                if let _ = error {
-                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
-                } else {
-                    self.updateGameUserTransSum(transSums)
+            updateTransactions { (success) in
+                if success {
                     self.updateCoinAmount()
                     self.updateCells()
                     self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+                } else {
+                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
                 }
             }
         } else {
             self.walletList.switchRefreshHeader(to: .normal(.none, 0.5))
             checkLoginStatus()
         }
+//        if gameUser != nil {
+//            getTransSum { (transSums, error) in
+//                if let _ = error {
+//                    self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
+//                } else {
+//                    self.updateGameUserTransSum(transSums)
+//                    self.updateCoinAmount()
+//                    self.updateCells()
+//                    self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
+//                }
+//            }
+//        } else {
+//            self.walletList.switchRefreshHeader(to: .normal(.none, 0.5))
+//            checkLoginStatus()
+//        }
     }
     
     private func updateCoinAmount(){
@@ -391,18 +453,19 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
             URLServices.fetchInstance.passServerData(urlParameters: ["game","getAccount"], httpMethod: "POST", parameters: param){ (response, success) in
                 if success {
                     let data = response["data"]
-                    if let coins = self.gameUser?.coins{
-                        var newList : [GameCoin] = []
-                        for coin in coins{
-                            var newCoin = coin
-                            let newAmount = Double(data[coin.abbrName.lowercased()].stringValue) ?? 0
-                            if newAmount > 0 {
-                                newCoin.amount = newAmount
-                                newList.append(newCoin)
-                            }
-                        }
-                        self.gameUser!.coins = newList
-                    }
+                    self.gameUser?.updateCoinsAmount(data)
+//                    if let coins = self.gameUser?.coins{
+//                        var newList : [GameCoin] = []
+//                        for coin in coins{
+//                            var newCoin = coin
+//                            let newAmount = Double(data[coin.abbrName.lowercased()].stringValue) ?? 0
+//                            if newAmount > 0 {
+//                                newCoin.amount = newAmount
+//                                newList.append(newCoin)
+//                            }
+//                        }
+//                        self.gameUser!.coins = newList
+//                    }
                 }
             }
         }
@@ -440,14 +503,21 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     //Select specific coins and change to detail page
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if gameUser != nil {
-            let detailPage = GameCoinPageController()
-            detailPage.hidesBottomBarWhenPushed = true
-            //        let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
-            //        coinDetail = cell.selectCoin
-            detailPage.coinDetail = gameUser?.coins[indexPath.row]
-            detailPage.gameBalanceController = self
-            detailPage.coinDetailController.alertControllers.status = "detailPage"
-            navigationController?.pushViewController(detailPage, animated: true)
+            if indexPath.row == 0 {
+                let detailPage = AllGameTransactionsHistoryController()
+                detailPage.hidesBottomBarWhenPushed = true
+                detailPage.gameBalanceController = self
+                navigationController?.pushViewController(detailPage, animated: true)
+            } else {
+                let detailPage = GameCoinPageController()
+                detailPage.hidesBottomBarWhenPushed = true
+                //        let cell = self.walletList.cellForRow(at: indexPath) as! WalletsCell
+                //        coinDetail = cell.selectCoin
+                detailPage.coinDetail = showingCoins[indexPath.row]
+                detailPage.gameBalanceController = self
+                detailPage.coinDetailController.alertControllers.status = "detailPage"
+                navigationController?.pushViewController(detailPage, animated: true)
+            }
         }
     }
     
