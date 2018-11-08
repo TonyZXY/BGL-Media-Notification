@@ -111,13 +111,13 @@ class RankTableViewTopCell: UITableViewCell{
     }
     
     @objc func goldAction(sender : UITapGestureRecognizer) {
-        tableController?.presentPopWindow(viewModel: viewModels[0])
+        tableController?.presentPopWindow(viewModel: viewModels.count < 1 ? nil : viewModels[0])
     }
     @objc func silverAction(sender : UITapGestureRecognizer) {
-        tableController?.presentPopWindow(viewModel: viewModels[1])
+        tableController?.presentPopWindow(viewModel: viewModels.count < 2 ? nil : viewModels[1])
     }
     @objc func bronzeAction(sender : UITapGestureRecognizer) {
-        tableController?.presentPopWindow(viewModel: viewModels[2])
+        tableController?.presentPopWindow(viewModel:  viewModels.count < 3 ? nil : viewModels[2])
     }
     
     class TopRankContainer : UIView{

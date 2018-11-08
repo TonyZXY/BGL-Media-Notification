@@ -18,13 +18,13 @@
 		2442BE6A217ED841000100BE /* StopLossSettingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE68217ED841000100BE /* StopLossSettingView.swift */; };
 		2442BE6C217ED84D000100BE /* StopLoss.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6B217ED84D000100BE /* StopLoss.swift */; };
 		2442BE70217ED88E000100BE /* RankTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6D217ED88E000100BE /* RankTableViewCell.swift */; };
-		2442BE71217ED88E000100BE /* RankPopWindowContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6E217ED88E000100BE /* RankPopWindowContent.swift */; };
 		2442BE72217ED88E000100BE /* ToRankPageButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6F217ED88E000100BE /* ToRankPageButton.swift */; };
 		2442BE75217ED89E000100BE /* RankingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE73217ED89E000100BE /* RankingViewController.swift */; };
 		2442BE76217ED89E000100BE /* RankTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE74217ED89E000100BE /* RankTableViewController.swift */; };
 		2442BE78217ED8A7000100BE /* RankModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE77217ED8A7000100BE /* RankModel.swift */; };
 		24476084216D889D00A769E6 /* GameGeneralController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24476083216D889D00A769E6 /* GameGeneralController.swift */; };
 		245E9A812167427A004577E0 /* PopWindowController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 245E9A802167427A004577E0 /* PopWindowController.swift */; };
+		24CA23D22193E96700CFBEDC /* RankPopWindowContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6E217ED88E000100BE /* RankPopWindowContent.swift */; };
 		24DB1878218047150064349F /* AssetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB1877218047150064349F /* AssetController.swift */; };
 		24DB1895218048170064349F /* MenuPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB188D218048170064349F /* MenuPage.swift */; };
 		24DB1896218048170064349F /* MenuBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB188E218048170064349F /* MenuBarView.swift */; };
@@ -1602,6 +1602,7 @@
 				2D52AEA520E46E1A00018FC0 /* HistoryTableViewCell.swift in Sources */,
 				57355C4B20F718CC002E70E4 /* TransAdditionalCell.swift in Sources */,
 				57C2F412213E16B50065F0B9 /* RefreshDataService.swift in Sources */,
+				24CA23D22193E96700CFBEDC /* RankPopWindowContent.swift in Sources */,
 				573C96AB20EF068A00B667AB /* Extension.swift in Sources */,
 				2D52AE9920E46E1A00018FC0 /* DetailController.swift in Sources */,
 				2D3AF497211C02BD00F5AA51 /* AboutAppViewController.swift in Sources */,
@@ -1659,7 +1660,6 @@
 				578FE8DB20FF1FF40027F17E /* LaunchScreenViewController.swift in Sources */,
 				24DB1895218048170064349F /* MenuPage.swift in Sources */,
 				24DB1896218048170064349F /* MenuBarView.swift in Sources */,
-				2442BE71217ED88E000100BE /* RankPopWindowContent.swift in Sources */,
 				57BBAB6B210962C300984AA4 /* WatchListCell.swift in Sources */,
 				57650895210D9AFE007368CC /* Transactions.swift in Sources */,
 				57BAD86B21045ACF00973B45 /* exchangeController.swift in Sources */,

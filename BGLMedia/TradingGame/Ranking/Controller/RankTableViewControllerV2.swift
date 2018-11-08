@@ -1,16 +1,15 @@
 //
-//  RankTableViewController.swift
+//  RankTableViewControllerV2.swift
 //  BGLMedia
 //
-//  Created by Jia YI Bai on 3/10/18.
+//  Created by Jia YI Bai on 1/11/18.
 //  Copyright © 2018 ZHANG ZEYAO. All rights reserved.
 //
 
 import Foundation
 import UIKit
-import SwiftyJSON
 
-class RankTableViewController: UIViewController, UITableViewDelegate, UITableViewDataSource{
+class RankTableViewControllerV2: UIViewController, UITableViewDelegate, UITableViewDataSource{
     let factor = UIScreen.main.bounds.width/414
     
     var allRank = [RankObjectViewModel](){
@@ -32,12 +31,10 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     lazy var rankTableView : UITableView = {
         var tv = UITableView()
-//        tv.bounces = false
+        //        tv.bounces = false
         tv.backgroundColor = ThemeColor().themeColor()
         tv.separatorStyle = .none
-
-        tv.register(RankTableViewTopCell.self, forCellReuseIdentifier: RankTableViewTopCell.registerID)
-        tv.register(RankTableViewBottomCell.self, forCellReuseIdentifier: RankTableViewBottomCell.registerID)
+        tv.register(RankTableViewCell.self, forCellReuseIdentifier: RankTableViewCell.registerID)
         tv.dataSource = self
         tv.delegate = self
         return tv
@@ -117,17 +114,17 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0{
-            let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewTopCell.registerID, for: indexPath) as! RankTableViewTopCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewTopCell.registerID, for: indexPath) as! RankTableViewCell
             cell.selectionStyle = .none
             //  this is setted for onclick event
-            cell.tableController = self
+//            cell.tableController = self
             // setupview is called after cell initiated to avoid add constraint with default frame (width 320 height 44)
             cell.setupView()
-            cell.viewModels = allRank
+//            cell.viewModels = allRank
             return cell
         }else{
             //row > 0
-            let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewBottomCell.registerID, for: indexPath) as! RankTableViewBottomCell
+            let cell = tableView.dequeueReusableCell(withIdentifier: RankTableViewBottomCell.registerID, for: indexPath) as! RankTableViewCell
             cell.selectionStyle = .none
             cell.setupView()
             cell.rankViewModel = allRank[indexPath.row+2]
@@ -151,113 +148,26 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         let cell = tableView.cellForRow(at: indexPath) as! RankTableViewBottomCell
         let viewModel = cell.rankViewModel
-        presentPopWindow(viewModel: viewModel)
+//        presentPopWindow(viewModel: viewModel)
     }
     
-    func presentPopWindow(viewModel: RankObjectViewModel?){
-        let header = PopWindowHeader(title: viewModel?.pop_title)
-        
-        let content = RankPopWindowContent(rankViewModel: viewModel)
-        let view : UIView = {
-            let view = UIView()
-            view.heightAnchor.constraint(equalToConstant: 150*factor).isActive = true
-            view.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
-            view.addSubview(header)
-            view.addSubview(content)
-            view.addConstraintsWithFormat(format: "H:|[v0]|", views: header)
-            view.addConstraintsWithFormat(format: "H:|[v0]|", views: content)
-            view.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor))]-0-[v1]|", views: header,content)
-            return view
-        }()
-        let popWindowConttroller = PopWindowController(contentView: view)
-        header.dismissButton.dismissController = popWindowConttroller
-        self.present(popWindowConttroller, animated: true, completion: nil)
-    }
-}
-
-
-class CompetitionTableViewController : RankTableViewController{
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // get data from refresshing
-        DispatchQueue.main.async {
-            self.rankTableView.beginHeaderRefreshing()
-        }
-    }
-    
-    func handleRefresh(_ tableView: UITableView){
-        let api = RankApiReader()
-        api.getAllRankData(completion: { success in
-            if success {
-                self.allRank = api.getCompetitionViewModels()
-                self.userRank = api.getUserCompetitionViewModel()
-                tableView.reloadData()
-                tableView.switchRefreshHeader(to: .normal(.success, 0.5))
-            }else{
-                tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
-            }
-        })
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName : nibNameOrNil, bundle: nibBundleOrNil)
-        // add refresh header
-        let header = DefaultRefreshHeader.header()
-        header.textLabel.textColor = ThemeColor().whiteColor()
-        header.textLabel.font = UIFont.regularFont(12)
-        header.tintColor = ThemeColor().whiteColor()
-        header.imageRenderingWithTintColor = true
-        self.rankTableView.configRefreshHeader(with:header, container: self, action: {
-            self.handleRefresh(self.rankTableView)
-        })
-        
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}
-
-class TotalRankTableViewController : RankTableViewController{
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
-        // get data from refresshing
-        DispatchQueue.main.async {
-            self.rankTableView.beginHeaderRefreshing()
-        }
-    }
-    
-    func handleRefresh(_ tableView: UITableView){
-        let api = RankApiReader()
-        api.getAllRankData(completion: { success in
-            if success {
-                self.allRank = api.getTotalViewModels()
-                self.userRank = api.getUserTotalViewModel()
-                tableView.reloadData()
-                tableView.switchRefreshHeader(to: .normal(.success, 0.5))
-            }else{
-                tableView.switchRefreshHeader(to: .normal(.failure, 0.5))
-            }
-        })
-    }
-    
-    override init(nibName nibNameOrNil: String?, bundle nibBundleOrNil: Bundle?) {
-        super.init(nibName : nibNameOrNil, bundle: nibBundleOrNil)
-        // add refresh header
-        let header = DefaultRefreshHeader.header()
-        header.textLabel.textColor = ThemeColor().whiteColor()
-        header.textLabel.font = UIFont.regularFont(12)
-        header.tintColor = ThemeColor().whiteColor()
-        header.imageRenderingWithTintColor = true
-        self.rankTableView.configRefreshHeader(with:header, container: self, action: {
-            self.handleRefresh(self.rankTableView)
-        })
-        
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
+//    func presentPopWindow(viewModel: RankObjectViewModel?){
+//        let header = PopWindowHeader(title: viewModel?.pop_title)
+//
+//        let content = RankPopWindowContent(rankViewModel: viewModel)
+//        let view : UIView = {
+//            let view = UIView()
+//            view.heightAnchor.constraint(equalToConstant: 200*factor).isActive = true
+//            view.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
+//            view.addSubview(header)
+//            view.addSubview(content)
+//            view.addConstraintsWithFormat(format: "H:|[v0]|", views: header)
+//            view.addConstraintsWithFormat(format: "H:|[v0]|", views: content)
+//            view.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor))]-0-[v1]|", views: header,content)
+//            return view
+//        }()
+//        let popWindowConttroller = PopWindowController(contentView: view)
+//        header.dismissButton.dismissController = popWindowConttroller
+//        self.present(popWindowConttroller, animated: true, completion: nil)
+//    }
 }

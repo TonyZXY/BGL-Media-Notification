@@ -437,10 +437,8 @@ hud_timeOut = "请求超时";
 navigationTitle_event = "活动";
 
 //Ranking Page
-rankMenuTitle_Weekly = "周榜";
+rankMenuTitle_Competition = "比赛";
 rankMenuTitle_Total = "总榜";
-rankPopWindow_Weekly = "周榜";
-rankPopWindow_Total = "总榜";
 
 //StopLoss
 stopLoss_title = "止损/止盈 设置";

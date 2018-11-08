@@ -87,6 +87,15 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
+        if loginStatus {
+            if gameUser != nil{
+                toRankButton.isUserInteractionEnabled = true
+            }else{
+                toRankButton.isUserInteractionEnabled = false
+            }
+        }else{
+            toRankButton.isUserInteractionEnabled = false
+        }
         if gameUser != nil {
             setupTimer()
             beginRefresh()
@@ -916,7 +925,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         button.translatesAutoresizingMaskIntoConstraints = false
         
         
-        button.isUserInteractionEnabled = false
+//        button.isUserInteractionEnabled = false
         return button
     }()
     

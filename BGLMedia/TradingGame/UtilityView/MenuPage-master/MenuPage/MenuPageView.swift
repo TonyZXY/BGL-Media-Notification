@@ -66,6 +66,18 @@ class MenuPageView: BasicView, UICollectionViewDataSource, UICollectionViewDeleg
         }
     }
     
+    var horizontalBarHeight : CGFloat! {
+        didSet{
+            menuBarView.heightOfHorizontalBar = horizontalBarHeight
+        }
+    }
+    
+    var menuBarPadding : CGFloat!{
+        didSet{
+            menuBarView.padding = menuBarPadding
+        }
+    }
+    
     private lazy var pageCollectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         layout.scrollDirection = .horizontal

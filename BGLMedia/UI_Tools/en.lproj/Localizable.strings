@@ -446,10 +446,8 @@ hud_timeOut = "Time Out";
 navigationTitle_event = "Events";
 
 //Ranking Page
-rankMenuTitle_Weekly = "Weekly";
+rankMenuTitle_Competition = "Competition";
 rankMenuTitle_Total = "Total";
-rankPopWindow_Weekly = "Weekly";
-rankPopWindow_Total = "Total";
 
 //StopLoss/takeProfit
 stopLoss_title = "Stop Loss/Take Profit Setting";
