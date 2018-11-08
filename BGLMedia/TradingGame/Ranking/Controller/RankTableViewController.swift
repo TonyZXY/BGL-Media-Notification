@@ -156,11 +156,11 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
     
     func presentPopWindow(viewModel: RankObjectViewModel?){
         let header = PopWindowHeader(title: viewModel?.pop_title)
-    
+        
         let content = RankPopWindowContent(rankViewModel: viewModel)
         let view : UIView = {
             let view = UIView()
-            view.heightAnchor.constraint(equalToConstant: 200*factor).isActive = true
+            view.heightAnchor.constraint(equalToConstant: 150*factor).isActive = true
             view.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
             view.addSubview(header)
             view.addSubview(content)
@@ -178,12 +178,20 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
 
 class CompetitionTableViewController : RankTableViewController{
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // get data from refresshing
+        DispatchQueue.main.async {
+            self.rankTableView.beginHeaderRefreshing()
+        }
+    }
+    
     func handleRefresh(_ tableView: UITableView){
         let api = RankApiReader()
         api.getAllRankData(completion: { success in
             if success {
-//                self.allRank = api.getWeeklyViewModels()
-//                self.userRank = api.getUserWeeklyViewModel()
+                self.allRank = api.getCompetitionViewModels()
+                self.userRank = api.getUserCompetitionViewModel()
                 tableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }else{
@@ -213,12 +221,20 @@ class CompetitionTableViewController : RankTableViewController{
 
 class TotalRankTableViewController : RankTableViewController{
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        // get data from refresshing
+        DispatchQueue.main.async {
+            self.rankTableView.beginHeaderRefreshing()
+        }
+    }
+    
     func handleRefresh(_ tableView: UITableView){
         let api = RankApiReader()
         api.getAllRankData(completion: { success in
             if success {
-//                self.allRank = api.getTotalViewModels()
-//                self.userRank = api.getUserTotalViewModel()
+                self.allRank = api.getTotalViewModels()
+                self.userRank = api.getUserTotalViewModel()
                 tableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }else{

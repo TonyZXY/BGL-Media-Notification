@@ -12,10 +12,7 @@ import SwiftyJSON
  responsible for getting all rankdata into dataModel and also responsible to covert dataModel to viewModel
  */
 class RankApiReader {
-//    var rankInfoModel = RankDetailModel()
-    var competitionRankModels = [RankObjectModel]()
-    var totalRankModels = [RankObjectModel]()
-    var userRankModel = RankObjectModel()
+    var rankData = RankAllInfoModel()
     
     var token :String {
         get{
@@ -40,30 +37,10 @@ class RankApiReader {
         URLServices.fetchInstance.passServerData(urlParameters: ["game","getRanking"], httpMethod: "POST", parameters: ["token": token,"email": email,"user_id": user_id]){ (res,success) in
             if success{
                 print("成功获取Ranking")
-                self.clearAllData()
                 // store data
                 let data = JSON(res)["data"]
                 
-                let competition_rank = data["competitionRank"].array
-                let total_rank = data["totalRank"].array
-                
-                let user_competition = data["competition"]
-                let user_total = data["total"]
-//                //user rank is a single object
-//                let user_rank = data["user_rank"]
-//
-//                self.userRankModel = RankObjectModel(user_rank)
-//
-//                for obj in weekly_rank{
-//                    let rank = RankObjectModel(obj)
-//                    self.weeklyRankModels.append(rank)
-//                }
-//
-//                for obj in total_rank{
-//                    let rank = RankObjectModel(obj)
-//                    //                        print(rank.total)
-//                    self.totalRankModels.append(rank)
-//                }
+                self.rankData = RankAllInfoModel(data)
                 
                 completion(true)
                 
@@ -74,34 +51,43 @@ class RankApiReader {
         }
     }
     
-    func clearAllData(){
-//        self.rankInfoModel = RankDetailModel()
-//        self.weeklyRankModels.removeAll()
-//        self.totalRankModels.removeAll()
-//        self.userRankModel = RankObjectModel()
-    }
     // function that returns the viewmodels we want to display
-    func convertToViewModels(rankModels: [RankObjectModel], displayMode: RankObjectViewModel.DisplayMode)->[RankObjectViewModel]{
+    func convertToViewModels(totalModels: [TotalRankModel])->[RankObjectViewModel]{
         var viewModels = [RankObjectViewModel]()
-        for rankModel in rankModels{
-            viewModels.append(RankObjectViewModel(rankModel, displayMode: displayMode))
+        for model in totalModels{
+            viewModels.append(RankObjectViewModel(totalModel: model))
         }
         return viewModels
     }
     
-//    func getWeeklyViewModels()->[RankObjectViewModel]{
-//        return self.convertToViewModels(rankModels: weeklyRankModels, displayMode: RankObjectViewModel.DisplayMode.weekly)
-//    }
-//
-//    func getTotalViewModels()->[RankObjectViewModel]{
-//        return self.convertToViewModels(rankModels: totalRankModels, displayMode: RankObjectViewModel.DisplayMode.total)
-//    }
-//
-//    func getUserWeeklyViewModel()->RankObjectViewModel{
-//        return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.weekly)
-//    }
-//
-//    func getUserTotalViewModel()->RankObjectViewModel{
-//        return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.total)
-//    }
+    // function that returns the viewmodels we want to display
+    func convertToViewModels(competitionModels: [CompetitionRankModel])->[RankObjectViewModel]{
+        var viewModels = [RankObjectViewModel]()
+        for model in competitionModels{
+            viewModels.append(RankObjectViewModel(competitionModel: model))
+        }
+        return viewModels
+    }
+    
+    func getCompetitionViewModels()->[RankObjectViewModel]{
+        return self.convertToViewModels(competitionModels: rankData.competitionRank)
+    }
+    
+    func getTotalViewModels()->[RankObjectViewModel]{
+        return self.convertToViewModels(totalModels: rankData.totalRank)
+    }
+
+    func getUserCompetitionViewModel()->RankObjectViewModel?{
+        if let userCompetition = rankData.competition{
+            return RankObjectViewModel(competitionModel: userCompetition)
+        }
+        return nil
+    }
+
+    func getUserTotalViewModel()->RankObjectViewModel?{
+        if let userTotal = rankData.total{
+            return RankObjectViewModel(totalModel: userTotal)
+        }
+        return nil
+    }
 }

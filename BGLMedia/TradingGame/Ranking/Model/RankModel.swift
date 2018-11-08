@@ -9,49 +9,93 @@
 import Foundation
 import SwiftyJSON
 
-//struct RankDetailModel {
-//    var title : String = ""
-//    var rank_time : Date = Date()
-//    var rank_time_string : String = ""
-//    var week_number : Int = -1
-//
-//    init(_ json: JSON? = nil) {
-//        if json != nil{
-//            title = json!["title"].string ?? ""
-//            rank_time = Extension.method.convertStringToDate(date: json!["rank_time"].string ?? "")
-//            rank_time_string = json!["rank_time_string"].string ?? ""
-//            week_number = json!["week_number"].int ?? -1
-//        }
-//    }
-//}
+struct RankDetailModel {
+    var date_number : Int = -1
+    var time_string : String = ""
+    var title : String = ""
+    var time : Date = Date()
 
+    init(_ rankJson: JSON? = nil) {
+        if var json = rankJson{
+            date_number = json["date_number"].int ?? -1
+            time_string = json["time_string"].string ?? ""
+            title = json["title"].string ?? ""
+            time = Extension.method.convertStringToDate(date: json["time"].string ?? "")
+        }
+    }
+}
 
-
-struct RankObjectModel{
+struct CompetitionRankModel {
     var _id : String = ""
     var user_id : String = ""
-    var user_nickname : String? = ""
-    var total : Double = -1
-    var week_percentage : Double = -1
-    var week_rank : Int = -1
-    var total_rank : Int = -1
-    var rankType : RankType?
+    var user_nickname : String = ""
+    var daily_rank : Int = -1
+    var this_week : Double = -1
     
-    enum RankType {
-        case competition
-        case total
-    }
-    init(_ json: JSON? = nil) {
-        if json != nil{
-            _id = json!["_id"].string ?? ""
-            user_id = json!["user_id"].string ?? ""
-            user_nickname = json!["user_nickname"].string ?? ""
-            total = json!["total"].double ?? -1
-            week_percentage = json!["week_percentage"].double ?? -1
-            week_rank = json!["week_rank"].int ?? -1
-            total_rank = json!["total_rank"].int ?? -1
+    init(_ competitionData : JSON?) {
+        if let json = competitionData {
+            _id = json["_id"].string ?? ""
+            user_id = json["user_id"].string ?? ""
+            user_nickname = json["user_nickname"].string ?? ""
+            daily_rank = json["daily_rank"].int ?? -1
+            this_week = json["daily_rank"].double ?? -1
         }
-        // should go with default value if empty param
+    }
+}
+
+struct TotalRankModel {
+    var _id : String = ""
+    var user_id : String = ""
+    var user_nickname : String = ""
+    var total_rank : Int = -1
+    var total : Double = -1
+    
+    init(_ totalData : JSON?) {
+        if let json = totalData {
+            _id = json["_id"].string ?? ""
+            user_id = json["user_id"].string ?? ""
+            user_nickname = json["user_nickname"].string ?? ""
+            total_rank = json["total_rank"].int ?? -1
+            total = json["total"].double ?? -1
+        }
+    }
+}
+
+struct RankAllInfoModel{
+    var total : TotalRankModel?
+    var competition : CompetitionRankModel?
+    var competition_detail : RankDetailModel?
+    var total_detail : RankDetailModel?
+    var totalRank : [TotalRankModel] = []
+    var competitionRank : [CompetitionRankModel] = []
+    
+    init(_ result: JSON?=nil) {
+        if var json = result {
+            total = TotalRankModel(json["total"])
+            competition = CompetitionRankModel(json["competition"])
+            
+            let competition_json = json["competitionRank"]
+            let total_json = json["totalRank"]
+            competition_detail = RankDetailModel(competition_json)
+            total_detail = RankDetailModel(total_json)
+            
+            let competition_data = competition_json["data"].array ?? []
+            let total_data = total_json["data"].array ?? []
+            
+            totalRank.removeAll()
+            competitionRank.removeAll()
+            for data in competition_data{
+                competitionRank.append(CompetitionRankModel(data))
+            }
+            
+            for data in total_data{
+                totalRank.append(TotalRankModel(data))
+            }
+            
+//            print(totalRank)
+//            print(competitionRank)
+        }
+        // should go with default value if empty result
     }
 }
 
@@ -65,36 +109,31 @@ struct RankObjectViewModel {
     
     // for displaying onclick pop window content
     var pop_title : String = ""
-    var pop_weeklyStat : String = ""
-    var pop_totalStat : String = ""
-    var pop_weeklyRank : String = ""
-    var pop_totalRank : String = ""
+//    var pop_weeklyStat : String = ""
+    var pop_stat : String = ""
+    var pop_rank : String = ""
+//    var pop_totalRank : String = ""
+
+    init(totalModel : TotalRankModel) {
+        nickname = totalModel.user_nickname
+        ranknumber = totalModel.total_rank
+        ranknumberString = "\(totalModel.total_rank)."
+        statString = totalModel.total.toAbbreviateString(decimal: 3)
     
-    enum DisplayMode {
-        case weekly
-        case total
-    }
-    
-    
-    init(_ rankModel: RankObjectModel, displayMode : DisplayMode) {
-        if displayMode == DisplayMode.weekly{
-            nickname = rankModel.user_nickname ?? ""
-            ranknumber = rankModel.week_rank
-            ranknumberString = "\(rankModel.week_rank)."
-            statString = "\(String(format : "%.2f", rankModel.week_percentage))%"
-        }
-        if displayMode == DisplayMode.total {
-            nickname = rankModel.user_nickname ?? ""
-            ranknumber = rankModel.total_rank
-            ranknumberString = "\(rankModel.total_rank)."
-            statString = rankModel.total.toAbbreviateString(decimal: 2)
-        }
-        
         pop_title = nickname
-        pop_weeklyRank = "\(rankModel.week_rank)"
-        pop_totalRank = "\(rankModel.total_rank)"
-        pop_weeklyStat = "\(String(format : "%.2f", rankModel.week_percentage))%"
-        pop_totalStat = "\(rankModel.total)"
+        pop_stat = "\(totalModel.total.floorTo(decimalLimit: 8))"
+        pop_rank = "\(ranknumber)"
     }
 
+    init(competitionModel: CompetitionRankModel){
+        nickname = competitionModel.user_nickname
+        ranknumber = competitionModel.daily_rank
+        ranknumberString = "\(competitionModel.daily_rank)."
+        statString = "\(competitionModel.this_week.floorTo(decimalLimit: 3))%"
+        
+        pop_title = nickname
+        pop_stat = "\(competitionModel.this_week.floorTo(decimalLimit: 8))%"
+        pop_rank = "\(ranknumber)"
+    }
+    
 }

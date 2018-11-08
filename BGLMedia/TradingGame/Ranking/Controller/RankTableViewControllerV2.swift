@@ -148,26 +148,26 @@ class RankTableViewControllerV2: UIViewController, UITableViewDelegate, UITableV
         }
         let cell = tableView.cellForRow(at: indexPath) as! RankTableViewBottomCell
         let viewModel = cell.rankViewModel
-        presentPopWindow(viewModel: viewModel)
+//        presentPopWindow(viewModel: viewModel)
     }
     
-    func presentPopWindow(viewModel: RankObjectViewModel?){
-        let header = PopWindowHeader(title: viewModel?.pop_title)
-        
-        let content = RankPopWindowContent(rankViewModel: viewModel)
-        let view : UIView = {
-            let view = UIView()
-            view.heightAnchor.constraint(equalToConstant: 200*factor).isActive = true
-            view.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
-            view.addSubview(header)
-            view.addSubview(content)
-            view.addConstraintsWithFormat(format: "H:|[v0]|", views: header)
-            view.addConstraintsWithFormat(format: "H:|[v0]|", views: content)
-            view.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor))]-0-[v1]|", views: header,content)
-            return view
-        }()
-        let popWindowConttroller = PopWindowController(contentView: view)
-        header.dismissButton.dismissController = popWindowConttroller
-        self.present(popWindowConttroller, animated: true, completion: nil)
-    }
+//    func presentPopWindow(viewModel: RankObjectViewModel?){
+//        let header = PopWindowHeader(title: viewModel?.pop_title)
+//
+//        let content = RankPopWindowContent(rankViewModel: viewModel)
+//        let view : UIView = {
+//            let view = UIView()
+//            view.heightAnchor.constraint(equalToConstant: 200*factor).isActive = true
+//            view.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
+//            view.addSubview(header)
+//            view.addSubview(content)
+//            view.addConstraintsWithFormat(format: "H:|[v0]|", views: header)
+//            view.addConstraintsWithFormat(format: "H:|[v0]|", views: content)
+//            view.addConstraintsWithFormat(format: "V:|-0-[v0(\(50*factor))]-0-[v1]|", views: header,content)
+//            return view
+//        }()
+//        let popWindowConttroller = PopWindowController(contentView: view)
+//        header.dismissButton.dismissController = popWindowConttroller
+//        self.present(popWindowConttroller, animated: true, completion: nil)
+//    }
 }

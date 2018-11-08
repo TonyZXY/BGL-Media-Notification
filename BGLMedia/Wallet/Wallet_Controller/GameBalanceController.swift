@@ -112,6 +112,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         if !UserDefaults.standard.bool(forKey: "isLoggedIn"){
             let login = LoginController(usedPlace: 0)
             self.present(login, animated: true, completion: nil)
+            // diable Ranking if not loged in will enabled in checkNickname
+            toRankButton.isUserInteractionEnabled = false
         } else {
             checkNickname()
         }
@@ -126,6 +128,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                         self.popNicknameAlert(true)
                     } else {
                         self.setupGameUser(response)
+                        // checkNick name success and enable ranking button
+                        self.toRankButton.isUserInteractionEnabled = true
                     }
                 } else {
                     self.popNetworkFailureAlert()

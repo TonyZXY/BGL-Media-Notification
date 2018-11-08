@@ -12,8 +12,6 @@ import UIKit
 class RankViewController : UIViewController{
     let factor = UIScreen.main.bounds.width/375
     
-    let rankApiReader = RankApiReader()
-    
     lazy var menuBar : MenuPageView = {
         let page1 = MenuPage(title: textValue(name: "rankMenuTitle_Total"),pageView: totalContainer)
         let page2 = MenuPage(title: textValue(name: "rankMenuTitle_Copetition"),pageView: competitionContainer)
@@ -58,16 +56,5 @@ class RankViewController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
-        getData()
-    }
-    
-    func getData(){
-        rankApiReader.getAllRankData(completion: { success in
-            if success {
-                
-            }else{
-                
-            }
-        })
     }
 }
