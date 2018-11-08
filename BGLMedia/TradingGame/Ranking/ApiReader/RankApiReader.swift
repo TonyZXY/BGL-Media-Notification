@@ -11,9 +11,9 @@ import SwiftyJSON
 /**
  responsible for getting all rankdata into dataModel and also responsible to covert dataModel to viewModel
  */
-class RankDataReader {
-    var rankInfoModel = RankDetailModel()
-    var weeklyRankModels = [RankObjectModel]()
+class RankApiReader {
+//    var rankInfoModel = RankDetailModel()
+    var competitionRankModels = [RankObjectModel]()
     var totalRankModels = [RankObjectModel]()
     var userRankModel = RankObjectModel()
     
@@ -42,13 +42,13 @@ class RankDataReader {
                 print("成功获取Ranking")
                 self.clearAllData()
                 // store data
-                var data = JSON(res)["data"]
-                print(data)
-//                self.rankInfoModel = RankDetailModel(data)
-//                //                    print(data)
-//                // both ranking data are array
-//                let weekly_rank = data["weekly_rank"].array ?? []
-//                let total_rank = data["total_rank"].array ?? []
+                let data = JSON(res)["data"]
+                
+                let competition_rank = data["competitionRank"].array
+                let total_rank = data["totalRank"].array
+                
+                let user_competition = data["competition"]
+                let user_total = data["total"]
 //                //user rank is a single object
 //                let user_rank = data["user_rank"]
 //
@@ -75,10 +75,10 @@ class RankDataReader {
     }
     
     func clearAllData(){
-        self.rankInfoModel = RankDetailModel()
-        self.weeklyRankModels.removeAll()
-        self.totalRankModels.removeAll()
-        self.userRankModel = RankObjectModel()
+//        self.rankInfoModel = RankDetailModel()
+//        self.weeklyRankModels.removeAll()
+//        self.totalRankModels.removeAll()
+//        self.userRankModel = RankObjectModel()
     }
     // function that returns the viewmodels we want to display
     func convertToViewModels(rankModels: [RankObjectModel], displayMode: RankObjectViewModel.DisplayMode)->[RankObjectViewModel]{
@@ -89,19 +89,19 @@ class RankDataReader {
         return viewModels
     }
     
-    func getWeeklyViewModels()->[RankObjectViewModel]{
-        return self.convertToViewModels(rankModels: weeklyRankModels, displayMode: RankObjectViewModel.DisplayMode.weekly)
-    }
-    
-    func getTotalViewModels()->[RankObjectViewModel]{
-        return self.convertToViewModels(rankModels: totalRankModels, displayMode: RankObjectViewModel.DisplayMode.total)
-    }
-    
-    func getUserWeeklyViewModel()->RankObjectViewModel{
-        return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.weekly)
-    }
-    
-    func getUserTotalViewModel()->RankObjectViewModel{
-        return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.total)
-    }
+//    func getWeeklyViewModels()->[RankObjectViewModel]{
+//        return self.convertToViewModels(rankModels: weeklyRankModels, displayMode: RankObjectViewModel.DisplayMode.weekly)
+//    }
+//
+//    func getTotalViewModels()->[RankObjectViewModel]{
+//        return self.convertToViewModels(rankModels: totalRankModels, displayMode: RankObjectViewModel.DisplayMode.total)
+//    }
+//
+//    func getUserWeeklyViewModel()->RankObjectViewModel{
+//        return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.weekly)
+//    }
+//
+//    func getUserTotalViewModel()->RankObjectViewModel{
+//        return RankObjectViewModel(userRankModel, displayMode: RankObjectViewModel.DisplayMode.total)
+//    }
 }

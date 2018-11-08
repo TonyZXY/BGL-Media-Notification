@@ -9,21 +9,23 @@
 import Foundation
 import SwiftyJSON
 
-struct RankDetailModel {
-    var title : String = ""
-    var rank_time : Date = Date()
-    var rank_time_string : String = ""
-    var week_number : Int = -1
-    
-    init(_ json: JSON? = nil) {
-        if json != nil{
-            title = json!["title"].string ?? ""
-            rank_time = Extension.method.convertStringToDate(date: json!["rank_time"].string ?? "")
-            rank_time_string = json!["rank_time_string"].string ?? ""
-            week_number = json!["week_number"].int ?? -1
-        }
-    }
-}
+//struct RankDetailModel {
+//    var title : String = ""
+//    var rank_time : Date = Date()
+//    var rank_time_string : String = ""
+//    var week_number : Int = -1
+//
+//    init(_ json: JSON? = nil) {
+//        if json != nil{
+//            title = json!["title"].string ?? ""
+//            rank_time = Extension.method.convertStringToDate(date: json!["rank_time"].string ?? "")
+//            rank_time_string = json!["rank_time_string"].string ?? ""
+//            week_number = json!["week_number"].int ?? -1
+//        }
+//    }
+//}
+
+
 
 struct RankObjectModel{
     var _id : String = ""
@@ -33,7 +35,12 @@ struct RankObjectModel{
     var week_percentage : Double = -1
     var week_rank : Int = -1
     var total_rank : Int = -1
+    var rankType : RankType?
     
+    enum RankType {
+        case competition
+        case total
+    }
     init(_ json: JSON? = nil) {
         if json != nil{
             _id = json!["_id"].string ?? ""

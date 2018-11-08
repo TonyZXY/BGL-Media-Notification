@@ -176,14 +176,14 @@ class RankTableViewController: UIViewController, UITableViewDelegate, UITableVie
 }
 
 
-class WeeklyRankTableViewController : RankTableViewController{
+class CompetitionTableViewController : RankTableViewController{
     
     func handleRefresh(_ tableView: UITableView){
-        let api = RankDataReader()
+        let api = RankApiReader()
         api.getAllRankData(completion: { success in
             if success {
-                self.allRank = api.getWeeklyViewModels()
-                self.userRank = api.getUserWeeklyViewModel()
+//                self.allRank = api.getWeeklyViewModels()
+//                self.userRank = api.getUserWeeklyViewModel()
                 tableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }else{
@@ -214,11 +214,11 @@ class WeeklyRankTableViewController : RankTableViewController{
 class TotalRankTableViewController : RankTableViewController{
     
     func handleRefresh(_ tableView: UITableView){
-        let api = RankDataReader()
+        let api = RankApiReader()
         api.getAllRankData(completion: { success in
             if success {
-                self.allRank = api.getTotalViewModels()
-                self.userRank = api.getUserTotalViewModel()
+//                self.allRank = api.getTotalViewModels()
+//                self.userRank = api.getUserTotalViewModel()
                 tableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }else{

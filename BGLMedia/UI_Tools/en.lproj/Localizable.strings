@@ -446,7 +446,7 @@ hud_timeOut = "Time Out";
 navigationTitle_event = "Events";
 
 //Ranking Page
-rankMenuTitle_Weekly = "Weekly";
+rankMenuTitle_Copetition = "Competition";
 rankMenuTitle_Total = "Total";
 rankPopWindow_Weekly = "Weekly";
 rankPopWindow_Total = "Total";

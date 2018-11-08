@@ -12,11 +12,11 @@ import UIKit
 class RankViewController : UIViewController{
     let factor = UIScreen.main.bounds.width/375
     
-    let rankApiReader = RankDataReader()
+    let rankApiReader = RankApiReader()
     
     lazy var menuBar : MenuPageView = {
-        let page1 = MenuPage(title: textValue(name: "rankMenuTitle_Weekly"),pageView: weeklyContainer)
-        let page2 = MenuPage(title: textValue(name: "rankMenuTitle_Total"),pageView: totalContainer)
+        let page1 = MenuPage(title: textValue(name: "rankMenuTitle_Total"),pageView: totalContainer)
+        let page2 = MenuPage(title: textValue(name: "rankMenuTitle_Copetition"),pageView: competitionContainer)
         let menu = MenuPageView(menuPages: [page1,page2])
         
         menu.menuBarBackgroundColor = ThemeColor().themeColor()
@@ -26,14 +26,14 @@ class RankViewController : UIViewController{
         return menu
     }()
     
-    var weeklyRankTableController = WeeklyRankTableViewController()
+    var competitionRankTableController = CompetitionTableViewController()
     var totalRankTableController = TotalRankTableViewController()
     
     
-    lazy var weeklyContainer:UIView = {
+    lazy var competitionContainer:UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        addChildViewController(childViewController: self.weeklyRankTableController, view: view)
+        addChildViewController(childViewController: self.competitionRankTableController, view: view)
         return view
     }()
     
@@ -58,9 +58,16 @@ class RankViewController : UIViewController{
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        getData()
     }
     
     func getData(){
-        
+        rankApiReader.getAllRankData(completion: { success in
+            if success {
+                
+            }else{
+                
+            }
+        })
     }
 }
