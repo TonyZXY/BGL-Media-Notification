@@ -70,7 +70,8 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(refreshNewAssetsData), name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.addObserver(self, selector: #selector(reloadNewMarketData), name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
-        NotificationCenter.default.addObserver(self, selector: #selector(refreshGameData), name: NSNotification.Name(rawValue: "refreshGameData"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(beginRefresh), name: NSNotification.Name(rawValue: "refreshGameData"), object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(beginRefresh), name: NSNotification.Name(rawValue: "applicationDidBecomeActive"), object: nil)
     }
     
     deinit {
@@ -80,6 +81,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadNewMarketData"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "reloadAssetsTableView"), object: nil)
         NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "refreshGameData"), object: nil)
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "applicationDidBecomeActive"), object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -313,12 +315,12 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         checkDataRiseFallColor(risefallnumber: realisedNumber, label: realizedResult,currency:"AUD", type: "Number")
     }
     
-    @objc func refreshGameData(){
-        print(999)
-        DispatchQueue.main.async(execute: {
-            self.walletList.switchRefreshHeader(to: .refreshing)
-        })
-    }
+//    @objc func refreshGameData(){
+//        print(999)
+//        DispatchQueue.main.async(execute: {
+//            self.walletList.switchRefreshHeader(to: .refreshing)
+//        })
+//    }
     
     @objc func reloadNewMarketData(){
         walletList.reloadData()
