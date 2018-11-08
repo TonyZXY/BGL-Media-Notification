@@ -126,6 +126,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                 if success {
                     if response["data"]["nick_name"].stringValue == "" {
                         self.popNicknameAlert(true)
+                        self.toRankButton.isUserInteractionEnabled = false
                     } else {
                         self.setupGameUser(response)
                         // checkNick name success and enable ranking button
@@ -133,6 +134,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                     }
                 } else {
                     self.popNetworkFailureAlert()
+                    self.toRankButton.isUserInteractionEnabled = false
                 }
             }
         }
