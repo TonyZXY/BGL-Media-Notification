@@ -60,6 +60,21 @@ class AssetController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupView()
+        
+        NotificationCenter.default.addObserver(self, selector: #selector(changeLanguage), name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+    }
+    
+    deinit {
+        NotificationCenter.default.removeObserver(self, name: NSNotification.Name(rawValue: "changeLanguage"), object: nil)
+    }
+    
+    @objc func changeLanguage(){
+        if let walletLabel = self.menuPageView.menuPages[0].menuView as? UILabel{
+            walletLabel.text = textValue(name: "asset_menu_wallet")
+        }
+        if let gameLabel = self.menuPageView.menuPages[1].menuView as? UILabel{
+            gameLabel.text = textValue(name: "asset_menu_game")
+        }
     }
     
     func setupView(){
