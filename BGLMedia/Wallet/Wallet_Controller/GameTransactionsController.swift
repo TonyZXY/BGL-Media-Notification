@@ -137,6 +137,8 @@ class GameTransactionsController: UIViewController, UITableViewDelegate, UITable
             }
             cell.price.tag = indexPath.row
             cell.price.delegate = self
+            cell.price.backgroundColor = ThemeColor().darkGreyColor()
+            cell.price.attributedPlaceholder = NSAttributedString(string: "", attributes:[NSAttributedStringKey.font: UIFont.ItalicFont(13*factor), NSAttributedStringKey.foregroundColor: ThemeColor().grayPlaceHolder()])
             cell.isUserInteractionEnabled = false
             return cell
         } else if indexPath.row == 4{

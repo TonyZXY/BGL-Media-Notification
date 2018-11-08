@@ -99,11 +99,19 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
 
     private lazy var percentageTextField: SUITextField = {
         let textField = SUITextField()
+        textField.keyboardType = UIKeyboardType.decimalPad
         textField.text = "0"
         textField.textColor = ThemeColor().whiteColor()
         textField.textAlignment = .center
         textField.backgroundColor = ThemeColor().greyColor()
+        textField.adjustsFontSizeToFitWidth = true
         textField.addTarget(self, action: #selector(percentageTextFieldDidChange), for: .editingChanged)
+        let toolbar = UIToolbar()
+        toolbar.sizeToFit()
+        let donebutton = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.done, target: self, action: #selector(doneclick))
+        let flexible = UIBarButtonItem(barButtonSystemItem: UIBarButtonSystemItem.flexibleSpace, target: self, action: nil)
+        toolbar.setItems([flexible,flexible,donebutton], animated: false)
+        textField.inputAccessoryView = toolbar
         return textField
     }()
 
@@ -262,7 +270,8 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             if coinName == "AUD" {
                 //for buying
                 slider.value = Float((Double(value) ?? 0) * coinPrice * 100 / (balance * (1 - transactionFee)))
-                percentageTextField.text = "\(slider.value)"
+                let sliderValue = (slider.value * 100).rounded() / 100
+                percentageTextField.text = "\(sliderValue)"
                 
                 if (Double(value) ?? 0) > (balance * (1 - transactionFee) / coinPrice) {
                     calculateCoinAmount()
@@ -270,7 +279,8 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
             } else {
                 //for selling
                 slider.value = Float((Double(value) ?? 0) * 100 / balance)
-                percentageTextField.text = "\(slider.value)"
+                let sliderValue = (slider.value * 100).rounded() / 100
+                percentageTextField.text = "\(sliderValue)"
                 
                 if (Double(value) ?? 0) > balance {
                     calculateCoinAmount()
