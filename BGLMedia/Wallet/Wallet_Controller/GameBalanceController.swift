@@ -115,7 +115,9 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     
     private func setupTimer() {
         //will refresh the coins' price every 10 sec
-        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in self.updateCells() }
+        timer = Timer.scheduledTimer(withTimeInterval: 10, repeats: true) { timer in
+            self.updateCells()
+        }
     }
     
     
@@ -317,6 +319,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
             totalValue = totalValue + coin.amount * coin.price
             unrealisedNumber = unrealisedNumber + coin.profitNumber
             realisedNumber = realisedNumber + coin.realisedProfitNumber
+//            print("coinNmae : \(coin.abbrName) amount : \(coin.amount), totalval : \(coin.totalValue) - \(coin.totalValueOfBuy)    profit : \(coin.profitNumber)")
         })
         
         checkDataRiseFallColor(risefallnumber: totalValue, label: totalNumber,currency:"AUD", type: "Default")
@@ -438,7 +441,6 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
             updateTransactions { (success) in
                 if success {
                     self.updateCoinAmount()
-                    self.updateCells()
                     self.walletList.switchRefreshHeader(to: .normal(.success, 0.5))
                 } else {
                     self.walletList.switchRefreshHeader(to: .normal(.failure, 0.5))
@@ -484,6 +486,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
 //                        }
 //                        self.gameUser!.coins = newList
 //                    }
+                    self.updateCells()
                 }
             }
         }
