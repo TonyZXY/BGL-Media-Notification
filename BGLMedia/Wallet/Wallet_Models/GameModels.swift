@@ -145,6 +145,8 @@ struct GameCoin {
                 realisedProfitNumber = realisedProfitNumber + transaction.tradePrice * transaction.tradeAmount * (1 - transactionFee) - avgOfBuyPrice * transaction.tradeAmount
                 totalValueOfBuy = totalValueOfBuy - avgOfBuyPrice * transaction.tradeAmount
                 totalAmountOfBuy -= transaction.tradeAmount
+                totalAmountOfBuy += 0.000000001
+                totalAmountOfBuy = totalAmountOfBuy.floorTo(decimalLimit: 8)
                 if totalAmountOfBuy == 0 {
                     totalValueOfBuy = 0 //solve double problem
                 }
