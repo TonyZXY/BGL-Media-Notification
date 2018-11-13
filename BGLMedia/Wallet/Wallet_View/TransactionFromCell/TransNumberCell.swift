@@ -89,6 +89,21 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
         return textfield
     }()
     
+    private let transactionFeeLabel: UILabel = {
+        let label = UILabel()
+        label.textColor = ThemeColor().textGreycolor()
+        label.text = textValue(name: "transactionFee") + ": \(transactionFee * 100)%"
+        label.textAlignment = .right
+        return label
+    }()
+    
+    private lazy var numberLabelAndTansactionFeeStackView: UIStackView = {
+        let stackView = UIStackView(arrangedSubviews: [numberLabel, transactionFeeLabel])
+        stackView.distribution = .fillEqually
+        stackView.axis = .horizontal
+        return stackView
+    }()
+    
     lazy var slider: SUISlider = {
         let slider = SUISlider()
         slider.minimumValue = 0
@@ -132,21 +147,6 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
         label.textColor = ThemeColor().textGreycolor()
         return label
     }()
-    
-    private let transactionFeeLabel: UILabel = {
-        let label = UILabel()
-        label.textColor = ThemeColor().textGreycolor()
-        label.text = textValue(name: "transactionFee") + ": \(transactionFee * 100)%"
-        label.textAlignment = .right
-        return label
-    }()
-    
-    private lazy var balanceAndTansactionFeeStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [balanceLabel, transactionFeeLabel])
-        stackView.distribution = .fillEqually
-        stackView.axis = .horizontal
-        return stackView
-    }()
 
     private lazy var sliderStackView: UIStackView = {
         let stackView = UIStackView(arrangedSubviews: [slider, paddingView, percentageTextField, percentageLabel])
@@ -172,7 +172,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
         
         if isGameMode {
             let contentStackView: UIStackView = {
-                let stackView = UIStackView(arrangedSubviews: [numberLabel, number, sliderStackView, balanceAndTansactionFeeStackView])
+                let stackView = UIStackView(arrangedSubviews: [numberLabelAndTansactionFeeStackView, number, sliderStackView, balanceLabel])
                 stackView.translatesAutoresizingMaskIntoConstraints = false
                 stackView.distribution = .fillEqually
                 stackView.axis = .vertical
@@ -216,8 +216,8 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
                 }
             }
 
-            number.text = "\(amount)"
-            newTransaction?.amount = amount
+            number.text = amount.toString()
+            newTransaction?.amount = Double(amount.toString()) ?? 0
         }
     }
     
