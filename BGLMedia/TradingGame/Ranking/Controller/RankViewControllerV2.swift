@@ -13,41 +13,53 @@ class RankViewControllerV2: UIViewController {
     let factor = UIScreen.main.bounds.width/375
     
     lazy var menuBar : MenuPageView = {
-        let page1 = MenuPage(title: textValue(name: "rankMenuTitle_Weekly"),menuView: self.seasonMenuCell,pageView: weeklyContainer)
-        let page2 = MenuPage(title: textValue(name: "rankMenuTitle_Total"),menuView: self.totalMenuCell,pageView: totalContainer)
+        let page1 = MenuPage(title: textValue(name: "rankMenuTitle_Total"),pageView: totalContainer)
+        let page2 = MenuPage(title: textValue(name: "rankMenuTitle_Competition"),pageView: competitionContainer)
         let menu = MenuPageView(menuPages: [page1,page2])
         
         menu.menuBarBackgroundColor = ThemeColor().themeColor()
-//        menu.selectedMenuColor = ThemeColor().themeWidgetColor()
-//        menu.notSelectedMenuColor = ThemeColor().textGreycolor()
-        menu.menuBarPadding = 0
-        menu.horizontalBarHeight = 0
-        
+        menu.horizontalMenuBarColor = ThemeColor().themeWidgetColor()
+        menu.selectedMenuColor = ThemeColor().themeWidgetColor()
+        menu.notSelectedMenuColor = ThemeColor().textGreycolor()
+//        menu.horizontalBarHeight = 0
+        menu.setPagesBounce(false)
         return menu
     }()
     
-    var totalMenuCell = RankMenuCell()
-    var seasonMenuCell = RankMenuCell()
+    var competitionRankTableController = CompetitionTableViewControllerV2()
+    var totalRankTableController = TotalRankTableViewControllerV2()
     
-    lazy var weeklyContainer:UIView = {
+    
+    var totalMenuCell = RankMenuCell(menuTitle: textValue(name: "rankMenuTitle_Total"))
+    var competitionMenuCell = RankMenuCell(menuTitle : textValue(name: "rankMenuTitle_Competition"))
+    
+    lazy var competitionContainer:UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ThemeColor().grayLightColor()
-//        addChildViewController(childViewController: self.weeklyRankTableController, view: view)
+        addChildViewController(childViewController: self.competitionRankTableController, view: view)
         return view
     }()
     
     lazy var totalContainer:UIView = {
         let view = UIView()
         view.translatesAutoresizingMaskIntoConstraints = false
-        view.backgroundColor = ThemeColor().grayLightColor()
-//        addChildViewController(childViewController: self.totalRankTableController, view: view)
+        addChildViewController(childViewController: self.totalRankTableController, view: view)
         return view
     }()
     
+    lazy var titleLabel: UILabel = {
+        let titleLabel = UILabel()
+        titleLabel.textColor = UIColor.white
+        titleLabel.text = textValue(name: "rankNavTitle")
+        titleLabel.font = UIFont.semiBoldFont(17*factor)
+        titleLabel.frame = CGRect(x: 0, y: 0, width: 100, height: 20)
+        titleLabel.textAlignment = .center
+        return titleLabel
+    }()
     
     private func setupView(){
         Extension.method.reloadNavigationBarBackButton(navigationBarItem: self.navigationItem)
+        self.navigationItem.titleView = titleLabel
         
         view.addSubview(menuBar)
         menuBar.topAnchor.constraint(equalTo: view.safeArea().topAnchor).isActive = true
@@ -65,13 +77,15 @@ class RankViewControllerV2: UIViewController {
 class RankMenuCell : UIView,CustomMenuCell{
     
     func selected() {
-        containerView.backgroundColor = ThemeColor().grayLightColor()
+        containerView.backgroundColor = ThemeColor().themeColor() * 1.5
         containerView.layer.borderColor = ThemeColor().themeWidgetColor().cgColor
+        menuLabel.textColor = ThemeColor().whiteColor()
     }
     
     func notselected() {
-        containerView.backgroundColor = ThemeColor().progressColor()
+        containerView.backgroundColor = ThemeColor().themeColor()
         containerView.layer.borderColor = UIColor.clear.cgColor
+        menuLabel.textColor = ThemeColor().textGreycolor()
     }
     
     let factor = UIScreen.main.bounds.width/375
@@ -84,13 +98,29 @@ class RankMenuCell : UIView,CustomMenuCell{
         return view
     }()
     
+    lazy var menuLabel : UILabel = {
+        let menuLabel = UILabel()
+        menuLabel.font = UIFont.regularFont(18*factor)
+        menuLabel.textColor = ThemeColor().whiteColor()
+        menuLabel.textAlignment = .center
+        return menuLabel
+    }()
+    
     private func setupView(){
         addSubview(containerView)
-        self.addConstraintsWithFormat(format: "H:|-\(5*factor)-[v0]-\(5*factor)-|", views: containerView)
-        containerView.bottomAnchor.constraint(equalTo: self.bottomAnchor, constant: 5*factor).isActive = true
-        containerView.topAnchor.constraint(equalTo: self.topAnchor, constant: 5*factor).isActive = true
+        self.addConstraintsWithFormat(format: "H:|-\(10*factor)-[v0]-\(10*factor)-|", views: containerView)
+        self.addConstraintsWithFormat(format: "V:|-\(3*factor)-[v0]-\(3*factor)-|", views: containerView)
+        containerView.addSubview(menuLabel)
+        self.addConstraintsWithFormat(format: "H:|-\(2*factor)-[v0]-\(2*factor)-|", views: menuLabel)
+        self.addConstraintsWithFormat(format: "V:|-\(2*factor)-[v0]-\(2*factor)-|", views: menuLabel)
     }
     
+    convenience init(menuTitle: String){
+        self.init()
+        setupView()
+        self.menuLabel.text = menuTitle
+
+    }
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()

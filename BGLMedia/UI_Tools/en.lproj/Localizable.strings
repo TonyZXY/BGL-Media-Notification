@@ -448,6 +448,10 @@ navigationTitle_event = "Events";
 //Ranking Page
 rankMenuTitle_Competition = "Competition";
 rankMenuTitle_Total = "Total";
+rankNavTitle = "Ranking";
+rank_updatedTime = "Updated";
+rank_userRank = "Rank";
+
 
 //StopLoss/takeProfit
 stopLoss_title = "Stop Loss/Take Profit Setting";

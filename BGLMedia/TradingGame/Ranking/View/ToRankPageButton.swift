@@ -28,7 +28,7 @@ class ToRankPageButton : UIButton{
     }
     
     @objc func goToRankPage(){
-        let rankController = RankViewController()
+        let rankController = RankViewControllerV2()
         //        self.parentViewController?.present(rankController, animated: true, completion: nil)
         rankController.hidesBottomBarWhenPushed = true
         self.parentViewController?.navigationController?.pushViewController(rankController, animated: true)

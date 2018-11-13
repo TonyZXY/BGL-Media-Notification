@@ -439,6 +439,9 @@ navigationTitle_event = "活动";
 //Ranking Page
 rankMenuTitle_Competition = "比赛";
 rankMenuTitle_Total = "总榜";
+rankNavTitle = "排行榜";
+rank_updatedTime = "更新时间";
+rank_userRank = "排名";
 
 //StopLoss
 stopLoss_title = "止损/止盈 设置";

@@ -38,7 +38,8 @@ struct CompetitionRankModel {
             user_id = json["user_id"].string ?? ""
             user_nickname = json["user_nickname"].string ?? ""
             daily_rank = json["daily_rank"].int ?? -1
-            this_week = json["daily_rank"].double ?? -1
+            this_week = json["this_week"].double ?? -1
+            this_week -= 100
         }
     }
 }
@@ -118,10 +119,10 @@ struct RankObjectViewModel {
         nickname = totalModel.user_nickname
         ranknumber = totalModel.total_rank
         ranknumberString = "\(totalModel.total_rank)."
-        statString = totalModel.total.toAbbreviateString(decimal: 3)
+        statString = "$\(totalModel.total.toAbbreviateString(decimal: 3))"
     
         pop_title = nickname
-        pop_stat = "\(totalModel.total.floorTo(decimalLimit: 8))"
+        pop_stat = "$\(totalModel.total.floorTo(decimalLimit: 8))"
         pop_rank = "\(ranknumber)"
     }
 
@@ -137,3 +138,4 @@ struct RankObjectViewModel {
     }
     
 }
+

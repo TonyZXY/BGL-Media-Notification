@@ -10,7 +10,8 @@ import Foundation
 import UIKit
 
 class RankTableViewTopCell: UITableViewCell{
-
+    let factor = UIScreen.main.bounds.width/414
+    
     public static let registerID = "rankTableViewTopCell"
     // needed to perform on click action
     var tableController : RankTableViewController?
@@ -37,13 +38,15 @@ class RankTableViewTopCell: UITableViewCell{
         }
     }
     
-    let baseView : UIView = {
+    lazy var baseView : UIView = {
         let view = UIView()
-        view.layer.cornerRadius = 5
+        view.layer.cornerRadius = 5 * factor
+        view.layer.borderColor = ThemeColor().goldColor().cgColor
+        view.layer.borderWidth = 3 * factor
         view.backgroundColor = ThemeColor().walletCellcolor()
-//        view.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
-//        view.layer.shadowOpacity = 1
-//        view.layer.shadowOffset = CGSize(width: 0, height: 5)
+        view.layer.shadowColor = ThemeColor().goldColor().cgColor
+        view.layer.shadowOpacity = 5
+        view.layer.shadowOffset = CGSize(width: 0, height: 0)
         return view
     }()
     
@@ -56,10 +59,10 @@ class RankTableViewTopCell: UITableViewCell{
 
     func setupView(){
         backgroundColor = ThemeColor().themeColor()
-        let factor = UIScreen.main.bounds.width/414
+
         addSubview(baseView)
-        addConstraintsWithFormat(format: "H:|-\(3*factor)-[v0]-\(3*factor)-|", views: baseView)
-        addConstraintsWithFormat(format: "V:|-\(2*factor)-[v0]-\(2*factor)-|", views: baseView)
+        addConstraintsWithFormat(format: "H:|-\(10*factor)-[v0]-\(10*factor)-|", views: baseView)
+        addConstraintsWithFormat(format: "V:|-\(5*factor)-[v0]-\(5*factor)-|", views: baseView)
         
         for container in topRankContainers{
             baseView.addSubview(container)
@@ -158,7 +161,6 @@ class RankTableViewTopCell: UITableViewCell{
         
         // vertical constratints is setted out side in parent class
         func setupView(){
-            backgroundColor = ThemeColor().walletCellcolor()
             addSubview(medalImageView)
             addSubview(nicknameLabel)
             addSubview(statLabel)

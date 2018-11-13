@@ -178,6 +178,24 @@ class ThemeColor:UIColor{
         let color = UIColor.init(red:53.0/255.0, green:218.0/255.0, blue:185.0/255.0, alpha:0.8)
         return color
     }
+    
+    func goldColor() -> UIColor {
+        _ = #colorLiteral(red: 0.831372549, green: 0.8745098039, blue: 0, alpha: 1)
+        let color =  UIColor.init(red:212.0/255.0, green:223.0/255.0, blue:0/255.0, alpha:1)
+        return color
+    }
+    
+    func silverColor() -> UIColor {
+        _ = #colorLiteral(red: 0.7529411765, green: 0.7529411765, blue: 0.7529411765, alpha: 1)
+        let color =  UIColor.init(red:192.0/255.0, green:192.0/255.0, blue:192.0/255.0, alpha:1)
+        return color
+    }
+    
+    func bronzeColor() -> UIColor {
+        _ = #colorLiteral(red: 0.8039215686, green: 0.4980392157, blue: 0.1960784314, alpha: 1)
+        let color =  UIColor.init(red:205.0/255.0, green:127.0/255.0, blue:50.0/255.0, alpha:1)
+        return color
+    }
 }
 
 //extension UIColor {

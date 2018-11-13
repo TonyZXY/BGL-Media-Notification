@@ -139,6 +139,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
                         self.popNicknameAlert(true)
                     } else {
                         self.setupGameUser(response)
+                        self.toRankButton.isUserInteractionEnabled = true
                     }
                 } else {
                     self.popNetworkFailureAlert()
