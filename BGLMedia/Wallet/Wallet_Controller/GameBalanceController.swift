@@ -637,12 +637,15 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         
         // modified
         totalProfitView.addSubview(toRankButton)
-        totalProfitView.addConstraintsWithFormat(format: "H:[v0]-\(50*factor)-|", views: toRankButton)
-        totalProfitView.addConstraintsWithFormat(format: "V:[v0]-\(15*factor)-|", views: toRankButton)
+        
+        totalProfitView.addConstraintsWithFormat(format: "H:[v0(\(50*factor))]-\(50*factor)-|", views: toRankButton)
+        totalProfitView.addConstraintsWithFormat(format: "V:[v0(\(50*factor))]", views: toRankButton)
+        toRankButton.centerYAnchor.constraint(equalTo: totalNumber.centerYAnchor).isActive = true
         
         totalProfitView.addSubview(huobiMessageButton)
-        totalProfitView.addConstraintsWithFormat(format: "H:|-\(50*factor)-[v0]", views: huobiMessageButton)
-        totalProfitView.addConstraintsWithFormat(format: "V:[v0]-\(15*factor)-|", views: huobiMessageButton)
+        totalProfitView.addConstraintsWithFormat(format: "H:|-\(50*factor)-[v0(\(50*factor))]", views: huobiMessageButton)
+        totalProfitView.addConstraintsWithFormat(format: "V:[v0(\(50*factor))]", views: huobiMessageButton)
+        huobiMessageButton.centerYAnchor.constraint(equalTo: totalNumber.centerYAnchor).isActive = true
         
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "H:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
         view.addConstraints(NSLayoutConstraint.constraints(withVisualFormat: "V:|[v0]|", options: NSLayoutFormatOptions(), metrics: nil, views: ["v0":existTransactionView]))
@@ -925,6 +928,7 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
     lazy var toRankButton: ToRankPageButton = {
         let buttonHeight:CGFloat = 24 * factor
         let buttonWidth:CGFloat = 24 * factor
+        // button size defines image size
         let button = ToRankPageButton(width: buttonWidth, height: buttonHeight,parentController: self)
         button.translatesAutoresizingMaskIntoConstraints = false
         

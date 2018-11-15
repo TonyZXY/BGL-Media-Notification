@@ -82,6 +82,7 @@ class RankTableViewCell : UITableViewCell{
                 cellContainer.gradientLayer.colors = [color1.cgColor,color2.cgColor]
                 cellContainer.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
                 rankNumberLabel.layer.backgroundColor = ThemeColor().themeWidgetColor().cgColor
+                rankNumberLabel.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
             }
         }
     }
