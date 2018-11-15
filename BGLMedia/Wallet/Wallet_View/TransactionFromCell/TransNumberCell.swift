@@ -149,7 +149,7 @@ class TransNumberCell:UITableViewCell, UITextFieldDelegate {
     }()
 
     private lazy var sliderStackView: UIStackView = {
-        let stackView = UIStackView(arrangedSubviews: [slider, paddingView, percentageTextField, percentageLabel])
+        let stackView = UIStackView(arrangedSubviews: [percentageTextField, percentageLabel, paddingView, slider])
         stackView.distribution = .fillProportionally
         stackView.axis = .horizontal
         //set up their proportions
