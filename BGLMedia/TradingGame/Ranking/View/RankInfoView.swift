@@ -108,7 +108,7 @@ class RankInfoView : UIView{
         }()
         
         let rankInfoStack : UIStackView = {
-            let stack = UIStackView(arrangedSubviews: [updatedTimeLabel,selfNickNameLabel,userInfoStack])
+            let stack = UIStackView(arrangedSubviews: [selfNickNameLabel,userInfoStack,updatedTimeLabel])
             stack.axis = .vertical
             stack.alignment = .center
             stack.distribution = .fillEqually

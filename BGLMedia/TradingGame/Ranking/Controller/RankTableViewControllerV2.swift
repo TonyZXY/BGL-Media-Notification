@@ -83,7 +83,7 @@ class RankTableViewControllerV2: UIViewController, UITableViewDelegate, UITableV
         let content = RankPopWindowContent(rankViewModel: viewModel)
         let view : UIView = {
             let view = UIView()
-            view.heightAnchor.constraint(equalToConstant: 200*factor).isActive = true
+            view.heightAnchor.constraint(equalToConstant: 150*factor).isActive = true
             view.widthAnchor.constraint(equalToConstant: 260*factor).isActive = true
             view.addSubview(header)
             view.addSubview(content)

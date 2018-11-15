@@ -183,7 +183,21 @@ class MainTabBarController: UITabBarController,UITabBarControllerDelegate {
         
         
         
-        
+        let annoucementApi = AnnouncementApiReader()
+        annoucementApi.getAllAnouncement(completion: { (results,success) in
+            if success {
+                let current_utc = Date()
+                let filterResults = results.filter{($0.timeFrom ?? Date() <= current_utc) && (current_utc <= $0.timeTo ?? Date())}
+                
+//                results.filter({$0.publishedTime})
+                if filterResults.count > 0{
+                    let content = AnnouncementPopContentView(models: filterResults)
+                    let popWindowConttroller = PopWindowController(contentView: content)
+                    content.closeButton.dismissController = popWindowConttroller
+                    self.present(popWindowConttroller, animated: true, completion: nil)
+                }
+            }
+        })
         
         
         

@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		240094C4214E512D007898BF /* NewsV2Controller.swift in Sources */ = {isa = PBXBuildFile; fileRef = 57355C0920F7188B002E70E4 /* NewsV2Controller.swift */; };
 		240094C5214F5346007898BF /* NewsSliderClasses.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */; };
+		2406371A219BA34300CC2CE1 /* AnnouncementModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24063719219BA34300CC2CE1 /* AnnouncementModel.swift */; };
+		2406371C219BAFAF00CC2CE1 /* AnnouncementPopContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2406371B219BAFAF00CC2CE1 /* AnnouncementPopContent.swift */; };
 		240DC2402170530100702B31 /* GameCoinPageController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23E2170530100702B31 /* GameCoinPageController.swift */; };
 		240DC2412170530100702B31 /* GameCoinDetailController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240DC23F2170530100702B31 /* GameCoinDetailController.swift */; };
 		240F697F2148D5710072E158 /* GenuineNewsObject.swift in Sources */ = {isa = PBXBuildFile; fileRef = 240F697E2148D5710072E158 /* GenuineNewsObject.swift */; };
@@ -264,6 +266,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		24063719219BA34300CC2CE1 /* AnnouncementModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementModel.swift; sourceTree = "<group>"; };
+		2406371B219BAFAF00CC2CE1 /* AnnouncementPopContent.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AnnouncementPopContent.swift; sourceTree = "<group>"; };
 		240DC23E2170530100702B31 /* GameCoinPageController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinPageController.swift; sourceTree = "<group>"; };
 		240DC23F2170530100702B31 /* GameCoinDetailController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GameCoinDetailController.swift; sourceTree = "<group>"; };
 		240F697C2148D3FA0072E158 /* NewsSliderClasses.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewsSliderClasses.swift; sourceTree = "<group>"; };
@@ -530,6 +534,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		24063718219BA31C00CC2CE1 /* Announcement */ = {
+			isa = PBXGroup;
+			children = (
+				24063719219BA34300CC2CE1 /* AnnouncementModel.swift */,
+				2406371B219BAFAF00CC2CE1 /* AnnouncementPopContent.swift */,
+			);
+			path = Announcement;
+			sourceTree = "<group>";
+		};
 		241051BE217EBFC70064B676 /* ApiReader */ = {
 			isa = PBXGroup;
 			children = (
@@ -928,6 +941,7 @@
 		2D6F5EFF20E324D4006264BB /* BGLMedia */ = {
 			isa = PBXGroup;
 			children = (
+				24063718219BA31C00CC2CE1 /* Announcement */,
 				24121503215C700300B9069B /* TradingGame */,
 				5772046821186B420049BBE8 /* MPAchart */,
 				57E67D0821408C71005F290E /* Event */,
@@ -1556,6 +1570,7 @@
 				57AEA1832112C0A200042CF6 /* CustomAlertController.swift in Sources */,
 				2D52AEE120E46E1A00018FC0 /* LanguagePackage.swift in Sources */,
 				2D52AF1020E46E1A00018FC0 /* NewsFlash.swift in Sources */,
+				2406371A219BA34300CC2CE1 /* AnnouncementModel.swift in Sources */,
 				57355C0C20F7188B002E70E4 /* NewsObject.swift in Sources */,
 				246038432199257C00A6F8DB /* RankTableCellV2.swift in Sources */,
 				244281FB218BCAB300BCDACF /* UtilityClass.swift in Sources */,
@@ -1720,6 +1735,7 @@
 				2D52AEFB20E46E1A00018FC0 /* AboutUsViewController.swift in Sources */,
 				2D52AF0A20E46E1A00018FC0 /* TimelineTableViewController.swift in Sources */,
 				57FC420520FDC7260052EE02 /* FlashSearchController.swift in Sources */,
+				2406371C219BAFAF00CC2CE1 /* AnnouncementPopContent.swift in Sources */,
 				57BAD9522104CAD500973B45 /* TCPickerView.swift in Sources */,
 				2D52AF1E20E46E1A00018FC0 /* CandleStickChart.swift in Sources */,
 				2442BE69217ED841000100BE /* StopLossDisplayView.swift in Sources */,

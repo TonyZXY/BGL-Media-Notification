@@ -28,9 +28,9 @@ class RankTableViewCell : UITableViewCell{
             self.nicknameLabel.attributedText = NSAttributedString(string: rankViewModel?.nickname ?? "", attributes: attributes)
             self.rankNumberLabel.attributedText = NSAttributedString(string: rankViewModel?.ranknumberString ?? "", attributes: attributes)
             self.statLabel.attributedText = NSAttributedString(string: rankViewModel?.statString ?? "", attributes: attributes)
-            configCellBorder(view: baseView)
-            configCellMedalIcon(view: cellContainer)
-            configCellColor(view: cellContainer)
+            configCellBorder()
+            configCellMedalIcon()
+            configCellColor()
         }
     }
     
@@ -49,117 +49,114 @@ class RankTableViewCell : UITableViewCell{
         return view
     }()
     
-    private func configCellColor(view : GradientView){
+    private func configCellColor(){
         if let model = rankViewModel{
             switch model.ranknumber{
             case 1:
                 let color1 = ThemeColor().walletCellcolor() + ThemeColor().goldColor() * 0.15
                 let color2 = ThemeColor().walletCellcolor()
-                view.gradientLayer.colors = [color1.cgColor,color2.cgColor]
-                view.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
-                rankNumberLabel.backgroundColor = ThemeColor().goldColor()
+                cellContainer.gradientLayer.colors = [color1.cgColor,color2.cgColor]
+                cellContainer.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
+                rankNumberLabel.layer.backgroundColor = ThemeColor().goldColor().cgColor
+                rankNumberLabel.layer.shadowColor = ThemeColor().goldColor().cgColor
                 break
             case 2:
                 let color1 = ThemeColor().walletCellcolor() + ThemeColor().silverColor() * 0.15
                 let color2 = ThemeColor().walletCellcolor()
-                view.gradientLayer.colors = [color1.cgColor,color2.cgColor]
-                view.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
-                rankNumberLabel.backgroundColor = ThemeColor().silverColor()
+                cellContainer.gradientLayer.colors = [color1.cgColor,color2.cgColor]
+                cellContainer.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
+                rankNumberLabel.layer.backgroundColor = ThemeColor().silverColor().cgColor
+                rankNumberLabel.layer.shadowColor = ThemeColor().silverColor().cgColor
                 break
             case 3:
                 let color1 = ThemeColor().walletCellcolor() + ThemeColor().bronzeColor() * 0.15
                 let color2 = ThemeColor().walletCellcolor()
-                view.gradientLayer.colors = [color1.cgColor,color2.cgColor]
-                view.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
-                rankNumberLabel.backgroundColor = ThemeColor().bronzeColor()
+                cellContainer.gradientLayer.colors = [color1.cgColor,color2.cgColor]
+                cellContainer.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
+                rankNumberLabel.layer.backgroundColor = ThemeColor().bronzeColor().cgColor
+                rankNumberLabel.layer.shadowColor = ThemeColor().bronzeColor().cgColor
                 break
             default:
                 let color1 = ThemeColor().walletCellcolor() + ThemeColor().themeWidgetColor() * 0.1
                 let color2 = ThemeColor().walletCellcolor()
-                view.gradientLayer.colors = [color1.cgColor,color2.cgColor]
-                view.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
-                rankNumberLabel.backgroundColor = ThemeColor().themeWidgetColor()
+                cellContainer.gradientLayer.colors = [color1.cgColor,color2.cgColor]
+                cellContainer.gradientLayer.gradient = GradientPoint.bottomRightTopLeft.draw()
+                rankNumberLabel.layer.backgroundColor = ThemeColor().themeWidgetColor().cgColor
             }
         }
     }
     
-    private func configCellMedalIcon(view : GradientView){
-        let medalIcon : UIImageView = {
-            let imageview = UIImageView()
-            imageview.contentMode = .scaleAspectFit
-            imageview.translatesAutoresizingMaskIntoConstraints = false
-            return imageview
-        }()
+    private func configCellMedalIcon(){
+
         
         if let model = rankViewModel{
             switch model.ranknumber{
             case 1:
                 medalIcon.image = UIImage(named: "first")
-                view.addSubview(medalIcon)
-                view.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-[v1(\(20*factor))]", views: rankNumberLabel,medalIcon)
-                medalIcon.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-                medalIcon.heightAnchor.constraint(equalToConstant: 20*factor).isActive = true
+                medalIcon.isHidden = false
                 break
             case 2:
                 medalIcon.image = UIImage(named: "second")
-                view.addSubview(medalIcon)
-                view.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-[v1(\(20*factor))]", views: rankNumberLabel,medalIcon)
-                medalIcon.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-                medalIcon.heightAnchor.constraint(equalToConstant: 20*factor).isActive = true
+                medalIcon.isHidden = false
                 break
             case 3:
                 medalIcon.image = UIImage(named: "third")
-                view.addSubview(medalIcon)
-                view.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-[v1(\(20*factor))]", views: rankNumberLabel,medalIcon)
-                medalIcon.centerYAnchor.constraint(equalTo: view.centerYAnchor).isActive = true
-                medalIcon.heightAnchor.constraint(equalToConstant: 20*factor).isActive = true
+                medalIcon.isHidden = false
                 break
             default:
+                medalIcon.isHidden = true
                 break
             }
         }
     }
     
-    private func configCellBorder(view : UIView){
+    private func configCellBorder(){
 //        view.layer.borderWidth = 3*factor
         if let model = rankViewModel{
             switch model.ranknumber{
                 case 1:
 //                    view.layer.borderColor = ThemeColor().goldColor().cgColor
-                    view.layer.shadowColor = ThemeColor().goldColor().cgColor
-                    view.layer.shadowOpacity = 1
-                    view.layer.shadowOffset = CGSize(width: 0, height: 0)
-                    view.layer.shadowRadius = 3 * factor
+                    baseView.layer.shadowColor = ThemeColor().goldColor().cgColor
+                    baseView.layer.shadowOpacity = 1
+                    baseView.layer.shadowOffset = CGSize(width: 0, height: 0)
+                    baseView.layer.shadowRadius = 3 * factor
           
                     break
                 case 2:
 //                    view.layer.borderColor = ThemeColor().silverColor().cgColor
-                    view.layer.shadowColor = ThemeColor().silverColor().cgColor
-                    view.layer.shadowOpacity = 1
-                    view.layer.shadowOffset = CGSize(width: 0, height: 0)
-                    view.layer.shadowRadius = 3 * factor
+                    baseView.layer.shadowColor = ThemeColor().silverColor().cgColor
+                    baseView.layer.shadowOpacity = 1
+                    baseView.layer.shadowOffset = CGSize(width: 0, height: 0)
+                    baseView.layer.shadowRadius = 3 * factor
                     break
                 case 3:
 //                    view.layer.borderColor = ThemeColor().bronzeColor().cgColor
-                    view.layer.shadowColor = ThemeColor().bronzeColor().cgColor
-                    view.layer.shadowOpacity = 1
-                    view.layer.shadowOffset = CGSize(width: 0, height: 0)
-                    view.layer.shadowRadius = 3 * factor
+                    baseView.layer.shadowColor = ThemeColor().bronzeColor().cgColor
+                    baseView.layer.shadowOpacity = 1
+                    baseView.layer.shadowOffset = CGSize(width: 0, height: 0)
+                    baseView.layer.shadowRadius = 3 * factor
                     break
                 default:
 //                    view.layer.borderColor = (ThemeColor().walletCellcolor()*0.8).cgColor
-                    view.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
-                    view.layer.shadowOpacity = 1
-                    view.layer.shadowOffset = CGSize(width: 0, height: 0)
-                    view.layer.shadowRadius = 3 * factor
+                    baseView.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+                    baseView.layer.shadowOpacity = 1
+                    baseView.layer.shadowOffset = CGSize(width: 0, height: 0)
+                    baseView.layer.shadowRadius = 3 * factor
                     break
             }
 
         }else{
-            view.layer.borderColor = ThemeColor().themeWidgetColor().cgColor
+            baseView.layer.borderColor = ThemeColor().themeWidgetColor().cgColor
             rankNumberLabel.backgroundColor = ThemeColor().themeWidgetColor()
         }
     }
+    
+    let medalIcon : UIImageView = {
+        let imageview = UIImageView()
+        imageview.contentMode = .scaleAspectFit
+        imageview.translatesAutoresizingMaskIntoConstraints = false
+        return imageview
+    }()
     
     lazy var rankNumberLabel : UILabel = {
         var label = UILabel()
@@ -167,6 +164,10 @@ class RankTableViewCell : UITableViewCell{
 //        label.textColor = .white
 //        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
 //        label.text = ""
+        label.layer.cornerRadius = 5 * factor
+        label.layer.shadowColor = ThemeColor().darkBlackColor().cgColor
+        label.layer.shadowOffset = CGSize(width: 0, height: 0)
+        label.layer.shadowOpacity = 1
         label.textAlignment = .center
         return label
     }()
@@ -205,13 +206,19 @@ class RankTableViewCell : UITableViewCell{
         cellContainer.addSubview(nicknameLabel)
         cellContainer.addSubview(statLabel)
         
+        cellContainer.addSubview(medalIcon)
+        cellContainer.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-[v1(\(20*factor))]", views: rankNumberLabel,medalIcon)
+        medalIcon.centerYAnchor.constraint(equalTo: cellContainer.centerYAnchor).isActive = true
+        medalIcon.heightAnchor.constraint(equalToConstant: 20*factor).isActive = true
+        
         // center alignment for vertical direction
-        //        addConstraint(NSLayoutConstraint(item: rankNumberLabel, attribute: .centerY, relatedBy: .equal, toItem: cellContainer, attribute: .centerY, multiplier: 1, constant: 0))
-        cellContainer.addConstraintsWithFormat(format: "V:|[v0]|", views: rankNumberLabel)
+        addConstraint(NSLayoutConstraint(item: rankNumberLabel, attribute: .centerY, relatedBy: .equal, toItem: cellContainer, attribute: .centerY, multiplier: 1, constant: 0))
+//        cellContainer.addConstraintsWithFormat(format: "V:|[v0]|", views: rankNumberLabel)
         addConstraint(NSLayoutConstraint(item: nicknameLabel, attribute: .centerY, relatedBy: .equal, toItem: cellContainer, attribute: .centerY, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: statLabel, attribute: .centerY, relatedBy: .equal, toItem: cellContainer, attribute: .centerY, multiplier: 1, constant: 0))
         
-        cellContainer.addConstraintsWithFormat(format: "H:|-0-[v0(\(40*factor))]-(\(40 * factor))-[v1(\(200*factor))]", views: rankNumberLabel,nicknameLabel)
-        cellContainer.addConstraintsWithFormat(format: "H:[v0(\(100*factor))]-(\(20 * factor))-|", views: statLabel)
+        cellContainer.addConstraintsWithFormat(format: "H:|-\(14*factor)-[v0(\(30*factor))]-(\(40 * factor))-[v1(\(200*factor))]", views: rankNumberLabel,nicknameLabel)
+        rankNumberLabel.heightAnchor.constraint(equalToConstant: 30*factor).isActive = true
+        cellContainer.addConstraintsWithFormat(format: "H:[v0(\(100*factor))]-(\(14 * factor))-|", views: statLabel)
     }
 }

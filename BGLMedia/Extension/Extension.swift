@@ -17,7 +17,68 @@ import SwiftKeychainWrapper
 class Extension:NSObject{
     var realm = try! Realm()
     static let method = Extension()
-   
+    enum DateFormat : String{
+        case format1 = "yyyy-MM-dd'T'HH:mm:ss.SSSZ"
+        case format2 = "yyyy-MM-dd  HH:mm:ss"
+        case format3 = "yyyy-MM-dd"
+    }
+    
+    func localToUTC(from : DateFormat, date:String, to : DateFormat) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = from.rawValue
+        dateFormatter.calendar = NSCalendar.current
+        dateFormatter.timeZone = TimeZone.current
+        
+        let dt = dateFormatter.date(from: date)
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        dateFormatter.dateFormat = to.rawValue
+        
+        return dateFormatter.string(from: dt!)
+    }
+    
+    func UTCToLocal(from : DateFormat, date:String, to : DateFormat) -> String {
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = from.rawValue
+        dateFormatter.timeZone = TimeZone(abbreviation: "UTC")
+        
+        let dt = dateFormatter.date(from: date)
+        dateFormatter.timeZone = TimeZone.current
+        dateFormatter.dateFormat = to.rawValue
+        
+        return dateFormatter.string(from: dt!)
+    }
+    
+    
+    func localToUTC(date:Date) -> Date {
+        let localstring = convertDateToString(date: date, toFormat: .format2)
+        let utcstring = localToUTC(from: .format2, date: localstring, to: .format2)
+        return convertStringToDate(date: utcstring, fromFormat: .format2)
+    }
+    
+    func UTCToLocal(date:Date) -> Date {
+        let utcstring = convertDateToString(date: date, toFormat: .format2)
+        let localstring = UTCToLocal(from: .format2, date: utcstring, to: .format2)
+        return convertStringToDate(date: localstring, fromFormat: .format2)
+    }
+    
+    /// Convert Date to String
+    func convertDateToString(date: Date, toFormat: DateFormat) -> String {
+        let dateFormatter = DateFormatter()
+        let dateFormat2 = toFormat.rawValue
+        dateFormatter.dateFormat = dateFormat2
+        let newDate: String = dateFormatter.string(from: date)
+        return newDate
+    }
+    
+    /// Convert Date to String
+    func convertStringToDate(date: String, fromFormat: DateFormat) -> Date {
+        let dateFormat2 =   fromFormat.rawValue
+        let dateFormatter = DateFormatter()
+        dateFormatter.dateFormat = dateFormat2
+        let newDate:Date = dateFormatter.date(from: date) ?? Date()
+        return newDate
+    }
+    
     //Convert String to Date
     func convertStringToDate(date:String) -> Date{
 //        let dateFormat1 = "yyyy-MM-dd"

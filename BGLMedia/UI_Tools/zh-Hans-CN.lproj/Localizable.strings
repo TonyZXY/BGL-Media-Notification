@@ -472,6 +472,7 @@ expected_loss = "预计损失";
 setting_up = "正在设置";
 register = "注册";
 Huobi_Au = "火币澳洲";
+close = "关闭";
 
 // Asset Menu
 asset_menu_wallet = "数字资产";
@@ -483,3 +484,7 @@ asset_title = "资产";
  gameTrans_alert_stopLossReset = "您的 止损/止盈 设置 已重置";
 
 huobi_message_registerForTen = "注册货币澳洲，为你的数字资产增加$10!";
+
+
+//announcement pop
+announcement_title = "公告";

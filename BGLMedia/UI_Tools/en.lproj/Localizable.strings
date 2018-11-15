@@ -482,6 +482,7 @@ expected_profit = "Expected Profit";
 expected_loss = "Expected Loss";
 setting_up = "Setting Up";
 register = "Register";
+close = "Close";
 
 Huobi_Au = "Huobi Australia";
 
@@ -496,3 +497,6 @@ gameTrans_alert_stopLossReset = "Your Stop Loss/Take Profit setting has being re
 
 
 huobi_message_registerForTen = "Register Huobi Australia to take $10 bonus for your real Crypto trading";
+
+//announcement pop
+announcement_title = "Announcement";
