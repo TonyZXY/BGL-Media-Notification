@@ -29,7 +29,7 @@ class RankTableViewCell : UITableViewCell{
             self.rankNumberLabel.attributedText = NSAttributedString(string: rankViewModel?.ranknumberString ?? "", attributes: attributes)
             self.statLabel.attributedText = NSAttributedString(string: rankViewModel?.statString ?? "", attributes: attributes)
             configCellBorder()
-            configCellMedalIcon()
+//            configCellMedalIcon()
             configCellColor()
         }
     }
@@ -87,29 +87,29 @@ class RankTableViewCell : UITableViewCell{
         }
     }
     
-    private func configCellMedalIcon(){
-
-        
-        if let model = rankViewModel{
-            switch model.ranknumber{
-            case 1:
-                medalIcon.image = UIImage(named: "first")
-                medalIcon.isHidden = false
-                break
-            case 2:
-                medalIcon.image = UIImage(named: "second")
-                medalIcon.isHidden = false
-                break
-            case 3:
-                medalIcon.image = UIImage(named: "third")
-                medalIcon.isHidden = false
-                break
-            default:
-                medalIcon.isHidden = true
-                break
-            }
-        }
-    }
+//    private func configCellMedalIcon(){
+//
+//
+//        if let model = rankViewModel{
+//            switch model.ranknumber{
+//            case 1:
+//                medalIcon.image = UIImage(named: "first")
+//                medalIcon.isHidden = false
+//                break
+//            case 2:
+//                medalIcon.image = UIImage(named: "second")
+//                medalIcon.isHidden = false
+//                break
+//            case 3:
+//                medalIcon.image = UIImage(named: "third")
+//                medalIcon.isHidden = false
+//                break
+//            default:
+//                medalIcon.isHidden = true
+//                break
+//            }
+//        }
+//    }
     
     private func configCellBorder(){
 //        view.layer.borderWidth = 3*factor
@@ -152,12 +152,12 @@ class RankTableViewCell : UITableViewCell{
         }
     }
     
-    let medalIcon : UIImageView = {
-        let imageview = UIImageView()
-        imageview.contentMode = .scaleAspectFit
-        imageview.translatesAutoresizingMaskIntoConstraints = false
-        return imageview
-    }()
+//    let medalIcon : UIImageView = {
+//        let imageview = UIImageView()
+//        imageview.contentMode = .scaleAspectFit
+//        imageview.translatesAutoresizingMaskIntoConstraints = false
+//        return imageview
+//    }()
     
     lazy var rankNumberLabel : UILabel = {
         var label = UILabel()
@@ -207,10 +207,10 @@ class RankTableViewCell : UITableViewCell{
         cellContainer.addSubview(nicknameLabel)
         cellContainer.addSubview(statLabel)
         
-        cellContainer.addSubview(medalIcon)
-        cellContainer.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-[v1(\(20*factor))]", views: rankNumberLabel,medalIcon)
-        medalIcon.centerYAnchor.constraint(equalTo: cellContainer.centerYAnchor).isActive = true
-        medalIcon.heightAnchor.constraint(equalToConstant: 20*factor).isActive = true
+//        cellContainer.addSubview(medalIcon)
+//        cellContainer.addConstraintsWithFormat(format: "H:[v0]-\(10*factor)-[v1(\(20*factor))]", views: rankNumberLabel,medalIcon)
+//        medalIcon.centerYAnchor.constraint(equalTo: cellContainer.centerYAnchor).isActive = true
+//        medalIcon.heightAnchor.constraint(equalToConstant: 20*factor).isActive = true
         
         // center alignment for vertical direction
         addConstraint(NSLayoutConstraint(item: rankNumberLabel, attribute: .centerY, relatedBy: .equal, toItem: cellContainer, attribute: .centerY, multiplier: 1, constant: 0))
@@ -218,8 +218,8 @@ class RankTableViewCell : UITableViewCell{
         addConstraint(NSLayoutConstraint(item: nicknameLabel, attribute: .centerY, relatedBy: .equal, toItem: cellContainer, attribute: .centerY, multiplier: 1, constant: 0))
         addConstraint(NSLayoutConstraint(item: statLabel, attribute: .centerY, relatedBy: .equal, toItem: cellContainer, attribute: .centerY, multiplier: 1, constant: 0))
         
-        cellContainer.addConstraintsWithFormat(format: "H:|-\(14*factor)-[v0(\(30*factor))]-(\(40 * factor))-[v1(\(200*factor))]", views: rankNumberLabel,nicknameLabel)
+        cellContainer.addConstraintsWithFormat(format: "H:|-\(15*factor)-[v0(\(30*factor))]-(\(15 * factor))-[v1(\(200*factor))]", views: rankNumberLabel,nicknameLabel)
         rankNumberLabel.heightAnchor.constraint(equalToConstant: 30*factor).isActive = true
-        cellContainer.addConstraintsWithFormat(format: "H:[v0(\(100*factor))]-(\(14 * factor))-|", views: statLabel)
+        cellContainer.addConstraintsWithFormat(format: "H:[v0(\(100*factor))]-(\(15 * factor))-|", views: statLabel)
     }
 }
