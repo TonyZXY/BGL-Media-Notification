@@ -12,6 +12,14 @@ import UIKit
 class RankInfoView : UIView{
     let factor = UIScreen.main.bounds.width/375
     
+    lazy var commingSoonLabel: UILabel = {
+        var label = UILabel()
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+9))
+        label.text = textValue(name: "Comming Soon...")
+        label.textColor = .white
+        return label
+    }()
+    
     let nickNameAttributes : [NSAttributedString.Key:Any] = [NSAttributedStringKey.font: UIFont.semiBoldFont(CGFloat(fontSize+9)),
                                                      NSAttributedStringKey.foregroundColor: UIColor.white,
                                                      NSAttributedStringKey.strokeWidth : -3.0,
@@ -118,6 +126,18 @@ class RankInfoView : UIView{
         self.addSubview(rankInfoStack)
         self.addConstraintsWithFormat(format: "H:|[v0]|", views: rankInfoStack)
         self.addConstraintsWithFormat(format: "V:|[v0]|", views: rankInfoStack)
+        
+        self.addSubview(commingSoonLabel)
+        commingSoonLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        commingSoonLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        commingSoonLabel.isHidden = true
+    }
+    
+    func hideAllLabels(_ bool: Bool){
+        selfStatLabel.isHidden = bool
+        selfNickNameLabel.isHidden = bool
+        selfRankLabel.isHidden = bool
+        updatedTimeLabel.isHidden = bool
     }
     
     
@@ -162,6 +182,12 @@ class CompetitionRankInfoView : RankInfoView{
         return label
     }()
     
+    override func hideAllLabels(_ bool: Bool) {
+        super.hideAllLabels(bool)
+        currentAssetLabel.isHidden = bool
+        startAssetLabel.isHidden = bool
+    }
+    
     override func setupView() {
         self.clipsToBounds = true
         self.heightAnchor.constraint(equalToConstant: 140*factor).isActive = true
@@ -191,5 +217,10 @@ class CompetitionRankInfoView : RankInfoView{
         self.addSubview(rankInfoStack)
         self.addConstraintsWithFormat(format: "H:|[v0]|", views: rankInfoStack)
         self.addConstraintsWithFormat(format: "V:|[v0]|", views: rankInfoStack)
+        
+        self.addSubview(commingSoonLabel)
+        commingSoonLabel.centerXAnchor.constraint(equalTo: self.centerXAnchor).isActive = true
+        commingSoonLabel.centerYAnchor.constraint(equalTo: self.centerYAnchor).isActive = true
+        commingSoonLabel.isHidden = true
     }
 }

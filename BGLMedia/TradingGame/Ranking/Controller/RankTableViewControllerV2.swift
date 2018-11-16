@@ -119,6 +119,13 @@ class CompetitionTableViewControllerV2 : RankTableViewControllerV2{
                 self.rankInfoView.rankViewModel = api.getUserCompetitionViewModel()
                 self.rankInfoView.rankDetailModel = api.rankData.competition_detail
                 (self.rankInfoView as! CompetitionRankInfoView).gameUser = api.gameUser
+                if self.allRank.count == 0{
+                    self.rankInfoView.hideAllLabels(true)
+                    self.rankInfoView.commingSoonLabel.isHidden = false
+                }else{
+                    self.rankInfoView.hideAllLabels(false)
+                    self.rankInfoView.commingSoonLabel.isHidden = true
+                }
                 tableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }else{
@@ -167,6 +174,13 @@ class TotalRankTableViewControllerV2 : RankTableViewControllerV2{
                 self.allRank = api.getTotalViewModels()
                 self.rankInfoView.rankViewModel = api.getUserTotalViewModel()
                 self.rankInfoView.rankDetailModel = api.rankData.total_detail
+                if self.allRank.count == 0{
+                    self.rankInfoView.hideAllLabels(true)
+                    self.rankInfoView.commingSoonLabel.isHidden = false
+                }else{
+                    self.rankInfoView.hideAllLabels(false)
+                    self.rankInfoView.commingSoonLabel.isHidden = true
+                }
                 tableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }else{
