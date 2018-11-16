@@ -69,6 +69,8 @@ class AssetController: UIViewController {
     }
     
     @objc func changeLanguage(){
+        titleLabel.text = textValue(name: "asset_title")
+        
         if let walletLabel = self.menuPageView.menuPages[0].menuView as? UILabel{
             walletLabel.text = textValue(name: "asset_menu_wallet")
         }

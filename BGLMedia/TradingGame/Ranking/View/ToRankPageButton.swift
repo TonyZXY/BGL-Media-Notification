@@ -15,6 +15,7 @@ class ToRankPageButton : UIButton{
     let defaultHeight:CGFloat = 50
     
     var parentViewController : UIViewController?
+    let rankController = RankViewControllerV2()
     
     func initSetup (width: CGFloat,height:CGFloat,parentController:UIViewController){
         self.frame = CGRect(x: 0, y: 0, width: width, height: height)
@@ -28,7 +29,6 @@ class ToRankPageButton : UIButton{
     }
     
     @objc func goToRankPage(){
-        let rankController = RankViewControllerV2()
         //        self.parentViewController?.present(rankController, animated: true, completion: nil)
         rankController.hidesBottomBarWhenPushed = true
         self.parentViewController?.navigationController?.pushViewController(rankController, animated: true)

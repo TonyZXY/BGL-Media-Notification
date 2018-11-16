@@ -24,7 +24,7 @@ class RankInfoView : UIView{
             var rankText = "\(textValue(name: "rank_userRank")) : "
             rankText += "\(rankViewModel?.ranknumber ?? 0)"
             selfRankLabel.text = rankText
-            selfStatLabel.text = rankViewModel?.statString ?? "--"
+            selfStatLabel.text = rankViewModel?.pop_stat ?? "--"
             
             selfNickNameLabel.attributedText =  NSAttributedString(string: rankViewModel?.nickname ?? "--", attributes: nickNameAttributes)
         }
@@ -128,5 +128,68 @@ class RankInfoView : UIView{
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class CompetitionRankInfoView : RankInfoView{
+    
+    var gameUser : GameUser?{
+        didSet{
+            if let user = gameUser{
+                startAssetLabel.text = "\(textValue(name: "start_asset")) : $\(user.competitionStartingAsset.floorTo(decimalLimit: 8))"
+                currentAssetLabel.text = "\(textValue(name: "current_asset")) : $\(user.totalBalance.floorTo(decimalLimit: 8))"
+            }
+        }
+    }
+    
+    lazy var currentAssetLabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
+        label.textColor = .white
+        label.text = "--"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        return label
+    }()
+    
+    lazy var startAssetLabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
+        label.textColor = .white
+        label.text = "--"
+        label.translatesAutoresizingMaskIntoConstraints = false
+        label.textAlignment = .center
+        return label
+    }()
+    
+    override func setupView() {
+        self.clipsToBounds = true
+        self.heightAnchor.constraint(equalToConstant: 140*factor).isActive = true
+        addSubview(backgroundImage)
+        backgroundImage.heightAnchor.constraint(equalToConstant: 200*factor).isActive = true
+        backgroundImage.widthAnchor.constraint(equalToConstant: 200*factor).isActive = true
+        backgroundImage.centerXAnchor.constraint(equalTo: self.rightAnchor,constant: -20*factor).isActive = true
+        backgroundImage.centerYAnchor.constraint(equalTo: self.bottomAnchor,constant: -20*factor).isActive = true
+        
+        let rankStatStack : UIStackView = {
+            let stack = UIStackView(arrangedSubviews: [selfRankLabel,selfStatLabel])
+            stack.axis = .horizontal
+            stack.alignment = .center
+            stack.distribution = .fillEqually
+            stack.spacing = 20 * factor
+            return stack
+        }()
+        
+        let rankInfoStack : UIStackView = {
+            let stack = UIStackView(arrangedSubviews: [selfNickNameLabel,rankStatStack,startAssetLabel,currentAssetLabel,updatedTimeLabel])
+            stack.axis = .vertical
+            stack.alignment = .center
+            stack.distribution = .fillEqually
+            return stack
+        }()
+        
+        self.addSubview(rankInfoStack)
+        self.addConstraintsWithFormat(format: "H:|[v0]|", views: rankInfoStack)
+        self.addConstraintsWithFormat(format: "V:|[v0]|", views: rankInfoStack)
     }
 }

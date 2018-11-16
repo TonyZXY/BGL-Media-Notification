@@ -932,8 +932,6 @@ class GameBalanceController: UIViewController,UITableViewDelegate,UITableViewDat
         let button = ToRankPageButton(width: buttonWidth, height: buttonHeight,parentController: self)
         button.translatesAutoresizingMaskIntoConstraints = false
         
-        
-//        button.isUserInteractionEnabled = false
         return button
     }()
     

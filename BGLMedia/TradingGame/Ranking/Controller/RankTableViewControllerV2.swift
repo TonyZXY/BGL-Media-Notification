@@ -112,11 +112,13 @@ class CompetitionTableViewControllerV2 : RankTableViewControllerV2{
     
     func handleRefresh(_ tableView: UITableView){
         let api = RankApiReader()
-        api.getAllRankData(completion: { success in
+        // proceess a nest api call to get more information
+        api.processAllApis(completion: { success in
             if success {
                 self.allRank = api.getCompetitionViewModels()
                 self.rankInfoView.rankViewModel = api.getUserCompetitionViewModel()
                 self.rankInfoView.rankDetailModel = api.rankData.competition_detail
+                (self.rankInfoView as! CompetitionRankInfoView).gameUser = api.gameUser
                 tableView.reloadData()
                 tableView.switchRefreshHeader(to: .normal(.success, 0.5))
             }else{
@@ -137,6 +139,10 @@ class CompetitionTableViewControllerV2 : RankTableViewControllerV2{
             self.handleRefresh(self.rankTableView)
         })
         
+        // change info view style to subclass competitionRankInfo
+        let view = CompetitionRankInfoView()
+        view.backgroundColor = ThemeColor().walletCellcolor()
+        rankInfoView = view
     }
     
     required init?(coder aDecoder: NSCoder) {

@@ -451,7 +451,8 @@ rankMenuTitle_Total = "Total";
 rankNavTitle = "Ranking";
 rank_updatedTime = "Updated";
 rank_userRank = "Rank";
-
+start_asset = "Start Balance";
+current_asset = "Current Balance";
 
 //StopLoss/takeProfit
 stopLoss_title = "Stop Loss/Take Profit Setting";

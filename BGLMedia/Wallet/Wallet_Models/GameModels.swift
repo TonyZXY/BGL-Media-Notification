@@ -14,10 +14,19 @@ struct GameUser {
     let id : String
     let name: String
     var coins: [GameCoin]
+    var competitionStartingAsset : Double
+    var totalBalance : Double {
+        var total = 0.0
+        coins.forEach({ (coin) in
+            total += coin.amount * coin.price
+        })
+        return total
+    }
     
     init(_ json: JSON) {
         id = json["data"]["user_id"].stringValue
         name = json["data"]["nick_name"].stringValue
+        competitionStartingAsset = Double(json["data"]["last_week"].stringValue) ?? 0
         coins = [GameCoin]()
         setupCoins(json["data"])
     }

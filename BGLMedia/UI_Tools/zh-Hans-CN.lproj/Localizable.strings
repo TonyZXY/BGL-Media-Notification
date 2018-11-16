@@ -442,6 +442,8 @@ rankMenuTitle_Total = "总榜";
 rankNavTitle = "排行榜";
 rank_updatedTime = "更新时间";
 rank_userRank = "排名";
+start_asset = "初始价值";
+current_asset = "现有价值";
 
 //StopLoss
 stopLoss_title = "止损/止盈 设置";

@@ -13,6 +13,8 @@ import SwiftyJSON
  */
 class RankApiReader {
     var rankData = RankAllInfoModel()
+    // startAsset and totalValue is stored in this model
+    var gameUser : GameUser?
     
     var token :String {
         get{
@@ -28,6 +30,22 @@ class RankApiReader {
         get{
             return UserDefaults.standard.integer(forKey: "user_id")
         }
+    }
+    
+    func processAllApis(completion: @escaping (Bool) -> (Void)){
+        getAllRankData(completion: { success in
+            if success {
+                self.getAssetData(completion: { success2 in
+                    if success2{
+                        completion(true)
+                    }else{
+                        completion(false)
+                    }
+                })
+            }else{
+                completion(false)
+            }
+        })
     }
     
     func getAllRankData(completion: @escaping (Bool) -> (Void)){
@@ -46,6 +64,58 @@ class RankApiReader {
                 
             } else{
                 print("失败获取Ranking")
+                completion(false)
+            }
+        }
+    }
+    
+    func getAssetData(completion: @escaping (Bool) -> (Void)) {
+        
+        let parameter = ["token": token, "email": email]
+        URLServices.fetchInstance.passServerData(urlParameters: ["userLogin","checkAccount"], httpMethod: "POST", parameters: parameter) { (response, success) in
+            if success {
+                if response["data"]["nick_name"].stringValue == "" {
+                    completion(false)
+                } else {
+                    self.gameUser = GameUser(response)
+                    self.getCoinPirce(completion: {success2 in
+                        if success2 {
+                            completion(true)
+                        }else{
+                            completion(false)
+                        }
+                    })
+
+                }
+            } else {
+                completion(false)
+            }
+        }
+    }
+    
+    func getCoinPirce(completion: @escaping (Bool) -> (Void)){
+        URLServices.fetchInstance.passServerData(urlParameters: ["game","getCoinData"], httpMethod: "GET", parameters: [:]) { (response, success) in
+            
+            if success {
+                let dataArray = response["data"].array ?? []
+                guard let coins = self.gameUser?.coins else {
+                    completion(false)
+                    return
+                }
+                
+                for (index, _) in coins.enumerated() {
+                    if coins[index].abbrName == "AUD" {
+                        self.gameUser?.coins[index].price = 1
+                    }
+                    
+                    if let coinDetail = dataArray.first(where: { (item) -> Bool in
+                        item["coin_name"].stringValue == coins[index].abbrName.lowercased()
+                    }) {
+                        self.gameUser?.coins[index].price = coinDetail["current_price"].doubleValue
+                    }
+                }
+                completion(true)
+            }else{
                 completion(false)
             }
         }
