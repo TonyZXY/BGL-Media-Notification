@@ -17,6 +17,7 @@ class RankInfoView : UIView{
         label.font = UIFont.semiBoldFont(CGFloat(fontSize+9))
         label.text = textValue(name: "Comming Soon...")
         label.textColor = .white
+        label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
     
@@ -62,7 +63,7 @@ class RankInfoView : UIView{
         let label = UILabel()
         label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.textColor = .white
-        label.text = "--"
+        label.text = ""
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         return label
@@ -81,7 +82,7 @@ class RankInfoView : UIView{
         let label = UILabel()
         label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.textColor = .white
-        label.text = "--"
+        label.text = ""
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         return label
@@ -91,7 +92,7 @@ class RankInfoView : UIView{
         let label = UILabel()
         label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.textColor = .white
-        label.text = "--"
+        label.text = ""
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         return label
@@ -166,7 +167,7 @@ class CompetitionRankInfoView : RankInfoView{
         let label = UILabel()
         label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.textColor = .white
-        label.text = "--"
+        label.text = ""
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         return label
@@ -176,7 +177,7 @@ class CompetitionRankInfoView : RankInfoView{
         let label = UILabel()
         label.font = UIFont.semiBoldFont(CGFloat(fontSize+4))
         label.textColor = .white
-        label.text = "--"
+        label.text = ""
         label.translatesAutoresizingMaskIntoConstraints = false
         label.textAlignment = .center
         return label
