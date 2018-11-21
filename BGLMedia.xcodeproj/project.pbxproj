@@ -28,6 +28,7 @@
 		246038412199255200A6F8DB /* RankTableViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246038402199255200A6F8DB /* RankTableViewControllerV2.swift */; };
 		246038432199257C00A6F8DB /* RankTableCellV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246038422199257C00A6F8DB /* RankTableCellV2.swift */; };
 		246038452199259100A6F8DB /* RankViewControllerV2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 246038442199259100A6F8DB /* RankViewControllerV2.swift */; };
+		24A7EFAC21A51F4C000369D8 /* Logo.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24A7EFAB21A51F4C000369D8 /* Logo.swift */; };
 		24CA23D22193E96700CFBEDC /* RankPopWindowContent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2442BE6E217ED88E000100BE /* RankPopWindowContent.swift */; };
 		24DB1878218047150064349F /* AssetController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB1877218047150064349F /* AssetController.swift */; };
 		24DB1895218048170064349F /* MenuPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 24DB188D218048170064349F /* MenuPage.swift */; };
@@ -287,6 +288,7 @@
 		246038402199255200A6F8DB /* RankTableViewControllerV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankTableViewControllerV2.swift; sourceTree = "<group>"; };
 		246038422199257C00A6F8DB /* RankTableCellV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankTableCellV2.swift; sourceTree = "<group>"; };
 		246038442199259100A6F8DB /* RankViewControllerV2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RankViewControllerV2.swift; sourceTree = "<group>"; };
+		24A7EFAB21A51F4C000369D8 /* Logo.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Logo.swift; sourceTree = "<group>"; };
 		24DB1877218047150064349F /* AssetController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AssetController.swift; sourceTree = "<group>"; };
 		24DB188D218048170064349F /* MenuPage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuPage.swift; sourceTree = "<group>"; };
 		24DB188E218048170064349F /* MenuBarView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MenuBarView.swift; sourceTree = "<group>"; };
@@ -1378,6 +1380,7 @@
 		B930B6E7214F3D3500685F64 /* Models */ = {
 			isa = PBXGroup;
 			children = (
+				24A7EFAB21A51F4C000369D8 /* Logo.swift */,
 				B930B6E8214F3D5900685F64 /* Event.swift */,
 			);
 			path = Models;
@@ -1673,6 +1676,7 @@
 				57355C1320F7189D002E70E4 /* URLServices.swift in Sources */,
 				57355C4920F718CC002E70E4 /* TransTimeCell.swift in Sources */,
 				2D52AF1F20E46E1A00018FC0 /* YAxisLabelView.swift in Sources */,
+				24A7EFAC21A51F4C000369D8 /* Logo.swift in Sources */,
 				57355C5320F718CC002E70E4 /* CryptoCompareClient.swift in Sources */,
 				2D52AEAB20E46E1A00018FC0 /* priceNotificationCell.swift in Sources */,
 				2D52AEAE20E46E1A00018FC0 /* MainTabBarController.swift in Sources */,

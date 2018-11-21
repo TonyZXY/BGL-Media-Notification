@@ -12,6 +12,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     
     var eventViewModels = [EventViewModel]()
     var groupedEvents = [[EventViewModel]]()
+    var logos = [Logo]()
     var dayStr = ""
     var weekStr = ""
     var monthStr = ""
@@ -81,10 +82,14 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     }
     
     private func getDataFromServer() {
-        URLServices.fetchInstance.passServerData(urlParameters: ["api","eventAll"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
+        URLServices.fetchInstance.passServerData(urlParameters: ["api","eventAllV2"], httpMethod: "GET", parameters: [String:Any]()) { (response, success) in
             //print(response)
-            
-            let allEventViewModels = response.arrayValue.map({ (item) -> EventViewModel in
+    
+            self.logos = response["data"]["url"].arrayValue.map({ (item) -> Logo in
+                return Logo(item)
+            })
+
+            let allEventViewModels = response["data"]["events"].arrayValue.map({ (item) -> EventViewModel in
                 return EventViewModel(event: Event(item))
             })
             
@@ -224,6 +229,18 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         let eventListTableViewCell = cell as! EventListTableViewCell
+        
+        //need to update logoURL because backend's need
+        logos.forEach { (logo) in
+            if logo.name == groupedEvents[indexPath.section][indexPath.row].host {
+                groupedEvents[indexPath.section][indexPath.row].logoURL = logo.url
+            }
+        }
+        //set logoURL to default for those still equal ""
+        if groupedEvents[indexPath.section][indexPath.row].logoURL == "" {
+            groupedEvents[indexPath.section][indexPath.row].logoURL = logos.first(where: { $0.name == "default"})?.url ?? ""
+        }
+        
         eventListTableViewCell.eventViewModel = groupedEvents[indexPath.section][indexPath.row]
     }
     
@@ -233,6 +250,7 @@ class AllEventsViewController: UIViewController, UITableViewDelegate,UITableView
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print(groupedEvents[indexPath.section][indexPath.row].logoURL)
         let eventDetailVC = EventDetailViewController()
         eventDetailVC.eventViewModel = groupedEvents[indexPath.section][indexPath.row]
         eventDetailVC.hidesBottomBarWhenPushed = true
@@ -309,7 +327,11 @@ class EventListTableViewCell:UITableViewCell{
     }
     
     func updateUI() {
-        imgView.image = UIImage(named: "BlockchainCenter")
+        if let logoUrlStr = eventViewModel?.logoURL {
+            imgView.setImage(urlString: logoUrlStr)
+        } else {
+            imgView.image = UIImage(named: "notfound")
+        }
         titleLabel.text = eventViewModel?.title
         hostLabel.text = eventViewModel?.hostLabel
         addressLabel.text = eventViewModel?.address
