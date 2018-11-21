@@ -993,6 +993,9 @@ public extension UIViewController {
 
 
 class IndicatorView: UIView {
+    
+    let indicator = UIActivityIndicatorView()
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         setupView()
@@ -1000,12 +1003,14 @@ class IndicatorView: UIView {
 
     func setupView(){
         backgroundColor = UIColor.darkGray
-        let indicator = UIActivityIndicatorView()
-        indicator.center = self.center
         addSubview(indicator)
         indicator.startAnimating()
     }
 
+    override func layoutSubviews() {
+        indicator.center = self.center
+    }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
